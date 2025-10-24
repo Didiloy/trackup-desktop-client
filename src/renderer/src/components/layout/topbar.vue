@@ -23,7 +23,10 @@ function handleWindowControls(): void {
 }
 </script>
 <template>
-  <div id="drag-region" class="flex items-center justify-between w-full h-8 bg-surface-200">
+  <div
+    id="drag-region"
+    class="flex items-center justify-between w-full h-8 mx-2 pl-2 rounded-lg bg-surface-50 opacity-80"
+  >
     <div>
       <span class="">TrackUp</span>
     </div>
@@ -33,21 +36,21 @@ function handleWindowControls(): void {
     <div id="window-controls" class="flex items-center justify-center h-full w-fit">
       <div
         id="min-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-300 hover:cursor-pointer text-gray-600 hover:text-black"
+        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
         :title="i18n.t('topbar.minimize')"
       >
         <i class="pi pi-minus"></i>
       </div>
       <div
         id="max-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-300 hover:cursor-pointer text-gray-600 hover:text-black"
+        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
         :title="i18n.t('topbar.maximize')"
       >
         <i class="pi pi-sort"></i>
       </div>
       <div
         id="close-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white"
+        class="h-full w-11 rounded-r-lg flex justify-center items-center bg-surface-50 opacity-80 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white"
         :title="i18n.t('topbar.close')"
       >
         <i class="pi pi-times"></i>
