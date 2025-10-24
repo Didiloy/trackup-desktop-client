@@ -1,4 +1,16 @@
 {
-  "fr": {},
-  "en": {}
+  "fr": {
+    "topbar": {
+      "minimize": "Minimiser",
+      "maximize": "Maximiser",
+      "close": "Fermer"
+    }
+  },
+  "en": {
+    "topbar": {
+      "minimize": "Minimize",
+      "maximize": "Maximize",
+      "close": "Close"
+    }
+  }
 }

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 onMounted(() => {
   handleWindowControls()
@@ -31,18 +34,21 @@ function handleWindowControls(): void {
       <div
         id="min-button"
         class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-300 hover:cursor-pointer text-gray-600 hover:text-black"
+        :title="i18n.t('topbar.minimize')"
       >
         <i class="pi pi-minus"></i>
       </div>
       <div
         id="max-button"
         class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-300 hover:cursor-pointer text-gray-600 hover:text-black"
+        :title="i18n.t('topbar.maximize')"
       >
         <i class="pi pi-sort"></i>
       </div>
       <div
         id="close-button"
         class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white"
+        :title="i18n.t('topbar.close')"
       >
         <i class="pi pi-times"></i>
       </div>
