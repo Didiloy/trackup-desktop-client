@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Servers from '@/components/sidebar/servers.vue'
-import ServersActions from '@/components/sidebar/servers-actions.vue'
+// import Servers from '@/components/sidebar/servers.vue'
+// import ServersActions from '@/components/sidebar/servers-actions.vue'
 </script>
 <template>
   <div

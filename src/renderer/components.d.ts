@@ -12,7 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    Home: typeof import('./src/components/Home.vue')['default']
+    ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Servers: typeof import('./src/components/sidebar/servers.vue')['default']

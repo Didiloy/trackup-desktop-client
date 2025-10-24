@@ -9,14 +9,17 @@ onMounted(() => {
 })
 
 function handleWindowControls(): void {
+  //@ts-ignore
   document.getElementById('min-button').addEventListener('click', () => {
     window.electron.ipcRenderer.send('minimize')
   })
 
+  //@ts-ignore
   document.getElementById('max-button').addEventListener('click', () => {
     window.electron.ipcRenderer.send('maximize')
   })
 
+  //@ts-ignore
   document.getElementById('close-button').addEventListener('click', async () => {
     window.electron.ipcRenderer.send('close')
   })
@@ -25,7 +28,7 @@ function handleWindowControls(): void {
 <template>
   <div
     id="drag-region"
-    class="flex items-center justify-between w-full h-8 mx-2 pl-2 rounded-lg bg-surface-50 opacity-80"
+    class="flex items-center justify-between w-full h-8 min-h-8 mx-2 pl-2 rounded-lg bg-surface-50 opacity-80"
   >
     <div>
       <span class="">TrackUp</span>

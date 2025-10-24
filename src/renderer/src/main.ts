@@ -1,10 +1,10 @@
 import './style/style.css'
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
-import App from './App.vue'
-import { TrackupPreset } from './style/preset'
+import App from '@/App.vue'
+import { TrackupPreset } from '@/style/preset'
 import { createPinia } from 'pinia'
-import { router } from './router'
+import { router } from '@/router/router'
 import { createI18n } from 'vue-i18n'
 import messages from '@/i18n/messages.json'
 

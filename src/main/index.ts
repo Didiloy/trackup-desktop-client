@@ -3,13 +3,24 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+let mainWindow: BrowserWindow | null = null
+let pendingDeepLinkUrl: string | null = null
+
+function sendAuthCallback(url: string) {
+  if (mainWindow?.webContents) {
+    mainWindow.webContents.send('auth-callback-url', url)
+  } else {
+    pendingDeepLinkUrl = url
+  }
+}
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     minWidth: 600,
     height: 690,
-    minHeight: 400,
+    minHeight: 500,
     show: false,
     autoHideMenuBar: true,
     frame: false,
@@ -21,7 +32,12 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
+    // Flush any pending deep link once renderer is ready
+    if (pendingDeepLinkUrl) {
+      mainWindow?.webContents.send('auth-callback-url', pendingDeepLinkUrl)
+      pendingDeepLinkUrl = null
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -41,9 +57,34 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+// Ensure single instance to receive deep links on Win/Linux
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  app.quit()
+}
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.github.trackup')
+
+  // Register custom protocol for auth callback
+  try {
+    // In dev, Electron needs explicit args to relaunch the app for deep links
+    if (process.defaultApp || is.dev) {
+      const appPathArg = join(process.cwd(), process.argv[1] ?? '')
+      const ok = app.setAsDefaultProtocolClient('trackup', process.execPath, [appPathArg])
+      if (!ok) {
+        console.warn('Protocol register (dev) failed. Deep links may not work until packaged.')
+      }
+    } else {
+      const ok = app.setAsDefaultProtocolClient('trackup')
+      if (!ok) {
+        console.warn('Protocol register (prod) failed. The desktop entry should still register the scheme when installed.')
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -101,3 +142,29 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// macOS deep link handler
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  sendAuthCallback(url)
+})
+
+// Win/Linux second-instance handler with deep link in argv
+app.on('second-instance', (_event, commandLine) => {
+  const deepLinkArg = commandLine.find((arg) => arg.startsWith('trackup://'))
+  if (deepLinkArg) {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    sendAuthCallback(deepLinkArg)
+  }
+})
+
+// Parse deep link from initial launch (Windows)
+if (process.platform === 'win32') {
+  const deepLinkArg = process.argv.find((arg) => arg.startsWith('trackup://'))
+  if (deepLinkArg) {
+    pendingDeepLinkUrl = deepLinkArg
+  }
+}

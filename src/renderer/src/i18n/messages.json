@@ -4,6 +4,16 @@
       "minimize": "Minimiser",
       "maximize": "Maximiser",
       "close": "Fermer"
+    },
+    "login": {
+      "title": "TrackUp",
+      "description": "Connectez-vous pour continuer",
+      "google": "Continuer avec Google",
+      "github": "Continuer avec GitHub",
+      "gitlab": "Continuer avec GitLab",
+      "error": "Une erreur s'est produite lors de la connection",
+      "loading": "Redirection...",
+      "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité"
     }
   },
   "en": {
@@ -11,6 +21,16 @@
       "minimize": "Minimize",
       "maximize": "Maximize",
       "close": "Close"
+    },
+    "login": {
+      "title": "TrackUp",
+      "description": "Connect to continue",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub",
+      "gitlab": "Continue with GitLab",
+      "error": "An error occurred while logging in",
+      "loading": "Redirecting...",
+      "terms": "By continuing, you accept our terms of use and privacy policy."
     }
   }
 }
