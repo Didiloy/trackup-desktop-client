@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 let mainWindow: BrowserWindow | null = null
 let pendingDeepLinkUrl: string | null = null
 
-function sendAuthCallback(url: string) {
+function sendAuthCallback(url: string): void {
   if (mainWindow?.webContents) {
     mainWindow.webContents.send('auth-callback-url', url)
   } else {
@@ -79,7 +79,9 @@ app.whenReady().then(() => {
     } else {
       const ok = app.setAsDefaultProtocolClient('trackup')
       if (!ok) {
-        console.warn('Protocol register (prod) failed. The desktop entry should still register the scheme when installed.')
+        console.warn(
+          'Protocol register (prod) failed. The desktop entry should still register the scheme when installed.'
+        )
       }
     }
   } catch (e) {

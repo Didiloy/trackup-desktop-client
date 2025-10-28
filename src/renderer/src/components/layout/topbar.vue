@@ -9,20 +9,27 @@ onMounted(() => {
 })
 
 function handleWindowControls(): void {
-  //@ts-ignore
-  document.getElementById('min-button').addEventListener('click', () => {
-    window.electron.ipcRenderer.send('minimize')
-  })
+  const minButton = document.getElementById('min-button')
+  const maxButton = document.getElementById('max-button')
+  const closeButton = document.getElementById('close-button')
 
-  //@ts-ignore
-  document.getElementById('max-button').addEventListener('click', () => {
-    window.electron.ipcRenderer.send('maximize')
-  })
+  if (minButton) {
+    minButton.addEventListener('click', () => {
+      window.electron.ipcRenderer.send('minimize')
+    })
+  }
 
-  //@ts-ignore
-  document.getElementById('close-button').addEventListener('click', async () => {
-    window.electron.ipcRenderer.send('close')
-  })
+  if (maxButton) {
+    maxButton.addEventListener('click', () => {
+      window.electron.ipcRenderer.send('maximize')
+    })
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener('click', async () => {
+      window.electron.ipcRenderer.send('close')
+    })
+  }
 }
 </script>
 <template>
@@ -40,21 +47,21 @@ function handleWindowControls(): void {
       <div
         id="min-button"
         class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
-        :title="i18n.t('topbar.minimize')"
+        :title="i18n.t('actions.minimize')"
       >
         <i class="pi pi-minus"></i>
       </div>
       <div
         id="max-button"
         class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
-        :title="i18n.t('topbar.maximize')"
+        :title="i18n.t('actions.maximize')"
       >
         <i class="pi pi-sort"></i>
       </div>
       <div
         id="close-button"
         class="h-full w-11 rounded-r-lg flex justify-center items-center bg-surface-50 opacity-80 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white"
-        :title="i18n.t('topbar.close')"
+        :title="i18n.t('actions.close')"
       >
         <i class="pi pi-times"></i>
       </div>

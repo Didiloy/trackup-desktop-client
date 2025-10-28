@@ -34,7 +34,8 @@ async function initializeSession(): Promise<void> {
       try {
         const parsed = new URL(url)
         const code = parsed.searchParams.get('code')
-        const errorDescription = parsed.searchParams.get('error_description') || parsed.searchParams.get('error')
+        const errorDescription =
+          parsed.searchParams.get('error_description') || parsed.searchParams.get('error')
         if (errorDescription) {
           error.value = errorDescription
           return
@@ -56,7 +57,8 @@ async function initializeSession(): Promise<void> {
       }
     }
     window.electron.ipcRenderer.on('auth-callback-url', handler)
-    deepLinkUnsubscribe = () => window.electron.ipcRenderer.removeListener('auth-callback-url', handler)
+    deepLinkUnsubscribe = () =>
+      window.electron.ipcRenderer.removeListener('auth-callback-url', handler)
   }
   loading.value = false
 }

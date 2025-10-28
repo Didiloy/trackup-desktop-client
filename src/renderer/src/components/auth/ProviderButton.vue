@@ -12,9 +12,7 @@ const emit = defineEmits<{
   (e: 'click', provider: Provider): void
 }>()
 
-function onClick() {
-  // Forward provider so parent can handle the sign-in logic
-  // @ts-ignore - props inferred above
+function onClick(): void {
   emit('click', props.provider)
 }
 </script>
@@ -28,10 +26,6 @@ function onClick() {
     <i v-if="icon" :class="['pi', icon]"></i>
     <span class="font-medium">{{ label }}</span>
   </button>
-  
 </template>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>
