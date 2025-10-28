@@ -1,4 +1,6 @@
 import { LoggerConfig, LogLevel } from './types.js';
+import dotenv from 'dotenv'
+
 
 /**
  * Configuration manager for logger settings
@@ -10,6 +12,7 @@ export class LoggerConfigManager {
    * Initialize logger configuration from environment variables
    */
   static initialize(): LoggerConfig {
+    dotenv.config()
     if (this.config) return this.config;
 
     const levels = this.parseLogLevels();
