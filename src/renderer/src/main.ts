@@ -39,7 +39,7 @@ async function initializeApp(): Promise<void> {
     // const response = await readPref()
 
     // If we have preferences with a language setting, use it
-    let locale = i18n.global.locale // Default
+    const locale = i18n.global.locale // Default
 
     // if (response && response.preference && response.preference.language) {
     //   // preferenceStore.setPreference(response.preference)

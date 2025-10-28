@@ -1,8 +1,20 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { windowBridge } from './bridges/window.bridge'
+import { appBridge } from './bridges/app.bridge'
+import { authBridge } from './bridges/auth.bridge'
 
-// Custom APIs for renderer
-const api = {}
+/**
+ * Preload script
+ * Aggregates all bridges and exposes them to the renderer via contextBridge
+ */
+
+// Aggregate all API bridges
+const api = {
+  window: windowBridge,
+  app: appBridge,
+  auth: authBridge
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

@@ -55,18 +55,15 @@ const { t } = useI18n()
 
 const { signInWithOAuth, loading, error } = useAuth()
 
-async function handleOAuth(provider: Provider) {
+async function handleOAuth(provider: Provider): Promise<void> {
   // Use custom deep-link scheme to return to the app after browser auth
   const redirectTo = 'trackup://auth/callback'
-  const data = await signInWithOAuth(provider, redirectTo)
+  const data = (await signInWithOAuth(provider, redirectTo)) as { url?: string } | undefined
   // When skipBrowserRedirect is used, Supabase returns a URL to open
-  const url = (data as any)?.url
-  if (url && window?.electron?.ipcRenderer) {
-    // Rely on BrowserWindow setWindowOpenHandler to open externally
-    window.open(url, '_blank')
-  } else if (url) {
-    // Last resort
-    location.href = url
+  const url = data?.url
+  if (url) {
+    // Use bridge to open externally in main (validation & security)
+    await window.api.app.openExternal(url)
   }
 }
 </script>

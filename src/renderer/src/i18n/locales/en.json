@@ -124,9 +124,7 @@
       "copyClipBoard": "Copied to clipboard"
     }
   },
-  "entities": {
-
-  },
+  "entities": {},
   "userInterface": {
     "loginView": {
       "welcome": "Welcome!",
@@ -144,8 +142,8 @@
       "already_have_account": "Already have an account?",
       "error": {
         "cannot_login": "An error occurred while logging in",
-        "invalid_email" : "Invalid email address."
-       }
+        "invalid_email": "Invalid email address."
+      }
     }
   }
 }

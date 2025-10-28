@@ -76,14 +76,10 @@ async function handleDeepLinkUrl(url: string): Promise<void> {
 function setupDeepLinkListener(): void {
   if (deepLinkUnsubscribe) return
   if (typeof window === 'undefined') return
-  const ipc = window?.electron?.ipcRenderer
-  if (!ipc) return
-
-  const handler = (_: unknown, url: string): void => {
+  // Subscribe via typed preload bridge
+  deepLinkUnsubscribe = window.api.auth.onCallbackUrl((url) => {
     void handleDeepLinkUrl(url)
-  }
-  ipc.on('auth-callback-url', handler)
-  deepLinkUnsubscribe = () => ipc.removeListener('auth-callback-url', handler)
+  })
 }
 
 function cleanupAuth(): void {

@@ -1,7 +1,9 @@
 import { createI18n } from 'vue-i18n'
-import { VNode } from 'vue'
 
-const loadedLanguages: Record<string, any> = {}
+// Avoid explicit any
+type LocaleMessages = Record<string, unknown>
+
+const loadedLanguages: Record<string, LocaleMessages> = {}
 
 // Function to get all available locales from the locales directory
 // This uses Vite's import.meta.glob to get all JSON files in the locales directory
@@ -54,7 +56,7 @@ function getFlagEmoji(code: string): string {
 }
 
 // Get language info for a locale code
-function getLanguageInfo(code: string) : { name: string; flag: string } {
+function getLanguageInfo(code: string): { name: string; flag: string } {
   return {
     name: getLanguageName(code),
     flag: getFlagEmoji(code)
@@ -62,7 +64,7 @@ function getLanguageInfo(code: string) : { name: string; flag: string } {
 }
 
 // Get all available languages with their info
-function getAvailableLanguages() : Array<{ code: string; name: string; flag: string }> {
+function getAvailableLanguages(): Array<{ code: string; name: string; flag: string }> {
   return supportedLocales.map((code) => ({
     code,
     ...getLanguageInfo(code)
@@ -78,7 +80,7 @@ function getBrowserLocale(): string {
   return supportedLocales.includes(localePart) ? localePart : 'en'
 }
 
-async function loadLanguageAsync(locale: string) : Promise<VNode[] | null> {
+async function loadLanguageAsync(locale: string): Promise<LocaleMessages | null> {
   if (loadedLanguages[locale]) {
     return loadedLanguages[locale]
   }
@@ -86,12 +88,12 @@ async function loadLanguageAsync(locale: string) : Promise<VNode[] | null> {
   try {
     // Dynamically import the locale file
     const messages = await import(`./locales/${locale}.json`)
-    loadedLanguages[locale] = messages.default
+    loadedLanguages[locale] = messages.default as LocaleMessages
 
     // Update document language for accessibility
     document.documentElement.setAttribute('lang', locale)
 
-    return messages.default
+    return loadedLanguages[locale]
   } catch (e) {
     console.error(`Could not load translations for locale: ${locale}`, e)
     return null
@@ -120,7 +122,7 @@ loadLanguageAsync(currentLocale).then((messages) => {
 })
 
 // Add helper to set locale globally
-async function setI18nLanguage(locale: string) : Promise<string | null> {
+async function setI18nLanguage(locale: string): Promise<string | null> {
   const messages = await loadLanguageAsync(locale)
   if (messages) {
     i18n.global.setLocaleMessage(locale, messages)

@@ -15,19 +15,19 @@ function handleWindowControls(): void {
 
   if (minButton) {
     minButton.addEventListener('click', () => {
-      window.electron.ipcRenderer.send('minimize')
+      window.api.window.minimize()
     })
   }
 
   if (maxButton) {
     maxButton.addEventListener('click', () => {
-      window.electron.ipcRenderer.send('maximize')
+      window.api.window.maximize()
     })
   }
 
   if (closeButton) {
     closeButton.addEventListener('click', async () => {
-      window.electron.ipcRenderer.send('close')
+      window.api.window.close()
     })
   }
 }
