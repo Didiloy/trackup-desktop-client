@@ -13,8 +13,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ## Arborescence
 
 - src/main
-  - bootstrap.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
-  - app.ts (orchestrateur: start/stop, wiring des modules)
+  - index.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
   - windows/
     - WindowManager.ts (registre des BrowserWindow, création paresseuse, cleanup)
     - MainWindow.ts (config d’une fenêtre spécifique)
@@ -31,17 +30,9 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
     - applicationMenu.ts (construction du menu)
   - security/
     - permissions.ts (session.setPermissionRequestHandler)
-    - csp.ts (headers CSP via webRequest)
-    - hardening.ts (désactiver features non-utilisées)
-  - logging/
-    - logger.ts (electron-log/pino/winston)
-  - update/
-    - autoUpdater.ts (intégration electron-updater)
-  - config/
-    - env.ts (lecture d’ENV, defaults)
 
 - src/preload
-  - index.ts (agrégateur: enregistre les bridges)
+  - index.ts (agrégateur : enregistre les bridges)
   - bridges/
     - app.bridge.ts (API app: getVersion, openExternal, etc.)
     - auth.bridge.ts (API auth: signIn, signOut si nécessaire)
@@ -51,7 +42,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
   - types/
     - global.d.ts (déclare `window.api` typé)
 
-- src/shared (accédé par main + renderer)
+- src/shared (accédé par main + preload + renderer)
   - contracts/
     - types/ (DTO, interfaces d’API, ex: TUseAuth, TUpdater)
     - events.ts (noms d’événements + payloads)
@@ -84,7 +75,6 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 4. Logging & Config.
 5. IPC: `registerAllIpc(ipcMain, services)`.
 6. Windows: `WindowManager.createMain()` + restore/snapshot state.
-7. Updater (facultatif) après `ready`.
 
 ---
 
@@ -112,30 +102,6 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 - `session.setPermissionRequestHandler` refuse par défaut.
 - CSP en-têtes (via `webRequest.onHeadersReceived`) et/ou meta CSP en dev.
 - Preload minimal: uniquement les méthodes nécessaires, jamais d’accès brut au FS/réseau depuis le renderer.
-
----
-
-## Logging & Config
-- Un `logger` central injecté dans les services.
-- `config/env.ts` pour centraliser l’accès aux ENV (dev/prod).
-
----
-
-## Updater
-- `UpdaterService` encapsule electron-updater.
-- IPC: `checkForUpdates`, `downloadUpdate`, `quitAndInstall`, et events (`checking`, `available`, `not-available`, `download-progress`, `error`).
-
----
-
-## Settings/Store
-- `SettingsService` basé sur `electron-store` (ou JSON dans `app.getPath('userData')`).
-- Ne jamais exposer le store directement au renderer: passer par IPC et valider.
-
----
-
-## Tests
-- Services purs testables sans Electron via DI (logger, config, FS virtualisé).
-- Bridges testés via mocks d’IPC.
 
 ---
 
