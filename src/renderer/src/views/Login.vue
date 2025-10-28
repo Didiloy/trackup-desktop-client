@@ -4,10 +4,10 @@
       <div class="flex flex-col items-center gap-2 mb-6">
         <img
           src="https://raw.githubusercontent.com/Didiloy/GameClock/refs/heads/master/resources/icon.png"
-          alt="TrackUp"
+          :alt="t('app.title')"
           class="w-12 h-12"
         />
-        <h1 class="text-xl font-semibold">TrackUp</h1>
+        <h1 class="text-xl font-semibold">{{ t('app.title') }}</h1>
         <p class="text-sm text-gray-600">{{ t('userInterface.loginView.description') }}</p>
       </div>
 

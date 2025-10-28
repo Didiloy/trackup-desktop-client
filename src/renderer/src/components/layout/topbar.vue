@@ -38,10 +38,10 @@ function handleWindowControls(): void {
     class="flex items-center justify-between w-full h-8 min-h-8 mx-2 pl-2 rounded-lg bg-surface-50 opacity-80"
   >
     <div>
-      <span class="">TrackUp</span>
+      <span class="">{{ i18n.t('app.title') }}</span>
     </div>
     <div>
-      <span class="">Contenu</span>
+      <span class="">{{ i18n.t('navigation.home') }}</span>
     </div>
     <div id="window-controls" class="flex items-center justify-center h-full w-fit">
       <div

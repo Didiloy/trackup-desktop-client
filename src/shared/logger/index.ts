@@ -1,4 +1,4 @@
-// Re-export all public types and interfaces
+// Re-export all public interfaces and interfaces
 export type {
   LogLevel,
   ColorKey,
