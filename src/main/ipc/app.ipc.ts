@@ -1,7 +1,8 @@
 import { ipcMain, shell, app } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
-import type { AppVersion } from '../../shared/contracts/types/app.types'
+import type { IAppVersion } from '../../shared/contracts/interfaces/app.interfaces'
 import { Logger } from '../../shared/logger'
+import { updateService } from '../services/UpdateService'
 
 const logger = new Logger('IPC:App')
 
@@ -15,7 +16,7 @@ export function registerAppIpc(): void {
   })
 
   // Get app version information
-  ipcMain.handle(ipc_channels.app.getVersion, (): AppVersion => {
+  ipcMain.handle(ipc_channels.app.getVersion, (): IAppVersion => {
     return {
       version: app.getVersion(),
       electron: process.versions.electron,
@@ -31,5 +32,20 @@ export function registerAppIpc(): void {
       throw new Error('Invalid URL')
     }
     await shell.openExternal(url)
+  })
+
+  // Check for updates
+  ipcMain.handle(ipc_channels.app.checkForUpdates, async (): Promise<void> => {
+    await updateService.checkForUpdates()
+  })
+
+  // Download update
+  ipcMain.handle(ipc_channels.app.downloadUpdate, async (): Promise<void> => {
+    await updateService.downloadUpdate()
+  })
+
+  // Install update
+  ipcMain.handle(ipc_channels.app.installUpdate, (): void => {
+    updateService.installUpdate()
   })
 }

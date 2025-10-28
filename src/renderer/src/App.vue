@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Topbar from '@/components/layout/topbar.vue'
 import Sidebar from '@/components/layout/sidebar.vue'
+import UpdateModal from '@/components/UpdateModal.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'
 import Login from '@/views/Login.vue'
@@ -17,6 +18,7 @@ onMounted(() => {
     class="flex flex-col items-center justify-start h-screen w-screen p-2 bg-linear-to-br from-surface-100 to-surface-200 overflow-hidden"
   >
     <Topbar />
+    <UpdateModal />
     <template v-if="!isAuthenticated">
       <Login />
     </template>

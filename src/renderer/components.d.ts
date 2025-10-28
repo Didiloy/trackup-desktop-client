@@ -19,6 +19,7 @@ declare module 'vue' {
     ServersActions: typeof import('./src/components/sidebar/servers-actions.vue')['default']
     Sidebar: typeof import('./src/components/layout/sidebar.vue')['default']
     Topbar: typeof import('./src/components/layout/topbar.vue')['default']
+    UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']
     Versions: typeof import('./src/components/Versions.vue')['default']
   }
 }

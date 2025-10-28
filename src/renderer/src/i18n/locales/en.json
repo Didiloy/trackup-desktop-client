@@ -145,5 +145,20 @@
         "invalid_email": "Invalid email address."
       }
     }
+  },
+  "updateModal": {
+    "title": "Update available",
+    "version": "Version",
+    "type": "Type",
+    "major": "Major",
+    "minor": "Minor",
+    "releaseNotes": "Release notes",
+    "releaseDate": "Release date",
+    "downloading": "Downloading...",
+    "error": "Error",
+    "skip": "Skip",
+    "updateNow": "Update now",
+    "installAndRestart": "Install and restart",
+    "downloadError": "Error while downloading"
   }
 }
