@@ -3,6 +3,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { windowBridge } from './bridges/window.bridge'
 import { appBridge } from './bridges/app.bridge'
 import { authBridge } from './bridges/auth.bridge'
+import { Logger } from '../shared/logger'
+
+const logger = new Logger('Preload')
 
 /**
  * Preload script
@@ -24,7 +27,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
   }
 } else {
   // @ts-ignore (define in dts)

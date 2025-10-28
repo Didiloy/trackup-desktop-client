@@ -1,6 +1,9 @@
 import { ipcMain, shell, app } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
 import type { AppVersion } from '../../shared/contracts/types/app.types'
+import { Logger } from '../../shared/logger'
+
+const logger = new Logger('IPC:App')
 
 /**
  * Register app-related IPC handlers
@@ -8,7 +11,7 @@ import type { AppVersion } from '../../shared/contracts/types/app.types'
 export function registerAppIpc(): void {
   // Ping/Pong for testing
   ipcMain.on(ipc_channels.app.ping, () => {
-    console.log('pong')
+    logger.info('pong')
   })
 
   // Get app version information

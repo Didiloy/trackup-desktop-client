@@ -1,6 +1,9 @@
 import { app } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { join } from 'path'
+import { Logger } from '../../shared/logger'
+
+const logger = new Logger('Protocol:DeepLink')
 
 /**
  * Deep Link Handler
@@ -22,20 +25,20 @@ export class DeepLinkHandler {
           appPathArg
         ])
         if (!ok) {
-          console.warn('Protocol register (dev) failed. Deep links may not work until packaged.')
+          logger.warn('Protocol register (dev) failed. Deep links may not work until packaged.')
         }
         return ok
       } else {
         const ok = app.setAsDefaultProtocolClient(this.protocolScheme)
         if (!ok) {
-          console.warn(
+          logger.warn(
             'Protocol register (prod) failed. The desktop entry should still register the scheme when installed.'
           )
         }
         return ok
       }
     } catch (e) {
-      console.error('Failed to register protocol:', e)
+      logger.error('Failed to register protocol:', e)
       return false
     }
   }

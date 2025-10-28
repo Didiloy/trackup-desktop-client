@@ -3,6 +3,9 @@ import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
 import icon from '../../../resources/icon.png?asset'
+import { Logger } from '../../shared/logger'
+
+const logger = new Logger('Window:Main')
 
 /**
  * MainWindow
@@ -41,7 +44,7 @@ export class MainWindow {
 
     this.window.on('ready-to-show', () => {
       this.window?.show()
-
+      logger.info('Main window ready-to-show')
       // Flush any pending deep link once renderer is ready
       if (this.pendingDeepLinkUrl) {
         this.sendAuthCallback(this.pendingDeepLinkUrl)
@@ -49,8 +52,10 @@ export class MainWindow {
       }
     })
 
+    // Must be synchronous: return a WindowOpenHandlerResponse immediately
     this.window.webContents.setWindowOpenHandler((details) => {
       void shell.openExternal(details.url)
+      logger.debug('Blocked window open; opened externally', details.url)
       return { action: 'deny' }
     })
 
