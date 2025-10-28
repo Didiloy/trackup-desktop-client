@@ -5,6 +5,9 @@ import { MainWindow } from './windows/MainWindow'
 import { registerAllIpc } from './ipc'
 import { deepLinkHandler } from './protocols/deepLink'
 import { applySecurity } from './security/hardening'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 // Ensure single instance to receive deep links on Win/Linux
 const gotTheLock = app.requestSingleInstanceLock()
@@ -29,13 +32,15 @@ app.whenReady().then(async () => {
 
   // Register the custom protocol for deep links and listeners
   deepLinkHandler.registerProtocol()
-  deepLinkHandler.setCallback((url) => {
+  deepLinkHandler.setCallback(async (url) => {
     // Focus main window when a deep link arrives
-    const win =
+    const win: BrowserWindow =
       windowManager.getMain() ||
-      windowManager.focusOrCreate('main', async () => await createMainWindow())
+      (await windowManager.focusOrCreate('main', async () => await createMainWindow()))
     if (win) {
-      if (win.isMinimized()) win.restore()
+      if (win.isMinimized()) {
+        win.restore()
+      }
       win.focus()
     }
     // Forward to renderer
