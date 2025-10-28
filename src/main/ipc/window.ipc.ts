@@ -1,6 +1,8 @@
 import { ipcMain, BrowserWindow } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { Logger } from '../../shared/logger'
 
+const logger = new Logger('window-ipc')
 /**
  * Register window management IPC handlers
  */
@@ -15,6 +17,7 @@ export function registerWindowIpc(): void {
 
   // Maximize/Restore window
   ipcMain.on(ipc_channels.window.maximize, () => {
+    logger.debug('window maximize IPC called')
     const window = BrowserWindow.getFocusedWindow()
     if (!window) {
       return
