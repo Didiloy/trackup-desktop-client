@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { supabase } from '@/supabase'
 import type { Provider, Session, User } from '@supabase/supabase-js'
-import type { UseAuth } from '@/contracts/types/TUseAuth'
+import type { TUseAuth } from '../../../../shared/contracts/types/useAuth.type'
 
 // Reactive auth state (module-scoped singletons)
 const user = ref<User | null>(null)
@@ -153,7 +153,7 @@ async function signOut(): Promise<void> {
 
 const isAuthenticated = computed((): boolean => !!user.value)
 
-export function useAuth(): UseAuth {
+export function useAuth(): TUseAuth {
   if (!initialized) {
     initialized = true
     // fire-and-forget initialization
