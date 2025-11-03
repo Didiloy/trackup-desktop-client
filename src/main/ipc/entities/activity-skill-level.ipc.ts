@@ -8,7 +8,11 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
-import { validateRequired, validateAuth, combineValidations } from '../../../shared/helpers/index.helpers'
+import {
+  validateRequired,
+  validateAuth,
+  combineValidations
+} from '../../../shared/helpers/index.helpers'
 
 const logger = new Logger('IPC:ActivitySkillLevel')
 

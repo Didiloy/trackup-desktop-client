@@ -41,7 +41,6 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
       logger.info('Creating snapshot:', serverId, request.type)
 
-
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
         validateRequired(request.type, 'Snapshot type'),

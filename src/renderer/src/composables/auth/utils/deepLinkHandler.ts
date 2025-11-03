@@ -61,4 +61,3 @@ export function setupDeepLinkListener(): (() => void) | null {
 
   return unsubscribe
 }
-

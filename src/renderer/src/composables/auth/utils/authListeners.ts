@@ -12,4 +12,3 @@ export function setupAuthStateListener(): () => void {
 
   return () => listener.subscription.unsubscribe()
 }
-
