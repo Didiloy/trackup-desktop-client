@@ -45,4 +45,3 @@ export async function handleImplicitFlow(accessToken: string, refreshToken: stri
     loading.value = false
   }
 }
-

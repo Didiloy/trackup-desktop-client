@@ -32,6 +32,13 @@ export const windowBridge = {
    */
   isMaximized: (): Promise<boolean> => {
     return ipcRenderer.invoke(ipc_channels.window.isMaximized)
+  },
+
+  /**
+   * Open the DevTools for the current window
+   */
+  openDevTools: (): void => {
+    ipcRenderer.send(ipc_channels.window.openDevTools)
   }
 }
 

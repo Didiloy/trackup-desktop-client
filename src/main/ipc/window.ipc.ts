@@ -15,6 +15,12 @@ export function registerWindowIpc(): void {
     }
   })
 
+  // Open DevTools
+  ipcMain.on(ipc_channels.window.openDevTools, () => {
+    const window = BrowserWindow.getFocusedWindow()
+    window?.webContents.openDevTools()
+  })
+
   // Maximize/Restore window
   ipcMain.on(ipc_channels.window.maximize, () => {
     logger.debug('window maximize IPC called')
@@ -29,7 +35,6 @@ export function registerWindowIpc(): void {
     }
   })
 
-  // Close window
   ipcMain.on(ipc_channels.window.close, () => {
     const window = BrowserWindow.getFocusedWindow()
     if (window) {

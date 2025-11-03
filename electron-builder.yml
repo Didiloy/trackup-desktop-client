@@ -39,7 +39,7 @@ dmg:
 linux:
   target:
     - AppImage
-  maintainer: electronjs.org
+  maintainer: 'Trackup support (support@trackup.com)'
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}

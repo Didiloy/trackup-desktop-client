@@ -9,3 +9,4 @@ out
 pnpm-lock.yaml
 /.env
 pnpm-workspace.yaml
+compile-and-restart.sh

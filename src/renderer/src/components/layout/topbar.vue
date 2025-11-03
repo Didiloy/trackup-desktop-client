@@ -12,7 +12,13 @@ function handleWindowControls(): void {
   const minButton = document.getElementById('min-button')
   const maxButton = document.getElementById('max-button')
   const closeButton = document.getElementById('close-button')
+  const devToolsButton = document.getElementById('devtools-button')
 
+  if (devToolsButton) {
+    devToolsButton.addEventListener('click', () => {
+      window.api.window.openDevTools()
+    })
+  }
   if (minButton) {
     minButton.addEventListener('click', () => {
       window.api.window.minimize()
@@ -44,6 +50,13 @@ function handleWindowControls(): void {
       <span class="">{{ i18n.t('navigation.home') }}</span>
     </div>
     <div id="window-controls" class="flex items-center justify-center h-full w-fit">
+      <div
+        id="devtools-button"
+        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
+        :title="i18n.t('actions.devtools')"
+      >
+        <i class="pi pi-cog"></i>
+      </div>
       <div
         id="min-button"
         class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
