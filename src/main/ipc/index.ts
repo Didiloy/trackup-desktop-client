@@ -2,6 +2,7 @@ import { ipcMain } from 'electron'
 import { registerWindowIpc } from './window.ipc'
 import { registerAppIpc } from './app.ipc'
 import { registerServerIpc } from './server.ipc'
+import { registerEnumDefinitionIpc } from './enum-definition.ipc'
 
 /**
  * Register all IPC handlers
@@ -15,4 +16,5 @@ export function registerAllIpc(): void {
   registerWindowIpc()
   registerAppIpc()
   registerServerIpc()
+  registerEnumDefinitionIpc()
 }
