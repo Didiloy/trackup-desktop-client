@@ -5,6 +5,7 @@ import { appBridge } from './bridges/app.bridge'
 import { authBridge } from './bridges/auth.bridge'
 import { serverBridge } from './bridges/server.bridge'
 import { enumDefinitionBridge } from './bridges/enum-definition.bridge'
+import { activityBridge } from './bridges/activity.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -20,7 +21,8 @@ const api = {
   app: appBridge,
   auth: authBridge,
   server: serverBridge,
-  enumDefinition: enumDefinitionBridge
+  enumDefinition: enumDefinitionBridge,
+  activity: activityBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

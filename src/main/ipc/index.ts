@@ -3,6 +3,7 @@ import { registerWindowIpc } from './window.ipc'
 import { registerAppIpc } from './app.ipc'
 import { registerServerIpc } from './server.ipc'
 import { registerEnumDefinitionIpc } from './enum-definition.ipc'
+import { registerActivityIpc } from './activity.ipc'
 
 /**
  * Register all IPC handlers
@@ -17,4 +18,5 @@ export function registerAllIpc(): void {
   registerAppIpc()
   registerServerIpc()
   registerEnumDefinitionIpc()
+  registerActivityIpc()
 }
