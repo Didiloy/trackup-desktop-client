@@ -14,7 +14,7 @@ import {
   validateAuth,
   combineValidations,
   buildRequestOptions
-} from '../../../shared/helpers'
+} from '../../../shared/helpers/index.helpers'
 
 const logger = new Logger('IPC:Activity')
 

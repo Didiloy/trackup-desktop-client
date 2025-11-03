@@ -2,7 +2,7 @@ import { ipcMain, shell } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import type { IBillingApiResponse } from '../../shared/contracts/interfaces/billing.interfaces'
 import { Logger } from '../../shared/logger'
-import { validateAuth, validateUrlScheme } from '../../shared/helpers'
+import { validateAuth, validateUrlScheme } from '../../shared/helpers/index.helpers'
 
 const logger = new Logger('IPC:Billing')
 

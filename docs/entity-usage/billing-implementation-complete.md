@@ -48,7 +48,7 @@ Successfully implemented the **billing** entity for Stripe subscription and bill
 ### Files Modified:
 
 1. ✅ `src/shared/contracts/ipc-channels/index.channels.ts` - Added BILLING_CHANNELS
-2. ✅ `src/main/ipc/index.ts` - Registered `registerBillingIpc()`
+2. ✅ `src/main/ipc/index.ipc.ts` - Registered `registerBillingIpc()`
 3. ✅ `src/preload/index.preload.ts` - Added `billingBridge` to API
 4. ✅ `src/preload/index.preload.d.ts` - Added `BillingBridge` type
 

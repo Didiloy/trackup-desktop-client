@@ -7,7 +7,7 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/user.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
-import { validateAuth } from '../../../shared/helpers'
+import { validateAuth } from '../../../shared/helpers/index.helpers'
 
 const logger = new Logger('IPC:User')
 
