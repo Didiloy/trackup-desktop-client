@@ -1,6 +1,6 @@
 import { app } from 'electron'
 import { is } from '@electron-toolkit/utils'
-import { join } from 'path'
+import { resolve } from 'path'
 import { Logger } from '../../shared/logger'
 
 const logger = new Logger('Protocol:DeepLink')
@@ -20,20 +20,28 @@ export class DeepLinkHandler {
     try {
       // In dev, Electron needs explicit args to relaunch the app for deep links
       if (process.defaultApp || is.dev) {
-        const appPathArg = join(process.cwd(), process.argv[1] ?? '')
+        // Always resolve to an absolute path; do NOT join with CWD (Windows may launch from system32)
+        const scriptArg = process.argv[1]
+        const appPathArg = scriptArg ? resolve(scriptArg) : ''
         const ok = app.setAsDefaultProtocolClient(this.protocolScheme, process.execPath, [
           appPathArg
         ])
         if (!ok) {
           logger.warn('Protocol register (dev) failed. Deep links may not work until packaged.')
+        } else {
+          logger.info(
+            `Registered protocol (dev) with execPath="${process.execPath}" arg1="${appPathArg}"`
+          )
         }
         return ok
       } else {
         const ok = app.setAsDefaultProtocolClient(this.protocolScheme)
         if (!ok) {
           logger.warn(
-            'Protocol register (prod) failed. The desktop entry should still register the scheme when installed.'
+            'Protocol register (prod) failed. The installer should still register the scheme.'
           )
+        } else {
+          logger.info('Registered protocol (prod)')
         }
         return ok
       }
