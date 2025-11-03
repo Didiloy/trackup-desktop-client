@@ -10,10 +10,10 @@ Repository stack
 
 Core entry points
 
-- Main process (Electron): src/main/index.ts
+- Main process (Electron): src/main/index.channels.ts
 - Window classes: src/main/windows/\*.ts (MainWindow.ts)
-- IPC registry: src/main/ipc/index.ts (imports per-domain files: app.ipc.ts, window.ipc.ts, …)
-- Preload: src/preload/index.ts (exposes window.api)
+- IPC registry: src/main/ipc/index.channels.ts (imports per-domain files: app.ipc.ts, window.ipc.ts, …)
+- Preload: src/preload/index.channels.ts (exposes window.api)
 - Preload bridges: src/preload/bridges/\*.bridge.ts
 - Renderer entry: src/renderer/src/main.ts
 - Shared contracts (channels/types): src/shared/contracts/\*\*
@@ -60,8 +60,8 @@ Common patterns
 
 - Add a new domain “settings”:
   1. Channels: src/shared/contracts/channels/settings.ts (export SETTINGS_CHANNELS), aggregate in shared/contracts/channels.ts
-  2. Main IPC: src/main/ipc/settings.ipc.ts (register handlers), add to src/main/ipc/index.ts
-  3. Preload: src/preload/bridges/settings.bridge.ts; add to window.api in src/preload/index.ts and type in src/preload/index.d.ts
+  2. Main IPC: src/main/ipc/settings.ipc.ts (register handlers), add to src/main/ipc/index.channels.ts
+  3. Preload: src/preload/bridges/settings.bridge.ts; add to window.api in src/preload/index.channels.ts and type in src/preload/index.preload.d.ts
   4. Renderer: call window.api.settings.get()/set() and subscribe to events
   5. Validate IPC inputs; do not expose Node APIs directly
 - Open external link from renderer:
@@ -99,7 +99,7 @@ File map quick reference
 - IPC: src/main/ipc/{app,auth?,window}.ipc.ts
 - Windows: src/main/windows/MainWindow.ts, src/main/windows/WindowManager.ts
 - Preload bridges: src/preload/bridges/{app,auth,window}.bridge.ts
-- Preload types: src/preload/index.d.ts
+- Preload types: src/preload/index.preload.d.ts
 - Renderer auth: src/renderer/src/composables/auth/useAuth.ts
 - Docs (human): docs/electron-architecture.md
 

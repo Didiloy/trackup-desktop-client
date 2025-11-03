@@ -1,7 +1,7 @@
 import { BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import icon from '../../../resources/icon.png?asset'
 import { Logger } from '../../shared/logger'
 

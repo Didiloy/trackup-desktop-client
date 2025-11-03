@@ -3,7 +3,7 @@ import { autoUpdater } from 'electron-updater'
 import type { IUpdateInfo, IUpdateProgress } from '../../shared/contracts/interfaces/app.interfaces'
 import { Logger } from '../../shared/logger'
 import { windowManager } from '../windows/WindowManager'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 
 const logger = new Logger('Service:Update')
 

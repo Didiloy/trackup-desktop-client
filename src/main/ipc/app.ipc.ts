@@ -1,5 +1,5 @@
 import { ipcMain, shell, app } from 'electron'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import type { IAppVersion } from '../../shared/contracts/interfaces/app.interfaces'
 import { Logger } from '../../shared/logger'
 import { updateService } from '../services/UpdateService'

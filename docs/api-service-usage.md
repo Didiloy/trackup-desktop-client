@@ -99,7 +99,7 @@ export const CHANNEL_CHANNELS = {
 } as const
 ```
 
-Update `src/shared/contracts/ipc-channels/index.ts`:
+Update `src/shared/contracts/ipc-channels/index.channels.ts`:
 
 ```typescript
 import { CHANNEL_CHANNELS } from './types/channel'
@@ -245,7 +245,7 @@ export function registerChannelIpc(): void {
 
 ### Step 4: Register IPC Handlers
 
-Update `src/main/ipc/index.ts`:
+Update `src/main/ipc/index.channels.ts`:
 
 ```typescript
 import { registerChannelIpc } from './channel.ipc'
@@ -304,7 +304,7 @@ export type ChannelBridge = typeof channelBridge
 
 ### Step 6: Expose Bridge in Preload
 
-Update `src/preload/index.ts`:
+Update `src/preload/index.channels.ts`:
 
 ```typescript
 import { channelBridge } from './bridges/channel.bridge'
@@ -315,7 +315,7 @@ const api = {
 }
 ```
 
-Update `src/preload/index.d.ts`:
+Update `src/preload/index.preload.d.ts`:
 
 ```typescript
 import type { ChannelBridge } from './bridges/channel.bridge'

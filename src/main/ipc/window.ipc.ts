@@ -1,5 +1,5 @@
 import { ipcMain, BrowserWindow } from 'electron'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import { Logger } from '../../shared/logger'
 
 const logger = new Logger('window-ipc')

@@ -14,13 +14,13 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ## Arborescence
 
 - src/main
-  - index.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
+  - index.channels.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
   - windows/
     - WindowManager.ts (registre des BrowserWindow, création paresseuse, cleanup)
     - MainWindow.ts (config d’une fenêtre spécifique)
     - SettingsWindow.ts (exemple supplémentaire)
   - ipc/
-    - index.ts (registre central qui appelle chaque `registerXyzIpc`)
+    - index.channels.ts (registre central qui appelle chaque `registerXyzIpc`)
     - auth.ipc.ts, settings.ipc.ts, updater.ipc.ts (par domaine)
   - services/
     - AuthService.ts, SettingsService.ts, UpdaterService.ts, FileSystemService.ts (stateless ou DI légère)
@@ -33,13 +33,13 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
     - permissions.ts (session.setPermissionRequestHandler)
 
 - src/preload
-  - index.ts (agrégateur : enregistre les bridges)
+  - index.channels.ts (agrégateur : enregistre les bridges)
   - bridges/
     - app.bridge.ts (API app: getVersion, openExternal, etc.)
     - auth.bridge.ts (API auth: signIn, signOut si nécessaire)
     - updater.bridge.ts (API updater: check, download, events)
     - settings.bridge.ts (API settings: get/set)
-  - index.ts (constantes de noms de canaux IPC)
+  - index.channels.ts (constantes de noms de canaux IPC)
   - types/
     - global.d.ts (déclare `window.api` typé)
 
@@ -115,7 +115,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 
 - Nommage canaux: `domaine:action`.
 - Unité de code = un domaine par fichier (registre IPC / bridge / service).
-- Éviter l’état global mutable dans main; préférer des services instanciés dans `app.ts`.
+- Éviter l’état global mutable dans main; préférer des services instanciés dans `app.channels.ts`.
 
 ---
 
@@ -123,9 +123,9 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 
 - `src/main/bootstrap.ts`
   - Initialise sécurité, protocols, IPC, WindowManager, puis crée MainWindow.
-- `src/main/ipc/index.ts`
+- `src/main/ipc/index.channels.ts`
   - `export function registerAllIpc(ipcMain, services) { registerAuthIpc(...); registerUpdaterIpc(...); }`
-- `src/preload/index.ts`
+- `src/preload/index.channels.ts`
   - Importe chaque `*.bridge.ts` et expose: `contextBridge.exposeInMainWorld('api', { app: appBridge, updater: updaterBridge, ... })`.
 - `src/preload/types/global.d.ts`
   - `declare global { interface Window { api: { app: AppBridge; updater: UpdaterBridge; ... } } }`

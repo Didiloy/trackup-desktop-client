@@ -1,5 +1,5 @@
 import { ipcRenderer, IpcRendererEvent } from 'electron'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 
 /**
  * Auth API Bridge

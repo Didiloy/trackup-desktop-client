@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import { ipc_channels } from '../../shared/contracts/ipc-channels'
+import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 
 /**
  * Window API Bridge

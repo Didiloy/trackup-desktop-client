@@ -13,7 +13,7 @@ Successfully implemented the complete **users** entity for current user informat
 - `IUserServer` - Reuses `IServer` type (omits invite_code fields)
 
 ### 2. IPC Channels
-**File**: `src/shared/contracts/ipc-channels/types/user.ts`
+**File**: `src/shared/contracts/ipc-channels/types/user.channels.ts`
 - `getMe`, `getMyServers`
 
 ### 3. IPC Handlers
@@ -36,10 +36,10 @@ Successfully implemented the complete **users** entity for current user informat
 ## Integration Complete
 
 ### Files Modified:
-1. ✅ `src/shared/contracts/ipc-channels/index.ts` - Added USER_CHANNELS
-2. ✅ `src/main/ipc/index.ts` - Registered registerUserIpc()
-3. ✅ `src/preload/index.ts` - Added userBridge to API
-4. ✅ `src/preload/index.d.ts` - Added UserBridge type
+1. ✅ `src/shared/contracts/ipc-channels/index.channels.ts` - Added USER_CHANNELS
+2. ✅ `src/main/ipc/index.channels.ts` - Registered registerUserIpc()
+3. ✅ `src/preload/index.channels.ts` - Added userBridge to API
+4. ✅ `src/preload/index.preload.d.ts` - Added UserBridge type
 
 ## Data Model
 
