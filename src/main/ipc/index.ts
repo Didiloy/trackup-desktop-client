@@ -6,6 +6,7 @@ import { registerEnumDefinitionIpc } from './enum-definition.ipc'
 import { registerActivityIpc } from './activity.ipc'
 import { registerActivitySkillLevelIpc } from './activity-skill-level.ipc'
 import { registerSessionIpc } from './session.ipc'
+import { registerMemberIpc } from './member.ipc'
 
 /**
  * Register all IPC handlers
@@ -23,4 +24,5 @@ export function registerAllIpc(): void {
   registerActivityIpc()
   registerActivitySkillLevelIpc()
   registerSessionIpc()
+  registerMemberIpc()
 }

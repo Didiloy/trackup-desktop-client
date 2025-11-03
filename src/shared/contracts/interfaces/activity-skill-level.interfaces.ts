@@ -42,4 +42,3 @@ export interface IActivitySkillLevelApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

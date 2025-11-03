@@ -25,4 +25,3 @@ export interface IActivityApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

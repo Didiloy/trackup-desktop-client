@@ -42,4 +42,3 @@ export interface IEnumDefinitionApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

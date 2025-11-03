@@ -8,4 +8,3 @@ export const ACTIVITY_SKILL_LEVEL_CHANNELS = {
   update: 'activitySkillLevel:update',
   delete: 'activitySkillLevel:delete'
 } as const
-

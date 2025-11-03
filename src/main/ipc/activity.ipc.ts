@@ -180,4 +180,3 @@ export function registerActivityIpc(): void {
 
   logger.info('Activity IPC handlers registered')
 }
-

@@ -104,4 +104,3 @@ export const activitySkillLevelBridge = {
 }
 
 export type ActivitySkillLevelBridge = typeof activitySkillLevelBridge
-

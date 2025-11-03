@@ -69,4 +69,3 @@ export const enumDefinitionBridge = {
 }
 
 export type EnumDefinitionBridge = typeof enumDefinitionBridge
-

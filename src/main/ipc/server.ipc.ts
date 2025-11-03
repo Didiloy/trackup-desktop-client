@@ -12,7 +12,6 @@ import { apiService } from '../services/ApiService'
 
 const logger = new Logger('IPC:Server')
 
-
 /**
  * Register server-related IPC handlers
  */

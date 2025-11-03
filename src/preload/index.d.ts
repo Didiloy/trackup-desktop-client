@@ -7,6 +7,7 @@ import type { EnumDefinitionBridge } from './bridges/enum-definition.bridge'
 import type { ActivityBridge } from './bridges/activity.bridge'
 import type { ActivitySkillLevelBridge } from './bridges/activity-skill-level.bridge'
 import type { SessionBridge } from './bridges/session.bridge'
+import type { MemberBridge } from './bridges/member.bridge'
 
 /**
  * Global type definitions for window.api
@@ -20,6 +21,7 @@ export interface API {
   activity: ActivityBridge
   activitySkillLevel: ActivitySkillLevelBridge
   session: SessionBridge
+  member: MemberBridge
 }
 
 declare global {

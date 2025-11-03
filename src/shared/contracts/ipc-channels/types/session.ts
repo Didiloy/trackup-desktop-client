@@ -10,4 +10,3 @@ export const SESSION_CHANNELS = {
   like: 'session:like',
   unlike: 'session:unlike'
 } as const
-

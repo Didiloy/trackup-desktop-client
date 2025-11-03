@@ -7,4 +7,3 @@ export const ENUM_DEFINITION_CHANNELS = {
   update: 'enumDefinition:update',
   delete: 'enumDefinition:delete'
 } as const
-

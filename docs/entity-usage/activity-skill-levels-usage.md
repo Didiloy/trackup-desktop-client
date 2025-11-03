@@ -250,10 +250,7 @@ export function useActivitySkillLevels(serverId: string, activityId: string) {
   }
 
   // Update skill level
-  async function updateSkillLevel(
-    skillLevelId: string,
-    request: IUpdateActivitySkillLevelRequest
-  ) {
+  async function updateSkillLevel(skillLevelId: string, request: IUpdateActivitySkillLevelRequest) {
     if (!accessToken.value) {
       error.value = 'Not authenticated'
       return null
@@ -369,9 +366,7 @@ export function useActivitySkillLevels(serverId: string, activityId: string) {
         <div class="level-stats">
           <div class="stat">
             <label>Sessions:</label>
-            <span>
-              {{ level.min_sessions }} - {{ level.max_sessions ?? '∞' }}
-            </span>
+            <span> {{ level.min_sessions }} - {{ level.max_sessions ?? '∞' }} </span>
           </div>
           <div class="stat">
             <label>Duration:</label>
@@ -417,7 +412,11 @@ export function useActivitySkillLevels(serverId: string, activityId: string) {
         </div>
         <div class="form-group">
           <label>Max Sessions</label>
-          <input v-model.number="formData.max_sessions" type="number" placeholder="Leave empty for unlimited" />
+          <input
+            v-model.number="formData.max_sessions"
+            type="number"
+            placeholder="Leave empty for unlimited"
+          />
         </div>
       </div>
 
@@ -428,13 +427,21 @@ export function useActivitySkillLevels(serverId: string, activityId: string) {
         </div>
         <div class="form-group">
           <label>Max Duration (minutes)</label>
-          <input v-model.number="formData.max_duration" type="number" placeholder="Leave empty for unlimited" />
+          <input
+            v-model.number="formData.max_duration"
+            type="number"
+            placeholder="Leave empty for unlimited"
+          />
         </div>
       </div>
 
       <div class="form-group">
         <label>Description</label>
-        <textarea v-model="formData.description" placeholder="Describe this skill level..." rows="3"></textarea>
+        <textarea
+          v-model="formData.description"
+          placeholder="Describe this skill level..."
+          rows="3"
+        ></textarea>
       </div>
 
       <div class="form-group">
@@ -733,17 +740,17 @@ button:hover:not(:disabled) {
 
 ```typescript
 {
-  public_id: string           // e.g., "sklvl_123"
-  name: string                // e.g., "Beginner"
-  display_order: number       // Ordering (1, 2, 3...)
-  min_sessions: number        // Minimum sessions required
+  public_id: string // e.g., "sklvl_123"
+  name: string // e.g., "Beginner"
+  display_order: number // Ordering (1, 2, 3...)
+  min_sessions: number // Minimum sessions required
   max_sessions: number | null // Maximum sessions (null = unlimited)
-  min_duration: number        // Minimum total duration in minutes
+  min_duration: number // Minimum total duration in minutes
   max_duration: number | null // Maximum total duration in minutes (null = unlimited)
-  description: string | null  // Optional description
-  color: string | null        // Optional hex color (e.g., "#4CAF50")
-  created_at: string          // ISO 8601 timestamp
-  updated_at: string          // ISO 8601 timestamp
+  description: string | null // Optional description
+  color: string | null // Optional hex color (e.g., "#4CAF50")
+  created_at: string // ISO 8601 timestamp
+  updated_at: string // ISO 8601 timestamp
 }
 ```
 
@@ -753,53 +760,73 @@ button:hover:not(:disabled) {
 
 ```typescript
 // Beginner: 0-10 sessions, 0-5 hours
-await window.api.activitySkillLevel.create(serverId, activityId, {
-  name: 'Beginner',
-  display_order: 1,
-  min_sessions: 0,
-  max_sessions: 10,
-  min_duration: 0,
-  max_duration: 300,
-  color: '#4CAF50'
-}, accessToken)
+await window.api.activitySkillLevel.create(
+  serverId,
+  activityId,
+  {
+    name: 'Beginner',
+    display_order: 1,
+    min_sessions: 0,
+    max_sessions: 10,
+    min_duration: 0,
+    max_duration: 300,
+    color: '#4CAF50'
+  },
+  accessToken
+)
 
 // Intermediate: 11-50 sessions, 5-50 hours
-await window.api.activitySkillLevel.create(serverId, activityId, {
-  name: 'Intermediate',
-  display_order: 2,
-  min_sessions: 11,
-  max_sessions: 50,
-  min_duration: 301,
-  max_duration: 3000,
-  color: '#FFC107'
-}, accessToken)
+await window.api.activitySkillLevel.create(
+  serverId,
+  activityId,
+  {
+    name: 'Intermediate',
+    display_order: 2,
+    min_sessions: 11,
+    max_sessions: 50,
+    min_duration: 301,
+    max_duration: 3000,
+    color: '#FFC107'
+  },
+  accessToken
+)
 
 // Expert: 51+ sessions, 50+ hours
-await window.api.activitySkillLevel.create(serverId, activityId, {
-  name: 'Expert',
-  display_order: 3,
-  min_sessions: 51,
-  max_sessions: null, // unlimited
-  min_duration: 3001,
-  max_duration: null, // unlimited
-  color: '#F44336'
-}, accessToken)
+await window.api.activitySkillLevel.create(
+  serverId,
+  activityId,
+  {
+    name: 'Expert',
+    display_order: 3,
+    min_sessions: 51,
+    max_sessions: null, // unlimited
+    min_duration: 3001,
+    max_duration: null, // unlimited
+    color: '#F44336'
+  },
+  accessToken
+)
 ```
 
 ### 2. Fitness Tracking
 
 ```typescript
 // Casual: 0-20 sessions
-await window.api.activitySkillLevel.create(serverId, activityId, {
-  name: 'Casual',
-  display_order: 1,
-  min_sessions: 0,
-  max_sessions: 20,
-  min_duration: 0,
-  max_duration: 600, // 10 hours
-  description: 'Just getting started with fitness',
-  color: '#E3F2FD'
-}, accessToken)
+await window.api.activitySkillLevel.create(
+  serverId,
+  activityId,
+  {
+    name: 'Casual',
+    display_order: 1,
+    min_sessions: 0,
+    max_sessions: 20,
+    min_duration: 0,
+    max_duration: 600, // 10 hours
+    description: 'Just getting started with fitness',
+    color: '#E3F2FD'
+  },
+  accessToken
+)
 ```
 
 ## Error Handling
@@ -808,13 +835,18 @@ All API calls return an object with either `data` or `error`:
 
 ```typescript
 // Success
-{ data: IActivitySkillLevel }
+{
+  data: IActivitySkillLevel
+}
 
 // Error
-{ error: "Error message" }
+{
+  error: 'Error message'
+}
 ```
 
 Common errors:
+
 - `"Server ID is required"` - Missing server ID parameter
 - `"Activity ID is required"` - Missing activity ID parameter
 - `"Skill level ID is required"` - Missing skill level ID parameter
@@ -879,4 +911,3 @@ if (userLevel) {
   console.log(`User is at ${userLevel.name} level`)
 }
 ```
-

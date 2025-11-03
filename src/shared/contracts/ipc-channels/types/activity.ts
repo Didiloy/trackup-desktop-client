@@ -8,4 +8,3 @@ export const ACTIVITY_CHANNELS = {
   update: 'activity:update',
   delete: 'activity:delete'
 } as const
-

@@ -203,4 +203,3 @@ export function registerActivitySkillLevelIpc(): void {
 
   logger.info('Activity skill level IPC handlers registered')
 }
-

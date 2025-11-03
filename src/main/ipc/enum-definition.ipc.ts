@@ -136,4 +136,3 @@ export function registerEnumDefinitionIpc(): void {
 
   logger.info('Enum definition IPC handlers registered')
 }
-

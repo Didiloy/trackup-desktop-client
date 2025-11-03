@@ -128,9 +128,7 @@ const result = await window.api.session.update(
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   {
     duration: 45, // Updated duration
-    participants: [
-      'member_123e4567-e89b-12d3-a456-426614174000'
-    ]
+    participants: ['member_123e4567-e89b-12d3-a456-426614174000']
   },
   accessToken
 )
@@ -458,8 +456,8 @@ export function useSessions(serverId: string) {
 
 ```typescript
 {
-  enum_value_id: string     // Enum value ID
-  selected_key: string      // Selected key (value1, value2, etc.)
+  enum_value_id: string // Enum value ID
+  selected_key: string // Selected key (value1, value2, etc.)
 }
 ```
 
@@ -493,13 +491,18 @@ All API calls return an object with either `data` or `error`:
 
 ```typescript
 // Success
-{ data: ISession }
+{
+  data: ISession
+}
 
 // Error
-{ error: "Error message" }
+{
+  error: 'Error message'
+}
 ```
 
 Common errors:
+
 - `"Server ID is required"` - Missing server ID
 - `"Session ID is required"` - Missing session ID
 - `"Activity ID is required"` - Missing activity ID
@@ -632,4 +635,3 @@ function formatSessionDate(dateString: string): string {
 - [ ] Test with invalid dates
 - [ ] Test with empty participants array
 - [ ] Test pagination edge cases (last page, page > pageCount)
-

@@ -77,4 +77,3 @@ export const activityBridge = {
 }
 
 export type ActivityBridge = typeof activityBridge
-

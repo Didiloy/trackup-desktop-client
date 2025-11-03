@@ -224,11 +224,7 @@ export function registerChannelIpc(): void {
   // Delete channel
   ipcMain.handle(
     ipc_channels.channel.delete,
-    async (
-      _event,
-      channelId: string,
-      accessToken: string
-    ): Promise<IChannelApiResponse<void>> => {
+    async (_event, channelId: string, accessToken: string): Promise<IChannelApiResponse<void>> => {
       logger.info('Deleting channel:', channelId)
 
       if (!channelId) {
@@ -358,11 +354,7 @@ if (result.error) {
 const channels = await window.api.channel.list('srv_123', accessToken)
 
 // Update channel
-await window.api.channel.update(
-  'chn_456',
-  { name: 'New Name' },
-  accessToken
-)
+await window.api.channel.update('chn_456', { name: 'New Name' }, accessToken)
 
 // Delete channel
 await window.api.channel.delete('chn_456', accessToken)
@@ -410,4 +402,3 @@ apiService.post<IChannel>('/api/v1/channels', accessToken, body, {
 const anotherApi = new ApiService('https://api.example.com')
 anotherApi.get('/endpoint', accessToken)
 ```
-

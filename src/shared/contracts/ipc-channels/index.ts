@@ -11,6 +11,7 @@ import { ENUM_DEFINITION_CHANNELS } from './types/enum-definition'
 import { ACTIVITY_CHANNELS } from './types/activity'
 import { ACTIVITY_SKILL_LEVEL_CHANNELS } from './types/activity-skill-level'
 import { SESSION_CHANNELS } from './types/session'
+import { MEMBER_CHANNELS } from './types/member'
 
 export const ipc_channels = {
   window: WINDOW_CHANNELS,
@@ -20,5 +21,6 @@ export const ipc_channels = {
   enumDefinition: ENUM_DEFINITION_CHANNELS,
   activity: ACTIVITY_CHANNELS,
   activitySkillLevel: ACTIVITY_SKILL_LEVEL_CHANNELS,
-  session: SESSION_CHANNELS
+  session: SESSION_CHANNELS,
+  member: MEMBER_CHANNELS
 } as const

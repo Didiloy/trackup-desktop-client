@@ -53,11 +53,7 @@ export function registerSessionIpc(): void {
         return { error: 'Authentication required' }
       }
 
-      return apiService.post<ISession>(
-        `/api/v1/servers/${serverId}/sessions`,
-        accessToken,
-        request
-      )
+      return apiService.post<ISession>(`/api/v1/servers/${serverId}/sessions`, accessToken, request)
     }
   )
 
@@ -253,4 +249,3 @@ export function registerSessionIpc(): void {
 
   logger.info('Session IPC handlers registered')
 }
-
