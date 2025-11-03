@@ -482,6 +482,333 @@ const loadPage = async (page: number, limit: number = 20) => {
 7. **Optimized**: Efficient query parameter handling
 8. **Error Handling**: Consistent error responses across all methods
 
+---
+
+## Member Activity Statistics
+
+Track individual member performance and progression on specific activities.
+
+### Available Methods
+
+#### 1. Get All Activities for a Member
+```typescript
+window.api.memberActivityStats.getAllActivities(serverId, memberId, params, accessToken)
+```
+Returns paginated list of all activities a member has participated in, sorted by duration.
+
+**Parameters:**
+- `page`: Page number (must be >= 1)
+- `limit`: Items per page (must be >= 1)
+
+**Example:**
+```typescript
+const { session } = useAuth()
+const result = await window.api.memberActivityStats.getAllActivities(
+  'srv_123',
+  'mem_456',
+  { page: 1, limit: 20 },
+  session.value?.access_token
+)
+
+if (result.data) {
+  result.data.data.forEach(activity => {
+    console.log(`${activity.activity_name}:`)
+    console.log(`  Sessions: ${activity.total_sessions}`)
+    console.log(`  Duration: ${activity.total_duration}s`)
+    console.log(`  Skill Level: ${activity.skill_level}`)
+    console.log(`  Proficiency: ${activity.proficiency_score}`)
+  })
+}
+```
+
+#### 2. Get Member Activity Details
+```typescript
+window.api.memberActivityStats.getActivityStats(serverId, memberId, activityId, accessToken)
+```
+Returns detailed statistics for a member on a specific activity, including skill level and proficiency.
+
+**Example:**
+```typescript
+const stats = await window.api.memberActivityStats.getActivityStats(
+  'srv_123',
+  'mem_456',
+  'act_789',
+  accessToken
+)
+
+if (stats.data) {
+  console.log('Activity:', stats.data.activity_name)
+  console.log('Total sessions:', stats.data.total_sessions)
+  console.log('Avg duration:', stats.data.avg_session_duration)
+  console.log('Skill level:', stats.data.skill_level)
+  console.log('Proficiency score:', stats.data.proficiency_score)
+  console.log('Sessions created:', stats.data.sessions_created)
+  console.log('Total likes:', stats.data.total_likes)
+}
+```
+
+#### 3. Get Activity Progression
+```typescript
+window.api.memberActivityStats.getActivityProgression(serverId, memberId, activityId, params, accessToken)
+```
+Returns progression over time showing skill development.
+
+**Parameters:**
+- `period`: 'all_time' | 'daily' | 'weekly' | 'monthly' | 'yearly' (default: 'weekly')
+- `limit`: Number of periods (default: 12, max: 52)
+
+**Example:**
+```typescript
+const progression = await window.api.memberActivityStats.getActivityProgression(
+  'srv_123',
+  'mem_456',
+  'act_789',
+  { period: 'weekly', limit: 12 },
+  accessToken
+)
+
+if (progression.data) {
+  progression.data.forEach(period => {
+    console.log(`Week ${period.period_start}:`)
+    console.log(`  Sessions: ${period.total_sessions}`)
+    console.log(`  Skill: ${period.skill_level}`)
+    console.log(`  Proficiency: ${period.proficiency_score}`)
+  })
+}
+```
+
+### Use Case: Member Profile Activity Tab
+```typescript
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useAuth } from '@/composables/auth/useAuth'
+
+const { session } = useAuth()
+const props = defineProps<{ serverId: string; memberId: string }>()
+
+const activities = ref([])
+const loading = ref(false)
+
+const loadActivities = async () => {
+  loading.value = true
+  const result = await window.api.memberActivityStats.getAllActivities(
+    props.serverId,
+    props.memberId,
+    { page: 1, limit: 10 },
+    session.value?.access_token
+  )
+
+  if (result.data) {
+    activities.value = result.data.data
+  }
+  loading.value = false
+}
+
+onMounted(() => {
+  loadActivities()
+})
+</script>
+```
+
+---
+
+## Enum Definition Statistics
+
+Track usage and distribution of enum values across sessions.
+
+### Available Methods
+
+#### 1. Get All Enum Definitions Stats
+```typescript
+window.api.enumDefinitionStats.getAllStats(serverId, params, accessToken)
+```
+Returns paginated list of all enum definitions with usage statistics.
+
+**Example:**
+```typescript
+const { session } = useAuth()
+const result = await window.api.enumDefinitionStats.getAllStats(
+  'srv_123',
+  { page: 1, limit: 20 },
+  session.value?.access_token
+)
+
+if (result.data) {
+  result.data.data.forEach(enumDef => {
+    console.log(`${enumDef.enum_definition_name}:`)
+    console.log(`  Total values: ${enumDef.total_values}`)
+    console.log(`  Total usage: ${enumDef.total_usage}`)
+    console.log(`  Sessions: ${enumDef.total_sessions}`)
+    console.log(`  Unique users: ${enumDef.unique_users}`)
+    console.log(`  Most used: ${enumDef.most_used_value.enum_value_id}`)
+  })
+}
+```
+
+#### 2. Get Enum Definition Details
+```typescript
+window.api.enumDefinitionStats.getStats(serverId, enumDefinitionId, params, accessToken)
+```
+Returns detailed statistics for a specific enum definition with all its values (paginated).
+
+**Parameters:**
+- `page`: Page number (must be >= 1)
+- `limit`: Items per page (must be >= 1)
+- `period`: Time period (default: 'all_time')
+
+**Example:**
+```typescript
+const details = await window.api.enumDefinitionStats.getStats(
+  'srv_123',
+  'enumdef_456',
+  { page: 1, limit: 10, period: 'weekly' },
+  accessToken
+)
+
+if (details.data) {
+  details.data.data.forEach(value => {
+    console.log(`${value.enum_value_display}:`)
+    console.log(`  Usage: ${value.usage_count}`)
+    console.log(`  Percentage: ${value.percentage_of_total}%`)
+    console.log(`  Sessions: ${value.total_sessions}`)
+    console.log(`  Avg likes: ${value.avg_likes_when_selected}`)
+  })
+}
+```
+
+#### 3. Get Value Distribution
+```typescript
+window.api.enumDefinitionStats.getDistribution(serverId, enumDefinitionId, accessToken)
+```
+Returns the distribution of values with percentages.
+
+**Example:**
+```typescript
+const distribution = await window.api.enumDefinitionStats.getDistribution(
+  'srv_123',
+  'enumdef_456',
+  accessToken
+)
+
+if (distribution.data) {
+  console.log('Value:', distribution.data.enum_value_display)
+  console.log('Usage:', distribution.data.usage_count)
+  console.log('Percentage:', distribution.data.percentage + '%')
+  console.log('Sessions:', distribution.data.total_sessions)
+  console.log('Unique users:', distribution.data.unique_users)
+}
+```
+
+#### 4. Get Specific Enum Value Stats
+```typescript
+window.api.enumDefinitionStats.getValueStats(serverId, enumDefinitionId, enumValueId, params, accessToken)
+```
+Returns detailed statistics for a specific enum value (paginated).
+
+**Parameters:**
+- `page`: Page number (must be >= 1)
+- `limit`: Items per page (must be >= 1)
+- `period`: Time period (default: 'all_time')
+
+**Example:**
+```typescript
+const valueStats = await window.api.enumDefinitionStats.getValueStats(
+  'srv_123',
+  'enumdef_456',
+  'enumval_789',
+  { page: 1, limit: 20, period: 'monthly' },
+  accessToken
+)
+
+if (valueStats.data) {
+  console.log(`Total records: ${valueStats.data.total}`)
+  console.log(`Page ${valueStats.data.page} of ${valueStats.data.pageCount}`)
+
+  valueStats.data.data.forEach(stat => {
+    console.log(`Period ${stat.period_start} to ${stat.period_end}:`)
+    console.log(`  Usage: ${stat.usage_count}`)
+    console.log(`  Sessions: ${stat.total_sessions}`)
+    console.log(`  Duration: ${stat.total_duration}s`)
+  })
+}
+```
+
+### Use Case: Enum Value Distribution Chart
+```typescript
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
+import { useAuth } from '@/composables/auth/useAuth'
+
+const { session } = useAuth()
+const props = defineProps<{ serverId: string; enumDefinitionId: string }>()
+
+const enumStats = ref(null)
+const loading = ref(false)
+
+const chartData = computed(() => {
+  if (!enumStats.value?.data) return []
+
+  return enumStats.value.data.map(value => ({
+    label: value.enum_value_display,
+    value: value.usage_count,
+    percentage: value.percentage_of_total
+  }))
+})
+
+const loadEnumStats = async () => {
+  loading.value = true
+  const result = await window.api.enumDefinitionStats.getStats(
+    props.serverId,
+    props.enumDefinitionId,
+    { page: 1, limit: 50 },
+    session.value?.access_token
+  )
+
+  if (result.data) {
+    enumStats.value = result
+  }
+  loading.value = false
+}
+
+onMounted(() => {
+  loadEnumStats()
+})
+</script>
+```
+
+---
+
+## Complete Stats Implementation Summary
+
+### All Available Stats APIs
+
+1. **Server Stats** (`window.api.serverStats.*`)
+   - Global server analytics
+   - Timeline and growth trends
+   - Comparative analysis
+
+2. **Member Stats** (`window.api.memberStats.*`)
+   - Individual member statistics
+   - Leaderboards and rankings
+   - Activity patterns and growth
+
+3. **Activity Stats** (`window.api.activityStats.*`)
+   - Activity popularity metrics
+   - Time patterns and rankings
+   - Growth trends and contributors
+
+4. **Member Activity Stats** (`window.api.memberActivityStats.*`)
+   - Member performance on specific activities
+   - Skill progression tracking
+   - Activity participation history
+
+5. **Enum Definition Stats** (`window.api.enumDefinitionStats.*`)
+   - Enum value usage analytics
+   - Distribution analysis
+   - Value-specific statistics
+
+### Architecture Benefits
+
 ## Next Steps
 
 1. Create Vue composables for each stat type (optional):

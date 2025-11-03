@@ -14,6 +14,8 @@ import { serverTypeBridge } from './bridges/server-type.bridge'
 import { serverStatsBridge } from './bridges/server-stats.bridge'
 import { memberStatsBridge } from './bridges/member-stats.bridge'
 import { activityStatsBridge } from './bridges/activity-stats.bridge'
+import { memberActivityStatsBridge } from './bridges/member-activity-stats.bridge'
+import { enumDefinitionStatsBridge } from './bridges/enum-definition-stats.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -38,7 +40,9 @@ const api = {
   serverType: serverTypeBridge,
   serverStats: serverStatsBridge,
   memberStats: memberStatsBridge,
-  activityStats: activityStatsBridge
+  activityStats: activityStatsBridge,
+  memberActivityStats: memberActivityStatsBridge,
+  enumDefinitionStats: enumDefinitionStatsBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

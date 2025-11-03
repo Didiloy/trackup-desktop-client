@@ -17,6 +17,8 @@ import { SERVER_TYPE_CHANNELS } from './types/server-type'
 import { SERVER_STATS_CHANNELS } from './types/server-stats'
 import { MEMBER_STATS_CHANNELS } from './types/member-stats'
 import { ACTIVITY_STATS_CHANNELS } from './types/activity-stats'
+import { MEMBER_ACTIVITY_STATS_CHANNELS } from './types/member-activity-stats'
+import { ENUM_DEFINITION_STATS_CHANNELS } from './types/enum-definition-stats'
 
 export const ipc_channels = {
   window: WINDOW_CHANNELS,
@@ -32,5 +34,7 @@ export const ipc_channels = {
   serverType: SERVER_TYPE_CHANNELS,
   serverStats: SERVER_STATS_CHANNELS,
   memberStats: MEMBER_STATS_CHANNELS,
-  activityStats: ACTIVITY_STATS_CHANNELS
+  activityStats: ACTIVITY_STATS_CHANNELS,
+  memberActivityStats: MEMBER_ACTIVITY_STATS_CHANNELS,
+  enumDefinitionStats: ENUM_DEFINITION_STATS_CHANNELS
 } as const

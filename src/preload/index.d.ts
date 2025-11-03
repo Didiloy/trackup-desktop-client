@@ -13,6 +13,8 @@ import type { ServerTypeBridge } from './bridges/server-type.bridge'
 import type { ServerStatsBridge } from './bridges/server-stats.bridge'
 import type { MemberStatsBridge } from './bridges/member-stats.bridge'
 import type { ActivityStatsBridge } from './bridges/activity-stats.bridge'
+import type { MemberActivityStatsBridge } from './bridges/member-activity-stats.bridge'
+import type { EnumDefinitionStatsBridge } from './bridges/enum-definition-stats.bridge'
 
 /**
  * Global type definitions for window.api
@@ -32,6 +34,8 @@ export interface API {
   serverStats: ServerStatsBridge
   memberStats: MemberStatsBridge
   activityStats: ActivityStatsBridge
+  memberActivityStats: MemberActivityStatsBridge
+  enumDefinitionStats: EnumDefinitionStatsBridge
 }
 
 declare global {

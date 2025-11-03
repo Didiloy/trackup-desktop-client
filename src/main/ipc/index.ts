@@ -12,6 +12,8 @@ import { registerServerTypeIpc } from './server-type.ipc'
 import { registerServerStatsIpc } from './server-stats.ipc'
 import { registerMemberStatsIpc } from './member-stats.ipc'
 import { registerActivityStatsIpc } from './activity-stats.ipc'
+import { registerMemberActivityStatsIpc } from './member-activity-stats.ipc'
+import { registerEnumDefinitionStatsIpc } from './enum-definition-stats.ipc'
 
 /**
  * Register all IPC handlers
@@ -37,4 +39,6 @@ export function registerAllIpc(): void {
   registerServerStatsIpc()
   registerMemberStatsIpc()
   registerActivityStatsIpc()
+  registerMemberActivityStatsIpc()
+  registerEnumDefinitionStatsIpc()
 }
