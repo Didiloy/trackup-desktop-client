@@ -8,8 +8,28 @@ import Login from '@/views/Login.vue'
 
 const { isAuthenticated } = useAuth()
 
-onMounted(() => {
+onMounted(async () => {
   console.log(isAuthenticated.value)
+
+  const { session } = useAuth()
+  const accessToken = session.value?.access_token
+
+  if (accessToken) {
+    const result = await window.api.server.create(
+      {
+        name: 'My Server',
+        type_public_id: 'srvtype_123',
+        description: 'Test server'
+      },
+      accessToken
+    )
+
+    if (result.error) {
+      console.error('Error creating server:', result.error)
+    } else {
+      console.log('Server created:', result.data)
+    }
+  }
 })
 </script>
 
