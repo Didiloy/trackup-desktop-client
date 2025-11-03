@@ -40,33 +40,73 @@ function setupAuthStateListener(): void {
   unsubscribe = () => listener.subscription.unsubscribe()
 }
 
+async function handlePKCEFlow(code: string): Promise<void> {
+  loading.value = true
+  error.value = null
+  try {
+    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+    if (exchangeError) {
+      error.value = exchangeError.message
+    } else {
+      setStateFromSession(data.session)
+    }
+  } catch (e) {
+    setError(e, 'Authentication failed')
+  } finally {
+    loading.value = false
+  }
+}
+
+async function handleImplicitFlow(accessToken: string, refreshToken: string): Promise<void> {
+  loading.value = true
+  error.value = null
+  try {
+    const { data, error: sessionError } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken
+    })
+    if (sessionError) {
+      error.value = sessionError.message
+    } else {
+      setStateFromSession(data.session)
+    }
+  } catch (e) {
+    setError(e, 'Authentication failed')
+  } finally {
+    loading.value = false
+  }
+}
+
 async function handleDeepLinkUrl(url: string): Promise<void> {
   try {
     const parsed = new URL(url)
-    const code = parsed.searchParams.get('code')
+
+    // Check for errors in query params or hash
     const errorDescription =
-      parsed.searchParams.get('error_description') || parsed.searchParams.get('error')
+      parsed.searchParams.get('error_description') ||
+      parsed.searchParams.get('error') ||
+      new URLSearchParams(parsed.hash.slice(1)).get('error_description') ||
+      new URLSearchParams(parsed.hash.slice(1)).get('error')
 
     if (errorDescription) {
       error.value = errorDescription
       return
     }
 
+    // Handle PKCE flow (code in query params)
+    const code = parsed.searchParams.get('code')
     if (code) {
-      loading.value = true
-      error.value = null
-      try {
-        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-        if (exchangeError) {
-          error.value = exchangeError.message
-        } else {
-          setStateFromSession(data.session)
-        }
-      } catch (e) {
-        setError(e, 'Authentication failed')
-      } finally {
-        loading.value = false
-      }
+      await handlePKCEFlow(code)
+      return
+    }
+
+    // Handle implicit flow (tokens in hash fragment)
+    const hashParams = new URLSearchParams(parsed.hash.slice(1))
+    const accessToken = hashParams.get('access_token')
+    const refreshToken = hashParams.get('refresh_token')
+
+    if (accessToken) {
+      await handleImplicitFlow(accessToken, refreshToken || '')
     }
   } catch (e) {
     setError(e, 'Authentication failed')

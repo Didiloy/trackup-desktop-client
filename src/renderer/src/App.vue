@@ -6,12 +6,12 @@ import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'
 import Login from '@/views/Login.vue'
 
-const { isAuthenticated } = useAuth()
+const { isAuthenticated, session } = useAuth()
 
 onMounted(async () => {
   console.log(isAuthenticated.value)
+  console.log(session.value)
 
-  const { session } = useAuth()
   const accessToken = session.value?.access_token
 
   if (accessToken) {
