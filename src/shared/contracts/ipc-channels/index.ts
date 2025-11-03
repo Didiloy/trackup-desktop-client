@@ -9,6 +9,8 @@ import { APP_CHANNELS } from './types/app'
 import { SERVER_CHANNELS } from './types/server'
 import { ENUM_DEFINITION_CHANNELS } from './types/enum-definition'
 import { ACTIVITY_CHANNELS } from './types/activity'
+import { ACTIVITY_SKILL_LEVEL_CHANNELS } from './types/activity-skill-level'
+import { SESSION_CHANNELS } from './types/session'
 
 export const ipc_channels = {
   window: WINDOW_CHANNELS,
@@ -16,5 +18,7 @@ export const ipc_channels = {
   app: APP_CHANNELS,
   server: SERVER_CHANNELS,
   enumDefinition: ENUM_DEFINITION_CHANNELS,
-  activity: ACTIVITY_CHANNELS
+  activity: ACTIVITY_CHANNELS,
+  activitySkillLevel: ACTIVITY_SKILL_LEVEL_CHANNELS,
+  session: SESSION_CHANNELS
 } as const

@@ -5,6 +5,8 @@ import type { AuthBridge } from './bridges/auth.bridge'
 import type { ServerBridge } from './bridges/server.bridge'
 import type { EnumDefinitionBridge } from './bridges/enum-definition.bridge'
 import type { ActivityBridge } from './bridges/activity.bridge'
+import type { ActivitySkillLevelBridge } from './bridges/activity-skill-level.bridge'
+import type { SessionBridge } from './bridges/session.bridge'
 
 /**
  * Global type definitions for window.api
@@ -16,6 +18,8 @@ export interface API {
   server: ServerBridge
   enumDefinition: EnumDefinitionBridge
   activity: ActivityBridge
+  activitySkillLevel: ActivitySkillLevelBridge
+  session: SessionBridge
 }
 
 declare global {

@@ -6,6 +6,8 @@ import { authBridge } from './bridges/auth.bridge'
 import { serverBridge } from './bridges/server.bridge'
 import { enumDefinitionBridge } from './bridges/enum-definition.bridge'
 import { activityBridge } from './bridges/activity.bridge'
+import { activitySkillLevelBridge } from './bridges/activity-skill-level.bridge'
+import { sessionBridge } from './bridges/session.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -22,7 +24,9 @@ const api = {
   auth: authBridge,
   server: serverBridge,
   enumDefinition: enumDefinitionBridge,
-  activity: activityBridge
+  activity: activityBridge,
+  activitySkillLevel: activitySkillLevelBridge,
+  session: sessionBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

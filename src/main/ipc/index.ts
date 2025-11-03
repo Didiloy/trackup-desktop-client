@@ -4,6 +4,8 @@ import { registerAppIpc } from './app.ipc'
 import { registerServerIpc } from './server.ipc'
 import { registerEnumDefinitionIpc } from './enum-definition.ipc'
 import { registerActivityIpc } from './activity.ipc'
+import { registerActivitySkillLevelIpc } from './activity-skill-level.ipc'
+import { registerSessionIpc } from './session.ipc'
 
 /**
  * Register all IPC handlers
@@ -19,4 +21,6 @@ export function registerAllIpc(): void {
   registerServerIpc()
   registerEnumDefinitionIpc()
   registerActivityIpc()
+  registerActivitySkillLevelIpc()
+  registerSessionIpc()
 }
