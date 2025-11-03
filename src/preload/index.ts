@@ -11,6 +11,9 @@ import { sessionBridge } from './bridges/session.bridge'
 import { memberBridge } from './bridges/member.bridge'
 import { userBridge } from './bridges/user.bridge'
 import { serverTypeBridge } from './bridges/server-type.bridge'
+import { serverStatsBridge } from './bridges/server-stats.bridge'
+import { memberStatsBridge } from './bridges/member-stats.bridge'
+import { activityStatsBridge } from './bridges/activity-stats.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -32,7 +35,10 @@ const api = {
   session: sessionBridge,
   member: memberBridge,
   user: userBridge,
-  serverType: serverTypeBridge
+  serverType: serverTypeBridge,
+  serverStats: serverStatsBridge,
+  memberStats: memberStatsBridge,
+  activityStats: activityStatsBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -10,6 +10,9 @@ import type { SessionBridge } from './bridges/session.bridge'
 import type { MemberBridge } from './bridges/member.bridge'
 import type { UserBridge } from './bridges/user.bridge'
 import type { ServerTypeBridge } from './bridges/server-type.bridge'
+import type { ServerStatsBridge } from './bridges/server-stats.bridge'
+import type { MemberStatsBridge } from './bridges/member-stats.bridge'
+import type { ActivityStatsBridge } from './bridges/activity-stats.bridge'
 
 /**
  * Global type definitions for window.api
@@ -26,6 +29,9 @@ export interface API {
   member: MemberBridge
   user: UserBridge
   serverType: ServerTypeBridge
+  serverStats: ServerStatsBridge
+  memberStats: MemberStatsBridge
+  activityStats: ActivityStatsBridge
 }
 
 declare global {

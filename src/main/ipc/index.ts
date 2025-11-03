@@ -9,6 +9,9 @@ import { registerSessionIpc } from './session.ipc'
 import { registerMemberIpc } from './member.ipc'
 import { registerUserIpc } from './user.ipc'
 import { registerServerTypeIpc } from './server-type.ipc'
+import { registerServerStatsIpc } from './server-stats.ipc'
+import { registerMemberStatsIpc } from './member-stats.ipc'
+import { registerActivityStatsIpc } from './activity-stats.ipc'
 
 /**
  * Register all IPC handlers
@@ -29,4 +32,9 @@ export function registerAllIpc(): void {
   registerMemberIpc()
   registerUserIpc()
   registerServerTypeIpc()
+
+  // Register stats IPC handlers
+  registerServerStatsIpc()
+  registerMemberStatsIpc()
+  registerActivityStatsIpc()
 }
