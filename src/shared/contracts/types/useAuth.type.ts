@@ -1,9 +1,7 @@
 import { ComputedRef, Ref } from 'vue'
-import { Provider, Session, User } from '@supabase/supabase-js'
+import { Provider } from '@supabase/supabase-js'
 
 export type TUseAuth = {
-  user: Ref<User | null>
-  session: Ref<Session | null>
   loading: Ref<boolean>
   error: Ref<string | null>
   isAuthenticated: ComputedRef<boolean>

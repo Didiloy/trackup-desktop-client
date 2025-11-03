@@ -6,30 +6,29 @@ import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'
 import Login from '@/views/Login.vue'
 
-const { isAuthenticated, session } = useAuth()
+const { isAuthenticated } = useAuth()
 
 onMounted(async () => {
   console.log(isAuthenticated.value)
-  console.log(session.value)
 
-  const accessToken = session.value?.access_token
-
-  if (accessToken) {
-    const result = await window.api.server.create(
-      {
-        name: 'My Server',
-        type_public_id: 'srvtype_123',
-        description: 'Test server'
-      },
-      accessToken
-    )
-
-    if (result.error) {
-      console.error('Error creating server:', result.error)
-    } else {
-      console.log('Server created:', result.data)
-    }
-  }
+  // const accessToken = session.value?.access_token
+  //
+  // if (accessToken) {
+  //   const result = await window.api.server.create(
+  //     {
+  //       name: 'My Server',
+  //       type_public_id: 'srvtype_123',
+  //       description: 'Test server'
+  //     },
+  //     accessToken
+  //   )
+  //
+  //   if (result.error) {
+  //     console.error('Error creating server:', result.error)
+  //   } else {
+  //     console.log('Server created:', result.data)
+  //   }
+  // }
 })
 </script>
 

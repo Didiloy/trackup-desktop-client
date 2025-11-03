@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import Versions from '@/components/Versions.vue'
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 const ipcHandle = (): void => window.api.app.ping()
+const user_store = useUserStore()
+
+onMounted(() => {
+  console.log('Home component mounted')
+  console.log('User Store State:', user_store.$state)
+  console.log('User Store getUsername:', user_store.getUsername)
+  console.log('User Store getAvatar:', user_store.getAvatar)
+  console.log('User Store getId:', user_store.getId)
+  console.log('User Store getEmail:', user_store.getEmail)
+  console.log('User Store getAccessToken:', user_store.getAccessToken)
+})
 </script>
 
 <template>

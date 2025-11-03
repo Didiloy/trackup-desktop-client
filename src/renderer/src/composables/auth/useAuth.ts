@@ -1,7 +1,7 @@
 import type { TUseAuth } from '../../../../shared/contracts/types/useAuth.type'
 
 // Import separated modules
-import { user, session, loading, error, isAuthenticated } from './utils/authState'
+import { loading, error, isAuthenticated } from './utils/authState'
 import { initializeSession, signInWithOAuth, signOut } from './utils/authOperations'
 
 /**
@@ -62,8 +62,6 @@ export function useAuth(): TUseAuth {
   }
 
   return {
-    user,
-    session,
     loading,
     error,
     isAuthenticated,
