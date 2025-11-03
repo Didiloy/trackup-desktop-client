@@ -7,6 +7,8 @@ import { registerActivityIpc } from './activity.ipc'
 import { registerActivitySkillLevelIpc } from './activity-skill-level.ipc'
 import { registerSessionIpc } from './session.ipc'
 import { registerMemberIpc } from './member.ipc'
+import { registerUserIpc } from './user.ipc'
+import { registerServerTypeIpc } from './server-type.ipc'
 
 /**
  * Register all IPC handlers
@@ -25,4 +27,6 @@ export function registerAllIpc(): void {
   registerActivitySkillLevelIpc()
   registerSessionIpc()
   registerMemberIpc()
+  registerUserIpc()
+  registerServerTypeIpc()
 }

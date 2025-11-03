@@ -8,6 +8,8 @@ import type { ActivityBridge } from './bridges/activity.bridge'
 import type { ActivitySkillLevelBridge } from './bridges/activity-skill-level.bridge'
 import type { SessionBridge } from './bridges/session.bridge'
 import type { MemberBridge } from './bridges/member.bridge'
+import type { UserBridge } from './bridges/user.bridge'
+import type { ServerTypeBridge } from './bridges/server-type.bridge'
 
 /**
  * Global type definitions for window.api
@@ -22,6 +24,8 @@ export interface API {
   activitySkillLevel: ActivitySkillLevelBridge
   session: SessionBridge
   member: MemberBridge
+  user: UserBridge
+  serverType: ServerTypeBridge
 }
 
 declare global {

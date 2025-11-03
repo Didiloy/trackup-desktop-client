@@ -12,6 +12,8 @@ import { ACTIVITY_CHANNELS } from './types/activity'
 import { ACTIVITY_SKILL_LEVEL_CHANNELS } from './types/activity-skill-level'
 import { SESSION_CHANNELS } from './types/session'
 import { MEMBER_CHANNELS } from './types/member'
+import { USER_CHANNELS } from './types/user'
+import { SERVER_TYPE_CHANNELS } from './types/server-type'
 
 export const ipc_channels = {
   window: WINDOW_CHANNELS,
@@ -22,5 +24,7 @@ export const ipc_channels = {
   activity: ACTIVITY_CHANNELS,
   activitySkillLevel: ACTIVITY_SKILL_LEVEL_CHANNELS,
   session: SESSION_CHANNELS,
-  member: MEMBER_CHANNELS
+  member: MEMBER_CHANNELS,
+  user: USER_CHANNELS,
+  serverType: SERVER_TYPE_CHANNELS
 } as const

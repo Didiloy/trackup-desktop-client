@@ -9,6 +9,8 @@ import { activityBridge } from './bridges/activity.bridge'
 import { activitySkillLevelBridge } from './bridges/activity-skill-level.bridge'
 import { sessionBridge } from './bridges/session.bridge'
 import { memberBridge } from './bridges/member.bridge'
+import { userBridge } from './bridges/user.bridge'
+import { serverTypeBridge } from './bridges/server-type.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -28,7 +30,9 @@ const api = {
   activity: activityBridge,
   activitySkillLevel: activitySkillLevelBridge,
   session: sessionBridge,
-  member: memberBridge
+  member: memberBridge,
+  user: userBridge,
+  serverType: serverTypeBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
