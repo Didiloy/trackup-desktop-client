@@ -118,4 +118,3 @@ export function combineValidations(...validations: ValidationResult[]): Validati
   }
   return undefined
 }
-

@@ -15,22 +15,15 @@ import type {
 } from '../../../shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  buildQueryParams,
+  combineValidations,
+  validateAuth,
+  validatePagination,
+  validateRequired
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:MemberActivityStats')
-
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerMemberActivityStatsIpc(): void {
   // Get all activities for a member (paginated)
@@ -45,25 +38,13 @@ export function registerMemberActivityStatsIpc(): void {
     ): Promise<IMemberActivityStatsApiResponse<IPaginatedMemberActivityStats>> => {
       logger.info('Getting all activities for member:', serverId, memberId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -86,21 +67,13 @@ export function registerMemberActivityStatsIpc(): void {
     ): Promise<IMemberActivityStatsApiResponse<IMemberActivityDetails>> => {
       logger.info('Getting member activity stats:', serverId, memberId, activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IMemberActivityDetails>(
         `/api/v1/stats/servers/${serverId}/members/${memberId}/activities/${activityId}`,
@@ -122,21 +95,13 @@ export function registerMemberActivityStatsIpc(): void {
     ): Promise<IMemberActivityStatsApiResponse<IMemberActivityProgression[]>> => {
       logger.info('Getting member activity progression:', serverId, memberId, activityId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 

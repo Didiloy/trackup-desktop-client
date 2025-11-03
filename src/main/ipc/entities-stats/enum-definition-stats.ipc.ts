@@ -16,22 +16,15 @@ import type {
 } from '../../../shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  buildQueryParams,
+  combineValidations,
+  validateAuth,
+  validatePagination,
+  validateRequired
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:EnumDefinitionStats')
-
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerEnumDefinitionStatsIpc(): void {
   // Get all enum definitions statistics (paginated)
@@ -45,21 +38,12 @@ export function registerEnumDefinitionStatsIpc(): void {
     ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumDefinitionStats>> => {
       logger.info('Getting all enum definitions stats:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -86,21 +70,13 @@ export function registerEnumDefinitionStatsIpc(): void {
         return { error: 'Server ID is required' }
       }
 
-      if (!enumDefinitionId) {
-        return { error: 'Enum definition ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(enumDefinitionId, 'Enum Definition ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -122,17 +98,12 @@ export function registerEnumDefinitionStatsIpc(): void {
     ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
       logger.info('Getting enum value distribution:', serverId, enumDefinitionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!enumDefinitionId) {
-        return { error: 'Enum definition ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(enumDefinitionId, 'Enum Definition ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IEnumValueDistribution>(
         `/api/v1/stats/servers/${serverId}/enums_definitions/${enumDefinitionId}/distribution`,
@@ -154,29 +125,14 @@ export function registerEnumDefinitionStatsIpc(): void {
     ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
       logger.info('Getting enum value stats:', serverId, enumDefinitionId, enumValueId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!enumDefinitionId) {
-        return { error: 'Enum definition ID is required' }
-      }
-
-      if (!enumValueId) {
-        return { error: 'Enum value ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(enumDefinitionId, 'Enum Definition ID'),
+        validateRequired(enumValueId, 'Enum Value ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 

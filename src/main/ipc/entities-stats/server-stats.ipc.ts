@@ -17,22 +17,9 @@ import type {
 } from '../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { buildQueryParams, combineValidations, validateAuth, validateRequired } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:ServerStats')
-
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerServerStatsIpc(): void {
   // Get server statistics
@@ -45,13 +32,11 @@ export function registerServerStatsIpc(): void {
     ): Promise<IServerStatsApiResponse<IServerStats>> => {
       logger.info('Getting server statistics:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IServerStats>(`/api/v1/stats/servers/${serverId}`, accessToken)
     }
@@ -67,13 +52,11 @@ export function registerServerStatsIpc(): void {
     ): Promise<IServerStatsApiResponse<IServerStatsDetails>> => {
       logger.info('Getting server stats details:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IServerStatsDetails>(
         `/api/v1/stats/servers/${serverId}/details`,
@@ -93,13 +76,11 @@ export function registerServerStatsIpc(): void {
     ): Promise<IServerStatsApiResponse<IStatsTimeline[]>> => {
       logger.info('Getting server timeline:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -121,13 +102,11 @@ export function registerServerStatsIpc(): void {
     ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
       logger.info('Getting server growth trends:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -148,13 +127,11 @@ export function registerServerStatsIpc(): void {
     ): Promise<IServerStatsApiResponse<IComparativeAnalysis[]>> => {
       logger.info('Getting comparative analysis:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IComparativeAnalysis[]>(
         `/api/v1/stats/servers/${serverId}/comparative-analysis`,

@@ -22,10 +22,15 @@ import type {
 import type { IStatsTimeline } from '../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
-import { validateRequired, validateAuth, validatePagination, combineValidations, buildQueryParams } from '../../../shared/helpers'
+import {
+  validateRequired,
+  validateAuth,
+  validatePagination,
+  combineValidations,
+  buildQueryParams
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:MemberStats')
-
 
 export function registerMemberStatsIpc(): void {
   // Get member leaderboard

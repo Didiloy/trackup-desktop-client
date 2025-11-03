@@ -19,22 +19,15 @@ import type {
 } from '../../../shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  buildQueryParams,
+  combineValidations,
+  validateAuth,
+  validatePagination,
+  validateRequired
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:SnapshotStats')
-
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerSnapshotStatsIpc(): void {
   // Create a manual snapshot
@@ -48,17 +41,13 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
       logger.info('Creating snapshot:', serverId, request.type)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
 
-      if (!request.type) {
-        return { error: 'Snapshot type is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(request.type, 'Snapshot type'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<ISnapshot>(
         `/api/v1/stats/servers/${serverId}/snapshots`,
@@ -79,17 +68,12 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<IPaginatedSnapshots>> => {
       logger.info('Getting all snapshots:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -111,17 +95,12 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
       logger.info('Getting snapshot:', serverId, snapshotId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!snapshotId) {
-        return { error: 'Snapshot ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(snapshotId, 'Snapshot ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<ISnapshot>(
         `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId}`,
@@ -141,17 +120,12 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
       logger.info('Getting latest snapshot:', serverId, params.type)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!params.type) {
-        return { error: 'Snapshot type is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(params.type, 'Snapshot type'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -172,13 +146,11 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshotSummary>> => {
       logger.info('Getting snapshots summary:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<ISnapshotSummary>(
         `/api/v1/stats/servers/${serverId}/snapshots/summary`,
@@ -199,22 +171,13 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ISnapshotComparisonResult>> => {
       logger.info('Comparing snapshots:', serverId, snapshotId1, snapshotId2)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!snapshotId1) {
-        return { error: 'First snapshot ID is required' }
-      }
-
-      if (!snapshotId2) {
-        return { error: 'Second snapshot ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
-
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(snapshotId1, 'First Snapshot ID'),
+        validateRequired(snapshotId2, 'Second Snapshot ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
       return apiService.get<ISnapshotComparisonResult>(
         `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId1}/compare/${snapshotId2}`,
         accessToken
@@ -233,13 +196,11 @@ export function registerSnapshotStatsIpc(): void {
     ): Promise<ISnapshotApiResponse<ICleanupSnapshotsResponse>> => {
       logger.info('Cleaning up snapshots:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 

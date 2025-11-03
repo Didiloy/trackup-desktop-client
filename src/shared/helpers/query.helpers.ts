@@ -9,7 +9,7 @@
  * @param params - Object containing query parameters
  * @returns Query string with leading '?' or empty string
  */
-export function buildQueryParams(params?: Record<string, unknown>): string {
+export function buildQueryParams(params: Record<string, any> | undefined): string {
   if (!params || Object.keys(params).length === 0) return ''
 
   const query = Object.entries(params)
@@ -26,7 +26,7 @@ export function buildQueryParams(params?: Record<string, unknown>): string {
  * @param params - Object containing query parameters
  * @returns Complete URL with query string
  */
-export function buildUrlWithParams(path: string, params?: Record<string, unknown>): string {
+export function buildUrlWithParams(path: string, params?: Record<string, any>): string {
   const queryString = buildQueryParams(params)
   return `${path}${queryString}`
 }
@@ -37,7 +37,7 @@ export function buildUrlWithParams(path: string, params?: Record<string, unknown
  * @returns Options object for apiService methods
  */
 export function buildRequestOptions(
-  params?: Record<string, unknown>
+  params?: Record<string, any>
 ): { params?: Record<string, string> } | undefined {
   if (!params || Object.keys(params).length === 0) return undefined
 
@@ -51,4 +51,3 @@ export function buildRequestOptions(
 
   return Object.keys(filteredParams).length > 0 ? { params: filteredParams } : undefined
 }
-
