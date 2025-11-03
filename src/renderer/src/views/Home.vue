@@ -2,9 +2,11 @@
 import Versions from '@/components/Versions.vue'
 import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useAuth } from '@/composables/auth/useAuth'
 
 const ipcHandle = (): void => window.api.app.ping()
 const user_store = useUserStore()
+const { signOut } = useAuth()
 
 onMounted(() => {
   console.log('Home component mounted')
@@ -33,6 +35,7 @@ onMounted(() => {
       </div>
       <div class="action">
         <Button label="Send IPC" @click="ipcHandle" />
+        <Button label="signout" @click="signOut"></Button>
       </div>
     </div>
     <Versions />
