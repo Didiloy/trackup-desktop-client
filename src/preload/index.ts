@@ -16,6 +16,7 @@ import { memberStatsBridge } from './bridges/member-stats.bridge'
 import { activityStatsBridge } from './bridges/activity-stats.bridge'
 import { memberActivityStatsBridge } from './bridges/member-activity-stats.bridge'
 import { enumDefinitionStatsBridge } from './bridges/enum-definition-stats.bridge'
+import { snapshotStatsBridge } from './bridges/snapshot-stats.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -42,7 +43,8 @@ const api = {
   memberStats: memberStatsBridge,
   activityStats: activityStatsBridge,
   memberActivityStats: memberActivityStatsBridge,
-  enumDefinitionStats: enumDefinitionStatsBridge
+  enumDefinitionStats: enumDefinitionStatsBridge,
+  snapshotStats: snapshotStatsBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

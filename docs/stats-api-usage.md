@@ -807,6 +807,327 @@ onMounted(() => {
    - Distribution analysis
    - Value-specific statistics
 
+6. **Snapshot Stats** (`window.api.snapshotStats.*`)
+   - Historical stats snapshots
+   - Snapshot comparisons
+   - Summary and cleanup
+
+---
+
+## Snapshot Statistics
+
+Track and compare server statistics over time with automatic and manual snapshots.
+
+### Available Methods
+
+#### 1. Create Manual Snapshot
+```typescript
+window.api.snapshotStats.create(serverId, request, accessToken)
+```
+Create a manual snapshot of current server stats. Only the server creator can create snapshots.
+
+**Snapshot Types:**
+- `daily`: Daily snapshot
+- `weekly`: Weekly snapshot
+- `monthly`: Monthly snapshot
+- `yearly`: Yearly snapshot
+- `milestone`: Milestone snapshot
+- `custom`: Custom snapshot
+
+**Example:**
+```typescript
+const { session } = useAuth()
+const result = await window.api.snapshotStats.create(
+  'srv_123',
+  {
+    type: 'weekly',
+    description: 'End of Q4 2025 snapshot'
+  },
+  session.value?.access_token
+)
+
+if (result.data) {
+  console.log('Snapshot created:', result.data.id)
+  console.log('Snapshot date:', result.data.snapshot_date)
+  console.log('Total sessions:', result.data.data.server_stats.total_sessions)
+  console.log('Engagement score:', result.data.data.server_stats.engagement_score)
+}
+```
+
+#### 2. Get All Snapshots
+```typescript
+window.api.snapshotStats.getAll(serverId, params, accessToken)
+```
+Returns paginated list of all snapshots with optional filtering.
+
+**Parameters:**
+- `page`: Page number (required, must be >= 1)
+- `limit`: Items per page (optional)
+- `type`: Filter by snapshot type (optional)
+- `from_date`: Start date filter in ISO8601 format (optional)
+- `to_date`: End date filter in ISO8601 format (optional)
+
+**Example:**
+```typescript
+const snapshots = await window.api.snapshotStats.getAll(
+  'srv_123',
+  {
+    page: 1,
+    limit: 20,
+    type: 'weekly',
+    from_date: '2025-01-01T00:00:00Z',
+    to_date: '2025-12-31T23:59:59Z'
+  },
+  accessToken
+)
+
+if (snapshots.data) {
+  console.log(`Total snapshots: ${snapshots.data.total}`)
+  console.log(`Page ${snapshots.data.page} of ${snapshots.data.pageCount}`)
+
+  snapshots.data.data.forEach(snapshot => {
+    console.log(`\n${snapshot.type} snapshot - ${snapshot.snapshot_date}`)
+    console.log(`  Description: ${snapshot.description}`)
+    console.log(`  Sessions: ${snapshot.highlights.total_sessions}`)
+    console.log(`  Members: ${snapshot.highlights.total_members}`)
+    console.log(`  Engagement: ${snapshot.highlights.engagement_score}`)
+    console.log(`  Change: +${snapshot.highlights.sessions_change} sessions`)
+  })
+}
+```
+
+#### 3. Get Specific Snapshot
+```typescript
+window.api.snapshotStats.getById(serverId, snapshotId, accessToken)
+```
+Returns complete data for a specific snapshot including all statistics.
+
+**Example:**
+```typescript
+const snapshot = await window.api.snapshotStats.getById(
+  'srv_123',
+  'statsnapshot_abc123',
+  accessToken
+)
+
+if (snapshot.data) {
+  const data = snapshot.data.data
+
+  console.log('Server Stats:', data.server_stats)
+  console.log('Period Stats:', data.period_stats)
+  console.log('Top Members:', data.top_members)
+  console.log('Top Activities:', data.top_activities)
+  console.log('Top Enums:', data.top_enums)
+  console.log('Trends:', data.trends)
+  console.log('Metadata:', data.metadata)
+}
+```
+
+#### 4. Get Latest Snapshot by Type
+```typescript
+window.api.snapshotStats.getLatest(serverId, params, accessToken)
+```
+Returns the most recent snapshot of a specific type.
+
+**Example:**
+```typescript
+const latestWeekly = await window.api.snapshotStats.getLatest(
+  'srv_123',
+  { type: 'weekly' },
+  accessToken
+)
+
+if (latestWeekly.data) {
+  console.log('Latest weekly snapshot:', latestWeekly.data.snapshot_date)
+  console.log('Total sessions:', latestWeekly.data.data.server_stats.total_sessions)
+  console.log('Growth rate:', latestWeekly.data.data.server_stats.sessions_growth_rate)
+}
+```
+
+#### 5. Get Snapshots Summary
+```typescript
+window.api.snapshotStats.getSummary(serverId, accessToken)
+```
+Returns the latest snapshot for each type (daily, weekly, monthly, yearly).
+
+**Example:**
+```typescript
+const summary = await window.api.snapshotStats.getSummary('srv_123', accessToken)
+
+if (summary.data) {
+  if (summary.data.daily) {
+    console.log('Daily snapshot:', summary.data.daily.snapshot_date)
+  }
+
+  if (summary.data.weekly) {
+    console.log('Weekly snapshot:', summary.data.weekly.snapshot_date)
+    console.log('Engagement:', summary.data.weekly.data.server_stats.engagement_score)
+  }
+
+  if (summary.data.monthly) {
+    console.log('Monthly snapshot:', summary.data.monthly.snapshot_date)
+  }
+
+  if (summary.data.yearly) {
+    console.log('Yearly snapshot:', summary.data.yearly.snapshot_date)
+  }
+}
+```
+
+#### 6. Compare Two Snapshots
+```typescript
+window.api.snapshotStats.compare(serverId, snapshotId1, snapshotId2, accessToken)
+```
+Compare two snapshots to see changes over time.
+
+**Example:**
+```typescript
+const comparison = await window.api.snapshotStats.compare(
+  'srv_123',
+  'snapshot_old',
+  'snapshot_new',
+  accessToken
+)
+
+if (comparison.data) {
+  console.log('Comparing:')
+  console.log(`  ${comparison.data.snapshot1.date} (${comparison.data.snapshot1.type})`)
+  console.log(`  vs`)
+  console.log(`  ${comparison.data.snapshot2.date} (${comparison.data.snapshot2.type})`)
+
+  console.log('\nChanges:')
+  console.log(`  Sessions: ${comparison.data.comparison.sessions_diff > 0 ? '+' : ''}${comparison.data.comparison.sessions_diff}`)
+  console.log(`  Members: ${comparison.data.comparison.members_diff > 0 ? '+' : ''}${comparison.data.comparison.members_diff}`)
+  console.log(`  Duration: ${comparison.data.comparison.duration_diff > 0 ? '+' : ''}${comparison.data.comparison.duration_diff}s`)
+  console.log(`  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`)
+
+  console.log('\nTop Members Changes:')
+  console.log(`  New entries: ${comparison.data.top_members_changes.new_entries.length}`)
+  console.log(`  Dropped: ${comparison.data.top_members_changes.dropped_entries.length}`)
+  console.log(`  Maintained: ${comparison.data.top_members_changes.maintained}`)
+
+  console.log('\nTop Activities Changes:')
+  console.log(`  New entries: ${comparison.data.top_activities_changes.new_entries.length}`)
+  console.log(`  Dropped: ${comparison.data.top_activities_changes.dropped_entries.length}`)
+  console.log(`  Maintained: ${comparison.data.top_activities_changes.maintained}`)
+}
+```
+
+#### 7. Cleanup Old Snapshots
+```typescript
+window.api.snapshotStats.cleanup(serverId, params, accessToken)
+```
+Delete snapshots older than specified days. Only the server creator can perform cleanup.
+
+**Example:**
+```typescript
+// Cleanup snapshots older than 90 days
+const cleanup = await window.api.snapshotStats.cleanup(
+  'srv_123',
+  { days: 90 },
+  accessToken
+)
+
+if (cleanup.data) {
+  console.log(`Deleted ${cleanup.data.count} old snapshots`)
+}
+```
+
+### Use Cases
+
+#### Snapshot Dashboard
+```typescript
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useAuth } from '@/composables/auth/useAuth'
+
+const { session } = useAuth()
+const props = defineProps<{ serverId: string }>()
+
+const summary = ref(null)
+const loading = ref(false)
+
+const loadSummary = async () => {
+  loading.value = true
+  const result = await window.api.snapshotStats.getSummary(
+    props.serverId,
+    session.value?.access_token
+  )
+
+  if (result.data) {
+    summary.value = result.data
+  }
+  loading.value = false
+}
+
+onMounted(() => {
+  loadSummary()
+})
+</script>
+
+<template>
+  <div class="snapshot-dashboard">
+    <div v-if="summary?.daily" class="snapshot-card">
+      <h3>Daily Snapshot</h3>
+      <p>{{ summary.daily.snapshot_date }}</p>
+      <p>Engagement: {{ summary.daily.data.server_stats.engagement_score }}</p>
+    </div>
+
+    <div v-if="summary?.weekly" class="snapshot-card">
+      <h3>Weekly Snapshot</h3>
+      <p>{{ summary.weekly.snapshot_date }}</p>
+      <p>Sessions: {{ summary.weekly.data.server_stats.total_sessions }}</p>
+    </div>
+
+    <!-- More snapshot cards... -->
+  </div>
+</template>
+```
+
+#### Snapshot Comparison Chart
+```typescript
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useAuth } from '@/composables/auth/useAuth'
+
+const { session } = useAuth()
+const props = defineProps<{
+  serverId: string
+  snapshotId1: string
+  snapshotId2: string
+}>()
+
+const comparison = ref(null)
+
+const chartData = computed(() => {
+  if (!comparison.value) return null
+
+  return {
+    labels: ['Sessions', 'Members', 'Duration (hrs)', 'Engagement'],
+    differences: [
+      comparison.value.comparison.sessions_diff,
+      comparison.value.comparison.members_diff,
+      comparison.value.comparison.duration_diff / 3600,
+      comparison.value.comparison.engagement_diff
+    ]
+  }
+})
+
+const loadComparison = async () => {
+  const result = await window.api.snapshotStats.compare(
+    props.serverId,
+    props.snapshotId1,
+    props.snapshotId2,
+    session.value?.access_token
+  )
+
+  if (result.data) {
+    comparison.value = result.data
+  }
+}
+</script>
+```
+
 ### Architecture Benefits
 
 ## Next Steps
