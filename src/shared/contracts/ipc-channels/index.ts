@@ -19,6 +19,7 @@ import { MEMBER_STATS_CHANNELS } from './types/member-stats'
 import { ACTIVITY_STATS_CHANNELS } from './types/activity-stats'
 import { MEMBER_ACTIVITY_STATS_CHANNELS } from './types/member-activity-stats'
 import { ENUM_DEFINITION_STATS_CHANNELS } from './types/enum-definition-stats'
+import { SNAPSHOT_STATS_CHANNELS } from './types/snapshot-stats'
 
 export const ipc_channels = {
   window: WINDOW_CHANNELS,
@@ -36,5 +37,6 @@ export const ipc_channels = {
   memberStats: MEMBER_STATS_CHANNELS,
   activityStats: ACTIVITY_STATS_CHANNELS,
   memberActivityStats: MEMBER_ACTIVITY_STATS_CHANNELS,
-  enumDefinitionStats: ENUM_DEFINITION_STATS_CHANNELS
+  enumDefinitionStats: ENUM_DEFINITION_STATS_CHANNELS,
+  snapshotStats: SNAPSHOT_STATS_CHANNELS
 } as const

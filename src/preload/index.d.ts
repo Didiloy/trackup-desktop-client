@@ -15,6 +15,7 @@ import type { MemberStatsBridge } from './bridges/member-stats.bridge'
 import type { ActivityStatsBridge } from './bridges/activity-stats.bridge'
 import type { MemberActivityStatsBridge } from './bridges/member-activity-stats.bridge'
 import type { EnumDefinitionStatsBridge } from './bridges/enum-definition-stats.bridge'
+import type { SnapshotStatsBridge } from './bridges/snapshot-stats.bridge'
 
 /**
  * Global type definitions for window.api
@@ -36,6 +37,7 @@ export interface API {
   activityStats: ActivityStatsBridge
   memberActivityStats: MemberActivityStatsBridge
   enumDefinitionStats: EnumDefinitionStatsBridge
+  snapshotStats: SnapshotStatsBridge
 }
 
 declare global {
