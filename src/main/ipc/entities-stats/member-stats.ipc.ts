@@ -22,22 +22,10 @@ import type {
 import type { IStatsTimeline } from '../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateRequired, validateAuth, validatePagination, combineValidations, buildQueryParams } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:MemberStats')
 
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerMemberStatsIpc(): void {
   // Get member leaderboard
@@ -51,13 +39,11 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberLeaderboard>> => {
       logger.info('Getting member leaderboard:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -79,21 +65,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IPaginatedMemberStats>> => {
       logger.info('Getting all members statistics:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -115,17 +92,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberStats>> => {
       logger.info('Getting member statistics:', serverId, memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IMemberStats>(
         `/api/v1/stats/servers/${serverId}/members/${memberId}`,
@@ -145,17 +117,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberStatsDetails>> => {
       logger.info('Getting member details:', serverId, memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IMemberStatsDetails>(
         `/api/v1/stats/servers/${serverId}/members/${memberId}/details`,
@@ -175,17 +142,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberActivityPatterns>> => {
       logger.info('Getting member patterns:', serverId, memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IMemberActivityPatterns>(
         `/api/v1/stats/servers/${serverId}/members/${memberId}/patterns`,
@@ -205,17 +167,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberRanking>> => {
       logger.info('Getting member ranking:', serverId, memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IMemberRanking>(
         `/api/v1/stats/servers/${serverId}/members/${memberId}/ranking`,
@@ -236,17 +193,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IStatsTimeline[]>> => {
       logger.info('Getting member timeline:', serverId, memberId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -269,17 +221,12 @@ export function registerMemberStatsIpc(): void {
     ): Promise<IMemberStatsApiResponse<IMemberGrowthTrends>> => {
       logger.info('Getting member growth trends:', serverId, memberId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 

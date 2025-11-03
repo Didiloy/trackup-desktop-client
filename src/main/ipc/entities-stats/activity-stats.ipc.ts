@@ -23,22 +23,10 @@ import type {
 import type { IStatsTimeline } from '../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateRequired, validateAuth, validatePagination, combineValidations, buildQueryParams } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:ActivityStats')
 
-/**
- * Build query string from params object
- */
-function buildQueryParams(params?: Record<string, any>): string {
-  if (!params || Object.keys(params).length === 0) return ''
-
-  const query = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-    .join('&')
-
-  return query ? `?${query}` : ''
-}
 
 export function registerActivityStatsIpc(): void {
   // Get activity leaderboard
@@ -52,13 +40,11 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityLeaderboard>> => {
       logger.info('Getting activity leaderboard:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -80,21 +66,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IPaginatedActivityStats>> => {
       logger.info('Getting all activities statistics:', serverId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!params.page || params.page < 1) {
-        return { error: 'Page must be >= 1' }
-      }
-
-      if (!params.limit || params.limit < 1) {
-        return { error: 'Limit must be >= 1' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validatePagination(params.page, params.limit),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -116,17 +93,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityStats>> => {
       logger.info('Getting activity statistics:', serverId, activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivityStats>(
         `/api/v1/stats/servers/${serverId}/activities/${activityId}`,
@@ -146,17 +118,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityStatsDetails>> => {
       logger.info('Getting activity details:', serverId, activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivityStatsDetails>(
         `/api/v1/stats/servers/${serverId}/activities/${activityId}/details`,
@@ -176,17 +143,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityTimePatterns>> => {
       logger.info('Getting activity patterns:', serverId, activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivityTimePatterns>(
         `/api/v1/stats/servers/${serverId}/activities/${activityId}/patterns`,
@@ -207,17 +169,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityRanking>> => {
       logger.info('Getting activity ranking:', serverId, activityId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -240,17 +197,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IStatsTimeline[]>> => {
       logger.info('Getting activity timeline:', serverId, activityId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 
@@ -273,17 +225,12 @@ export function registerActivityStatsIpc(): void {
     ): Promise<IActivityStatsApiResponse<IActivityGrowthTrends>> => {
       logger.info('Getting activity growth trends:', serverId, activityId, params)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       const queryString = buildQueryParams(params)
 

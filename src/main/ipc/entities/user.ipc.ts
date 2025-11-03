@@ -7,6 +7,7 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/user.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateAuth } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:User')
 
@@ -20,9 +21,8 @@ export function registerUserIpc(): void {
     async (_event, accessToken: string): Promise<IUserApiResponse<IUser>> => {
       logger.info('Getting current user information')
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = validateAuth(accessToken)
+      if (validationError) return validationError
 
       return apiService.get<IUser>('/api/v1/users/me', accessToken)
     }
@@ -34,9 +34,8 @@ export function registerUserIpc(): void {
     async (_event, accessToken: string): Promise<IUserApiResponse<IUserServer[]>> => {
       logger.info('Getting current user servers')
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = validateAuth(accessToken)
+      if (validationError) return validationError
 
       return apiService.get<IUserServer[]>('/api/v1/users/me/servers', accessToken)
     }

@@ -8,6 +8,7 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/enum-definition.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateRequired, validateAuth, combineValidations } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:EnumDefinition')
 
@@ -27,17 +28,12 @@ export function registerEnumDefinitionIpc(): void {
       logger.info('Creating enum definition:', request.name)
 
       // Validate input
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!request.name) {
-        return { error: 'Name is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(request.name, 'Name'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IEnumDefinition>(
         `/api/v1/servers/${serverId}/enum-definitions`,
@@ -57,13 +53,11 @@ export function registerEnumDefinitionIpc(): void {
     ): Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>> => {
       logger.info('Listing enum definitions for server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IEnumDefinition[]>(
         `/api/v1/servers/${serverId}/enum-definitions`,
@@ -84,17 +78,12 @@ export function registerEnumDefinitionIpc(): void {
     ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
       logger.info('Updating enum definition:', enumDefinitionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!enumDefinitionId) {
-        return { error: 'Enum definition ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(enumDefinitionId, 'Enum definition ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.put<IEnumDefinition>(
         `/api/v1/servers/${serverId}/enum-definitions/${enumDefinitionId}`,
@@ -115,17 +104,12 @@ export function registerEnumDefinitionIpc(): void {
     ): Promise<IEnumDefinitionApiResponse<void>> => {
       logger.info('Deleting enum definition:', enumDefinitionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!enumDefinitionId) {
-        return { error: 'Enum definition ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(enumDefinitionId, 'Enum definition ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(
         `/api/v1/servers/${serverId}/enum-definitions/${enumDefinitionId}`,

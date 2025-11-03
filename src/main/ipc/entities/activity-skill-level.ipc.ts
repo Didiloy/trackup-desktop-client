@@ -8,6 +8,7 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateRequired, validateAuth, combineValidations } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:ActivitySkillLevel')
 
@@ -28,33 +29,16 @@ export function registerActivitySkillLevelIpc(): void {
       logger.info('Creating skill level for activity:', activityId)
 
       // Validate input
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!request.name) {
-        return { error: 'Skill level name is required' }
-      }
-
-      if (request.display_order === undefined || request.display_order === null) {
-        return { error: 'Display order is required' }
-      }
-
-      if (request.min_sessions === undefined || request.min_sessions === null) {
-        return { error: 'Minimum sessions is required' }
-      }
-
-      if (request.min_duration === undefined || request.min_duration === null) {
-        return { error: 'Minimum duration is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateRequired(request.name, 'Skill level name'),
+        validateRequired(request.display_order, 'Display order'),
+        validateRequired(request.min_sessions, 'Minimum sessions'),
+        validateRequired(request.min_duration, 'Minimum duration'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IActivitySkillLevel>(
         `/api/v1/servers/${serverId}/activities/${activityId}/skill-levels`,
@@ -75,17 +59,12 @@ export function registerActivitySkillLevelIpc(): void {
     ): Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel[]>> => {
       logger.info('Listing skill levels for activity:', activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivitySkillLevel[]>(
         `/api/v1/servers/${serverId}/activities/${activityId}/skill-levels`,
@@ -106,21 +85,13 @@ export function registerActivitySkillLevelIpc(): void {
     ): Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel>> => {
       logger.info('Getting skill level details:', skillLevelId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!skillLevelId) {
-        return { error: 'Skill level ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateRequired(skillLevelId, 'Skill level ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivitySkillLevel>(
         `/api/v1/servers/${serverId}/activities/${activityId}/skill-levels/${skillLevelId}`,
@@ -142,21 +113,13 @@ export function registerActivitySkillLevelIpc(): void {
     ): Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel>> => {
       logger.info('Updating skill level:', skillLevelId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!skillLevelId) {
-        return { error: 'Skill level ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateRequired(skillLevelId, 'Skill level ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.put<IActivitySkillLevel>(
         `/api/v1/servers/${serverId}/activities/${activityId}/skill-levels/${skillLevelId}`,
@@ -178,21 +141,13 @@ export function registerActivitySkillLevelIpc(): void {
     ): Promise<IActivitySkillLevelApiResponse<void>> => {
       logger.info('Deleting skill level:', skillLevelId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!skillLevelId) {
-        return { error: 'Skill level ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateRequired(skillLevelId, 'Skill level ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(
         `/api/v1/servers/${serverId}/activities/${activityId}/skill-levels/${skillLevelId}`,

@@ -2,6 +2,7 @@ import { ipcMain, shell } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import type { IBillingApiResponse } from '../../shared/contracts/interfaces/billing.interfaces'
 import { Logger } from '../../shared/logger'
+import { validateAuth, validateUrlScheme } from '../../shared/helpers'
 
 const logger = new Logger('IPC:Billing')
 
@@ -19,18 +20,18 @@ export function registerBillingIpc(): void {
     async (_event, accessToken: string): Promise<IBillingApiResponse> => {
       logger.info('Starting subscription checkout')
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = validateAuth(accessToken)
+      if (validationError) return validationError
 
       try {
         // Construct URL with access_token as query parameter
         const url = `${API_BASE_URL}/api/v1/billing/subscribe/start?access_token=${encodeURIComponent(accessToken)}`
 
         // Validate URL scheme (security check)
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        const urlValidationError = validateUrlScheme(url)
+        if (urlValidationError) {
           logger.error('Invalid URL scheme:', url)
-          return { error: 'Invalid URL scheme' }
+          return urlValidationError
         }
 
         // Open URL in default browser
@@ -51,18 +52,18 @@ export function registerBillingIpc(): void {
     async (_event, accessToken: string): Promise<IBillingApiResponse> => {
       logger.info('Starting billing portal')
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = validateAuth(accessToken)
+      if (validationError) return validationError
 
       try {
         // Construct URL with access_token as query parameter
         const url = `${API_BASE_URL}/api/v1/billing/portal/start?access_token=${encodeURIComponent(accessToken)}`
 
         // Validate URL scheme (security check)
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        const urlValidationError = validateUrlScheme(url)
+        if (urlValidationError) {
           logger.error('Invalid URL scheme:', url)
-          return { error: 'Invalid URL scheme' }
+          return urlValidationError
         }
 
         // Open URL in default browser

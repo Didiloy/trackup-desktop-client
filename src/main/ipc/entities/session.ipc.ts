@@ -10,6 +10,14 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  validateRequired,
+  validateAuth,
+  validatePositive,
+  validateNotEmpty,
+  combineValidations,
+  buildRequestOptions
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:Session')
 
@@ -29,29 +37,15 @@ export function registerSessionIpc(): void {
       logger.info('Creating session for activity:', request.activity_id)
 
       // Validate input
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!request.activity_id) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!request.duration || request.duration <= 0) {
-        return { error: 'Duration must be greater than 0' }
-      }
-
-      if (!request.date) {
-        return { error: 'Date is required' }
-      }
-
-      if (!request.participants || request.participants.length === 0) {
-        return { error: 'At least one participant is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(request.activity_id, 'Activity ID'),
+        validatePositive(request.duration, 'Duration'),
+        validateRequired(request.date, 'Date'),
+        validateNotEmpty(request.participants, 'At least one participant'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<ISession>(`/api/v1/servers/${serverId}/sessions`, accessToken, request)
     }
@@ -68,29 +62,16 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
       logger.info('Listing sessions for server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
-
-      // Build query parameters
-      const params: Record<string, string | number> = {}
-      if (options?.page) {
-        params.page = options.page
-      }
-      if (options?.limit) {
-        params.limit = options.limit
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IPaginatedSessions>(
         `/api/v1/servers/${serverId}/sessions`,
         accessToken,
-        {
-          params: Object.keys(params).length > 0 ? params : undefined
-        }
+        buildRequestOptions(options)
       )
     }
   )
@@ -106,17 +87,12 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<ISession>> => {
       logger.info('Getting session details:', sessionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!sessionId) {
-        return { error: 'Session ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(sessionId, 'Session ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<ISession>(
         `/api/v1/servers/${serverId}/sessions/${sessionId}`,
@@ -137,17 +113,12 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<ISession>> => {
       logger.info('Updating session:', sessionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!sessionId) {
-        return { error: 'Session ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(sessionId, 'Session ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.put<ISession>(
         `/api/v1/servers/${serverId}/sessions/${sessionId}`,
@@ -168,17 +139,12 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<void>> => {
       logger.info('Deleting session:', sessionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!sessionId) {
-        return { error: 'Session ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(sessionId, 'Session ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(
         `/api/v1/servers/${serverId}/sessions/${sessionId}`,
@@ -198,17 +164,12 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<void>> => {
       logger.info('Liking session:', sessionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!sessionId) {
-        return { error: 'Session ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(sessionId, 'Session ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<void>(
         `/api/v1/servers/${serverId}/sessions/${sessionId}/like`,
@@ -228,17 +189,12 @@ export function registerSessionIpc(): void {
     ): Promise<ISessionApiResponse<void>> => {
       logger.info('Unliking session:', sessionId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!sessionId) {
-        return { error: 'Session ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(sessionId, 'Session ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(
         `/api/v1/servers/${serverId}/sessions/${sessionId}/unlike`,

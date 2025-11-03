@@ -9,6 +9,12 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/activity.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  validateRequired,
+  validateAuth,
+  combineValidations,
+  buildRequestOptions
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:Activity')
 
@@ -28,17 +34,12 @@ export function registerActivityIpc(): void {
       logger.info('Creating activity:', request.name)
 
       // Validate input
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!request.name) {
-        return { error: 'Activity name is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(request.name, 'Activity name'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IActivity>(
         `/api/v1/servers/${serverId}/activities`,
@@ -59,26 +60,17 @@ export function registerActivityIpc(): void {
     ): Promise<IActivityApiResponse<IActivity[]>> => {
       logger.info('Listing activities for server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
-
-      // Build query parameters
-      const params: Record<string, string> = {}
-      if (options?.search) {
-        params.search = options.search
-      }
-      if (options?.searchMode) {
-        params.searchMode = options.searchMode
-      }
-
-      return apiService.get<IActivity[]>(`/api/v1/servers/${serverId}/activities`, accessToken, {
-        params: Object.keys(params).length > 0 ? params : undefined
-      })
+      return apiService.get<IActivity[]>(
+        `/api/v1/servers/${serverId}/activities`,
+        accessToken,
+        buildRequestOptions(options)
+      )
     }
   )
 
@@ -93,17 +85,12 @@ export function registerActivityIpc(): void {
     ): Promise<IActivityApiResponse<IActivity>> => {
       logger.info('Getting activity details:', activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IActivity>(
         `/api/v1/servers/${serverId}/activities/${activityId}`,
@@ -124,21 +111,13 @@ export function registerActivityIpc(): void {
     ): Promise<IActivityApiResponse<IActivity>> => {
       logger.info('Updating activity:', activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!request.name) {
-        return { error: 'Activity name is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateRequired(request.name, 'Activity name'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.put<IActivity>(
         `/api/v1/servers/${serverId}/activities/${activityId}`,
@@ -159,17 +138,12 @@ export function registerActivityIpc(): void {
     ): Promise<IActivityApiResponse<void>> => {
       logger.info('Deleting activity:', activityId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!activityId) {
-        return { error: 'Activity ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(activityId, 'Activity ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(
         `/api/v1/servers/${serverId}/activities/${activityId}`,

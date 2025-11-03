@@ -9,6 +9,7 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/server.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import { validateRequired, validateAuth, combineValidations } from '../../../shared/helpers'
 
 const logger = new Logger('IPC:Server')
 
@@ -27,13 +28,12 @@ export function registerServerIpc(): void {
       logger.info('Creating server:', request.name)
 
       // Validate input
-      if (!request.name || !request.type_public_id) {
-        return { error: 'Name and type_public_id are required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(request.name, 'Name'),
+        validateRequired(request.type_public_id, 'type_public_id'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IServer>('/api/v1/servers/create', accessToken, request)
     }
@@ -45,13 +45,11 @@ export function registerServerIpc(): void {
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<IServer>> => {
       logger.info('Refreshing invite code for server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IServer>(
         `/api/v1/servers/${serverId}/invite-code/refresh`,
@@ -70,13 +68,11 @@ export function registerServerIpc(): void {
     ): Promise<IServerApiResponse<void>> => {
       logger.info('Joining server with code:', request.code)
 
-      if (!request.code) {
-        return { error: 'Invitation code is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(request.code, 'Invitation code'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<void>('/api/v1/servers/join', accessToken, request)
     }
@@ -88,13 +84,11 @@ export function registerServerIpc(): void {
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<IServer>> => {
       logger.info('Getting server details:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IServer>(`/api/v1/servers/${serverId}`, accessToken)
     }
@@ -111,13 +105,11 @@ export function registerServerIpc(): void {
     ): Promise<IServerApiResponse<IServer>> => {
       logger.info('Updating server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.put<IServer>(`/api/v1/servers/${serverId}`, accessToken, request)
     }
@@ -129,13 +121,11 @@ export function registerServerIpc(): void {
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<void>> => {
       logger.info('Deleting server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(`/api/v1/servers/${serverId}`, accessToken)
     }

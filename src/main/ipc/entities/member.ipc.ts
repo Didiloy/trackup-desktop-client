@@ -10,6 +10,12 @@ import type {
 } from '../../../shared/contracts/interfaces/entities/member.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
+import {
+  validateRequired,
+  validateAuth,
+  combineValidations,
+  buildRequestOptions
+} from '../../../shared/helpers'
 
 const logger = new Logger('IPC:Member')
 
@@ -29,17 +35,12 @@ export function registerMemberIpc(): void {
       logger.info('Inviting member to server:', serverId)
 
       // Validate input
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!request.user_id) {
-        return { error: 'User ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(request.user_id, 'User ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.post<IServerMember>(
         `/api/v1/servers/${serverId}/members/invite`,
@@ -55,13 +56,11 @@ export function registerMemberIpc(): void {
     async (_event, serverId: string, accessToken: string): Promise<IMemberApiResponse<void>> => {
       logger.info('Quitting server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(`/api/v1/servers/${serverId}/members/quit`, accessToken)
     }
@@ -78,35 +77,17 @@ export function registerMemberIpc(): void {
     ): Promise<IMemberApiResponse<IPaginatedMembers>> => {
       logger.info('Listing members for server:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
-
-      // Build query parameters
-      const params: Record<string, string | number> = {}
-      if (options?.page) {
-        params.page = options.page
-      }
-      if (options?.limit) {
-        params.limit = options.limit
-      }
-      if (options?.search) {
-        params.search = options.search
-      }
-      if (options?.nickname) {
-        params.nickname = options.nickname
-      }
-      if (options?.role_public_id) {
-        params.role_public_id = options.role_public_id
-      }
-
-      return apiService.get<IPaginatedMembers>(`/api/v1/servers/${serverId}/members`, accessToken, {
-        params: Object.keys(params).length > 0 ? params : undefined
-      })
+      return apiService.get<IPaginatedMembers>(
+        `/api/v1/servers/${serverId}/members`,
+        accessToken,
+        buildRequestOptions(options)
+      )
     }
   )
 
@@ -121,17 +102,12 @@ export function registerMemberIpc(): void {
     ): Promise<IMemberApiResponse<IServerMember>> => {
       logger.info('Getting member details:', memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.get<IServerMember>(
         `/api/v1/servers/${serverId}/members/${memberId}`,
@@ -151,17 +127,12 @@ export function registerMemberIpc(): void {
     ): Promise<IMemberApiResponse<void>> => {
       logger.info('Kicking member:', memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.delete<void>(`/api/v1/servers/${serverId}/members/${memberId}`, accessToken)
     }
@@ -179,21 +150,13 @@ export function registerMemberIpc(): void {
     ): Promise<IMemberApiResponse<IServerMember>> => {
       logger.info('Updating member nickname:', memberId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
-
-      if (!memberId) {
-        return { error: 'Member ID is required' }
-      }
-
-      if (!request.nickname) {
-        return { error: 'Nickname is required' }
-      }
-
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+      const validationError = combineValidations(
+        validateRequired(serverId, 'Server ID'),
+        validateRequired(memberId, 'Member ID'),
+        validateRequired(request.nickname, 'Nickname'),
+        validateAuth(accessToken)
+      )
+      if (validationError) return validationError
 
       return apiService.patch<IServerMember>(
         `/api/v1/servers/${serverId}/members/${memberId}/nickname`,
