@@ -3,6 +3,7 @@
 Ce document décrit l’architecture à utiliser pour cette application Electron + Vue + TypeScript. Il est prescriptif et va à l’essentiel: où placer chaque élément, comment les couches interagissent et quelles conventions suivre.
 
 ## Objectifs
+
 - Séparation des responsabilités par domaine (app, window, auth, settings, updater, …)
 - Sécurité par défaut (aucun accès Node dans le renderer, API preload minimaliste)
 - Contrats IPC typés et explicites, partagés entre les couches
@@ -51,6 +52,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Responsabilités par couche
+
 - main/
   - Gère le cycle de vie de l’application, les fenêtres, les capacités OS, et les endpoints IPC
   - Implemente des handlers IPC par domaine (aucune UI ici)
@@ -69,6 +71,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Cycle de vie (bootstrap)
+
 1. Single instance lock + early exits.
 2. Sécurité globale (permissions, CSP, hardening).
 3. Protocols (deep link, file handlers).
@@ -79,6 +82,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Gestion des fenêtres (WindowManager)
+
 - Expose: `createX`, `get(id|name)`, `focusOrCreate`, `all()`, `closeAll()`, `dispose()`.
 - Chaque fenêtre a sa classe dédiée qui encapsule les options BrowserWindow, preload, listeners (`close`, `ready-to-show`), restauration position/taille.
 - Aucune logique applicative dans les classes de fenêtre: elles délèguent aux services via IPC.
@@ -86,6 +90,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## IPC et Bridges
+
 - Côté main: modules `*.ipc.ts` recevant `ipcMain` + dépendances (services) et enregistrant:
   - `ipcMain.handle('ns:action', handler)` pour les requêtes
   - `webContents.send('ns:event', payload)` pour pousser des événements
@@ -97,6 +102,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Sécurité (essentiel)
+
 - `contextIsolation: true`, `sandbox: true`, `nodeIntegration: false`.
 - `BrowserWindow` avec `webPreferences` stricts (désactiver les features non-utilisées).
 - `session.setPermissionRequestHandler` refuse par défaut.
@@ -106,6 +112,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Conventions
+
 - Nommage canaux: `domaine:action`.
 - Unité de code = un domaine par fichier (registre IPC / bridge / service).
 - Éviter l’état global mutable dans main; préférer des services instanciés dans `app.ts`.
@@ -113,6 +120,7 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ---
 
 ## Exemples de fichiers (squelettes)
+
 - `src/main/bootstrap.ts`
   - Initialise sécurité, protocols, IPC, WindowManager, puis crée MainWindow.
 - `src/main/ipc/index.ts`

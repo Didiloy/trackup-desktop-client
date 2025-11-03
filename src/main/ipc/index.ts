@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron'
 import { registerWindowIpc } from './window.ipc'
 import { registerAppIpc } from './app.ipc'
+import { registerServerIpc } from './server.ipc'
 
 /**
  * Register all IPC handlers
@@ -13,4 +14,5 @@ export function registerAllIpc(): void {
   // Register domain-specific IPC handlers
   registerWindowIpc()
   registerAppIpc()
+  registerServerIpc()
 }

@@ -1,6 +1,10 @@
 import { ipcRenderer } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
-import type { IAppVersion, IUpdateInfo, IUpdateProgress } from '../../shared/contracts/interfaces/app.interfaces'
+import type {
+  IAppVersion,
+  IUpdateInfo,
+  IUpdateProgress
+} from '../../shared/contracts/interfaces/app.interfaces'
 
 /**
  * App API Bridge
@@ -52,7 +56,7 @@ export const appBridge = {
   /**
    * Listen for update available event
    */
-  onUpdateAvailable: (callback: (updateInfo: IUpdateInfo) => void): () => void => {
+  onUpdateAvailable: (callback: (updateInfo: IUpdateInfo) => void): (() => void) => {
     const handler = (_event: any, updateInfo: IUpdateInfo) => callback(updateInfo)
     ipcRenderer.on(ipc_channels.app.updateAvailable, handler)
     return () => ipcRenderer.removeListener(ipc_channels.app.updateAvailable, handler)
@@ -61,7 +65,7 @@ export const appBridge = {
   /**
    * Listen for update downloaded event
    */
-  onUpdateDownloaded: (callback: (info: any) => void): () => void => {
+  onUpdateDownloaded: (callback: (info: any) => void): (() => void) => {
     const handler = (_event: any, info: any) => callback(info)
     ipcRenderer.on(ipc_channels.app.updateDownloaded, handler)
     return () => ipcRenderer.removeListener(ipc_channels.app.updateDownloaded, handler)
@@ -70,7 +74,7 @@ export const appBridge = {
   /**
    * Listen for update error event
    */
-  onUpdateError: (callback: (error: string) => void): () => void => {
+  onUpdateError: (callback: (error: string) => void): (() => void) => {
     const handler = (_event: any, error: string) => callback(error)
     ipcRenderer.on(ipc_channels.app.updateError, handler)
     return () => ipcRenderer.removeListener(ipc_channels.app.updateError, handler)
@@ -79,7 +83,7 @@ export const appBridge = {
   /**
    * Listen for download progress event
    */
-  onUpdateProgress: (callback: (progress: IUpdateProgress) => void): () => void => {
+  onUpdateProgress: (callback: (progress: IUpdateProgress) => void): (() => void) => {
     const handler = (_event: any, progress: IUpdateProgress) => callback(progress)
     ipcRenderer.on(ipc_channels.app.updateProgress, handler)
     return () => ipcRenderer.removeListener(ipc_channels.app.updateProgress, handler)

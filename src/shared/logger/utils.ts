@@ -1,4 +1,4 @@
-import { ColorKey } from './types.js';
+import { ColorKey } from './types.js'
 
 /**
  * ANSI color codes for terminal output
@@ -30,27 +30,27 @@ export const COLORS: Record<ColorKey, string> = {
   brown: '\u001b[38;2;165;42;42m', // Custom RGB color
   brightBrown: '\u001b[38;2;210;105;30m', // Custom RGB color
   lightGray: '\u001b[90m',
-  brightTeal: '\u001b[38;2;64;224;208m', // Custom RGB color - turquoise
-};
+  brightTeal: '\u001b[38;2;64;224;208m' // Custom RGB color - turquoise
+}
 
 /**
  * Apply color to text if colors are enabled
  */
 export function colorize(enabled: boolean, color: ColorKey, text: string): string {
-  if (!enabled) return text;
-  return COLORS[color] + text + COLORS.reset;
+  if (!enabled) return text
+  return COLORS[color] + text + COLORS.reset
 }
 
 /**
  * Convert any value to a readable string message
  */
 export function toMessage(val: unknown): string {
-  if (typeof val === 'string') return val;
-  if (val instanceof Error) return val.message;
+  if (typeof val === 'string') return val
+  if (val instanceof Error) return val.message
   try {
-    return JSON.stringify(val);
+    return JSON.stringify(val)
   } catch {
-    return String(val);
+    return String(val)
   }
 }
 
@@ -58,7 +58,7 @@ export function toMessage(val: unknown): string {
  * Format timestamp in ISO-like format
  */
 export function formatTimestamp(): string {
-  const d = new Date();
-  const iso = d.toISOString();
-  return iso.replace('T', ' ').replace('Z', ''); // 2025-09-25 12:34:56.789
+  const d = new Date()
+  const iso = d.toISOString()
+  return iso.replace('T', ' ').replace('Z', '') // 2025-09-25 12:34:56.789
 }

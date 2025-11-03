@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { windowBridge } from './bridges/window.bridge'
 import { appBridge } from './bridges/app.bridge'
 import { authBridge } from './bridges/auth.bridge'
+import { serverBridge } from './bridges/server.bridge'
 import { Logger } from '../shared/logger'
 
 const logger = new Logger('Preload')
@@ -16,7 +17,8 @@ const logger = new Logger('Preload')
 const api = {
   window: windowBridge,
   app: appBridge,
-  auth: authBridge
+  auth: authBridge,
+  server: serverBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
