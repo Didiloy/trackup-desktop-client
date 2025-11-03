@@ -18,4 +18,3 @@ export const SNAPSHOT_STATS_CHANNELS = {
   // Cleanup
   cleanup: 'snapshot-stats:cleanup'
 } as const
-

@@ -44,4 +44,3 @@ export function registerUserIpc(): void {
 
   logger.info('User IPC handlers registered')
 }
-

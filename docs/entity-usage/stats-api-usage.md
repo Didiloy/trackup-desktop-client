@@ -40,12 +40,15 @@ src/
 ### Available Methods
 
 #### 1. Get Server Statistics
+
 ```typescript
 window.api.serverStats.getStats(serverId, accessToken)
 ```
+
 Returns global server statistics including sessions, members, activities, and engagement.
 
 **Example:**
+
 ```typescript
 const { session } = useAuth()
 const result = await window.api.serverStats.getStats('srv_123', session.value?.access_token)
@@ -57,12 +60,15 @@ if (result.data) {
 ```
 
 #### 2. Get Complete Server Details
+
 ```typescript
 window.api.serverStats.getDetails(serverId, accessToken)
 ```
+
 Returns comprehensive stats including top members, top activities, and timeline.
 
 **Example:**
+
 ```typescript
 const details = await window.api.serverStats.getDetails('srv_123', accessToken)
 
@@ -75,17 +81,21 @@ if (details.data) {
 ```
 
 #### 3. Get Server Timeline
+
 ```typescript
 window.api.serverStats.getTimeline(serverId, params, accessToken)
 ```
+
 Returns timeline statistics showing evolution over time.
 
 **Parameters:**
+
 - `period`: 'all_time' | 'daily' | 'weekly' | 'monthly' | 'yearly'
 - `limit`: Number of periods (default: 30, max: 365)
 - `isoWeek`: Use ISO week (Monday) for fallback (default: true)
 
 **Example:**
+
 ```typescript
 const timeline = await window.api.serverStats.getTimeline(
   'srv_123',
@@ -94,19 +104,22 @@ const timeline = await window.api.serverStats.getTimeline(
 )
 
 if (timeline.data) {
-  timeline.data.forEach(point => {
+  timeline.data.forEach((point) => {
     console.log(`${point.period}: ${point.sessions_count} sessions`)
   })
 }
 ```
 
 #### 4. Get Growth Trends
+
 ```typescript
 window.api.serverStats.getGrowthTrends(serverId, params, accessToken)
 ```
+
 Returns growth metrics comparing current period to previous.
 
 **Example:**
+
 ```typescript
 const growth = await window.api.serverStats.getGrowthTrends(
   'srv_123',
@@ -121,9 +134,11 @@ if (growth.data) {
 ```
 
 #### 5. Get Comparative Analysis
+
 ```typescript
 window.api.serverStats.getComparativeAnalysis(serverId, accessToken)
 ```
+
 Returns comparative analysis across different time periods.
 
 ---
@@ -133,16 +148,20 @@ Returns comparative analysis across different time periods.
 ### Available Methods
 
 #### 1. Get Member Leaderboard
+
 ```typescript
 window.api.memberStats.getLeaderboard(serverId, params, accessToken)
 ```
+
 Returns top members by total duration.
 
 **Parameters:**
+
 - `period`: 'all_time' | 'daily' | 'weekly' | 'monthly'
 - `limit`: Maximum number of results
 
 **Example:**
+
 ```typescript
 const leaderboard = await window.api.memberStats.getLeaderboard(
   'srv_123',
@@ -151,23 +170,27 @@ const leaderboard = await window.api.memberStats.getLeaderboard(
 )
 
 if (leaderboard.data) {
-  leaderboard.data.leaderboard.forEach(entry => {
+  leaderboard.data.leaderboard.forEach((entry) => {
     console.log(`${entry.rank}. ${entry.member_name} - ${entry.total_duration}s`)
   })
 }
 ```
 
 #### 2. Get All Members Statistics
+
 ```typescript
 window.api.memberStats.getAllStats(serverId, params, accessToken)
 ```
+
 Returns paginated list of all member statistics.
 
 **Parameters:**
+
 - `page`: Page number (must be >= 1)
 - `limit`: Items per page (must be >= 1)
 
 **Example:**
+
 ```typescript
 const members = await window.api.memberStats.getAllStats(
   'srv_123',
@@ -177,19 +200,22 @@ const members = await window.api.memberStats.getAllStats(
 
 if (members.data) {
   console.log(`Page ${members.data.page} of ${members.data.pageCount}`)
-  members.data.data.forEach(member => {
+  members.data.data.forEach((member) => {
     console.log(member.user_email, member.total_sessions)
   })
 }
 ```
 
 #### 3. Get Member Statistics
+
 ```typescript
 window.api.memberStats.getStats(serverId, memberId, accessToken)
 ```
+
 Returns detailed stats for a specific member. Use 'me' as memberId for own stats.
 
 **Example:**
+
 ```typescript
 // Get own stats
 const myStats = await window.api.memberStats.getStats('srv_123', 'me', accessToken)
@@ -199,12 +225,15 @@ const memberStats = await window.api.memberStats.getStats('srv_123', 'mem_456', 
 ```
 
 #### 4. Get Complete Member Details
+
 ```typescript
 window.api.memberStats.getDetails(serverId, memberId, accessToken)
 ```
+
 Returns comprehensive details including stats, patterns, ranking, and timeline.
 
 **Example:**
+
 ```typescript
 const details = await window.api.memberStats.getDetails('srv_123', 'me', accessToken)
 
@@ -217,12 +246,15 @@ if (details.data) {
 ```
 
 #### 5. Get Activity Patterns
+
 ```typescript
 window.api.memberStats.getPatterns(serverId, memberId, accessToken)
 ```
+
 Returns activity patterns including most active day, hour, and streaks.
 
 **Example:**
+
 ```typescript
 const patterns = await window.api.memberStats.getPatterns('srv_123', 'me', accessToken)
 
@@ -234,12 +266,15 @@ if (patterns.data) {
 ```
 
 #### 6. Get Member Ranking
+
 ```typescript
 window.api.memberStats.getRanking(serverId, memberId, accessToken)
 ```
+
 Returns member's rank and percentile in the server.
 
 **Example:**
+
 ```typescript
 const ranking = await window.api.memberStats.getRanking('srv_123', 'me', accessToken)
 
@@ -250,15 +285,19 @@ if (ranking.data) {
 ```
 
 #### 7. Get Member Timeline
+
 ```typescript
 window.api.memberStats.getTimeline(serverId, memberId, params, accessToken)
 ```
+
 Returns timeline showing member activity evolution.
 
 #### 8. Get Member Growth Trends
+
 ```typescript
 window.api.memberStats.getGrowthTrends(serverId, memberId, params, accessToken)
 ```
+
 Returns member growth metrics over time.
 
 ---
@@ -268,12 +307,15 @@ Returns member growth metrics over time.
 ### Available Methods
 
 #### 1. Get Activity Leaderboard
+
 ```typescript
 window.api.activityStats.getLeaderboard(serverId, params, accessToken)
 ```
+
 Returns top activities by popularity score.
 
 **Example:**
+
 ```typescript
 const leaderboard = await window.api.activityStats.getLeaderboard(
   'srv_123',
@@ -282,7 +324,7 @@ const leaderboard = await window.api.activityStats.getLeaderboard(
 )
 
 if (leaderboard.data) {
-  leaderboard.data.leaderboard.forEach(activity => {
+  leaderboard.data.leaderboard.forEach((activity) => {
     console.log(`${activity.rank}. ${activity.activity_name}`)
     console.log(`  Score: ${activity.popularity_score}`)
     console.log(`  Sessions: ${activity.total_sessions}`)
@@ -291,12 +333,15 @@ if (leaderboard.data) {
 ```
 
 #### 2. Get All Activities Statistics
+
 ```typescript
 window.api.activityStats.getAllStats(serverId, params, accessToken)
 ```
+
 Returns paginated list of all activity statistics, sorted by popularity.
 
 **Example:**
+
 ```typescript
 const activities = await window.api.activityStats.getAllStats(
   'srv_123',
@@ -306,12 +351,15 @@ const activities = await window.api.activityStats.getAllStats(
 ```
 
 #### 3. Get Activity Statistics
+
 ```typescript
 window.api.activityStats.getStats(serverId, activityId, accessToken)
 ```
+
 Returns detailed statistics for a specific activity.
 
 **Example:**
+
 ```typescript
 const stats = await window.api.activityStats.getStats('srv_123', 'act_789', accessToken)
 
@@ -323,12 +371,15 @@ if (stats.data) {
 ```
 
 #### 4. Get Complete Activity Details
+
 ```typescript
 window.api.activityStats.getDetails(serverId, activityId, accessToken)
 ```
+
 Returns comprehensive details including stats, patterns, growth, timeline, and top contributors.
 
 **Example:**
+
 ```typescript
 const details = await window.api.activityStats.getDetails('srv_123', 'act_789', accessToken)
 
@@ -341,12 +392,15 @@ if (details.data) {
 ```
 
 #### 5. Get Time Patterns
+
 ```typescript
 window.api.activityStats.getPatterns(serverId, activityId, accessToken)
 ```
+
 Returns activity time patterns including peak day and hour.
 
 **Example:**
+
 ```typescript
 const patterns = await window.api.activityStats.getPatterns('srv_123', 'act_789', accessToken)
 
@@ -358,15 +412,19 @@ if (patterns.data) {
 ```
 
 #### 6. Get Activity Ranking
+
 ```typescript
 window.api.activityStats.getRanking(serverId, activityId, params, accessToken)
 ```
+
 Returns the ranking of a specific activity based on popularity.
 
 **Parameters:**
+
 - `period`: Time period for ranking (default: 'all_time')
 
 **Example:**
+
 ```typescript
 const ranking = await window.api.activityStats.getRanking(
   'srv_123',
@@ -382,15 +440,19 @@ if (ranking.data) {
 ```
 
 #### 7. Get Activity Timeline
+
 ```typescript
 window.api.activityStats.getTimeline(serverId, activityId, params, accessToken)
 ```
+
 Returns timeline showing activity usage evolution over time.
 
 #### 8. Get Activity Growth Trends
+
 ```typescript
 window.api.activityStats.getGrowthTrends(serverId, activityId, params, accessToken)
 ```
+
 Returns activity growth metrics over time.
 
 ---
@@ -454,11 +516,7 @@ onMounted(() => {
 
 ```typescript
 const loadPage = async (page: number, limit: number = 20) => {
-  const result = await window.api.memberStats.getAllStats(
-    serverId,
-    { page, limit },
-    accessToken
-  )
+  const result = await window.api.memberStats.getAllStats(serverId, { page, limit }, accessToken)
 
   if (result.data) {
     return {
@@ -491,16 +549,20 @@ Track individual member performance and progression on specific activities.
 ### Available Methods
 
 #### 1. Get All Activities for a Member
+
 ```typescript
 window.api.memberActivityStats.getAllActivities(serverId, memberId, params, accessToken)
 ```
+
 Returns paginated list of all activities a member has participated in, sorted by duration.
 
 **Parameters:**
+
 - `page`: Page number (must be >= 1)
 - `limit`: Items per page (must be >= 1)
 
 **Example:**
+
 ```typescript
 const { session } = useAuth()
 const result = await window.api.memberActivityStats.getAllActivities(
@@ -511,7 +573,7 @@ const result = await window.api.memberActivityStats.getAllActivities(
 )
 
 if (result.data) {
-  result.data.data.forEach(activity => {
+  result.data.data.forEach((activity) => {
     console.log(`${activity.activity_name}:`)
     console.log(`  Sessions: ${activity.total_sessions}`)
     console.log(`  Duration: ${activity.total_duration}s`)
@@ -522,12 +584,15 @@ if (result.data) {
 ```
 
 #### 2. Get Member Activity Details
+
 ```typescript
 window.api.memberActivityStats.getActivityStats(serverId, memberId, activityId, accessToken)
 ```
+
 Returns detailed statistics for a member on a specific activity, including skill level and proficiency.
 
 **Example:**
+
 ```typescript
 const stats = await window.api.memberActivityStats.getActivityStats(
   'srv_123',
@@ -548,16 +613,26 @@ if (stats.data) {
 ```
 
 #### 3. Get Activity Progression
+
 ```typescript
-window.api.memberActivityStats.getActivityProgression(serverId, memberId, activityId, params, accessToken)
+window.api.memberActivityStats.getActivityProgression(
+  serverId,
+  memberId,
+  activityId,
+  params,
+  accessToken
+)
 ```
+
 Returns progression over time showing skill development.
 
 **Parameters:**
+
 - `period`: 'all_time' | 'daily' | 'weekly' | 'monthly' | 'yearly' (default: 'weekly')
 - `limit`: Number of periods (default: 12, max: 52)
 
 **Example:**
+
 ```typescript
 const progression = await window.api.memberActivityStats.getActivityProgression(
   'srv_123',
@@ -568,7 +643,7 @@ const progression = await window.api.memberActivityStats.getActivityProgression(
 )
 
 if (progression.data) {
-  progression.data.forEach(period => {
+  progression.data.forEach((period) => {
     console.log(`Week ${period.period_start}:`)
     console.log(`  Sessions: ${period.total_sessions}`)
     console.log(`  Skill: ${period.skill_level}`)
@@ -578,6 +653,7 @@ if (progression.data) {
 ```
 
 ### Use Case: Member Profile Activity Tab
+
 ```typescript
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
@@ -619,12 +695,15 @@ Track usage and distribution of enum values across sessions.
 ### Available Methods
 
 #### 1. Get All Enum Definitions Stats
+
 ```typescript
 window.api.enumDefinitionStats.getAllStats(serverId, params, accessToken)
 ```
+
 Returns paginated list of all enum definitions with usage statistics.
 
 **Example:**
+
 ```typescript
 const { session } = useAuth()
 const result = await window.api.enumDefinitionStats.getAllStats(
@@ -634,7 +713,7 @@ const result = await window.api.enumDefinitionStats.getAllStats(
 )
 
 if (result.data) {
-  result.data.data.forEach(enumDef => {
+  result.data.data.forEach((enumDef) => {
     console.log(`${enumDef.enum_definition_name}:`)
     console.log(`  Total values: ${enumDef.total_values}`)
     console.log(`  Total usage: ${enumDef.total_usage}`)
@@ -646,17 +725,21 @@ if (result.data) {
 ```
 
 #### 2. Get Enum Definition Details
+
 ```typescript
 window.api.enumDefinitionStats.getStats(serverId, enumDefinitionId, params, accessToken)
 ```
+
 Returns detailed statistics for a specific enum definition with all its values (paginated).
 
 **Parameters:**
+
 - `page`: Page number (must be >= 1)
 - `limit`: Items per page (must be >= 1)
 - `period`: Time period (default: 'all_time')
 
 **Example:**
+
 ```typescript
 const details = await window.api.enumDefinitionStats.getStats(
   'srv_123',
@@ -666,7 +749,7 @@ const details = await window.api.enumDefinitionStats.getStats(
 )
 
 if (details.data) {
-  details.data.data.forEach(value => {
+  details.data.data.forEach((value) => {
     console.log(`${value.enum_value_display}:`)
     console.log(`  Usage: ${value.usage_count}`)
     console.log(`  Percentage: ${value.percentage_of_total}%`)
@@ -677,12 +760,15 @@ if (details.data) {
 ```
 
 #### 3. Get Value Distribution
+
 ```typescript
 window.api.enumDefinitionStats.getDistribution(serverId, enumDefinitionId, accessToken)
 ```
+
 Returns the distribution of values with percentages.
 
 **Example:**
+
 ```typescript
 const distribution = await window.api.enumDefinitionStats.getDistribution(
   'srv_123',
@@ -700,17 +786,27 @@ if (distribution.data) {
 ```
 
 #### 4. Get Specific Enum Value Stats
+
 ```typescript
-window.api.enumDefinitionStats.getValueStats(serverId, enumDefinitionId, enumValueId, params, accessToken)
+window.api.enumDefinitionStats.getValueStats(
+  serverId,
+  enumDefinitionId,
+  enumValueId,
+  params,
+  accessToken
+)
 ```
+
 Returns detailed statistics for a specific enum value (paginated).
 
 **Parameters:**
+
 - `page`: Page number (must be >= 1)
 - `limit`: Items per page (must be >= 1)
 - `period`: Time period (default: 'all_time')
 
 **Example:**
+
 ```typescript
 const valueStats = await window.api.enumDefinitionStats.getValueStats(
   'srv_123',
@@ -724,7 +820,7 @@ if (valueStats.data) {
   console.log(`Total records: ${valueStats.data.total}`)
   console.log(`Page ${valueStats.data.page} of ${valueStats.data.pageCount}`)
 
-  valueStats.data.data.forEach(stat => {
+  valueStats.data.data.forEach((stat) => {
     console.log(`Period ${stat.period_start} to ${stat.period_end}:`)
     console.log(`  Usage: ${stat.usage_count}`)
     console.log(`  Sessions: ${stat.total_sessions}`)
@@ -734,6 +830,7 @@ if (valueStats.data) {
 ```
 
 ### Use Case: Enum Value Distribution Chart
+
 ```typescript
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
@@ -821,12 +918,15 @@ Track and compare server statistics over time with automatic and manual snapshot
 ### Available Methods
 
 #### 1. Create Manual Snapshot
+
 ```typescript
 window.api.snapshotStats.create(serverId, request, accessToken)
 ```
+
 Create a manual snapshot of current server stats. Only the server creator can create snapshots.
 
 **Snapshot Types:**
+
 - `daily`: Daily snapshot
 - `weekly`: Weekly snapshot
 - `monthly`: Monthly snapshot
@@ -835,6 +935,7 @@ Create a manual snapshot of current server stats. Only the server creator can cr
 - `custom`: Custom snapshot
 
 **Example:**
+
 ```typescript
 const { session } = useAuth()
 const result = await window.api.snapshotStats.create(
@@ -855,12 +956,15 @@ if (result.data) {
 ```
 
 #### 2. Get All Snapshots
+
 ```typescript
 window.api.snapshotStats.getAll(serverId, params, accessToken)
 ```
+
 Returns paginated list of all snapshots with optional filtering.
 
 **Parameters:**
+
 - `page`: Page number (required, must be >= 1)
 - `limit`: Items per page (optional)
 - `type`: Filter by snapshot type (optional)
@@ -868,6 +972,7 @@ Returns paginated list of all snapshots with optional filtering.
 - `to_date`: End date filter in ISO8601 format (optional)
 
 **Example:**
+
 ```typescript
 const snapshots = await window.api.snapshotStats.getAll(
   'srv_123',
@@ -885,7 +990,7 @@ if (snapshots.data) {
   console.log(`Total snapshots: ${snapshots.data.total}`)
   console.log(`Page ${snapshots.data.page} of ${snapshots.data.pageCount}`)
 
-  snapshots.data.data.forEach(snapshot => {
+  snapshots.data.data.forEach((snapshot) => {
     console.log(`\n${snapshot.type} snapshot - ${snapshot.snapshot_date}`)
     console.log(`  Description: ${snapshot.description}`)
     console.log(`  Sessions: ${snapshot.highlights.total_sessions}`)
@@ -897,12 +1002,15 @@ if (snapshots.data) {
 ```
 
 #### 3. Get Specific Snapshot
+
 ```typescript
 window.api.snapshotStats.getById(serverId, snapshotId, accessToken)
 ```
+
 Returns complete data for a specific snapshot including all statistics.
 
 **Example:**
+
 ```typescript
 const snapshot = await window.api.snapshotStats.getById(
   'srv_123',
@@ -924,12 +1032,15 @@ if (snapshot.data) {
 ```
 
 #### 4. Get Latest Snapshot by Type
+
 ```typescript
 window.api.snapshotStats.getLatest(serverId, params, accessToken)
 ```
+
 Returns the most recent snapshot of a specific type.
 
 **Example:**
+
 ```typescript
 const latestWeekly = await window.api.snapshotStats.getLatest(
   'srv_123',
@@ -945,12 +1056,15 @@ if (latestWeekly.data) {
 ```
 
 #### 5. Get Snapshots Summary
+
 ```typescript
 window.api.snapshotStats.getSummary(serverId, accessToken)
 ```
+
 Returns the latest snapshot for each type (daily, weekly, monthly, yearly).
 
 **Example:**
+
 ```typescript
 const summary = await window.api.snapshotStats.getSummary('srv_123', accessToken)
 
@@ -975,12 +1089,15 @@ if (summary.data) {
 ```
 
 #### 6. Compare Two Snapshots
+
 ```typescript
 window.api.snapshotStats.compare(serverId, snapshotId1, snapshotId2, accessToken)
 ```
+
 Compare two snapshots to see changes over time.
 
 **Example:**
+
 ```typescript
 const comparison = await window.api.snapshotStats.compare(
   'srv_123',
@@ -996,10 +1113,18 @@ if (comparison.data) {
   console.log(`  ${comparison.data.snapshot2.date} (${comparison.data.snapshot2.type})`)
 
   console.log('\nChanges:')
-  console.log(`  Sessions: ${comparison.data.comparison.sessions_diff > 0 ? '+' : ''}${comparison.data.comparison.sessions_diff}`)
-  console.log(`  Members: ${comparison.data.comparison.members_diff > 0 ? '+' : ''}${comparison.data.comparison.members_diff}`)
-  console.log(`  Duration: ${comparison.data.comparison.duration_diff > 0 ? '+' : ''}${comparison.data.comparison.duration_diff}s`)
-  console.log(`  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`)
+  console.log(
+    `  Sessions: ${comparison.data.comparison.sessions_diff > 0 ? '+' : ''}${comparison.data.comparison.sessions_diff}`
+  )
+  console.log(
+    `  Members: ${comparison.data.comparison.members_diff > 0 ? '+' : ''}${comparison.data.comparison.members_diff}`
+  )
+  console.log(
+    `  Duration: ${comparison.data.comparison.duration_diff > 0 ? '+' : ''}${comparison.data.comparison.duration_diff}s`
+  )
+  console.log(
+    `  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`
+  )
 
   console.log('\nTop Members Changes:')
   console.log(`  New entries: ${comparison.data.top_members_changes.new_entries.length}`)
@@ -1014,19 +1139,18 @@ if (comparison.data) {
 ```
 
 #### 7. Cleanup Old Snapshots
+
 ```typescript
 window.api.snapshotStats.cleanup(serverId, params, accessToken)
 ```
+
 Delete snapshots older than specified days. Only the server creator can perform cleanup.
 
 **Example:**
+
 ```typescript
 // Cleanup snapshots older than 90 days
-const cleanup = await window.api.snapshotStats.cleanup(
-  'srv_123',
-  { days: 90 },
-  accessToken
-)
+const cleanup = await window.api.snapshotStats.cleanup('srv_123', { days: 90 }, accessToken)
 
 if (cleanup.data) {
   console.log(`Deleted ${cleanup.data.count} old snapshots`)
@@ -1036,6 +1160,7 @@ if (cleanup.data) {
 ### Use Cases
 
 #### Snapshot Dashboard
+
 ```typescript
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
@@ -1085,6 +1210,7 @@ onMounted(() => {
 ```
 
 #### Snapshot Comparison Chart
+
 ```typescript
 <script setup lang="ts">
 import { ref, computed } from 'vue'
@@ -1146,4 +1272,3 @@ const loadComparison = async () => {
 3. Add caching layer for frequently accessed stats
 
 4. Implement real-time updates using WebSocket events
-

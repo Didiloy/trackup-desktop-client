@@ -29,4 +29,3 @@ export function registerServerTypeIpc(): void {
 
   logger.info('Server type IPC handlers registered')
 }
-

@@ -27,4 +27,3 @@ export const userBridge = {
 }
 
 export type UserBridge = typeof userBridge
-

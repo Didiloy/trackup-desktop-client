@@ -12,4 +12,3 @@ export const MEMBER_ACTIVITY_STATS_CHANNELS = {
   // Activity progression
   getActivityProgression: 'member-activity-stats:getActivityProgression'
 } as const
-

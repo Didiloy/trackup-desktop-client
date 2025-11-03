@@ -53,10 +53,7 @@ export function registerServerStatsIpc(): void {
         return { error: 'Authentication required' }
       }
 
-      return apiService.get<IServerStats>(
-        `/api/v1/stats/servers/${serverId}`,
-        accessToken
-      )
+      return apiService.get<IServerStats>(`/api/v1/stats/servers/${serverId}`, accessToken)
     }
   )
 
@@ -168,4 +165,3 @@ export function registerServerStatsIpc(): void {
 
   logger.info('Server stats IPC handlers registered')
 }
-

@@ -252,4 +252,3 @@ export function registerSnapshotStatsIpc(): void {
 
   logger.info('Snapshot stats IPC handlers registered')
 }
-

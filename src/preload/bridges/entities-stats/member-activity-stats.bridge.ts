@@ -73,4 +73,3 @@ export const memberActivityStatsBridge = {
 }
 
 export type MemberActivityStatsBridge = typeof memberActivityStatsBridge
-

@@ -114,4 +114,3 @@ export interface IEnumDefinitionStatsApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

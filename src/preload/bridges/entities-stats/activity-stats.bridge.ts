@@ -47,12 +47,7 @@ export const activityStatsBridge = {
     params: IActivityPaginationParams,
     accessToken: string
   ): Promise<IActivityStatsApiResponse<IPaginatedActivityStats>> => {
-    return ipcRenderer.invoke(
-      ipc_channels.activityStats.getAllStats,
-      serverId,
-      params,
-      accessToken
-    )
+    return ipcRenderer.invoke(ipc_channels.activityStats.getAllStats, serverId, params, accessToken)
   },
 
   /**
@@ -159,4 +154,3 @@ export const activityStatsBridge = {
 }
 
 export type ActivityStatsBridge = typeof activityStatsBridge
-

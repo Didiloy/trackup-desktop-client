@@ -21,4 +21,3 @@ export const MEMBER_STATS_CHANNELS = {
   getTimeline: 'member-stats:getTimeline',
   getGrowthTrends: 'member-stats:getGrowthTrends'
 } as const
-

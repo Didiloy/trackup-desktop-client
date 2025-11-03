@@ -87,4 +87,3 @@ export interface IMemberActivityStatsApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

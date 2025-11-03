@@ -130,4 +130,3 @@ export interface IServerStatsApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

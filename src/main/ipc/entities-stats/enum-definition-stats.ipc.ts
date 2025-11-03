@@ -189,4 +189,3 @@ export function registerEnumDefinitionStatsIpc(): void {
 
   logger.info('Enum definition stats IPC handlers registered')
 }
-

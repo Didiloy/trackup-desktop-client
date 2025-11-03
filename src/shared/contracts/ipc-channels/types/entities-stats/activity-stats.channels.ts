@@ -21,4 +21,3 @@ export const ACTIVITY_STATS_CHANNELS = {
   getTimeline: 'activity-stats:getTimeline',
   getGrowthTrends: 'activity-stats:getGrowthTrends'
 } as const
-

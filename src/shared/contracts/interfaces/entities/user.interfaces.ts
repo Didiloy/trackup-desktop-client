@@ -16,4 +16,3 @@ export interface IUserApiResponse<T = unknown> {
 
 // Reuse IServer from server.interfaces for user's servers list
 export type IUserServer = Omit<IServer, 'invite_code' | 'invite_code_expires_at'>
-

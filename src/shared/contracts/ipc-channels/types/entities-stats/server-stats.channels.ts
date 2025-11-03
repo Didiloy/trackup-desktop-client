@@ -18,4 +18,3 @@ export const SERVER_STATS_CHANNELS = {
   // Comparative analysis
   getComparativeAnalysis: 'server-stats:getComparativeAnalysis'
 } as const
-

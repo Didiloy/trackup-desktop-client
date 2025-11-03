@@ -292,4 +292,3 @@ export function registerMemberStatsIpc(): void {
 
   logger.info('Member stats IPC handlers registered')
 }
-

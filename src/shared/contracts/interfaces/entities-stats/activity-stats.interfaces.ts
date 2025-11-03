@@ -165,4 +165,3 @@ export interface IActivityStatsApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

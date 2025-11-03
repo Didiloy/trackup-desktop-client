@@ -232,4 +232,3 @@ export interface ISnapshotApiResponse<T = unknown> {
   data?: T
   error?: string
 }
-

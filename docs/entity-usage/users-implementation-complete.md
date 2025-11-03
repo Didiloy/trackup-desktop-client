@@ -7,35 +7,44 @@ Successfully implemented the complete **users** entity for current user informat
 ## Files Created
 
 ### 1. Interfaces
+
 **File**: `src/shared/contracts/interfaces/user.interfaces.ts`
+
 - `IUser` - User entity with id and email
 - `IUserApiResponse<T>` - Generic API response wrapper
 - `IUserServer` - Reuses `IServer` type (omits invite_code fields)
 
 ### 2. IPC Channels
+
 **File**: `src/shared/contracts/ipc-channels/types/user.channels.ts`
+
 - `getMe`, `getMyServers`
 
 ### 3. IPC Handlers
+
 **File**: `src/main/ipc/user.ipc.ts`
+
 - Uses `apiService` for all HTTP requests
 - Includes authentication validation
 - Proper error handling and logging
 
 ### 4. Preload Bridge
+
 **File**: `src/preload/bridges/user.bridge.ts`
+
 - Exposes 2 methods to renderer via `window.api.user.*`
 
 ## API Endpoints Implemented (2/2)
 
-| Method | Endpoint | Handler |
-|--------|----------|---------|
-| GET | `/api/v1/users/me` | ✅ getMe() |
-| GET | `/api/v1/users/me/servers` | ✅ getMyServers() |
+| Method | Endpoint                   | Handler           |
+| ------ | -------------------------- | ----------------- |
+| GET    | `/api/v1/users/me`         | ✅ getMe()        |
+| GET    | `/api/v1/users/me/servers` | ✅ getMyServers() |
 
 ## Integration Complete
 
 ### Files Modified:
+
 1. ✅ `src/shared/contracts/ipc-channels/index.channels.ts` - Added USER_CHANNELS
 2. ✅ `src/main/ipc/index.channels.ts` - Registered registerUserIpc()
 3. ✅ `src/preload/index.channels.ts` - Added userBridge to API
@@ -44,14 +53,16 @@ Successfully implemented the complete **users** entity for current user informat
 ## Data Model
 
 ### IUser
+
 ```typescript
 {
-  id: string      // User ID (e.g., "6f1b6c5a-7f1a-4f5b-b8c8-3f7e1a2b9cde")
-  email: string   // User email (e.g., "user@example.com")
+  id: string // User ID (e.g., "6f1b6c5a-7f1a-4f5b-b8c8-3f7e1a2b9cde")
+  email: string // User email (e.g., "user@example.com")
 }
 ```
 
 ### IUserServer
+
 ```typescript
 // Reuses IServer from server.interfaces.ts
 {
@@ -115,10 +126,7 @@ if (result.error) {
 // src/renderer/src/composables/user/useCurrentUser.ts
 import { ref, computed } from 'vue'
 import { useAuth } from '@/composables/auth/useAuth'
-import type {
-  IUser,
-  IUserServer
-} from '@shared/contracts/interfaces/user.interfaces'
+import type { IUser, IUserServer } from '@shared/contracts/interfaces/user.interfaces'
 
 export function useCurrentUser() {
   const { session } = useAuth()
@@ -233,14 +241,7 @@ export function useCurrentUser() {
 import { onMounted } from 'vue'
 import { useCurrentUser } from '@/composables/user/useCurrentUser'
 
-const {
-  user,
-  servers,
-  loading,
-  error,
-  loadUserInfo,
-  loadUserServers
-} = useCurrentUser()
+const { user, servers, loading, error, loadUserInfo, loadUserServers } = useCurrentUser()
 
 onMounted(async () => {
   await loadUserInfo()
@@ -328,6 +329,7 @@ button:disabled {
 ## Common Use Cases
 
 ### 1. Display User Profile
+
 ```typescript
 const { user, loadUserInfo } = useCurrentUser()
 await loadUserInfo()
@@ -337,6 +339,7 @@ await loadUserInfo()
 ```
 
 ### 2. Server Switcher
+
 ```typescript
 const { servers, loadUserServers } = useCurrentUser()
 await loadUserServers()
@@ -350,13 +353,11 @@ await loadUserServers()
 ```
 
 ### 3. Initialize App State
+
 ```typescript
 onMounted(async () => {
   // Load user info and servers on app startup
-  await Promise.all([
-    window.api.user.getMe(accessToken),
-    window.api.user.getMyServers(accessToken)
-  ])
+  await Promise.all([window.api.user.getMe(accessToken), window.api.user.getMyServers(accessToken)])
 })
 ```
 
@@ -380,6 +381,7 @@ All API calls return an object with either `data` or `error`:
 ```
 
 Common errors:
+
 - `"Authentication required"` - Missing or invalid access token
 - `"Unauthorized"` - Invalid token
 - `"Forbidden"` - Insufficient permissions
@@ -406,4 +408,3 @@ You can now call `window.api.user.*` methods from your Vue components!
 - [x] Documentation created
 
 **All entities are now complete!** 🎉
-

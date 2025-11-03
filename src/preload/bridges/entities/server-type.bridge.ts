@@ -19,4 +19,3 @@ export const serverTypeBridge = {
 }
 
 export type ServerTypeBridge = typeof serverTypeBridge
-

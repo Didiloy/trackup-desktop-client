@@ -15,4 +15,3 @@ export const ENUM_DEFINITION_STATS_CHANNELS = {
   // Specific enum value stats
   getValueStats: 'enum-definition-stats:getValueStats'
 } as const
-
