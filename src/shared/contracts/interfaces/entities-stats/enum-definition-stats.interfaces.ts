@@ -3,7 +3,7 @@
  * All types related to enum definition statistics and value distribution
  */
 
-import type { StatsPeriod } from './server-stats.interfaces'
+import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
 // Enum Definition Stats
@@ -97,13 +97,13 @@ export interface IEnumDefinitionPaginationParams {
 export interface IEnumDefinitionDetailsParams {
   page: number
   limit: number
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 export interface IEnumValueDetailsParams {
   page: number
   limit: number
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 // ============================================================================

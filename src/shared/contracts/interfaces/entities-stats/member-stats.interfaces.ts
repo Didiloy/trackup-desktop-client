@@ -3,7 +3,8 @@
  * All types related to member statistics and analytics
  */
 
-import type { IStatsTimeline, IGrowthMetric, StatsPeriod } from './server-stats.interfaces'
+import type { IStatsTimeline, IGrowthMetric } from './server-stats.interfaces'
+import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
 // Base Member Stats
@@ -110,7 +111,7 @@ export interface IPaginatedMemberStats {
 // ============================================================================
 
 export interface ILeaderboardParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
 }
 
@@ -120,12 +121,12 @@ export interface IPaginationParams {
 }
 
 export interface IMemberTimelineParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
 }
 
 export interface IMemberGrowthParams {
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 // ============================================================================

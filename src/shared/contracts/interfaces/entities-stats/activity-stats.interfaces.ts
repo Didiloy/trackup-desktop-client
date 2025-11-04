@@ -3,7 +3,8 @@
  * All types related to activity statistics and analytics
  */
 
-import type { IStatsTimeline, IGrowthMetric, StatsPeriod } from './server-stats.interfaces'
+import type { IStatsTimeline, IGrowthMetric } from './server-stats.interfaces'
+import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
 // Base Activity Stats
@@ -135,7 +136,7 @@ export interface IPaginatedActivityStats {
 // ============================================================================
 
 export interface IActivityLeaderboardParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
 }
 
@@ -145,16 +146,16 @@ export interface IActivityPaginationParams {
 }
 
 export interface IActivityTimelineParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
 }
 
 export interface IActivityGrowthParams {
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 export interface IActivityRankingParams {
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 // ============================================================================
