@@ -5,6 +5,7 @@ import { user, session } from '@/composables/auth/utils/authState'
 import type { IUserServer } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
+import HomeButton from './home-button.vue'
 
 const servers = ref<IUserServer[]>([])
 const user_store = useUserStore()
@@ -32,11 +33,17 @@ function openServer(id: string): void {
     router.push(`/servers/${id}`)
   }
 }
+
+function goHome(): void {
+  router.push('/')
+}
+
+const isHome = computed(() => route.path === '/')
 </script>
 <template>
   <div class="flex flex-col items-center w-16 h-full my-2 bg-surface-200 rounded-lg">
     <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
-      <ServerItem :image-url="avatarUrl" :label="user?.email || 'Me'" />
+      <HomeButton :image-url="avatarUrl" :label="user?.email || 'Me'" :active="isHome" @click="goHome" />
       <div class="w-8 h-px bg-surface-400 my-1"></div>
     </div>
 
