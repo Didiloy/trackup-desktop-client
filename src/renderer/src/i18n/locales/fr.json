@@ -147,21 +147,21 @@
         "cannot_login": "Une erreur est survenue lors de la connexion",
         "invalid_email": "Veuillez entrer une adresse email valide"
       }
+    },
+    "updateModal": {
+      "title": "Mise à jour disponible",
+      "version": "Version",
+      "type": "Type",
+      "major": "Majeure",
+      "minor": "Mineure",
+      "releaseNotes": "Notes de version",
+      "releaseDate": "Date de sortie",
+      "downloading": "Téléchargement en cours...",
+      "error": "Erreur",
+      "skip": "Ignorer",
+      "updateNow": "Mettre à jour maintenant",
+      "installAndRestart": "Installer et redémarrer",
+      "downloadError": "Erreur lors du téléchargement"
     }
-  },
-  "updateModal": {
-    "title": "Mise à jour disponible",
-    "version": "Version",
-    "type": "Type",
-    "major": "Majeure",
-    "minor": "Mineure",
-    "releaseNotes": "Notes de version",
-    "releaseDate": "Date de sortie",
-    "downloading": "Téléchargement en cours...",
-    "error": "Erreur",
-    "skip": "Ignorer",
-    "updateNow": "Mettre à jour maintenant",
-    "installAndRestart": "Installer et redémarrer",
-    "downloadError": "Erreur lors du téléchargement"
   }
 }

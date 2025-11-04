@@ -4,29 +4,33 @@
     modal
     :closable="!updateInfo?.isMajor"
     :close-on-escape="!updateInfo?.isMajor"
-    :header="t('updateModal.title')"
+    :header="t('userInterface.updateModal.title')"
     :style="{ width: '450px' }"
   >
     <div v-if="updateInfo">
       <p>
-        <strong>{{ t('updateModal.version') }}:</strong> {{ updateInfo.version }}
+        <strong>{{ t('userInterface.updateModal.version') }}:</strong> {{ updateInfo.version }}
       </p>
       <p>
-        <strong>{{ t('updateModal.type') }}:</strong>
-        {{ updateInfo.isMajor ? t('updateModal.major') : t('updateModal.minor') }}
+        <strong>{{ t('userInterface.updateModal.type') }}:</strong>
+        {{
+          updateInfo.isMajor
+            ? t('userInterface.updateModal.major')
+            : t('userInterface.updateModal.minor')
+        }}
       </p>
       <p v-if="updateInfo.releaseNotes">
-        <strong>{{ t('updateModal.releaseNotes') }}:</strong>
+        <strong>{{ t('userInterface.updateModal.releaseNotes') }}:</strong>
       </p>
       <div class="release-notes" v-html="updateInfo.releaseNotes"></div>
       <p v-if="updateInfo.releaseDate">
-        <strong>{{ t('updateModal.releaseDate') }}:</strong>
+        <strong>{{ t('userInterface.updateModal.releaseDate') }}:</strong>
         {{ formatDate(updateInfo.releaseDate) }}
       </p>
     </div>
 
     <div v-if="downloading" class="mt-4">
-      <p>{{ t('updateModal.downloading') }}</p>
+      <p>{{ t('userInterface.updateModal.downloading') }}</p>
       <ProgressBar :value="progressPercent" />
       <p class="text-sm text-gray-600">
         {{ progressPercent }}% - {{ formatBytes(downloadedBytes) }} / {{ formatBytes(totalBytes) }}
@@ -35,7 +39,7 @@
 
     <div v-if="error" class="mt-4 p-2 bg-red-100 text-red-800 rounded">
       <p>
-        <strong>{{ t('updateModal.error') }}:</strong> {{ error }}
+        <strong>{{ t('userInterface.updateModal.error') }}:</strong> {{ error }}
       </p>
     </div>
 
@@ -43,21 +47,21 @@
       <div class="flex justify-end gap-2">
         <Button
           v-if="!updateInfo?.isMajor && !downloading"
-          :label="t('updateModal.skip')"
+          :label="t('userInterface.updateModal.skip')"
           icon="pi pi-times"
           class="p-button-text"
           @click="skip"
         />
         <Button
           v-if="!downloading && !downloaded"
-          :label="t('updateModal.updateNow')"
+          :label="t('userInterface.updateModal.updateNow')"
           icon="pi pi-check"
           class="p-button-primary"
           @click="updateNow"
         />
         <Button
           v-if="downloaded"
-          :label="t('updateModal.installAndRestart')"
+          :label="t('userInterface.updateModal.installAndRestart')"
           icon="pi pi-refresh"
           class="p-button-success"
           @click="install"
