@@ -34,7 +34,12 @@ onMounted(() => {
         <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
       </div>
       <div class="action">
-        <Button label="Send IPC" @click="ipcHandle" />
+        <Button
+          label="Send IPC"
+          class="text-white border-0 px-4 py-2 rounded-lg transition hover:opacity-90"
+          :style="{ background: 'var(--gradient-primary)' }"
+          @click="ipcHandle"
+        />
         <Button label="signout" @click="signOut"></Button>
       </div>
     </div>

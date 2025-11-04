@@ -41,7 +41,7 @@ function handleWindowControls(): void {
 <template>
   <div
     id="drag-region"
-    class="flex items-center justify-between w-full h-8 min-h-8 mx-2 pl-2 rounded-lg bg-surface-50 opacity-80"
+    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
   >
     <div>
       <span class="">{{ i18n.t('app.title') }}</span>
@@ -49,31 +49,31 @@ function handleWindowControls(): void {
     <div>
       <span class="">{{ i18n.t('navigation.home') }}</span>
     </div>
-    <div id="window-controls" class="flex items-center justify-center h-full w-fit">
+    <div id="window-controls" class="flex items-center justify-center h-full w-fit bg-surface-200">
       <div
         id="devtools-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
         :title="i18n.t('actions.devtools')"
       >
         <i class="pi pi-cog"></i>
       </div>
       <div
         id="min-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
         :title="i18n.t('actions.minimize')"
       >
         <i class="pi pi-minus"></i>
       </div>
       <div
         id="max-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-50 opacity-80 hover:bg-surface-200 hover:cursor-pointer text-gray-600 hover:text-black"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
         :title="i18n.t('actions.maximize')"
       >
         <i class="pi pi-sort"></i>
       </div>
       <div
         id="close-button"
-        class="h-full w-11 rounded-r-lg flex justify-center items-center bg-surface-50 opacity-80 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white dark:text-gray-400"
         :title="i18n.t('actions.close')"
       >
         <i class="pi pi-times"></i>

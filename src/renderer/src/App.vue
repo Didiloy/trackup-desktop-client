@@ -10,31 +10,12 @@ const { isAuthenticated } = useAuth()
 
 onMounted(async () => {
   console.log(isAuthenticated.value)
-
-  // const accessToken = session.value?.access_token
-  //
-  // if (accessToken) {
-  //   const result = await window.api.server.create(
-  //     {
-  //       name: 'My Server',
-  //       type_public_id: 'srvtype_123',
-  //       description: 'Test server'
-  //     },
-  //     accessToken
-  //   )
-  //
-  //   if (result.error) {
-  //     console.error('Error creating server:', result.error)
-  //   } else {
-  //     console.log('Server created:', result.data)
-  //   }
-  // }
 })
 </script>
 
 <template>
   <div
-    class="flex flex-col items-center justify-start h-screen w-screen p-2 bg-linear-to-br from-surface-100 to-surface-200 overflow-hidden"
+    class="flex flex-col items-center justify-start h-screen w-screen bg-surface-200 overflow-hidden"
   >
     <Topbar />
     <UpdateModal />
@@ -43,7 +24,7 @@ onMounted(async () => {
     </template>
     <template v-else>
       <div
-        class="w-full h-full flex flex-row justify-between items-center gap-4 pt-2 bg-linear-to-br from-surface-100 to-surface-200"
+        class="w-full h-full flex flex-row justify-between items-center gap-4 pr-2 pb-2 bg-surface-200"
       >
         <Sidebar />
         <div class="grow bg-surface-50 h-full w-full rounded-xl">

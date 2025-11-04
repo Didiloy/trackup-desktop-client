@@ -1,3 +1,7 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
+:root {
+  --gradient-primary: linear-gradient(135deg, #4a84ff 0%, #8a5cf7 100%);
+  --gradient-secondary: linear-gradient(135deg, #8a5cf7 0%, #d46eff 100%);
+}
