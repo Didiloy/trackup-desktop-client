@@ -15,6 +15,7 @@ declare module 'vue' {
     ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ServerItem: typeof import('./src/components/sidebar/server-item.vue')['default']
     Servers: typeof import('./src/components/sidebar/servers.vue')['default']
     ServersActions: typeof import('./src/components/sidebar/servers-actions.vue')['default']
     Sidebar: typeof import('./src/components/layout/sidebar.vue')['default']
