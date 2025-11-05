@@ -90,6 +90,8 @@ async function submit(): Promise<void> {
 onMounted(() => {
   void loadServerTypes()
 })
+
+const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -100,6 +102,11 @@ onMounted(() => {
         v-model="name"
         :placeholder="i18n.t('userInterface.createServerView.placeholder.name')"
         class="w-full"
+        :pt="{
+          root: {
+            style: background_style
+          }
+        }"
       />
     </div>
 
@@ -108,14 +115,15 @@ onMounted(() => {
       <Select
         v-model="selected_type"
         :options="server_types"
-        optionLabel="name"
+        option-label="name"
         :loading="loading_types"
         :placeholder="i18n.t('userInterface.createServerView.placeholder.type')"
         class="w-full"
-        appendTo="self"
+        append-to="self"
         :pt="{
-          panel: { class: 'bg-surface-100 border border-surface-300 rounded-md shadow-md' },
+          root: { style: background_style },
           list: { class: 'bg-surface-100' },
+          label: { style: background_style },
           item: { class: 'text-surface-900 dark:text-surface-0' },
           itemLabel: { class: 'text-surface-900 dark:text-surface-0' }
         }"
@@ -127,8 +135,13 @@ onMounted(() => {
       <Textarea
         v-model="description"
         rows="2"
-        autoResize
+        auto-resize
         :placeholder="i18n.t('userInterface.createServerView.placeholder.description')"
+        :pt="{
+          root: {
+            style: background_style
+          }
+        }"
       />
     </div>
 
@@ -139,10 +152,15 @@ onMounted(() => {
       <div class="flex items-center gap-3">
         <FileUpload
           mode="basic"
-          customUpload
-          :chooseLabel="i18n.t('common.choose')"
+          custom-upload
+          :choose-label="i18n.t('common.choose')"
           :auto="false"
           accept="image/*"
+          :pt="{
+            root: {
+              style: 'color: var(--p-surface-900)'
+            }
+          }"
           @select="onLogoSelect"
         />
         <Button
@@ -162,7 +180,16 @@ onMounted(() => {
       </div>
       <div class="flex items-center gap-2">
         <span class="text-xs text-surface-500">{{ $t('common.or') }}</span>
-        <InputText v-model="logo_url" placeholder="https://example.com/logo.png" class="w-full" />
+        <InputText
+          v-model="logo_url"
+          placeholder="https://example.com/logo.png"
+          class="w-full"
+          :pt="{
+            root: {
+              style: background_style
+            }
+          }"
+        />
       </div>
     </div>
 
