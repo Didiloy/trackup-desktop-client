@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActionsList from '@/components/servers/ServersActionsList.vue'
-import ProfileButton from '@/components/sidebar/profile-button.vue'
+import ProfileButton from '@/components/ProfileButton.vue'
 import { useUserStore } from '@/stores/user'
 
 const user_store = useUserStore()

@@ -20,7 +20,7 @@ declare module 'vue' {
     Dropdown: typeof import('primevue/dropdown')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
     InputText: typeof import('primevue/inputtext')['default']
-    ProfileButton: typeof import('./src/components/sidebar/profile-button.vue')['default']
+    ProfileButton: typeof import('./src/components/ProfileButton.vue')['default']
     ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
