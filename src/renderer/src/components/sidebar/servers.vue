@@ -10,6 +10,7 @@ import AppDialog from '@/components/common/AppDialog.vue'
 import CreateServerForm from '@/components/server/CreateServerForm.vue'
 
 import { useI18n } from 'vue-i18n'
+import { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
 
 const i18n = useI18n()
 
@@ -56,10 +57,10 @@ function openCreate(): void {
   showCreate.value = true
 }
 
-async function onCreated(server: { public_id: string }): Promise<void> {
+async function onCreated(server: IServer): Promise<void> {
   showCreate.value = false
   await fetchServers()
-  if (server?.public_id) router.push(`/servers/${server.public_id}`)
+  if (server?.public_id) await router.push(`/servers/${server.public_id}`)
 }
 </script>
 <template>
@@ -92,11 +93,17 @@ async function onCreated(server: { public_id: string }): Promise<void> {
       </div>
     </div>
 
-    <AppDialog v-model="showCreate" :styleClass="'w-[560px] max-w-[92vw] rounded-xl'" :contentClass="'p-0 bg-surface-50'">
+    <AppDialog
+      v-model="showCreate"
+      :style-class="'w-[560px] max-w-[92vw] rounded-xl'"
+      :content-class="'p-0 bg-surface-50'"
+    >
       <template #header>
         <div class="flex items-center gap-2 p-3 select-none">
           <i class="pi pi-plus-circle text-primary-500"></i>
-          <span class="font-semibold text-surface-900">{{ i18n.t('userInterface.createServerView.title') }}</span>
+          <span class="font-semibold text-surface-900">{{
+            i18n.t('userInterface.createServerView.title')
+          }}</span>
         </div>
       </template>
       <div class="p-4">

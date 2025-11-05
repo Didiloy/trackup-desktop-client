@@ -52,7 +52,12 @@ const rootClass = computed(() => `rounded-2xl overflow-hidden ${props.styleClass
     :modal="props.modal"
     :closable="props.closable"
     :dismissableMask="props.dismissableMask"
-    :pt="{ root: { class: rootClass }, content: { class: contentClass }, header: { class: headerClass }, footer: { class: footerClass } }"
+    :pt="{
+      root: { class: rootClass },
+      content: { class: contentClass },
+      header: { class: headerClass },
+      footer: { class: footerClass }
+    }"
     @update:visible="(v: boolean) => emit('update:modelValue', v)"
     @hide="onHide"
     @show="onShow"
@@ -71,7 +76,4 @@ const rootClass = computed(() => `rounded-2xl overflow-hidden ${props.styleClass
       </slot>
     </template>
   </Dialog>
-  
 </template>
-
-
