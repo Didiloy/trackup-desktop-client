@@ -6,11 +6,28 @@ import type {
   IEnumDefinitionApiResponse
 } from '../../../../shared/contracts/interfaces/entities/enum-definition.interfaces'
 
+interface UseEnumDefinitionCRUDReturn {
+  createEnumDefinition: (
+    serverId: string,
+    request: ICreateEnumDefinitionRequest
+  ) => Promise<IEnumDefinitionApiResponse<IEnumDefinition>>
+  listEnumDefinitions: (serverId: string) => Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>>
+  updateEnumDefinition: (
+    serverId: string,
+    enumDefinitionId: string,
+    request: IUpdateEnumDefinitionRequest
+  ) => Promise<IEnumDefinitionApiResponse<IEnumDefinition>>
+  deleteEnumDefinition: (
+    serverId: string,
+    enumDefinitionId: string
+  ) => Promise<IEnumDefinitionApiResponse<void>>
+}
+
 /**
  * Composable for Enum Definition entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useEnumDefinition() {
+export function useEnumDefinitionCRUD(): UseEnumDefinitionCRUDReturn {
   const user_store = useUserStore()
 
   /**

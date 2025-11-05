@@ -12,11 +12,40 @@ import type {
   ISnapshotApiResponse
 } from '../../../../shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
+interface UseSnapshotStatsCRUDReturn {
+  createSnapshot: (
+    serverId: string,
+    request: ICreateSnapshotRequest
+  ) => Promise<ISnapshotApiResponse<ISnapshot>>
+  getAllSnapshots: (
+    serverId: string,
+    params: IGetSnapshotsParams
+  ) => Promise<ISnapshotApiResponse<IPaginatedSnapshots>>
+  getSnapshotById: (
+    serverId: string,
+    snapshotId: string
+  ) => Promise<ISnapshotApiResponse<ISnapshot>>
+  getLatestSnapshot: (
+    serverId: string,
+    params: IGetLatestSnapshotParams
+  ) => Promise<ISnapshotApiResponse<ISnapshot>>
+  getSnapshotsSummary: (serverId: string) => Promise<ISnapshotApiResponse<ISnapshotSummary>>
+  compareSnapshots: (
+    serverId: string,
+    snapshotId1: string,
+    snapshotId2: string
+  ) => Promise<ISnapshotApiResponse<ISnapshotComparisonResult>>
+  cleanupSnapshots: (
+    serverId: string,
+    params?: ICleanupSnapshotsParams
+  ) => Promise<ISnapshotApiResponse<ICleanupSnapshotsResponse>>
+}
+
 /**
  * Composable for Snapshot Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useSnapshotStats() {
+export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

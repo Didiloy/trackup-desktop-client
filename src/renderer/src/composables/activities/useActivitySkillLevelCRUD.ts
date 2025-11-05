@@ -6,11 +6,39 @@ import type {
   IActivitySkillLevelApiResponse
 } from '../../../../shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 
+interface UseActivitySkillLevelCRUDReturn {
+  createSkillLevel: (
+    serverId: string,
+    activityId: string,
+    request: ICreateActivitySkillLevelRequest
+  ) => Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel>>
+  listSkillLevels: (
+    serverId: string,
+    activityId: string
+  ) => Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel[]>>
+  getSkillLevelById: (
+    serverId: string,
+    activityId: string,
+    skillLevelId: string
+  ) => Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel>>
+  updateSkillLevel: (
+    serverId: string,
+    activityId: string,
+    skillLevelId: string,
+    request: IUpdateActivitySkillLevelRequest
+  ) => Promise<IActivitySkillLevelApiResponse<IActivitySkillLevel>>
+  deleteSkillLevel: (
+    serverId: string,
+    activityId: string,
+    skillLevelId: string
+  ) => Promise<IActivitySkillLevelApiResponse<void>>
+}
+
 /**
  * Composable for Activity Skill Level entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useActivitySkillLevel() {
+export function useActivitySkillLevelCRUD(): UseActivitySkillLevelCRUDReturn {
   const user_store = useUserStore()
 
   /**
@@ -85,7 +113,7 @@ export function useActivitySkillLevel() {
       serverId,
       activityId,
       skillLevelId,
-      user_store.getAccessToken
+      user_store.getAccessToken!
     )
   }
 

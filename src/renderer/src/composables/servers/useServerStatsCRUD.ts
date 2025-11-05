@@ -10,11 +10,27 @@ import type {
   IServerStatsApiResponse
 } from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
+interface UseServerStatsCRUDReturn {
+  getServerStats: (serverId: string) => Promise<IServerStatsApiResponse<IServerStats>>
+  getServerStatsDetails: (serverId: string) => Promise<IServerStatsApiResponse<IServerStatsDetails>>
+  getServerTimeline: (
+    serverId: string,
+    params?: IStatsTimelineParams
+  ) => Promise<IServerStatsApiResponse<IStatsTimeline[]>>
+  getServerGrowthTrends: (
+    serverId: string,
+    params?: IStatsGrowthParams
+  ) => Promise<IServerStatsApiResponse<IServerGrowthTrends>>
+  getComparativeAnalysis: (
+    serverId: string
+  ) => Promise<IServerStatsApiResponse<IComparativeAnalysis[]>>
+}
+
 /**
  * Composable for Server Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useServerStats() {
+export function useServerStatsCRUD(): UseServerStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

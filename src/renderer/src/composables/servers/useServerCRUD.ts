@@ -7,11 +7,23 @@ import type {
   IServerApiResponse
 } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
 
+interface UseServerCRUDReturn {
+  createServer: (request: ICreateServerRequest) => Promise<IServerApiResponse<IServer>>
+  refreshInviteCode: (serverId: string) => Promise<IServerApiResponse<IServer>>
+  joinServer: (request: IJoinServerRequest) => Promise<IServerApiResponse<void>>
+  getServerDetails: (serverId: string) => Promise<IServerApiResponse<IServer>>
+  updateServer: (
+    serverId: string,
+    request: IUpdateServerRequest
+  ) => Promise<IServerApiResponse<IServer>>
+  deleteServer: (serverId: string) => Promise<IServerApiResponse<void>>
+}
+
 /**
  * Composable for Server entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useServerCRUD() {
+export function useServerCRUD(): UseServerCRUDReturn {
   const user_store = useUserStore()
 
   /**

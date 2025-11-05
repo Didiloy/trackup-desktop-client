@@ -1259,9 +1259,9 @@ const loadComparison = async () => {
 ## Next Steps
 
 1. Create Vue composables for each stat type (optional):
-   - `useServerStats(serverId)`
-   - `useMemberStats(serverId, memberId)`
-   - `useActivityStats(serverId, activityId)`
+   - `useServerStatsCRUD(serverId)`
+   - `useMemberStatsCRUD(serverId, memberId)`
+   - `useActivityStatsCRUD(serverId, activityId)`
 
 2. Create reusable Vue components:
    - LeaderboardTable

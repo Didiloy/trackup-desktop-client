@@ -15,11 +15,48 @@ import type {
 } from '../../../../shared/contracts/interfaces/entities-stats/member-stats.interfaces'
 import type { IStatsTimeline } from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
+interface UseMemberStatsCRUDReturn {
+  getMemberLeaderboard: (
+    serverId: string,
+    params?: ILeaderboardParams
+  ) => Promise<IMemberStatsApiResponse<IMemberLeaderboard>>
+  getAllMemberStats: (
+    serverId: string,
+    params: IPaginationParams
+  ) => Promise<IMemberStatsApiResponse<IPaginatedMemberStats>>
+  getMemberStats: (
+    serverId: string,
+    memberId: string
+  ) => Promise<IMemberStatsApiResponse<IMemberStats>>
+  getMemberDetails: (
+    serverId: string,
+    memberId: string
+  ) => Promise<IMemberStatsApiResponse<IMemberStatsDetails>>
+  getMemberPatterns: (
+    serverId: string,
+    memberId: string
+  ) => Promise<IMemberStatsApiResponse<IMemberActivityPatterns>>
+  getMemberRanking: (
+    serverId: string,
+    memberId: string
+  ) => Promise<IMemberStatsApiResponse<IMemberRanking>>
+  getMemberTimeline: (
+    serverId: string,
+    memberId: string,
+    params?: IMemberTimelineParams
+  ) => Promise<IMemberStatsApiResponse<IStatsTimeline[]>>
+  getMemberGrowthTrends: (
+    serverId: string,
+    memberId: string,
+    params?: IMemberGrowthParams
+  ) => Promise<IMemberStatsApiResponse<IMemberGrowthTrends>>
+}
+
 /**
  * Composable for Member Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useMemberStats() {
+export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

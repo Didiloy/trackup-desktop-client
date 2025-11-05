@@ -8,11 +8,34 @@ import type {
   ISessionApiResponse
 } from '../../../../shared/contracts/interfaces/entities/session.interfaces'
 
+interface UseSessionCRUDReturn {
+  createSession: (
+    serverId: string,
+    request: ICreateSessionRequest
+  ) => Promise<ISessionApiResponse<ISession>>
+  listSessions: (
+    serverId: string,
+    options?: IListSessionsOptions
+  ) => Promise<ISessionApiResponse<IPaginatedSessions>>
+  getSessionById: (
+    serverId: string,
+    sessionId: string
+  ) => Promise<ISessionApiResponse<ISession>>
+  updateSession: (
+    serverId: string,
+    sessionId: string,
+    request: IUpdateSessionRequest
+  ) => Promise<ISessionApiResponse<ISession>>
+  deleteSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
+  likeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
+  unlikeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
+}
+
 /**
  * Composable for Session entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useSession() {
+export function useSessionCRUD(): UseSessionCRUDReturn {
   const user_store = useUserStore()
 
   /**

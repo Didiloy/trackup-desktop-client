@@ -8,11 +8,30 @@ import type {
   IMemberActivityStatsApiResponse
 } from '../../../../shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
 
+interface UseMemberActivityStatsCRUDReturn {
+  getAllMemberActivities: (
+    serverId: string,
+    memberId: string,
+    params: IMemberActivityPaginationParams
+  ) => Promise<IMemberActivityStatsApiResponse<IPaginatedMemberActivityStats>>
+  getMemberActivityStats: (
+    serverId: string,
+    memberId: string,
+    activityId: string
+  ) => Promise<IMemberActivityStatsApiResponse<IMemberActivityDetails>>
+  getMemberActivityProgression: (
+    serverId: string,
+    memberId: string,
+    activityId: string,
+    params?: IMemberActivityProgressionParams
+  ) => Promise<IMemberActivityStatsApiResponse<IMemberActivityProgression[]>>
+}
+
 /**
  * Composable for Member Activity Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useMemberActivityStats() {
+export function useMemberActivityStatsCRUD(): UseMemberActivityStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

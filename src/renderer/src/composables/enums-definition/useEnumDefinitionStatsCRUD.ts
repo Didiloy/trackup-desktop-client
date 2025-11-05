@@ -8,11 +8,27 @@ import type {
   IEnumDefinitionStatsApiResponse
 } from '../../../../shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 
+interface UseEnumDefinitionStatsCRUDReturn {
+  getAllEnumDefinitionStats: (
+    serverId: string,
+    params: IEnumDefinitionPaginationParams
+  ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumDefinitionStats>>
+  getEnumDefinitionStats: (
+    serverId: string,
+    enumDefinitionId: string,
+    params: IEnumDefinitionDetailsParams
+  ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
+  getEnumValueDistribution: (
+    serverId: string,
+    enumDefinitionId: string
+  ) => Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>>
+}
+
 /**
  * Composable for Enum Definition Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useEnumDefinitionStats() {
+export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

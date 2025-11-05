@@ -5,11 +5,16 @@ import type {
   IUserApiResponse
 } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 
+interface UseUserCRUDReturn {
+  getMe: () => Promise<IUserApiResponse<IUser>>
+  getMyServers: () => Promise<IUserApiResponse<IUserServer[]>>
+}
+
 /**
  * Composable for User entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useUserCRUD() {
+export function useUserCRUD(): UseUserCRUDReturn {
   const user_store = useUserStore()
 
   /**

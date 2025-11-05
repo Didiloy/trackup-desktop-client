@@ -7,11 +7,32 @@ import type {
   IActivityApiResponse
 } from '../../../../shared/contracts/interfaces/entities/activity.interfaces'
 
+interface UseActivityCRUDReturn {
+  createActivity: (
+    serverId: string,
+    request: ICreateActivityRequest
+  ) => Promise<IActivityApiResponse<IActivity>>
+  listActivities: (
+    serverId: string,
+    options?: IListActivitiesOptions
+  ) => Promise<IActivityApiResponse<IActivity[]>>
+  getActivityById: (
+    serverId: string,
+    activityId: string
+  ) => Promise<IActivityApiResponse<IActivity>>
+  updateActivity: (
+    serverId: string,
+    activityId: string,
+    request: IUpdateActivityRequest
+  ) => Promise<IActivityApiResponse<IActivity>>
+  deleteActivity: (serverId: string, activityId: string) => Promise<IActivityApiResponse<void>>
+}
+
 /**
  * Composable for Activity entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useActivity() {
+export function useActivityCRUD(): UseActivityCRUDReturn {
   const user_store = useUserStore()
 
   /**

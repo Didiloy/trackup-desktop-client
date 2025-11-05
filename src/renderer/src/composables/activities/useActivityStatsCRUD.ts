@@ -16,11 +16,49 @@ import type {
 } from '../../../../shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { IStatsTimeline } from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
+interface UseActivityStatsCRUDReturn {
+  getActivityLeaderboard: (
+    serverId: string,
+    params?: IActivityLeaderboardParams
+  ) => Promise<IActivityStatsApiResponse<IActivityLeaderboard>>
+  getAllActivityStats: (
+    serverId: string,
+    params: IActivityPaginationParams
+  ) => Promise<IActivityStatsApiResponse<IPaginatedActivityStats>>
+  getActivityStats: (
+    serverId: string,
+    activityId: string
+  ) => Promise<IActivityStatsApiResponse<IActivityStats>>
+  getActivityDetails: (
+    serverId: string,
+    activityId: string
+  ) => Promise<IActivityStatsApiResponse<IActivityStatsDetails>>
+  getActivityPatterns: (
+    serverId: string,
+    activityId: string
+  ) => Promise<IActivityStatsApiResponse<IActivityTimePatterns>>
+  getActivityRanking: (
+    serverId: string,
+    activityId: string,
+    params?: IActivityRankingParams
+  ) => Promise<IActivityStatsApiResponse<IActivityRanking>>
+  getActivityTimeline: (
+    serverId: string,
+    activityId: string,
+    params?: IActivityTimelineParams
+  ) => Promise<IActivityStatsApiResponse<IStatsTimeline[]>>
+  getActivityGrowthTrends: (
+    serverId: string,
+    activityId: string,
+    params?: IActivityGrowthParams
+  ) => Promise<IActivityStatsApiResponse<IActivityGrowthTrends>>
+}
+
 /**
  * Composable for Activity Stats operations
  * Each method is independent and contains all necessary parameters
  */
-export function useActivityStats() {
+export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
   const user_store = useUserStore()
 
   /**

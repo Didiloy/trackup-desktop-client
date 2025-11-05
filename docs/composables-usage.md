@@ -18,15 +18,15 @@ Les composables sont organisés en deux catégories principales :
 
 ## Composables Entities
 
-### useActivity
+### useActivityCRUD
 
 Gestion des activités dans un serveur.
 
 ```typescript
-import { useActivity } from '@/composables/entities'
+import { useActivityCRUD } from '@/composables/entities'
 
 const { createActivity, listActivities, getActivityById, updateActivity, deleteActivity } =
-  useActivity()
+  useActivityCRUD()
 
 // Exemple d'utilisation
 const result = await createActivity(
@@ -107,15 +107,15 @@ const servers = await getMyServers(accessToken)
 
 ---
 
-### useMember
+### useMemberCRUD
 
 Gestion des membres d'un serveur.
 
 ```typescript
-import { useMember } from '@/composables/entities'
+import { useMemberCRUD } from '@/composables/entities'
 
 const { inviteMember, quitServer, listMembers, getMemberById, kickMember, updateMemberNickname } =
-  useMember()
+  useMemberCRUD()
 
 // Exemple d'utilisation
 const members = await listMembers(serverId, { page: 1, limit: 20 }, accessToken)
@@ -132,12 +132,12 @@ const members = await listMembers(serverId, { page: 1, limit: 20 }, accessToken)
 
 ---
 
-### useSession
+### useSessionCRUD
 
 Gestion des sessions d'activité.
 
 ```typescript
-import { useSession } from '@/composables/entities'
+import { useSessionCRUD } from '@/composables/entities'
 
 const {
   createSession,
@@ -147,7 +147,7 @@ const {
   deleteSession,
   likeSession,
   unlikeSession
-} = useSession()
+} = useSessionCRUD()
 
 // Exemple d'utilisation
 const session = await createSession(
@@ -174,15 +174,15 @@ const session = await createSession(
 
 ---
 
-### useActivitySkillLevel
+### useActivitySkillLevelCRUD
 
 Gestion des niveaux de compétence des activités.
 
 ```typescript
-import { useActivitySkillLevel } from '@/composables/entities'
+import { useActivitySkillLevelCRUD } from '@/composables/entities'
 
 const { createSkillLevel, listSkillLevels, getSkillLevelById, updateSkillLevel, deleteSkillLevel } =
-  useActivitySkillLevel()
+  useActivitySkillLevelCRUD()
 
 // Exemple d'utilisation
 const skillLevel = await createSkillLevel(
@@ -208,15 +208,15 @@ const skillLevel = await createSkillLevel(
 
 ---
 
-### useEnumDefinition
+### useEnumDefinitionCRUD
 
 Gestion des définitions d'énumérations.
 
 ```typescript
-import { useEnumDefinition } from '@/composables/entities'
+import { useEnumDefinitionCRUD } from '@/composables/entities'
 
 const { createEnumDefinition, listEnumDefinitions, updateEnumDefinition, deleteEnumDefinition } =
-  useEnumDefinition()
+  useEnumDefinitionCRUD()
 ```
 
 **Méthodes disponibles :**
@@ -228,14 +228,14 @@ const { createEnumDefinition, listEnumDefinitions, updateEnumDefinition, deleteE
 
 ---
 
-### useServerType
+### useServerTypeCRUD
 
 Gestion des types de serveur.
 
 ```typescript
-import { useServerType } from '@/composables/entities'
+import { useServerTypeCRUD } from '@/composables/entities'
 
-const { getAllServerTypes } = useServerType()
+const { getAllServerTypes } = useServerTypeCRUD()
 
 // Exemple d'utilisation
 const types = await getAllServerTypes(accessToken)
@@ -249,12 +249,12 @@ const types = await getAllServerTypes(accessToken)
 
 ## Composables Stats
 
-### useActivityStats
+### useActivityStatsCRUD
 
 Statistiques des activités.
 
 ```typescript
-import { useActivityStats } from '@/composables/entity-stats'
+import { useActivityStatsCRUD } from '@/composables/entity-stats'
 
 const {
   getActivityLeaderboard,
@@ -265,7 +265,7 @@ const {
   getActivityRanking,
   getActivityTimeline,
   getActivityGrowthTrends
-} = useActivityStats()
+} = useActivityStatsCRUD()
 
 // Exemple d'utilisation
 const leaderboard = await getActivityLeaderboard(serverId, { limit: 10 }, accessToken)
@@ -284,12 +284,12 @@ const leaderboard = await getActivityLeaderboard(serverId, { limit: 10 }, access
 
 ---
 
-### useMemberStats
+### useMemberStatsCRUD
 
 Statistiques des membres.
 
 ```typescript
-import { useMemberStats } from '@/composables/entity-stats'
+import { useMemberStatsCRUD } from '@/composables/entity-stats'
 
 const {
   getMemberLeaderboard,
@@ -300,7 +300,7 @@ const {
   getMemberRanking,
   getMemberTimeline,
   getMemberGrowthTrends
-} = useMemberStats()
+} = useMemberStatsCRUD()
 
 // Exemple d'utilisation
 const stats = await getMemberStats(serverId, memberId, accessToken)
@@ -319,12 +319,12 @@ const stats = await getMemberStats(serverId, memberId, accessToken)
 
 ---
 
-### useServerStats
+### useServerStatsCRUD
 
 Statistiques des serveurs.
 
 ```typescript
-import { useServerStats } from '@/composables/entity-stats'
+import { useServerStatsCRUD } from '@/composables/entity-stats'
 
 const {
   getServerStats,
@@ -332,7 +332,7 @@ const {
   getServerTimeline,
   getServerGrowthTrends,
   getComparativeAnalysis
-} = useServerStats()
+} = useServerStatsCRUD()
 
 // Exemple d'utilisation
 const stats = await getServerStats(serverId, accessToken)
@@ -348,15 +348,15 @@ const stats = await getServerStats(serverId, accessToken)
 
 ---
 
-### useMemberActivityStats
+### useMemberActivityStatsCRUD
 
 Statistiques des membres par activité.
 
 ```typescript
-import { useMemberActivityStats } from '@/composables/entity-stats'
+import { useMemberActivityStatsCRUD } from '@/composables/entity-stats'
 
 const { getAllMemberActivities, getMemberActivityStats, getMemberActivityProgression } =
-  useMemberActivityStats()
+  useMemberActivityStatsCRUD()
 
 // Exemple d'utilisation
 const progression = await getMemberActivityProgression(
@@ -376,12 +376,12 @@ const progression = await getMemberActivityProgression(
 
 ---
 
-### useSnapshotStats
+### useSnapshotStatsCRUD
 
 Gestion des snapshots de statistiques.
 
 ```typescript
-import { useSnapshotStats } from '@/composables/entity-stats'
+import { useSnapshotStatsCRUD } from '@/composables/entity-stats'
 
 const {
   createSnapshot,
@@ -391,7 +391,7 @@ const {
   getSnapshotsSummary,
   compareSnapshots,
   cleanupSnapshots
-} = useSnapshotStats()
+} = useSnapshotStatsCRUD()
 
 // Exemple d'utilisation
 const snapshot = await createSnapshot(serverId, { type: 'manual' }, accessToken)
@@ -409,15 +409,15 @@ const snapshot = await createSnapshot(serverId, { type: 'manual' }, accessToken)
 
 ---
 
-### useEnumDefinitionStats
+### useEnumDefinitionStatsCRUD
 
 Statistiques des énumérations.
 
 ```typescript
-import { useEnumDefinitionStats } from '@/composables/entity-stats'
+import { useEnumDefinitionStatsCRUD } from '@/composables/entity-stats'
 
 const { getAllEnumDefinitionStats, getEnumDefinitionStats, getEnumValueDistribution } =
-  useEnumDefinitionStats()
+  useEnumDefinitionStatsCRUD()
 
 // Exemple d'utilisation
 const distribution = await getEnumValueDistribution(serverId, enumDefinitionId, accessToken)
@@ -437,22 +437,22 @@ const distribution = await getEnumValueDistribution(serverId, enumDefinitionId, 
 
 ```typescript
 // Import d'un composable spécifique
-import { useActivity } from '@/composables/entities'
-import { useActivityStats } from '@/composables/entity-stats'
+import { useActivityCRUD } from '@/composables/entities'
+import { useActivityStatsCRUD } from '@/composables/entity-stats'
 
 // Import depuis les index
-import { useActivity, useServerCRUD, useMember } from '@/composables/entities'
-import { useActivityStats, useMemberStats } from '@/composables/entity-stats'
+import { useActivityCRUD, useServerCRUD, useMemberCRUD } from '@/composables/entities'
+import { useActivityStatsCRUD, useMemberStatsCRUD } from '@/composables/entity-stats'
 ```
 
 ### Pattern d'utilisation
 
 ```typescript
 // 1. Importer le composable
-import { useActivity } from '@/composables/entities'
+import { useActivityCRUD } from '@/composables/entities'
 
 // 2. Destructurer les méthodes nécessaires
-const { createActivity, listActivities } = useActivity()
+const { createActivity, listActivities } = useActivityCRUD()
 
 // 3. Appeler les méthodes avec tous les paramètres
 const handleCreateActivity = async () => {
@@ -506,11 +506,11 @@ if (result.error) {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useActivity } from '@/composables/entities'
+import { useActivityCRUD } from '@/composables/entities'
 import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
-const { listActivities } = useActivity()
+const { listActivities } = useActivityCRUD()
 
 const activities = ref([])
 const loading = ref(false)
@@ -546,21 +546,21 @@ const loadActivities = async (serverId: string) => {
 ```
 src/renderer/src/composables/
 ├── entities/
-│   ├── useActivity.ts
-│   ├── useActivitySkillLevel.ts
-│   ├── useEnumDefinition.ts
-│   ├── useMember.ts
+│   ├── useActivityCRUD.ts
+│   ├── useActivitySkillLevelCRUD.ts
+│   ├── useEnumDefinitionCRUD.ts
+│   ├── useMemberCRUD.ts
 │   ├── useServerCRUD.ts
-│   ├── useServerType.ts
-│   ├── useSession.ts
+│   ├── useServerTypeCRUD.ts
+│   ├── useSessionCRUD.ts
 │   ├── useUserCRUD.ts
 │   └── index.ts
 └── entity-stats/
-    ├── useActivityStats.ts
-    ├── useEnumDefinitionStats.ts
-    ├── useMemberActivityStats.ts
-    ├── useMemberStats.ts
-    ├── useServerStats.ts
-    ├── useSnapshotStats.ts
+    ├── useActivityStatsCRUD.ts
+    ├── useEnumDefinitionStatsCRUD.ts
+    ├── useMemberActivityStatsCRUD.ts
+    ├── useMemberStatsCRUD.ts
+    ├── useServerStatsCRUD.ts
+    ├── useSnapshotStatsCRUD.ts
     └── index.ts
 ```

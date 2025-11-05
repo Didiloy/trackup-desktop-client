@@ -8,11 +8,33 @@ import type {
   IMemberApiResponse
 } from '../../../../shared/contracts/interfaces/entities/member.interfaces'
 
+interface UseMemberCRUDReturn {
+  inviteMember: (
+    serverId: string,
+    request: IInviteMemberRequest
+  ) => Promise<IMemberApiResponse<IServerMember>>
+  quitServer: (serverId: string) => Promise<IMemberApiResponse<void>>
+  listMembers: (
+    serverId: string,
+    options?: IListMembersOptions
+  ) => Promise<IMemberApiResponse<IPaginatedMembers>>
+  getMemberById: (
+    serverId: string,
+    memberId: string
+  ) => Promise<IMemberApiResponse<IServerMember>>
+  kickMember: (serverId: string, memberId: string) => Promise<IMemberApiResponse<void>>
+  updateMemberNickname: (
+    serverId: string,
+    memberId: string,
+    request: IUpdateNicknameRequest
+  ) => Promise<IMemberApiResponse<IServerMember>>
+}
+
 /**
  * Composable for Member entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useMember() {
+export function useMemberCRUD(): UseMemberCRUDReturn {
   const user_store = useUserStore()
 
   /**

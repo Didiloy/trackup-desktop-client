@@ -8,7 +8,7 @@ import type {
  * Composable for Server Type entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useServerType() {
+export function useServerTypeCRUD() {
   const user_store = useUserStore()
 
   /**

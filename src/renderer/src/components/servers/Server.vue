@@ -16,7 +16,6 @@ const initials = computed(() => {
   if (!trimmed) return '?'
   return trimmed.charAt(0).toUpperCase()
 })
-
 const shapeClass = computed(() => (props.active ? 'rounded-xl' : 'rounded-2xl'))
 const wrapperBgClass = computed(() => {
   return props.active ? 'bg-surface-100' : ''

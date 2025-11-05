@@ -17,7 +17,7 @@ export interface ISessionMember {
 
 /**
  * Enum data in a session
- * Reuses IEnumValue from enum-definition and adds the definition name and selected key
+ * Reuses IEnumValue from enums-definition and adds the definition name and selected key
  */
 export interface ISessionEnum {
   enum_definition_name: string
