@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 interface UseServerListReturn {
   servers: Ref<IUserServer[]>
   isLoading: Ref<boolean>
-  error: Ref<Error | null>
+  error: Ref<string | null>
   fetchServers: () => Promise<void>
   handleServerCreated: (server: IServer) => Promise<void>
 }
@@ -15,28 +15,30 @@ interface UseServerListReturn {
 export function useServerList(): UseServerListReturn {
   const servers = ref<IUserServer[]>([])
   const isLoading = ref(false)
-  const error = ref<Error | null>(null)
+  const error = ref<string | null>(null)
   const { getMyServers } = useUserCRUD()
   const router = useRouter()
 
   async function fetchServers(): Promise<void> {
     isLoading.value = true
     error.value = null
-    try {
-      const res = await getMyServers()
-      servers.value = res.data ?? []
-    } catch (e) {
-      error.value = e instanceof Error ? e : new Error('Failed to fetch servers')
+
+    const res = await getMyServers()
+    if (res.error) {
+      error.value = res.error
       servers.value = []
-    } finally {
       isLoading.value = false
+      return
     }
+    servers.value = res.data ?? []
+    isLoading.value = false
   }
 
   async function handleServerCreated(server: IServer): Promise<void> {
     await fetchServers()
     if (server?.public_id) {
-      await router.push(`/servers/${server.public_id}`)}
+      await router.push(`/servers/${server.public_id}`)
+    }
   }
 
   return {
