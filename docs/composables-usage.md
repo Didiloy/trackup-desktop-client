@@ -25,22 +25,22 @@ Gestion des activités dans un serveur.
 ```typescript
 import { useActivity } from '@/composables/entities'
 
-const {
-  createActivity,
-  listActivities,
-  getActivityById,
-  updateActivity,
-  deleteActivity
-} = useActivity()
+const { createActivity, listActivities, getActivityById, updateActivity, deleteActivity } =
+  useActivity()
 
 // Exemple d'utilisation
-const result = await createActivity(serverId, {
-  name: 'Football',
-  description: 'Sport collectif'
-}, accessToken)
+const result = await createActivity(
+  serverId,
+  {
+    name: 'Football',
+    description: 'Sport collectif'
+  },
+  accessToken
+)
 ```
 
 **Méthodes disponibles :**
+
 - `createActivity(serverId, request, accessToken)` - Créer une nouvelle activité
 - `listActivities(serverId, options, accessToken)` - Lister les activités avec filtres
 - `getActivityById(serverId, activityId, accessToken)` - Obtenir les détails d'une activité
@@ -66,13 +66,17 @@ const {
 } = useServer()
 
 // Exemple d'utilisation
-const result = await createServer({
-  name: 'Mon Serveur',
-  type_public_id: 'type-uuid'
-}, accessToken)
+const result = await createServer(
+  {
+    name: 'Mon Serveur',
+    type_public_id: 'type-uuid'
+  },
+  accessToken
+)
 ```
 
 **Méthodes disponibles :**
+
 - `createServer(request, accessToken)` - Créer un nouveau serveur
 - `refreshInviteCode(serverId, accessToken)` - Rafraîchir le code d'invitation
 - `joinServer(request, accessToken)` - Rejoindre un serveur avec un code
@@ -97,6 +101,7 @@ const servers = await getMyServers(accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `getMe(accessToken)` - Obtenir les informations de l'utilisateur courant
 - `getMyServers(accessToken)` - Obtenir les serveurs de l'utilisateur
 
@@ -109,20 +114,15 @@ Gestion des membres d'un serveur.
 ```typescript
 import { useMember } from '@/composables/entities'
 
-const {
-  inviteMember,
-  quitServer,
-  listMembers,
-  getMemberById,
-  kickMember,
-  updateMemberNickname
-} = useMember()
+const { inviteMember, quitServer, listMembers, getMemberById, kickMember, updateMemberNickname } =
+  useMember()
 
 // Exemple d'utilisation
 const members = await listMembers(serverId, { page: 1, limit: 20 }, accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `inviteMember(serverId, request, accessToken)` - Inviter un membre
 - `quitServer(serverId, accessToken)` - Quitter un serveur
 - `listMembers(serverId, options, accessToken)` - Lister les membres avec pagination
@@ -150,15 +150,20 @@ const {
 } = useSession()
 
 // Exemple d'utilisation
-const session = await createSession(serverId, {
-  activity_id: 'activity-uuid',
-  duration: 3600,
-  date: '2024-01-01',
-  participants: ['member-uuid-1', 'member-uuid-2']
-}, accessToken)
+const session = await createSession(
+  serverId,
+  {
+    activity_id: 'activity-uuid',
+    duration: 3600,
+    date: '2024-01-01',
+    participants: ['member-uuid-1', 'member-uuid-2']
+  },
+  accessToken
+)
 ```
 
 **Méthodes disponibles :**
+
 - `createSession(serverId, request, accessToken)` - Créer une nouvelle session
 - `listSessions(serverId, options, accessToken)` - Lister les sessions avec pagination
 - `getSessionById(serverId, sessionId, accessToken)` - Obtenir une session par ID
@@ -176,24 +181,25 @@ Gestion des niveaux de compétence des activités.
 ```typescript
 import { useActivitySkillLevel } from '@/composables/entities'
 
-const {
-  createSkillLevel,
-  listSkillLevels,
-  getSkillLevelById,
-  updateSkillLevel,
-  deleteSkillLevel
-} = useActivitySkillLevel()
+const { createSkillLevel, listSkillLevels, getSkillLevelById, updateSkillLevel, deleteSkillLevel } =
+  useActivitySkillLevel()
 
 // Exemple d'utilisation
-const skillLevel = await createSkillLevel(serverId, activityId, {
-  name: 'Débutant',
-  display_order: 1,
-  min_sessions: 0,
-  min_duration: 0
-}, accessToken)
+const skillLevel = await createSkillLevel(
+  serverId,
+  activityId,
+  {
+    name: 'Débutant',
+    display_order: 1,
+    min_sessions: 0,
+    min_duration: 0
+  },
+  accessToken
+)
 ```
 
 **Méthodes disponibles :**
+
 - `createSkillLevel(serverId, activityId, request, accessToken)` - Créer un niveau
 - `listSkillLevels(serverId, activityId, accessToken)` - Lister les niveaux
 - `getSkillLevelById(serverId, activityId, skillLevelId, accessToken)` - Obtenir un niveau
@@ -209,15 +215,12 @@ Gestion des définitions d'énumérations.
 ```typescript
 import { useEnumDefinition } from '@/composables/entities'
 
-const {
-  createEnumDefinition,
-  listEnumDefinitions,
-  updateEnumDefinition,
-  deleteEnumDefinition
-} = useEnumDefinition()
+const { createEnumDefinition, listEnumDefinitions, updateEnumDefinition, deleteEnumDefinition } =
+  useEnumDefinition()
 ```
 
 **Méthodes disponibles :**
+
 - `createEnumDefinition(serverId, request, accessToken)` - Créer une définition
 - `listEnumDefinitions(serverId, accessToken)` - Lister les définitions
 - `updateEnumDefinition(serverId, enumDefinitionId, request, accessToken)` - Mettre à jour
@@ -239,6 +242,7 @@ const types = await getAllServerTypes(accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `getAllServerTypes(accessToken)` - Obtenir tous les types de serveur
 
 ---
@@ -268,6 +272,7 @@ const leaderboard = await getActivityLeaderboard(serverId, { limit: 10 }, access
 ```
 
 **Méthodes disponibles :**
+
 - `getActivityLeaderboard(serverId, params, accessToken)` - Classement des activités
 - `getAllActivityStats(serverId, params, accessToken)` - Toutes les stats paginées
 - `getActivityStats(serverId, activityId, accessToken)` - Stats d'une activité
@@ -302,6 +307,7 @@ const stats = await getMemberStats(serverId, memberId, accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `getMemberLeaderboard(serverId, params, accessToken)` - Classement des membres
 - `getAllMemberStats(serverId, params, accessToken)` - Toutes les stats paginées
 - `getMemberStats(serverId, memberId, accessToken)` - Stats d'un membre
@@ -333,6 +339,7 @@ const stats = await getServerStats(serverId, accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `getServerStats(serverId, accessToken)` - Stats du serveur
 - `getServerStatsDetails(serverId, accessToken)` - Détails complets
 - `getServerTimeline(serverId, params, accessToken)` - Timeline
@@ -348,11 +355,8 @@ Statistiques des membres par activité.
 ```typescript
 import { useMemberActivityStats } from '@/composables/entity-stats'
 
-const {
-  getAllMemberActivities,
-  getMemberActivityStats,
-  getMemberActivityProgression
-} = useMemberActivityStats()
+const { getAllMemberActivities, getMemberActivityStats, getMemberActivityProgression } =
+  useMemberActivityStats()
 
 // Exemple d'utilisation
 const progression = await getMemberActivityProgression(
@@ -365,6 +369,7 @@ const progression = await getMemberActivityProgression(
 ```
 
 **Méthodes disponibles :**
+
 - `getAllMemberActivities(serverId, memberId, params, accessToken)` - Toutes les activités
 - `getMemberActivityStats(serverId, memberId, activityId, accessToken)` - Stats par activité
 - `getMemberActivityProgression(serverId, memberId, activityId, params, accessToken)` - Progression
@@ -393,6 +398,7 @@ const snapshot = await createSnapshot(serverId, { type: 'manual' }, accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `createSnapshot(serverId, request, accessToken)` - Créer un snapshot
 - `getAllSnapshots(serverId, params, accessToken)` - Liste paginée
 - `getSnapshotById(serverId, snapshotId, accessToken)` - Obtenir un snapshot
@@ -410,21 +416,15 @@ Statistiques des énumérations.
 ```typescript
 import { useEnumDefinitionStats } from '@/composables/entity-stats'
 
-const {
-  getAllEnumDefinitionStats,
-  getEnumDefinitionStats,
-  getEnumValueDistribution
-} = useEnumDefinitionStats()
+const { getAllEnumDefinitionStats, getEnumDefinitionStats, getEnumValueDistribution } =
+  useEnumDefinitionStats()
 
 // Exemple d'utilisation
-const distribution = await getEnumValueDistribution(
-  serverId,
-  enumDefinitionId,
-  accessToken
-)
+const distribution = await getEnumValueDistribution(serverId, enumDefinitionId, accessToken)
 ```
 
 **Méthodes disponibles :**
+
 - `getAllEnumDefinitionStats(serverId, params, accessToken)` - Toutes les stats
 - `getEnumDefinitionStats(serverId, enumDefinitionId, params, accessToken)` - Stats d'une enum
 - `getEnumValueDistribution(serverId, enumDefinitionId, accessToken)` - Distribution des valeurs
@@ -457,12 +457,13 @@ const { createActivity, listActivities } = useActivity()
 // 3. Appeler les méthodes avec tous les paramètres
 const handleCreateActivity = async () => {
   const result = await createActivity(
-    serverId,           // ID du serveur
-    {                   // Données de la requête
+    serverId, // ID du serveur
+    {
+      // Données de la requête
       name: 'Football',
-      description: 'Sport d\'équipe'
+      description: "Sport d'équipe"
     },
-    accessToken         // Token d'authentification
+    accessToken // Token d'authentification
   )
 
   if (result.error) {
@@ -563,4 +564,3 @@ src/renderer/src/composables/
     ├── useSnapshotStats.ts
     └── index.ts
 ```
-

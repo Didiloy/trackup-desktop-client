@@ -5,12 +5,13 @@ import { user, session } from '@/composables/auth/utils/authState'
 import type { IUserServer } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
-import HomeButton from './home-button.vue'
+import ProfileButton from './profile-button.vue'
 import AppDialog from '@/components/common/AppDialog.vue'
 import CreateServerForm from '@/components/server/CreateServerForm.vue'
 
 import { useI18n } from 'vue-i18n'
 import { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
+import { useUser } from '@/composables/entities'
 
 const i18n = useI18n()
 
@@ -18,25 +19,19 @@ const servers = ref<IUserServer[]>([])
 const user_store = useUserStore()
 const route = useRoute()
 const router = useRouter()
-
-const avatarUrl = computed<string | null>(() => {
-  return user_store.getAvatar || null
-})
+const { getMyServers } = useUser()
 
 async function fetchServers(): Promise<void> {
-  const token = session.value?.access_token || ''
-  if (!token) return
   try {
-    const res = await window.api.user.getMyServers(token)
+    const res = await getMyServers()
     servers.value = res.data ?? []
-    console.log(servers.value)
   } catch {
     servers.value = []
   }
 }
 
-onMounted(() => {
-  fetchServers()
+onMounted(async () => {
+  await fetchServers()
 })
 
 function openServer(id: string): void {
@@ -44,12 +39,6 @@ function openServer(id: string): void {
     router.push(`/servers/${id}`)
   }
 }
-
-function goHome(): void {
-  router.push('/')
-}
-
-const isHome = computed(() => route.path === '/')
 
 const showCreate = ref(false)
 
@@ -66,12 +55,7 @@ async function onCreated(server: IServer): Promise<void> {
 <template>
   <div class="flex flex-col items-center w-16 h-full my-2 bg-surface-200 rounded-lg">
     <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
-      <HomeButton
-        :image-url="avatarUrl"
-        :label="user?.email || 'Me'"
-        :active="isHome"
-        @click="goHome"
-      />
+      <ProfileButton :image-url="user_store.getAvatar" :label="user_store.getEmail || 'Me'" />
       <div class="w-8 h-px bg-surface-400 my-1"></div>
     </div>
 

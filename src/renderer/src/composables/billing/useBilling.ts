@@ -34,7 +34,7 @@ export function useBilling() {
     }
   }
 
-  async function openBillingPortal() : Promise<boolean> {
+  async function openBillingPortal(): Promise<boolean> {
     const accessToken = user_store.getAccessToken
     if (!accessToken) {
       error.value = 'Not authenticated'

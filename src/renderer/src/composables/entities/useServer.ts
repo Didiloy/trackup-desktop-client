@@ -26,27 +26,21 @@ export function useServer() {
   /**
    * Refresh server invitation code
    */
-  const refreshInviteCode = async (
-    serverId: string
-  ): Promise<IServerApiResponse<IServer>> => {
+  const refreshInviteCode = async (serverId: string): Promise<IServerApiResponse<IServer>> => {
     return window.api.server.refreshInviteCode(serverId, user_store.getAccessToken!)
   }
 
   /**
    * Join a server by invitation code
    */
-  const joinServer = async (
-    request: IJoinServerRequest
-  ): Promise<IServerApiResponse<void>> => {
+  const joinServer = async (request: IJoinServerRequest): Promise<IServerApiResponse<void>> => {
     return window.api.server.join(request, user_store.getAccessToken!)
   }
 
   /**
    * Get server details
    */
-  const getServerDetails = async (
-    serverId: string
-  ): Promise<IServerApiResponse<IServer>> => {
+  const getServerDetails = async (serverId: string): Promise<IServerApiResponse<IServer>> => {
     return window.api.server.getDetails(serverId, user_store.getAccessToken!)
   }
 
@@ -63,9 +57,7 @@ export function useServer() {
   /**
    * Delete a server
    */
-  const deleteServer = async (
-    serverId: string
-  ): Promise<IServerApiResponse<void>> => {
+  const deleteServer = async (serverId: string): Promise<IServerApiResponse<void>> => {
     return window.api.server.delete(serverId, user_store.getAccessToken!)
   }
 
@@ -78,4 +70,3 @@ export function useServer() {
     deleteServer
   }
 }
-

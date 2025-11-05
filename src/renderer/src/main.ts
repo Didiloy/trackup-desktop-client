@@ -4,7 +4,7 @@ import PrimeVue from 'primevue/config'
 import App from '@/App.vue'
 import { TrackupPreset } from '@/style/preset'
 import { createPinia } from 'pinia'
-import { router } from '@/router/router'
+import router from '@/router/router'
 
 import { i18n, loadLanguageAsync } from '@/i18n'
 

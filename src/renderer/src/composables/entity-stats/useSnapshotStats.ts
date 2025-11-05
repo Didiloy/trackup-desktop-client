@@ -76,7 +76,12 @@ export function useSnapshotStats() {
     snapshotId1: string,
     snapshotId2: string
   ): Promise<ISnapshotApiResponse<ISnapshotComparisonResult>> => {
-    return window.api.snapshotStats.compare(serverId, snapshotId1, snapshotId2, user_store.getAccessToken!)
+    return window.api.snapshotStats.compare(
+      serverId,
+      snapshotId1,
+      snapshotId2,
+      user_store.getAccessToken!
+    )
   }
 
   /**
@@ -99,4 +104,3 @@ export function useSnapshotStats() {
     cleanupSnapshots
   }
 }
-

@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 interface Props {
   imageUrl?: string | null
   label: string
-  active?: boolean
 }
 
+const route = useRoute()
+
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'click'): void }>()
 
 const initials = computed(() => {
   const trimmed = (props.label || '').trim()
@@ -16,7 +17,7 @@ const initials = computed(() => {
   return trimmed.charAt(0).toUpperCase()
 })
 
-const shapeClass = computed(() => (props.active ? 'rounded-2xl active' : 'rounded-2xl'))
+const shapeClass = computed(() => (route.path === '/' ? 'rounded-2xl active' : 'rounded-2xl'))
 </script>
 
 <template>
@@ -26,7 +27,7 @@ const shapeClass = computed(() => (props.active ? 'rounded-2xl active' : 'rounde
       :title="label"
       class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group hover:scale-110"
       :class="shapeClass"
-      @click="emit('click')"
+      @click="$router.push({ name: 'Home' })"
     >
       <img
         v-if="imageUrl"
