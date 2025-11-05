@@ -86,14 +86,14 @@ const result = await createServer(
 
 ---
 
-### useUser
+### useUserCRUD
 
 Gestion des utilisateurs.
 
 ```typescript
-import { useUser } from '@/composables/entities'
+import { useUserCRUD } from '@/composables/entities'
 
-const { getMe, getMyServers } = useUser()
+const { getMe, getMyServers } = useUserCRUD()
 
 // Exemple d'utilisation
 const user = await getMe(accessToken)
@@ -553,7 +553,7 @@ src/renderer/src/composables/
 │   ├── useServerCRUD.ts
 │   ├── useServerType.ts
 │   ├── useSession.ts
-│   ├── useUser.ts
+│   ├── useUserCRUD.ts
 │   └── index.ts
 └── entity-stats/
     ├── useActivityStats.ts

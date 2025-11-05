@@ -5,7 +5,7 @@
 
 export { useActivity } from './useActivity'
 export { useServerCRUD } from '../servers/useServerCRUD'
-export { useUser } from './useUser'
+export { useUserCRUD } from '../users/useUserCRUD'
 export { useMember } from './useMember'
 export { useSession } from './useSession'
 export { useActivitySkillLevel } from './useActivitySkillLevel'

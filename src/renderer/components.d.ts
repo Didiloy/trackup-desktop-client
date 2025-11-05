@@ -25,7 +25,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']
-    ServerItem: typeof import('./src/components/sidebar/server-item.vue')['default']
+    Server: typeof import('./src/components/servers/Server.vue')['default']
     ServerListHeader: typeof import('./src/components/servers/list/ServerListHeader.vue')['default']
     ServerListItems: typeof import('./src/components/servers/list/ServerListItems.vue')['default']
     ServersActions: typeof import('./src/components/sidebar/servers-actions.vue')['default']

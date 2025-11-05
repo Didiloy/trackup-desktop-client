@@ -9,7 +9,7 @@ import type {
  * Composable for User entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useUser() {
+export function useUserCRUD() {
   const user_store = useUserStore()
 
   /**

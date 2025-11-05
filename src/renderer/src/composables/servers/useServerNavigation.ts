@@ -10,9 +10,9 @@ export function useServerNavigation(servers: Ref<IUserServer[]>) {
     return route.params.id === serverId
   }
 
-  function navigateToServer(serverId: string): void {
+  async function navigateToServer(serverId: string): Promise<void> {
     if (!isServerActive(serverId)) {
-      router.push(`/servers/${serverId}`)
+      await router.push(`/servers/${serverId}`)
     }
   }
 
