@@ -24,7 +24,7 @@ const shapeClass = computed(() => (props.active ? 'rounded-2xl active' : 'rounde
     <button
       type="button"
       :title="label"
-      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group"
+      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group hover:scale-110"
       :class="shapeClass"
       @click="emit('click')"
     >

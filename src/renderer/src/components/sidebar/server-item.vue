@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 interface Props {
   imageUrl?: string | null
+  icon?: string | null
   label: string
   active?: boolean
 }
@@ -17,10 +18,15 @@ const initials = computed(() => {
 })
 
 const shapeClass = computed(() => (props.active ? 'rounded-xl' : 'rounded-2xl'))
-const wrapperBgClass = computed(() => (props.active ? 'bg-surface-100' : ''))
-const btnBgClass = computed(() =>
-  props.active ? 'bg-transparent' : 'bg-surface-200 hover:bg-surface-300'
-)
+const wrapperBgClass = computed(() => {
+  return props.active ? 'bg-surface-100' : ''
+})
+const btnBgClass = computed(() => {
+  const hover_scale = 'hover:scale-110'
+  if (props.imageUrl) return 'bg-transparent ' + hover_scale
+  if (props.icon) return 'bg-surface-300 hover:bg-primary-300 click:bg-primary-400 ' + hover_scale
+  return ''
+})
 </script>
 
 <template>
@@ -38,6 +44,7 @@ const btnBgClass = computed(() =>
         :alt="label"
         class="w-full h-full object-cover not-draggable"
       />
+      <i v-else-if="icon" :class="props.icon"></i>
       <span v-else class="text-sm font-semibold text-surface-700">
         {{ initials }}
       </span>

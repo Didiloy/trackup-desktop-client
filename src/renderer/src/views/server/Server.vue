@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { session } from '@/composables/auth/utils/authState'
-import type { IServer } from '../../../shared/contracts/interfaces/entities/server.interfaces'
+import type { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
 
 const route = useRoute()
 const serverId = ref<string>(route.params.id as string)

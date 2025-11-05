@@ -6,6 +6,12 @@ import type { IUserServer } from '../../../../shared/contracts/interfaces/entiti
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
 import HomeButton from './home-button.vue'
+import AppDialog from '@/components/common/AppDialog.vue'
+import CreateServerForm from '@/components/server/CreateServerForm.vue'
+
+import { useI18n } from 'vue-i18n'
+
+const i18n = useI18n()
 
 const servers = ref<IUserServer[]>([])
 const user_store = useUserStore()
@@ -39,6 +45,17 @@ function goHome(): void {
 }
 
 const isHome = computed(() => route.path === '/')
+
+const showCreate = ref(false)
+
+function openCreate(): void {
+  showCreate.value = true
+}
+
+function onCreated(server: { public_id: string }): void {
+  showCreate.value = false
+  if (server?.public_id) router.push(`/servers/${server.public_id}`)
+}
 </script>
 <template>
   <div class="flex flex-col items-center w-16 h-full my-2 bg-surface-200 rounded-lg">
@@ -62,7 +79,24 @@ const isHome = computed(() => route.path === '/')
             @click="openServer(s.public_id)"
           />
         </template>
+        <ServerItem
+          icon="pi pi-plus"
+          :label="i18n.t('userInterface.createServerView.title')"
+          @click="openCreate()"
+        />
       </div>
     </div>
+
+    <AppDialog v-model="showCreate" :styleClass="'w-[560px] max-w-[92vw] rounded-xl'" :contentClass="'p-0 bg-surface-50'">
+      <template #header>
+        <div class="flex items-center gap-2 p-3 select-none">
+          <i class="pi pi-plus-circle text-primary-500"></i>
+          <span class="font-semibold text-surface-900">{{ i18n.t('userInterface.createServerView.title') }}</span>
+        </div>
+      </template>
+      <div class="p-4">
+        <CreateServerForm @created="onCreated" @cancel="showCreate = false" />
+      </div>
+    </AppDialog>
   </div>
 </template>

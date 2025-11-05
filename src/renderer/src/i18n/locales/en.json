@@ -8,6 +8,11 @@
     "success": "Success",
     "name": "Name",
     "description": "Description",
+    "type": "Type",
+    "logo": "Logo",
+    "choose": "Choose",
+    "clear": "Clear",
+    "or": "or",
     "settings": "Settings",
     "required": "Required",
     "cancel": "Cancel"
@@ -144,6 +149,17 @@
         "cannot_login": "An error occurred while logging in",
         "invalid_email": "Invalid email address."
       }
+    },
+    "createServerView": {
+      "title": "Create a server",
+      "description": "Create a new server",
+      "placeholder": {
+        "name": "Server name example: My Community",
+        "type": "Server type",
+        "description": "Server description ex: A community to share your ideas"
+      },
+      "create": "Create",
+      "cancel": "Cancel"
     }
   },
   "updateModal": {

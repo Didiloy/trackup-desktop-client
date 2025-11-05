@@ -10,6 +10,11 @@
     "success": "Succès",
     "name": "Nom",
     "description": "Description",
+    "type": "Type",
+    "logo": "Logo",
+    "choose": "Choisir",
+    "clear": "Effacer",
+    "or": "ou",
     "settings": "Paramètres",
     "required": "Requis",
     "cancel": "Annuler"
@@ -147,6 +152,17 @@
         "cannot_login": "Une erreur est survenue lors de la connexion",
         "invalid_email": "Veuillez entrer une adresse email valide"
       }
+    },
+    "createServerView": {
+      "title": "Créer un serveur",
+      "description": "Créez un nouveau serveur",
+      "placeholder": {
+        "name": "Nom du serveur ex: Ma communauté",
+        "type": "Type de serveur",
+        "description": "Description du serveur ex: Une communauté pour partager vos idées"
+      },
+      "create": "Créer",
+      "cancel": "Annuler"
     }
   },
   "updateModal": {
