@@ -10,11 +10,11 @@ import type {
 
 /**
  * Server API Bridge
- * Exposes server-related functions to the renderer
+ * Exposes servers-related functions to the renderer
  */
 export const serverBridge = {
   /**
-   * Create a new server
+   * Create a new servers
    */
   create: (
     request: ICreateServerRequest,
@@ -24,7 +24,7 @@ export const serverBridge = {
   },
 
   /**
-   * Refresh the server invitation code (creator only)
+   * Refresh the servers invitation code (creator only)
    */
   refreshInviteCode: (
     serverId: string,
@@ -34,21 +34,21 @@ export const serverBridge = {
   },
 
   /**
-   * Join a server by invitation code
+   * Join a servers by invitation code
    */
   join: (request: IJoinServerRequest, accessToken: string): Promise<IServerApiResponse<void>> => {
     return ipcRenderer.invoke(ipc_channels.server.join, request, accessToken)
   },
 
   /**
-   * Get details of a server
+   * Get details of a servers
    */
   getDetails: (serverId: string, accessToken: string): Promise<IServerApiResponse<IServer>> => {
     return ipcRenderer.invoke(ipc_channels.server.getDetails, serverId, accessToken)
   },
 
   /**
-   * Update server details (creator only)
+   * Update servers details (creator only)
    */
   update: (
     serverId: string,
@@ -59,7 +59,7 @@ export const serverBridge = {
   },
 
   /**
-   * Delete a server (creator only)
+   * Delete a servers (creator only)
    */
   delete: (serverId: string, accessToken: string): Promise<IServerApiResponse<void>> => {
     return ipcRenderer.invoke(ipc_channels.server.delete, serverId, accessToken)

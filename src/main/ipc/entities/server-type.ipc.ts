@@ -11,14 +11,14 @@ import { validateAuth } from '../../../shared/helpers/index.helpers'
 const logger = new Logger('IPC:ServerType')
 
 /**
- * Register server-type-related IPC handlers
+ * Register servers-type-related IPC handlers
  */
 export function registerServerTypeIpc(): void {
-  // Get all server types
+  // Get all servers types
   ipcMain.handle(
     ipc_channels.serverType.getAll,
     async (_event, accessToken: string): Promise<IServerTypeApiResponse<IServerType[]>> => {
-      logger.info('Getting all server types')
+      logger.info('Getting all servers types')
 
       const validationError = validateAuth(accessToken)
       if (validationError) return validationError

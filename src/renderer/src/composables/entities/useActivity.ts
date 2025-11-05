@@ -15,7 +15,7 @@ export function useActivity() {
   const user_store = useUserStore()
 
   /**
-   * Create a new activity in a server
+   * Create a new activity in a servers
    */
   const createActivity = async (
     serverId: string,
@@ -25,7 +25,7 @@ export function useActivity() {
   }
 
   /**
-   * List all activities in a server with optional search
+   * List all activities in a servers with optional search
    */
   const listActivities = async (
     serverId: string,

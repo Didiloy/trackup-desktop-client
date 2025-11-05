@@ -23,7 +23,7 @@ const logger = new Logger('IPC:Member')
  * Register member-related IPC handlers
  */
 export function registerMemberIpc(): void {
-  // Invite a new member to the server
+  // Invite a new member to the servers
   ipcMain.handle(
     ipc_channels.member.invite,
     async (
@@ -32,7 +32,7 @@ export function registerMemberIpc(): void {
       request: IInviteMemberRequest,
       accessToken: string
     ): Promise<IMemberApiResponse<IServerMember>> => {
-      logger.info('Inviting member to server:', serverId)
+      logger.info('Inviting member to servers:', serverId)
 
       // Validate input
       const validationError = combineValidations(
@@ -50,11 +50,11 @@ export function registerMemberIpc(): void {
     }
   )
 
-  // Quit a server
+  // Quit a servers
   ipcMain.handle(
     ipc_channels.member.quit,
     async (_event, serverId: string, accessToken: string): Promise<IMemberApiResponse<void>> => {
-      logger.info('Quitting server:', serverId)
+      logger.info('Quitting servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -66,7 +66,7 @@ export function registerMemberIpc(): void {
     }
   )
 
-  // List server members with filters and pagination
+  // List servers members with filters and pagination
   ipcMain.handle(
     ipc_channels.member.list,
     async (
@@ -75,7 +75,7 @@ export function registerMemberIpc(): void {
       options: IListMembersOptions | undefined,
       accessToken: string
     ): Promise<IMemberApiResponse<IPaginatedMembers>> => {
-      logger.info('Listing members for server:', serverId)
+      logger.info('Listing members for servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -116,7 +116,7 @@ export function registerMemberIpc(): void {
     }
   )
 
-  // Kick a member from the server (creator only)
+  // Kick a member from the servers (creator only)
   ipcMain.handle(
     ipc_channels.member.kick,
     async (

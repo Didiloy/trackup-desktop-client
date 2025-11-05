@@ -49,7 +49,7 @@ export function registerActivityIpc(): void {
     }
   )
 
-  // List all activities in a server
+  // List all activities in a servers
   ipcMain.handle(
     ipc_channels.activity.list,
     async (
@@ -58,7 +58,7 @@ export function registerActivityIpc(): void {
       options: IListActivitiesOptions | undefined,
       accessToken: string
     ): Promise<IActivityApiResponse<IActivity[]>> => {
-      logger.info('Listing activities for server:', serverId)
+      logger.info('Listing activities for servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),

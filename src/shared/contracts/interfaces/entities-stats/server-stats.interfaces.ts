@@ -1,6 +1,6 @@
 /**
  * Server Statistics Interfaces
- * All types related to server statistics and analytics
+ * All types related to servers statistics and analytics
  */
 import { EPeriod } from '../../enums/period.enum'
 

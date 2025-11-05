@@ -1,6 +1,6 @@
 /**
  * Server Statistics IPC Handlers
- * Handles all server statistics-related IPC communication
+ * Handles all servers statistics-related IPC communication
  */
 
 import { ipcMain } from 'electron'
@@ -27,7 +27,7 @@ import {
 const logger = new Logger('IPC:ServerStats')
 
 export function registerServerStatsIpc(): void {
-  // Get server statistics
+  // Get servers statistics
   ipcMain.handle(
     ipc_channels.serverStats.getStats,
     async (
@@ -35,7 +35,7 @@ export function registerServerStatsIpc(): void {
       serverId: string,
       accessToken: string
     ): Promise<IServerStatsApiResponse<IServerStats>> => {
-      logger.info('Getting server statistics:', serverId)
+      logger.info('Getting servers statistics:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -47,7 +47,7 @@ export function registerServerStatsIpc(): void {
     }
   )
 
-  // Get complete server stats details
+  // Get complete servers stats details
   ipcMain.handle(
     ipc_channels.serverStats.getDetails,
     async (
@@ -55,7 +55,7 @@ export function registerServerStatsIpc(): void {
       serverId: string,
       accessToken: string
     ): Promise<IServerStatsApiResponse<IServerStatsDetails>> => {
-      logger.info('Getting server stats details:', serverId)
+      logger.info('Getting servers stats details:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -70,7 +70,7 @@ export function registerServerStatsIpc(): void {
     }
   )
 
-  // Get server timeline
+  // Get servers timeline
   ipcMain.handle(
     ipc_channels.serverStats.getTimeline,
     async (
@@ -79,7 +79,7 @@ export function registerServerStatsIpc(): void {
       params: IStatsTimelineParams | undefined,
       accessToken: string
     ): Promise<IServerStatsApiResponse<IStatsTimeline[]>> => {
-      logger.info('Getting server timeline:', serverId, params)
+      logger.info('Getting servers timeline:', serverId, params)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -96,7 +96,7 @@ export function registerServerStatsIpc(): void {
     }
   )
 
-  // Get server growth trends
+  // Get servers growth trends
   ipcMain.handle(
     ipc_channels.serverStats.getGrowthTrends,
     async (
@@ -105,7 +105,7 @@ export function registerServerStatsIpc(): void {
       params: IStatsGrowthParams | undefined,
       accessToken: string
     ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
-      logger.info('Getting server growth trends:', serverId, params)
+      logger.info('Getting servers growth trends:', serverId, params)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),

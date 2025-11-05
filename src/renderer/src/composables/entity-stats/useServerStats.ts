@@ -18,7 +18,7 @@ export function useServerStats() {
   const user_store = useUserStore()
 
   /**
-   * Get server statistics
+   * Get servers statistics
    */
   const getServerStats = async (
     serverId: string
@@ -27,7 +27,7 @@ export function useServerStats() {
   }
 
   /**
-   * Get complete server stats details
+   * Get complete servers stats details
    */
   const getServerStatsDetails = async (
     serverId: string
@@ -36,7 +36,7 @@ export function useServerStats() {
   }
 
   /**
-   * Get server timeline
+   * Get servers timeline
    */
   const getServerTimeline = async (
     serverId: string,
@@ -46,7 +46,7 @@ export function useServerStats() {
   }
 
   /**
-   * Get server growth trends
+   * Get servers growth trends
    */
   const getServerGrowthTrends = async (
     serverId: string,

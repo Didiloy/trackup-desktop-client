@@ -60,7 +60,7 @@ export function registerSessionIpc(): void {
       options: IListSessionsOptions | undefined,
       accessToken: string
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
-      logger.info('Listing sessions for server:', serverId)
+      logger.info('Listing sessions for servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),

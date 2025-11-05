@@ -18,7 +18,7 @@ async function refresh(): Promise<void> {
   try {
     const res = await window.api.server.getDetails(serverId.value, token)
     server.value = res.data ?? null
-    console.log('server details', server.value)
+    console.log('servers details', server.value)
   } catch {
     server.value = null
   }

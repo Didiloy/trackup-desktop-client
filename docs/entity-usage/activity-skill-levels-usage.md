@@ -15,7 +15,7 @@ const { session } = useAuth()
 const accessToken = session.value?.access_token
 
 const result = await window.api.activitySkillLevel.create(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activity_456', // activity ID
   {
     name: 'Beginner',
@@ -55,7 +55,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.activitySkillLevel.list(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activity_456', // activity ID
   accessToken
 )
@@ -72,7 +72,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.activitySkillLevel.getById(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activity_456', // activity ID
   'sklvl_123', // skill level ID
   accessToken
@@ -89,7 +89,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.activitySkillLevel.update(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activity_456', // activity ID
   'sklvl_123', // skill level ID
   {
@@ -112,7 +112,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.activitySkillLevel.delete(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activity_456', // activity ID
   'sklvl_123', // skill level ID
   accessToken

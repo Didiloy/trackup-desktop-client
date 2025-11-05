@@ -64,7 +64,7 @@ Successfully implemented the complete **users** entity for current user informat
 ### IUserServer
 
 ```typescript
-// Reuses IServer from server.interfaces.ts
+// Reuses IServer from servers.interfaces.ts
 {
   public_id: string
   name: string
@@ -113,7 +113,7 @@ if (result.error) {
   //     public_id: "srv_abc123def456",
   //     name: "My Gaming Server",
   //     server_type_public_id: "srvtype_550e8400-e29b-41d4-a716-446655440000",
-  //     description: "A Minecraft server for friends",
+  //     description: "A Minecraft servers for friends",
   //     logo: "https://example.com/logo.png"
   //   }
   // ]
@@ -346,7 +346,7 @@ await loadUserServers()
 
 // Show dropdown of user's servers
 <select v-model="selectedServer">
-  <option v-for="server in servers" :key="server.public_id" :value="server.public_id">
+  <option v-for="servers in servers" :key="servers.public_id" :value="servers.public_id">
     {{ server.name }}
   </option>
 </select>

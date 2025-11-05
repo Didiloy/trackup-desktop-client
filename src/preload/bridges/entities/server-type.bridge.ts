@@ -7,11 +7,11 @@ import type {
 
 /**
  * Server Type API Bridge
- * Exposes server-type-related functions to the renderer
+ * Exposes servers-type-related functions to the renderer
  */
 export const serverTypeBridge = {
   /**
-   * Get all server types
+   * Get all servers types
    */
   getAll: (accessToken: string): Promise<IServerTypeApiResponse<IServerType[]>> => {
     return ipcRenderer.invoke(ipc_channels.serverType.getAll, accessToken)

@@ -4,8 +4,8 @@ import { session } from '@/composables/auth/utils/authState'
 import type {
   IServer,
   ICreateServerRequest
-} from '../../../../shared/contracts/interfaces/entities/server.interfaces'
-import type { IServerType } from '../../../../shared/contracts/interfaces/entities/server-type.interfaces'
+} from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
+import type { IServerType } from '../../../../../shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
 
 const i18n = useI18n()
@@ -38,7 +38,7 @@ async function loadServerTypes(): Promise<void> {
     const res = await window.api.serverType.getAll(token)
     server_types.value = res.data ?? []
   } catch (e) {
-    error.value = 'Failed to load server types'
+    error.value = 'Failed to load servers types'
   } finally {
     loading_types.value = false
   }
@@ -78,10 +78,10 @@ async function submit(): Promise<void> {
     }
     const res = await window.api.server.create(payload, token)
     const created: IServer | undefined = res.data as IServer | undefined
-    if (!created) throw new Error(res.error || 'Failed to create server')
+    if (!created) throw new Error(res.error || 'Failed to create servers')
     emit('created', created)
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to create server'
+    error.value = e instanceof Error ? e.message : 'Failed to create servers'
   } finally {
     submitting.value = false
   }

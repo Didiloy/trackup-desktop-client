@@ -12,7 +12,7 @@ export function useServerType() {
   const user_store = useUserStore()
 
   /**
-   * Get all server types
+   * Get all servers types
    */
   const getAllServerTypes = async (): Promise<IServerTypeApiResponse<IServerType[]>> => {
     return window.api.serverType.getAll(user_store.getAccessToken!)

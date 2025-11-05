@@ -16,7 +16,7 @@ export function useMember() {
   const user_store = useUserStore()
 
   /**
-   * Invite a new member to the server
+   * Invite a new member to the servers
    */
   const inviteMember = async (
     serverId: string,
@@ -26,14 +26,14 @@ export function useMember() {
   }
 
   /**
-   * Quit a server
+   * Quit a servers
    */
   const quitServer = async (serverId: string): Promise<IMemberApiResponse<void>> => {
     return window.api.member.quit(serverId, user_store.getAccessToken!)
   }
 
   /**
-   * List server members with filters and pagination
+   * List servers members with filters and pagination
    */
   const listMembers = async (
     serverId: string,
@@ -53,7 +53,7 @@ export function useMember() {
   }
 
   /**
-   * Kick a member from the server (creator only)
+   * Kick a member from the servers (creator only)
    */
   const kickMember = async (
     serverId: string,

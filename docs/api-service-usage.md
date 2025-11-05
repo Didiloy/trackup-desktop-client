@@ -41,16 +41,16 @@ See `src/main/ipc/server.ipc.ts` for a complete example:
 ```typescript
 import { apiService } from '../services/ApiService'
 
-// Create a server
+// Create a servers
 return apiService.post<IServer>('/api/v1/servers/create', accessToken, request)
 
-// Get server details
+// Get servers details
 return apiService.get<IServer>(`/api/v1/servers/${serverId}`, accessToken)
 
-// Update server
+// Update servers
 return apiService.put<IServer>(`/api/v1/servers/${serverId}`, accessToken, request)
 
-// Delete server
+// Delete servers
 return apiService.delete<void>(`/api/v1/servers/${serverId}`, accessToken)
 ```
 
@@ -182,7 +182,7 @@ export function registerChannelIpc(): void {
       serverId: string,
       accessToken: string
     ): Promise<IChannelApiResponse<IChannel[]>> => {
-      logger.info('Listing channels for server:', serverId)
+      logger.info('Listing channels for servers:', serverId)
 
       if (!serverId) {
         return { error: 'Server ID is required' }

@@ -4,17 +4,17 @@
 
 export const SERVER_STATS_CHANNELS = {
   // Base stats
-  getStats: 'server-stats:getStats',
+  getStats: 'servers-stats:getStats',
 
   // Detailed stats
-  getDetails: 'server-stats:getDetails',
+  getDetails: 'servers-stats:getDetails',
 
   // Timeline
-  getTimeline: 'server-stats:getTimeline',
+  getTimeline: 'servers-stats:getTimeline',
 
   // Growth trends
-  getGrowthTrends: 'server-stats:getGrowthTrends',
+  getGrowthTrends: 'servers-stats:getGrowthTrends',
 
   // Comparative analysis
-  getComparativeAnalysis: 'server-stats:getComparativeAnalysis'
+  getComparativeAnalysis: 'servers-stats:getComparativeAnalysis'
 } as const

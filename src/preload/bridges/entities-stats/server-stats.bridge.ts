@@ -1,6 +1,6 @@
 /**
  * Server Statistics Bridge
- * Exposes server statistics API to the renderer process
+ * Exposes servers statistics API to the renderer process
  */
 
 import { ipcRenderer } from 'electron'
@@ -18,7 +18,7 @@ import type {
 
 export const serverStatsBridge = {
   /**
-   * Get server statistics
+   * Get servers statistics
    */
   getStats: (
     serverId: string,
@@ -28,7 +28,7 @@ export const serverStatsBridge = {
   },
 
   /**
-   * Get complete server stats details
+   * Get complete servers stats details
    */
   getDetails: (
     serverId: string,
@@ -38,7 +38,7 @@ export const serverStatsBridge = {
   },
 
   /**
-   * Get server timeline
+   * Get servers timeline
    */
   getTimeline: (
     serverId: string,
@@ -49,7 +49,7 @@ export const serverStatsBridge = {
   },
 
   /**
-   * Get server growth trends
+   * Get servers growth trends
    */
   getGrowthTrends: (
     serverId: string,

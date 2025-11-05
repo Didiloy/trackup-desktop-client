@@ -15,7 +15,7 @@ const { session } = useAuth()
 const accessToken = session.value?.access_token
 
 const result = await window.api.session.create(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   {
     activity_id: 'activity_123e4567-e89b-12d3-a456-426614174000',
     duration: 30, // Duration in minutes
@@ -108,7 +108,7 @@ if (paginatedResult.error) {
 
 ```typescript
 const result = await window.api.session.getById(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   accessToken
 )
@@ -124,7 +124,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.update(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   {
     duration: 45, // Updated duration
@@ -144,7 +144,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.delete(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   accessToken
 )
@@ -160,7 +160,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.like(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   accessToken
 )
@@ -176,7 +176,7 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.unlike(
-  'srv_123', // server ID
+  'srv_123', // servers ID
   'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
   accessToken
 )

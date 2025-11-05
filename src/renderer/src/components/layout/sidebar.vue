@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ServersList from '@/components/sidebar/ServersList.vue'
+import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActions from '@/components/sidebar/servers-actions.vue'
 </script>
 <template>

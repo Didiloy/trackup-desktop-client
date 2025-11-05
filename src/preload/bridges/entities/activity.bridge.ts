@@ -14,7 +14,7 @@ import type {
  */
 export const activityBridge = {
   /**
-   * Create a new activity in a server
+   * Create a new activity in a servers
    */
   create: (
     serverId: string,
@@ -25,7 +25,7 @@ export const activityBridge = {
   },
 
   /**
-   * List all activities in a server with optional search
+   * List all activities in a servers with optional search
    */
   list: (
     serverId: string,

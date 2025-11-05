@@ -1,6 +1,6 @@
 /**
  * Snapshot Statistics IPC Handlers
- * Handles server statistics snapshots and comparisons
+ * Handles servers statistics snapshots and comparisons
  */
 
 import { ipcMain } from 'electron'

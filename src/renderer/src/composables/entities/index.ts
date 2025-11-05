@@ -4,7 +4,7 @@
  */
 
 export { useActivity } from './useActivity'
-export { useServer } from './useServer'
+export { useServerCRUD } from '../servers/useServerCRUD'
 export { useUser } from './useUser'
 export { useMember } from './useMember'
 export { useSession } from './useSession'

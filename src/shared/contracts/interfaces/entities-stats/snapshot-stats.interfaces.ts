@@ -1,6 +1,6 @@
 /**
  * Snapshot Statistics Interfaces
- * All types related to server statistics snapshots
+ * All types related to servers statistics snapshots
  */
 
 // ============================================================================

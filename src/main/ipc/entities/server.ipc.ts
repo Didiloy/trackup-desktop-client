@@ -18,10 +18,10 @@ import {
 const logger = new Logger('IPC:Server')
 
 /**
- * Register server-related IPC handlers
+ * Register servers-related IPC handlers
  */
 export function registerServerIpc(): void {
-  // Create a new server
+  // Create a new servers
   ipcMain.handle(
     ipc_channels.server.create,
     async (
@@ -29,7 +29,7 @@ export function registerServerIpc(): void {
       request: ICreateServerRequest,
       accessToken: string
     ): Promise<IServerApiResponse<IServer>> => {
-      logger.info('Creating server:', request.name)
+      logger.info('Creating servers:', request.name)
 
       // Validate input
       const validationError = combineValidations(
@@ -43,11 +43,11 @@ export function registerServerIpc(): void {
     }
   )
 
-  // Refresh server invitation code
+  // Refresh servers invitation code
   ipcMain.handle(
     ipc_channels.server.refreshInviteCode,
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<IServer>> => {
-      logger.info('Refreshing invite code for server:', serverId)
+      logger.info('Refreshing invite code for servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -62,7 +62,7 @@ export function registerServerIpc(): void {
     }
   )
 
-  // Join a server by invitation code
+  // Join a servers by invitation code
   ipcMain.handle(
     ipc_channels.server.join,
     async (
@@ -70,7 +70,7 @@ export function registerServerIpc(): void {
       request: IJoinServerRequest,
       accessToken: string
     ): Promise<IServerApiResponse<void>> => {
-      logger.info('Joining server with code:', request.code)
+      logger.info('Joining servers with code:', request.code)
 
       const validationError = combineValidations(
         validateRequired(request.code, 'Invitation code'),
@@ -82,11 +82,11 @@ export function registerServerIpc(): void {
     }
   )
 
-  // Get server details
+  // Get servers details
   ipcMain.handle(
     ipc_channels.server.getDetails,
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<IServer>> => {
-      logger.info('Getting server details:', serverId)
+      logger.info('Getting servers details:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -98,7 +98,7 @@ export function registerServerIpc(): void {
     }
   )
 
-  // Update server details
+  // Update servers details
   ipcMain.handle(
     ipc_channels.server.update,
     async (
@@ -107,7 +107,7 @@ export function registerServerIpc(): void {
       request: IUpdateServerRequest,
       accessToken: string
     ): Promise<IServerApiResponse<IServer>> => {
-      logger.info('Updating server:', serverId)
+      logger.info('Updating servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),
@@ -119,11 +119,11 @@ export function registerServerIpc(): void {
     }
   )
 
-  // Delete a server
+  // Delete a servers
   ipcMain.handle(
     ipc_channels.server.delete,
     async (_event, serverId: string, accessToken: string): Promise<IServerApiResponse<void>> => {
-      logger.info('Deleting server:', serverId)
+      logger.info('Deleting servers:', serverId)
 
       const validationError = combineValidations(
         validateRequired(serverId, 'Server ID'),

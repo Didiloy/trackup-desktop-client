@@ -15,7 +15,7 @@ import type {
  */
 export const memberBridge = {
   /**
-   * Invite a new member to the server
+   * Invite a new member to the servers
    */
   invite: (
     serverId: string,
@@ -26,14 +26,14 @@ export const memberBridge = {
   },
 
   /**
-   * Quit a server (leave)
+   * Quit a servers (leave)
    */
   quit: (serverId: string, accessToken: string): Promise<IMemberApiResponse<void>> => {
     return ipcRenderer.invoke(ipc_channels.member.quit, serverId, accessToken)
   },
 
   /**
-   * List server members with optional filters and pagination
+   * List servers members with optional filters and pagination
    */
   list: (
     serverId: string,
@@ -55,7 +55,7 @@ export const memberBridge = {
   },
 
   /**
-   * Kick a member from the server (creator only)
+   * Kick a member from the servers (creator only)
    */
   kick: (
     serverId: string,

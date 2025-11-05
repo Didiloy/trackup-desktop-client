@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
   const hasSession = computed(() => session.value !== null)
 
   const getId = computed(() => user.value?.id ?? null)
-  const getEmail = computed(() => user.value?.email ?? false)
+  const getEmail = computed(() => user.value?.email ?? null)
   const getAvatar = computed(() => user.value?.user_metadata?.avatar_url ?? null)
   const getUsername = computed(() => user.value?.user_metadata?.full_name ?? null)
   const getAccessToken = computed(() => session.value?.access_token ?? null)

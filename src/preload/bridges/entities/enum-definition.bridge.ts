@@ -13,7 +13,7 @@ import type {
  */
 export const enumDefinitionBridge = {
   /**
-   * Create a new enum definition in a server (creator only)
+   * Create a new enum definition in a servers (creator only)
    */
   create: (
     serverId: string,
@@ -24,7 +24,7 @@ export const enumDefinitionBridge = {
   },
 
   /**
-   * List all enum definitions in a server
+   * List all enum definitions in a servers
    */
   list: (
     serverId: string,

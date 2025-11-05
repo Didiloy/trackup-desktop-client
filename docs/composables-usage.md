@@ -49,12 +49,12 @@ const result = await createActivity(
 
 ---
 
-### useServer
+### useServerCRUD
 
 Gestion des serveurs.
 
 ```typescript
-import { useServer } from '@/composables/entities'
+import { useServerCRUD } from '@/composables/entities'
 
 const {
   createServer,
@@ -63,7 +63,7 @@ const {
   getServerDetails,
   updateServer,
   deleteServer
-} = useServer()
+} = useServerCRUD()
 
 // Exemple d'utilisation
 const result = await createServer(
@@ -441,7 +441,7 @@ import { useActivity } from '@/composables/entities'
 import { useActivityStats } from '@/composables/entity-stats'
 
 // Import depuis les index
-import { useActivity, useServer, useMember } from '@/composables/entities'
+import { useActivity, useServerCRUD, useMember } from '@/composables/entities'
 import { useActivityStats, useMemberStats } from '@/composables/entity-stats'
 ```
 
@@ -550,7 +550,7 @@ src/renderer/src/composables/
 │   ├── useActivitySkillLevel.ts
 │   ├── useEnumDefinition.ts
 │   ├── useMember.ts
-│   ├── useServer.ts
+│   ├── useServerCRUD.ts
 │   ├── useServerType.ts
 │   ├── useSession.ts
 │   ├── useUser.ts
