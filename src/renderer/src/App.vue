@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Topbar from '@/components/layout/topbar.vue'
+import Topbar from '@/components/asides/topbar.vue'
 import UpdateModal from '@/components/UpdateModal.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'

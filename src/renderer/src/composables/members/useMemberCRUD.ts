@@ -18,10 +18,7 @@ interface UseMemberCRUDReturn {
     serverId: string,
     options?: IListMembersOptions
   ) => Promise<IMemberApiResponse<IPaginatedMembers>>
-  getMemberById: (
-    serverId: string,
-    memberId: string
-  ) => Promise<IMemberApiResponse<IServerMember>>
+  getMemberById: (serverId: string, memberId: string) => Promise<IMemberApiResponse<IServerMember>>
   kickMember: (serverId: string, memberId: string) => Promise<IMemberApiResponse<void>>
   updateMemberNickname: (
     serverId: string,
