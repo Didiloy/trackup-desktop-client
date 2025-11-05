@@ -2,6 +2,7 @@
  * Server Statistics Interfaces
  * All types related to server statistics and analytics
  */
+import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
 // Base Server Stats
@@ -110,16 +111,14 @@ export interface IServerStatsDetails {
 // Query Parameters
 // ============================================================================
 
-export type StatsPeriod = 'all_time' | 'daily' | 'weekly' | 'monthly' | 'yearly'
-
 export interface IStatsTimelineParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
   isoWeek?: boolean
 }
 
 export interface IStatsGrowthParams {
-  period?: StatsPeriod
+  period?: EPeriod
 }
 
 // ============================================================================

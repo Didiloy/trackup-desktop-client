@@ -3,7 +3,7 @@
  * All types related to member activity statistics and progression
  */
 
-import type { StatsPeriod } from './server-stats.interfaces'
+import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
 // Member Activity Stats
@@ -75,7 +75,7 @@ export interface IMemberActivityPaginationParams {
 }
 
 export interface IMemberActivityProgressionParams {
-  period?: StatsPeriod
+  period?: EPeriod
   limit?: number
 }
 

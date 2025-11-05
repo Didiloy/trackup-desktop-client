@@ -163,21 +163,21 @@
       },
       "create": "Créer",
       "cancel": "Annuler"
+    },
+    "updateModal": {
+      "title": "Mise à jour disponible",
+      "version": "Version",
+      "type": "Type",
+      "major": "Majeure",
+      "minor": "Mineure",
+      "releaseNotes": "Notes de version",
+      "releaseDate": "Date de sortie",
+      "downloading": "Téléchargement en cours...",
+      "error": "Erreur",
+      "skip": "Ignorer",
+      "updateNow": "Mettre à jour maintenant",
+      "installAndRestart": "Installer et redémarrer",
+      "downloadError": "Erreur lors du téléchargement"
     }
-  },
-  "updateModal": {
-    "title": "Mise à jour disponible",
-    "version": "Version",
-    "type": "Type",
-    "major": "Majeure",
-    "minor": "Mineure",
-    "releaseNotes": "Notes de version",
-    "releaseDate": "Date de sortie",
-    "downloading": "Téléchargement en cours...",
-    "error": "Erreur",
-    "skip": "Ignorer",
-    "updateNow": "Mettre à jour maintenant",
-    "installAndRestart": "Installer et redémarrer",
-    "downloadError": "Erreur lors du téléchargement"
   }
 }
