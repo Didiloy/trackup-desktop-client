@@ -379,4 +379,3 @@ const props = withDefaults(defineProps<Props>(), {
   transform: translateX(100%) rotate(120deg);
 }
 </style>
-

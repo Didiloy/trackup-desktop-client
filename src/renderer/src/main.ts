@@ -5,6 +5,12 @@ import App from '@/App.vue'
 import { TrackupPreset } from '@/style/preset'
 import { createPinia } from 'pinia'
 import router from '@/router/router'
+/* import font awesome icon component */
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
 
 import { i18n, loadLanguageAsync } from '@/i18n'
 
@@ -22,6 +28,9 @@ app.use(PrimeVue, {
 })
 
 app.use(router)
+
+app.component("font-awesome-icon", FontAwesomeIcon);
+library.add(fas, far, fab);
 
 const pinia = createPinia()
 app.use(pinia)

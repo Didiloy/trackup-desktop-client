@@ -3,6 +3,7 @@ import Versions from '@/components/Versions.vue'
 import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/composables/auth/useAuth'
+import ThemeSelector from '@/components/common/ThemeSelector.vue'
 
 const ipcHandle = (): void => window.api.app.ping()
 const user_store = useUserStore()
@@ -44,5 +45,6 @@ onMounted(() => {
       </div>
     </div>
     <Versions />
+    <ThemeSelector/>
   </div>
 </template>

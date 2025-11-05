@@ -23,6 +23,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@primeuix/themes": "^1.2.5",
     "@supabase/supabase-js": "^2.76.1",
     "@tailwindcss/vite": "^4.1.15",

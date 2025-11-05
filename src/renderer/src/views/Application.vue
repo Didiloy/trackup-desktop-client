@@ -10,7 +10,7 @@ import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
     <Sidebar />
     <div class="grow bg-surface-50 h-full w-full rounded-r-xl">
       <router-view v-slot="{ Component }">
-        <TransitionWrapper name="rotate-fade">
+        <TransitionWrapper name="fade">
           <component :is="Component" />
         </TransitionWrapper>
       </router-view>
