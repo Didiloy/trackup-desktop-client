@@ -53,11 +53,11 @@ const props = withDefaults(defineProps<Props>(), {
 }
 .slide-fade-enter-from {
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(20px);
 }
 .slide-fade-leave-to {
   opacity: 0;
-  transform: translateX(10px);
+  transform: translateX(40px);
 }
 
 /* Slide Up */
