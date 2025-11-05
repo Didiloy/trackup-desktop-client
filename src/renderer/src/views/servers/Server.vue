@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
+import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 
 const route = useRoute()
 const server_id = ref<string>(route.params.id as string)
@@ -24,15 +25,22 @@ onMounted(() => {
 
 watch(
   () => route.params.id,
-  () => {
-    getServerInfos()
+  (newId) => {
+    if (newId && typeof newId === 'string') {
+      server_id.value = newId
+      getServerInfos()
+    }
   }
 )
 </script>
 
 <template>
   <div>
-    <h1>Server {{ server_id }}</h1>
-    <p v-if="server">{{ server.name }}</p>
+    <TransitionWrapper name="slide-fade">
+      <div :key="server_id">
+        <h1>Server {{ server_id }}</h1>
+        <p v-if="server">{{ server.name }}</p>
+      </div>
+    </TransitionWrapper>
   </div>
 </template>
