@@ -45,6 +45,6 @@ onMounted(() => {
       </div>
     </div>
     <Versions />
-    <ThemeSelector/>
+    <ThemeSelector />
   </div>
 </template>
