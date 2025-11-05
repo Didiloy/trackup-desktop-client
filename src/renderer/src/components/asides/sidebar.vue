@@ -13,8 +13,8 @@ const user_store = useUserStore()
       <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
         <ProfileButton :image-url="user_store.getAvatar" :label="user_store.getEmail || 'Me'" />
         <div class="w-8 h-px bg-surface-400 my-1"></div>
-        <ServersList />
       </div>
+      <ServersList />
     </div>
     <ServersActionsList />
   </div>

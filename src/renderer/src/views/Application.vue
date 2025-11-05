@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Sidebar from '@/components/layout/sidebar.vue'
+import Sidebar from '@/components/asides/sidebar.vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 </script>
 
