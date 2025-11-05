@@ -175,6 +175,18 @@
       "updateNow": "Update now",
       "installAndRestart": "Install and restart",
       "downloadError": "Error while downloading"
+    },
+    "userProfileMenu": {
+      "preferences": {
+        "title": "Preferences",
+        "language": "Language",
+        "theme": {
+          "title": "Theme",
+          "light": "Light",
+          "dark": "Dark",
+          "system": "System"
+        }
+      }
     }
   }
 }

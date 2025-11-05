@@ -112,8 +112,8 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
     <Select
       v-model="is_dark_mode"
       :options="themeOptions"
-      optionLabel="name"
-      optionValue="value"
+      option-label="name"
+      option-value="value"
       class="w-full max-w-[135px]"
       @change="handleThemeChange"
     >
@@ -151,4 +151,3 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
     </Select>
   </div>
 </template>
-

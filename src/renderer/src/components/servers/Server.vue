@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { getInitials } from '@/utils'
 
 interface Props {
   imageUrl?: string | null
@@ -11,11 +12,8 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'click'): void }>()
 
-const initials = computed(() => {
-  const trimmed = (props.label || '').trim()
-  if (!trimmed) return '?'
-  return trimmed.charAt(0).toUpperCase()
-})
+const getInitial = computed(() => getInitials(props.label, { maxInitials: 3, mode: 'all' }))
+
 const shapeClass = computed(() => (props.active ? 'rounded-xl' : 'rounded-2xl'))
 const wrapperBgClass = computed(() => {
   return props.active ? 'bg-surface-100' : ''
@@ -45,7 +43,7 @@ const btnBgClass = computed(() => {
       />
       <i v-else-if="icon" :class="props.icon"></i>
       <span v-else class="text-sm font-semibold text-surface-700">
-        {{ initials }}
+        {{ getInitial }}
       </span>
     </button>
   </div>
