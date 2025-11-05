@@ -43,7 +43,12 @@ const isHome = computed(() => route.path === '/')
 <template>
   <div class="flex flex-col items-center w-16 h-full my-2 bg-surface-200 rounded-lg">
     <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
-      <HomeButton :image-url="avatarUrl" :label="user?.email || 'Me'" :active="isHome" @click="goHome" />
+      <HomeButton
+        :image-url="avatarUrl"
+        :label="user?.email || 'Me'"
+        :active="isHome"
+        @click="goHome"
+      />
       <div class="w-8 h-px bg-surface-400 my-1"></div>
     </div>
 

@@ -25,17 +25,22 @@ const btnBgClass = computed(() =>
 
 <template>
   <div class="w-full flex items-center justify-center py-1 relative" :class="wrapperBgClass">
-      <button
+    <button
       type="button"
       :title="label"
-        class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group"
-        :class="[shapeClass, btnBgClass]"
-        @click="emit('click')"
-        >
-        <img v-if="imageUrl" :src="imageUrl" :alt="label" class="w-full h-full object-cover" />
-        <span v-else class="text-sm font-semibold text-surface-700">
-          {{ initials }}
-        </span>
-      </button>
+      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group"
+      :class="[shapeClass, btnBgClass]"
+      @click="emit('click')"
+    >
+      <img
+        v-if="imageUrl"
+        :src="imageUrl"
+        :alt="label"
+        class="w-full h-full object-cover not-draggable"
+      />
+      <span v-else class="text-sm font-semibold text-surface-700">
+        {{ initials }}
+      </span>
+    </button>
   </div>
 </template>
