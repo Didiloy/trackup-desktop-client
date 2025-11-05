@@ -1,7 +1,7 @@
 import { ref, type Ref } from 'vue'
 import type { IUserServer } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 import type { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
-import { useUserCRUD } from '@/composables/entities'
+import { useUserCRUD } from '@/composables/users/useUserCRUD'
 import { useRouter } from 'vue-router'
 
 interface UseServerListReturn {
