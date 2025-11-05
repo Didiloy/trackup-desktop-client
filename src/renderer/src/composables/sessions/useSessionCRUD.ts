@@ -17,10 +17,7 @@ interface UseSessionCRUDReturn {
     serverId: string,
     options?: IListSessionsOptions
   ) => Promise<ISessionApiResponse<IPaginatedSessions>>
-  getSessionById: (
-    serverId: string,
-    sessionId: string
-  ) => Promise<ISessionApiResponse<ISession>>
+  getSessionById: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<ISession>>
   updateSession: (
     serverId: string,
     sessionId: string,
