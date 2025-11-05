@@ -22,7 +22,7 @@ const avatarUrl = computed<string | null>(() => {
   return user_store.getAvatar || null
 })
 
-onMounted(async () => {
+async function fetchServers(): Promise<void> {
   const token = session.value?.access_token || ''
   if (!token) return
   try {
@@ -32,6 +32,10 @@ onMounted(async () => {
   } catch {
     servers.value = []
   }
+}
+
+onMounted(() => {
+  fetchServers()
 })
 
 function openServer(id: string): void {
@@ -52,8 +56,9 @@ function openCreate(): void {
   showCreate.value = true
 }
 
-function onCreated(server: { public_id: string }): void {
+async function onCreated(server: { public_id: string }): Promise<void> {
   showCreate.value = false
+  await fetchServers()
   if (server?.public_id) router.push(`/servers/${server.public_id}`)
 }
 </script>
