@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import MembersList from './MembersList.vue'
+import MembersList from '../members/MembersList.vue'
 import { useServerMembersStore } from '@/stores/server_members'
 
 const route = useRoute()

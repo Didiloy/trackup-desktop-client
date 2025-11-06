@@ -19,11 +19,7 @@ const buttonClass = computed(() => {
   const classes = ['hover:scale-110']
   classes.push(props.active ? 'rounded-xl' : 'rounded-2xl')
   if (!props.imageUrl) {
-    classes.push(
-      'bg-surface-300',
-      'hover:bg-primary-300',
-      'click:bg-primary-400'
-    )
+    classes.push('bg-surface-300', 'hover:bg-primary-300', 'click:bg-primary-400')
   }
   return classes.join(' ')
 })
@@ -46,6 +42,3 @@ const handleClick = (): void => emit('click')
   </div>
 </template>
 
-<style scoped>
-/* Wrapper retains its own background; AvatarButton handles avatar rendering */
-</style>

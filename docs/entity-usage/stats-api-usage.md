@@ -129,7 +129,7 @@ const growth = await window.api.serverStats.getGrowthTrends(
 
 if (growth.data) {
   console.log('Sessions growth:', growth.data.sessions.change_percent + '%')
-  console.log('Members growth:', growth.data.members.change_percent + '%')
+  console.log('MembersAside growth:', growth.data.members.change_percent + '%')
 }
 ```
 
@@ -1023,7 +1023,7 @@ if (snapshot.data) {
 
   console.log('Server Stats:', data.server_stats)
   console.log('Period Stats:', data.period_stats)
-  console.log('Top Members:', data.top_members)
+  console.log('Top MembersAside:', data.top_members)
   console.log('Top Activities:', data.top_activities)
   console.log('Top Enums:', data.top_enums)
   console.log('Trends:', data.trends)
@@ -1126,7 +1126,7 @@ if (comparison.data) {
     `  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`
   )
 
-  console.log('\nTop Members Changes:')
+  console.log('\nTop MembersAside Changes:')
   console.log(`  New entries: ${comparison.data.top_members_changes.new_entries.length}`)
   console.log(`  Dropped: ${comparison.data.top_members_changes.dropped_entries.length}`)
   console.log(`  Maintained: ${comparison.data.top_members_changes.maintained}`)
@@ -1229,7 +1229,7 @@ const chartData = computed(() => {
   if (!comparison.value) return null
 
   return {
-    labels: ['Sessions', 'Members', 'Duration (hrs)', 'Engagement'],
+    labels: ['Sessions', 'MembersAside', 'Duration (hrs)', 'Engagement'],
     differences: [
       comparison.value.comparison.sessions_diff,
       comparison.value.comparison.members_diff,
