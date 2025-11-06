@@ -11,7 +11,8 @@ const hasServerActions = computed(() => route.name === 'Server')
 </script>
 
 <template>
-  <nav
+  <aside
+    id="ServersAside"
     class="flex flex-row items-center justify-start h-full rounded-lg bg-surface-200 transition-all duration-300 ease-in-out overflow-hidden"
     :class="[hasServerActions ? 'w-64 min-w-64' : 'w-16 min-w-16']"
   >
@@ -25,5 +26,5 @@ const hasServerActions = computed(() => route.name === 'Server')
     <TransitionWrapper name="fade">
       <ServersActionsList v-if="hasServerActions" />
     </TransitionWrapper>
-  </nav>
+  </aside>
 </template>

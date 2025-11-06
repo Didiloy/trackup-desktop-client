@@ -16,6 +16,7 @@ onMounted(async () => {
 
 <template>
   <div
+    id="App-wrapper"
     class="flex flex-col items-center justify-start h-screen w-screen bg-surface-200 overflow-hidden"
   >
     <TopAside />

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex items-center justify-center">
+  <div id="LoginOrSignup" class="w-full h-full flex items-center justify-center">
     <div class="w-md max-w-[90vw] bg-surface-50 rounded-xl p-6 border border-surface-200 shadow-sm">
       <div class="flex flex-col items-center gap-2 mb-6">
         <img

@@ -50,8 +50,9 @@ function handleToggleMembersAside(): void {
 }
 </script>
 <template>
-  <div
-    id="drag-region"
+  <nav
+
+    id="TopAside"
     class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
   >
     <div>
@@ -104,7 +105,7 @@ function handleToggleMembersAside(): void {
         <i class="pi pi-times"></i>
       </div>
     </div>
-  </div>
+  </nav>
 </template>
 <style scoped>
 #drag-region {
