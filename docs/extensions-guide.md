@@ -15,6 +15,7 @@ Pour ajouter une extension Chrome/Edge :
 3. Copiez l'ID depuis l'URL (la longue chaîne de caractères après `/detail/`)
 
 **Exemple** : Pour Vue.js DevTools
+
 - URL : `https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd`
 - ID : `nhdogjmejiglipccpnnnanhbledajbpd`
 
@@ -31,8 +32,8 @@ export const EXTENSIONS_TO_INSTALL: ExtensionConfig[] = [
   },
   {
     id: 'fmkadmapgofadopljbjfkapdkoienihi', // Nouvel ID
-    name: 'React Developer Tools',          // Nouveau nom
-    enabled: true                           // Activée
+    name: 'React Developer Tools', // Nouveau nom
+    enabled: true // Activée
   }
 ]
 ```
@@ -56,6 +57,7 @@ npm run dev
 ```
 
 Vous verrez dans la console :
+
 ```
 📦 Installation de X extension(s)...
 ✅ Extension "Vue.js DevTools" chargée (Vue.js devtools 6.x)
@@ -69,11 +71,11 @@ Vous verrez dans la console :
 
 Voici quelques extensions utiles pour le développement :
 
-| Extension | ID | Description |
-|-----------|----|-----------|
-| Vue.js DevTools | `nhdogjmejiglipccpnnnanhbledajbpd` | DevTools pour Vue.js |
-| React Developer Tools | `fmkadmapgofadopljbjfkapdkoienihi` | DevTools pour React |
-| Redux DevTools | `lmhkpmbekcpmknklioeibfkpmmfibljd` | DevTools pour Redux |
+| Extension             | ID                                 | Description          |
+| --------------------- | ---------------------------------- | -------------------- |
+| Vue.js DevTools       | `nhdogjmejiglipccpnnnanhbledajbpd` | DevTools pour Vue.js |
+| React Developer Tools | `fmkadmapgofadopljbjfkapdkoienihi` | DevTools pour React  |
+| Redux DevTools        | `lmhkpmbekcpmknklioeibfkpmmfibljd` | DevTools pour Redux  |
 
 ## ⚙️ Configuration avancée
 
@@ -100,6 +102,7 @@ Les extensions sont automatiquement chargées uniquement quand `NODE_ENV === 'de
 **Problème** : "Extension not found locally"
 
 **Solution** :
+
 1. Assurez-vous que l'extension est bien installée dans Chrome/Edge
 2. Vérifiez que l'ID est correct
 3. Redémarrez Chrome/Edge puis votre application
@@ -109,13 +112,16 @@ Les extensions sont automatiquement chargées uniquement quand `NODE_ENV === 'de
 Le système cherche les extensions dans ces dossiers :
 
 **Windows** :
+
 - `%LOCALAPPDATA%\Google\Chrome\User Data\Default\Extensions\{ID}`
 - `%LOCALAPPDATA%\Microsoft\Edge\User Data\Default\Extensions\{ID}`
 
 **macOS** :
+
 - `~/Library/Application Support/Google/Chrome/Default/Extensions/{ID}`
 
 **Linux** :
+
 - `~/.config/google-chrome/Default/Extensions/{ID}`
 
 ## 📖 Architecture
@@ -151,4 +157,3 @@ Si vous rencontrez des problèmes :
 2. Consultez les logs dans la console
 3. Vérifiez que l'extension est installée dans Chrome/Edge
 4. Vérifiez que l'ID est correct dans le fichier de config
-

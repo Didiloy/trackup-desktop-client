@@ -14,5 +14,3 @@ export function useServerSidebar() {
   }
   return { visible, show, hide, toggle }
 }
-
-

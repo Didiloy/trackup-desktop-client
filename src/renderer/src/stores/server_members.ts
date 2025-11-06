@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { IServerMember, IListMembersOptions } from '../../../shared/contracts/interfaces/entities/member.interfaces'
+import type {
+  IServerMember,
+  IListMembersOptions
+} from '../../../shared/contracts/interfaces/entities/member.interfaces'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 
 export const useServerMembersStore = defineStore('serverMembers', () => {
@@ -37,5 +40,3 @@ export const useServerMembersStore = defineStore('serverMembers', () => {
 
   return { serverId, members, total, loading, error, clear, fetch }
 })
-
-

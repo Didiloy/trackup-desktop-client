@@ -35,7 +35,7 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
   border: none;
 }
 
-.avatar-container:hover{
+.avatar-container:hover {
   animation: border-angle-rotate 3s infinite linear;
 }
 

@@ -6,6 +6,7 @@ export interface IServerMember {
   public_id: string
   user_email: string
   nickname: string
+  avatar_url: string
   role_public_id: string
   role_name: string
   created_at: string

@@ -30,4 +30,3 @@ export const EXTENSIONS_TO_INSTALL: ExtensionConfig[] = [
   //   enabled: false
   // }
 ]
-

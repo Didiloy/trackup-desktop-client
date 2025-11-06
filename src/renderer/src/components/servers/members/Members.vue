@@ -11,7 +11,7 @@ function currentServerId(): string | null {
   return route.name === 'Server' ? (route.params.id as string) : null
 }
 
-onMounted(async() => {
+onMounted(async () => {
   const id = currentServerId()
   if (id) {
     await store.fetch(id)
