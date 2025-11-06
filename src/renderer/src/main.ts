@@ -29,7 +29,7 @@ app.use(PrimeVue, {
 
 app.use(router)
 
-app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('FontAwesomeIcon', FontAwesomeIcon)
 library.add(fas, far, fab)
 
 const pinia = createPinia()
@@ -39,21 +39,9 @@ app.use(i18n)
 
 // Function to initialize app with the correct language
 async function initializeApp(): Promise<void> {
-  // Initialize pinia
-  // const preferenceStore = usePreferenceStore()
-  // const { readPref } = usePreferenceCRUD()
-
   try {
-    // Try to load user preferences first
-    // const response = await readPref()
-
     // If we have preferences with a language setting, use it
     const locale = i18n.global.locale // Default
-
-    // if (response && response.preference && response.preference.language) {
-    //   // preferenceStore.setPreference(response.preference)
-    //   locale = response.preference.language
-    // }
 
     // Load the language
     const messages = await loadLanguageAsync(locale)

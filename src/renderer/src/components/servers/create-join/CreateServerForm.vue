@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { session } from '@/composables/auth/utils/authState'
 import type {
   IServer,
   ICreateServerRequest
@@ -8,11 +7,13 @@ import type {
 import type { IServerType } from '../../../../../shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
+import { useServerCRUD } from '@/composables/servers/useServerCRUD'
+import { useServerTypeCRUD } from '@/composables/servers/useServerTypeCRUD'
 
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  (e: 'created', server: IServer): void
+  (e: 'created', server: IServer | undefined): void
   (e: 'cancel'): void
 }>()
 
@@ -25,54 +26,52 @@ const logo = ref<string>('')
 const submitting = ref(false)
 const loading_types = ref(false)
 const error = ref<string | null>(null)
+const { createServer } = useServerCRUD()
+const { getAllServerTypes } = useServerTypeCRUD()
 
 const can_submit = computed(() => {
   return !submitting.value && !!name.value.trim() && !!selected_type.value
 })
 
 async function loadServerTypes(): Promise<void> {
-  const token = session.value?.access_token || ''
-  if (!token) return
   loading_types.value = true
-  try {
-    const res = await window.api.serverType.getAll(token)
-    server_types.value = res.data ?? []
-  } catch (e) {
+  const res = await getAllServerTypes()
+  if (res.error) {
     error.value = 'Failed to load servers types'
-  } finally {
     loading_types.value = false
+    return
   }
+  server_types.value = res.data ?? []
+  loading_types.value = false
 }
 
 function updateLogo(newLogo: string): void {
   logo.value = newLogo
 }
 
-async function submit(): Promise<void> {
+async function createNewServer(): Promise<void> {
   if (!can_submit.value) return
   submitting.value = true
   error.value = null
-  const token = session.value?.access_token || ''
-  try {
-    const payload: ICreateServerRequest = {
-      name: name.value.trim(),
-      type_public_id: selected_type.value!.public_id,
-      description: description.value.trim() || undefined,
-      logo: logo.value || undefined
-    }
-    const res = await window.api.server.create(payload, token)
-    const created: IServer | undefined = res.data as IServer | undefined
-    if (!created) throw new Error(res.error || 'Failed to create-join servers')
-    emit('created', created)
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to create-join servers'
-  } finally {
-    submitting.value = false
+  const payload: ICreateServerRequest = {
+    name: name.value.trim(),
+    type_public_id: selected_type.value!.public_id,
+    description: description.value.trim(),
+    logo: logo.value
   }
+  const res = await createServer(payload)
+  if (res.error) {
+    error.value = res.error
+    submitting.value = false
+    return
+  }
+  const created: IServer | undefined = res.data
+  emit('created', created)
+  submitting.value = false
 }
 
-onMounted(() => {
-  void loadServerTypes()
+onMounted(async () => {
+  await loadServerTypes()
 })
 
 const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
@@ -149,7 +148,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         :loading="submitting"
         :disabled="!can_submit"
         :style="{ background: 'var(--gradient-primary)' }"
-        @click="submit"
+        @click="createNewServer"
       />
     </div>
   </div>

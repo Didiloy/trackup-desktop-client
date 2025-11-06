@@ -32,7 +32,7 @@ export class ExtensionService {
    */
   private async loadExtension(extensionPath: string, extensionName: string): Promise<void> {
     try {
-      const extension = await session.defaultSession.extensions.loadExtension(extensionPath, {
+      await session.defaultSession.extensions.loadExtension(extensionPath, {
         allowFileAccess: true
       })
       // this.logger.info(`Extension "${extensionName}" loaded successfully (${extension.name})`)
