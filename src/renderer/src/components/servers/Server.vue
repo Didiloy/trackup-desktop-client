@@ -22,7 +22,7 @@ const btnBgClass = computed(() => {
   const hover_scale = 'hover:scale-110'
   if (props.imageUrl) return 'bg-transparent ' + hover_scale
   if (props.icon) return 'bg-surface-300 hover:bg-primary-300 click:bg-primary-400 ' + hover_scale
-  return ''
+  return hover_scale
 })
 </script>
 
@@ -31,7 +31,7 @@ const btnBgClass = computed(() => {
     <button
       type="button"
       :title="label"
-      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group"
+      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group hover:cursor-pointer"
       :class="[shapeClass, btnBgClass]"
       @click="emit('click')"
     >
@@ -42,7 +42,10 @@ const btnBgClass = computed(() => {
         class="w-full h-full object-cover not-draggable"
       />
       <i v-else-if="icon" :class="props.icon"></i>
-      <span v-else class="text-sm font-semibold text-surface-700">
+      <span
+        v-else
+        class="text-sm font-semibold w-full h-full flex items-center justify-center text-surface-700 bg-surface-300 hover:bg-primary-300 click:bg-primary-400"
+      >
         {{ getInitial }}
       </span>
     </button>
