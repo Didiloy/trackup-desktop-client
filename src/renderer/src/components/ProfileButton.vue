@@ -18,20 +18,12 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
 <template>
   <button
     :class="shapeClass"
-    class="avatar-container rounded-2xl cursor-pointer transition-all duration-200 hover:scale-110"
+    class="avatar-container rounded-2xl cursor-pointer transition-all duration-100 hover:scale-108 hover:"
     @click="$router.push({ name: 'Home' })"
   >
-    <Avatar
-      v-if="imageUrl"
-      :image="imageUrl"
-      size="large"
-    />
+    <Avatar v-if="imageUrl" :image="imageUrl" size="large" />
 
-    <Avatar
-      v-else
-      :label="getInitials(label, { maxInitials: 2, mode: 'all' })"
-      size="large"
-    />
+    <Avatar v-else :label="getInitials(label, { maxInitials: 2, mode: 'all' })" size="large" />
   </button>
 </template>
 <style scoped>
@@ -42,9 +34,14 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
   background: none;
   border: none;
 }
+
+.avatar-container:hover{
+  animation: border-angle-rotate 3s infinite linear;
+}
+
 .avatar-container.active {
   --border-angle: 0deg;
-  animation: border-angle-rotate 2s infinite linear;
+  animation: border-angle-rotate 3s infinite linear;
   background: conic-gradient(
     from var(--border-angle),
     oklch(100% 0.37 0),
