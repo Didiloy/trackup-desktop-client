@@ -73,7 +73,7 @@ function handleWindowControls(): void {
       </div>
       <div
         id="close-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-800 hover:text-white dark:text-gray-400"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-600 hover:text-white dark:text-gray-400"
         :title="i18n.t('actions.close')"
       >
         <i class="pi pi-times"></i>

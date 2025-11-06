@@ -18,7 +18,7 @@ const emit = defineEmits<Emits>()
 </script>
 
 <template>
-  <div class="flex-1 w-full scroll-y-hide">
+  <div class="flex-1 w-full scroll-y-hide mb-8">
     <div class="flex flex-col items-center gap-2 pb-2">
       <template v-for="server in servers" :key="server.public_id">
         <Server
