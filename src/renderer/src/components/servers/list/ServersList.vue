@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useServerList } from '@/composables/servers/useServerList'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
 import ServerListItems from './ServerListItems.vue'
-import CreateServerDialog from '../create/CreateServerDialog.vue'
+import ServerActionDialog from '../ServerActionDialog.vue'
 import type { IServer } from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
 
 const i18n = useI18n()
@@ -16,10 +16,7 @@ const { servers, fetchServers, handleServerCreated } = useServerList()
 const { currentServerId, navigateToServer } = useServerNavigation(servers)
 
 // Dialog state
-const showCreateDialog = ref(false)
-
-// Computed properties
-const createServerLabel = i18n.t('userInterface.createServerView.title')
+const showActionDialog = ref(false)
 
 // Lifecycle
 onMounted(async () => {
@@ -28,11 +25,11 @@ onMounted(async () => {
 
 // Event handlers
 function handleOpenCreate(): void {
-  showCreateDialog.value = true
+  showActionDialog.value = true
 }
 
-async function handleCreated(server: IServer): Promise<void> {
-  showCreateDialog.value = false
+async function handleServerAction(server: IServer): Promise<void> {
+  showActionDialog.value = false
   await handleServerCreated(server)
 }
 </script>
@@ -40,14 +37,10 @@ async function handleCreated(server: IServer): Promise<void> {
   <ServerListItems
     :servers="servers"
     :active-server-id="currentServerId"
-    :create-server-label="createServerLabel"
+    :create-server-label="i18n.t('userInterface.serverActionView.title')"
     @server-click="navigateToServer"
     @create-click="handleOpenCreate"
   />
 
-  <CreateServerDialog
-    v-model="showCreateDialog"
-    :title="createServerLabel"
-    @created="handleCreated"
-  />
+  <ServerActionDialog v-model="showActionDialog" @server-action="handleServerAction" />
 </template>

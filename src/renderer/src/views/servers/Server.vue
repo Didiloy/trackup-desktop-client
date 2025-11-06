@@ -39,7 +39,10 @@ watch(
     <TransitionWrapper name="slide-fade">
       <div :key="server_id">
         <h1>Server {{ server_id }}</h1>
-        <p v-if="server">{{ server.name }}</p>
+        <p v-if="server">
+          {{ server.name }}
+          {{ server.invite_code }}
+        </p>
       </div>
     </TransitionWrapper>
   </div>

@@ -156,6 +156,7 @@
     },
     "createServerView": {
       "title": "Créer un serveur",
+      "subtitle": "Créez votre propre espace communautaire",
       "description": "Créez un nouveau serveur",
       "placeholder": {
         "name": "Nom du serveur ex: Ma communauté",
@@ -164,6 +165,20 @@
       },
       "create": "Créer",
       "cancel": "Annuler"
+    },
+    "joinServerView": {
+      "title": "Rejoindre un serveur",
+      "subtitle": "Entrez un code d'invitation",
+      "invitationCodeLabel": "Code d'invitation",
+      "invitationCodeHint": "Exemple : ABC123XYZ",
+      "joinButton": "Rejoindre",
+      "placeholder": {
+        "invitationCode": "Entrez le code d'invitation"
+      }
+    },
+    "serverActionView": {
+      "title": "Ajouter un serveur",
+      "description": "Choisissez comment vous voulez ajouter un serveur"
     },
     "updateModal": {
       "title": "Mise à jour disponible",

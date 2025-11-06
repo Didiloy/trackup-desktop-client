@@ -79,7 +79,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 select-none">
     <div class="flex flex-col gap-2">
       <div class="flex flex-col gap-3">
         <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>
@@ -139,8 +139,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         }"
       />
     </div>
-
-    <Divider />
 
     <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
 

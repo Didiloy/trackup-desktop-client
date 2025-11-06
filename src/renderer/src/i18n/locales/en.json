@@ -153,6 +153,7 @@
     },
     "createServerView": {
       "title": "Create a server",
+      "subtitle": "Create your own community space",
       "description": "Create a new server",
       "placeholder": {
         "name": "Server name example: My Community",
@@ -161,6 +162,20 @@
       },
       "create": "Create",
       "cancel": "Cancel"
+    },
+    "joinServerView": {
+      "title": "Join a server",
+      "subtitle": "Enter an invitation code",
+      "invitationCodeLabel": "Invitation code",
+      "invitationCodeHint": "Example: ABC123XYZ",
+      "joinButton": "Join",
+      "placeholder": {
+        "invitationCode": "Enter invitation code"
+      }
+    },
+    "serverActionView": {
+      "title": "Add a server",
+      "description": "Choose how you want to add a server"
     },
     "updateModal": {
       "title": "Update available",
