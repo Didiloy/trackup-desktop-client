@@ -18,7 +18,7 @@ const emit = defineEmits<Emits>()
 </script>
 
 <template>
-  <div class="flex-1 w-full overflow-y-auto">
+  <div class="flex-1 w-full scroll-y-hide">
     <div class="flex flex-col items-center gap-2 pb-2">
       <template v-for="server in servers" :key="server.public_id">
         <Server
@@ -32,3 +32,15 @@ const emit = defineEmits<Emits>()
     </div>
   </div>
 </template>
+
+<style scoped>
+.scroll-y-hide {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.scroll-y-hide::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>
