@@ -5,8 +5,9 @@ import { MainWindow } from './windows/MainWindow'
 import { registerAllIpc } from './ipc/index.ipc'
 import { deepLinkHandler } from './protocols/deepLink'
 import { applySecurity } from './security/hardening'
+import { ExtensionService } from './services/ExtensionService'
 import dotenv from 'dotenv'
-
+import path from 'path'
 dotenv.config()
 
 // Ensure single instance to receive deep links on Win/Linux
@@ -26,6 +27,15 @@ async function createMainWindow(): Promise<BrowserWindow> {
 app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.github.trackup')
+
+  // Install extensions in development mode
+  if (process.env.NODE_ENV === 'development') {
+    const extensionsDir = path.join(app.getPath('userData'), 'extensions')
+    const extensionService = new ExtensionService(extensionsDir)
+
+    await extensionService.installExtensions()
+    extensionService.listLoadedExtensions()
+  }
 
   // Apply security hardening
   applySecurity()
