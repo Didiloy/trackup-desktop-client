@@ -78,8 +78,15 @@ function getInitials(text: string): string {
               class="px-2 py-1 rounded hover:bg-surface-300"
             >
               <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full overflow-hidden bg-surface-300 flex items-center justify-center text-[10px] font-semibold text-surface-800">
-                  <img v-if="m.avatar_url" :src="m.avatar_url" :alt="m.nickname || m.user_email" class="w-full h-full object-cover" />
+                <div
+                  class="w-6 h-6 rounded-full overflow-hidden bg-surface-300 flex items-center justify-center text-[10px] font-semibold text-surface-800"
+                >
+                  <img
+                    v-if="m.avatar_url"
+                    :src="m.avatar_url"
+                    :alt="m.nickname || m.user_email"
+                    class="w-full h-full object-cover"
+                  />
                   <span v-else>{{ getInitials(m.nickname || m.user_email) }}</span>
                 </div>
                 <div class="text-sm text-surface-900">{{ m.nickname || m.user_email }}</div>

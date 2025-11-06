@@ -11,7 +11,7 @@ const actions: ServerAction[] = [
   { id: 'stats', label: 'Statistiques', icon: 'pi pi-chart-line', routeName: 'ServerStats' },
   { id: 'widgets', label: 'Widgets', icon: 'pi pi-th-large', routeName: 'ServerWidgets' },
   { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' },
-  { id: 'invites', label: 'Invitations', icon: 'pi pi-link', routeName: 'ServerInvites' },
+  { id: 'invites', label: 'Invitations', icon: 'pi pi-link', routeName: 'ServerInvites' }
 ]
 
 const emit = defineEmits<{ (e: 'action-click', action: ServerAction): void }>()
@@ -21,9 +21,7 @@ function onClick(action: ServerAction): void {
 }
 </script>
 <template>
-  <div
-    class="flex flex-col items-start gap-1 w-full h-full bg-surface-100 rounded-l-2xl p-2"
-  >
+  <div class="flex flex-col items-start gap-1 w-full h-full bg-surface-100 rounded-l-2xl p-2">
     <button
       v-for="a in actions"
       :key="a.id"

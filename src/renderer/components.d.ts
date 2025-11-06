@@ -39,4 +39,7 @@ declare module 'vue' {
     UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']
     Versions: typeof import('./src/components/Versions.vue')['default']
   }
+  export interface GlobalDirectives {
+    Tooltip: typeof import('primevue/tooltip')['default']
+  }
 }
