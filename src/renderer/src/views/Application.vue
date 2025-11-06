@@ -27,13 +27,13 @@ watch(
     class="w-full h-full flex flex-row justify-between items-center gap-1 pr-2 pb-2 bg-surface-200"
   >
     <ServersAside />
-    <div class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden">
+    <main class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden">
       <router-view v-slot="{ Component }">
         <TransitionWrapper name="fade">
           <component :is="Component" />
         </TransitionWrapper>
       </router-view>
-    </div>
+    </main>
     <MembersAside v-if="visible" />
   </div>
 </template>
