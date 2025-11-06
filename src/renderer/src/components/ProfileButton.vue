@@ -1,45 +1,48 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { getInitials } from '@/utils'
+import { useRoute, useRouter } from 'vue-router'
+import AvatarButton from '@/components/common/AvatarButton.vue'
 
 interface Props {
   imageUrl?: string | null
   label: string
 }
 
+const props = defineProps<Props>()
 const route = useRoute()
+const router = useRouter()
 
-defineProps<Props>()
+const isActive = computed(() => route.path === '/')
 
-const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
+const goHome = (): void => {
+  router.push({ name: 'Home' })
+}
+
+const buttonClass = computed(() => 'p-0')
 </script>
 
 <template>
-  <button
-    :class="shapeClass"
-    class="avatar-container rounded-2xl cursor-pointer transition-all duration-100 hover:scale-108 hover:"
-    @click="$router.push({ name: 'Home' })"
-  >
-    <Avatar v-if="imageUrl" :image="imageUrl" size="large" />
-
-    <Avatar v-else :label="getInitials(label, { maxInitials: 2, mode: 'all' })" size="large" />
-  </button>
+  <div class="profile-rainbow" :class="{ 'is-active': isActive }">
+    <AvatarButton
+      :image-url="props.imageUrl"
+      :label="props.label"
+      size="normal"
+      shape="rounded"
+      hover-scale
+      :title="props.label"
+      :button-class="buttonClass"
+      @click="goHome"
+    />
+  </div>
 </template>
+
 <style scoped>
-.avatar-container {
-  width: 48px;
-  height: 48px;
-  padding: 2px;
-  background: none;
-  border: none;
+.profile-rainbow {
+  /* Match AvatarButton outer rounding visually */
+  border-radius: 1rem; /* close to rounded-2xl */
 }
 
-.avatar-container:hover {
-  animation: border-angle-rotate 3s infinite linear;
-}
-
-.avatar-container.active {
+.profile-rainbow.is-active {
   --border-angle: 0deg;
   animation: border-angle-rotate 3s infinite linear;
   background: conic-gradient(
@@ -56,13 +59,6 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
   );
 }
 
-.avatar-container :deep(.p-avatar) {
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
-
 @keyframes border-angle-rotate {
   from {
     --border-angle: 0deg;
@@ -72,6 +68,7 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
   }
 }
 
+/* Register custom property for smoother animation (supported browsers) */
 @property --border-angle {
   syntax: '<angle>';
   initial-value: 0deg;

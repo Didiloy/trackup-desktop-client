@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Server from '../Server.vue'
+import AvatarButton from '@/components/common/AvatarButton.vue'
 import type { IUserServer } from '../../../../../shared/contracts/interfaces/entities/user.interfaces'
 
 interface Props {
@@ -28,7 +29,14 @@ const emit = defineEmits<Emits>()
           @click="emit('server-click', server.public_id)"
         />
       </template>
-      <Server icon="pi pi-plus" :label="createServerLabel" @click="emit('server-action-click')" />
+      <AvatarButton
+        icon="pi pi-plus"
+        size="normal"
+        shape="rounded"
+        :title="createServerLabel"
+        button-class="rounded-2xl bg-surface-300 hover:bg-primary-300 click:bg-primary-400 hover:scale-110"
+        @click="emit('server-action-click')"
+      />
     </div>
   </div>
 </template>

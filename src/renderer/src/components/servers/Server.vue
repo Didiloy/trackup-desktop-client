@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getInitials } from '@/utils'
+import AvatarButton from '@/components/common/AvatarButton.vue'
 
 interface Props {
   imageUrl?: string | null
@@ -12,42 +12,40 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'click'): void }>()
 
-const getInitial = computed(() => getInitials(props.label, { maxInitials: 3, mode: 'all' }))
+const wrapperBgClass = computed(() => (props.active ? 'bg-surface-100' : ''))
 
-const shapeClass = computed(() => (props.active ? 'rounded-xl' : 'rounded-2xl'))
-const wrapperBgClass = computed(() => {
-  return props.active ? 'bg-surface-100' : ''
+// Rounding class handled via buttonClass now
+const buttonClass = computed(() => {
+  const classes = ['hover:scale-110']
+  classes.push(props.active ? 'rounded-xl' : 'rounded-2xl')
+  if (!props.imageUrl) {
+    classes.push(
+      'bg-surface-300',
+      'hover:bg-primary-300',
+      'click:bg-primary-400'
+    )
+  }
+  return classes.join(' ')
 })
-const btnBgClass = computed(() => {
-  const hover_scale = 'hover:scale-110'
-  if (props.imageUrl) return 'bg-transparent ' + hover_scale
-  if (props.icon) return 'bg-surface-300 hover:bg-primary-300 click:bg-primary-400 ' + hover_scale
-  return hover_scale
-})
+
+const handleClick = (): void => emit('click')
 </script>
 
 <template>
   <div class="w-full flex items-center justify-center py-1 relative" :class="wrapperBgClass">
-    <button
-      type="button"
+    <AvatarButton
+      :image-url="imageUrl"
+      :icon="icon"
+      :label="!imageUrl && !icon ? label : undefined"
+      size="normal"
+      shape="rounded"
       :title="label"
-      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group hover:cursor-pointer"
-      :class="[shapeClass, btnBgClass]"
-      @click="emit('click')"
-    >
-      <img
-        v-if="imageUrl"
-        :src="imageUrl"
-        :alt="label"
-        class="w-full h-full object-cover not-draggable"
-      />
-      <i v-else-if="icon" :class="props.icon"></i>
-      <span
-        v-else
-        class="text-sm font-semibold w-full h-full flex items-center justify-center text-surface-00 bg-surface-300 hover:bg-primary-300 click:bg-primary-400"
-      >
-        {{ getInitial }}
-      </span>
-    </button>
+      :button-class="buttonClass"
+      @click="handleClick"
+    />
   </div>
 </template>
+
+<style scoped>
+/* Wrapper retains its own background; AvatarButton handles avatar rendering */
+</style>

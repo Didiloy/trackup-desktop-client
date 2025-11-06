@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppDialog: typeof import('./src/components/common/AppDialog.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
+    AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']
     Button: typeof import('primevue/button')['default']
     CreateServerForm: typeof import('./src/components/servers/create-join/CreateServerForm.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
