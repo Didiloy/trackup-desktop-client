@@ -9,7 +9,7 @@ import type { IServerType } from '../../../../../shared/contracts/interfaces/ent
 import { useI18n } from 'vue-i18n'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 
-const i18n = useI18n()
+const { t } = useI18n()
 
 const emit = defineEmits<{
   (e: 'created', server: IServer): void
@@ -82,7 +82,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
   <div class="flex flex-col gap-2 select-none">
     <div class="flex flex-col gap-2">
       <div class="flex flex-col gap-3">
-        <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>
+        <label class="text-sm text-surface-500">{{ t('common.logo') }}</label>
         <EntityLogoHandling
           :logo="logo"
           :initial="name"
@@ -92,10 +92,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         />
       </div>
 
-      <label class="text-sm text-surface-500">{{ $t('common.name') }}</label>
+      <label class="text-sm text-surface-500">{{ t('common.name') }}</label>
       <InputText
         v-model="name"
-        :placeholder="i18n.t('userInterface.createServerView.placeholder.name')"
+        :placeholder="t('userInterface.createServerView.placeholder.name')"
         class="w-full"
         :pt="{
           root: {
@@ -106,13 +106,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm text-surface-500">{{ $t('common.type') }}</label>
+      <label class="text-sm text-surface-500">{{ t('common.type') }}</label>
       <Select
         v-model="selected_type"
         :options="server_types"
         option-label="name"
         :loading="loading_types"
-        :placeholder="i18n.t('userInterface.createServerView.placeholder.type')"
+        :placeholder="t('userInterface.createServerView.placeholder.type')"
         class="w-full"
         append-to="self"
         :pt="{
@@ -126,12 +126,12 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm text-surface-500">{{ $t('common.description') }}</label>
+      <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
       <Textarea
         v-model="description"
         rows="2"
         auto-resize
-        :placeholder="i18n.t('userInterface.createServerView.placeholder.description')"
+        :placeholder="t('userInterface.createServerView.placeholder.description')"
         :pt="{
           root: {
             style: background_style
@@ -143,9 +143,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
     <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
 
     <div class="flex justify-end gap-2 pt-2">
-      <Button :label="i18n.t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
+      <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
       <Button
-        :label="i18n.t('actions.create-join')"
+        :label="t('actions.create')"
         :loading="submitting"
         :disabled="!can_submit"
         :style="{ background: 'var(--gradient-primary)' }"

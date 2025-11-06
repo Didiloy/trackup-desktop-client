@@ -10,7 +10,7 @@ interface Props {
 
 interface Emits {
   (e: 'server-click', id: string): void
-  (e: 'create-click'): void
+  (e: 'server-action-click'): void
 }
 
 defineProps<Props>()
@@ -28,7 +28,7 @@ const emit = defineEmits<Emits>()
           @click="emit('server-click', server.public_id)"
         />
       </template>
-      <Server icon="pi pi-plus" :label="createServerLabel" @click="emit('create-join-click')" />
+      <Server icon="pi pi-plus" :label="createServerLabel" @click="emit('server-action-click')" />
     </div>
   </div>
 </template>

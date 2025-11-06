@@ -24,7 +24,7 @@ onMounted(async () => {
 })
 
 // Event handlers
-function handleOpenCreate(): void {
+function handleOpenActionDialog(): void {
   showActionDialog.value = true
 }
 
@@ -39,7 +39,7 @@ async function handleServerAction(server: IServer): Promise<void> {
     :active-server-id="currentServerId"
     :create-server-label="i18n.t('userInterface.serverActionView.title')"
     @server-click="navigateToServer"
-    @create-click="handleOpenCreate"
+    @server-action-click="handleOpenActionDialog"
   />
 
   <ServerCreateJoinDialog v-model="showActionDialog" @server-action="handleServerAction" />
