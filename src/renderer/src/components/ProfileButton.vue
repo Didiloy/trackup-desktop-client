@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { getInitials } from '@/utils'
 
 interface Props {
   imageUrl?: string | null
@@ -9,59 +10,60 @@ interface Props {
 
 const route = useRoute()
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
-const initials = computed(() => {
-  const trimmed = (props.label || '').trim()
-  if (!trimmed) return '?'
-  return trimmed.charAt(0).toUpperCase()
-})
-
-const shapeClass = computed(() => (route.path === '/' ? 'rounded-2xl active' : 'rounded-2xl'))
+const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
 </script>
 
 <template>
-  <div class="w-full flex items-center justify-center py-1 relative">
-    <button
-      type="button"
-      :title="label"
-      class="relative z-10 flex items-center justify-center w-12 h-12 overflow-hidden transition-all duration-200 group hover:scale-110"
-      :class="shapeClass"
-      @click="$router.push({ name: 'Home' })"
-    >
-      <img
-        v-if="imageUrl"
-        :src="imageUrl"
-        :alt="label"
-        class="w-full h-full object-cover not-draggable"
-      />
-      <span v-else class="text-sm font-semibold text-surface-700">
-        {{ initials }}
-      </span>
-    </button>
-  </div>
+  <button
+    :class="shapeClass"
+    class="avatar-container rounded-2xl cursor-pointer transition-all duration-200 hover:scale-110"
+    @click="$router.push({ name: 'Home' })"
+  >
+    <Avatar
+      v-if="imageUrl"
+      :image="imageUrl"
+      size="large"
+    />
+
+    <Avatar
+      v-else
+      :label="getInitials(label, { maxInitials: 2, mode: 'all' })"
+      size="large"
+    />
+  </button>
 </template>
 <style scoped>
-.active {
+.avatar-container {
+  width: 48px;
+  height: 48px;
+  padding: 2px;
+  background: none;
+  border: none;
+}
+.avatar-container.active {
   --border-angle: 0deg;
   animation: border-angle-rotate 2s infinite linear;
-  border: 0.2rem solid transparent;
-  position: relative;
-  background:
-    linear-gradient(white, white) padding-box,
-    conic-gradient(
-        from var(--border-angle),
-        oklch(100% 100% 0deg),
-        oklch(100% 100% 45deg),
-        oklch(100% 100% 90deg),
-        oklch(100% 100% 135deg),
-        oklch(100% 100% 180deg),
-        oklch(100% 100% 225deg),
-        oklch(100% 100% 270deg),
-        oklch(100% 100% 315deg),
-        oklch(100% 100% 360deg)
-      )
-      border-box;
+  background: conic-gradient(
+    from var(--border-angle),
+    oklch(100% 0.37 0),
+    oklch(100% 0.37 45),
+    oklch(100% 0.37 90),
+    oklch(100% 0.37 135),
+    oklch(100% 0.37 180),
+    oklch(100% 0.37 225),
+    oklch(100% 0.37 270),
+    oklch(100% 0.37 315),
+    oklch(100% 0.37 360)
+  );
+}
+
+.avatar-container :deep(.p-avatar) {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 @keyframes border-angle-rotate {
