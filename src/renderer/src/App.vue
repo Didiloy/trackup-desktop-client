@@ -5,6 +5,7 @@ import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'
 import LoginOrSignup from '@/views/LoginOrSignup.vue'
 import Application from '@/views/Application.vue'
+import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 
 const { isAuthenticated } = useAuth()
 
@@ -19,8 +20,10 @@ onMounted(async () => {
   >
     <TopAside />
     <UpdateModal />
-    <LoginOrSignup v-if="!isAuthenticated" key="login" />
-    <Application v-else key="application" />
+    <TransitionWrapper name="zoom-fade">
+      <LoginOrSignup v-if="!isAuthenticated" key="login" />
+      <Application v-else key="application" />
+    </TransitionWrapper>
     <Toast />
   </div>
 </template>
