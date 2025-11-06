@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useServerList } from '@/composables/servers/useServerList'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
 import ServerListItems from './ServerListItems.vue'
-import ServerActionDialog from '../ServerActionDialog.vue'
+import ServerCreateJoinDialog from '../create-join/ServerCreateJoinDialog.vue'
 import type { IServer } from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
 
 const i18n = useI18n()
@@ -42,5 +42,5 @@ async function handleServerAction(server: IServer): Promise<void> {
     @create-click="handleOpenCreate"
   />
 
-  <ServerActionDialog v-model="showActionDialog" @server-action="handleServerAction" />
+  <ServerCreateJoinDialog v-model="showActionDialog" @server-action="handleServerAction" />
 </template>

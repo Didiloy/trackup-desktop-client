@@ -28,7 +28,7 @@ const emit = defineEmits<Emits>()
           @click="emit('server-click', server.public_id)"
         />
       </template>
-      <Server icon="pi pi-plus" :label="createServerLabel" @click="emit('create-click')" />
+      <Server icon="pi pi-plus" :label="createServerLabel" @click="emit('create-join-click')" />
     </div>
   </div>
 </template>

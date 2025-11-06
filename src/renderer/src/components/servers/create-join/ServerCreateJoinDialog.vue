@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppDialog from '@/components/common/AppDialog.vue'
-import CreateServerForm from '@/components/servers/create/CreateServerForm.vue'
-import JoinServerForm from '@/components/servers/join/JoinServerForm.vue'
-import type { IServer } from '../../../../shared/contracts/interfaces/entities/server.interfaces'
+import CreateServerForm from '@/components/servers/create-join/CreateServerForm.vue'
+import JoinServerForm from '@/components/servers/create-join/JoinServerForm.vue'
+import type { IServer } from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
 import { useI18n } from 'vue-i18n'
 
 interface Props {

@@ -62,10 +62,10 @@ async function submit(): Promise<void> {
     }
     const res = await window.api.server.create(payload, token)
     const created: IServer | undefined = res.data as IServer | undefined
-    if (!created) throw new Error(res.error || 'Failed to create servers')
+    if (!created) throw new Error(res.error || 'Failed to create-join servers')
     emit('created', created)
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to create servers'
+    error.value = e instanceof Error ? e.message : 'Failed to create-join servers'
   } finally {
     submitting.value = false
   }
@@ -145,7 +145,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
     <div class="flex justify-end gap-2 pt-2">
       <Button :label="i18n.t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
       <Button
-        :label="i18n.t('actions.create')"
+        :label="i18n.t('actions.create-join')"
         :loading="submitting"
         :disabled="!can_submit"
         :style="{ background: 'var(--gradient-primary)' }"
