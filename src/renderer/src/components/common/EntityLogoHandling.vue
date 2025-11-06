@@ -118,13 +118,7 @@ function removeLogo(): void {
 
     <!-- Upload and URL input section on the right -->
     <div v-if="displayEditButton" class="flex-1 flex items-center gap-6">
-      <input
-        ref="file_input"
-        type="file"
-        accept="image/*"
-        class="hidden"
-        @change="onFileChange"
-      />
+      <input ref="file_input" type="file" accept="image/*" class="hidden" @change="onFileChange" />
 
       <!-- Custom button to trigger file input -->
       <Button
