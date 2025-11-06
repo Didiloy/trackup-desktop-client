@@ -200,6 +200,7 @@
       "downloadError": "Error while downloading"
     },
     "userProfileMenu": {
+      "title": "User Profile",
       "preferences": {
         "title": "Preferences",
         "language": "Language",

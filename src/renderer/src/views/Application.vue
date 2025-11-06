@@ -3,15 +3,11 @@ import ServersAside from '@/components/asides/ServersAside.vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 import MembersAside from '@/components/asides/MembersAside.vue'
 import { useRoute } from 'vue-router'
-import { computed, watch } from 'vue'
-import { useServerMembersStore } from '@/stores/server_members'
+import { computed } from 'vue'
 
 const route = useRoute()
-const serverMembers = useServerMembersStore()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
-
-
 </script>
 
 <template>

@@ -203,6 +203,7 @@
       "downloadError": "Erreur lors du téléchargement"
     },
     "userProfileMenu": {
+      "title": "Profil Utilisateur",
       "preferences": {
         "title": "Préférences",
         "language": "Langue",

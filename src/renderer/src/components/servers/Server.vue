@@ -4,7 +4,6 @@ import AvatarButton from '@/components/common/AvatarButton.vue'
 
 interface Props {
   imageUrl?: string | null
-  icon?: string | null
   label: string
   active?: boolean
 }
@@ -31,11 +30,9 @@ const handleClick = (): void => emit('click')
   <div class="w-full flex items-center justify-center py-1 relative" :class="wrapperBgClass">
     <AvatarButton
       :image-url="imageUrl"
-      :icon="icon"
-      :label="!imageUrl && !icon ? label : undefined"
+      :label="label"
       size="normal"
       shape="rounded"
-      :title="label"
       :button-class="buttonClass"
       @click="handleClick"
     />

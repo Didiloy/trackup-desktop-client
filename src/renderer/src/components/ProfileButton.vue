@@ -2,13 +2,13 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AvatarButton from '@/components/common/AvatarButton.vue'
+import { useUserStore } from '@/stores/user'
+import { useI18n } from 'vue-i18n'
 
-interface Props {
-  imageUrl?: string | null
-  label: string
-}
+const i18n = useI18n()
 
-const props = defineProps<Props>()
+const user_store = useUserStore()
+
 const route = useRoute()
 const router = useRouter()
 
@@ -24,12 +24,12 @@ const buttonClass = computed(() => 'p-0')
 <template>
   <div class="profile-rainbow" :class="{ 'is-active': isActive }">
     <AvatarButton
-      :image-url="props.imageUrl"
-      :label="props.label"
+      :image-url="user_store.getAvatar"
+      :label="i18n.t('userInterface.userProfileMenu.title')"
       size="normal"
       shape="rounded"
       hover-scale
-      :title="props.label"
+      :title="user_store.getUsername"
       :button-class="buttonClass"
       @click="goHome"
     />

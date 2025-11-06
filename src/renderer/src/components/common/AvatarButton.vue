@@ -126,6 +126,7 @@ const onClick = (e: MouseEvent): void => {
 
 <template>
   <button
+    v-tooltip.right="label || title || ''"
     :type="buttonType"
     :disabled="disabled"
     :aria-label="ariaLabel"
@@ -143,7 +144,6 @@ const onClick = (e: MouseEvent): void => {
     @click="onClick"
     @focus="$emit('focus', $event)"
     @blur="$emit('blur', $event)"
-    v-tooltip.right="title || label || ''"
   >
     <Avatar
       v-if="imageUrl"
