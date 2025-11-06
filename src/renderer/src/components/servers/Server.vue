@@ -44,7 +44,7 @@ const btnBgClass = computed(() => {
       <i v-else-if="icon" :class="props.icon"></i>
       <span
         v-else
-        class="text-sm font-semibold w-full h-full flex items-center justify-center text-surface-700 bg-surface-300 hover:bg-primary-300 click:bg-primary-400"
+        class="text-sm font-semibold w-full h-full flex items-center justify-center text-surface-00 bg-surface-300 hover:bg-primary-300 click:bg-primary-400"
       >
         {{ getInitial }}
       </span>
