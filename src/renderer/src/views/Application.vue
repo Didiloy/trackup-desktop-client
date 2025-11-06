@@ -34,7 +34,9 @@ watch(
         </TransitionWrapper>
       </router-view>
     </main>
-    <MembersAside v-if="visible" />
+    <TransitionWrapper name="panel-right">
+      <MembersAside v-if="visible" class="h-full w-64 min-w-64" />
+    </TransitionWrapper>
   </div>
 </template>
 

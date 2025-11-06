@@ -17,6 +17,8 @@ type TransitionName =
   | 'swing'
   | 'shake'
   | 'roll'
+  | 'panel-right'
+  | 'panel-left'
 
 interface Props {
   name?: TransitionName
@@ -33,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
   </transition>
 </template>
 
-<style scoped>
+<style>
 /* Fade */
 .fade-enter-active,
 .fade-leave-active {
@@ -377,5 +379,53 @@ const props = withDefaults(defineProps<Props>(), {
 .roll-leave-to {
   opacity: 0;
   transform: translateX(100%) rotate(120deg);
+}
+
+/* Panel Right: width + slide blend for right-side panels */
+.panel-right-enter-active,
+.panel-right-leave-active {
+  transition:
+    width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    min-width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  overflow: hidden;
+  will-change: width;
+}
+.panel-right-enter-from {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(12px);
+}
+.panel-right-leave-to {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+/* Panel Left: width + slide blend for left-side panels */
+.panel-left-enter-active,
+.panel-left-leave-active {
+  transition:
+    width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    min-width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  overflow: hidden;
+  will-change: width;
+}
+.panel-left-enter-from {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(-12px);
+}
+.panel-left-leave-to {
+  width: 0;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(-12px);
 }
 </style>
