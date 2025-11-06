@@ -42,6 +42,13 @@ const grouped = computed(() => {
 
   return result
 })
+
+function getInitials(text: string): string {
+  const parts = text.split(/\s+/).filter(Boolean)
+  const first = parts[0]?.[0] || ''
+  const second = parts[1]?.[0] || ''
+  return (first + second).toUpperCase() || (text[0] || '?').toUpperCase()
+}
 </script>
 
 <template>
@@ -68,9 +75,15 @@ const grouped = computed(() => {
             <li
               v-for="m in group.members"
               :key="m.public_id"
-              class="px-2 py-1 rounded hover:bg-surface-200"
+              class="px-2 py-1 rounded hover:bg-surface-300"
             >
-              <div class="text-sm text-surface-900">{{ m.nickname || m.user_email }}</div>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full overflow-hidden bg-surface-300 flex items-center justify-center text-[10px] font-semibold text-surface-800">
+                  <img v-if="m.avatar_url" :src="m.avatar_url" :alt="m.nickname || m.user_email" class="w-full h-full object-cover" />
+                  <span v-else>{{ getInitials(m.nickname || m.user_email) }}</span>
+                </div>
+                <div class="text-sm text-surface-900">{{ m.nickname || m.user_email }}</div>
+              </div>
             </li>
           </ul>
         </div>
