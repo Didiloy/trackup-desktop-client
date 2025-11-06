@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Topbar from '@/components/asides/topbar.vue'
+import TopAside from '@/components/asides/TopAside.vue'
 import UpdateModal from '@/components/UpdateModal.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import { onMounted } from 'vue'
@@ -17,7 +17,7 @@ onMounted(async () => {
   <div
     class="flex flex-col items-center justify-start h-screen w-screen bg-surface-200 overflow-hidden"
   >
-    <Topbar />
+    <TopAside />
     <UpdateModal />
     <LoginOrSignup v-if="!isAuthenticated" key="login" />
     <Application v-else key="application" />

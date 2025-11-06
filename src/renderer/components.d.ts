@@ -35,6 +35,7 @@ declare module 'vue' {
     Textarea: typeof import('primevue/textarea')['default']
     ThemeSelector: typeof import('./src/components/common/ThemeSelector.vue')['default']
     Toast: typeof import('primevue/toast')['default']
+    TopAside: typeof import('./src/components/asides/TopAside.vue')['default']
     Topbar: typeof import('./src/components/asides/topbar.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/TransitionWrapper.vue')['default']
     UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']

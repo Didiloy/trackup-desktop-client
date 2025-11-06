@@ -1,8 +1,13 @@
-import { computed, type Ref } from 'vue'
+import { computed, type Ref, type ComputedRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { IUserServer } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 
-export function useServerNavigation(servers: Ref<IUserServer[]>) {
+interface UseServerNavigationResult {
+  currentServerId: ComputedRef<string | undefined>
+  navigateToServer: (serverId: string) => Promise<void>
+}
+
+export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavigationResult {
   const route = useRoute()
   const router = useRouter()
 
@@ -12,17 +17,16 @@ export function useServerNavigation(servers: Ref<IUserServer[]>) {
 
   async function navigateToServer(serverId: string): Promise<void> {
     if (!isServerActive(serverId)) {
-      await router.push(`/servers/${serverId}`)
+      await router.push({ path: `/servers/${serverId}`, query: { ...route.query } })
     }
   }
 
-  const currentServerId = computed(() => {
+  const currentServerId = computed<string | undefined>(() => {
     return servers.value.find((s) => isServerActive(s.public_id))?.public_id
   })
 
   return {
     currentServerId,
-    isServerActive,
     navigateToServer
   }
 }

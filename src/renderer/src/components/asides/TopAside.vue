@@ -2,13 +2,14 @@
 import { onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
-import { useRoute } from 'vue-router'
-import { useServerSidebar } from '@/composables/servers/useServerSidebar'
+import { useRoute, useRouter } from 'vue-router'
 
 const i18n = useI18n()
 const route = useRoute()
-const showToggle = computed(() => route.name === 'Server')
-const { toggle, visible } = useServerSidebar()
+const router = useRouter()
+const showMembersAsideToggle = computed(() => route.name === 'Server')
+const isMembersAsideVisible = computed(() => route.query.members === 'true')
+
 
 onMounted(() => {
   handleWindowControls()
@@ -43,6 +44,11 @@ function handleWindowControls(): void {
     })
   }
 }
+
+function handleToggleMembersAside(): void {
+  const current = route.query.members === 'true'
+  router.replace({ query: { ...route.query, members: current ? 'false' : 'true' } })
+}
 </script>
 <template>
   <div
@@ -57,15 +63,15 @@ function handleWindowControls(): void {
     </div>
     <div id="window-controls" class="flex items-center justify-center h-full w-fit bg-surface-200">
       <div
-        v-if="showToggle"
+        v-if="showMembersAsideToggle"
         id="toggle-sidebar-button"
         class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
         :title="i18n.t('actions.toggle_sidebar')"
-        @click="toggle"
+        @click="handleToggleMembersAside"
       >
         <span
           class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-          :class="visible ? 'text-primary-600' : 'text-gray-600'"
+          :class="isMembersAsideVisible ? 'text-primary-600' : 'text-gray-600'"
           aria-hidden="true"
           v-html="toggle_sidebar_icon"
         />

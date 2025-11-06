@@ -2,21 +2,20 @@
 import ServersAside from '@/components/asides/ServersAside.vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 import MembersAside from '@/components/asides/MembersAside.vue'
-import { useServerSidebar } from '@/composables/servers/useServerSidebar'
 import { useRoute } from 'vue-router'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useServerMembersStore } from '@/stores/server_members'
 
-const { visible, hide } = useServerSidebar()
 const route = useRoute()
 const serverMembers = useServerMembersStore()
+
+const isMembersAsideVisible = computed(() => route.query.members === 'true')
 
 watch(
   () => route.name,
   (name) => {
     if (name !== 'Server') {
       serverMembers.clear()
-      hide()
     }
   }
 )
@@ -35,7 +34,7 @@ watch(
       </router-view>
     </main>
     <TransitionWrapper name="panel-right">
-      <MembersAside v-if="visible" class="h-full w-64 min-w-64" />
+      <MembersAside v-if="isMembersAsideVisible" class="h-full w-64 min-w-64" />
     </TransitionWrapper>
   </div>
 </template>

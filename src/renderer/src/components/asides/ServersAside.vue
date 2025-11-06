@@ -24,7 +24,7 @@ const hasServerActions = computed(() => route.name === 'Server')
       </div>
       <ServersList />
     </div>
-    <TransitionWrapper name="slide-left">
+    <TransitionWrapper name="fade">
       <ServersActionsList v-if="hasServerActions" />
     </TransitionWrapper>
   </nav>
