@@ -19,7 +19,7 @@ function onClick(): void {
 
 <template>
   <button
-    class="w-full h-11 px-3 rounded-lg bg-surface-100 hover:bg-surface-200 text-gray-900 flex items-center justify-center gap-2 border border-surface-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+    class="w-full h-11 px-3 rounded-lg bg-surface-100 hover:bg-surface-200 text-surface-900 flex items-center justify-center gap-2 border border-surface-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
     :disabled="disabled"
     @click="onClick"
   >

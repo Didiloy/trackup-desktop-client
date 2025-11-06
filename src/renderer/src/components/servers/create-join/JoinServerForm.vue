@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { session } from '@/composables/auth/utils/authState'
 import type {
   IJoinServerRequest,
   IServer

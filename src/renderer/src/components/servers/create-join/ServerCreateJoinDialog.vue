@@ -26,7 +26,8 @@ function selectAction(action: 'create' | 'join'): void {
   currentAction.value = action
 }
 
-function handleServerAction(server: IServer): void {
+function handleServerAction(server: IServer | undefined): void {
+  if (!server) return
   emit('server-action', server)
   closeDialog()
 }
