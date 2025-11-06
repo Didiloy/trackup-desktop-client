@@ -78,85 +78,83 @@ function removeLogo(): void {
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center gap-4">
-    <div class="flex justify-center w-full">
-      <div class="relative" style="width: 200px; height: 60px">
-        <!-- Avatar avec logo ou initiales -->
+  <div class="w-full flex items-center gap-4">
+    <!-- Avatar section on the left -->
+    <div class="relative shrink-0" style="width: 80px; height: 80px">
+      <Avatar
+        v-if="logo"
+        :image="logo"
+        size="xlarge"
+        shape="circle"
+        class="w-20 h-20 object-cover border-3 border-white shadow-md"
+      />
 
-        <div class="absolute inset-0 flex items-center justify-center">
-          <Avatar
-            v-if="logo"
-            :image="logo"
-            size="xlarge"
-            shape="circle"
-            class="w-20 h-20 object-cover border-3 border-white shadow-md"
-          />
+      <Avatar
+        v-else
+        :label="getInitials(entityName, { maxInitials: 2, mode: 'all' })"
+        size="xlarge"
+        shape="circle"
+        class="w-20 h-20 border-3 border-white shadow-md text-2xl"
+      />
 
-          <Avatar
-            v-else
-            :label="getInitials(entityName, { maxInitials: 2, mode: 'all' })"
-            size="xlarge"
-            shape="circle"
-            class="w-20 h-20 border-3 border-white shadow-md text-2xl"
-          />
-        </div>
-
-        <!-- Bouton de suppression du logo -->
-        <Button
-          v-if="logo && displayEditButton"
-          rounded
-          text
-          severity="danger"
-          size="small"
-          class="absolute top-0 left-35 text-surface-500 hover:text-red-500 transition-all hover:scale-110"
-          @click="removeLogo"
-        >
-          <FontAwesomeIcon icon="fa-solid fa-times" />
-        </Button>
-      </div>
+      <!-- Bouton de suppression du logo -->
+      <Button
+        v-if="logo && displayEditButton"
+        rounded
+        text
+        severity="danger"
+        size="small"
+        class="absolute -top-10 -left-1 text-surface-500 hover:text-red-500 transition-all hover:scale-110"
+        :pt="{
+          root: {
+            class: '!w-6 !h-6 !min-w-0 !p-0'
+          }
+        }"
+        @click="removeLogo"
+      >
+        <FontAwesomeIcon icon="fa-solid fa-times" class="text-xs" />
+      </Button>
     </div>
 
-    <!-- Bouton d'upload et champ URL -->
-    <div v-if="displayEditButton" class="w-full flex flex-col gap-2">
-      <div class="flex items-center gap-2">
-        <input
-          ref="file_input"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="onFileChange"
-        />
+    <!-- Upload and URL input section on the right -->
+    <div v-if="displayEditButton" class="flex-1 flex items-center gap-6">
+      <input
+        ref="file_input"
+        type="file"
+        accept="image/*"
+        class="hidden"
+        @change="onFileChange"
+      />
 
-        <!-- Custom button to trigger file input -->
-        <Button
-          class="flex-1"
-          :pt="{
-            root: {
-              class: 'w-full',
-              style: 'color: var(--p-surface-100)'
-            }
-          }"
-          @click="triggerFileInput"
-        >
-          <FontAwesomeIcon icon="fa-solid fa-upload" class="mr-1" />
-          {{ t('common.choose') }}
-        </Button>
+      <!-- Custom button to trigger file input -->
+      <Button
+        class="flex-1"
+        :pt="{
+          root: {
+            class: 'w-full',
+            style: 'color: var(--p-surface-100)'
+          }
+        }"
+        @click="triggerFileInput"
+      >
+        <FontAwesomeIcon icon="fa-solid fa-upload" class="mr-1" />
+        {{ t('common.choose') }}
+      </Button>
 
-        <span class="text-sm text-surface-500 shrink-0">{{ t('common.or') }}</span>
+      <span class="text-sm text-surface-500 shrink-0">{{ t('common.or') }}</span>
 
-        <InputText
-          v-model="logo_url"
-          placeholder="https://example.com/logo.png"
-          class="flex-1"
-          :pt="{
-            root: {
-              style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-            }
-          }"
-          @blur="onUrlChange"
-          @keyup.enter="onUrlChange"
-        />
-      </div>
+      <InputText
+        v-model="logo_url"
+        placeholder="https://example.com/logo.png"
+        class="flex-1"
+        :pt="{
+          root: {
+            style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
+          }
+        }"
+        @blur="onUrlChange"
+        @keyup.enter="onUrlChange"
+      />
     </div>
   </div>
 </template>
