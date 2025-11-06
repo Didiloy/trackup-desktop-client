@@ -21,17 +21,9 @@ const shapeClass = computed(() => (route.path === '/' ? 'active' : ''))
     class="avatar-container rounded-2xl cursor-pointer transition-all duration-200 hover:scale-110"
     @click="$router.push({ name: 'Home' })"
   >
-    <Avatar
-      v-if="imageUrl"
-      :image="imageUrl"
-      size="large"
-    />
+    <Avatar v-if="imageUrl" :image="imageUrl" size="large" />
 
-    <Avatar
-      v-else
-      :label="getInitials(label, { maxInitials: 2, mode: 'all' })"
-      size="large"
-    />
+    <Avatar v-else :label="getInitials(label, { maxInitials: 2, mode: 'all' })" size="large" />
   </button>
 </template>
 <style scoped>

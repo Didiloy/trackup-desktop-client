@@ -56,7 +56,8 @@
     "rename": "Renommer",
     "minimize": "Minimiser",
     "maximize": "Maximiser",
-    "close_window": "Fermer"
+    "close_window": "Fermer",
+    "toggle_sidebar": "Voir les membres du serveur"
   },
   "placeholder": {
     "search": "Rechercher...",
@@ -165,6 +166,12 @@
       },
       "create": "Créer",
       "cancel": "Annuler"
+    },
+    "serverSidebar": {
+      "title": "Membres du serveur",
+      "description": "Liste des membres du serveur",
+      "no_members": "Aucun membre",
+      "loading": "Chargement des membres..."
     },
     "joinServerView": {
       "title": "Rejoindre un serveur",

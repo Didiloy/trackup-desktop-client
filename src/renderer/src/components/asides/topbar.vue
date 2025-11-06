@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
+import { useRoute } from 'vue-router'
+import { useServerSidebar } from '@/composables/servers/useServerSidebar'
 
 const i18n = useI18n()
+const route = useRoute()
+const showToggle = computed(() => route.name === 'Server')
+const { toggle, visible } = useServerSidebar()
 
 onMounted(() => {
   handleWindowControls()
@@ -51,6 +57,20 @@ function handleWindowControls(): void {
     </div>
     <div id="window-controls" class="flex items-center justify-center h-full w-fit bg-surface-200">
       <div
+        v-if="showToggle"
+        id="toggle-sidebar-button"
+        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+        :title="i18n.t('actions.toggle_sidebar')"
+        @click="toggle"
+      >
+        <span
+          class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+          :class="visible ? 'text-primary-600' : 'text-gray-600'"
+          aria-hidden="true"
+          v-html="toggle_sidebar_icon"
+        />
+      </div>
+      <div
         id="devtools-button"
         class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
         :title="i18n.t('actions.devtools')"
@@ -88,5 +108,15 @@ function handleWindowControls(): void {
 
 #window-controls {
   -webkit-app-region: no-drag;
+}
+
+.icon :deep(path),
+.icon :deep(circle),
+.icon :deep(rect),
+.icon :deep(polygon),
+.icon :deep(ellipse),
+.icon :deep(line),
+.icon :deep(polyline) {
+  stroke: currentColor !important;
 }
 </style>

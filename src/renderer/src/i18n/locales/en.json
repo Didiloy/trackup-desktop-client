@@ -54,7 +54,8 @@
     "rename": "Rename",
     "minimize": "Minimize",
     "maximize": "Maximize",
-    "close_window": "Close"
+    "close_window": "Close",
+    "toggle_sidebar": "View server members"
   },
   "placeholder": {
     "search": "Search...",
@@ -162,6 +163,12 @@
       },
       "create": "Create",
       "cancel": "Cancel"
+    },
+    "serverSidebar": {
+      "title": "Server members",
+      "description": "List of server members",
+      "no_members": "No members",
+      "loading": "Loading members..."
     },
     "joinServerView": {
       "title": "Join a server",

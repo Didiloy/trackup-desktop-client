@@ -11,4 +11,12 @@
     -webkit-user-select: none;
     -ms-user-select: none;
   }
+  --text-secondary-500: '#a855f7';
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
