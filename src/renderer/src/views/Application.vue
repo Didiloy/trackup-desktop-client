@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Sidebar from '@/components/asides/sidebar.vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
-import Members from '@/components/servers/members/Members.vue'
+import Members from '@/components/members/Members.vue'
 import { useServerSidebar } from '@/composables/servers/useServerSidebar'
 import { useRoute } from 'vue-router'
 import { watch } from 'vue'

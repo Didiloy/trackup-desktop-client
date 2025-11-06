@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { IServerMember } from '../../../../../shared/contracts/interfaces/entities/member.interfaces'
+import type { IServerMember } from '../../../../shared/contracts/interfaces/entities/member.interfaces'
 
 interface Props {
   members: IServerMember[]
