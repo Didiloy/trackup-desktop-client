@@ -10,7 +10,6 @@ const router = useRouter()
 const showMembersAsideToggle = computed(() => route.name === 'Server')
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 
-
 onMounted(() => {
   handleWindowControls()
 })

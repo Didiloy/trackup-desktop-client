@@ -41,4 +41,3 @@ const handleClick = (): void => emit('click')
     />
   </div>
 </template>
-

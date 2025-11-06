@@ -11,14 +11,7 @@ const serverMembers = useServerMembersStore()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 
-watch(
-  () => route.name,
-  (name) => {
-    if (name !== 'Server') {
-      serverMembers.clear()
-    }
-  }
-)
+
 </script>
 
 <template>
