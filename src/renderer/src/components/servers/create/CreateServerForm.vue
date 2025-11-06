@@ -82,7 +82,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
   <div class="flex flex-col gap-2">
     <div class="flex flex-col gap-2">
       <div class="flex flex-col gap-3">
-<!--        <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>-->
+        <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>
         <EntityLogoHandling
           :logo="logo"
           :initial="name"

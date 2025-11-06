@@ -82,6 +82,7 @@ function removeLogo(): void {
     <div class="flex justify-center w-full">
       <div class="relative" style="width: 200px; height: 60px">
         <!-- Avatar avec logo ou initiales -->
+
         <div class="absolute inset-0 flex items-center justify-center">
           <Avatar
             v-if="logo"
