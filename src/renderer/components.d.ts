@@ -12,12 +12,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppDialog: typeof import('./src/components/common/AppDialog.vue')['default']
+    Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     CreateServerDialog: typeof import('./src/components/servers/create/CreateServerDialog.vue')['default']
     CreateServerForm: typeof import('./src/components/servers/create/CreateServerForm.vue')['default']
     Divider: typeof import('primevue/divider')['default']
     Dropdown: typeof import('primevue/dropdown')['default']
+    EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
     InputText: typeof import('primevue/inputtext')['default']
     ProfileButton: typeof import('./src/components/ProfileButton.vue')['default']

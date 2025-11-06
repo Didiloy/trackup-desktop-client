@@ -7,6 +7,7 @@ import type {
 } from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
 import type { IServerType } from '../../../../../shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
+import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 
 const i18n = useI18n()
 
@@ -19,8 +20,7 @@ const name = ref('')
 const description = ref('')
 const selected_type = ref<IServerType | null>(null)
 const server_types = ref<IServerType[]>([])
-const logo_base_64 = ref<string | null>(null)
-const logo_url = ref<string>('')
+const logo = ref<string>('')
 
 const submitting = ref(false)
 const loading_types = ref(false)
@@ -44,24 +44,8 @@ async function loadServerTypes(): Promise<void> {
   }
 }
 
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve((reader.result as string) || '')
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
-
-async function onLogoSelect(event: { files: File[] }): Promise<void> {
-  const file = event?.files?.[0]
-  if (!file) return
-  logo_base_64.value = await fileToBase64(file)
-}
-
-function clearLogo(): void {
-  logo_base_64.value = null
-  logo_url.value = ''
+function updateLogo(newLogo: string): void {
+  logo.value = newLogo
 }
 
 async function submit(): Promise<void> {
@@ -74,7 +58,7 @@ async function submit(): Promise<void> {
       name: name.value.trim(),
       type_public_id: selected_type.value!.public_id,
       description: description.value.trim() || undefined,
-      logo: logo_base_64.value || logo_url.value.trim() || undefined
+      logo: logo.value || undefined
     }
     const res = await window.api.server.create(payload, token)
     const created: IServer | undefined = res.data as IServer | undefined
@@ -97,6 +81,17 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-3">
+<!--        <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>-->
+        <EntityLogoHandling
+          :logo="logo"
+          :initial="name"
+          :entity-name="name"
+          :display-edit-button="true"
+          @update-logo="updateLogo"
+        />
+      </div>
+
       <label class="text-sm text-surface-500">{{ $t('common.name') }}</label>
       <InputText
         v-model="name"
@@ -147,52 +142,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 
     <Divider />
 
-    <div class="flex flex-col gap-3">
-      <label class="text-sm text-surface-500">{{ $t('common.logo') }}</label>
-      <div class="flex items-center gap-3">
-        <FileUpload
-          mode="basic"
-          custom-upload
-          :choose-label="i18n.t('common.choose')"
-          :auto="false"
-          accept="image/*"
-          :pt="{
-            root: {
-              style: 'color: var(--p-surface-900)'
-            }
-          }"
-          @select="onLogoSelect"
-        />
-        <Button
-          v-if="logo_base_64 || logo_url"
-          :label="i18n.t('common.clear')"
-          severity="secondary"
-          text
-          @click="clearLogo"
-        />
-        <div v-if="logo_base_64 || logo_url" class="mt-2">
-          <img
-            :src="logo_base_64 || logo_url"
-            alt="Logo preview"
-            class="h-20 w-20 object-cover rounded-md"
-          />
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-surface-500">{{ $t('common.or') }}</span>
-        <InputText
-          v-model="logo_url"
-          placeholder="https://example.com/logo.png"
-          class="w-full"
-          :pt="{
-            root: {
-              style: background_style
-            }
-          }"
-        />
-      </div>
-    </div>
-
     <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
 
     <div class="flex justify-end gap-2 pt-2">
@@ -201,8 +150,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         :label="i18n.t('actions.create')"
         :loading="submitting"
         :disabled="!can_submit"
-        @click="submit"
         :style="{ background: 'var(--gradient-primary)' }"
+        @click="submit"
       />
     </div>
   </div>
