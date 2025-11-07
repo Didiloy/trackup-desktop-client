@@ -3,6 +3,12 @@ import { createI18n } from 'vue-i18n'
 // Avoid explicit any
 type LocaleMessages = Record<string, unknown>
 
+export interface Language {
+  code: string
+  name: string
+  flag: string
+}
+
 const loadedLanguages: Record<string, LocaleMessages> = {}
 
 // Function to get all available locales from the locales directory
@@ -64,7 +70,7 @@ function getLanguageInfo(code: string): { name: string; flag: string } {
 }
 
 // Get all available languages with their info
-function getAvailableLanguages(): Array<{ code: string; name: string; flag: string }> {
+function getAvailableLanguages(): Array<Language> {
   return supportedLocales.map((code) => ({
     code,
     ...getLanguageInfo(code)

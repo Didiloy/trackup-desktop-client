@@ -2,15 +2,10 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { getAvailableLanguages, setI18nLanguage } from '@/i18n'
+import { getAvailableLanguages, Language, setI18nLanguage } from '@/i18n'
 
 import Select from 'primevue/select'
 
-interface Language {
-  code: string
-  name: string
-  flag: string
-}
 
 const i18n = useI18n()
 const toast = useToast()
