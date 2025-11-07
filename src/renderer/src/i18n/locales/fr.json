@@ -171,7 +171,12 @@
       "title": "Membres du serveur",
       "description": "Liste des membres du serveur",
       "no_members": "Aucun membre",
-      "loading": "Chargement des membres..."
+      "loading": "Chargement des membres...",
+      "view_profile": "Voir le profil",
+      "update_nickname": "Mettre à jour le surnom",
+      "update_nickname_message": "Entrez un nouveau surnom pour votre profil.",
+      "new_nickname": "Nouveau surnom",
+      "enter_nickname": "Entrez le surnom"
     },
     "joinServerView": {
       "title": "Rejoindre un serveur",

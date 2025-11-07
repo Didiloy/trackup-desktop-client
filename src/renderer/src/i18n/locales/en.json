@@ -168,7 +168,12 @@
       "title": "Server members",
       "description": "List of server members",
       "no_members": "No members",
-      "loading": "Loading members..."
+      "loading": "Loading members...",
+      "view_profile": "View profile",
+      "update_nickname": "Update nickname",
+      "update_nickname_message": "Enter a new nickname for your profile.",
+      "new_nickname": "New nickname",
+      "enter_nickname": "Enter nickname"
     },
     "joinServerView": {
       "title": "Join a server",

@@ -70,7 +70,7 @@ const handleUpdateNickname = async (nickname: string): Promise<void> => {
 const items = computed(() => {
   const baseItems = [
     {
-      label: 'View Profile',
+      label: t('userInterface.membersAside.view_profile'),
       icon: 'pi pi-user',
       command: () => {
         console.log('View profile for', currentMember.value?.nickname)
@@ -81,7 +81,7 @@ const items = computed(() => {
   // Only add Update Nickname option if the current member is the logged-in user
   if (currentMember.value?.user_email === user_store.getEmail) {
     baseItems.push({
-      label: 'Update Nickname',
+      label: t('userInterface.membersAside.update_nickname'),
       icon: 'pi pi-user-edit',
       command: openNicknameDialog
     })
@@ -153,8 +153,9 @@ const grouped = computed(() => {
         <li
           v-for="m in group.members"
           :key="m.public_id"
-          class="px-2 py-1 rounded hover:bg-surface-300"
+          class="px-2 py-1 rounded hover:bg-surface-300 cursor-pointer"
           @contextmenu="handleRightClick($event, m)"
+          @click="handleRightClick($event, m)"
         >
           <div class="flex items-center gap-2">
             <div
