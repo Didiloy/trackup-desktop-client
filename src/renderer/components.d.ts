@@ -11,12 +11,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppDialog: typeof import('./src/components/common/AppDialog.vue')['default']
+    AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']
     Button: typeof import('primevue/button')['default']
+    ConfirmationDialog: typeof import('./src/components/common/dialogs/ConfirmationDialog.vue')['default']
+    ContextActionMenu: typeof import('./src/components/common/ContextActionMenu.vue')['default']
+    ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateServerForm: typeof import('./src/components/servers/create-join/CreateServerForm.vue')['default']
+    Dialog: typeof import('primevue/dialog')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
+    InputDialog: typeof import('./src/components/common/dialogs/InputDialog.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     JoinServerForm: typeof import('./src/components/servers/create-join/JoinServerForm.vue')['default']
     MembersAside: typeof import('./src/components/asides/MembersAside.vue')['default']
@@ -42,6 +47,7 @@ declare module 'vue' {
     Versions: typeof import('./src/components/Versions.vue')['default']
   }
   export interface GlobalDirectives {
+    Ripple: typeof import('primevue/ripple')['default']
     Tooltip: typeof import('primevue/tooltip')['default']
   }
 }
