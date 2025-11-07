@@ -18,7 +18,6 @@ const goHome = (): void => {
   router.push({ name: 'Home' })
 }
 
-const buttonClass = computed(() => 'p-0')
 </script>
 
 <template>
@@ -30,7 +29,6 @@ const buttonClass = computed(() => 'p-0')
       shape="rounded"
       hover-scale
       :title="user_store.getUsername"
-      :button-class="buttonClass"
       @click="goHome"
     />
   </div>
