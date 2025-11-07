@@ -14,6 +14,7 @@ const { listMembers } = useMemberCRUD()
 
 async function getServerInfos(): Promise<void> {
   server_store.resetState()
+
   const resServerDetails = await getServerDetails(server_id.value)
   if (resServerDetails.error) return
   server_store.setServer(resServerDetails.data ?? null)
@@ -32,7 +33,6 @@ watch(
   (newId) => {
     if (newId && typeof newId === 'string') {
       server_id.value = newId
-
       getServerInfos()
     }
   }
@@ -47,6 +47,10 @@ watch(
         <p>
           {{ server_store.getName }}
           {{ server_store.getInvitationCode }}
+          {{ server_store.getMembers?.length }} members
+          {{ server_store.getDescription }}
+          {{ server_store.getInvitationCodeExpDate }}
+          {{ server_store.getServerTypePublicId}}
         </p>
       </div>
     </TransitionWrapper>
