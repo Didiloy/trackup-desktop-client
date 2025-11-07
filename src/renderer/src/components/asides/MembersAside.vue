@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import MembersList from '../members/MembersList.vue'
+import MembersList from '../members/list/MembersList.vue'
 
 const { t } = useI18n()
 </script>

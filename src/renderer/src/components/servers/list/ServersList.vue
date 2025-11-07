@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerList } from '@/composables/servers/useServerList'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
-import ServerListItems from './ServerListItems.vue'
+import ServersListItems from './ServersListItems.vue'
 import ServerCreateJoinDialog from '../create-join/ServerCreateJoinDialog.vue'
 import type { IServer } from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
 
@@ -34,7 +34,7 @@ async function handleServerAction(server: IServer): Promise<void> {
 }
 </script>
 <template>
-  <ServerListItems
+  <ServersListItems
     :servers="servers"
     :active-server-id="currentServerId"
     :create-server-label="i18n.t('userInterface.serverActionView.title')"
