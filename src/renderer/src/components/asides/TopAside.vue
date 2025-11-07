@@ -52,7 +52,7 @@ function handleToggleMembersAside(): void {
 <template>
   <nav
     id="TopAside"
-    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200 "
+    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
   >
     <div>
       <span class="">{{ i18n.t('app.title') }}</span>

@@ -20,26 +20,26 @@ const goHome = (): void => {
 </script>
 
 <template>
-  <div id="ProfileButton" class="profile-rainbow" :class="{ 'is-active': isActive }">
-    <AvatarButton
-      :image-url="user_store.getAvatar"
-      :label="i18n.t('userInterface.userProfileMenu.title')"
-      size="normal"
-      shape="rounded"
-      hover-scale
-      :title="user_store.getUsername"
-      :disabled="$route.fullPath === '/'"
-      @click="goHome"
-    />
-  </div>
+  <AvatarButton
+    id="ProfileButton"
+    :image-url="user_store.getAvatar"
+    :label="i18n.t('userInterface.userProfileMenu.title')"
+    size="normal"
+    shape="rounded"
+    hover-scale
+    :title="user_store.getUsername"
+    :disabled="$route.fullPath === '/'"
+    :button-class="'profile-rainbow'"
+    :class="{ 'is-active': isActive }"
+    @click="goHome"
+  />
 </template>
 
 <style scoped>
 .profile-rainbow {
   /* Match AvatarButton outer rounding visually */
   border-radius: 1rem; /* close to rounded-2xl */
-  width: 41px;
-  height: 45px;
+  padding: 1.5px;
 }
 
 .profile-rainbow.is-active {

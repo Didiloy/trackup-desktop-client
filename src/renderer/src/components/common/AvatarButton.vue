@@ -174,6 +174,7 @@ const onClick = (e: MouseEvent): void => {
 <style scoped>
 .avatar-button {
   border: none;
+  padding: 0;
 }
 
 .avatar-button :deep(.p-avatar) {
