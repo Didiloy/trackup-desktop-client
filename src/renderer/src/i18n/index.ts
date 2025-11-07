@@ -100,8 +100,8 @@ async function loadLanguageAsync(locale: string): Promise<LocaleMessages | null>
   }
 }
 
-// Pre-load current browser locale
-const currentLocale = getBrowserLocale()
+// Pre-load current browser locale or saved preference
+const currentLocale = localStorage.getItem('locale') || getBrowserLocale()
 
 // Create i18n instance
 const i18n = createI18n({

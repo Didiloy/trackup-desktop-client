@@ -13,6 +13,7 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import { i18n, loadLanguageAsync } from '@/i18n'
+import { ToastService } from 'primevue'
 
 const app = createApp(App)
 
@@ -26,7 +27,7 @@ app.use(PrimeVue, {
     }
   }
 })
-
+app.use(ToastService)
 app.use(router)
 
 app.component('FontAwesomeIcon', FontAwesomeIcon)

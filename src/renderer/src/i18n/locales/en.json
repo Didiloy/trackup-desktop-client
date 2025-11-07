@@ -208,7 +208,14 @@
       "title": "User Profile",
       "preferences": {
         "title": "Preferences",
-        "language": "Language",
+        "language": {
+          "title": "Language",
+          "switch": {
+            "error": "Failed to switch language",
+            "error_detail": "Please try again.",
+            "success": "Language switched successfully"
+          }
+        },
         "theme": {
           "title": "Theme",
           "light": "Light",

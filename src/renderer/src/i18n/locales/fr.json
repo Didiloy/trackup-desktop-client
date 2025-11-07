@@ -211,7 +211,14 @@
       "title": "Profil Utilisateur",
       "preferences": {
         "title": "Préférences",
-        "language": "Langue",
+        "language": {
+          "title": "Langue",
+          "switch": {
+            "error": "Échec du changement de langue",
+            "error_detail": "Veuillez réessayer.",
+            "success": "Langue changée avec succès"
+          }
+        },
         "theme": {
           "title": "Thème",
           "light": "Clair",

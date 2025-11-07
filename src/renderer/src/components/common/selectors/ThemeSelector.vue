@@ -106,7 +106,7 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
 
 <template>
   <div class="flex items-center justify-between gap-12">
-    <h3 class="text-base font-medium text-surface-900 dark:text-surface-50">
+    <h3>
       {{ i18n.t('userInterface.userProfileMenu.preferences.theme.title') }}
     </h3>
     <Select
