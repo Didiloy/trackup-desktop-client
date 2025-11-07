@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
-import { getInitials } from '@/utils'
 import ContextActionMenu from '@/components/common/ContextActionMenu.vue'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
@@ -22,19 +21,19 @@ const server_store = useServerStore()
 const user_store = useUserStore()
 const { updateMemberNickname, listMembers } = useMemberCRUD()
 
-const showNicknameDialog = ref(false)
-const newNickname = ref('')
-const isUpdating = ref(false)
+const show_nickname_dialog = ref(false)
+const new_nickname = ref('')
+const is_updating = ref(false)
 
 const openNicknameDialog = (): void => {
-  newNickname.value = props.member.nickname || ''
-  showNicknameDialog.value = true
+  new_nickname.value = props.member.nickname || ''
+  show_nickname_dialog.value = true
 }
 
 const closeNicknameDialog = (): void => {
-  showNicknameDialog.value = false
-  newNickname.value = ''
-  isUpdating.value = false
+  show_nickname_dialog.value = false
+  new_nickname.value = ''
+  is_updating.value = false
 }
 
 const handleUpdateNickname = async (nickname: string): Promise<void> => {
@@ -44,7 +43,7 @@ const handleUpdateNickname = async (nickname: string): Promise<void> => {
     return
   }
 
-  isUpdating.value = true
+  is_updating.value = true
 
   try {
     const result = await updateMemberNickname(server_store.getPublicId, props.member.public_id, {
@@ -61,11 +60,11 @@ const handleUpdateNickname = async (nickname: string): Promise<void> => {
     } else {
       console.error('Failed to update nickname:', result.error)
       // Keep dialog open to show error
-      isUpdating.value = false
+      is_updating.value = false
     }
   } catch (error) {
     console.error('Error updating nickname:', error)
-    isUpdating.value = false
+    is_updating.value = false
   }
 }
 
@@ -105,20 +104,22 @@ const onItemSelected = (item: unknown): void => {
 </script>
 
 <template>
-  <li
-    class="px-2 py-1 rounded hover:bg-surface-300 cursor-pointer"
-    @contextmenu="handleContextMenu"
-    @click="handleContextMenu"
-  >
-    <Member :member="props.member" />
-  </li>
+  <ul class="flex flex-col gap-1">
+    <li
+      class="px-2 py-1 rounded hover:bg-surface-300 cursor-pointer"
+      @contextmenu="handleContextMenu"
+      @click="handleContextMenu"
+    >
+      <Member :member="props.member" />
+    </li>
+  </ul>
 
   <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected" />
 
   <!-- Nickname Update Dialog -->
   <InputDialog
-    v-model="showNicknameDialog"
-    v-model:input-value="newNickname"
+    v-model="show_nickname_dialog"
+    v-model:input-value="new_nickname"
     :title="t('userInterface.membersAside.update_nickname')"
     :message="t('userInterface.membersAside.update_nickname_message')"
     :input-label="t('userInterface.membersAside.new_nickname')"
@@ -126,7 +127,7 @@ const onItemSelected = (item: unknown): void => {
     :confirm-label="t('actions.update')"
     :cancel-label="t('actions.cancel')"
     confirm-severity="primary"
-    :loading="isUpdating"
+    :loading="is_updating"
     @confirm="handleUpdateNickname"
   />
 </template>

@@ -54,9 +54,7 @@ const grouped = computed(() => {
         <span class="text-2xs text-surface-500">- {{ group.members.length }}</span>
       </div>
 
-      <ul class="flex flex-col gap-1">
-        <MembersListItems v-for="m in group.members" :key="m.public_id" :member="m" />
-      </ul>
+      <MembersListItems v-for="m in group.members" :key="m.public_id" :member="m" />
     </div>
   </div>
 </template>
