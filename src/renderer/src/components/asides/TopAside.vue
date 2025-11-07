@@ -51,9 +51,8 @@ function handleToggleMembersAside(): void {
 </script>
 <template>
   <nav
-
     id="TopAside"
-    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
+    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200 "
   >
     <div>
       <span class="">{{ i18n.t('app.title') }}</span>
@@ -108,7 +107,7 @@ function handleToggleMembersAside(): void {
   </nav>
 </template>
 <style scoped>
-#drag-region {
+#TopAside {
   -webkit-app-region: drag;
 }
 
