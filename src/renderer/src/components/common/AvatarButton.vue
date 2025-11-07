@@ -137,7 +137,7 @@ const onClick = (e: MouseEvent): void => {
       hoverScaleClass,
       bgClass,
       wrapperContrastClass,
-      { 'is-disabled pointer-events-none opacity-60': disabled },
+      { 'is-disabled pointer-events-none ': disabled },
       buttonClass
     ]"
     :style="dimensionStyle"
@@ -173,9 +173,7 @@ const onClick = (e: MouseEvent): void => {
 
 <style scoped>
 .avatar-button {
-  padding: 2px;
   border: none;
-  align-items: center;
 }
 
 .avatar-button :deep(.p-avatar) {

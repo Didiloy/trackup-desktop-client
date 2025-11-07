@@ -17,11 +17,10 @@ const isActive = computed(() => route.path === '/')
 const goHome = (): void => {
   router.push({ name: 'Home' })
 }
-
 </script>
 
 <template>
-  <div class="profile-rainbow" :class="{ 'is-active': isActive }">
+  <div id="ProfileButton" class="profile-rainbow" :class="{ 'is-active': isActive }">
     <AvatarButton
       :image-url="user_store.getAvatar"
       :label="i18n.t('userInterface.userProfileMenu.title')"
@@ -29,6 +28,7 @@ const goHome = (): void => {
       shape="rounded"
       hover-scale
       :title="user_store.getUsername"
+      :disabled="$route.fullPath === '/'"
       @click="goHome"
     />
   </div>
@@ -38,6 +38,8 @@ const goHome = (): void => {
 .profile-rainbow {
   /* Match AvatarButton outer rounding visually */
   border-radius: 1rem; /* close to rounded-2xl */
+  width: 41px;
+  height: 45px;
 }
 
 .profile-rainbow.is-active {
