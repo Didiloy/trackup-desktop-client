@@ -164,7 +164,7 @@
       "create": "Create",
       "cancel": "Cancel"
     },
-    "serverSidebar": {
+    "membersAside": {
       "title": "Server members",
       "description": "List of server members",
       "no_members": "No members",

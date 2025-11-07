@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { IServerMember } from '../../../../shared/contracts/interfaces/entities/member.interfaces'
+import { useServerStore } from '@/stores/server'
+import { useI18n } from 'vue-i18n'
 
-interface Props {
-  members: IServerMember[]
-  loading?: boolean
-}
-
-const props = defineProps<Props>()
+const server_store = useServerStore()
+const { t } = useI18n()
 
 const grouped = computed(() => {
   const byRole = new Map<string, IServerMember[]>()
 
-  for (const m of props.members) {
+  if (!server_store.getMembers) return []
+  for (const m of server_store.getMembers) {
     const role = (m.role_name || 'Unknown').trim()
     if (!byRole.has(role)) byRole.set(role, [])
     byRole.get(role)!.push(m)
@@ -52,52 +51,47 @@ function getInitials(text: string): string {
 </script>
 
 <template>
-  <div class="p-2">
-    <div v-if="loading" class="text-xs text-surface-500 px-2 py-1">
-      {{ $t('userInterface.serverSidebar.loading') }}
-    </div>
-    <template v-else>
-      <template v-if="grouped.length">
-        <div v-for="group in grouped" :key="group.role" class="mb-3">
-          <div class="px-2 py-1 text-xs font-semibold flex items-center gap-1">
-            <span
-              :class="
-                (group.role || '').toLowerCase() === 'creator'
-                  ? 'gradient-text'
-                  : 'text-surface-600'
-              "
-            >
-              {{ group.role }}
-            </span>
-            <span class="text-2xs text-surface-500">- {{ group.members.length }}</span>
-          </div>
-          <ul class="flex flex-col gap-1">
-            <li
-              v-for="m in group.members"
-              :key="m.public_id"
-              class="px-2 py-1 rounded hover:bg-surface-300"
-            >
-              <div class="flex items-center gap-2">
-                <div
-                  class="w-6 h-6 rounded-full overflow-hidden bg-surface-300 flex items-center justify-center text-[10px] font-semibold text-surface-800"
-                >
-                  <img
-                    v-if="m.avatar_url"
-                    :src="m.avatar_url"
-                    :alt="m.nickname || m.user_email"
-                    class="w-full h-full object-cover"
-                  />
-                  <span v-else>{{ getInitials(m.nickname || m.user_email) }}</span>
-                </div>
-                <div class="text-sm text-surface-900">{{ m.nickname || m.user_email }}</div>
-              </div>
-            </li>
-          </ul>
+  <div v-if="server_store.hasServerMembers" class="p-2">
+    <template v-if="grouped.length">
+      <div v-for="group in grouped" :key="group.role" class="mb-3">
+        <div class="px-2 py-1 text-xs font-semibold flex items-center gap-1">
+          <span
+            :class="
+              (group.role || '').toLowerCase() === 'creator'
+                ? 'gradient-text'
+                : 'text-surface-600'
+            "
+          >
+            {{ group.role }}
+          </span>
+          <span class="text-2xs text-surface-500">- {{ group.members.length }}</span>
         </div>
-      </template>
-      <div v-else class="text-xs text-surface-500 px-2 py-1">
-        {{ $t('userInterface.serverSidebar.no_members') }}
+        <ul class="flex flex-col gap-1">
+          <li
+            v-for="m in group.members"
+            :key="m.public_id"
+            class="px-2 py-1 rounded hover:bg-surface-300"
+          >
+            <div class="flex items-center gap-2">
+              <div
+                class="w-6 h-6 rounded-full overflow-hidden bg-surface-300 flex items-center justify-center text-[10px] font-semibold text-surface-800"
+              >
+                <img
+                  v-if="m.avatar_url"
+                  :src="m.avatar_url"
+                  :alt="m.nickname || m.user_email"
+                  class="w-full h-full object-cover"
+                />
+                <span v-else>{{ getInitials(m.nickname || m.user_email) }}</span>
+              </div>
+              <div class="text-sm text-surface-900">{{ m.nickname || m.user_email }}</div>
+            </div>
+          </li>
+        </ul>
       </div>
     </template>
+    <div v-else class="text-xs text-surface-500 px-2 py-1">
+      {{ t('userInterface.membersAside.no_members') }}
+    </div>
   </div>
 </template>
