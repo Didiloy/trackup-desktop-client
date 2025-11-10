@@ -9,6 +9,7 @@ export interface IServer {
   creator_id: string
   description: string | null
   logo: string | null
+  banner: string | null
   invite_code: string | null
   invite_code_expires_at: string | null
 }
@@ -18,6 +19,7 @@ export interface ICreateServerRequest {
   type_public_id: string
   description?: string
   logo?: string
+  banner?: string
 }
 
 export interface IUpdateServerRequest {
@@ -25,6 +27,7 @@ export interface IUpdateServerRequest {
   type_public_id?: string
   description?: string
   logo?: string
+  banner?: string
 }
 
 export interface IJoinServerRequest {
