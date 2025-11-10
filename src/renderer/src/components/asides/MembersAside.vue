@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import MembersList from '../members/list/MembersList.vue'
+import { useServerStore } from '@/stores/server'
 
 const { t } = useI18n()
+const server_store = useServerStore()
+const members = server_store.getMembers
 </script>
 
 <template>
@@ -10,6 +13,7 @@ const { t } = useI18n()
     <div class="h-full flex flex-col">
       <div class="px-3 py-2 text-sm font-semibold text-surface-800 border-b border-surface-300">
         {{ t('userInterface.membersAside.title') }}
+        {{ members?.length ? `- ${members.length}` : '' }}
       </div>
       <div class="flex-1 overflow-y-auto">
         <MembersList />
