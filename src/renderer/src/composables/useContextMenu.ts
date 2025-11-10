@@ -30,11 +30,11 @@ export function useContextMenu(items: ContextMenuItem[]): ContextMenuProps {
 
   const onRightClick = (event: MouseEvent): void => {
     event.preventDefault()
-    if (globalMenu.value && globalMenu.value !== menu.value) {
+    if (globalMenu.value && globalMenu.value !== menu.value && globalMenu.value.menu) {
       globalMenu.value.menu.hide()
     }
     globalMenu.value = menu.value
-    setTimeout(() => menu.value?.menu.show(event), 0)
+    setTimeout(() => menu.value?.menu?.show(event), 0)
   }
 
   const closeMenu = (): void => {
@@ -49,6 +49,9 @@ export function useContextMenu(items: ContextMenuItem[]): ContextMenuProps {
 
   onUnmounted(() => {
     document.removeEventListener('click', closeMenu)
+    if (globalMenu.value === menu.value) {
+      globalMenu.value = undefined
+    }
   })
 
   return {
