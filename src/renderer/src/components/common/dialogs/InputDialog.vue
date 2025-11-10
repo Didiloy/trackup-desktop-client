@@ -160,4 +160,3 @@ const confirmAction = (): void => {
   width: 100%;
 }
 </style>
-
