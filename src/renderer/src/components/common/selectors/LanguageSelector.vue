@@ -6,7 +6,6 @@ import { getAvailableLanguages, Language, setI18nLanguage } from '@/i18n'
 
 import Select from 'primevue/select'
 
-
 const i18n = useI18n()
 const toast = useToast()
 

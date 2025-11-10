@@ -47,6 +47,6 @@ onMounted(() => {
     </div>
     <Versions />
     <ThemeSelector />
-    <LanguageSelector/>
+    <LanguageSelector />
   </div>
 </template>

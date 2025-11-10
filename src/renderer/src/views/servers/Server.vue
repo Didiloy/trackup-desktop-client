@@ -50,7 +50,7 @@ watch(
           {{ server_store.getMembers?.length }} members
           {{ server_store.getDescription }}
           {{ server_store.getInvitationCodeExpDate }}
-          {{ server_store.getServerTypePublicId}}
+          {{ server_store.getServerTypePublicId }}
         </p>
       </div>
     </TransitionWrapper>
