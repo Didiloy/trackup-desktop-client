@@ -10,6 +10,7 @@
     "description": "Description",
     "type": "Type",
     "logo": "Logo",
+    "banner": "Banner",
     "choose": "Choose",
     "change": "Change",
     "clear": "Clear",

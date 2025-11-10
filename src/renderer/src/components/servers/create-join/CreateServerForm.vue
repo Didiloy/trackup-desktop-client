@@ -7,6 +7,7 @@ import type {
 import type { IServerType } from '../../../../../shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
+import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useServerTypeCRUD } from '@/composables/servers/useServerTypeCRUD'
 
@@ -22,6 +23,7 @@ const description = ref('')
 const selected_type = ref<IServerType | null>(null)
 const server_types = ref<IServerType[]>([])
 const logo = ref<string>('')
+const banner = ref<string>('')
 
 const submitting = ref(false)
 const loading_types = ref(false)
@@ -49,6 +51,10 @@ function updateLogo(newLogo: string): void {
   logo.value = newLogo
 }
 
+function updateBanner(newBanner: string): void {
+  banner.value = newBanner
+}
+
 async function createNewServer(): Promise<void> {
   if (!can_submit.value) return
   submitting.value = true
@@ -57,7 +63,8 @@ async function createNewServer(): Promise<void> {
     name: name.value.trim(),
     type_public_id: selected_type.value!.public_id,
     description: description.value.trim(),
-    logo: logo.value
+    logo: logo.value,
+    banner: banner.value
   }
   const res = await createServer(payload)
   if (res.error) {
@@ -88,6 +95,15 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
           :entity-name="name"
           :display-edit-button="true"
           @update-logo="updateLogo"
+        />
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <label class="text-sm text-surface-500">{{ t('common.banner') }}</label>
+        <EntityBannerHandling
+          :banner="banner"
+          :display-edit-button="true"
+          @update-banner="updateBanner"
         />
       </div>
 

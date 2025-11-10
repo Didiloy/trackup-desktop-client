@@ -20,6 +20,7 @@ declare module 'vue' {
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateServerForm: typeof import('./src/components/servers/create-join/CreateServerForm.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
+    EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
     InputDialog: typeof import('./src/components/common/dialogs/InputDialog.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
