@@ -63,6 +63,11 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
       option-label="name"
       option-value="code"
       class="language-select"
+      :pt="{
+        root: { class: 'bg-surface-100' },
+        overlay: { class: 'bg-surface-100' },
+        listContainer: { class: 'bg-surface-100' }
+      }"
       @change="switchLanguage"
     >
       <template #value="slotProps">
