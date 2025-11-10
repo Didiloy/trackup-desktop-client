@@ -105,6 +105,11 @@ const confirmAction = (): void => {
       userSelect: 'none'
     }"
     :draggable="false"
+    :pt="{
+      root: {
+        style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
+      }
+    }"
   >
     <p v-if="props.message" class="mb-4">{{ props.message }}</p>
 
@@ -160,4 +165,3 @@ const confirmAction = (): void => {
   width: 100%;
 }
 </style>
-
