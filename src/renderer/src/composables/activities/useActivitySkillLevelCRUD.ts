@@ -4,7 +4,7 @@ import type {
     ICreateActivitySkillLevelRequest,
     IUpdateActivitySkillLevelRequest,
     IActivitySkillLevelApiResponse
-} from '../../../../shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+} from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 
 interface UseActivitySkillLevelCRUDReturn {
     createSkillLevel: (

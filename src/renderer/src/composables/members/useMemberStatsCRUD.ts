@@ -12,8 +12,8 @@ import type {
     IMemberTimelineParams,
     IMemberGrowthParams,
     IMemberStatsApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/member-stats.interfaces'
-import type { IStatsTimeline } from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
 interface UseMemberStatsCRUDReturn {
     getMemberLeaderboard: (

@@ -1,6 +1,6 @@
 import { computed, type Ref, type ComputedRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { IUserServer } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
+import type { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 import { useServerStore } from '@/stores/server'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'

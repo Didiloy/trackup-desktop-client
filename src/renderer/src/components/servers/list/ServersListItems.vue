@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Server from '../Server.vue'
 import AvatarButton from '@/components/common/AvatarButton.vue'
-import type { IUserServer } from '../../../../../shared/contracts/interfaces/entities/user.interfaces'
+import type { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 
 interface Props {
     servers: IUserServer[]

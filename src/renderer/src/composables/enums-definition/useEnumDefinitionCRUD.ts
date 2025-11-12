@@ -4,7 +4,7 @@ import type {
     ICreateEnumDefinitionRequest,
     IUpdateEnumDefinitionRequest,
     IEnumDefinitionApiResponse
-} from '../../../../shared/contracts/interfaces/entities/enum-definition.interfaces'
+} from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 
 interface UseEnumDefinitionCRUDReturn {
     createEnumDefinition: (

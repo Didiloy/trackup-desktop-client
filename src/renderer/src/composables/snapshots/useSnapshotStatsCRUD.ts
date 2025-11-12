@@ -10,7 +10,7 @@ import type {
     ICleanupSnapshotsParams,
     ICleanupSnapshotsResponse,
     ISnapshotApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
 interface UseSnapshotStatsCRUDReturn {
     createSnapshot: (

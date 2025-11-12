@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type {
     IJoinServerRequest,
     IServer
-} from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
+} from '@shared/contracts/interfaces/entities/server.interfaces'
 import { useI18n } from 'vue-i18n'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 

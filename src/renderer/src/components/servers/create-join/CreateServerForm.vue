@@ -3,8 +3,8 @@ import { ref, computed, onMounted } from 'vue'
 import type {
     IServer,
     ICreateServerRequest
-} from '../../../../../shared/contracts/interfaces/entities/server.interfaces'
-import type { IServerType } from '../../../../../shared/contracts/interfaces/entities/server-type.interfaces'
+} from '@shared/contracts/interfaces/entities/server.interfaces'
+import type { IServerType } from '@shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'

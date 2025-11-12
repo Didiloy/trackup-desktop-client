@@ -8,7 +8,7 @@ import type {
     IStatsTimelineParams,
     IStatsGrowthParams,
     IServerStatsApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
 interface UseServerStatsCRUDReturn {
     getServerStats: (serverId: string) => Promise<IServerStatsApiResponse<IServerStats>>

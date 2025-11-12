@@ -6,7 +6,7 @@ import type {
     IUpdateNicknameRequest,
     IListMembersOptions,
     IMemberApiResponse
-} from '../../../../shared/contracts/interfaces/entities/member.interfaces'
+} from '@shared/contracts/interfaces/entities/member.interfaces'
 
 interface UseMemberCRUDReturn {
     inviteMember: (

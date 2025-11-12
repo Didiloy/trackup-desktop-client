@@ -1,4 +1,4 @@
-import type { TUseAuth } from '../../../../shared/contracts/types/useAuth.type'
+import type { TUseAuth } from '@shared/contracts/types/useAuth.type'
 
 // Import separated modules
 import { loading, error, isAuthenticated } from './utils/authState'

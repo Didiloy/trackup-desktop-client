@@ -2,14 +2,21 @@ import { useUserStore } from '@/stores/user'
 import type {
     IServerType,
     IServerTypeApiResponse
-} from '../../../../shared/contracts/interfaces/entities/server-type.interfaces'
+} from '@shared/contracts/interfaces/entities/server-type.interfaces'
 import { ref } from 'vue'
+
+interface UseServerTypeCRUDReturn {
+    getAllServerTypes: (refresh?: boolean) => Promise<IServerTypeApiResponse<IServerType[]>>
+    getServerTypeById: (
+        public_id: string
+    ) => Promise<IServerTypeApiResponse<IServerType | undefined>>
+}
 
 /**
  * Composable for Server Type entity operations
  * Each method is independent and contains all necessary parameters
  */
-export function useServerTypeCRUD() {
+export function useServerTypeCRUD(): UseServerTypeCRUDReturn {
     const user_store = useUserStore()
     const cache = ref<IServerType[] | null>(null)
 

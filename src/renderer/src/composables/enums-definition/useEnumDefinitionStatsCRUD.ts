@@ -6,7 +6,7 @@ import type {
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
     IEnumDefinitionStatsApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 
 interface UseEnumDefinitionStatsCRUDReturn {
     getAllEnumDefinitionStats: (

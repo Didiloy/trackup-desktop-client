@@ -6,7 +6,7 @@ import type {
     IUpdateSessionRequest,
     IListSessionsOptions,
     ISessionApiResponse
-} from '../../../../shared/contracts/interfaces/entities/session.interfaces'
+} from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
     createSession: (
