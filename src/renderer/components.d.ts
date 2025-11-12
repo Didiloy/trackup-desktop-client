@@ -41,6 +41,7 @@ declare module 'vue' {
     ServersAside: typeof import('./src/components/asides/ServersAside.vue')['default']
     ServersList: typeof import('./src/components/servers/list/ServersList.vue')['default']
     ServersListItems: typeof import('./src/components/servers/list/ServersListItems.vue')['default']
+    Skeleton: typeof import('primevue/skeleton')['default']
     Textarea: typeof import('primevue/textarea')['default']
     ThemeSelector: typeof import('./src/components/common/selectors/ThemeSelector.vue')['default']
     Toast: typeof import('primevue/toast')['default']
