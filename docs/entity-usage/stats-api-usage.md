@@ -54,8 +54,8 @@ const { session } = useAuth()
 const result = await window.api.serverStats.getStats('srv_123', session.value?.access_token)
 
 if (result.data) {
-  console.log('Total sessions:', result.data.total_sessions)
-  console.log('Active members:', result.data.active_members)
+    console.log('Total sessions:', result.data.total_sessions)
+    console.log('Active members:', result.data.active_members)
 }
 ```
 
@@ -73,10 +73,10 @@ Returns comprehensive stats including top members, top activities, and timeline.
 const details = await window.api.serverStats.getDetails('srv_123', accessToken)
 
 if (details.data) {
-  console.log('Server stats:', details.data.server_stats)
-  console.log('Top members:', details.data.top_members)
-  console.log('Top activities:', details.data.top_activities)
-  console.log('Timeline:', details.data.timeline)
+    console.log('Server stats:', details.data.server_stats)
+    console.log('Top members:', details.data.top_members)
+    console.log('Top activities:', details.data.top_activities)
+    console.log('Timeline:', details.data.timeline)
 }
 ```
 
@@ -98,15 +98,15 @@ Returns timeline statistics showing evolution over time.
 
 ```typescript
 const timeline = await window.api.serverStats.getTimeline(
-  'srv_123',
-  { period: 'weekly', limit: 12 },
-  accessToken
+    'srv_123',
+    { period: 'weekly', limit: 12 },
+    accessToken
 )
 
 if (timeline.data) {
-  timeline.data.forEach((point) => {
-    console.log(`${point.period}: ${point.sessions_count} sessions`)
-  })
+    timeline.data.forEach((point) => {
+        console.log(`${point.period}: ${point.sessions_count} sessions`)
+    })
 }
 ```
 
@@ -122,14 +122,14 @@ Returns growth metrics comparing current period to previous.
 
 ```typescript
 const growth = await window.api.serverStats.getGrowthTrends(
-  'srv_123',
-  { period: 'weekly' },
-  accessToken
+    'srv_123',
+    { period: 'weekly' },
+    accessToken
 )
 
 if (growth.data) {
-  console.log('Sessions growth:', growth.data.sessions.change_percent + '%')
-  console.log('MembersAside growth:', growth.data.members.change_percent + '%')
+    console.log('Sessions growth:', growth.data.sessions.change_percent + '%')
+    console.log('MembersAside growth:', growth.data.members.change_percent + '%')
 }
 ```
 
@@ -164,15 +164,15 @@ Returns top members by total duration.
 
 ```typescript
 const leaderboard = await window.api.memberStats.getLeaderboard(
-  'srv_123',
-  { period: 'weekly', limit: 10 },
-  accessToken
+    'srv_123',
+    { period: 'weekly', limit: 10 },
+    accessToken
 )
 
 if (leaderboard.data) {
-  leaderboard.data.leaderboard.forEach((entry) => {
-    console.log(`${entry.rank}. ${entry.member_name} - ${entry.total_duration}s`)
-  })
+    leaderboard.data.leaderboard.forEach((entry) => {
+        console.log(`${entry.rank}. ${entry.member_name} - ${entry.total_duration}s`)
+    })
 }
 ```
 
@@ -193,16 +193,16 @@ Returns paginated list of all member statistics.
 
 ```typescript
 const members = await window.api.memberStats.getAllStats(
-  'srv_123',
-  { page: 1, limit: 20 },
-  accessToken
+    'srv_123',
+    { page: 1, limit: 20 },
+    accessToken
 )
 
 if (members.data) {
-  console.log(`Page ${members.data.page} of ${members.data.pageCount}`)
-  members.data.data.forEach((member) => {
-    console.log(member.user_email, member.total_sessions)
-  })
+    console.log(`Page ${members.data.page} of ${members.data.pageCount}`)
+    members.data.data.forEach((member) => {
+        console.log(member.user_email, member.total_sessions)
+    })
 }
 ```
 
@@ -238,10 +238,10 @@ Returns comprehensive details including stats, patterns, ranking, and timeline.
 const details = await window.api.memberStats.getDetails('srv_123', 'me', accessToken)
 
 if (details.data) {
-  console.log('Stats:', details.data)
-  console.log('Patterns:', details.data.patterns)
-  console.log('Ranking:', details.data.ranking)
-  console.log('Timeline:', details.data.timeline)
+    console.log('Stats:', details.data)
+    console.log('Patterns:', details.data.patterns)
+    console.log('Ranking:', details.data.ranking)
+    console.log('Timeline:', details.data.timeline)
 }
 ```
 
@@ -259,9 +259,9 @@ Returns activity patterns including most active day, hour, and streaks.
 const patterns = await window.api.memberStats.getPatterns('srv_123', 'me', accessToken)
 
 if (patterns.data) {
-  console.log('Most active day:', patterns.data.most_active_day_of_week)
-  console.log('Most active hour:', patterns.data.most_active_hour)
-  console.log('Current streak:', patterns.data.streak_current)
+    console.log('Most active day:', patterns.data.most_active_day_of_week)
+    console.log('Most active hour:', patterns.data.most_active_hour)
+    console.log('Current streak:', patterns.data.streak_current)
 }
 ```
 
@@ -279,8 +279,8 @@ Returns member's rank and percentile in the server.
 const ranking = await window.api.memberStats.getRanking('srv_123', 'me', accessToken)
 
 if (ranking.data) {
-  console.log(`Rank: ${ranking.data.rank_in_server} / ${ranking.data.total_members}`)
-  console.log(`Percentile: ${ranking.data.percentile}`)
+    console.log(`Rank: ${ranking.data.rank_in_server} / ${ranking.data.total_members}`)
+    console.log(`Percentile: ${ranking.data.percentile}`)
 }
 ```
 
@@ -318,17 +318,17 @@ Returns top activities by popularity score.
 
 ```typescript
 const leaderboard = await window.api.activityStats.getLeaderboard(
-  'srv_123',
-  { period: 'monthly', limit: 10 },
-  accessToken
+    'srv_123',
+    { period: 'monthly', limit: 10 },
+    accessToken
 )
 
 if (leaderboard.data) {
-  leaderboard.data.leaderboard.forEach((activity) => {
-    console.log(`${activity.rank}. ${activity.activity_name}`)
-    console.log(`  Score: ${activity.popularity_score}`)
-    console.log(`  Sessions: ${activity.total_sessions}`)
-  })
+    leaderboard.data.leaderboard.forEach((activity) => {
+        console.log(`${activity.rank}. ${activity.activity_name}`)
+        console.log(`  Score: ${activity.popularity_score}`)
+        console.log(`  Sessions: ${activity.total_sessions}`)
+    })
 }
 ```
 
@@ -344,9 +344,9 @@ Returns paginated list of all activity statistics, sorted by popularity.
 
 ```typescript
 const activities = await window.api.activityStats.getAllStats(
-  'srv_123',
-  { page: 1, limit: 20 },
-  accessToken
+    'srv_123',
+    { page: 1, limit: 20 },
+    accessToken
 )
 ```
 
@@ -364,9 +364,9 @@ Returns detailed statistics for a specific activity.
 const stats = await window.api.activityStats.getStats('srv_123', 'act_789', accessToken)
 
 if (stats.data) {
-  console.log('Total sessions:', stats.data.total_sessions)
-  console.log('Popularity score:', stats.data.popularity_score)
-  console.log('Unique participants:', stats.data.unique_participants)
+    console.log('Total sessions:', stats.data.total_sessions)
+    console.log('Popularity score:', stats.data.popularity_score)
+    console.log('Unique participants:', stats.data.unique_participants)
 }
 ```
 
@@ -384,10 +384,10 @@ Returns comprehensive details including stats, patterns, growth, timeline, and t
 const details = await window.api.activityStats.getDetails('srv_123', 'act_789', accessToken)
 
 if (details.data) {
-  console.log('Stats:', details.data)
-  console.log('Time patterns:', details.data.time_patterns)
-  console.log('Growth trend:', details.data.growth_trend)
-  console.log('Top contributors:', details.data.top_contributors)
+    console.log('Stats:', details.data)
+    console.log('Time patterns:', details.data.time_patterns)
+    console.log('Growth trend:', details.data.growth_trend)
+    console.log('Top contributors:', details.data.top_contributors)
 }
 ```
 
@@ -405,9 +405,9 @@ Returns activity time patterns including peak day and hour.
 const patterns = await window.api.activityStats.getPatterns('srv_123', 'act_789', accessToken)
 
 if (patterns.data) {
-  console.log('Peak day of week:', patterns.data.peak_day_of_week)
-  console.log('Peak hour:', patterns.data.peak_hour)
-  console.log('Current streak:', patterns.data.streak_current)
+    console.log('Peak day of week:', patterns.data.peak_day_of_week)
+    console.log('Peak hour:', patterns.data.peak_hour)
+    console.log('Current streak:', patterns.data.streak_current)
 }
 ```
 
@@ -427,15 +427,15 @@ Returns the ranking of a specific activity based on popularity.
 
 ```typescript
 const ranking = await window.api.activityStats.getRanking(
-  'srv_123',
-  'act_789',
-  { period: 'weekly' },
-  accessToken
+    'srv_123',
+    'act_789',
+    { period: 'weekly' },
+    accessToken
 )
 
 if (ranking.data) {
-  console.log(`Rank: ${ranking.data.rank} / ${ranking.data.total_activities}`)
-  console.log(`Score: ${ranking.data.popularity_score}`)
+    console.log(`Rank: ${ranking.data.rank} / ${ranking.data.total_activities}`)
+    console.log(`Score: ${ranking.data.popularity_score}`)
 }
 ```
 
@@ -467,11 +467,11 @@ All methods return a response with `data` or `error`:
 const result = await window.api.serverStats.getStats(serverId, accessToken)
 
 if (result.error) {
-  console.error('Error:', result.error)
-  // Handle error
+    console.error('Error:', result.error)
+    // Handle error
 } else if (result.data) {
-  console.log('Success:', result.data)
-  // Use data
+    console.log('Success:', result.data)
+    // Use data
 }
 ```
 
@@ -516,16 +516,16 @@ onMounted(() => {
 
 ```typescript
 const loadPage = async (page: number, limit: number = 20) => {
-  const result = await window.api.memberStats.getAllStats(serverId, { page, limit }, accessToken)
+    const result = await window.api.memberStats.getAllStats(serverId, { page, limit }, accessToken)
 
-  if (result.data) {
-    return {
-      items: result.data.data,
-      total: result.data.total,
-      pageCount: result.data.pageCount,
-      currentPage: result.data.page
+    if (result.data) {
+        return {
+            items: result.data.data,
+            total: result.data.total,
+            pageCount: result.data.pageCount,
+            currentPage: result.data.page
+        }
     }
-  }
 }
 ```
 
@@ -566,20 +566,20 @@ Returns paginated list of all activities a member has participated in, sorted by
 ```typescript
 const { session } = useAuth()
 const result = await window.api.memberActivityStats.getAllActivities(
-  'srv_123',
-  'mem_456',
-  { page: 1, limit: 20 },
-  session.value?.access_token
+    'srv_123',
+    'mem_456',
+    { page: 1, limit: 20 },
+    session.value?.access_token
 )
 
 if (result.data) {
-  result.data.data.forEach((activity) => {
-    console.log(`${activity.activity_name}:`)
-    console.log(`  Sessions: ${activity.total_sessions}`)
-    console.log(`  Duration: ${activity.total_duration}s`)
-    console.log(`  Skill Level: ${activity.skill_level}`)
-    console.log(`  Proficiency: ${activity.proficiency_score}`)
-  })
+    result.data.data.forEach((activity) => {
+        console.log(`${activity.activity_name}:`)
+        console.log(`  Sessions: ${activity.total_sessions}`)
+        console.log(`  Duration: ${activity.total_duration}s`)
+        console.log(`  Skill Level: ${activity.skill_level}`)
+        console.log(`  Proficiency: ${activity.proficiency_score}`)
+    })
 }
 ```
 
@@ -595,20 +595,20 @@ Returns detailed statistics for a member on a specific activity, including skill
 
 ```typescript
 const stats = await window.api.memberActivityStats.getActivityStats(
-  'srv_123',
-  'mem_456',
-  'act_789',
-  accessToken
+    'srv_123',
+    'mem_456',
+    'act_789',
+    accessToken
 )
 
 if (stats.data) {
-  console.log('Activity:', stats.data.activity_name)
-  console.log('Total sessions:', stats.data.total_sessions)
-  console.log('Avg duration:', stats.data.avg_session_duration)
-  console.log('Skill level:', stats.data.skill_level)
-  console.log('Proficiency score:', stats.data.proficiency_score)
-  console.log('Sessions created:', stats.data.sessions_created)
-  console.log('Total likes:', stats.data.total_likes)
+    console.log('Activity:', stats.data.activity_name)
+    console.log('Total sessions:', stats.data.total_sessions)
+    console.log('Avg duration:', stats.data.avg_session_duration)
+    console.log('Skill level:', stats.data.skill_level)
+    console.log('Proficiency score:', stats.data.proficiency_score)
+    console.log('Sessions created:', stats.data.sessions_created)
+    console.log('Total likes:', stats.data.total_likes)
 }
 ```
 
@@ -616,11 +616,11 @@ if (stats.data) {
 
 ```typescript
 window.api.memberActivityStats.getActivityProgression(
-  serverId,
-  memberId,
-  activityId,
-  params,
-  accessToken
+    serverId,
+    memberId,
+    activityId,
+    params,
+    accessToken
 )
 ```
 
@@ -635,20 +635,20 @@ Returns progression over time showing skill development.
 
 ```typescript
 const progression = await window.api.memberActivityStats.getActivityProgression(
-  'srv_123',
-  'mem_456',
-  'act_789',
-  { period: 'weekly', limit: 12 },
-  accessToken
+    'srv_123',
+    'mem_456',
+    'act_789',
+    { period: 'weekly', limit: 12 },
+    accessToken
 )
 
 if (progression.data) {
-  progression.data.forEach((period) => {
-    console.log(`Week ${period.period_start}:`)
-    console.log(`  Sessions: ${period.total_sessions}`)
-    console.log(`  Skill: ${period.skill_level}`)
-    console.log(`  Proficiency: ${period.proficiency_score}`)
-  })
+    progression.data.forEach((period) => {
+        console.log(`Week ${period.period_start}:`)
+        console.log(`  Sessions: ${period.total_sessions}`)
+        console.log(`  Skill: ${period.skill_level}`)
+        console.log(`  Proficiency: ${period.proficiency_score}`)
+    })
 }
 ```
 
@@ -707,20 +707,20 @@ Returns paginated list of all enum definitions with usage statistics.
 ```typescript
 const { session } = useAuth()
 const result = await window.api.enumDefinitionStats.getAllStats(
-  'srv_123',
-  { page: 1, limit: 20 },
-  session.value?.access_token
+    'srv_123',
+    { page: 1, limit: 20 },
+    session.value?.access_token
 )
 
 if (result.data) {
-  result.data.data.forEach((enumDef) => {
-    console.log(`${enumDef.enum_definition_name}:`)
-    console.log(`  Total values: ${enumDef.total_values}`)
-    console.log(`  Total usage: ${enumDef.total_usage}`)
-    console.log(`  Sessions: ${enumDef.total_sessions}`)
-    console.log(`  Unique users: ${enumDef.unique_users}`)
-    console.log(`  Most used: ${enumDef.most_used_value.enum_value_id}`)
-  })
+    result.data.data.forEach((enumDef) => {
+        console.log(`${enumDef.enum_definition_name}:`)
+        console.log(`  Total values: ${enumDef.total_values}`)
+        console.log(`  Total usage: ${enumDef.total_usage}`)
+        console.log(`  Sessions: ${enumDef.total_sessions}`)
+        console.log(`  Unique users: ${enumDef.unique_users}`)
+        console.log(`  Most used: ${enumDef.most_used_value.enum_value_id}`)
+    })
 }
 ```
 
@@ -742,20 +742,20 @@ Returns detailed statistics for a specific enum definition with all its values (
 
 ```typescript
 const details = await window.api.enumDefinitionStats.getStats(
-  'srv_123',
-  'enumdef_456',
-  { page: 1, limit: 10, period: 'weekly' },
-  accessToken
+    'srv_123',
+    'enumdef_456',
+    { page: 1, limit: 10, period: 'weekly' },
+    accessToken
 )
 
 if (details.data) {
-  details.data.data.forEach((value) => {
-    console.log(`${value.enum_value_display}:`)
-    console.log(`  Usage: ${value.usage_count}`)
-    console.log(`  Percentage: ${value.percentage_of_total}%`)
-    console.log(`  Sessions: ${value.total_sessions}`)
-    console.log(`  Avg likes: ${value.avg_likes_when_selected}`)
-  })
+    details.data.data.forEach((value) => {
+        console.log(`${value.enum_value_display}:`)
+        console.log(`  Usage: ${value.usage_count}`)
+        console.log(`  Percentage: ${value.percentage_of_total}%`)
+        console.log(`  Sessions: ${value.total_sessions}`)
+        console.log(`  Avg likes: ${value.avg_likes_when_selected}`)
+    })
 }
 ```
 
@@ -771,17 +771,17 @@ Returns the distribution of values with percentages.
 
 ```typescript
 const distribution = await window.api.enumDefinitionStats.getDistribution(
-  'srv_123',
-  'enumdef_456',
-  accessToken
+    'srv_123',
+    'enumdef_456',
+    accessToken
 )
 
 if (distribution.data) {
-  console.log('Value:', distribution.data.enum_value_display)
-  console.log('Usage:', distribution.data.usage_count)
-  console.log('Percentage:', distribution.data.percentage + '%')
-  console.log('Sessions:', distribution.data.total_sessions)
-  console.log('Unique users:', distribution.data.unique_users)
+    console.log('Value:', distribution.data.enum_value_display)
+    console.log('Usage:', distribution.data.usage_count)
+    console.log('Percentage:', distribution.data.percentage + '%')
+    console.log('Sessions:', distribution.data.total_sessions)
+    console.log('Unique users:', distribution.data.unique_users)
 }
 ```
 
@@ -789,11 +789,11 @@ if (distribution.data) {
 
 ```typescript
 window.api.enumDefinitionStats.getValueStats(
-  serverId,
-  enumDefinitionId,
-  enumValueId,
-  params,
-  accessToken
+    serverId,
+    enumDefinitionId,
+    enumValueId,
+    params,
+    accessToken
 )
 ```
 
@@ -809,23 +809,23 @@ Returns detailed statistics for a specific enum value (paginated).
 
 ```typescript
 const valueStats = await window.api.enumDefinitionStats.getValueStats(
-  'srv_123',
-  'enumdef_456',
-  'enumval_789',
-  { page: 1, limit: 20, period: 'monthly' },
-  accessToken
+    'srv_123',
+    'enumdef_456',
+    'enumval_789',
+    { page: 1, limit: 20, period: 'monthly' },
+    accessToken
 )
 
 if (valueStats.data) {
-  console.log(`Total records: ${valueStats.data.total}`)
-  console.log(`Page ${valueStats.data.page} of ${valueStats.data.pageCount}`)
+    console.log(`Total records: ${valueStats.data.total}`)
+    console.log(`Page ${valueStats.data.page} of ${valueStats.data.pageCount}`)
 
-  valueStats.data.data.forEach((stat) => {
-    console.log(`Period ${stat.period_start} to ${stat.period_end}:`)
-    console.log(`  Usage: ${stat.usage_count}`)
-    console.log(`  Sessions: ${stat.total_sessions}`)
-    console.log(`  Duration: ${stat.total_duration}s`)
-  })
+    valueStats.data.data.forEach((stat) => {
+        console.log(`Period ${stat.period_start} to ${stat.period_end}:`)
+        console.log(`  Usage: ${stat.usage_count}`)
+        console.log(`  Sessions: ${stat.total_sessions}`)
+        console.log(`  Duration: ${stat.total_duration}s`)
+    })
 }
 ```
 
@@ -880,34 +880,34 @@ onMounted(() => {
 ### All Available Stats APIs
 
 1. **Server Stats** (`window.api.serverStats.*`)
-   - Global server analytics
-   - Timeline and growth trends
-   - Comparative analysis
+    - Global server analytics
+    - Timeline and growth trends
+    - Comparative analysis
 
 2. **Member Stats** (`window.api.memberStats.*`)
-   - Individual member statistics
-   - Leaderboards and rankings
-   - Activity patterns and growth
+    - Individual member statistics
+    - Leaderboards and rankings
+    - Activity patterns and growth
 
 3. **Activity Stats** (`window.api.activityStats.*`)
-   - Activity popularity metrics
-   - Time patterns and rankings
-   - Growth trends and contributors
+    - Activity popularity metrics
+    - Time patterns and rankings
+    - Growth trends and contributors
 
 4. **Member Activity Stats** (`window.api.memberActivityStats.*`)
-   - Member performance on specific activities
-   - Skill progression tracking
-   - Activity participation history
+    - Member performance on specific activities
+    - Skill progression tracking
+    - Activity participation history
 
 5. **Enum Definition Stats** (`window.api.enumDefinitionStats.*`)
-   - Enum value usage analytics
-   - Distribution analysis
-   - Value-specific statistics
+    - Enum value usage analytics
+    - Distribution analysis
+    - Value-specific statistics
 
 6. **Snapshot Stats** (`window.api.snapshotStats.*`)
-   - Historical stats snapshots
-   - Snapshot comparisons
-   - Summary and cleanup
+    - Historical stats snapshots
+    - Snapshot comparisons
+    - Summary and cleanup
 
 ---
 
@@ -939,19 +939,19 @@ Create a manual snapshot of current server stats. Only the server creator can cr
 ```typescript
 const { session } = useAuth()
 const result = await window.api.snapshotStats.create(
-  'srv_123',
-  {
-    type: 'weekly',
-    description: 'End of Q4 2025 snapshot'
-  },
-  session.value?.access_token
+    'srv_123',
+    {
+        type: 'weekly',
+        description: 'End of Q4 2025 snapshot'
+    },
+    session.value?.access_token
 )
 
 if (result.data) {
-  console.log('Snapshot created:', result.data.id)
-  console.log('Snapshot date:', result.data.snapshot_date)
-  console.log('Total sessions:', result.data.data.server_stats.total_sessions)
-  console.log('Engagement score:', result.data.data.server_stats.engagement_score)
+    console.log('Snapshot created:', result.data.id)
+    console.log('Snapshot date:', result.data.snapshot_date)
+    console.log('Total sessions:', result.data.data.server_stats.total_sessions)
+    console.log('Engagement score:', result.data.data.server_stats.engagement_score)
 }
 ```
 
@@ -975,29 +975,29 @@ Returns paginated list of all snapshots with optional filtering.
 
 ```typescript
 const snapshots = await window.api.snapshotStats.getAll(
-  'srv_123',
-  {
-    page: 1,
-    limit: 20,
-    type: 'weekly',
-    from_date: '2025-01-01T00:00:00Z',
-    to_date: '2025-12-31T23:59:59Z'
-  },
-  accessToken
+    'srv_123',
+    {
+        page: 1,
+        limit: 20,
+        type: 'weekly',
+        from_date: '2025-01-01T00:00:00Z',
+        to_date: '2025-12-31T23:59:59Z'
+    },
+    accessToken
 )
 
 if (snapshots.data) {
-  console.log(`Total snapshots: ${snapshots.data.total}`)
-  console.log(`Page ${snapshots.data.page} of ${snapshots.data.pageCount}`)
+    console.log(`Total snapshots: ${snapshots.data.total}`)
+    console.log(`Page ${snapshots.data.page} of ${snapshots.data.pageCount}`)
 
-  snapshots.data.data.forEach((snapshot) => {
-    console.log(`\n${snapshot.type} snapshot - ${snapshot.snapshot_date}`)
-    console.log(`  Description: ${snapshot.description}`)
-    console.log(`  Sessions: ${snapshot.highlights.total_sessions}`)
-    console.log(`  Members: ${snapshot.highlights.total_members}`)
-    console.log(`  Engagement: ${snapshot.highlights.engagement_score}`)
-    console.log(`  Change: +${snapshot.highlights.sessions_change} sessions`)
-  })
+    snapshots.data.data.forEach((snapshot) => {
+        console.log(`\n${snapshot.type} snapshot - ${snapshot.snapshot_date}`)
+        console.log(`  Description: ${snapshot.description}`)
+        console.log(`  Sessions: ${snapshot.highlights.total_sessions}`)
+        console.log(`  Members: ${snapshot.highlights.total_members}`)
+        console.log(`  Engagement: ${snapshot.highlights.engagement_score}`)
+        console.log(`  Change: +${snapshot.highlights.sessions_change} sessions`)
+    })
 }
 ```
 
@@ -1013,21 +1013,21 @@ Returns complete data for a specific snapshot including all statistics.
 
 ```typescript
 const snapshot = await window.api.snapshotStats.getById(
-  'srv_123',
-  'statsnapshot_abc123',
-  accessToken
+    'srv_123',
+    'statsnapshot_abc123',
+    accessToken
 )
 
 if (snapshot.data) {
-  const data = snapshot.data.data
+    const data = snapshot.data.data
 
-  console.log('Server Stats:', data.server_stats)
-  console.log('Period Stats:', data.period_stats)
-  console.log('Top MembersAside:', data.top_members)
-  console.log('Top Activities:', data.top_activities)
-  console.log('Top Enums:', data.top_enums)
-  console.log('Trends:', data.trends)
-  console.log('Metadata:', data.metadata)
+    console.log('Server Stats:', data.server_stats)
+    console.log('Period Stats:', data.period_stats)
+    console.log('Top MembersAside:', data.top_members)
+    console.log('Top Activities:', data.top_activities)
+    console.log('Top Enums:', data.top_enums)
+    console.log('Trends:', data.trends)
+    console.log('Metadata:', data.metadata)
 }
 ```
 
@@ -1043,15 +1043,15 @@ Returns the most recent snapshot of a specific type.
 
 ```typescript
 const latestWeekly = await window.api.snapshotStats.getLatest(
-  'srv_123',
-  { type: 'weekly' },
-  accessToken
+    'srv_123',
+    { type: 'weekly' },
+    accessToken
 )
 
 if (latestWeekly.data) {
-  console.log('Latest weekly snapshot:', latestWeekly.data.snapshot_date)
-  console.log('Total sessions:', latestWeekly.data.data.server_stats.total_sessions)
-  console.log('Growth rate:', latestWeekly.data.data.server_stats.sessions_growth_rate)
+    console.log('Latest weekly snapshot:', latestWeekly.data.snapshot_date)
+    console.log('Total sessions:', latestWeekly.data.data.server_stats.total_sessions)
+    console.log('Growth rate:', latestWeekly.data.data.server_stats.sessions_growth_rate)
 }
 ```
 
@@ -1069,22 +1069,22 @@ Returns the latest snapshot for each type (daily, weekly, monthly, yearly).
 const summary = await window.api.snapshotStats.getSummary('srv_123', accessToken)
 
 if (summary.data) {
-  if (summary.data.daily) {
-    console.log('Daily snapshot:', summary.data.daily.snapshot_date)
-  }
+    if (summary.data.daily) {
+        console.log('Daily snapshot:', summary.data.daily.snapshot_date)
+    }
 
-  if (summary.data.weekly) {
-    console.log('Weekly snapshot:', summary.data.weekly.snapshot_date)
-    console.log('Engagement:', summary.data.weekly.data.server_stats.engagement_score)
-  }
+    if (summary.data.weekly) {
+        console.log('Weekly snapshot:', summary.data.weekly.snapshot_date)
+        console.log('Engagement:', summary.data.weekly.data.server_stats.engagement_score)
+    }
 
-  if (summary.data.monthly) {
-    console.log('Monthly snapshot:', summary.data.monthly.snapshot_date)
-  }
+    if (summary.data.monthly) {
+        console.log('Monthly snapshot:', summary.data.monthly.snapshot_date)
+    }
 
-  if (summary.data.yearly) {
-    console.log('Yearly snapshot:', summary.data.yearly.snapshot_date)
-  }
+    if (summary.data.yearly) {
+        console.log('Yearly snapshot:', summary.data.yearly.snapshot_date)
+    }
 }
 ```
 
@@ -1100,41 +1100,41 @@ Compare two snapshots to see changes over time.
 
 ```typescript
 const comparison = await window.api.snapshotStats.compare(
-  'srv_123',
-  'snapshot_old',
-  'snapshot_new',
-  accessToken
+    'srv_123',
+    'snapshot_old',
+    'snapshot_new',
+    accessToken
 )
 
 if (comparison.data) {
-  console.log('Comparing:')
-  console.log(`  ${comparison.data.snapshot1.date} (${comparison.data.snapshot1.type})`)
-  console.log(`  vs`)
-  console.log(`  ${comparison.data.snapshot2.date} (${comparison.data.snapshot2.type})`)
+    console.log('Comparing:')
+    console.log(`  ${comparison.data.snapshot1.date} (${comparison.data.snapshot1.type})`)
+    console.log(`  vs`)
+    console.log(`  ${comparison.data.snapshot2.date} (${comparison.data.snapshot2.type})`)
 
-  console.log('\nChanges:')
-  console.log(
-    `  Sessions: ${comparison.data.comparison.sessions_diff > 0 ? '+' : ''}${comparison.data.comparison.sessions_diff}`
-  )
-  console.log(
-    `  Members: ${comparison.data.comparison.members_diff > 0 ? '+' : ''}${comparison.data.comparison.members_diff}`
-  )
-  console.log(
-    `  Duration: ${comparison.data.comparison.duration_diff > 0 ? '+' : ''}${comparison.data.comparison.duration_diff}s`
-  )
-  console.log(
-    `  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`
-  )
+    console.log('\nChanges:')
+    console.log(
+        `  Sessions: ${comparison.data.comparison.sessions_diff > 0 ? '+' : ''}${comparison.data.comparison.sessions_diff}`
+    )
+    console.log(
+        `  Members: ${comparison.data.comparison.members_diff > 0 ? '+' : ''}${comparison.data.comparison.members_diff}`
+    )
+    console.log(
+        `  Duration: ${comparison.data.comparison.duration_diff > 0 ? '+' : ''}${comparison.data.comparison.duration_diff}s`
+    )
+    console.log(
+        `  Engagement: ${comparison.data.comparison.engagement_diff > 0 ? '+' : ''}${comparison.data.comparison.engagement_diff}`
+    )
 
-  console.log('\nTop MembersAside Changes:')
-  console.log(`  New entries: ${comparison.data.top_members_changes.new_entries.length}`)
-  console.log(`  Dropped: ${comparison.data.top_members_changes.dropped_entries.length}`)
-  console.log(`  Maintained: ${comparison.data.top_members_changes.maintained}`)
+    console.log('\nTop MembersAside Changes:')
+    console.log(`  New entries: ${comparison.data.top_members_changes.new_entries.length}`)
+    console.log(`  Dropped: ${comparison.data.top_members_changes.dropped_entries.length}`)
+    console.log(`  Maintained: ${comparison.data.top_members_changes.maintained}`)
 
-  console.log('\nTop Activities Changes:')
-  console.log(`  New entries: ${comparison.data.top_activities_changes.new_entries.length}`)
-  console.log(`  Dropped: ${comparison.data.top_activities_changes.dropped_entries.length}`)
-  console.log(`  Maintained: ${comparison.data.top_activities_changes.maintained}`)
+    console.log('\nTop Activities Changes:')
+    console.log(`  New entries: ${comparison.data.top_activities_changes.new_entries.length}`)
+    console.log(`  Dropped: ${comparison.data.top_activities_changes.dropped_entries.length}`)
+    console.log(`  Maintained: ${comparison.data.top_activities_changes.maintained}`)
 }
 ```
 
@@ -1153,7 +1153,7 @@ Delete snapshots older than specified days. Only the server creator can perform 
 const cleanup = await window.api.snapshotStats.cleanup('srv_123', { days: 90 }, accessToken)
 
 if (cleanup.data) {
-  console.log(`Deleted ${cleanup.data.count} old snapshots`)
+    console.log(`Deleted ${cleanup.data.count} old snapshots`)
 }
 ```
 
@@ -1259,15 +1259,15 @@ const loadComparison = async () => {
 ## Next Steps
 
 1. Create Vue composables for each stat type (optional):
-   - `useServerStatsCRUD(serverId)`
-   - `useMemberStatsCRUD(serverId, memberId)`
-   - `useActivityStatsCRUD(serverId, activityId)`
+    - `useServerStatsCRUD(serverId)`
+    - `useMemberStatsCRUD(serverId, memberId)`
+    - `useActivityStatsCRUD(serverId, activityId)`
 
 2. Create reusable Vue components:
-   - LeaderboardTable
-   - StatsCard
-   - TimelineChart
-   - GrowthTrendGraph
+    - LeaderboardTable
+    - StatsCard
+    - TimelineChart
+    - GrowthTrendGraph
 
 3. Add caching layer for frequently accessed stats
 

@@ -15,61 +15,61 @@ const { session } = useAuth()
 const accessToken = session.value?.access_token
 
 const result = await window.api.session.create(
-  'srv_123', // servers ID
-  {
-    activity_id: 'activity_123e4567-e89b-12d3-a456-426614174000',
-    duration: 30, // Duration in minutes
-    date: '2025-09-24T15:00:00.000Z', // ISO 8601 date
-    participants: [
-      'member_123e4567-e89b-12d3-a456-426614174000',
-      'member_987e6543-e21b-32d3-b654-126614174999'
-    ],
-    enums: [
-      {
-        enum_value_id: 'enumval_123e4567-e89b-12d3-a456-426614174000',
-        selected_key: 'value3'
-      }
-    ]
-  },
-  accessToken
+    'srv_123', // servers ID
+    {
+        activity_id: 'activity_123e4567-e89b-12d3-a456-426614174000',
+        duration: 30, // Duration in minutes
+        date: '2025-09-24T15:00:00.000Z', // ISO 8601 date
+        participants: [
+            'member_123e4567-e89b-12d3-a456-426614174000',
+            'member_987e6543-e21b-32d3-b654-126614174999'
+        ],
+        enums: [
+            {
+                enum_value_id: 'enumval_123e4567-e89b-12d3-a456-426614174000',
+                selected_key: 'value3'
+            }
+        ]
+    },
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error creating session:', result.error)
+    console.error('Error creating session:', result.error)
 } else {
-  console.log('Session created:', result.data)
-  // result.data structure:
-  // {
-  //   public_id: "activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce",
-  //   date: "2025-09-25T09:01:18.877Z",
-  //   duration: "60",
-  //   activity: {
-  //     public_id: "activity_966c1c61-b5a2-4f50-ac6d-65cd58fbadf3",
-  //     name: "Football"
-  //   },
-  //   server_member: [
-  //     {
-  //       public_id: "member_aa06ec70-d773-4156-a369-2af0d714d53c",
-  //       nickname: "John DoDo",
-  //       avatar: null
-  //     }
-  //   ],
-  //   enums: [
-  //     {
-  //       enum_definition_name: "Fun Level",
-  //       values: {
-  //         value1: "Fun",
-  //         value2: "Neutral",
-  //         value3: "Boring",
-  //         value4: null,
-  //         value5: null
-  //       },
-  //       selected_key: "value3"
-  //     }
-  //   ],
-  //   likes_count: 0,
-  //   liked_by_me: false
-  // }
+    console.log('Session created:', result.data)
+    // result.data structure:
+    // {
+    //   public_id: "activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce",
+    //   date: "2025-09-25T09:01:18.877Z",
+    //   duration: "60",
+    //   activity: {
+    //     public_id: "activity_966c1c61-b5a2-4f50-ac6d-65cd58fbadf3",
+    //     name: "Football"
+    //   },
+    //   server_member: [
+    //     {
+    //       public_id: "member_aa06ec70-d773-4156-a369-2af0d714d53c",
+    //       nickname: "John DoDo",
+    //       avatar: null
+    //     }
+    //   ],
+    //   enums: [
+    //     {
+    //       enum_definition_name: "Fun Level",
+    //       values: {
+    //         value1: "Fun",
+    //         value2: "Neutral",
+    //         value3: "Boring",
+    //         value4: null,
+    //         value5: null
+    //       },
+    //       selected_key: "value3"
+    //     }
+    //   ],
+    //   likes_count: 0,
+    //   liked_by_me: false
+    // }
 }
 ```
 
@@ -81,26 +81,26 @@ const result = await window.api.session.list('srv_123', undefined, accessToken)
 
 // List with custom pagination
 const paginatedResult = await window.api.session.list(
-  'srv_123',
-  {
-    page: 1,
-    limit: 10
-  },
-  accessToken
+    'srv_123',
+    {
+        page: 1,
+        limit: 10
+    },
+    accessToken
 )
 
 if (paginatedResult.error) {
-  console.error('Error listing sessions:', paginatedResult.error)
+    console.error('Error listing sessions:', paginatedResult.error)
 } else {
-  console.log('Sessions:', paginatedResult.data)
-  // paginatedResult.data structure:
-  // {
-  //   total: 42,
-  //   page: 1,
-  //   limit: 10,
-  //   pageCount: 5,
-  //   data: [ ...sessions array... ]
-  // }
+    console.log('Sessions:', paginatedResult.data)
+    // paginatedResult.data structure:
+    // {
+    //   total: 42,
+    //   page: 1,
+    //   limit: 10,
+    //   pageCount: 5,
+    //   data: [ ...sessions array... ]
+    // }
 }
 ```
 
@@ -108,15 +108,15 @@ if (paginatedResult.error) {
 
 ```typescript
 const result = await window.api.session.getById(
-  'srv_123', // servers ID
-  'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
-  accessToken
+    'srv_123', // servers ID
+    'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error getting session:', result.error)
+    console.error('Error getting session:', result.error)
 } else {
-  console.log('Session details:', result.data)
+    console.log('Session details:', result.data)
 }
 ```
 
@@ -124,19 +124,19 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.update(
-  'srv_123', // servers ID
-  'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
-  {
-    duration: 45, // Updated duration
-    participants: ['member_123e4567-e89b-12d3-a456-426614174000']
-  },
-  accessToken
+    'srv_123', // servers ID
+    'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
+    {
+        duration: 45, // Updated duration
+        participants: ['member_123e4567-e89b-12d3-a456-426614174000']
+    },
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error updating session:', result.error)
+    console.error('Error updating session:', result.error)
 } else {
-  console.log('Session updated:', result.data)
+    console.log('Session updated:', result.data)
 }
 ```
 
@@ -144,15 +144,15 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.delete(
-  'srv_123', // servers ID
-  'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
-  accessToken
+    'srv_123', // servers ID
+    'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error deleting session:', result.error)
+    console.error('Error deleting session:', result.error)
 } else {
-  console.log('Session deleted successfully')
+    console.log('Session deleted successfully')
 }
 ```
 
@@ -160,15 +160,15 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.like(
-  'srv_123', // servers ID
-  'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
-  accessToken
+    'srv_123', // servers ID
+    'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error liking session:', result.error)
+    console.error('Error liking session:', result.error)
 } else {
-  console.log('Session liked successfully')
+    console.log('Session liked successfully')
 }
 ```
 
@@ -176,15 +176,15 @@ if (result.error) {
 
 ```typescript
 const result = await window.api.session.unlike(
-  'srv_123', // servers ID
-  'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
-  accessToken
+    'srv_123', // servers ID
+    'activitysession_69dea6ea-7346-4976-ae50-6f00392c8fce', // session ID
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error unliking session:', result.error)
+    console.error('Error unliking session:', result.error)
 } else {
-  console.log('Session unliked successfully')
+    console.log('Session unliked successfully')
 }
 ```
 
@@ -197,217 +197,217 @@ Create a comprehensive composable for managing sessions:
 import { ref, computed } from 'vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import type {
-  ISession,
-  IPaginatedSessions,
-  ICreateSessionRequest,
-  IUpdateSessionRequest,
-  IListSessionsOptions
+    ISession,
+    IPaginatedSessions,
+    ICreateSessionRequest,
+    IUpdateSessionRequest,
+    IListSessionsOptions
 } from '@shared/contracts/interfaces/session.interfaces'
 
 export function useSessions(serverId: string) {
-  const { session: authSession } = useAuth()
-  const sessions = ref<ISession[]>([])
-  const pagination = ref<Omit<IPaginatedSessions, 'data'> | null>(null)
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+    const { session: authSession } = useAuth()
+    const sessions = ref<ISession[]>([])
+    const pagination = ref<Omit<IPaginatedSessions, 'data'> | null>(null)
+    const loading = ref(false)
+    const error = ref<string | null>(null)
 
-  const accessToken = computed(() => authSession.value?.access_token || '')
+    const accessToken = computed(() => authSession.value?.access_token || '')
 
-  // Load sessions with pagination
-  async function loadSessions(options?: IListSessionsOptions) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return
-    }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.session.list(serverId, options, accessToken.value)
-
-      if (result.error) {
-        error.value = result.error
-      } else if (result.data) {
-        sessions.value = result.data.data
-        pagination.value = {
-          total: result.data.total,
-          page: result.data.page,
-          limit: result.data.limit,
-          pageCount: result.data.pageCount
+    // Load sessions with pagination
+    async function loadSessions(options?: IListSessionsOptions) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return
         }
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-    } finally {
-      loading.value = false
-    }
-  }
 
-  // Create session
-  async function createSession(request: ICreateSessionRequest) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return null
-    }
+        loading.value = true
+        error.value = null
 
-    loading.value = true
-    error.value = null
+        try {
+            const result = await window.api.session.list(serverId, options, accessToken.value)
 
-    try {
-      const result = await window.api.session.create(serverId, request, accessToken.value)
-
-      if (result.error) {
-        error.value = result.error
-        return null
-      } else {
-        // Reload sessions to get updated list
-        await loadSessions()
-        return result.data
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return null
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // Get session by ID
-  async function getSession(sessionId: string) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return null
-    }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.session.getById(serverId, sessionId, accessToken.value)
-
-      if (result.error) {
-        error.value = result.error
-        return null
-      } else {
-        return result.data
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return null
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // Update session
-  async function updateSession(sessionId: string, request: IUpdateSessionRequest) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return null
-    }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.session.update(
-        serverId,
-        sessionId,
-        request,
-        accessToken.value
-      )
-
-      if (result.error) {
-        error.value = result.error
-        return null
-      } else {
-        // Update local list
-        const index = sessions.value.findIndex((s) => s.public_id === sessionId)
-        if (index !== -1 && result.data) {
-          sessions.value[index] = result.data
+            if (result.error) {
+                error.value = result.error
+            } else if (result.data) {
+                sessions.value = result.data.data
+                pagination.value = {
+                    total: result.data.total,
+                    page: result.data.page,
+                    limit: result.data.limit,
+                    pageCount: result.data.pageCount
+                }
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+        } finally {
+            loading.value = false
         }
-        return result.data
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return null
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // Delete session
-  async function deleteSession(sessionId: string) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return false
     }
 
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.session.delete(serverId, sessionId, accessToken.value)
-
-      if (result.error) {
-        error.value = result.error
-        return false
-      } else {
-        // Remove from local list
-        sessions.value = sessions.value.filter((s) => s.public_id !== sessionId)
-        return true
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // Toggle like on a session
-  async function toggleLike(sessionId: string, currentlyLiked: boolean) {
-    if (!accessToken.value) {
-      error.value = 'Not authenticated'
-      return false
-    }
-
-    try {
-      const result = currentlyLiked
-        ? await window.api.session.unlike(serverId, sessionId, accessToken.value)
-        : await window.api.session.like(serverId, sessionId, accessToken.value)
-
-      if (result.error) {
-        error.value = result.error
-        return false
-      } else {
-        // Update local session
-        const session = sessions.value.find((s) => s.public_id === sessionId)
-        if (session) {
-          session.liked_by_me = !currentlyLiked
-          session.likes_count += currentlyLiked ? -1 : 1
+    // Create session
+    async function createSession(request: ICreateSessionRequest) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return null
         }
-        return true
-      }
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    }
-  }
 
-  return {
-    sessions,
-    pagination,
-    loading,
-    error,
-    loadSessions,
-    createSession,
-    getSession,
-    updateSession,
-    deleteSession,
-    toggleLike
-  }
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.session.create(serverId, request, accessToken.value)
+
+            if (result.error) {
+                error.value = result.error
+                return null
+            } else {
+                // Reload sessions to get updated list
+                await loadSessions()
+                return result.data
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return null
+        } finally {
+            loading.value = false
+        }
+    }
+
+    // Get session by ID
+    async function getSession(sessionId: string) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return null
+        }
+
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.session.getById(serverId, sessionId, accessToken.value)
+
+            if (result.error) {
+                error.value = result.error
+                return null
+            } else {
+                return result.data
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return null
+        } finally {
+            loading.value = false
+        }
+    }
+
+    // Update session
+    async function updateSession(sessionId: string, request: IUpdateSessionRequest) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return null
+        }
+
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.session.update(
+                serverId,
+                sessionId,
+                request,
+                accessToken.value
+            )
+
+            if (result.error) {
+                error.value = result.error
+                return null
+            } else {
+                // Update local list
+                const index = sessions.value.findIndex((s) => s.public_id === sessionId)
+                if (index !== -1 && result.data) {
+                    sessions.value[index] = result.data
+                }
+                return result.data
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return null
+        } finally {
+            loading.value = false
+        }
+    }
+
+    // Delete session
+    async function deleteSession(sessionId: string) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return false
+        }
+
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.session.delete(serverId, sessionId, accessToken.value)
+
+            if (result.error) {
+                error.value = result.error
+                return false
+            } else {
+                // Remove from local list
+                sessions.value = sessions.value.filter((s) => s.public_id !== sessionId)
+                return true
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        } finally {
+            loading.value = false
+        }
+    }
+
+    // Toggle like on a session
+    async function toggleLike(sessionId: string, currentlyLiked: boolean) {
+        if (!accessToken.value) {
+            error.value = 'Not authenticated'
+            return false
+        }
+
+        try {
+            const result = currentlyLiked
+                ? await window.api.session.unlike(serverId, sessionId, accessToken.value)
+                : await window.api.session.like(serverId, sessionId, accessToken.value)
+
+            if (result.error) {
+                error.value = result.error
+                return false
+            } else {
+                // Update local session
+                const session = sessions.value.find((s) => s.public_id === sessionId)
+                if (session) {
+                    session.liked_by_me = !currentlyLiked
+                    session.likes_count += currentlyLiked ? -1 : 1
+                }
+                return true
+            }
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        }
+    }
+
+    return {
+        sessions,
+        pagination,
+        loading,
+        error,
+        loadSessions,
+        createSession,
+        getSession,
+        updateSession,
+        deleteSession,
+        toggleLike
+    }
 }
 ```
 
@@ -456,8 +456,8 @@ export function useSessions(serverId: string) {
 
 ```typescript
 {
-  enum_value_id: string // Enum value ID
-  selected_key: string // Selected key (value1, value2, etc.)
+    enum_value_id: string // Enum value ID
+    selected_key: string // Selected key (value1, value2, etc.)
 }
 ```
 
@@ -469,19 +469,19 @@ await loadSessions({ page: 1, limit: 10 })
 
 // Load next page
 if (pagination.value && pagination.value.page < pagination.value.pageCount) {
-  await loadSessions({
-    page: pagination.value.page + 1,
-    limit: pagination.value.limit
-  })
+    await loadSessions({
+        page: pagination.value.page + 1,
+        limit: pagination.value.limit
+    })
 }
 
 // Calculate if there are more pages
 const hasNextPage = computed(() => {
-  return pagination.value && pagination.value.page < pagination.value.pageCount
+    return pagination.value && pagination.value.page < pagination.value.pageCount
 })
 
 const hasPrevPage = computed(() => {
-  return pagination.value && pagination.value.page > 1
+    return pagination.value && pagination.value.page > 1
 })
 ```
 
@@ -492,12 +492,12 @@ All API calls return an object with either `data` or `error`:
 ```typescript
 // Success
 {
-  data: ISession
+    data: ISession
 }
 
 // Error
 {
-  error: 'Error message'
+    error: 'Error message'
 }
 ```
 
@@ -545,8 +545,8 @@ const specificDate = new Date('2025-09-24T15:00:00').toISOString()
 
 // Format date for display
 function formatSessionDate(dateString: string): string {
-  const date = new Date(dateString)
-  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    const date = new Date(dateString)
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
 }
 ```
 
@@ -554,59 +554,59 @@ function formatSessionDate(dateString: string): string {
 
 ```vue
 <template>
-  <div class="session-feed">
-    <div v-for="session in sessions" :key="session.public_id" class="session-card">
-      <div class="session-header">
-        <h3>{{ session.activity.name }}</h3>
-        <span>{{ formatDate(session.date) }}</span>
-      </div>
+    <div class="session-feed">
+        <div v-for="session in sessions" :key="session.public_id" class="session-card">
+            <div class="session-header">
+                <h3>{{ session.activity.name }}</h3>
+                <span>{{ formatDate(session.date) }}</span>
+            </div>
 
-      <div class="session-info">
-        <span>Duration: {{ session.duration }} minutes</span>
-      </div>
+            <div class="session-info">
+                <span>Duration: {{ session.duration }} minutes</span>
+            </div>
 
-      <div class="participants">
-        <span v-for="member in session.server_member" :key="member.public_id">
-          {{ member.nickname }}
-        </span>
-      </div>
+            <div class="participants">
+                <span v-for="member in session.server_member" :key="member.public_id">
+                    {{ member.nickname }}
+                </span>
+            </div>
 
-      <div v-if="session.enums.length > 0" class="enums">
-        <div v-for="(enumVal, idx) in session.enums" :key="idx">
-          <strong>{{ enumVal.enum_definition_name }}:</strong>
-          {{ enumVal.values[enumVal.selected_key] }}
+            <div v-if="session.enums.length > 0" class="enums">
+                <div v-for="(enumVal, idx) in session.enums" :key="idx">
+                    <strong>{{ enumVal.enum_definition_name }}:</strong>
+                    {{ enumVal.values[enumVal.selected_key] }}
+                </div>
+            </div>
+
+            <div class="session-actions">
+                <button
+                    @click="toggleLike(session.public_id, session.liked_by_me)"
+                    :class="{ liked: session.liked_by_me }"
+                >
+                    {{ session.liked_by_me ? '❤️' : '🤍' }} {{ session.likes_count }}
+                </button>
+                <button @click="editSession(session)">Edit</button>
+                <button @click="deleteSessionConfirm(session.public_id)">Delete</button>
+            </div>
         </div>
-      </div>
 
-      <div class="session-actions">
-        <button
-          @click="toggleLike(session.public_id, session.liked_by_me)"
-          :class="{ liked: session.liked_by_me }"
-        >
-          {{ session.liked_by_me ? '❤️' : '🤍' }} {{ session.likes_count }}
-        </button>
-        <button @click="editSession(session)">Edit</button>
-        <button @click="deleteSessionConfirm(session.public_id)">Delete</button>
-      </div>
+        <!-- Pagination -->
+        <div v-if="pagination" class="pagination">
+            <button
+                @click="loadSessions({ page: pagination.page - 1, limit: pagination.limit })"
+                :disabled="!hasPrevPage"
+            >
+                Previous
+            </button>
+            <span>Page {{ pagination.page }} of {{ pagination.pageCount }}</span>
+            <button
+                @click="loadSessions({ page: pagination.page + 1, limit: pagination.limit })"
+                :disabled="!hasNextPage"
+            >
+                Next
+            </button>
+        </div>
     </div>
-
-    <!-- Pagination -->
-    <div v-if="pagination" class="pagination">
-      <button
-        @click="loadSessions({ page: pagination.page - 1, limit: pagination.limit })"
-        :disabled="!hasPrevPage"
-      >
-        Previous
-      </button>
-      <span>Page {{ pagination.page }} of {{ pagination.pageCount }}</span>
-      <button
-        @click="loadSessions({ page: pagination.page + 1, limit: pagination.limit })"
-        :disabled="!hasNextPage"
-      >
-        Next
-      </button>
-    </div>
-  </div>
 </template>
 ```
 

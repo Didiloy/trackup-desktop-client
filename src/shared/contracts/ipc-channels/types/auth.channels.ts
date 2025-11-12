@@ -2,5 +2,5 @@
  * Authentication ipc-channels
  */
 export const AUTH_CHANNELS = {
-  callbackUrl: 'auth:callbackUrl'
+    callbackUrl: 'auth:callbackUrl'
 } as const

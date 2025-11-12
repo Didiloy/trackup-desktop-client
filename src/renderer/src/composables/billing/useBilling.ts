@@ -3,68 +3,68 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 
 export function useBilling() {
-  const user_store = useUserStore()
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+    const user_store = useUserStore()
+    const loading = ref(false)
+    const error = ref<string | null>(null)
 
-  async function startSubscription(): Promise<boolean> {
-    const accessToken = user_store.getAccessToken
-    if (!accessToken) {
-      error.value = 'Not authenticated'
-      return false
+    async function startSubscription(): Promise<boolean> {
+        const accessToken = user_store.getAccessToken
+        if (!accessToken) {
+            error.value = 'Not authenticated'
+            return false
+        }
+
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.billing.startSubscription(accessToken)
+
+            if (result.error) {
+                error.value = result.error
+                return false
+            }
+
+            return true
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        } finally {
+            loading.value = false
+        }
     }
 
-    loading.value = true
-    error.value = null
+    async function openBillingPortal(): Promise<boolean> {
+        const accessToken = user_store.getAccessToken
+        if (!accessToken) {
+            error.value = 'Not authenticated'
+            return false
+        }
 
-    try {
-      const result = await window.api.billing.startSubscription(accessToken)
+        loading.value = true
+        error.value = null
 
-      if (result.error) {
-        error.value = result.error
-        return false
-      }
+        try {
+            const result = await window.api.billing.startPortal(accessToken)
 
-      return true
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    } finally {
-      loading.value = false
+            if (result.error) {
+                error.value = result.error
+                return false
+            }
+
+            return true
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        } finally {
+            loading.value = false
+        }
     }
-  }
 
-  async function openBillingPortal(): Promise<boolean> {
-    const accessToken = user_store.getAccessToken
-    if (!accessToken) {
-      error.value = 'Not authenticated'
-      return false
+    return {
+        loading,
+        error,
+        startSubscription,
+        openBillingPortal
     }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.billing.startPortal(accessToken)
-
-      if (result.error) {
-        error.value = result.error
-        return false
-      }
-
-      return true
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    } finally {
-      loading.value = false
-    }
-  }
-
-  return {
-    loading,
-    error,
-    startSubscription,
-    openBillingPortal
-  }
 }

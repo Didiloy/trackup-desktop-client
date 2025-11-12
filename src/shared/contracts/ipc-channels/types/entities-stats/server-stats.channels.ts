@@ -3,18 +3,18 @@
  */
 
 export const SERVER_STATS_CHANNELS = {
-  // Base stats
-  getStats: 'servers-stats:getStats',
+    // Base stats
+    getStats: 'servers-stats:getStats',
 
-  // Detailed stats
-  getDetails: 'servers-stats:getDetails',
+    // Detailed stats
+    getDetails: 'servers-stats:getDetails',
 
-  // Timeline
-  getTimeline: 'servers-stats:getTimeline',
+    // Timeline
+    getTimeline: 'servers-stats:getTimeline',
 
-  // Growth trends
-  getGrowthTrends: 'servers-stats:getGrowthTrends',
+    // Growth trends
+    getGrowthTrends: 'servers-stats:getGrowthTrends',
 
-  // Comparative analysis
-  getComparativeAnalysis: 'servers-stats:getComparativeAnalysis'
+    // Comparative analysis
+    getComparativeAnalysis: 'servers-stats:getComparativeAnalysis'
 } as const

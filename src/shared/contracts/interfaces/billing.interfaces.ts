@@ -3,6 +3,6 @@
  */
 
 export interface IBillingApiResponse {
-  data?: void
-  error?: string
+    data?: void
+    error?: string
 }

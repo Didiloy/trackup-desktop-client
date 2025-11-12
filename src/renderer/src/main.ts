@@ -18,14 +18,14 @@ import { ToastService } from 'primevue'
 const app = createApp(App)
 
 app.use(PrimeVue, {
-  ripple: true,
-  theme: {
-    preset: TrackupPreset,
-    options: {
-      prefix: 'p',
-      darkModeSelector: '.dark'
+    ripple: true,
+    theme: {
+        preset: TrackupPreset,
+        options: {
+            prefix: 'p',
+            darkModeSelector: '.dark'
+        }
     }
-  }
 })
 app.use(ToastService)
 app.use(router)
@@ -40,34 +40,34 @@ app.use(i18n)
 
 // Function to initialize app with the correct language
 async function initializeApp(): Promise<void> {
-  try {
-    // If we have preferences with a language setting, use it
-    const locale = i18n.global.locale // Default
+    try {
+        // If we have preferences with a language setting, use it
+        const locale = i18n.global.locale // Default
 
-    // Load the language
-    const messages = await loadLanguageAsync(locale)
-    if (messages) {
-      i18n.global.setLocaleMessage(locale, messages)
-      i18n.global.locale = locale
+        // Load the language
+        const messages = await loadLanguageAsync(locale)
+        if (messages) {
+            i18n.global.setLocaleMessage(locale, messages)
+            i18n.global.locale = locale
+        }
+
+        // Mount the app after language is loaded
+        app.mount('#app')
+    } catch (error) {
+        // If we can't load preferences, fall back to default behavior
+        const locale = i18n.global.locale
+        const messages = await loadLanguageAsync(locale)
+        if (messages) {
+            i18n.global.setLocaleMessage(locale, messages)
+        }
+
+        console.error('Failed to load user preferences:', error)
+        app.mount('#app')
     }
-
-    // Mount the app after language is loaded
-    app.mount('#app')
-  } catch (error) {
-    // If we can't load preferences, fall back to default behavior
-    const locale = i18n.global.locale
-    const messages = await loadLanguageAsync(locale)
-    if (messages) {
-      i18n.global.setLocaleMessage(locale, messages)
-    }
-
-    console.error('Failed to load user preferences:', error)
-    app.mount('#app')
-  }
 }
 
 // Start the initialization
 ;(async function () {
-  await initializeApp()
-  document.title = i18n.global.t('app.title')
+    await initializeApp()
+    document.title = i18n.global.t('app.title')
 })()

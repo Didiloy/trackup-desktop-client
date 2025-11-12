@@ -62,26 +62,26 @@ Create `src/shared/contracts/interfaces/<entity>.interfaces.ts`:
 
 ```typescript
 export interface IChannel {
-  public_id: string
-  name: string
-  server_id: string
-  // ... other fields
+    public_id: string
+    name: string
+    server_id: string
+    // ... other fields
 }
 
 export interface ICreateChannelRequest {
-  name: string
-  server_id: string
-  // ... other fields
+    name: string
+    server_id: string
+    // ... other fields
 }
 
 export interface IUpdateChannelRequest {
-  name?: string
-  // ... other optional fields
+    name?: string
+    // ... other optional fields
 }
 
 export interface IChannelApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }
 ```
 
@@ -91,11 +91,11 @@ Create `src/shared/contracts/ipc-channels/types/<entity>.ts`:
 
 ```typescript
 export const CHANNEL_CHANNELS = {
-  create: 'channel:create',
-  getById: 'channel:getById',
-  list: 'channel:list',
-  update: 'channel:update',
-  delete: 'channel:delete'
+    create: 'channel:create',
+    getById: 'channel:getById',
+    list: 'channel:list',
+    update: 'channel:update',
+    delete: 'channel:delete'
 } as const
 ```
 
@@ -105,8 +105,8 @@ Update `src/shared/contracts/ipc-channels/index.channels.ts`:
 import { CHANNEL_CHANNELS } from './types/channel'
 
 export const ipc_channels = {
-  // ...existing channels
-  channel: CHANNEL_CHANNELS
+    // ...existing channels
+    channel: CHANNEL_CHANNELS
 } as const
 ```
 
@@ -118,10 +118,10 @@ Create `src/main/ipc/<entity>.ipc.ts`:
 import { ipcMain } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
 import type {
-  IChannel,
-  ICreateChannelRequest,
-  IUpdateChannelRequest,
-  IChannelApiResponse
+    IChannel,
+    ICreateChannelRequest,
+    IUpdateChannelRequest,
+    IChannelApiResponse
 } from '../../shared/contracts/interfaces/channel.interfaces'
 import { Logger } from '../../shared/logger'
 import { apiService } from '../services/ApiService'
@@ -129,117 +129,121 @@ import { apiService } from '../services/ApiService'
 const logger = new Logger('IPC:Channel')
 
 export function registerChannelIpc(): void {
-  // Create channel
-  ipcMain.handle(
-    ipc_channels.channel.create,
-    async (
-      _event,
-      request: ICreateChannelRequest,
-      accessToken: string
-    ): Promise<IChannelApiResponse<IChannel>> => {
-      logger.info('Creating channel:', request.name)
+    // Create channel
+    ipcMain.handle(
+        ipc_channels.channel.create,
+        async (
+            _event,
+            request: ICreateChannelRequest,
+            accessToken: string
+        ): Promise<IChannelApiResponse<IChannel>> => {
+            logger.info('Creating channel:', request.name)
 
-      // Validate input
-      if (!request.name || !request.server_id) {
-        return { error: 'Name and server_id are required' }
-      }
+            // Validate input
+            if (!request.name || !request.server_id) {
+                return { error: 'Name and server_id are required' }
+            }
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+            if (!accessToken) {
+                return { error: 'Authentication required' }
+            }
 
-      return apiService.post<IChannel>('/api/v1/channels/create', accessToken, request)
-    }
-  )
+            return apiService.post<IChannel>('/api/v1/channels/create', accessToken, request)
+        }
+    )
 
-  // Get channel by ID
-  ipcMain.handle(
-    ipc_channels.channel.getById,
-    async (
-      _event,
-      channelId: string,
-      accessToken: string
-    ): Promise<IChannelApiResponse<IChannel>> => {
-      logger.info('Getting channel:', channelId)
+    // Get channel by ID
+    ipcMain.handle(
+        ipc_channels.channel.getById,
+        async (
+            _event,
+            channelId: string,
+            accessToken: string
+        ): Promise<IChannelApiResponse<IChannel>> => {
+            logger.info('Getting channel:', channelId)
 
-      if (!channelId) {
-        return { error: 'Channel ID is required' }
-      }
+            if (!channelId) {
+                return { error: 'Channel ID is required' }
+            }
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+            if (!accessToken) {
+                return { error: 'Authentication required' }
+            }
 
-      return apiService.get<IChannel>(`/api/v1/channels/${channelId}`, accessToken)
-    }
-  )
+            return apiService.get<IChannel>(`/api/v1/channels/${channelId}`, accessToken)
+        }
+    )
 
-  // List channels (with query params example)
-  ipcMain.handle(
-    ipc_channels.channel.list,
-    async (
-      _event,
-      serverId: string,
-      accessToken: string
-    ): Promise<IChannelApiResponse<IChannel[]>> => {
-      logger.info('Listing channels for servers:', serverId)
+    // List channels (with query params example)
+    ipcMain.handle(
+        ipc_channels.channel.list,
+        async (
+            _event,
+            serverId: string,
+            accessToken: string
+        ): Promise<IChannelApiResponse<IChannel[]>> => {
+            logger.info('Listing channels for servers:', serverId)
 
-      if (!serverId) {
-        return { error: 'Server ID is required' }
-      }
+            if (!serverId) {
+                return { error: 'Server ID is required' }
+            }
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+            if (!accessToken) {
+                return { error: 'Authentication required' }
+            }
 
-      return apiService.get<IChannel[]>('/api/v1/channels', accessToken, {
-        params: { server_id: serverId }
-      })
-    }
-  )
+            return apiService.get<IChannel[]>('/api/v1/channels', accessToken, {
+                params: { server_id: serverId }
+            })
+        }
+    )
 
-  // Update channel
-  ipcMain.handle(
-    ipc_channels.channel.update,
-    async (
-      _event,
-      channelId: string,
-      request: IUpdateChannelRequest,
-      accessToken: string
-    ): Promise<IChannelApiResponse<IChannel>> => {
-      logger.info('Updating channel:', channelId)
+    // Update channel
+    ipcMain.handle(
+        ipc_channels.channel.update,
+        async (
+            _event,
+            channelId: string,
+            request: IUpdateChannelRequest,
+            accessToken: string
+        ): Promise<IChannelApiResponse<IChannel>> => {
+            logger.info('Updating channel:', channelId)
 
-      if (!channelId) {
-        return { error: 'Channel ID is required' }
-      }
+            if (!channelId) {
+                return { error: 'Channel ID is required' }
+            }
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+            if (!accessToken) {
+                return { error: 'Authentication required' }
+            }
 
-      return apiService.put<IChannel>(`/api/v1/channels/${channelId}`, accessToken, request)
-    }
-  )
+            return apiService.put<IChannel>(`/api/v1/channels/${channelId}`, accessToken, request)
+        }
+    )
 
-  // Delete channel
-  ipcMain.handle(
-    ipc_channels.channel.delete,
-    async (_event, channelId: string, accessToken: string): Promise<IChannelApiResponse<void>> => {
-      logger.info('Deleting channel:', channelId)
+    // Delete channel
+    ipcMain.handle(
+        ipc_channels.channel.delete,
+        async (
+            _event,
+            channelId: string,
+            accessToken: string
+        ): Promise<IChannelApiResponse<void>> => {
+            logger.info('Deleting channel:', channelId)
 
-      if (!channelId) {
-        return { error: 'Channel ID is required' }
-      }
+            if (!channelId) {
+                return { error: 'Channel ID is required' }
+            }
 
-      if (!accessToken) {
-        return { error: 'Authentication required' }
-      }
+            if (!accessToken) {
+                return { error: 'Authentication required' }
+            }
 
-      return apiService.delete<void>(`/api/v1/channels/${channelId}`, accessToken)
-    }
-  )
+            return apiService.delete<void>(`/api/v1/channels/${channelId}`, accessToken)
+        }
+    )
 
-  logger.info('Channel IPC handlers registered')
+    logger.info('Channel IPC handlers registered')
 }
 ```
 
@@ -251,8 +255,8 @@ Update `src/main/ipc/index.channels.ts`:
 import { registerChannelIpc } from './channel.ipc'
 
 export function registerAllIpc(): void {
-  // ...existing registrations
-  registerChannelIpc()
+    // ...existing registrations
+    registerChannelIpc()
 }
 ```
 
@@ -264,39 +268,39 @@ Create `src/preload/bridges/<entity>.bridge.ts`:
 import { ipcRenderer } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels'
 import type {
-  IChannel,
-  ICreateChannelRequest,
-  IUpdateChannelRequest,
-  IChannelApiResponse
+    IChannel,
+    ICreateChannelRequest,
+    IUpdateChannelRequest,
+    IChannelApiResponse
 } from '../../shared/contracts/interfaces/channel.interfaces'
 
 export const channelBridge = {
-  create: (
-    request: ICreateChannelRequest,
-    accessToken: string
-  ): Promise<IChannelApiResponse<IChannel>> => {
-    return ipcRenderer.invoke(ipc_channels.channel.create, request, accessToken)
-  },
+    create: (
+        request: ICreateChannelRequest,
+        accessToken: string
+    ): Promise<IChannelApiResponse<IChannel>> => {
+        return ipcRenderer.invoke(ipc_channels.channel.create, request, accessToken)
+    },
 
-  getById: (channelId: string, accessToken: string): Promise<IChannelApiResponse<IChannel>> => {
-    return ipcRenderer.invoke(ipc_channels.channel.getById, channelId, accessToken)
-  },
+    getById: (channelId: string, accessToken: string): Promise<IChannelApiResponse<IChannel>> => {
+        return ipcRenderer.invoke(ipc_channels.channel.getById, channelId, accessToken)
+    },
 
-  list: (serverId: string, accessToken: string): Promise<IChannelApiResponse<IChannel[]>> => {
-    return ipcRenderer.invoke(ipc_channels.channel.list, serverId, accessToken)
-  },
+    list: (serverId: string, accessToken: string): Promise<IChannelApiResponse<IChannel[]>> => {
+        return ipcRenderer.invoke(ipc_channels.channel.list, serverId, accessToken)
+    },
 
-  update: (
-    channelId: string,
-    request: IUpdateChannelRequest,
-    accessToken: string
-  ): Promise<IChannelApiResponse<IChannel>> => {
-    return ipcRenderer.invoke(ipc_channels.channel.update, channelId, request, accessToken)
-  },
+    update: (
+        channelId: string,
+        request: IUpdateChannelRequest,
+        accessToken: string
+    ): Promise<IChannelApiResponse<IChannel>> => {
+        return ipcRenderer.invoke(ipc_channels.channel.update, channelId, request, accessToken)
+    },
 
-  delete: (channelId: string, accessToken: string): Promise<IChannelApiResponse<void>> => {
-    return ipcRenderer.invoke(ipc_channels.channel.delete, channelId, accessToken)
-  }
+    delete: (channelId: string, accessToken: string): Promise<IChannelApiResponse<void>> => {
+        return ipcRenderer.invoke(ipc_channels.channel.delete, channelId, accessToken)
+    }
 }
 
 export type ChannelBridge = typeof channelBridge
@@ -310,8 +314,8 @@ Update `src/preload/index.channels.ts`:
 import { channelBridge } from './bridges/channel.bridge'
 
 const api = {
-  // ...existing bridges
-  channel: channelBridge
+    // ...existing bridges
+    channel: channelBridge
 }
 ```
 
@@ -321,8 +325,8 @@ Update `src/preload/index.preload.d.ts`:
 import type { ChannelBridge } from './bridges/channel.bridge'
 
 export interface API {
-  // ...existing bridges
-  channel: ChannelBridge
+    // ...existing bridges
+    channel: ChannelBridge
 }
 ```
 
@@ -337,17 +341,17 @@ const accessToken = session.value?.access_token
 
 // Create a channel
 const result = await window.api.channel.create(
-  {
-    name: 'General',
-    server_id: 'srv_123'
-  },
-  accessToken
+    {
+        name: 'General',
+        server_id: 'srv_123'
+    },
+    accessToken
 )
 
 if (result.error) {
-  console.error('Error:', result.error)
+    console.error('Error:', result.error)
 } else {
-  console.log('Channel created:', result.data)
+    console.log('Channel created:', result.data)
 }
 
 // List channels
@@ -376,11 +380,11 @@ await window.api.channel.delete('chn_456', accessToken)
 ```typescript
 // GET with query params
 apiService.get<IChannel[]>('/api/v1/channels', accessToken, {
-  params: {
-    server_id: 'srv_123',
-    limit: 20,
-    offset: 0
-  }
+    params: {
+        server_id: 'srv_123',
+        limit: 20,
+        offset: 0
+    }
 })
 // Result: GET /api/v1/channels?server_id=srv_123&limit=20&offset=0
 ```
@@ -389,9 +393,9 @@ apiService.get<IChannel[]>('/api/v1/channels', accessToken, {
 
 ```typescript
 apiService.post<IChannel>('/api/v1/channels', accessToken, body, {
-  headers: {
-    'X-Custom-Header': 'value'
-  }
+    headers: {
+        'X-Custom-Header': 'value'
+    }
 })
 ```
 

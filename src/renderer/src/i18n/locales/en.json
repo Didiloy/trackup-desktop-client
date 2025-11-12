@@ -1,230 +1,238 @@
 {
-  "app": {
-    "title": "TrackUp"
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "Error",
-    "success": "Success",
-    "name": "Name",
-    "description": "Description",
-    "type": "Type",
-    "logo": "Logo",
-    "banner": "Banner",
-    "choose": "Choose",
-    "change": "Change",
-    "clear": "Clear",
-    "or": "or",
-    "settings": "Settings",
-    "required": "Required",
-    "cancel": "Cancel"
-  },
-  "navigation": {
-    "home": "Home",
-    "back": "Back",
-    "redirecting": "Redirecting...",
-    "server": "Server"
-  },
-  "actions": {
-    "title": "Actions",
-    "create": "Create {entity}",
-    "edit": "Edit {entity}",
-    "delete": "Delete {entity}",
-    "confirm": "Confirm",
-    "save": "Save",
-    "cancel": "Cancel",
-    "select": "Select",
-    "choose": "Choose",
-    "add": "Add {entity}",
-    "remove": "Remove {entity}",
-    "view": "View {entity}",
-    "update": "Update {entity}",
-    "import": "Import {entity}",
-    "refresh": "Refresh {entity}",
-    "restore": "Restore {entity}",
-    "next": "Next",
-    "previous": "Previous",
-    "enter": "Enter",
-    "search": "Search {entity}",
-    "submit": "Submit",
-    "upload": "Upload {entity}",
-    "change": "Change {entity}",
-    "write_to_confirm": "Write <strong><u>{entity}</u></strong> to confirm",
-    "close": "Close",
-    "leave": "Leave {entity}",
-    "select_short": "Select",
-    "rename": "Rename",
-    "minimize": "Minimize",
-    "maximize": "Maximize",
-    "close_window": "Close",
-    "toggle_sidebar": "View server members"
-  },
-  "placeholder": {
-    "search": "Search...",
-    "select": "Select an option",
-    "choose": "Choose an option",
-    "enter": "Enter a value",
-    "upload": "Upload a file",
-    "import": "Import a file",
-    "choose_file": "Choose a file",
-    "search_by_name": "Search by Name",
-    "filter_by_type": "Search by Type"
-  },
-  "messages": {
-    "info": {
-      "title": "Information",
-      "create": "Creating {entity}",
-      "delete": "Deleting {entity}",
-      "update": "Updating {entity}",
-      "fetch": "Fetching {entity}",
-      "upload": "Uploading {entity}",
-      "import": "Importing {entity}",
-      "restore": "Restoring {entity}",
-      "select": "Selecting {entity}",
-      "add": "Adding {entity}",
-      "refresh": "Refreshing {entity}",
-      "save": "Saving {entity}",
-      "copyClipBoard": "Copied to clipboard"
+    "app": {
+        "title": "TrackUp"
     },
-    "success": {
-      "title": "Success",
-      "create": "Creation successful",
-      "delete": "Deletion successful",
-      "update": "Update successful",
-      "fetch": "Fetch successful",
-      "upload": "Upload successful",
-      "import": "Import successful",
-      "restore": "Restore successful",
-      "select": "Selection successful",
-      "add": "Addition successful",
-      "refresh": "Refresh successful",
-      "save": "Save successful",
-      "copyClipBoard": "Copied to clipboard"
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "name": "Name",
+        "description": "Description",
+        "type": "Type",
+        "logo": "Logo",
+        "banner": "Banner",
+        "choose": "Choose",
+        "change": "Change",
+        "clear": "Clear",
+        "or": "or",
+        "settings": "Settings",
+        "required": "Required",
+        "cancel": "Cancel"
     },
-    "error": {
-      "title": "Error",
-      "create": "Creation failed",
-      "delete": "Deletion failed",
-      "update": "Update failed",
-      "fetch": "Fetch failed",
-      "upload": "Upload failed",
-      "import": "Import failed",
-      "restore": "Restore failed",
-      "select": "Selection failed",
-      "add": "Addition failed",
-      "refresh": "Refresh failed",
-      "save": "Save failed",
-      "emptyFields": "Empty fields",
-      "copyClipBoard": "Failed to copy to clipboard"
+    "navigation": {
+        "home": "Home",
+        "back": "Back",
+        "redirecting": "Redirecting...",
+        "server": "Server"
     },
-    "warning": {
-      "title": "Warning",
-      "create": "Creation in progress",
-      "delete": "Deletion in progress",
-      "update": "Update in progress",
-      "fetch": "Fetching in progress",
-      "upload": "Uploading in progress",
-      "import": "Importing in progress",
-      "restore": "Restoring in progress",
-      "select": "Selection in progress",
-      "add": "Adding in progress",
-      "refresh": "Refreshing in progress",
-      "save": "Saving in progress",
-      "copyClipBoard": "Copied to clipboard"
-    }
-  },
-  "entities": {},
-  "userInterface": {
-    "loginView": {
-      "welcome": "Welcome!",
-      "welcome_back": "Glad to see you again!",
-      "login": "Log in",
-      "description": "Connect to continue",
-      "google": "Continue with Google",
-      "github": "Continue with GitHub",
-      "gitlab": "Continue with GitLab",
-      "terms": "By continuing, you accept our terms of use and privacy policy.",
-      "logout": "Log out",
-      "signup": "Sign up",
-      "or": "or",
-      "no_account": "Don't have an account?",
-      "already_have_account": "Already have an account?",
-      "error": {
-        "cannot_login": "An error occurred while logging in",
-        "invalid_email": "Invalid email address."
-      }
+    "actions": {
+        "title": "Actions",
+        "create": "Create {entity}",
+        "edit": "Edit {entity}",
+        "delete": "Delete {entity}",
+        "confirm": "Confirm",
+        "save": "Save",
+        "cancel": "Cancel",
+        "select": "Select",
+        "choose": "Choose",
+        "add": "Add {entity}",
+        "remove": "Remove {entity}",
+        "view": "View {entity}",
+        "update": "Update {entity}",
+        "import": "Import {entity}",
+        "refresh": "Refresh {entity}",
+        "restore": "Restore {entity}",
+        "next": "Next",
+        "previous": "Previous",
+        "enter": "Enter",
+        "search": "Search {entity}",
+        "submit": "Submit",
+        "upload": "Upload {entity}",
+        "change": "Change {entity}",
+        "write_to_confirm": "Write <strong><u>{entity}</u></strong> to confirm",
+        "close": "Close",
+        "leave": "Leave {entity}",
+        "select_short": "Select",
+        "rename": "Rename",
+        "minimize": "Minimize",
+        "maximize": "Maximize",
+        "close_window": "Close",
+        "toggle_sidebar": "View server members"
     },
-    "createServerView": {
-      "title": "Create a server",
-      "subtitle": "Create your own community space",
-      "description": "Create a new server",
-      "placeholder": {
-        "name": "Server name example: My Community",
-        "type": "Server type",
-        "description": "Server description ex: A community to share your ideas"
-      },
-      "create": "Create",
-      "cancel": "Cancel"
+    "placeholder": {
+        "search": "Search...",
+        "select": "Select an option",
+        "choose": "Choose an option",
+        "enter": "Enter a value",
+        "upload": "Upload a file",
+        "import": "Import a file",
+        "choose_file": "Choose a file",
+        "search_by_name": "Search by Name",
+        "filter_by_type": "Search by Type"
     },
-    "membersAside": {
-      "title": "Server members",
-      "description": "List of server members",
-      "no_members": "No members",
-      "loading": "Loading members...",
-      "view_profile": "View profile",
-      "update_nickname": "Update nickname",
-      "update_nickname_message": "Enter a new nickname for your profile.",
-      "new_nickname": "New nickname",
-      "enter_nickname": "Enter nickname"
-    },
-    "joinServerView": {
-      "title": "Join a server",
-      "subtitle": "Enter an invitation code",
-      "invitationCodeLabel": "Invitation code",
-      "invitationCodeHint": "Example: ABC123XYZ",
-      "joinButton": "Join",
-      "placeholder": {
-        "invitationCode": "Enter invitation code"
-      }
-    },
-    "serverActionView": {
-      "title": "Add a server",
-      "description": "Choose how you want to add a server"
-    },
-    "updateModal": {
-      "title": "Update available",
-      "version": "Version",
-      "type": "Type",
-      "major": "Major",
-      "minor": "Minor",
-      "releaseNotes": "Release notes",
-      "releaseDate": "Release date",
-      "downloading": "Downloading...",
-      "error": "Error",
-      "skip": "Skip",
-      "updateNow": "Update now",
-      "installAndRestart": "Install and restart",
-      "downloadError": "Error while downloading"
-    },
-    "userProfileMenu": {
-      "title": "User Profile",
-      "preferences": {
-        "title": "Preferences",
-        "language": {
-          "title": "Language",
-          "switch": {
-            "error": "Failed to switch language",
-            "error_detail": "Please try again.",
-            "success": "Language switched successfully"
-          }
+    "messages": {
+        "info": {
+            "title": "Information",
+            "create": "Creating {entity}",
+            "delete": "Deleting {entity}",
+            "update": "Updating {entity}",
+            "fetch": "Fetching {entity}",
+            "upload": "Uploading {entity}",
+            "import": "Importing {entity}",
+            "restore": "Restoring {entity}",
+            "select": "Selecting {entity}",
+            "add": "Adding {entity}",
+            "refresh": "Refreshing {entity}",
+            "save": "Saving {entity}",
+            "copyClipBoard": "Copied to clipboard"
         },
-        "theme": {
-          "title": "Theme",
-          "light": "Light",
-          "dark": "Dark",
-          "system": "System"
+        "success": {
+            "title": "Success",
+            "create": "Creation successful",
+            "delete": "Deletion successful",
+            "update": "Update successful",
+            "fetch": "Fetch successful",
+            "upload": "Upload successful",
+            "import": "Import successful",
+            "restore": "Restore successful",
+            "select": "Selection successful",
+            "add": "Addition successful",
+            "refresh": "Refresh successful",
+            "save": "Save successful",
+            "copyClipBoard": "Copied to clipboard"
+        },
+        "error": {
+            "title": "Error",
+            "create": "Creation failed",
+            "delete": "Deletion failed",
+            "update": "Update failed",
+            "fetch": "Fetch failed",
+            "upload": "Upload failed",
+            "import": "Import failed",
+            "restore": "Restore failed",
+            "select": "Selection failed",
+            "add": "Addition failed",
+            "refresh": "Refresh failed",
+            "save": "Save failed",
+            "emptyFields": "Empty fields",
+            "copyClipBoard": "Failed to copy to clipboard"
+        },
+        "warning": {
+            "title": "Warning",
+            "create": "Creation in progress",
+            "delete": "Deletion in progress",
+            "update": "Update in progress",
+            "fetch": "Fetching in progress",
+            "upload": "Uploading in progress",
+            "import": "Importing in progress",
+            "restore": "Restoring in progress",
+            "select": "Selection in progress",
+            "add": "Adding in progress",
+            "refresh": "Refreshing in progress",
+            "save": "Saving in progress",
+            "copyClipBoard": "Copied to clipboard"
         }
-      }
+    },
+    "entities": {},
+    "userInterface": {
+        "loginView": {
+            "welcome": "Welcome!",
+            "welcome_back": "Glad to see you again!",
+            "login": "Log in",
+            "description": "Connect to continue",
+            "google": "Continue with Google",
+            "github": "Continue with GitHub",
+            "gitlab": "Continue with GitLab",
+            "terms": "By continuing, you accept our terms of use and privacy policy.",
+            "logout": "Log out",
+            "signup": "Sign up",
+            "or": "or",
+            "no_account": "Don't have an account?",
+            "already_have_account": "Already have an account?",
+            "error": {
+                "cannot_login": "An error occurred while logging in",
+                "invalid_email": "Invalid email address."
+            }
+        },
+        "createServerView": {
+            "title": "Create a server",
+            "subtitle": "Create your own community space",
+            "description": "Create a new server",
+            "placeholder": {
+                "name": "Server name example: My Community",
+                "type": "Server type",
+                "description": "Server description ex: A community to share your ideas"
+            },
+            "create": "Create",
+            "cancel": "Cancel"
+        },
+        "membersAside": {
+            "title": "Server members",
+            "description": "List of server members",
+            "no_members": "No members",
+            "loading": "Loading members...",
+            "view_profile": "View profile",
+            "update_nickname": "Update nickname",
+            "update_nickname_message": "Enter a new nickname for your profile.",
+            "new_nickname": "New nickname",
+            "enter_nickname": "Enter nickname"
+        },
+        "joinServerView": {
+            "title": "Join a server",
+            "subtitle": "Enter an invitation code",
+            "invitationCodeLabel": "Invitation code",
+            "invitationCodeHint": "Example: ABC123XYZ",
+            "joinButton": "Join",
+            "placeholder": {
+                "invitationCode": "Enter invitation code"
+            }
+        },
+        "serverActionView": {
+            "title": "Add a server",
+            "description": "Choose how you want to add a server"
+        },
+        "updateModal": {
+            "title": "Update available",
+            "version": "Version",
+            "type": "Type",
+            "major": "Major",
+            "minor": "Minor",
+            "releaseNotes": "Release notes",
+            "releaseDate": "Release date",
+            "downloading": "Downloading...",
+            "error": "Error",
+            "skip": "Skip",
+            "updateNow": "Update now",
+            "installAndRestart": "Install and restart",
+            "downloadError": "Error while downloading"
+        },
+        "serverActivitiesView": {
+            "title": "Activities",
+            "addActivity": "Add activity",
+            "addActivityModal": {
+                "title": "Add activity",
+                "description": "Add a new activity for your server"
+            }
+        },
+        "userProfileMenu": {
+            "title": "User Profile",
+            "preferences": {
+                "title": "Preferences",
+                "language": {
+                    "title": "Language",
+                    "switch": {
+                        "error": "Failed to switch language",
+                        "error_detail": "Please try again.",
+                        "success": "Language switched successfully"
+                    }
+                },
+                "theme": {
+                    "title": "Theme",
+                    "light": "Light",
+                    "dark": "Dark",
+                    "system": "System"
+                }
+            }
+        }
     }
-  }
 }

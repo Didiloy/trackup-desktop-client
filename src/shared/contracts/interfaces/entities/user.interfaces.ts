@@ -5,13 +5,13 @@
 import type { IServer } from './server.interfaces'
 
 export interface IUser {
-  id: string
-  email: string
+    id: string
+    email: string
 }
 
 export interface IUserApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }
 
 // Reuse IServer from servers.interfaces for user's servers list

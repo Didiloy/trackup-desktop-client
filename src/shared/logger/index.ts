@@ -1,13 +1,13 @@
 // Re-export all public interfaces and interfaces
 export type {
-  LogLevel,
-  ColorKey,
-  LogEntry,
-  LoggerConfig,
-  LogFormatter,
-  LogOutput,
-  ILogger,
-  IStaticLogger
+    LogLevel,
+    ColorKey,
+    LogEntry,
+    LoggerConfig,
+    LogFormatter,
+    LogOutput,
+    ILogger,
+    IStaticLogger
 } from './types.js'
 
 // Re-export main Logger class

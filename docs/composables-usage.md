@@ -26,16 +26,16 @@ Gestion des activités dans un serveur.
 import { useActivityCRUD } from '@/composables/entities'
 
 const { createActivity, listActivities, getActivityById, updateActivity, deleteActivity } =
-  useActivityCRUD()
+    useActivityCRUD()
 
 // Exemple d'utilisation
 const result = await createActivity(
-  serverId,
-  {
-    name: 'Football',
-    description: 'Sport collectif'
-  },
-  accessToken
+    serverId,
+    {
+        name: 'Football',
+        description: 'Sport collectif'
+    },
+    accessToken
 )
 ```
 
@@ -57,21 +57,21 @@ Gestion des serveurs.
 import { useServerCRUD } from '@/composables/entities'
 
 const {
-  createServer,
-  refreshInviteCode,
-  joinServer,
-  getServerDetails,
-  updateServer,
-  deleteServer
+    createServer,
+    refreshInviteCode,
+    joinServer,
+    getServerDetails,
+    updateServer,
+    deleteServer
 } = useServerCRUD()
 
 // Exemple d'utilisation
 const result = await createServer(
-  {
-    name: 'Mon Serveur',
-    type_public_id: 'type-uuid'
-  },
-  accessToken
+    {
+        name: 'Mon Serveur',
+        type_public_id: 'type-uuid'
+    },
+    accessToken
 )
 ```
 
@@ -115,7 +115,7 @@ Gestion des membres d'un serveur.
 import { useMemberCRUD } from '@/composables/entities'
 
 const { inviteMember, quitServer, listMembers, getMemberById, kickMember, updateMemberNickname } =
-  useMemberCRUD()
+    useMemberCRUD()
 
 // Exemple d'utilisation
 const members = await listMembers(serverId, { page: 1, limit: 20 }, accessToken)
@@ -140,25 +140,25 @@ Gestion des sessions d'activité.
 import { useSessionCRUD } from '@/composables/entities'
 
 const {
-  createSession,
-  listSessions,
-  getSessionById,
-  updateSession,
-  deleteSession,
-  likeSession,
-  unlikeSession
+    createSession,
+    listSessions,
+    getSessionById,
+    updateSession,
+    deleteSession,
+    likeSession,
+    unlikeSession
 } = useSessionCRUD()
 
 // Exemple d'utilisation
 const session = await createSession(
-  serverId,
-  {
-    activity_id: 'activity-uuid',
-    duration: 3600,
-    date: '2024-01-01',
-    participants: ['member-uuid-1', 'member-uuid-2']
-  },
-  accessToken
+    serverId,
+    {
+        activity_id: 'activity-uuid',
+        duration: 3600,
+        date: '2024-01-01',
+        participants: ['member-uuid-1', 'member-uuid-2']
+    },
+    accessToken
 )
 ```
 
@@ -182,19 +182,19 @@ Gestion des niveaux de compétence des activités.
 import { useActivitySkillLevelCRUD } from '@/composables/entities'
 
 const { createSkillLevel, listSkillLevels, getSkillLevelById, updateSkillLevel, deleteSkillLevel } =
-  useActivitySkillLevelCRUD()
+    useActivitySkillLevelCRUD()
 
 // Exemple d'utilisation
 const skillLevel = await createSkillLevel(
-  serverId,
-  activityId,
-  {
-    name: 'Débutant',
-    display_order: 1,
-    min_sessions: 0,
-    min_duration: 0
-  },
-  accessToken
+    serverId,
+    activityId,
+    {
+        name: 'Débutant',
+        display_order: 1,
+        min_sessions: 0,
+        min_duration: 0
+    },
+    accessToken
 )
 ```
 
@@ -216,7 +216,7 @@ Gestion des définitions d'énumérations.
 import { useEnumDefinitionCRUD } from '@/composables/entities'
 
 const { createEnumDefinition, listEnumDefinitions, updateEnumDefinition, deleteEnumDefinition } =
-  useEnumDefinitionCRUD()
+    useEnumDefinitionCRUD()
 ```
 
 **Méthodes disponibles :**
@@ -257,14 +257,14 @@ Statistiques des activités.
 import { useActivityStatsCRUD } from '@/composables/entity-stats'
 
 const {
-  getActivityLeaderboard,
-  getAllActivityStats,
-  getActivityStats,
-  getActivityDetails,
-  getActivityPatterns,
-  getActivityRanking,
-  getActivityTimeline,
-  getActivityGrowthTrends
+    getActivityLeaderboard,
+    getAllActivityStats,
+    getActivityStats,
+    getActivityDetails,
+    getActivityPatterns,
+    getActivityRanking,
+    getActivityTimeline,
+    getActivityGrowthTrends
 } = useActivityStatsCRUD()
 
 // Exemple d'utilisation
@@ -292,14 +292,14 @@ Statistiques des membres.
 import { useMemberStatsCRUD } from '@/composables/entity-stats'
 
 const {
-  getMemberLeaderboard,
-  getAllMemberStats,
-  getMemberStats,
-  getMemberDetails,
-  getMemberPatterns,
-  getMemberRanking,
-  getMemberTimeline,
-  getMemberGrowthTrends
+    getMemberLeaderboard,
+    getAllMemberStats,
+    getMemberStats,
+    getMemberDetails,
+    getMemberPatterns,
+    getMemberRanking,
+    getMemberTimeline,
+    getMemberGrowthTrends
 } = useMemberStatsCRUD()
 
 // Exemple d'utilisation
@@ -327,11 +327,11 @@ Statistiques des serveurs.
 import { useServerStatsCRUD } from '@/composables/entity-stats'
 
 const {
-  getServerStats,
-  getServerStatsDetails,
-  getServerTimeline,
-  getServerGrowthTrends,
-  getComparativeAnalysis
+    getServerStats,
+    getServerStatsDetails,
+    getServerTimeline,
+    getServerGrowthTrends,
+    getComparativeAnalysis
 } = useServerStatsCRUD()
 
 // Exemple d'utilisation
@@ -356,15 +356,15 @@ Statistiques des membres par activité.
 import { useMemberActivityStatsCRUD } from '@/composables/entity-stats'
 
 const { getAllMemberActivities, getMemberActivityStats, getMemberActivityProgression } =
-  useMemberActivityStatsCRUD()
+    useMemberActivityStatsCRUD()
 
 // Exemple d'utilisation
 const progression = await getMemberActivityProgression(
-  serverId,
-  memberId,
-  activityId,
-  { period: '30d' },
-  accessToken
+    serverId,
+    memberId,
+    activityId,
+    { period: '30d' },
+    accessToken
 )
 ```
 
@@ -384,13 +384,13 @@ Gestion des snapshots de statistiques.
 import { useSnapshotStatsCRUD } from '@/composables/entity-stats'
 
 const {
-  createSnapshot,
-  getAllSnapshots,
-  getSnapshotById,
-  getLatestSnapshot,
-  getSnapshotsSummary,
-  compareSnapshots,
-  cleanupSnapshots
+    createSnapshot,
+    getAllSnapshots,
+    getSnapshotById,
+    getLatestSnapshot,
+    getSnapshotsSummary,
+    compareSnapshots,
+    cleanupSnapshots
 } = useSnapshotStatsCRUD()
 
 // Exemple d'utilisation
@@ -417,7 +417,7 @@ Statistiques des énumérations.
 import { useEnumDefinitionStatsCRUD } from '@/composables/entity-stats'
 
 const { getAllEnumDefinitionStats, getEnumDefinitionStats, getEnumValueDistribution } =
-  useEnumDefinitionStatsCRUD()
+    useEnumDefinitionStatsCRUD()
 
 // Exemple d'utilisation
 const distribution = await getEnumValueDistribution(serverId, enumDefinitionId, accessToken)
@@ -456,21 +456,21 @@ const { createActivity, listActivities } = useActivityCRUD()
 
 // 3. Appeler les méthodes avec tous les paramètres
 const handleCreateActivity = async () => {
-  const result = await createActivity(
-    serverId, // ID du serveur
-    {
-      // Données de la requête
-      name: 'Football',
-      description: "Sport d'équipe"
-    },
-    accessToken // Token d'authentification
-  )
+    const result = await createActivity(
+        serverId, // ID du serveur
+        {
+            // Données de la requête
+            name: 'Football',
+            description: "Sport d'équipe"
+        },
+        accessToken // Token d'authentification
+    )
 
-  if (result.error) {
-    console.error('Erreur:', result.error)
-  } else {
-    console.log('Activité créée:', result.data)
-  }
+    if (result.error) {
+        console.error('Erreur:', result.error)
+    } else {
+        console.log('Activité créée:', result.data)
+    }
 }
 ```
 
@@ -480,8 +480,8 @@ Toutes les méthodes retournent une réponse de type `ApiResponse` :
 
 ```typescript
 interface ApiResponse<T> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }
 ```
 
@@ -491,13 +491,13 @@ Exemple de gestion :
 const result = await getActivityById(serverId, activityId, accessToken)
 
 if (result.error) {
-  // Gérer l'erreur
-  console.error('Erreur:', result.error)
-  showErrorToast(result.error)
+    // Gérer l'erreur
+    console.error('Erreur:', result.error)
+    showErrorToast(result.error)
 } else if (result.data) {
-  // Traiter les données
-  console.log('Activité:', result.data)
-  activity.value = result.data
+    // Traiter les données
+    console.log('Activité:', result.data)
+    activity.value = result.data
 }
 ```
 
@@ -516,19 +516,19 @@ const activities = ref([])
 const loading = ref(false)
 
 const loadActivities = async (serverId: string) => {
-  loading.value = true
+    loading.value = true
 
-  const result = await listActivities(
-    serverId,
-    { search: '', page: 1, limit: 20 },
-    authStore.accessToken
-  )
+    const result = await listActivities(
+        serverId,
+        { search: '', page: 1, limit: 20 },
+        authStore.accessToken
+    )
 
-  if (result.data) {
-    activities.value = result.data
-  }
+    if (result.data) {
+        activities.value = result.data
+    }
 
-  loading.value = false
+    loading.value = false
 }
 </script>
 ```

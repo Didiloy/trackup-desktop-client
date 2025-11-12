@@ -11,21 +11,21 @@ import { EPeriod } from '../../enums/period.enum'
 // ============================================================================
 
 export interface IFavoriteActivity {
-  id: string
-  name: string
-  sessions_count: number
+    id: string
+    name: string
+    sessions_count: number
 }
 
 export interface IMemberStats {
-  member_id: string
-  user_email: string
-  total_sessions: number
-  total_duration: number
-  sessions_created: number
-  sessions_participated: number
-  likes_given: number
-  likes_received: number
-  favorite_activity: IFavoriteActivity
+    member_id: string
+    user_email: string
+    total_sessions: number
+    total_duration: number
+    sessions_created: number
+    sessions_participated: number
+    likes_given: number
+    likes_received: number
+    favorite_activity: IFavoriteActivity
 }
 
 // ============================================================================
@@ -33,10 +33,10 @@ export interface IMemberStats {
 // ============================================================================
 
 export interface IMemberActivityPatterns {
-  most_active_day_of_week: number
-  most_active_hour: number
-  streak_current: number
-  streak_longest: number
+    most_active_day_of_week: number
+    most_active_hour: number
+    streak_current: number
+    streak_longest: number
 }
 
 // ============================================================================
@@ -44,11 +44,11 @@ export interface IMemberActivityPatterns {
 // ============================================================================
 
 export interface IMemberRanking {
-  rank_in_server: number
-  percentile: number
-  total_duration: number
-  total_sessions: number
-  total_members: number
+    rank_in_server: number
+    percentile: number
+    total_duration: number
+    total_sessions: number
+    total_members: number
 }
 
 // ============================================================================
@@ -56,12 +56,12 @@ export interface IMemberRanking {
 // ============================================================================
 
 export interface IMemberGrowthTrends {
-  member_id: string
-  period: string
-  current_period_start: string
-  current_period_end: string
-  sessions: IGrowthMetric
-  duration: IGrowthMetric
+    member_id: string
+    period: string
+    current_period_start: string
+    current_period_end: string
+    sessions: IGrowthMetric
+    duration: IGrowthMetric
 }
 
 // ============================================================================
@@ -69,9 +69,9 @@ export interface IMemberGrowthTrends {
 // ============================================================================
 
 export interface IMemberStatsDetails extends IMemberStats {
-  patterns: IMemberActivityPatterns
-  ranking: IMemberRanking
-  timeline: IStatsTimeline[]
+    patterns: IMemberActivityPatterns
+    ranking: IMemberRanking
+    timeline: IStatsTimeline[]
 }
 
 // ============================================================================
@@ -79,19 +79,19 @@ export interface IMemberStatsDetails extends IMemberStats {
 // ============================================================================
 
 export interface ILeaderboardEntry {
-  rank: number
-  member_id: string
-  member_name: string
-  total_duration: number
-  total_sessions: number
-  percentile: number
+    rank: number
+    member_id: string
+    member_name: string
+    total_duration: number
+    total_sessions: number
+    percentile: number
 }
 
 export interface IMemberLeaderboard {
-  leaderboard: ILeaderboardEntry[]
-  period: string
-  limit: number
-  total_members: number
+    leaderboard: ILeaderboardEntry[]
+    period: string
+    limit: number
+    total_members: number
 }
 
 // ============================================================================
@@ -99,11 +99,11 @@ export interface IMemberLeaderboard {
 // ============================================================================
 
 export interface IPaginatedMemberStats {
-  total: number
-  page: number
-  limit: number
-  pageCount: number
-  data: IMemberStats[]
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: IMemberStats[]
 }
 
 // ============================================================================
@@ -111,22 +111,22 @@ export interface IPaginatedMemberStats {
 // ============================================================================
 
 export interface ILeaderboardParams {
-  period?: EPeriod
-  limit?: number
+    period?: EPeriod
+    limit?: number
 }
 
 export interface IPaginationParams {
-  page: number
-  limit: number
+    page: number
+    limit: number
 }
 
 export interface IMemberTimelineParams {
-  period?: EPeriod
-  limit?: number
+    period?: EPeriod
+    limit?: number
 }
 
 export interface IMemberGrowthParams {
-  period?: EPeriod
+    period?: EPeriod
 }
 
 // ============================================================================
@@ -134,6 +134,6 @@ export interface IMemberGrowthParams {
 // ============================================================================
 
 export interface IMemberStatsApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }

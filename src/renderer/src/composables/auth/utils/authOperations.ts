@@ -9,29 +9,29 @@ import { setupDeepLinkListener } from './deepLinkHandler'
  * Should be called once when the app starts
  */
 export async function initializeSession(
-  onAuthListenerSetup?: (unsubscribe: () => void) => void,
-  onDeepLinkListenerSetup?: (unsubscribe: (() => void) | null) => void
+    onAuthListenerSetup?: (unsubscribe: () => void) => void,
+    onDeepLinkListenerSetup?: (unsubscribe: (() => void) | null) => void
 ): Promise<void> {
-  loading.value = true
-  error.value = null
-  try {
-    const { data, error: initError } = await supabase.auth.getSession()
-    if (initError) {
-      error.value = initError.message
+    loading.value = true
+    error.value = null
+    try {
+        const { data, error: initError } = await supabase.auth.getSession()
+        if (initError) {
+            error.value = initError.message
+        }
+        setStateFromSession(data.session)
+
+        // Setup listeners and pass unsubscribe functions back
+        const authUnsubscribe = setupAuthStateListener()
+        const deepLinkUnsubscribe = setupDeepLinkListener()
+
+        onAuthListenerSetup?.(authUnsubscribe)
+        onDeepLinkListenerSetup?.(deepLinkUnsubscribe)
+    } catch (e) {
+        setError(e)
+    } finally {
+        loading.value = false
     }
-    setStateFromSession(data.session)
-
-    // Setup listeners and pass unsubscribe functions back
-    const authUnsubscribe = setupAuthStateListener()
-    const deepLinkUnsubscribe = setupDeepLinkListener()
-
-    onAuthListenerSetup?.(authUnsubscribe)
-    onDeepLinkListenerSetup?.(deepLinkUnsubscribe)
-  } catch (e) {
-    setError(e)
-  } finally {
-    loading.value = false
-  }
 }
 
 /**
@@ -39,42 +39,42 @@ export async function initializeSession(
  * Opens browser for authentication
  */
 export async function signInWithOAuth(provider: Provider, redirectTo?: string): Promise<unknown> {
-  loading.value = true
-  error.value = null
-  try {
-    const { data, error: signInError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo,
-        skipBrowserRedirect: true
-      }
-    })
-    if (signInError) {
-      error.value = signInError.message
+    loading.value = true
+    error.value = null
+    try {
+        const { data, error: signInError } = await supabase.auth.signInWithOAuth({
+            provider,
+            options: {
+                redirectTo,
+                skipBrowserRedirect: true
+            }
+        })
+        if (signInError) {
+            error.value = signInError.message
+        }
+        return data
+    } catch (e) {
+        setError(e)
+    } finally {
+        loading.value = false
     }
-    return data
-  } catch (e) {
-    setError(e)
-  } finally {
-    loading.value = false
-  }
-  return undefined
+    return undefined
 }
 
 /**
  * Sign out current user
  */
 export async function signOut(): Promise<void> {
-  loading.value = true
-  error.value = null
-  try {
-    const { error: signOutError } = await supabase.auth.signOut()
-    if (signOutError) {
-      error.value = signOutError.message
+    loading.value = true
+    error.value = null
+    try {
+        const { error: signOutError } = await supabase.auth.signOut()
+        if (signOutError) {
+            error.value = signOutError.message
+        }
+    } catch (e) {
+        setError(e)
+    } finally {
+        loading.value = false
     }
-  } catch (e) {
-    setError(e)
-  } finally {
-    loading.value = false
-  }
 }

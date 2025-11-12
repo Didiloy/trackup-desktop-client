@@ -1,13 +1,13 @@
 import { useUserStore } from '@/stores/user'
 import type {
-  IUser,
-  IUserServer,
-  IUserApiResponse
+    IUser,
+    IUserServer,
+    IUserApiResponse
 } from '../../../../shared/contracts/interfaces/entities/user.interfaces'
 
 interface UseUserCRUDReturn {
-  getMe: () => Promise<IUserApiResponse<IUser>>
-  getMyServers: () => Promise<IUserApiResponse<IUserServer[]>>
+    getMe: () => Promise<IUserApiResponse<IUser>>
+    getMyServers: () => Promise<IUserApiResponse<IUserServer[]>>
 }
 
 /**
@@ -15,24 +15,24 @@ interface UseUserCRUDReturn {
  * Each method is independent and contains all necessary parameters
  */
 export function useUserCRUD(): UseUserCRUDReturn {
-  const user_store = useUserStore()
+    const user_store = useUserStore()
 
-  /**
-   * Get current user information
-   */
-  const getMe = async (): Promise<IUserApiResponse<IUser>> => {
-    return window.api.user.getMe(user_store.getAccessToken!)
-  }
+    /**
+     * Get current user information
+     */
+    const getMe = async (): Promise<IUserApiResponse<IUser>> => {
+        return window.api.user.getMe(user_store.getAccessToken!)
+    }
 
-  /**
-   * Get current user's servers
-   */
-  const getMyServers = async (): Promise<IUserApiResponse<IUserServer[]>> => {
-    return window.api.user.getMyServers(user_store.getAccessToken!)
-  }
+    /**
+     * Get current user's servers
+     */
+    const getMyServers = async (): Promise<IUserApiResponse<IUserServer[]>> => {
+        return window.api.user.getMyServers(user_store.getAccessToken!)
+    }
 
-  return {
-    getMe,
-    getMyServers
-  }
+    return {
+        getMe,
+        getMyServers
+    }
 }

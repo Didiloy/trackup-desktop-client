@@ -14,59 +14,59 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ## Arborescence
 
 - src/main
-  - index.channels.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
-  - windows/
-    - WindowManager.ts (registre des BrowserWindow, création paresseuse, cleanup)
-    - MainWindow.ts (config d’une fenêtre spécifique)
-    - SettingsWindow.ts (exemple supplémentaire)
-  - ipc/
-    - index.channels.ts (registre central qui appelle chaque `registerXyzIpc`)
-    - auth.ipc.ts, settings.ipc.ts, updater.ipc.ts (par domaine)
-  - services/
-    - AuthService.ts, SettingsService.ts, UpdaterService.ts, FileSystemService.ts (stateless ou DI légère)
-  - protocols/
-    - deepLink.ts (custom protocol client + parsing)
-    - safeFileProtocol.ts (si besoin d’accès fichiers)
-  - menu/
-    - applicationMenu.ts (construction du menu)
-  - security/
-    - permissions.ts (session.setPermissionRequestHandler)
+    - index.channels.ts (point d’entrée: ordre d’initialisation, single-instance-lock, handlers globaux)
+    - windows/
+        - WindowManager.ts (registre des BrowserWindow, création paresseuse, cleanup)
+        - MainWindow.ts (config d’une fenêtre spécifique)
+        - SettingsWindow.ts (exemple supplémentaire)
+    - ipc/
+        - index.channels.ts (registre central qui appelle chaque `registerXyzIpc`)
+        - auth.ipc.ts, settings.ipc.ts, updater.ipc.ts (par domaine)
+    - services/
+        - AuthService.ts, SettingsService.ts, UpdaterService.ts, FileSystemService.ts (stateless ou DI légère)
+    - protocols/
+        - deepLink.ts (custom protocol client + parsing)
+        - safeFileProtocol.ts (si besoin d’accès fichiers)
+    - menu/
+        - applicationMenu.ts (construction du menu)
+    - security/
+        - permissions.ts (session.setPermissionRequestHandler)
 
 - src/preload
-  - index.channels.ts (agrégateur : enregistre les bridges)
-  - bridges/
-    - app.bridge.ts (API app: getVersion, openExternal, etc.)
-    - auth.bridge.ts (API auth: signIn, signOut si nécessaire)
-    - updater.bridge.ts (API updater: check, download, events)
-    - settings.bridge.ts (API settings: get/set)
-  - index.channels.ts (constantes de noms de canaux IPC)
-  - types/
-    - global.d.ts (déclare `window.api` typé)
+    - index.channels.ts (agrégateur : enregistre les bridges)
+    - bridges/
+        - app.bridge.ts (API app: getVersion, openExternal, etc.)
+        - auth.bridge.ts (API auth: signIn, signOut si nécessaire)
+        - updater.bridge.ts (API updater: check, download, events)
+        - settings.bridge.ts (API settings: get/set)
+    - index.channels.ts (constantes de noms de canaux IPC)
+    - types/
+        - global.d.ts (déclare `window.api` typé)
 
 - src/shared (accédé par main + preload + renderer)
-  - contracts/
-    - types/ (DTO, interfaces d’API, ex: TUseAuth, TUpdater)
-    - events.ts (noms d’événements + payloads)
-    - schemas.ts (Zod pour valider les payloads côté main)
+    - contracts/
+        - types/ (DTO, interfaces d’API, ex: TUseAuth, TUpdater)
+        - events.ts (noms d’événements + payloads)
+        - schemas.ts (Zod pour valider les payloads côté main)
 
 ---
 
 ## Responsabilités par couche
 
 - main/
-  - Gère le cycle de vie de l’application, les fenêtres, les capacités OS, et les endpoints IPC
-  - Implemente des handlers IPC par domaine (aucune UI ici)
-  - Délègue optionnellement aux services (logique testable)
+    - Gère le cycle de vie de l’application, les fenêtres, les capacités OS, et les endpoints IPC
+    - Implemente des handlers IPC par domaine (aucune UI ici)
+    - Délègue optionnellement aux services (logique testable)
 - preload/
-  - Expose une API limitée: `window.api.<domaine>.<méthode>()`
-  - Traduit les appels du renderer en `ipcRenderer.send/invoke`
-  - Ne contient aucune logique métier; c’est une façade
+    - Expose une API limitée: `window.api.<domaine>.<méthode>()`
+    - Traduit les appels du renderer en `ipcRenderer.send/invoke`
+    - Ne contient aucune logique métier; c’est une façade
 - renderer/
-  - Application web (Vue) pure. N’importe jamais `electron` et n’accède jamais à Node
-  - Utilise uniquement `window.api` pour interagir avec le desktop
+    - Application web (Vue) pure. N’importe jamais `electron` et n’accède jamais à Node
+    - Utilise uniquement `window.api` pour interagir avec le desktop
 - shared/
-  - Source unique des canaux IPC et des types partagés
-  - Aucun code d’exécution
+    - Source unique des canaux IPC et des types partagés
+    - Aucun code d’exécution
 
 ---
 
@@ -92,8 +92,8 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ## IPC et Bridges
 
 - Côté main: modules `*.ipc.ts` recevant `ipcMain` + dépendances (services) et enregistrant:
-  - `ipcMain.handle('ns:action', handler)` pour les requêtes
-  - `webContents.send('ns:event', payload)` pour pousser des événements
+    - `ipcMain.handle('ns:action', handler)` pour les requêtes
+    - `webContents.send('ns:event', payload)` pour pousser des événements
 - Côté preload: un bridge par domaine, namespacé: `contextBridge.exposeInMainWorld('api', { ns: nsBridge })`.
 - Canaux constants dans `shared/contracts/channels` (ex: `export const CH = { updater: { check: 'updater:check', progress: 'updater:progress' } }`).
 - Typage partagé des requêtes/réponses dans `shared/contracts`, validation avec Zod côté main avant d’appeler un service.
@@ -122,10 +122,10 @@ Ce document décrit l’architecture à utiliser pour cette application Electron
 ## Exemples de fichiers (squelettes)
 
 - `src/main/bootstrap.ts`
-  - Initialise sécurité, protocols, IPC, WindowManager, puis crée MainWindow.
+    - Initialise sécurité, protocols, IPC, WindowManager, puis crée MainWindow.
 - `src/main/ipc/index.channels.ts`
-  - `export function registerAllIpc(ipcMain, services) { registerAuthIpc(...); registerUpdaterIpc(...); }`
+    - `export function registerAllIpc(ipcMain, services) { registerAuthIpc(...); registerUpdaterIpc(...); }`
 - `src/preload/index.channels.ts`
-  - Importe chaque `*.bridge.ts` et expose: `contextBridge.exposeInMainWorld('api', { app: appBridge, updater: updaterBridge, ... })`.
+    - Importe chaque `*.bridge.ts` et expose: `contextBridge.exposeInMainWorld('api', { app: appBridge, updater: updaterBridge, ... })`.
 - `src/preload/types/global.d.ts`
-  - `declare global { interface Window { api: { app: AppBridge; updater: UpdaterBridge; ... } } }`
+    - `declare global { interface Window { api: { app: AppBridge; updater: UpdaterBridge; ... } } }`

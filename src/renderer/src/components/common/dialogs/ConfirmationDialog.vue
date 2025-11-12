@@ -7,36 +7,36 @@ import { useDeviceStore } from '@/stores/deviceSize'
 const { t } = useI18n()
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  message: {
-    type: String,
-    required: true
-  },
-  cancelLabel: {
-    type: String
-  },
-  confirmLabel: {
-    type: String
-  },
-  cancelSeverity: {
-    type: String,
-    default: 'secondary'
-  },
-  confirmSeverity: {
-    type: String,
-    default: 'danger'
-  },
-  confirmationName: {
-    type: String,
-    default: ''
-  }
+    modelValue: {
+        type: Boolean,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    message: {
+        type: String,
+        required: true
+    },
+    cancelLabel: {
+        type: String
+    },
+    confirmLabel: {
+        type: String
+    },
+    cancelSeverity: {
+        type: String,
+        default: 'secondary'
+    },
+    confirmSeverity: {
+        type: String,
+        default: 'danger'
+    },
+    confirmationName: {
+        type: String,
+        default: ''
+    }
 })
 
 const device_store = useDeviceStore()
@@ -48,10 +48,10 @@ const dialogWidth = computed(() => (device_store.isMobile ? '90vw' : '400px'))
 const emit = defineEmits(['update:modelValue', 'confirm'])
 
 const visible = computed({
-  get: () => props.modelValue,
-  set: (value: boolean) => {
-    emit('update:modelValue', value)
-  }
+    get: () => props.modelValue,
+    set: (value: boolean) => {
+        emit('update:modelValue', value)
+    }
 })
 
 const userInput = ref('')
@@ -59,86 +59,86 @@ const isInputValid = computed(() => userInput.value === props.confirmationName)
 
 // Reset input when dialog is closed/opened
 watch(visible, (newVal) => {
-  if (newVal) {
-    userInput.value = ''
-  }
+    if (newVal) {
+        userInput.value = ''
+    }
 })
 
 const closeDialog = (): void => {
-  emit('update:modelValue', false)
+    emit('update:modelValue', false)
 }
 
 const confirmAction = (): void => {
-  if (isInputValid.value) {
-    emit('confirm')
-    closeDialog()
-  }
+    if (isInputValid.value) {
+        emit('confirm')
+        closeDialog()
+    }
 }
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :header="props.title"
-    :style="{
-      width: dialogWidth,
-      height: 'fit-content',
-      userSelect: 'none'
-    }"
-    :draggable="false"
-  >
-    <p>{{ props.message }}</p>
+    <Dialog
+        v-model:visible="visible"
+        modal
+        :header="props.title"
+        :style="{
+            width: dialogWidth,
+            height: 'fit-content',
+            userSelect: 'none'
+        }"
+        :draggable="false"
+    >
+        <p>{{ props.message }}</p>
 
-    <div v-if="props.confirmationName" class="confirmation-input">
-      <div class="icon-text-container">
-        <font-awesome-icon :icon="['fas', 'circle-exclamation']" />
-        <p v-html="t('actions.write_to_confirm', { entity: props.confirmationName })" />
-      </div>
-      <InputText v-model="userInput" class="w-full" @keyup.enter="confirmAction" />
-    </div>
+        <div v-if="props.confirmationName" class="confirmation-input">
+            <div class="icon-text-container">
+                <font-awesome-icon :icon="['fas', 'circle-exclamation']" />
+                <p v-html="t('actions.write_to_confirm', { entity: props.confirmationName })" />
+            </div>
+            <InputText v-model="userInput" class="w-full" @keyup.enter="confirmAction" />
+        </div>
 
-    <div class="o-delete-buttons">
-      <Button :label="cancelLabel" :severity="props.cancelSeverity" @click="closeDialog" />
-      <Button
-        v-if="confirmationName"
-        :label="confirmLabel"
-        :severity="props.confirmSeverity"
-        :disabled="props.confirmationName && !isInputValid"
-        @click="confirmAction"
-      />
-      <Button
-        v-else
-        :label="confirmLabel"
-        :severity="props.confirmSeverity"
-        @click="confirmAction"
-      />
-    </div>
-  </Dialog>
+        <div class="o-delete-buttons">
+            <Button :label="cancelLabel" :severity="props.cancelSeverity" @click="closeDialog" />
+            <Button
+                v-if="confirmationName"
+                :label="confirmLabel"
+                :severity="props.confirmSeverity"
+                :disabled="props.confirmationName && !isInputValid"
+                @click="confirmAction"
+            />
+            <Button
+                v-else
+                :label="confirmLabel"
+                :severity="props.confirmSeverity"
+                @click="confirmAction"
+            />
+        </div>
+    </Dialog>
 </template>
 
 <style scoped>
 .o-delete-buttons {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
 }
 
 .icon-text-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .confirmation-input {
-  margin: 1rem 0;
-  user-select: text;
+    margin: 1rem 0;
+    user-select: text;
 }
 
 .w-full {
-  width: 100%;
+    width: 100%;
 }
 </style>

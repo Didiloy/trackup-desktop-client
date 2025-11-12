@@ -9,121 +9,124 @@ const i18n = useI18n()
 const route = useRoute()
 const router = useRouter()
 const showMembersAsideToggle = computed(
-  () => typeof route.name === 'string' && route.name.startsWith('Server')
+    () => typeof route.name === 'string' && route.name.startsWith('Server')
 )
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 const server_store = useServerStore()
 const pageTitle = computed(() => {
-  if (showMembersAsideToggle.value) {
-    const serverName = server_store.getName || ''
-    return `${i18n.t('navigation.server')} - ${serverName}`
-  }
-  return i18n.t('navigation.home')
+    if (showMembersAsideToggle.value) {
+        const serverName = server_store.getName || ''
+        return `${i18n.t('navigation.server')} - ${serverName}`
+    }
+    return i18n.t('navigation.home')
 })
 
 onMounted(() => {
-  handleWindowControls()
+    handleWindowControls()
 })
 
 function handleWindowControls(): void {
-  const minButton = document.getElementById('min-button')
-  const maxButton = document.getElementById('max-button')
-  const closeButton = document.getElementById('close-button')
-  const devToolsButton = document.getElementById('devtools-button')
+    const minButton = document.getElementById('min-button')
+    const maxButton = document.getElementById('max-button')
+    const closeButton = document.getElementById('close-button')
+    const devToolsButton = document.getElementById('devtools-button')
 
-  if (devToolsButton) {
-    devToolsButton.addEventListener('click', () => {
-      window.api.window.openDevTools()
-    })
-  }
-  if (minButton) {
-    minButton.addEventListener('click', () => {
-      window.api.window.minimize()
-    })
-  }
+    if (devToolsButton) {
+        devToolsButton.addEventListener('click', () => {
+            window.api.window.openDevTools()
+        })
+    }
+    if (minButton) {
+        minButton.addEventListener('click', () => {
+            window.api.window.minimize()
+        })
+    }
 
-  if (maxButton) {
-    maxButton.addEventListener('click', () => {
-      window.api.window.maximize()
-    })
-  }
+    if (maxButton) {
+        maxButton.addEventListener('click', () => {
+            window.api.window.maximize()
+        })
+    }
 
-  if (closeButton) {
-    closeButton.addEventListener('click', async () => {
-      window.api.window.close()
-    })
-  }
+    if (closeButton) {
+        closeButton.addEventListener('click', async () => {
+            window.api.window.close()
+        })
+    }
 }
 
 function handleToggleMembersAside(): void {
-  const current = route.query.members === 'true'
-  router.replace({ query: { ...route.query, members: current ? 'false' : 'true' } })
+    const current = route.query.members === 'true'
+    router.replace({ query: { ...route.query, members: current ? 'false' : 'true' } })
 }
 </script>
 <template>
-  <nav
-    id="TopAside"
-    class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
-  >
-    <div>
-      <span class="">{{ i18n.t('app.title') }}</span>
-    </div>
-    <div>
-      <span class="">{{ pageTitle }}</span>
-    </div>
-    <div id="window-controls" class="flex items-center justify-center h-full w-fit bg-surface-200">
-      <div
-        v-if="showMembersAsideToggle"
-        id="toggle-sidebar-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-        :title="i18n.t('actions.toggle_sidebar')"
-        @click="handleToggleMembersAside"
-      >
-        <span
-          class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-          :class="isMembersAsideVisible ? 'text-primary-600' : 'text-gray-600'"
-          aria-hidden="true"
-          v-html="toggle_sidebar_icon"
-        />
-      </div>
-      <div
-        id="devtools-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-        :title="i18n.t('actions.devtools')"
-      >
-        <i class="pi pi-cog"></i>
-      </div>
-      <div
-        id="min-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-        :title="i18n.t('actions.minimize')"
-      >
-        <i class="pi pi-minus"></i>
-      </div>
-      <div
-        id="max-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-        :title="i18n.t('actions.maximize')"
-      >
-        <i class="pi pi-sort"></i>
-      </div>
-      <div
-        id="close-button"
-        class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-600 hover:text-white dark:text-gray-400"
-        :title="i18n.t('actions.close')"
-      >
-        <i class="pi pi-times"></i>
-      </div>
-    </div>
-  </nav>
+    <nav
+        id="TopAside"
+        class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
+    >
+        <div>
+            <span class="">{{ i18n.t('app.title') }}</span>
+        </div>
+        <div>
+            <span class="">{{ pageTitle }}</span>
+        </div>
+        <div
+            id="window-controls"
+            class="flex items-center justify-center h-full w-fit bg-surface-200"
+        >
+            <div
+                v-if="showMembersAsideToggle"
+                id="toggle-sidebar-button"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                :title="i18n.t('actions.toggle_sidebar')"
+                @click="handleToggleMembersAside"
+            >
+                <span
+                    class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                    :class="isMembersAsideVisible ? 'text-primary-600' : 'text-gray-600'"
+                    aria-hidden="true"
+                    v-html="toggle_sidebar_icon"
+                />
+            </div>
+            <div
+                id="devtools-button"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                :title="i18n.t('actions.devtools')"
+            >
+                <i class="pi pi-cog"></i>
+            </div>
+            <div
+                id="min-button"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                :title="i18n.t('actions.minimize')"
+            >
+                <i class="pi pi-minus"></i>
+            </div>
+            <div
+                id="max-button"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                :title="i18n.t('actions.maximize')"
+            >
+                <i class="pi pi-sort"></i>
+            </div>
+            <div
+                id="close-button"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-600 hover:text-white dark:text-gray-400"
+                :title="i18n.t('actions.close')"
+            >
+                <i class="pi pi-times"></i>
+            </div>
+        </div>
+    </nav>
 </template>
 <style scoped>
 #TopAside {
-  -webkit-app-region: drag;
+    -webkit-app-region: drag;
 }
 
 #window-controls {
-  -webkit-app-region: no-drag;
+    -webkit-app-region: no-drag;
 }
 
 .icon :deep(path),
@@ -133,6 +136,6 @@ function handleToggleMembersAside(): void {
 .icon :deep(ellipse),
 .icon :deep(line),
 .icon :deep(polyline) {
-  stroke: currentColor !important;
+    stroke: currentColor !important;
 }
 </style>
