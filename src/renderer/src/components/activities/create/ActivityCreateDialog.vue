@@ -10,7 +10,7 @@ import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import type {
     IActivity,
     ICreateActivityRequest
-} from '../../../../../shared/contracts/interfaces/entities/activity.interfaces'
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface Props {
     modelValue: boolean
