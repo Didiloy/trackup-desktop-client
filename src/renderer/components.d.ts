@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ActivityCreateDialog: typeof import('./src/components/activities/create/ActivityCreateDialog.vue')['default']
+    ActivityFilterBar: typeof import('./src/components/activities/ActivityFilterBar.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']
@@ -24,6 +25,7 @@ declare module 'vue' {
     EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
     InputDialog: typeof import('./src/components/common/dialogs/InputDialog.vue')['default']
+    InputSwitch: typeof import('primevue/inputswitch')['default']
     InputText: typeof import('primevue/inputtext')['default']
     JoinServerForm: typeof import('./src/components/servers/create-join/JoinServerForm.vue')['default']
     LanguageSelector: typeof import('./src/components/common/selectors/LanguageSelector.vue')['default']

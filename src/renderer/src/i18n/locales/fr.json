@@ -210,7 +210,7 @@
             "downloadError": "Erreur lors du téléchargement"
         },
         "serverActivitiesView": {
-            "title": "Activités",
+            "title": "Activités du serveur",
             "addActivity": "Ajouter une activité",
             "addActivityModal": {
                 "title": "Ajouter une activité",
@@ -218,6 +218,14 @@
                 "name": "Nom de l'activité",
                 "description_input": "Décris l'activité en quelques mots",
                 "createButton": "Créer l'activité"
+            },
+            "filters": {
+                "onlyMine": "Afficher seulement mes activités",
+                "sort": {
+                    "recent": "Plus récentes",
+                    "popular": "Plus populaires",
+                    "active": "Plus actives"
+                }
             }
         },
         "userProfileMenu": {

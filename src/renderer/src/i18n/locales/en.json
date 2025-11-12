@@ -207,11 +207,22 @@
             "downloadError": "Error while downloading"
         },
         "serverActivitiesView": {
-            "title": "Activities",
+            "title": "Server activities",
             "addActivity": "Add activity",
             "addActivityModal": {
-                "title": "Add activity",
-                "description": "Add a new activity for your server"
+                "title": "Add an activity",
+                "description": "Add a new activity for your server",
+                "name": "Activity name",
+                "description_input": "Describe the activity in a few words",
+                "createButton": "Create activity"
+            },
+            "filters": {
+                "onlyMine": "Show only my activities",
+                "sort": {
+                    "recent": "Recent",
+                    "popular": "Popular",
+                    "active": "Active"
+                }
             }
         },
         "userProfileMenu": {
