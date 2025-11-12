@@ -3,13 +3,50 @@ import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActionsList from '@/components/servers/ServersActionsList.vue'
 import ProfileButton from '@/components/ProfileButton.vue'
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
+import { useServerStore } from '@/stores/server'
+import { useServerTypeCRUD } from '@/composables/servers/useServerTypeCRUD'
+import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
+import { copyKeyToClipBoard } from '@/utils'
 
 const route = useRoute()
-const hasServerActions = computed(
-  () => typeof route.name === 'string' && route.name.startsWith('Server')
+const hasServerActions = computed(() => route.name?.toString().includes('Server'))
+
+const server_store = useServerStore()
+const serverName = computed<string>(() => server_store.getName || '')
+const inviteCode = computed<string | null>(() => server_store.getInvitationCode || null)
+const bannerUrl = computed<string>(() => server_store.getBanner || '')
+
+const { getServerTypeById } = useServerTypeCRUD()
+const serverTypeName = ref<string>('')
+const serverTypeId = computed<string>(() => server_store.getServerTypePublicId || '')
+
+async function refreshServerTypeName(): Promise<void> {
+  const id = serverTypeId.value
+  if (!id) {
+    serverTypeName.value = ''
+    return
+  }
+  const res = await getServerTypeById(id)
+  serverTypeName.value = res.data?.name || ''
+}
+
+watch(
+  serverTypeId,
+  () => {
+    void refreshServerTypeName()
+  },
+  { immediate: true }
 )
+
+const toast = useToast()
+const i18n = useI18n()
+async function copyInvite(): Promise<void> {
+  if (!inviteCode.value) return
+  await copyKeyToClipBoard(inviteCode.value, toast, i18n)
+}
 </script>
 
 <template>
@@ -26,7 +63,55 @@ const hasServerActions = computed(
       <ServersList />
     </div>
     <TransitionWrapper name="fade">
-      <ServersActionsList v-if="hasServerActions" key="server-actions" />
+      <div v-if="hasServerActions" class="flex-1 h-full">
+        <div class="w-full h-full bg-surface-100 rounded-l-2xl overflow-hidden flex flex-col">
+          <!-- Header with banner and server meta -->
+          <div class="relative w-full" style="height: 120px; min-height: 120px">
+            <div v-if="bannerUrl" class="absolute inset-0">
+              <img
+                :src="bannerUrl"
+                alt="Server banner"
+                class="w-full h-full object-cover not-draggable"
+              />
+            </div>
+            <div v-else class="absolute inset-0" style="background: var(--gradient-primary)"></div>
+            <!-- Contrast overlays -->
+            <div class="absolute inset-0 backdrop-blur-[2px] bg-black/0"></div>
+            <div
+              class="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/70 via-black/40 to-transparent"
+            ></div>
+            <div class="absolute bottom-0 left-0 right-0 p-3">
+              <div class="text-white font-semibold text-sm truncate text-elevated">
+                {{ serverName || 'Server' }}
+              </div>
+              <div class="text-white/90 text-xs text-elevated">{{ serverTypeName }}</div>
+              <div class="mt-2 flex items-center gap-2 absolute bottom-0 right-0 p-3">
+                <button
+                  v-if="inviteCode"
+                  type="button"
+                  class="flex items-center gap-1 px-2 py-1 rounded bg-white/15 hover:bg-white/25 text-white text-2xs"
+                  @click="copyInvite"
+                >
+                  <i class="pi pi-share-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Actions list -->
+          <div class="flex-1">
+            <ServersActionsList class="h-full" />
+          </div>
+        </div>
+      </div>
     </TransitionWrapper>
   </aside>
 </template>
+
+<style scoped>
+.text-elevated {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 0 8px rgba(0, 0, 0, 0.35);
+}
+</style>
+

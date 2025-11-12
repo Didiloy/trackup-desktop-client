@@ -43,7 +43,7 @@ function isActionActive(action: ServerAction): boolean {
 }
 </script>
 <template>
-  <div class="flex flex-col items-start gap-1 w-full h-full bg-surface-100 rounded-l-2xl p-2">
+  <div class="flex flex-col items-start gap-1 w-full h-full bg-transparent p-2">
     <button
       v-for="a in actions"
       :key="a.id"

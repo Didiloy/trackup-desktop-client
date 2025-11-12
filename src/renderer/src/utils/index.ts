@@ -10,7 +10,11 @@ export const copyKeyToClipBoard = async (
 ): Promise<void> => {
   if (!key) return
   try {
-    await navigator.clipboard.writeText(key)
+    if (window.api?.app?.clipboard?.writeText) {
+      window.api.app.clipboard.writeText(key)
+    } else {
+      await navigator.clipboard.writeText(key)
+    }
     if (toast) {
       toast.add({
         severity: 'success',
@@ -26,7 +30,7 @@ export const copyKeyToClipBoard = async (
         life: 3000
       })
     }
-    console.error('Erreur de copie :', err)
+    console.error('Failed to copy to clipboard:', err)
   }
 }
 

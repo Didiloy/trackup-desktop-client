@@ -45,6 +45,7 @@ export const useServerStore = defineStore('server', () => {
     () => state.server?.description ?? null
   )
   const getLogo: ComputedRef<string | null> = computed(() => state.server?.logo ?? null)
+  const getBanner: ComputedRef<string | null> = computed(() => state.server?.banner ?? null)
   const getInvitationCode: ComputedRef<string | null> = computed(
     () => state.server?.invite_code ?? null
   )
@@ -128,6 +129,7 @@ export const useServerStore = defineStore('server', () => {
     getName,
     getDescription,
     getLogo,
+    getBanner,
     getInvitationCode,
     getInvitationCodeExpDate,
     isOwnership,
