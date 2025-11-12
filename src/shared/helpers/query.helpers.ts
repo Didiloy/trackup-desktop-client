@@ -10,14 +10,14 @@
  * @returns Query string with leading '?' or empty string
  */
 export function buildQueryParams(params: Record<string, any> | undefined): string {
-  if (!params || Object.keys(params).length === 0) return ''
+    if (!params || Object.keys(params).length === 0) return ''
 
-  const query = Object.entries(params)
-    .filter(([, value]) => value !== undefined && value !== null)
-    .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
-    .join('&')
+    const query = Object.entries(params)
+        .filter(([, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
+        .join('&')
 
-  return query ? `?${query}` : ''
+    return query ? `?${query}` : ''
 }
 
 /**
@@ -27,8 +27,8 @@ export function buildQueryParams(params: Record<string, any> | undefined): strin
  * @returns Complete URL with query string
  */
 export function buildUrlWithParams(path: string, params?: Record<string, any>): string {
-  const queryString = buildQueryParams(params)
-  return `${path}${queryString}`
+    const queryString = buildQueryParams(params)
+    return `${path}${queryString}`
 }
 
 /**
@@ -37,17 +37,17 @@ export function buildUrlWithParams(path: string, params?: Record<string, any>): 
  * @returns Options object for apiService methods
  */
 export function buildRequestOptions(
-  params?: Record<string, any>
+    params?: Record<string, any>
 ): { params?: Record<string, string> } | undefined {
-  if (!params || Object.keys(params).length === 0) return undefined
+    if (!params || Object.keys(params).length === 0) return undefined
 
-  const filteredParams: Record<string, string> = {}
+    const filteredParams: Record<string, string> = {}
 
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      filteredParams[key] = String(value)
-    }
-  })
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+            filteredParams[key] = String(value)
+        }
+    })
 
-  return Object.keys(filteredParams).length > 0 ? { params: filteredParams } : undefined
+    return Object.keys(filteredParams).length > 0 ? { params: filteredParams } : undefined
 }

@@ -29,39 +29,39 @@ const logger = new Logger('Preload')
 
 // Aggregate all API bridges
 const api = {
-  window: windowBridge,
-  app: appBridge,
-  auth: authBridge,
-  server: serverBridge,
-  enumDefinition: enumDefinitionBridge,
-  activity: activityBridge,
-  activitySkillLevel: activitySkillLevelBridge,
-  session: sessionBridge,
-  member: memberBridge,
-  user: userBridge,
-  serverType: serverTypeBridge,
-  serverStats: serverStatsBridge,
-  memberStats: memberStatsBridge,
-  activityStats: activityStatsBridge,
-  memberActivityStats: memberActivityStatsBridge,
-  enumDefinitionStats: enumDefinitionStatsBridge,
-  snapshotStats: snapshotStatsBridge,
-  billing: billingBridge
+    window: windowBridge,
+    app: appBridge,
+    auth: authBridge,
+    server: serverBridge,
+    enumDefinition: enumDefinitionBridge,
+    activity: activityBridge,
+    activitySkillLevel: activitySkillLevelBridge,
+    session: sessionBridge,
+    member: memberBridge,
+    user: userBridge,
+    serverType: serverTypeBridge,
+    serverStats: serverStatsBridge,
+    memberStats: memberStatsBridge,
+    activityStats: activityStatsBridge,
+    memberActivityStats: memberActivityStatsBridge,
+    enumDefinitionStats: enumDefinitionStatsBridge,
+    snapshotStats: snapshotStatsBridge,
+    billing: billingBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
 if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    logger.error(error)
-  }
+    try {
+        contextBridge.exposeInMainWorld('electron', electronAPI)
+        contextBridge.exposeInMainWorld('api', api)
+    } catch (error) {
+        logger.error(error)
+    }
 } else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.api = api
+    // @ts-ignore (define in dts)
+    window.electron = electronAPI
+    // @ts-ignore (define in dts)
+    window.api = api
 }

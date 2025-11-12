@@ -22,29 +22,29 @@ import type { BillingBridge } from './bridges/billing.bridge'
  * Global type definitions for window.api
  */
 export interface API {
-  window: WindowBridge
-  app: AppBridge
-  auth: AuthBridge
-  server: ServerBridge
-  enumDefinition: EnumDefinitionBridge
-  activity: ActivityBridge
-  activitySkillLevel: ActivitySkillLevelBridge
-  session: SessionBridge
-  member: MemberBridge
-  user: UserBridge
-  serverType: ServerTypeBridge
-  serverStats: ServerStatsBridge
-  memberStats: MemberStatsBridge
-  activityStats: ActivityStatsBridge
-  memberActivityStats: MemberActivityStatsBridge
-  enumDefinitionStats: EnumDefinitionStatsBridge
-  snapshotStats: SnapshotStatsBridge
-  billing: BillingBridge
+    window: WindowBridge
+    app: AppBridge
+    auth: AuthBridge
+    server: ServerBridge
+    enumDefinition: EnumDefinitionBridge
+    activity: ActivityBridge
+    activitySkillLevel: ActivitySkillLevelBridge
+    session: SessionBridge
+    member: MemberBridge
+    user: UserBridge
+    serverType: ServerTypeBridge
+    serverStats: ServerStatsBridge
+    memberStats: MemberStatsBridge
+    activityStats: ActivityStatsBridge
+    memberActivityStats: MemberActivityStatsBridge
+    enumDefinitionStats: EnumDefinitionStatsBridge
+    snapshotStats: SnapshotStatsBridge
+    billing: BillingBridge
 }
 
 declare global {
-  interface Window {
-    electron: ElectronAPI
-    api: API
-  }
+    interface Window {
+        electron: ElectronAPI
+        api: API
+    }
 }

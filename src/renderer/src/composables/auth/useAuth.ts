@@ -26,28 +26,28 @@ let deepLinkUnsubscribe: (() => void) | null = null
  * Should be called on app shutdown or when tearing down auth
  */
 function cleanupAuth(): void {
-  if (authUnsubscribe) {
-    authUnsubscribe()
-    authUnsubscribe = null
-  }
-  if (deepLinkUnsubscribe) {
-    deepLinkUnsubscribe()
-    deepLinkUnsubscribe = null
-  }
+    if (authUnsubscribe) {
+        authUnsubscribe()
+        authUnsubscribe = null
+    }
+    if (deepLinkUnsubscribe) {
+        deepLinkUnsubscribe()
+        deepLinkUnsubscribe = null
+    }
 }
 
 /**
  * Initialize auth session with listener setup
  */
 async function initAuth(): Promise<void> {
-  await initializeSession(
-    (unsubscribe) => {
-      authUnsubscribe = unsubscribe
-    },
-    (unsubscribe) => {
-      deepLinkUnsubscribe = unsubscribe
-    }
-  )
+    await initializeSession(
+        (unsubscribe) => {
+            authUnsubscribe = unsubscribe
+        },
+        (unsubscribe) => {
+            deepLinkUnsubscribe = unsubscribe
+        }
+    )
 }
 
 /**
@@ -55,20 +55,20 @@ async function initAuth(): Promise<void> {
  * Singleton pattern - only initializes once
  */
 export function useAuth(): TUseAuth {
-  if (!initialized) {
-    initialized = true
-    // Fire-and-forget initialization
-    void initAuth()
-  }
+    if (!initialized) {
+        initialized = true
+        // Fire-and-forget initialization
+        void initAuth()
+    }
 
-  return {
-    loading,
-    error,
-    isAuthenticated,
-    initializeSession: initAuth,
-    signInWithOAuth,
-    signOut,
-    // Expose cleanup for manual teardown (e.g., app shutdown)
-    cleanup: cleanupAuth
-  }
+    return {
+        loading,
+        error,
+        isAuthenticated,
+        initializeSession: initAuth,
+        signInWithOAuth,
+        signOut,
+        // Expose cleanup for manual teardown (e.g., app shutdown)
+        cleanup: cleanupAuth
+    }
 }

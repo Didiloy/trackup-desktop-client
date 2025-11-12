@@ -10,14 +10,14 @@ import { EPeriod } from '../../enums/period.enum'
 // ============================================================================
 
 export interface IMemberActivityStats {
-  activity_id: string
-  activity_name: string
-  total_sessions: number
-  total_duration: number
-  avg_session_duration: number
-  last_session_date: string
-  skill_level: string
-  proficiency_score: number
+    activity_id: string
+    activity_name: string
+    total_sessions: number
+    total_duration: number
+    avg_session_duration: number
+    last_session_date: string
+    skill_level: string
+    proficiency_score: number
 }
 
 // ============================================================================
@@ -25,17 +25,17 @@ export interface IMemberActivityStats {
 // ============================================================================
 
 export interface IMemberActivityDetails {
-  server_member_id: string
-  activity_id: string
-  activity_name: string
-  total_sessions: number
-  total_duration: number
-  avg_session_duration: number
-  last_session_date: string
-  skill_level: string
-  proficiency_score: number
-  sessions_created: number
-  total_likes: number
+    server_member_id: string
+    activity_id: string
+    activity_name: string
+    total_sessions: number
+    total_duration: number
+    avg_session_duration: number
+    last_session_date: string
+    skill_level: string
+    proficiency_score: number
+    sessions_created: number
+    total_likes: number
 }
 
 // ============================================================================
@@ -43,14 +43,14 @@ export interface IMemberActivityDetails {
 // ============================================================================
 
 export interface IMemberActivityProgression {
-  period_type: string
-  period_start: string
-  period_end: string
-  total_sessions: number
-  total_duration: number
-  avg_session_duration: number
-  skill_level: string
-  proficiency_score: number
+    period_type: string
+    period_start: string
+    period_end: string
+    total_sessions: number
+    total_duration: number
+    avg_session_duration: number
+    skill_level: string
+    proficiency_score: number
 }
 
 // ============================================================================
@@ -58,11 +58,11 @@ export interface IMemberActivityProgression {
 // ============================================================================
 
 export interface IPaginatedMemberActivityStats {
-  total: number
-  page: number
-  limit: number
-  pageCount: number
-  data: IMemberActivityStats[]
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: IMemberActivityStats[]
 }
 
 // ============================================================================
@@ -70,13 +70,13 @@ export interface IPaginatedMemberActivityStats {
 // ============================================================================
 
 export interface IMemberActivityPaginationParams {
-  page: number
-  limit: number
+    page: number
+    limit: number
 }
 
 export interface IMemberActivityProgressionParams {
-  period?: EPeriod
-  limit?: number
+    period?: EPeriod
+    limit?: number
 }
 
 // ============================================================================
@@ -84,6 +84,6 @@ export interface IMemberActivityProgressionParams {
 // ============================================================================
 
 export interface IMemberActivityStatsApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }

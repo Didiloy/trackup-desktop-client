@@ -1,233 +1,233 @@
 {
-  "app": {
-    "title": "TrackUp"
-  },
-  "common": {
-    "loading": "Chargement en cours...",
-    "error": {
-      "refresh": "Échec du rafraîchissement"
+    "app": {
+        "title": "TrackUp"
     },
-    "success": "Succès",
-    "name": "Nom",
-    "description": "Description",
-    "type": "Type",
-    "logo": "Logo",
-    "banner": "Bannière",
-    "choose": "Choisir",
-    "change": "Changer",
-    "clear": "Effacer",
-    "or": "ou",
-    "settings": "Paramètres",
-    "required": "Requis",
-    "cancel": "Annuler"
-  },
-  "navigation": {
-    "home": "Accueil",
-    "back": "Retour",
-    "redirecting": "Redirection...",
-    "server": "Serveur"
-  },
-  "actions": {
-    "title": "Actions",
-    "create": "Créer {entity}",
-    "edit": "Modifier {entity}",
-    "delete": "Supprimer {entity}",
-    "confirm": "Confirmer",
-    "save": "Enregistrer",
-    "cancel": "Annuler",
-    "select": "Sélectionner",
-    "choose": "Choisir",
-    "add": "Ajouter {entity}",
-    "remove": "Retirer {entity}",
-    "view": "Voir {entity}",
-    "update": "Mettre à jour {entity}",
-    "import": "Importer {entity}",
-    "refresh": "Rafraîchir {entity}",
-    "restore": "Restaurer {entity}",
-    "next": "Suivant",
-    "previous": "Précédent",
-    "enter": "Entrer",
-    "search": "Rechercher {entity}",
-    "submit": "Soumettre",
-    "upload": "Télécharger {entity}",
-    "change": "Changer {entity}",
-    "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
-    "close": "Fermer",
-    "leave": "Quitter {entity}",
-    "select_short": "Sélec.",
-    "rename": "Renommer",
-    "minimize": "Minimiser",
-    "maximize": "Maximiser",
-    "close_window": "Fermer",
-    "toggle_sidebar": "Voir les membres du serveur"
-  },
-  "placeholder": {
-    "search": "Rechercher...",
-    "select": "Sélectionner une option",
-    "choose": "Choisir une option",
-    "enter": "Entrer une valeur",
-    "upload": "Télécharger un fichier",
-    "import": "Importer un fichier",
-    "choose_file": "Choisir un fichier",
-    "select_short": "Sélec.",
-    "search_by_name": "Rechercher par Nom",
-    "filter_by_type": "Rechercher par Type"
-  },
-  "messages": {
-    "info": {
-      "title": "Informations",
-      "create": " Création de {entity}",
-      "delete": "Suppression de {entity}",
-      "update": "Mise à jour de {entity}",
-      "fetch": "Récupération de {entity}",
-      "upload": "Téléchargement de {entity}",
-      "import": "Importation de {entity}",
-      "restore": "Restauration de {entity}",
-      "select": "Sélection de {entity}",
-      "add": "Ajout de {entity}",
-      "refresh": "Rafraîchissement de {entity}",
-      "save": "Enregistrement de {entity}",
-      "copyClipBoard": "Copié dans le presse-papiers"
-    },
-    "success": {
-      "title": "Succès",
-      "create": "Création réussie",
-      "delete": "Suppression réussie",
-      "update": "Mise à jour réussie",
-      "fetch": "Récupération réussie",
-      "upload": "Téléchargement réussi",
-      "import": "Importation réussie",
-      "restore": "Restauration réussie",
-      "select": "Sélection réussie",
-      "add": "Ajout réussi",
-      "refresh": "Rafraîchissement réussi",
-      "save": "Enregistrement réussi",
-      "copyClipBoard": "Copié dans le presse-papiers"
-    },
-    "error": {
-      "title": "Erreur",
-      "create": "Échec de la création",
-      "delete": "Échec de la suppression",
-      "update": "Échec de la mise à jour",
-      "fetch": "Échec de la récupération",
-      "upload": "Échec du téléchargement",
-      "import": "Échec de l'importation",
-      "restore": "Échec de la restauration",
-      "select": "Échec de la sélection",
-      "add": "Échec de l'ajout",
-      "refresh": "Échec du rafraîchissement",
-      "save": "Échec de l'enregistrement",
-      "emptyFields": "Champs vides",
-      "copyClipBoard": "Échec de la copie dans le presse-papiers"
-    },
-    "warning": {
-      "title": "Avertissement",
-      "create": "Création en cours",
-      "delete": "Suppression en cours",
-      "update": "Mise à jour en cours",
-      "fetch": "Récupération en cours",
-      "upload": "Téléchargement en cours",
-      "import": "Importation en cours",
-      "restore": "Restauration en cours",
-      "select": "Sélection en cours",
-      "add": "Ajout en cours",
-      "refresh": "Rafraîchissement en cours",
-      "save": "Enregistrement en cours",
-      "copyClipBoard": "Copie dans le presse-papiers en cours"
-    }
-  },
-  "entities": {},
-  "userInterface": {
-    "loginView": {
-      "welcome": "Bienvenue !",
-      "welcome_back": "Content de vous revoir !",
-      "login": "Se connecter",
-      "description": "Connectez-vous pour continuer",
-      "google": "Continuer avec Google",
-      "github": "Continuer avec GitHub",
-      "gitlab": "Continuer avec GitLab",
-      "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité",
-      "logout": "se déconnecter",
-      "signup": "S'inscrire",
-      "or": "ou",
-      "no_account": "Vous n'avez pas de compte ?",
-      "already_have_account": "Vous avez déjà un compte ?",
-      "error": {
-        "cannot_login": "Une erreur est survenue lors de la connexion",
-        "invalid_email": "Veuillez entrer une adresse email valide"
-      }
-    },
-    "createServerView": {
-      "title": "Créer un serveur",
-      "subtitle": "Créez votre propre espace communautaire",
-      "description": "Créez un nouveau serveur",
-      "placeholder": {
-        "name": "Nom du serveur ex: Ma communauté",
-        "type": "Type de serveur",
-        "description": "Description du serveur ex: Une communauté pour partager vos idées"
-      },
-      "create": "Créer",
-      "cancel": "Annuler"
-    },
-    "membersAside": {
-      "title": "Membres du serveur",
-      "description": "Liste des membres du serveur",
-      "no_members": "Aucun membre",
-      "loading": "Chargement des membres...",
-      "view_profile": "Voir le profil",
-      "update_nickname": "Mettre à jour le surnom",
-      "update_nickname_message": "Entrez un nouveau surnom pour votre profil.",
-      "new_nickname": "Nouveau surnom",
-      "enter_nickname": "Entrez le surnom"
-    },
-    "joinServerView": {
-      "title": "Rejoindre un serveur",
-      "subtitle": "Entrez un code d'invitation",
-      "invitationCodeLabel": "Code d'invitation",
-      "invitationCodeHint": "Exemple : ABC123XYZ",
-      "joinButton": "Rejoindre",
-      "placeholder": {
-        "invitationCode": "Entrez le code d'invitation"
-      }
-    },
-    "serverActionView": {
-      "title": "Ajouter un serveur",
-      "description": "Choisissez comment vous voulez ajouter un serveur"
-    },
-    "updateModal": {
-      "title": "Mise à jour disponible",
-      "version": "Version",
-      "type": "Type",
-      "major": "Majeure",
-      "minor": "Mineure",
-      "releaseNotes": "Notes de version",
-      "releaseDate": "Date de sortie",
-      "downloading": "Téléchargement en cours...",
-      "error": "Erreur",
-      "skip": "Ignorer",
-      "updateNow": "Mettre à jour maintenant",
-      "installAndRestart": "Installer et redémarrer",
-      "downloadError": "Erreur lors du téléchargement"
-    },
-    "userProfileMenu": {
-      "title": "Profil Utilisateur",
-      "preferences": {
-        "title": "Préférences",
-        "language": {
-          "title": "Langue",
-          "switch": {
-            "error": "Échec du changement de langue",
-            "error_detail": "Veuillez réessayer.",
-            "success": "Langue changée avec succès"
-          }
+    "common": {
+        "loading": "Chargement en cours...",
+        "error": {
+            "refresh": "Échec du rafraîchissement"
         },
-        "theme": {
-          "title": "Thème",
-          "light": "Clair",
-          "dark": "Sombre",
-          "system": "Système"
+        "success": "Succès",
+        "name": "Nom",
+        "description": "Description",
+        "type": "Type",
+        "logo": "Logo",
+        "banner": "Bannière",
+        "choose": "Choisir",
+        "change": "Changer",
+        "clear": "Effacer",
+        "or": "ou",
+        "settings": "Paramètres",
+        "required": "Requis",
+        "cancel": "Annuler"
+    },
+    "navigation": {
+        "home": "Accueil",
+        "back": "Retour",
+        "redirecting": "Redirection...",
+        "server": "Serveur"
+    },
+    "actions": {
+        "title": "Actions",
+        "create": "Créer {entity}",
+        "edit": "Modifier {entity}",
+        "delete": "Supprimer {entity}",
+        "confirm": "Confirmer",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "select": "Sélectionner",
+        "choose": "Choisir",
+        "add": "Ajouter {entity}",
+        "remove": "Retirer {entity}",
+        "view": "Voir {entity}",
+        "update": "Mettre à jour {entity}",
+        "import": "Importer {entity}",
+        "refresh": "Rafraîchir {entity}",
+        "restore": "Restaurer {entity}",
+        "next": "Suivant",
+        "previous": "Précédent",
+        "enter": "Entrer",
+        "search": "Rechercher {entity}",
+        "submit": "Soumettre",
+        "upload": "Télécharger {entity}",
+        "change": "Changer {entity}",
+        "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
+        "close": "Fermer",
+        "leave": "Quitter {entity}",
+        "select_short": "Sélec.",
+        "rename": "Renommer",
+        "minimize": "Minimiser",
+        "maximize": "Maximiser",
+        "close_window": "Fermer",
+        "toggle_sidebar": "Voir les membres du serveur"
+    },
+    "placeholder": {
+        "search": "Rechercher...",
+        "select": "Sélectionner une option",
+        "choose": "Choisir une option",
+        "enter": "Entrer une valeur",
+        "upload": "Télécharger un fichier",
+        "import": "Importer un fichier",
+        "choose_file": "Choisir un fichier",
+        "select_short": "Sélec.",
+        "search_by_name": "Rechercher par Nom",
+        "filter_by_type": "Rechercher par Type"
+    },
+    "messages": {
+        "info": {
+            "title": "Informations",
+            "create": " Création de {entity}",
+            "delete": "Suppression de {entity}",
+            "update": "Mise à jour de {entity}",
+            "fetch": "Récupération de {entity}",
+            "upload": "Téléchargement de {entity}",
+            "import": "Importation de {entity}",
+            "restore": "Restauration de {entity}",
+            "select": "Sélection de {entity}",
+            "add": "Ajout de {entity}",
+            "refresh": "Rafraîchissement de {entity}",
+            "save": "Enregistrement de {entity}",
+            "copyClipBoard": "Copié dans le presse-papiers"
+        },
+        "success": {
+            "title": "Succès",
+            "create": "Création réussie",
+            "delete": "Suppression réussie",
+            "update": "Mise à jour réussie",
+            "fetch": "Récupération réussie",
+            "upload": "Téléchargement réussi",
+            "import": "Importation réussie",
+            "restore": "Restauration réussie",
+            "select": "Sélection réussie",
+            "add": "Ajout réussi",
+            "refresh": "Rafraîchissement réussi",
+            "save": "Enregistrement réussi",
+            "copyClipBoard": "Copié dans le presse-papiers"
+        },
+        "error": {
+            "title": "Erreur",
+            "create": "Échec de la création",
+            "delete": "Échec de la suppression",
+            "update": "Échec de la mise à jour",
+            "fetch": "Échec de la récupération",
+            "upload": "Échec du téléchargement",
+            "import": "Échec de l'importation",
+            "restore": "Échec de la restauration",
+            "select": "Échec de la sélection",
+            "add": "Échec de l'ajout",
+            "refresh": "Échec du rafraîchissement",
+            "save": "Échec de l'enregistrement",
+            "emptyFields": "Champs vides",
+            "copyClipBoard": "Échec de la copie dans le presse-papiers"
+        },
+        "warning": {
+            "title": "Avertissement",
+            "create": "Création en cours",
+            "delete": "Suppression en cours",
+            "update": "Mise à jour en cours",
+            "fetch": "Récupération en cours",
+            "upload": "Téléchargement en cours",
+            "import": "Importation en cours",
+            "restore": "Restauration en cours",
+            "select": "Sélection en cours",
+            "add": "Ajout en cours",
+            "refresh": "Rafraîchissement en cours",
+            "save": "Enregistrement en cours",
+            "copyClipBoard": "Copie dans le presse-papiers en cours"
         }
-      }
+    },
+    "entities": {},
+    "userInterface": {
+        "loginView": {
+            "welcome": "Bienvenue !",
+            "welcome_back": "Content de vous revoir !",
+            "login": "Se connecter",
+            "description": "Connectez-vous pour continuer",
+            "google": "Continuer avec Google",
+            "github": "Continuer avec GitHub",
+            "gitlab": "Continuer avec GitLab",
+            "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité",
+            "logout": "se déconnecter",
+            "signup": "S'inscrire",
+            "or": "ou",
+            "no_account": "Vous n'avez pas de compte ?",
+            "already_have_account": "Vous avez déjà un compte ?",
+            "error": {
+                "cannot_login": "Une erreur est survenue lors de la connexion",
+                "invalid_email": "Veuillez entrer une adresse email valide"
+            }
+        },
+        "createServerView": {
+            "title": "Créer un serveur",
+            "subtitle": "Créez votre propre espace communautaire",
+            "description": "Créez un nouveau serveur",
+            "placeholder": {
+                "name": "Nom du serveur ex: Ma communauté",
+                "type": "Type de serveur",
+                "description": "Description du serveur ex: Une communauté pour partager vos idées"
+            },
+            "create": "Créer",
+            "cancel": "Annuler"
+        },
+        "membersAside": {
+            "title": "Membres du serveur",
+            "description": "Liste des membres du serveur",
+            "no_members": "Aucun membre",
+            "loading": "Chargement des membres...",
+            "view_profile": "Voir le profil",
+            "update_nickname": "Mettre à jour le surnom",
+            "update_nickname_message": "Entrez un nouveau surnom pour votre profil.",
+            "new_nickname": "Nouveau surnom",
+            "enter_nickname": "Entrez le surnom"
+        },
+        "joinServerView": {
+            "title": "Rejoindre un serveur",
+            "subtitle": "Entrez un code d'invitation",
+            "invitationCodeLabel": "Code d'invitation",
+            "invitationCodeHint": "Exemple : ABC123XYZ",
+            "joinButton": "Rejoindre",
+            "placeholder": {
+                "invitationCode": "Entrez le code d'invitation"
+            }
+        },
+        "serverActionView": {
+            "title": "Ajouter un serveur",
+            "description": "Choisissez comment vous voulez ajouter un serveur"
+        },
+        "updateModal": {
+            "title": "Mise à jour disponible",
+            "version": "Version",
+            "type": "Type",
+            "major": "Majeure",
+            "minor": "Mineure",
+            "releaseNotes": "Notes de version",
+            "releaseDate": "Date de sortie",
+            "downloading": "Téléchargement en cours...",
+            "error": "Erreur",
+            "skip": "Ignorer",
+            "updateNow": "Mettre à jour maintenant",
+            "installAndRestart": "Installer et redémarrer",
+            "downloadError": "Erreur lors du téléchargement"
+        },
+        "userProfileMenu": {
+            "title": "Profil Utilisateur",
+            "preferences": {
+                "title": "Préférences",
+                "language": {
+                    "title": "Langue",
+                    "switch": {
+                        "error": "Échec du changement de langue",
+                        "error_detail": "Veuillez réessayer.",
+                        "success": "Langue changée avec succès"
+                    }
+                },
+                "theme": {
+                    "title": "Thème",
+                    "light": "Clair",
+                    "dark": "Sombre",
+                    "system": "Système"
+                }
+            }
+        }
     }
-  }
 }

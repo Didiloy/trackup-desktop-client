@@ -72,14 +72,14 @@ const accessToken = session.value?.access_token
 const result = await window.api.billing.startSubscription(accessToken)
 
 if (result.error) {
-  console.error('Error:', result.error)
-  // Possible errors:
-  // - "Authentication required"
-  // - "Invalid URL scheme"
-  // - "Failed to open browser"
+    console.error('Error:', result.error)
+    // Possible errors:
+    // - "Authentication required"
+    // - "Invalid URL scheme"
+    // - "Failed to open browser"
 } else {
-  // Success! Browser has opened with Stripe checkout
-  console.log('Stripe checkout opened in browser')
+    // Success! Browser has opened with Stripe checkout
+    console.log('Stripe checkout opened in browser')
 }
 ```
 
@@ -89,10 +89,10 @@ if (result.error) {
 const result = await window.api.billing.startPortal(accessToken)
 
 if (result.error) {
-  console.error('Error:', result.error)
+    console.error('Error:', result.error)
 } else {
-  // Success! Browser has opened with Stripe billing portal
-  console.log('Billing portal opened in browser')
+    // Success! Browser has opened with Stripe billing portal
+    console.log('Billing portal opened in browser')
 }
 ```
 
@@ -100,24 +100,24 @@ if (result.error) {
 
 ```vue
 <template>
-  <div class="billing-actions">
-    <h3>Manage Subscription</h3>
+    <div class="billing-actions">
+        <h3>Manage Subscription</h3>
 
-    <button @click="startSubscription" :disabled="loading" class="btn-primary">
-      {{ loading ? 'Opening...' : 'Subscribe Now' }}
-    </button>
+        <button @click="startSubscription" :disabled="loading" class="btn-primary">
+            {{ loading ? 'Opening...' : 'Subscribe Now' }}
+        </button>
 
-    <button
-      v-if="hasActiveSubscription"
-      @click="openBillingPortal"
-      :disabled="loading"
-      class="btn-secondary"
-    >
-      {{ loading ? 'Opening...' : 'Manage Billing' }}
-    </button>
+        <button
+            v-if="hasActiveSubscription"
+            @click="openBillingPortal"
+            :disabled="loading"
+            class="btn-secondary"
+        >
+            {{ loading ? 'Opening...' : 'Manage Billing' }}
+        </button>
 
-    <div v-if="error" class="error">{{ error }}</div>
-  </div>
+        <div v-if="error" class="error">{{ error }}</div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -130,93 +130,93 @@ const error = ref<string | null>(null)
 const hasActiveSubscription = ref(false) // Check this from user state
 
 async function startSubscription() {
-  const accessToken = session.value?.access_token
-  if (!accessToken) {
-    error.value = 'Please log in first'
-    return
-  }
-
-  loading.value = true
-  error.value = null
-
-  try {
-    const result = await window.api.billing.startSubscription(accessToken)
-
-    if (result.error) {
-      error.value = result.error
-    } else {
-      // Browser opened successfully
-      // Optionally show a message
-      console.log('Redirected to Stripe checkout')
+    const accessToken = session.value?.access_token
+    if (!accessToken) {
+        error.value = 'Please log in first'
+        return
     }
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Unknown error'
-  } finally {
-    loading.value = false
-  }
+
+    loading.value = true
+    error.value = null
+
+    try {
+        const result = await window.api.billing.startSubscription(accessToken)
+
+        if (result.error) {
+            error.value = result.error
+        } else {
+            // Browser opened successfully
+            // Optionally show a message
+            console.log('Redirected to Stripe checkout')
+        }
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'Unknown error'
+    } finally {
+        loading.value = false
+    }
 }
 
 async function openBillingPortal() {
-  const accessToken = session.value?.access_token
-  if (!accessToken) {
-    error.value = 'Please log in first'
-    return
-  }
-
-  loading.value = true
-  error.value = null
-
-  try {
-    const result = await window.api.billing.startPortal(accessToken)
-
-    if (result.error) {
-      error.value = result.error
-    } else {
-      console.log('Redirected to Stripe billing portal')
+    const accessToken = session.value?.access_token
+    if (!accessToken) {
+        error.value = 'Please log in first'
+        return
     }
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Unknown error'
-  } finally {
-    loading.value = false
-  }
+
+    loading.value = true
+    error.value = null
+
+    try {
+        const result = await window.api.billing.startPortal(accessToken)
+
+        if (result.error) {
+            error.value = result.error
+        } else {
+            console.log('Redirected to Stripe billing portal')
+        }
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'Unknown error'
+    } finally {
+        loading.value = false
+    }
 }
 </script>
 
 <style scoped>
 .billing-actions {
-  padding: 20px;
+    padding: 20px;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 10px 20px;
-  margin: 10px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
 }
 
 .btn-primary {
-  background: #635bff;
-  color: white;
+    background: #635bff;
+    color: white;
 }
 
 .btn-secondary {
-  background: #6c757d;
-  color: white;
+    background: #6c757d;
+    color: white;
 }
 
 button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .error {
-  color: red;
-  margin-top: 10px;
-  padding: 10px;
-  background: #ffebee;
-  border-radius: 4px;
+    color: red;
+    margin-top: 10px;
+    padding: 10px;
+    background: #ffebee;
+    border-radius: 4px;
 }
 </style>
 ```
@@ -229,70 +229,70 @@ import { ref } from 'vue'
 import { useAuth } from '@/composables/auth/useAuth'
 
 export function useBilling() {
-  const { session } = useAuth()
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+    const { session } = useAuth()
+    const loading = ref(false)
+    const error = ref<string | null>(null)
 
-  async function startSubscription() {
-    const accessToken = session.value?.access_token
-    if (!accessToken) {
-      error.value = 'Not authenticated'
-      return false
+    async function startSubscription() {
+        const accessToken = session.value?.access_token
+        if (!accessToken) {
+            error.value = 'Not authenticated'
+            return false
+        }
+
+        loading.value = true
+        error.value = null
+
+        try {
+            const result = await window.api.billing.startSubscription(accessToken)
+
+            if (result.error) {
+                error.value = result.error
+                return false
+            }
+
+            return true
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        } finally {
+            loading.value = false
+        }
     }
 
-    loading.value = true
-    error.value = null
+    async function openBillingPortal() {
+        const accessToken = session.value?.access_token
+        if (!accessToken) {
+            error.value = 'Not authenticated'
+            return false
+        }
 
-    try {
-      const result = await window.api.billing.startSubscription(accessToken)
+        loading.value = true
+        error.value = null
 
-      if (result.error) {
-        error.value = result.error
-        return false
-      }
+        try {
+            const result = await window.api.billing.startPortal(accessToken)
 
-      return true
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    } finally {
-      loading.value = false
+            if (result.error) {
+                error.value = result.error
+                return false
+            }
+
+            return true
+        } catch (e) {
+            error.value = e instanceof Error ? e.message : 'Unknown error'
+            return false
+        } finally {
+            loading.value = false
+        }
     }
-  }
 
-  async function openBillingPortal() {
-    const accessToken = session.value?.access_token
-    if (!accessToken) {
-      error.value = 'Not authenticated'
-      return false
+    return {
+        loading,
+        error,
+        startSubscription,
+        openBillingPortal
     }
-
-    loading.value = true
-    error.value = null
-
-    try {
-      const result = await window.api.billing.startPortal(accessToken)
-
-      if (result.error) {
-        error.value = result.error
-        return false
-      }
-
-      return true
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : 'Unknown error'
-      return false
-    } finally {
-      loading.value = false
-    }
-  }
-
-  return {
-    loading,
-    error,
-    startSubscription,
-    openBillingPortal
-  }
 }
 ```
 

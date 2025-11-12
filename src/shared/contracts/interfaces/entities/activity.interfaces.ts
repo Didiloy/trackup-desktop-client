@@ -3,25 +3,25 @@
  */
 
 export interface IActivity {
-  public_id: string
-  name: string
-  server_public_id: string
+    public_id: string
+    name: string
+    server_public_id: string
 }
 
 export interface ICreateActivityRequest {
-  name: string
+    name: string
 }
 
 export interface IUpdateActivityRequest {
-  name: string
+    name: string
 }
 
 export interface IListActivitiesOptions {
-  search?: string
-  searchMode?: 'startsWith' | 'endsWith' | 'contains' | 'exact'
+    search?: string
+    searchMode?: 'startsWith' | 'endsWith' | 'contains' | 'exact'
 }
 
 export interface IActivityApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }

@@ -10,21 +10,21 @@ import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 const { isAuthenticated } = useAuth()
 
 onMounted(async () => {
-  console.log(isAuthenticated.value)
+    console.log(isAuthenticated.value)
 })
 </script>
 
 <template>
-  <div
-    id="App-wrapper"
-    class="flex flex-col items-center justify-start h-screen w-screen bg-surface-200 overflow-hidden"
-  >
-    <TopAside />
-    <UpdateModal />
-    <TransitionWrapper name="zoom-fade">
-      <LoginOrSignup v-if="!isAuthenticated" key="login" />
-      <Application v-else key="application" />
-    </TransitionWrapper>
-    <Toast />
-  </div>
+    <div
+        id="App-wrapper"
+        class="flex flex-col items-center justify-start h-screen w-screen bg-surface-200 overflow-hidden"
+    >
+        <TopAside />
+        <UpdateModal />
+        <TransitionWrapper name="zoom-fade">
+            <LoginOrSignup v-if="!isAuthenticated" key="login" />
+            <Application v-else key="application" />
+        </TransitionWrapper>
+        <Toast />
+    </div>
 </template>

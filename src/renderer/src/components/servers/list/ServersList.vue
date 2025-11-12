@@ -20,27 +20,27 @@ const showActionDialog = ref(false)
 
 // Lifecycle
 onMounted(async () => {
-  await fetchServers()
+    await fetchServers()
 })
 
 // Event handlers
 function handleOpenActionDialog(): void {
-  showActionDialog.value = true
+    showActionDialog.value = true
 }
 
 async function handleServerAction(server: IServer): Promise<void> {
-  showActionDialog.value = false
-  await handleServerCreated(server)
+    showActionDialog.value = false
+    await handleServerCreated(server)
 }
 </script>
 <template>
-  <ServersListItems
-    :servers="servers"
-    :active-server-id="currentServerId"
-    :create-server-label="i18n.t('userInterface.serverActionView.title')"
-    @server-click="navigateToServer"
-    @server-action-click="handleOpenActionDialog"
-  />
+    <ServersListItems
+        :servers="servers"
+        :active-server-id="currentServerId"
+        :create-server-label="i18n.t('userInterface.serverActionView.title')"
+        @server-click="navigateToServer"
+        @server-action-click="handleOpenActionDialog"
+    />
 
-  <ServerCreateJoinDialog v-model="showActionDialog" @server-action="handleServerAction" />
+    <ServerCreateJoinDialog v-model="showActionDialog" @server-action="handleServerAction" />
 </template>

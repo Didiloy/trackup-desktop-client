@@ -5,14 +5,14 @@
 import type { IEnumValue } from './enum-definition.interfaces'
 
 export interface ISessionActivity {
-  public_id: string
-  name: string
+    public_id: string
+    name: string
 }
 
 export interface ISessionMember {
-  public_id: string
-  nickname: string
-  avatar: string | null
+    public_id: string
+    nickname: string
+    avatar: string | null
 }
 
 /**
@@ -20,20 +20,20 @@ export interface ISessionMember {
  * Reuses IEnumValue from enums-definition and adds the definition name and selected key
  */
 export interface ISessionEnum {
-  enum_definition_name: string
-  values: IEnumValue // Reuses the enum value structure
-  selected_key: string // Which value was selected (e.g., "value1", "value2", etc.)
+    enum_definition_name: string
+    values: IEnumValue // Reuses the enum value structure
+    selected_key: string // Which value was selected (e.g., "value1", "value2", etc.)
 }
 
 export interface ISession {
-  public_id: string
-  date: string
-  duration: string
-  activity: ISessionActivity
-  server_member: ISessionMember[]
-  enums: ISessionEnum[]
-  likes_count: number
-  liked_by_me: boolean
+    public_id: string
+    date: string
+    duration: string
+    activity: ISessionActivity
+    server_member: ISessionMember[]
+    enums: ISessionEnum[]
+    likes_count: number
+    liked_by_me: boolean
 }
 
 /**
@@ -41,40 +41,40 @@ export interface ISession {
  * References an enum value from an enum definition and specifies which key to use
  */
 export interface ICreateSessionEnumRequest {
-  enum_value_id: string // ID of the enum value (from IEnumValue.public_id)
-  selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5' // Which key to select
+    enum_value_id: string // ID of the enum value (from IEnumValue.public_id)
+    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5' // Which key to select
 }
 
 export interface ICreateSessionRequest {
-  activity_id: string
-  duration: number
-  date: string
-  participants: string[]
-  enums?: ICreateSessionEnumRequest[]
+    activity_id: string
+    duration: number
+    date: string
+    participants: string[]
+    enums?: ICreateSessionEnumRequest[]
 }
 
 export interface IUpdateSessionRequest {
-  activity_id?: string
-  duration?: number
-  date?: string
-  participants?: string[]
-  enums?: ICreateSessionEnumRequest[]
+    activity_id?: string
+    duration?: number
+    date?: string
+    participants?: string[]
+    enums?: ICreateSessionEnumRequest[]
 }
 
 export interface IPaginatedSessions {
-  total: number
-  page: number
-  limit: number
-  pageCount: number
-  data: ISession[]
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: ISession[]
 }
 
 export interface IListSessionsOptions {
-  page?: number
-  limit?: number
+    page?: number
+    limit?: number
 }
 
 export interface ISessionApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }

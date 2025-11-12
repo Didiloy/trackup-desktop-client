@@ -3,5 +3,5 @@
  */
 
 export interface IWindowState {
-  isMaximized: boolean
+    isMaximized: boolean
 }

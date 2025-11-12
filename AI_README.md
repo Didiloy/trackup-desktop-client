@@ -42,9 +42,9 @@ Architecture rules (must follow)
 - Do not use ipcRenderer directly in renderer. Only call window.api.<domain>.\* exposed by preload bridges.
 - Define channels per domain under src/shared/contracts/channels/<domain>.ts and aggregate in src/shared/contracts/channels.ts.
 - Each domain has:
-  - Main-side IPC file: src/main/ipc/<domain>.ipc.ts
-  - Preload bridge: src/preload/bridges/<domain>.bridge.ts
-  - Optional main service: src/main/services/<Domain>Service.ts
+    - Main-side IPC file: src/main/ipc/<domain>.ipc.ts
+    - Preload bridge: src/preload/bridges/<domain>.bridge.ts
+    - Optional main service: src/main/services/<Domain>Service.ts
 - Security: BrowserWindow must use contextIsolation: true, nodeIntegration: false. setWindowOpenHandler must synchronously return { action: 'deny' } and use shell.openExternal for URLs. Keep applySecurity() active.
 - Validate inputs in main IPC handlers before calling services. Prefer types + runtime checks.
 - Never expose sensitive Node capabilities to renderer via window.api.
@@ -59,15 +59,15 @@ Deep link flow (trackup://)
 Common patterns
 
 - Add a new domain “settings”:
-  1. Channels: src/shared/contracts/channels/settings.ts (export SETTINGS_CHANNELS), aggregate in shared/contracts/channels.ts
-  2. Main IPC: src/main/ipc/settings.ipc.ts (register handlers), add to src/main/ipc/index.channels.ts
-  3. Preload: src/preload/bridges/settings.bridge.ts; add to window.api in src/preload/index.channels.ts and type in src/preload/index.preload.d.ts
-  4. Renderer: call window.api.settings.get()/set() and subscribe to events
-  5. Validate IPC inputs; do not expose Node APIs directly
+    1. Channels: src/shared/contracts/channels/settings.ts (export SETTINGS_CHANNELS), aggregate in shared/contracts/channels.ts
+    2. Main IPC: src/main/ipc/settings.ipc.ts (register handlers), add to src/main/ipc/index.channels.ts
+    3. Preload: src/preload/bridges/settings.bridge.ts; add to window.api in src/preload/index.channels.ts and type in src/preload/index.preload.d.ts
+    4. Renderer: call window.api.settings.get()/set() and subscribe to events
+    5. Validate IPC inputs; do not expose Node APIs directly
 - Open external link from renderer:
-  - Call await window.api.app.openExternal(url). The main validates http(s) scheme and uses shell.openExternal.
+    - Call await window.api.app.openExternal(url). The main validates http(s) scheme and uses shell.openExternal.
 - Window controls:
-  - window.api.window.minimize/maximize/close and isMaximized()
+    - window.api.window.minimize/maximize/close and isMaximized()
 
 Testing and quality gates
 

@@ -7,26 +7,26 @@
  */
 
 export interface ExtensionConfig {
-  id: string
-  name: string
-  enabled?: boolean
+    id: string
+    name: string
+    enabled?: boolean
 }
 
 export const EXTENSIONS_TO_INSTALL: ExtensionConfig[] = [
-  {
-    id: 'nhdogjmejiglipccpnnnanhbledajbpd', // Vue.js DevTools
-    name: 'Vue.js DevTools',
-    enabled: true
-  }
-  // Add more extensions here
-  // {
-  //   id: 'fmkadmapgofadopljbjfkapdkoienihi', // React Developer Tools
-  //   name: 'React Developer Tools',
-  //   enabled: true
-  // },
-  // {
-  //   id: 'lmhkpmbekcpmknklioeibfkpmmfibljd', // Redux DevTools
-  //   name: 'Redux DevTools',
-  //   enabled: false
-  // }
+    {
+        id: 'nhdogjmejiglipccpnnnanhbledajbpd', // Vue.js DevTools
+        name: 'Vue.js DevTools',
+        enabled: true
+    }
+    // Add more extensions here
+    // {
+    //   id: 'fmkadmapgofadopljbjfkapdkoienihi', // React Developer Tools
+    //   name: 'React Developer Tools',
+    //   enabled: true
+    // },
+    // {
+    //   id: 'lmhkpmbekcpmknklioeibfkpmmfibljd', // Redux DevTools
+    //   name: 'Redux DevTools',
+    //   enabled: false
+    // }
 ]

@@ -7,7 +7,7 @@
  * Validation error result
  */
 export interface ValidationError {
-  error: string
+    error: string
 }
 
 /**
@@ -22,10 +22,10 @@ export type ValidationResult = ValidationError | undefined
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validateRequired(value: unknown, fieldName: string): ValidationResult {
-  if (!value || (typeof value === 'string' && value.trim() === '')) {
-    return { error: `${fieldName} is required` }
-  }
-  return undefined
+    if (!value || (typeof value === 'string' && value.trim() === '')) {
+        return { error: `${fieldName} is required` }
+    }
+    return undefined
 }
 
 /**
@@ -34,13 +34,13 @@ export function validateRequired(value: unknown, fieldName: string): ValidationR
  * @returns ValidationError if any field is invalid, undefined if all are valid
  */
 export function validateRequiredFields(
-  fields: Record<string, { value: unknown; name: string }>
+    fields: Record<string, { value: unknown; name: string }>
 ): ValidationResult {
-  for (const { value, name } of Object.values(fields)) {
-    const error = validateRequired(value, name)
-    if (error) return error
-  }
-  return undefined
+    for (const { value, name } of Object.values(fields)) {
+        const error = validateRequired(value, name)
+        if (error) return error
+    }
+    return undefined
 }
 
 /**
@@ -49,7 +49,7 @@ export function validateRequiredFields(
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validateAuth(accessToken: string): ValidationResult {
-  return validateRequired(accessToken, 'Authentication')
+    return validateRequired(accessToken, 'Authentication')
 }
 
 /**
@@ -59,13 +59,13 @@ export function validateAuth(accessToken: string): ValidationResult {
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validatePagination(page?: number, limit?: number): ValidationResult {
-  if (page !== undefined && page < 1) {
-    return { error: 'Page must be >= 1' }
-  }
-  if (limit !== undefined && limit < 1) {
-    return { error: 'Limit must be >= 1' }
-  }
-  return undefined
+    if (page !== undefined && page < 1) {
+        return { error: 'Page must be >= 1' }
+    }
+    if (limit !== undefined && limit < 1) {
+        return { error: 'Limit must be >= 1' }
+    }
+    return undefined
 }
 
 /**
@@ -75,10 +75,10 @@ export function validatePagination(page?: number, limit?: number): ValidationRes
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validatePositive(value: number | undefined, fieldName: string): ValidationResult {
-  if (value !== undefined && value <= 0) {
-    return { error: `${fieldName} must be greater than 0` }
-  }
-  return undefined
+    if (value !== undefined && value <= 0) {
+        return { error: `${fieldName} must be greater than 0` }
+    }
+    return undefined
 }
 
 /**
@@ -88,10 +88,10 @@ export function validatePositive(value: number | undefined, fieldName: string): 
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validateNotEmpty<T>(array: T[] | undefined, fieldName: string): ValidationResult {
-  if (!array || array.length === 0) {
-    return { error: `${fieldName} must not be empty` }
-  }
-  return undefined
+    if (!array || array.length === 0) {
+        return { error: `${fieldName} must not be empty` }
+    }
+    return undefined
 }
 
 /**
@@ -100,10 +100,10 @@ export function validateNotEmpty<T>(array: T[] | undefined, fieldName: string): 
  * @returns ValidationError if invalid, undefined if valid
  */
 export function validateUrlScheme(url: string): ValidationResult {
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    return { error: 'Invalid URL scheme' }
-  }
-  return undefined
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return { error: 'Invalid URL scheme' }
+    }
+    return undefined
 }
 
 /**
@@ -113,8 +113,8 @@ export function validateUrlScheme(url: string): ValidationResult {
  * @returns ValidationError if any validation failed, undefined if all passed
  */
 export function combineValidations(...validations: ValidationResult[]): ValidationResult {
-  for (const validation of validations) {
-    if (validation) return validation
-  }
-  return undefined
+    for (const validation of validations) {
+        if (validation) return validation
+    }
+    return undefined
 }

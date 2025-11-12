@@ -22,29 +22,29 @@ import { registerBillingIpc } from './billing.ipc'
  * Central place to wire up all IPC modules
  */
 export function registerAllIpc(): void {
-  // Clear any existing handlers (useful for hot reload in development)
-  ipcMain.removeAllListeners()
+    // Clear any existing handlers (useful for hot reload in development)
+    ipcMain.removeAllListeners()
 
-  // Register domain-specific IPC handlers
-  registerWindowIpc()
-  registerAppIpc()
-  registerServerIpc()
-  registerEnumDefinitionIpc()
-  registerActivityIpc()
-  registerActivitySkillLevelIpc()
-  registerSessionIpc()
-  registerMemberIpc()
-  registerUserIpc()
-  registerServerTypeIpc()
+    // Register domain-specific IPC handlers
+    registerWindowIpc()
+    registerAppIpc()
+    registerServerIpc()
+    registerEnumDefinitionIpc()
+    registerActivityIpc()
+    registerActivitySkillLevelIpc()
+    registerSessionIpc()
+    registerMemberIpc()
+    registerUserIpc()
+    registerServerTypeIpc()
 
-  // Register stats IPC handlers
-  registerServerStatsIpc()
-  registerMemberStatsIpc()
-  registerActivityStatsIpc()
-  registerMemberActivityStatsIpc()
-  registerEnumDefinitionStatsIpc()
-  registerSnapshotStatsIpc()
+    // Register stats IPC handlers
+    registerServerStatsIpc()
+    registerMemberStatsIpc()
+    registerActivityStatsIpc()
+    registerMemberActivityStatsIpc()
+    registerEnumDefinitionStatsIpc()
+    registerSnapshotStatsIpc()
 
-  // Register billing IPC handlers
-  registerBillingIpc()
+    // Register billing IPC handlers
+    registerBillingIpc()
 }

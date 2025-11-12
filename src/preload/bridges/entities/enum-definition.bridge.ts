@@ -1,10 +1,10 @@
 import { ipcRenderer } from 'electron'
 import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.channels'
 import type {
-  IEnumDefinition,
-  ICreateEnumDefinitionRequest,
-  IUpdateEnumDefinitionRequest,
-  IEnumDefinitionApiResponse
+    IEnumDefinition,
+    ICreateEnumDefinitionRequest,
+    IUpdateEnumDefinitionRequest,
+    IEnumDefinitionApiResponse
 } from '../../../shared/contracts/interfaces/entities/enum-definition.interfaces'
 
 /**
@@ -12,60 +12,65 @@ import type {
  * Exposes enum definition-related functions to the renderer
  */
 export const enumDefinitionBridge = {
-  /**
-   * Create a new enum definition in a servers (creator only)
-   */
-  create: (
-    serverId: string,
-    request: ICreateEnumDefinitionRequest,
-    accessToken: string
-  ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
-    return ipcRenderer.invoke(ipc_channels.enumDefinition.create, serverId, request, accessToken)
-  },
+    /**
+     * Create a new enum definition in a servers (creator only)
+     */
+    create: (
+        serverId: string,
+        request: ICreateEnumDefinitionRequest,
+        accessToken: string
+    ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.enumDefinition.create,
+            serverId,
+            request,
+            accessToken
+        )
+    },
 
-  /**
-   * List all enum definitions in a servers
-   */
-  list: (
-    serverId: string,
-    accessToken: string
-  ): Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>> => {
-    return ipcRenderer.invoke(ipc_channels.enumDefinition.list, serverId, accessToken)
-  },
+    /**
+     * List all enum definitions in a servers
+     */
+    list: (
+        serverId: string,
+        accessToken: string
+    ): Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>> => {
+        return ipcRenderer.invoke(ipc_channels.enumDefinition.list, serverId, accessToken)
+    },
 
-  /**
-   * Update an enum definition (creator only)
-   */
-  update: (
-    serverId: string,
-    enumDefinitionId: string,
-    request: IUpdateEnumDefinitionRequest,
-    accessToken: string
-  ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
-    return ipcRenderer.invoke(
-      ipc_channels.enumDefinition.update,
-      serverId,
-      enumDefinitionId,
-      request,
-      accessToken
-    )
-  },
+    /**
+     * Update an enum definition (creator only)
+     */
+    update: (
+        serverId: string,
+        enumDefinitionId: string,
+        request: IUpdateEnumDefinitionRequest,
+        accessToken: string
+    ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.enumDefinition.update,
+            serverId,
+            enumDefinitionId,
+            request,
+            accessToken
+        )
+    },
 
-  /**
-   * Delete an enum definition (creator only)
-   */
-  delete: (
-    serverId: string,
-    enumDefinitionId: string,
-    accessToken: string
-  ): Promise<IEnumDefinitionApiResponse<void>> => {
-    return ipcRenderer.invoke(
-      ipc_channels.enumDefinition.delete,
-      serverId,
-      enumDefinitionId,
-      accessToken
-    )
-  }
+    /**
+     * Delete an enum definition (creator only)
+     */
+    delete: (
+        serverId: string,
+        enumDefinitionId: string,
+        accessToken: string
+    ): Promise<IEnumDefinitionApiResponse<void>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.enumDefinition.delete,
+            serverId,
+            enumDefinitionId,
+            accessToken
+        )
+    }
 }
 
 export type EnumDefinitionBridge = typeof enumDefinitionBridge

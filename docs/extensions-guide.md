@@ -25,16 +25,16 @@ Ouvrez le fichier `src/main/config/extensions.config.ts` et ajoutez votre extens
 
 ```typescript
 export const EXTENSIONS_TO_INSTALL: ExtensionConfig[] = [
-  {
-    id: 'nhdogjmejiglipccpnnnanhbledajbpd',
-    name: 'Vue.js DevTools',
-    enabled: true
-  },
-  {
-    id: 'fmkadmapgofadopljbjfkapdkoienihi', // Nouvel ID
-    name: 'React Developer Tools', // Nouveau nom
-    enabled: true // Activée
-  }
+    {
+        id: 'nhdogjmejiglipccpnnnanhbledajbpd',
+        name: 'Vue.js DevTools',
+        enabled: true
+    },
+    {
+        id: 'fmkadmapgofadopljbjfkapdkoienihi', // Nouvel ID
+        name: 'React Developer Tools', // Nouveau nom
+        enabled: true // Activée
+    }
 ]
 ```
 

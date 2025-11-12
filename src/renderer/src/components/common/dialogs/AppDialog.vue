@@ -2,43 +2,43 @@
 import Dialog from 'primevue/dialog'
 
 interface Props {
-  modelValue: boolean
-  headerComponent?: unknown
-  headerProps?: Record<string, unknown>
-  footerComponent?: unknown
-  footerProps?: Record<string, unknown>
-  modal?: boolean
-  closable?: boolean
-  dismissableMask?: boolean
-  styleClass?: string
-  contentClass?: string
-  headerClass?: string
-  footerClass?: string
+    modelValue: boolean
+    headerComponent?: unknown
+    headerProps?: Record<string, unknown>
+    footerComponent?: unknown
+    footerProps?: Record<string, unknown>
+    modal?: boolean
+    closable?: boolean
+    dismissableMask?: boolean
+    styleClass?: string
+    contentClass?: string
+    headerClass?: string
+    footerClass?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modal: true,
-  closable: true,
-  dismissableMask: true,
-  styleClass: '',
-  contentClass: 'bg-surface-50',
-  headerClass: 'bg-surface-50',
-  footerClass: 'bg-surface-50'
+    modal: true,
+    closable: true,
+    dismissableMask: true,
+    styleClass: '',
+    contentClass: 'bg-surface-50',
+    headerClass: 'bg-surface-50',
+    footerClass: 'bg-surface-50'
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-  (e: 'hide'): void
-  (e: 'show'): void
+    (e: 'update:modelValue', value: boolean): void
+    (e: 'hide'): void
+    (e: 'show'): void
 }>()
 
 function onHide(): void {
-  emit('update:modelValue', false)
-  emit('hide')
+    emit('update:modelValue', false)
+    emit('hide')
 }
 
 function onShow(): void {
-  emit('show')
+    emit('show')
 }
 import { computed } from 'vue'
 
@@ -46,34 +46,34 @@ const rootClass = computed(() => `rounded-2xl overflow-hidden ${props.styleClass
 </script>
 
 <template>
-  <Dialog
-    :draggable="false"
-    :visible="modelValue"
-    :modal="props.modal"
-    :closable="props.closable"
-    :dismissableMask="props.dismissableMask"
-    :pt="{
-      root: { class: rootClass },
-      content: { class: contentClass },
-      header: { class: headerClass },
-      footer: { class: footerClass }
-    }"
-    @update:visible="(v: boolean) => emit('update:modelValue', v)"
-    @hide="onHide"
-    @show="onShow"
-  >
-    <template #header>
-      <slot name="header">
-        <component v-if="headerComponent" :is="headerComponent" v-bind="headerProps" />
-      </slot>
-    </template>
+    <Dialog
+        :draggable="false"
+        :visible="modelValue"
+        :modal="props.modal"
+        :closable="props.closable"
+        :dismissableMask="props.dismissableMask"
+        :pt="{
+            root: { class: rootClass },
+            content: { class: contentClass },
+            header: { class: headerClass },
+            footer: { class: footerClass }
+        }"
+        @update:visible="(v: boolean) => emit('update:modelValue', v)"
+        @hide="onHide"
+        @show="onShow"
+    >
+        <template #header>
+            <slot name="header">
+                <component v-if="headerComponent" :is="headerComponent" v-bind="headerProps" />
+            </slot>
+        </template>
 
-    <slot />
+        <slot />
 
-    <template #footer>
-      <slot name="footer">
-        <component v-if="footerComponent" :is="footerComponent" v-bind="footerProps" />
-      </slot>
-    </template>
-  </Dialog>
+        <template #footer>
+            <slot name="footer">
+                <component v-if="footerComponent" :is="footerComponent" v-bind="footerProps" />
+            </slot>
+        </template>
+    </Dialog>
 </template>

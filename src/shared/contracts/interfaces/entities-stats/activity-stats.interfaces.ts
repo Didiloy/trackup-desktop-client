@@ -11,17 +11,17 @@ import { EPeriod } from '../../enums/period.enum'
 // ============================================================================
 
 export interface IActivityStats {
-  activity_id: string
-  activity_name: string
-  total_sessions: number
-  total_duration: number
-  avg_duration: number
-  total_likes: number
-  avg_likes_per_session: number
-  unique_participants: number
-  total_participants: number
-  avg_participants_per_session: number
-  popularity_score: number
+    activity_id: string
+    activity_name: string
+    total_sessions: number
+    total_duration: number
+    avg_duration: number
+    total_likes: number
+    avg_likes_per_session: number
+    unique_participants: number
+    total_participants: number
+    avg_participants_per_session: number
+    popularity_score: number
 }
 
 // ============================================================================
@@ -29,13 +29,13 @@ export interface IActivityStats {
 // ============================================================================
 
 export interface IActivityTimePatterns {
-  peak_day_of_week: number
-  peak_hour: number
-  avg_session_hours: number
-  likes_per_session: number
-  unique_participants: number
-  streak_current: number
-  streak_longest: number
+    peak_day_of_week: number
+    peak_hour: number
+    avg_session_hours: number
+    likes_per_session: number
+    unique_participants: number
+    streak_current: number
+    streak_longest: number
 }
 
 // ============================================================================
@@ -43,22 +43,22 @@ export interface IActivityTimePatterns {
 // ============================================================================
 
 export interface IActivityGrowthTrend {
-  growth_percent: number
-  sessions_this_week: number
-  sessions_last_week: number
-  growth_rate: number
-  trend: string
+    growth_percent: number
+    sessions_this_week: number
+    sessions_last_week: number
+    growth_rate: number
+    trend: string
 }
 
 export interface IActivityGrowthTrends {
-  activity_id: string
-  activity_name: string
-  period: string
-  current_period_start: string
-  current_period_end: string
-  sessions: IGrowthMetric
-  duration: IGrowthMetric
-  unique_members: IGrowthMetric
+    activity_id: string
+    activity_name: string
+    period: string
+    current_period_start: string
+    current_period_end: string
+    sessions: IGrowthMetric
+    duration: IGrowthMetric
+    unique_members: IGrowthMetric
 }
 
 // ============================================================================
@@ -66,11 +66,11 @@ export interface IActivityGrowthTrends {
 // ============================================================================
 
 export interface ITopContributor {
-  rank: number
-  member_id: string
-  user_email: string
-  sessions_count: number
-  total_duration: number
+    rank: number
+    member_id: string
+    user_email: string
+    sessions_count: number
+    total_duration: number
 }
 
 // ============================================================================
@@ -78,10 +78,10 @@ export interface ITopContributor {
 // ============================================================================
 
 export interface IActivityStatsDetails extends IActivityStats {
-  time_patterns: IActivityTimePatterns
-  growth_trend: IActivityGrowthTrend
-  timeline: IStatsTimeline[]
-  top_contributors: ITopContributor[]
+    time_patterns: IActivityTimePatterns
+    growth_trend: IActivityGrowthTrend
+    timeline: IStatsTimeline[]
+    top_contributors: ITopContributor[]
 }
 
 // ============================================================================
@@ -89,20 +89,20 @@ export interface IActivityStatsDetails extends IActivityStats {
 // ============================================================================
 
 export interface IActivityLeaderboardEntry {
-  rank: number
-  activity_id: string
-  activity_name: string
-  popularity_score: number
-  total_sessions: number
-  total_duration: number
-  unique_members: number
+    rank: number
+    activity_id: string
+    activity_name: string
+    popularity_score: number
+    total_sessions: number
+    total_duration: number
+    unique_members: number
 }
 
 export interface IActivityLeaderboard {
-  leaderboard: IActivityLeaderboardEntry[]
-  period: string
-  limit: number
-  total_activities: number
+    leaderboard: IActivityLeaderboardEntry[]
+    period: string
+    limit: number
+    total_activities: number
 }
 
 // ============================================================================
@@ -110,13 +110,13 @@ export interface IActivityLeaderboard {
 // ============================================================================
 
 export interface IActivityRanking {
-  activity_id: string
-  name: string
-  rank: number
-  total_sessions: number
-  total_duration: number
-  popularity_score: number
-  total_activities: number
+    activity_id: string
+    name: string
+    rank: number
+    total_sessions: number
+    total_duration: number
+    popularity_score: number
+    total_activities: number
 }
 
 // ============================================================================
@@ -124,11 +124,11 @@ export interface IActivityRanking {
 // ============================================================================
 
 export interface IPaginatedActivityStats {
-  total: number
-  page: number
-  limit: number
-  pageCount: number
-  data: IActivityStats[]
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: IActivityStats[]
 }
 
 // ============================================================================
@@ -136,26 +136,26 @@ export interface IPaginatedActivityStats {
 // ============================================================================
 
 export interface IActivityLeaderboardParams {
-  period?: EPeriod
-  limit?: number
+    period?: EPeriod
+    limit?: number
 }
 
 export interface IActivityPaginationParams {
-  page: number
-  limit: number
+    page: number
+    limit: number
 }
 
 export interface IActivityTimelineParams {
-  period?: EPeriod
-  limit?: number
+    period?: EPeriod
+    limit?: number
 }
 
 export interface IActivityGrowthParams {
-  period?: EPeriod
+    period?: EPeriod
 }
 
 export interface IActivityRankingParams {
-  period?: EPeriod
+    period?: EPeriod
 }
 
 // ============================================================================
@@ -163,6 +163,6 @@ export interface IActivityRankingParams {
 // ============================================================================
 
 export interface IActivityStatsApiResponse<T = unknown> {
-  data?: T
-  error?: string
+    data?: T
+    error?: string
 }
