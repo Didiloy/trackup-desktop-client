@@ -12,7 +12,9 @@ import { useI18n } from 'vue-i18n'
 import { copyKeyToClipBoard } from '@/utils'
 
 const route = useRoute()
-const hasServerActions = computed(() => route.name?.toString().includes('Server'))
+const hasServerActions = computed(
+  () => typeof route.name === 'string' && route.name.startsWith('Server')
+)
 
 const server_store = useServerStore()
 const serverName = computed<string>(() => server_store.getName || '')
@@ -115,4 +117,3 @@ async function copyInvite(): Promise<void> {
     0 0 8px rgba(0, 0, 0, 0.35);
 }
 </style>
-
