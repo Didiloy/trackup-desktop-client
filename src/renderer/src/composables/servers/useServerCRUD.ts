@@ -5,7 +5,7 @@ import type {
   IUpdateServerRequest,
   IJoinServerRequest,
   IServerApiResponse
-} from '../../../../shared/contracts/interfaces/entities/server.interfaces'
+} from '@shared/contracts/interfaces/entities/server.interfaces'
 
 interface UseServerCRUDReturn {
   createServer: (request: ICreateServerRequest) => Promise<IServerApiResponse<IServer>>

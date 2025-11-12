@@ -3,7 +3,7 @@ import type {
   IUser,
   IUserServer,
   IUserApiResponse
-} from '../../../../shared/contracts/interfaces/entities/user.interfaces'
+} from '@shared/contracts/interfaces/entities/user.interfaces'
 
 interface UseUserCRUDReturn {
   getMe: () => Promise<IUserApiResponse<IUser>>

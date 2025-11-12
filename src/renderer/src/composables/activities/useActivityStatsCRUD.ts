@@ -13,8 +13,8 @@ import type {
   IActivityGrowthParams,
   IActivityRankingParams,
   IActivityStatsApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
-import type { IStatsTimeline } from '../../../../shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
 interface UseActivityStatsCRUDReturn {
   getActivityLeaderboard: (
