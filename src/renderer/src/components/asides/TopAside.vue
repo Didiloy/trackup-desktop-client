@@ -3,6 +3,7 @@ import { onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
 import { useRoute, useRouter } from 'vue-router'
+import { useServerStore } from '@/stores/server'
 
 const i18n = useI18n()
 const route = useRoute()
@@ -11,6 +12,14 @@ const showMembersAsideToggle = computed(
   () => typeof route.name === 'string' && route.name.startsWith('Server')
 )
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
+const server_store = useServerStore()
+const pageTitle = computed(() => {
+  if (showMembersAsideToggle.value) {
+    const serverName = server_store.getName || ''
+    return `${i18n.t('navigation.server')} - ${serverName}`
+  }
+  return i18n.t('navigation.home')
+})
 
 onMounted(() => {
   handleWindowControls()
@@ -60,7 +69,7 @@ function handleToggleMembersAside(): void {
       <span class="">{{ i18n.t('app.title') }}</span>
     </div>
     <div>
-      <span class="">{{ i18n.t('navigation.home') }}</span>
+      <span class="">{{ pageTitle }}</span>
     </div>
     <div id="window-controls" class="flex items-center justify-center h-full w-fit bg-surface-200">
       <div

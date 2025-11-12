@@ -22,7 +22,8 @@
   "navigation": {
     "home": "Home",
     "back": "Back",
-    "redirecting": "Redirecting..."
+    "redirecting": "Redirecting...",
+    "server": "Server"
   },
   "actions": {
     "title": "Actions",

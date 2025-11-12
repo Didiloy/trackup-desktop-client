@@ -24,7 +24,8 @@
   "navigation": {
     "home": "Accueil",
     "back": "Retour",
-    "redirecting": "Redirection..."
+    "redirecting": "Redirection...",
+    "server": "Serveur"
   },
   "actions": {
     "title": "Actions",
