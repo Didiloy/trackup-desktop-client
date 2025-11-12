@@ -42,11 +42,7 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
         if (!resServerMembers.error && resServerMembers.data?.data) {
           server_store.setMembers(resServerMembers.data.data)
           // Cache the successful result
-          server_store.setCachedServer(
-            server_id,
-            resServerDetails.data,
-            resServerMembers.data.data
-          )
+          server_store.setCachedServer(server_id, resServerDetails.data, resServerMembers.data.data)
         }
       }
     } finally {

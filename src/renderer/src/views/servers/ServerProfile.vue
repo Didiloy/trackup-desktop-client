@@ -7,7 +7,6 @@ import { useServerStore } from '@/stores/server'
 const route = useRoute()
 const server_id = ref<string>(route.params.id as string)
 const server_store = useServerStore()
-
 </script>
 
 <template>
