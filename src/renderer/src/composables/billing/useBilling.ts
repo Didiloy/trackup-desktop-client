@@ -1,8 +1,15 @@
 // src/renderer/src/composables/billing/useBilling.ts
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 
-export function useBilling() {
+interface UseBillingReturn {
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  startSubscription: () => Promise<boolean>
+  openBillingPortal: () => Promise<boolean>
+}
+
+export function useBilling(): UseBillingReturn {
   const user_store = useUserStore()
   const loading = ref(false)
   const error = ref<string | null>(null)

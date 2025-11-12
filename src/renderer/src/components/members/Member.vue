@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IServerMember } from '../../../../shared/contracts/interfaces/entities/member.interfaces'
+import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import { getInitials } from '@/utils'
 
 interface Props {

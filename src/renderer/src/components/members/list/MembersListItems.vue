@@ -7,7 +7,7 @@ import ContextActionMenu from '@/components/common/ContextActionMenu.vue'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
-import { IServerMember } from '../../../../../shared/contracts/interfaces/entities/member.interfaces'
+import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import Member from '@/components/members/Member.vue'
 
 interface Props {

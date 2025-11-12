@@ -6,7 +6,7 @@ import type {
   IMemberActivityPaginationParams,
   IMemberActivityProgressionParams,
   IMemberActivityStatsApiResponse
-} from '../../../../shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
 
 interface UseMemberActivityStatsCRUDReturn {
   getAllMemberActivities: (

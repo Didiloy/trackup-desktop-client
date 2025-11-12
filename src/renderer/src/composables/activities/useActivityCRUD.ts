@@ -5,7 +5,7 @@ import type {
   IUpdateActivityRequest,
   IListActivitiesOptions,
   IActivityApiResponse
-} from '../../../../shared/contracts/interfaces/entities/activity.interfaces'
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface UseActivityCRUDReturn {
   createActivity: (
