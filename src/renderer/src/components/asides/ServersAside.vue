@@ -7,7 +7,9 @@ import { computed } from 'vue'
 import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
 
 const route = useRoute()
-const hasServerActions = computed(() => route.name === 'Server')
+const hasServerActions = computed(
+  () => typeof route.name === 'string' && route.name.startsWith('Server')
+)
 </script>
 
 <template>
@@ -24,7 +26,8 @@ const hasServerActions = computed(() => route.name === 'Server')
       <ServersList />
     </div>
     <TransitionWrapper name="fade">
-      <ServersActionsList v-if="hasServerActions" />
+      <ServersActionsList v-if="hasServerActions" key="server-actions" />
     </TransitionWrapper>
   </aside>
 </template>
+

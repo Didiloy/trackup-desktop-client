@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+
+const router = useRouter()
+const server_store = useServerStore()
+
 interface ServerAction {
   id: string
   label: string
@@ -8,16 +14,29 @@ interface ServerAction {
 }
 
 const actions: ServerAction[] = [
-  { id: 'stats', label: 'Statistiques', icon: 'pi pi-chart-line', routeName: 'ServerStats' },
+  { id: 'overview', label: 'Aperçu', icon: 'pi pi-home', routeName: 'ServerOverview' },
+  { id: 'activities', label: 'Activités', icon: 'pi pi-clock', routeName: 'ServerActivities' },
+  {
+    id: 'server-profile',
+    label: 'Profil du serveur',
+    icon: 'pi pi-user',
+    routeName: 'ServerProfile'
+  },
   { id: 'widgets', label: 'Widgets', icon: 'pi pi-th-large', routeName: 'ServerWidgets' },
-  { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' },
-  { id: 'invites', label: 'Invitations', icon: 'pi pi-link', routeName: 'ServerInvites' }
+  { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' }
 ]
 
-const emit = defineEmits<{ (e: 'action-click', action: ServerAction): void }>()
+// const emit = defineEmits<{ (e: 'action-click', action: ServerAction): void }>()
+//
+// function onClick(action: ServerAction): void {
+//   emit('action-click', action)
+// }
 
 function onClick(action: ServerAction): void {
-  emit('action-click', action)
+  // Navigate to the route if routeName is defined
+  if (action.routeName) {
+    router.push({ name: action.routeName, params: { id: server_store.getPublicId } })
+  }
 }
 </script>
 <template>

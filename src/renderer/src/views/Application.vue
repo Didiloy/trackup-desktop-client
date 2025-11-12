@@ -21,14 +21,14 @@ const isServerAsideVisible = computed(() => route.name === 'Server')
       class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden"
       :class="{ 'rounded-l-xl': !isServerAsideVisible }"
     >
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component, route: currentRoute }">
         <TransitionWrapper name="fade">
-          <component :is="Component" />
+          <component :is="Component" :key="currentRoute.path" />
         </TransitionWrapper>
       </router-view>
     </main>
     <TransitionWrapper name="panel-right">
-      <MembersAside v-if="isMembersAsideVisible" class="h-full w-64 min-w-64" />
+      <MembersAside v-if="isMembersAsideVisible" key="members-aside" class="h-full w-64 min-w-64" />
     </TransitionWrapper>
   </div>
 </template>

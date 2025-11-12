@@ -10,15 +10,45 @@ const routes: RouteRecordRaw[] = [
     component: Home
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/LoginOrSignup.vue')
+  },
+  {
     path: '/servers/:id',
     name: 'Server',
     component: () => import('@/views/servers/Server.vue'),
     meta: { requiresAuth: true }
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/LoginOrSignup.vue')
+    path: '/servers/:id/overview',
+    name: 'ServerOverview',
+    component: () => import('@/views/servers/ServerOverview.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/servers/:id/profile',
+    name: 'ServerProfile',
+    component: () => import('@/views/servers/ServerProfile.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/servers/:id/settings',
+    name: 'ServerSettings',
+    component: () => import('@/views/servers/ServerSettings.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/servers/:id/widgets',
+    name: 'ServerWidgets',
+    component: () => import('@/views/servers/ServerWidgets.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/servers/:id/activities',
+    name: 'ServerActivities',
+    component: () => import('@/views/servers/ServerActivities.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
