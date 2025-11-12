@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 
 const router = useRouter()
+const route = useRoute()
 const server_store = useServerStore()
 
 interface ServerAction {
@@ -26,17 +27,19 @@ const actions: ServerAction[] = [
   { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' }
 ]
 
-// const emit = defineEmits<{ (e: 'action-click', action: ServerAction): void }>()
-//
-// function onClick(action: ServerAction): void {
-//   emit('action-click', action)
-// }
-
-function onClick(action: ServerAction): void {
+function onActionClick(action: ServerAction): void {
   // Navigate to the route if routeName is defined
   if (action.routeName) {
-    router.push({ name: action.routeName, params: { id: server_store.getPublicId } })
+    router.push({
+      name: action.routeName,
+      params: { id: server_store.getPublicId },
+      query: { ...route.query }
+    })
   }
+}
+
+function isActionActive(action: ServerAction): boolean {
+  return route.name === action.routeName
 }
 </script>
 <template>
@@ -45,8 +48,9 @@ function onClick(action: ServerAction): void {
       v-for="a in actions"
       :key="a.id"
       type="button"
-      class="w-full flex items-center gap-2 px-2 py-2 rounded-md hover:bg-surface-200 text-left"
-      @click="onClick(a)"
+      class="w-full flex items-center gap-2 px-2 py-2 rounded-md hover:bg-surface-200 text-left cursor-pointer"
+      :class="{ 'bg-surface-200 font-semibold': isActionActive(a) }"
+      @click="onActionClick(a)"
     >
       <i v-if="a.icon" :class="a.icon" class="text-surface-600"></i>
       <span class="text-sm text-surface-900">{{ a.label }}</span>

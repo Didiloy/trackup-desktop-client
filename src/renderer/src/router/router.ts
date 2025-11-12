@@ -15,12 +15,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/LoginOrSignup.vue')
   },
   {
-    path: '/servers/:id',
-    name: 'Server',
-    component: () => import('@/views/servers/Server.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
     path: '/servers/:id/overview',
     name: 'ServerOverview',
     component: () => import('@/views/servers/ServerOverview.vue'),

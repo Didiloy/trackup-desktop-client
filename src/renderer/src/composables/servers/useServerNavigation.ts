@@ -17,7 +17,11 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
 
   async function navigateToServer(serverId: string): Promise<void> {
     if (!isServerActive(serverId)) {
-      await router.push({ path: `/servers/${serverId}`, query: { ...route.query } })
+      await router.push({
+        name: `ServerOverview`,
+        params: { id: serverId },
+        query: { ...route.query }
+      })
     }
   }
 
