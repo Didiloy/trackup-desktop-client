@@ -89,7 +89,8 @@ async function copyInvite(): Promise<void> {
                 <button
                   v-if="inviteCode"
                   type="button"
-                  class="flex items-center gap-1 px-2 py-1 rounded bg-white/15 hover:bg-white/25 text-white text-2xs"
+                  class="flex items-center justify-center gap-1 px-3 py-1.5 rounded-md text-white text-2xs shadow-sm hover:shadow-md transition-all duration-150 hover:scale-[1.02] active:scale-[0.99]"
+                  :style="{ background: 'var(--gradient-primary)' }"
                   @click="copyInvite"
                 >
                   <i class="pi pi-share-alt"></i>
