@@ -3,7 +3,17 @@ import { computed, ComputedRef, reactive } from 'vue'
 import { IServer } from '../../../shared/contracts/interfaces/entities/server.interfaces'
 import { IServerMember } from '../../../shared/contracts/interfaces/entities/member.interfaces'
 
+interface ServerCache {
+  server: IServer
+  members: IServerMember[]
+  timestamp: number
+}
+
 export const useServerStore = defineStore('server', () => {
+  // Cache to store previously loaded servers (TTL: 5 minutes)
+  const cache = reactive<Map<string, ServerCache>>(new Map())
+  const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+
   // Reactive getters based on auth state
 
   const state = reactive({
@@ -15,7 +25,8 @@ export const useServerStore = defineStore('server', () => {
       canDelete: false,
       canJoin: false
     },
-    ownership: false as boolean
+    ownership: false as boolean,
+    isLoading: false as boolean
   })
 
   const hasServer: ComputedRef<boolean> = computed(() => state.server !== null)
@@ -58,14 +69,59 @@ export const useServerStore = defineStore('server', () => {
     state.server = null
     state.serverMembers = null
     state.ownership = false
+    state.isLoading = false
+  }
+
+  const setLoading = (loading: boolean): void => {
+    state.isLoading = loading
+  }
+
+  const isLoading: ComputedRef<boolean> = computed(() => state.isLoading)
+
+  // Cache methods
+  const getCachedServer = (serverId: string): ServerCache | null => {
+    const cached = cache.get(serverId)
+    if (!cached) return null
+
+    // Check if cache is still valid
+    const now = Date.now()
+    if (now - cached.timestamp > CACHE_TTL) {
+      cache.delete(serverId)
+      return null
+    }
+
+    return cached
+  }
+
+  const setCachedServer = (serverId: string, server: IServer, members: IServerMember[]): void => {
+    cache.set(serverId, {
+      server,
+      members,
+      timestamp: Date.now()
+    })
+  }
+
+  const loadFromCache = (serverId: string): boolean => {
+    const cached = getCachedServer(serverId)
+    if (!cached) return false
+
+    state.server = cached.server
+    state.serverMembers = cached.members
+    return true
+  }
+
+  const clearCache = (): void => {
+    cache.clear()
   }
 
   return {
     hasServer,
     hasServerMembers,
+    isLoading,
 
     setServer,
     setMembers,
+    setLoading,
 
     getPublicId,
     getServerTypePublicId,
@@ -77,6 +133,11 @@ export const useServerStore = defineStore('server', () => {
     getInvitationCode,
     getInvitationCodeExpDate,
     isOwnership,
+
+    getCachedServer,
+    setCachedServer,
+    loadFromCache,
+    clearCache,
 
     resetState
   }

@@ -37,7 +37,10 @@ export function useServerList(): UseServerListReturn {
   async function handleServerCreated(server: IServer): Promise<void> {
     await fetchServers()
     if (server?.public_id) {
-      await router.push(`/servers/${server.public_id}`)
+      await router.push({
+        name: `ServerOverview`,
+        params: { id: server.public_id }
+      })
     }
   }
 

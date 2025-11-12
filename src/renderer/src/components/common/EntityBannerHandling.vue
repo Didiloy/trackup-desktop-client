@@ -79,7 +79,10 @@ function removeBanner(): void {
 <template>
   <div class="w-full flex flex-col gap-3">
     <!-- Banner preview -->
-    <div class="relative w-full rounded-md overflow-hidden border border-surface-200 shadow-sm" style="height: 140px">
+    <div
+      class="relative w-full rounded-md overflow-hidden border border-surface-200 shadow-sm"
+      style="height: 140px"
+    >
       <img
         v-if="banner"
         :src="banner"
@@ -126,12 +129,12 @@ function removeBanner(): void {
         v-model="banner_url"
         placeholder="https://example.com/banner.png"
         class="flex-1"
-        :pt="{ root: { style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)' } }"
+        :pt="{
+          root: { style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)' }
+        }"
         @blur="onUrlChange"
         @keyup.enter="onUrlChange"
       />
     </div>
   </div>
 </template>
-
-

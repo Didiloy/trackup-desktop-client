@@ -7,7 +7,9 @@ import { useRoute, useRouter } from 'vue-router'
 const i18n = useI18n()
 const route = useRoute()
 const router = useRouter()
-const showMembersAsideToggle = computed(() => route.name === 'Server')
+const showMembersAsideToggle = computed(
+  () => typeof route.name === 'string' && route.name.startsWith('Server')
+)
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 
 onMounted(() => {
