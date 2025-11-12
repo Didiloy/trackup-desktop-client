@@ -3,7 +3,9 @@
 </script>
 
 <template>
- ServerSettings
+  <div class="p-4">
+    ServerSettings
+  </div>
 </template>
 
 <style scoped>

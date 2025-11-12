@@ -3,7 +3,9 @@
 </script>
 
 <template>
- ServerActivities
+  <div class="p-4">
+    ServerActivities
+  </div>
 </template>
 
 <style scoped>

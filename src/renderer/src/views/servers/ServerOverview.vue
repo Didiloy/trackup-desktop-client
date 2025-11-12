@@ -3,7 +3,9 @@
 </script>
 
 <template>
- ServerOverview
+  <div class="p-4">
+    ServerOverview
+  </div>
 </template>
 
 <style scoped>

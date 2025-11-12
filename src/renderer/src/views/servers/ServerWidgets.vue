@@ -3,7 +3,9 @@
 </script>
 
 <template>
- ServerWidgets
+  <div class="p-4">
+      ServerWidgets
+  </div>
 </template>
 
 <style scoped>
