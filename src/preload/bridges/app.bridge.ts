@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, clipboard } from 'electron'
 import { ipc_channels } from '../../shared/contracts/ipc-channels/index.channels'
 import type {
   IAppVersion,
@@ -87,6 +87,19 @@ export const appBridge = {
     const handler = (_event: any, progress: IUpdateProgress) => callback(progress)
     ipcRenderer.on(ipc_channels.app.updateProgress, handler)
     return () => ipcRenderer.removeListener(ipc_channels.app.updateProgress, handler)
+  },
+
+  /**
+   * Clipboard helpers (preload → direct electron.clipboard)
+   */
+  clipboard: {
+    readText: (type?: 'selection' | 'clipboard'): string => clipboard.readText(type),
+    writeText: (text: string, type?: 'selection' | 'clipboard'): void =>
+      clipboard.writeText(text, type),
+    readHTML: (type?: 'selection' | 'clipboard'): string => clipboard.readHTML(type),
+    writeHTML: (markup: string, type?: 'selection' | 'clipboard'): void =>
+      clipboard.writeHTML(markup, type),
+    clear: (type?: 'selection' | 'clipboard'): void => clipboard.clear(type)
   }
 }
 
