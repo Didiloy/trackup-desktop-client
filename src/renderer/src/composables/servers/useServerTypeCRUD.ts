@@ -16,7 +16,9 @@ export function useServerTypeCRUD() {
   /**
    * Get all servers types
    */
-  const getAllServerTypes = async (refresh = false): Promise<IServerTypeApiResponse<IServerType[]>> => {
+  const getAllServerTypes = async (
+    refresh = false
+  ): Promise<IServerTypeApiResponse<IServerType[]>> => {
     if (cache.value && !refresh) {
       return { data: cache.value }
     }
