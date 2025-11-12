@@ -14,7 +14,7 @@ const isServerAsideVisible = computed(() => route.name === 'Server')
 <template>
   <div
     id="Application"
-    class="w-full h-full flex flex-row justify-between items-center gap-1 pr-2 pb-2 bg-surface-200"
+    class="w-full h-full flex flex-row justify-between items-center pr-2 pb-2 bg-surface-200"
   >
     <ServersAside />
     <main
