@@ -8,7 +8,7 @@ import { computed } from 'vue'
 const route = useRoute()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
-const isServerAsideVisible = computed(() => route.name === 'Server')
+const isServerAsideVisible = computed(() => route.name?.toString().includes('Server'))
 </script>
 
 <template>
