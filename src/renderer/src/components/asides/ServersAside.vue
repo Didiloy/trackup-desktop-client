@@ -17,9 +17,6 @@ const hasServerActions = computed(
 )
 
 const server_store = useServerStore()
-const serverName = computed<string>(() => server_store.getName || '')
-const inviteCode = computed<string | null>(() => server_store.getInvitationCode || null)
-const bannerUrl = computed<string>(() => server_store.getBanner || '')
 
 const { getServerTypeById } = useServerTypeCRUD()
 const serverTypeName = ref<string>('')
@@ -46,8 +43,8 @@ watch(
 const toast = useToast()
 const i18n = useI18n()
 async function copyInvite(): Promise<void> {
-    if (!inviteCode.value) return
-    await copyKeyToClipBoard(inviteCode.value, toast, i18n)
+    if (!server_store.getInvitationCode) return
+    await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
 }
 </script>
 
@@ -71,9 +68,9 @@ async function copyInvite(): Promise<void> {
                 >
                     <!-- Header with banner and server meta -->
                     <div class="relative w-full" style="height: 120px; min-height: 120px">
-                        <div v-if="bannerUrl" class="absolute inset-0">
+                        <div v-if="server_store.getBanner" class="absolute inset-0">
                             <img
-                                :src="bannerUrl"
+                                :src="server_store.getBanner"
                                 alt="Server banner"
                                 class="w-full h-full object-cover not-draggable"
                             />
@@ -90,14 +87,14 @@ async function copyInvite(): Promise<void> {
                         ></div>
                         <div class="absolute bottom-0 left-0 right-0 p-3">
                             <div class="text-white font-semibold text-sm truncate text-elevated">
-                                {{ serverName || 'Server' }}
+                                {{ server_store.getName || 'Server' }}
                             </div>
                             <div class="text-white/90 text-xs text-elevated">
                                 {{ serverTypeName }}
                             </div>
                             <div class="mt-2 flex items-center gap-2 absolute bottom-0 right-0 p-3">
                                 <button
-                                    v-if="inviteCode"
+                                    v-if="server_store.getInvitationCode"
                                     type="button"
                                     class="flex items-center justify-center gap-1 px-3 py-1.5 rounded-md text-white text-2xs shadow-sm hover:shadow-md transition-all duration-150 hover:scale-[1.02] active:scale-[0.99]"
                                     :style="{ background: 'var(--gradient-primary)' }"
