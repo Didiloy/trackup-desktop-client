@@ -8,5 +8,6 @@ export const SESSION_CHANNELS = {
     update: 'session:update',
     delete: 'session:delete',
     like: 'session:like',
-    unlike: 'session:unlike'
+    unlike: 'session:unlike',
+    addEnums: 'session:addEnums'
 } as const

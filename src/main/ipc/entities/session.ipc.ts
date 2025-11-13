@@ -6,7 +6,8 @@ import type {
     ICreateSessionRequest,
     IUpdateSessionRequest,
     IListSessionsOptions,
-    ISessionApiResponse
+    ISessionApiResponse,
+    IAddSessionEnumsRequest
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -203,6 +204,43 @@ export function registerSessionIpc(): void {
             return apiService.delete<void>(
                 `/api/v1/servers/${serverId}/sessions/${sessionId}/unlike`,
                 accessToken
+            )
+        }
+    )
+
+    // Add enum selections to a session
+    ipcMain.handle(
+        ipc_channels.session.addEnums,
+        async (
+            _event,
+            serverId: string,
+            sessionId: string,
+            request: IAddSessionEnumsRequest,
+            accessToken: string
+        ): Promise<ISessionApiResponse<ISession>> => {
+            logger.info('Adding enum selections to session:', sessionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(sessionId, 'Session ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            // Basic validation of selections
+            if (!request?.selections?.length) {
+                return { error: 'At least one enum selection is required' }
+            }
+            for (const sel of request.selections) {
+                if (!sel.enum_value_id || !sel.selected_key) {
+                    return { error: 'Invalid enum selection entry' }
+                }
+            }
+
+            return apiService.post<ISession>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums`,
+                accessToken,
+                request
             )
         }
     )

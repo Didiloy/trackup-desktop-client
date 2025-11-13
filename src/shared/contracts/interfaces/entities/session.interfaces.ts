@@ -40,17 +40,12 @@ export interface ISession {
  * Enum selection when creating/updating a session
  * References an enum value from an enum definition and specifies which key to use
  */
-export interface ICreateSessionEnumRequest {
-    enum_value_id: string // ID of the enum value (from IEnumValue.public_id)
-    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5' // Which key to select
-}
 
 export interface ICreateSessionRequest {
     activity_id: string
     duration: number
     date: string
     participants: string[]
-    enums?: ICreateSessionEnumRequest[]
 }
 
 export interface IUpdateSessionRequest {
@@ -58,7 +53,15 @@ export interface IUpdateSessionRequest {
     duration?: number
     date?: string
     participants?: string[]
-    enums?: ICreateSessionEnumRequest[]
+}
+
+// New request to add enum selections to a session
+export interface IAddSessionEnumsSelection {
+    enum_value_id: string
+    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
+}
+export interface IAddSessionEnumsRequest {
+    selections: IAddSessionEnumsSelection[]
 }
 
 export interface IPaginatedSessions {

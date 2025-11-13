@@ -6,7 +6,8 @@ import type {
     ICreateSessionRequest,
     IUpdateSessionRequest,
     IListSessionsOptions,
-    ISessionApiResponse
+    ISessionApiResponse,
+    IAddSessionEnumsRequest
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
@@ -96,6 +97,24 @@ export const sessionBridge = {
         accessToken: string
     ): Promise<ISessionApiResponse<void>> => {
         return ipcRenderer.invoke(ipc_channels.session.unlike, serverId, sessionId, accessToken)
+    },
+
+    /**
+     * Add enum selections to a session
+     */
+    addEnums: (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionEnumsRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.addEnums,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
     }
 }
 
