@@ -7,7 +7,8 @@ import type {
     IUpdateSessionRequest,
     IListSessionsOptions,
     ISessionApiResponse,
-    IAddSessionEnumsRequest
+    IAddSessionEnumsRequest,
+    IUpdateSessionEnumSelectionRequest
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -239,6 +240,36 @@ export function registerSessionIpc(): void {
 
             return apiService.post<ISession>(
                 `/api/v1/servers/${serverId}/sessions/${sessionId}/enums`,
+                accessToken,
+                request
+            )
+        }
+    )
+
+    // Update a specific enum selection in a session
+    ipcMain.handle(
+        ipc_channels.session.updateEnumSelection,
+        async (
+            _event,
+            serverId: string,
+            sessionId: string,
+            enumSelectionId: string,
+            request: IUpdateSessionEnumSelectionRequest,
+            accessToken: string
+        ): Promise<ISessionApiResponse<void>> => {
+            logger.info('Updating enum selection in session:', sessionId, enumSelectionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(sessionId, 'Session ID'),
+                validateRequired(enumSelectionId, 'Enum Selection ID'),
+                validateRequired(request?.selected_key, 'Selected key'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.put<void>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums/${enumSelectionId}`,
                 accessToken,
                 request
             )

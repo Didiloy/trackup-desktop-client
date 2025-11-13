@@ -23,6 +23,7 @@ export interface ISessionEnum {
     enum_definition_name: string
     values: IEnumValue // Reuses the enum value structure
     selected_key: string // Which value was selected (e.g., "value1", "value2", etc.)
+    enum_selection_id: string // Newly returned identifier for the enum selection
 }
 
 export interface ISession {
@@ -62,6 +63,11 @@ export interface IAddSessionEnumsSelection {
 }
 export interface IAddSessionEnumsRequest {
     selections: IAddSessionEnumsSelection[]
+}
+
+// New request to update an enum selection's selected_key
+export interface IUpdateSessionEnumSelectionRequest {
+    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
 }
 
 export interface IPaginatedSessions {

@@ -6,7 +6,8 @@ import type {
     IUpdateSessionRequest,
     IListSessionsOptions,
     ISessionApiResponse,
-    IAddSessionEnumsRequest
+    IAddSessionEnumsRequest,
+    IUpdateSessionEnumSelectionRequest
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
@@ -32,6 +33,12 @@ interface UseSessionCRUDReturn {
         sessionId: string,
         request: IAddSessionEnumsRequest
     ) => Promise<ISessionApiResponse<ISession>>
+    updateSessionEnumSelection: (
+        serverId: string,
+        sessionId: string,
+        enumSelectionId: string,
+        request: IUpdateSessionEnumSelectionRequest
+    ) => Promise<ISessionApiResponse<void>>
 }
 
 /**
@@ -123,6 +130,24 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         return window.api.session.addEnums(serverId, sessionId, request, user_store.getAccessToken!)
     }
 
+    /**
+     * Update enum selection in a session
+     */
+    const updateSessionEnumSelection = async (
+        serverId: string,
+        sessionId: string,
+        enumSelectionId: string,
+        request: IUpdateSessionEnumSelectionRequest
+    ): Promise<ISessionApiResponse<void>> => {
+        return window.api.session.updateEnumSelection(
+            serverId,
+            sessionId,
+            enumSelectionId,
+            request,
+            user_store.getAccessToken!
+        )
+    }
+
     return {
         createSession,
         listSessions,
@@ -131,6 +156,7 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         deleteSession,
         likeSession,
         unlikeSession,
-        addSessionEnums
+        addSessionEnums,
+        updateSessionEnumSelection
     }
 }
