@@ -2,8 +2,6 @@
  * Session related interfaces
  */
 
-import type { IEnumValue } from './enum-definition.interfaces'
-
 export interface ISessionActivity {
     public_id: string
     name: string
@@ -20,10 +18,9 @@ export interface ISessionMember {
  * Reuses IEnumValue from enums-definition and adds the definition name and selected key
  */
 export interface ISessionEnum {
+    enum_selection_id: string
     enum_definition_name: string
-    values: IEnumValue // Reuses the enum value structure
-    selected_key: string // Which value was selected (e.g., "value1", "value2", etc.)
-    enum_selection_id: string // Newly returned identifier for the enum selection
+    selected_value: string
 }
 
 export interface ISession {
