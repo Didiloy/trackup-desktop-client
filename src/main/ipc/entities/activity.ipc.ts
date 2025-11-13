@@ -5,7 +5,8 @@ import type {
     ICreateActivityRequest,
     IUpdateActivityRequest,
     IListActivitiesOptions,
-    IActivityApiResponse
+    IActivityApiResponse,
+    IPaginatedActivities
 } from '../../../shared/contracts/interfaces/entities/activity.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -57,7 +58,7 @@ export function registerActivityIpc(): void {
             serverId: string,
             options: IListActivitiesOptions | undefined,
             accessToken: string
-        ): Promise<IActivityApiResponse<IActivity[]>> => {
+        ): Promise<IActivityApiResponse<IPaginatedActivities>> => {
             logger.info('Listing activities for servers:', serverId)
 
             const validationError = combineValidations(
@@ -66,7 +67,7 @@ export function registerActivityIpc(): void {
             )
             if (validationError) return validationError
 
-            return apiService.get<IActivity[]>(
+            return apiService.get<IPaginatedActivities>(
                 `/api/v1/servers/${serverId}/activities`,
                 accessToken,
                 buildRequestOptions(options)

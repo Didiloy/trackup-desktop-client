@@ -4,7 +4,8 @@ import type {
     ICreateActivityRequest,
     IUpdateActivityRequest,
     IListActivitiesOptions,
-    IActivityApiResponse
+    IActivityApiResponse,
+    IPaginatedActivities
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface UseActivityCRUDReturn {
@@ -15,7 +16,7 @@ interface UseActivityCRUDReturn {
     listActivities: (
         serverId: string,
         options?: IListActivitiesOptions
-    ) => Promise<IActivityApiResponse<IActivity[]>>
+    ) => Promise<IActivityApiResponse<IPaginatedActivities>>
     getActivityById: (
         serverId: string,
         activityId: string
@@ -51,8 +52,25 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
     const listActivities = async (
         serverId: string,
         options?: IListActivitiesOptions
-    ): Promise<IActivityApiResponse<IActivity[]>> => {
-        return window.api.activity.list(serverId, options, user_store.getAccessToken!)
+    ): Promise<IActivityApiResponse<IPaginatedActivities>> => {
+        const response = (await window.api.activity.list(
+            serverId,
+            options,
+            user_store.getAccessToken!
+        )) as IActivityApiResponse<IPaginatedActivities | IActivity[]>
+        if (Array.isArray(response.data)) {
+            const arr = response.data
+            return {
+                data: {
+                    total: arr.length,
+                    page: 1,
+                    limit: arr.length,
+                    pageCount: 1,
+                    data: arr
+                }
+            }
+        }
+        return response as IActivityApiResponse<IPaginatedActivities>
     }
 
     /**

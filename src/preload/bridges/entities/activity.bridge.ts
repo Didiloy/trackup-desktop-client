@@ -5,7 +5,8 @@ import type {
     ICreateActivityRequest,
     IUpdateActivityRequest,
     IListActivitiesOptions,
-    IActivityApiResponse
+    IActivityApiResponse,
+    IPaginatedActivities
 } from '../../../shared/contracts/interfaces/entities/activity.interfaces'
 
 /**
@@ -31,7 +32,7 @@ export const activityBridge = {
         serverId: string,
         options: IListActivitiesOptions | undefined,
         accessToken: string
-    ): Promise<IActivityApiResponse<IActivity[]>> => {
+    ): Promise<IActivityApiResponse<IPaginatedActivities>> => {
         return ipcRenderer.invoke(ipc_channels.activity.list, serverId, options, accessToken)
     },
 

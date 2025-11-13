@@ -26,8 +26,18 @@ export interface IUpdateActivityRequest {
 }
 
 export interface IListActivitiesOptions {
+    page?: number
+    limit?: number
     search?: string
     searchMode?: 'startsWith' | 'endsWith' | 'contains' | 'exact'
+}
+
+export interface IPaginatedActivities {
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: IActivity[]
 }
 
 export interface IActivityApiResponse<T = unknown> {
