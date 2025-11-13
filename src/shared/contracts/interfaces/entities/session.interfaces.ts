@@ -70,12 +70,22 @@ export interface IUpdateSessionEnumSelectionRequest {
     selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
 }
 
+export interface ISessionListItem {
+    public_id: string
+    date: string
+    duration: string
+    activity: ISessionActivity
+    likes_count: number
+    liked_by_me: boolean
+    participants_count: number
+}
+
 export interface IPaginatedSessions {
     total: number
     page: number
     limit: number
     pageCount: number
-    data: ISession[]
+    data: ISessionListItem[]
 }
 
 export interface IListSessionsOptions {
