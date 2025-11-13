@@ -53,6 +53,20 @@ export interface IUpdateSessionRequest {
     participants?: string[]
 }
 
+// Detailed enum selection with full enum definition context
+export interface ISessionEnumSelectionDetail {
+    public_id: string
+    activity_session_id: string
+    enum_definition: {
+        public_id: string
+        name: string
+        description: string
+        enum_value_id: string
+    }
+    selected_key: string
+    selected_value: string
+}
+
 // New request to add enum selections to a session
 export interface IAddSessionEnumsSelection {
     enum_value_id: string

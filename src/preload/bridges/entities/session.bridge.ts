@@ -8,7 +8,8 @@ import type {
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IUpdateSessionEnumSelectionRequest
+    IUpdateSessionEnumSelectionRequest,
+    ISessionEnumSelectionDetail
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
@@ -134,6 +135,24 @@ export const sessionBridge = {
             sessionId,
             enumSelectionId,
             request,
+            accessToken
+        )
+    },
+
+    /**
+     * Get enum selection details
+     */
+    getEnumSelection: (
+        serverId: string,
+        sessionId: string,
+        enumSelectionId: string,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISessionEnumSelectionDetail>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.getEnumSelection,
+            serverId,
+            sessionId,
+            enumSelectionId,
             accessToken
         )
     }

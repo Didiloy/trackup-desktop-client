@@ -8,7 +8,8 @@ import type {
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IUpdateSessionEnumSelectionRequest
+    IUpdateSessionEnumSelectionRequest,
+    ISessionEnumSelectionDetail
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -272,6 +273,33 @@ export function registerSessionIpc(): void {
                 `/api/v1/servers/${serverId}/sessions/${sessionId}/enums/${enumSelectionId}`,
                 accessToken,
                 request
+            )
+        }
+    )
+
+    // Get a specific enum selection detail
+    ipcMain.handle(
+        ipc_channels.session.getEnumSelection,
+        async (
+            _event,
+            serverId: string,
+            sessionId: string,
+            enumSelectionId: string,
+            accessToken: string
+        ): Promise<ISessionApiResponse<ISessionEnumSelectionDetail>> => {
+            logger.info('Getting enum selection details:', sessionId, enumSelectionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(sessionId, 'Session ID'),
+                validateRequired(enumSelectionId, 'Enum Selection ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<ISessionEnumSelectionDetail>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums/${enumSelectionId}`,
+                accessToken
             )
         }
     )
