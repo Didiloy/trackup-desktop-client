@@ -39,18 +39,17 @@ export interface ISession {
  * References an enum value from an enum definition and specifies which key to use
  */
 
-export interface ICreateSessionRequest {
-    activity_id: string
-    duration: number
-    date: string
-    participants: string[]
-}
+
 
 export interface IUpdateSessionRequest {
     activity_id?: string
     duration?: number
     date?: string
     participants?: string[]
+}
+
+export interface IUpdateSessionParticipantsRequest {
+    participants: string[]
 }
 
 // Detailed enum selection with full enum definition context

@@ -5,18 +5,33 @@ import type {
     IUpdateActivityRequest,
     IListActivitiesOptions,
     IActivityApiResponse,
-    IPaginatedActivities
+    IPaginatedActivities,
+    ICreateActivitySessionRequest
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    ISession,
+    ISessionApiResponse
+} from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseActivityCRUDReturn {
     createActivity: (
         serverId: string,
         request: ICreateActivityRequest
     ) => Promise<IActivityApiResponse<IActivity>>
+    createActivitySession: (
+        serverId: string,
+        activityId: string,
+        request: ICreateActivitySessionRequest
+    ) => Promise<ISessionApiResponse<ISession>>
     listActivities: (
         serverId: string,
         options?: IListActivitiesOptions
     ) => Promise<IActivityApiResponse<IPaginatedActivities>>
+    listActivitySessions: (
+        serverId: string,
+        activityId: string,
+        options?: IListActivitiesOptions
+    ) => Promise<ISessionApiResponse<IPaginatedActivities>>
     getActivityById: (
         serverId: string,
         activityId: string
@@ -47,6 +62,22 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
     }
 
     /**
+     * Create a new session for a specific activity
+     */
+    const createActivitySession = async (
+        serverId: string,
+        activityId: string,
+        request: ICreateActivitySessionRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.activity.createSession(
+            serverId,
+            activityId,
+            request,
+            user_store.getAccessToken!
+        )
+    }
+
+    /**
      * List all activities in a servers with optional search
      */
     const listActivities = async (
@@ -71,6 +102,35 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
             }
         }
         return response as IActivityApiResponse<IPaginatedActivities>
+    }
+
+    /**
+     * List all sessions for a specific activity with optional search
+     */
+    const listActivitySessions = async (
+        serverId: string,
+        activityId: string,
+        options?: IListActivitiesOptions
+    ): Promise<ISessionApiResponse<IPaginatedActivities>> => {
+        const response = (await window.api.activity.listSessions(
+            serverId,
+            activityId,
+            options,
+            user_store.getAccessToken!
+        )) as ISessionApiResponse<IPaginatedActivities | IActivity[]>
+        if (Array.isArray(response.data)) {
+            const arr = response.data
+            return {
+                data: {
+                    total: arr.length,
+                    page: 1,
+                    limit: arr.length,
+                    pageCount: 1,
+                    data: arr
+                }
+            }
+        }
+        return response as ISessionApiResponse<IPaginatedActivities>
     }
 
     /**
@@ -106,7 +166,9 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
 
     return {
         createActivity,
+        createActivitySession,
         listActivities,
+        listActivitySessions,
         getActivityById,
         updateActivity,
         deleteActivity

@@ -18,6 +18,12 @@ export interface ICreateActivityRequest {
     banner: string
 }
 
+export interface ICreateActivitySessionRequest {
+    duration: number
+    date: string
+    participants: string[]
+}
+
 export interface IUpdateActivityRequest {
     name: string
     description: string
@@ -38,6 +44,23 @@ export interface IPaginatedActivities {
     limit: number
     pageCount: number
     data: IActivity[]
+}
+
+export interface IActivitySessionListItem {
+    public_id: string
+    date: string
+    duration: string
+    likes_count: number
+    liked_by_me: boolean
+    participants_count: number
+}
+
+export interface IPaginatedActivitySessions {
+    total: number
+    page: number
+    limit: number
+    pageCount: number
+    data: IActivitySessionListItem[]
 }
 
 export interface IActivityApiResponse<T = unknown> {

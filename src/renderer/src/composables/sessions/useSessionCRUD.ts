@@ -2,8 +2,8 @@ import { useUserStore } from '@/stores/user'
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -12,10 +12,6 @@ import type {
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
-    createSession: (
-        serverId: string,
-        request: ICreateSessionRequest
-    ) => Promise<ISessionApiResponse<ISession>>
     listSessions: (
         serverId: string,
         options?: IListSessionsOptions
@@ -25,6 +21,11 @@ interface UseSessionCRUDReturn {
         serverId: string,
         sessionId: string,
         request: IUpdateSessionRequest
+    ) => Promise<ISessionApiResponse<ISession>>
+    updateSessionParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
     ) => Promise<ISessionApiResponse<ISession>>
     deleteSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
     likeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
@@ -54,15 +55,7 @@ interface UseSessionCRUDReturn {
 export function useSessionCRUD(): UseSessionCRUDReturn {
     const user_store = useUserStore()
 
-    /**
-     * Create a new session
-     */
-    const createSession = async (
-        serverId: string,
-        request: ICreateSessionRequest
-    ): Promise<ISessionApiResponse<ISession>> => {
-        return window.api.session.create(serverId, request, user_store.getAccessToken!)
-    }
+
 
     /**
      * List paginated sessions
@@ -93,6 +86,22 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         request: IUpdateSessionRequest
     ): Promise<ISessionApiResponse<ISession>> => {
         return window.api.session.update(serverId, sessionId, request, user_store.getAccessToken!)
+    }
+
+    /**
+     * Update session participants (creator only)
+     */
+    const updateSessionParticipants = async (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.updateParticipants(
+            serverId,
+            sessionId,
+            request,
+            user_store.getAccessToken!
+        )
     }
 
     /**
@@ -171,10 +180,10 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
     }
 
     return {
-        createSession,
         listSessions,
         getSessionById,
         updateSession,
+        updateSessionParticipants,
         deleteSession,
         likeSession,
         unlikeSession,

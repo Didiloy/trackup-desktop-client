@@ -3,8 +3,8 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -16,8 +16,6 @@ import { apiService } from '../../services/ApiService'
 import {
     validateRequired,
     validateAuth,
-    validatePositive,
-    validateNotEmpty,
     combineValidations,
     buildRequestOptions
 } from '../../../shared/helpers/index.helpers'
@@ -28,35 +26,6 @@ const logger = new Logger('IPC:Session')
  * Register session-related IPC handlers
  */
 export function registerSessionIpc(): void {
-    // Create a new session
-    ipcMain.handle(
-        ipc_channels.session.create,
-        async (
-            _event,
-            serverId: string,
-            request: ICreateSessionRequest,
-            accessToken: string
-        ): Promise<ISessionApiResponse<ISession>> => {
-            logger.info('Creating session for activity:', request.activity_id)
-
-            // Validate input
-            const validationError = combineValidations(
-                validateRequired(serverId, 'Server ID'),
-                validateRequired(request.activity_id, 'Activity ID'),
-                validatePositive(request.duration, 'Duration'),
-                validateRequired(request.date, 'Date'),
-                validateNotEmpty(request.participants, 'At least one participant'),
-                validateAuth(accessToken)
-            )
-            if (validationError) return validationError
-
-            return apiService.post<ISession>(
-                `/api/v1/servers/${serverId}/sessions`,
-                accessToken,
-                request
-            )
-        }
-    )
 
     // List paginated sessions
     ipcMain.handle(
@@ -129,6 +98,33 @@ export function registerSessionIpc(): void {
 
             return apiService.put<ISession>(
                 `/api/v1/servers/${serverId}/sessions/${sessionId}`,
+                accessToken,
+                request
+            )
+        }
+    )
+
+    // Update session participants (creator only)
+    ipcMain.handle(
+        ipc_channels.session.updateParticipants,
+        async (
+            _event,
+            serverId: string,
+            sessionId: string,
+            request: IUpdateSessionParticipantsRequest,
+            accessToken: string
+        ): Promise<ISessionApiResponse<ISession>> => {
+            logger.info('Updating session participants:', sessionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(sessionId, 'Session ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.patch<ISession>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/participants`,
                 accessToken,
                 request
             )

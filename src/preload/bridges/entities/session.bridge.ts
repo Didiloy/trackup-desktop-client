@@ -3,8 +3,8 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -17,16 +17,6 @@ import type {
  * Exposes session-related functions to the renderer
  */
 export const sessionBridge = {
-    /**
-     * Create a new session
-     */
-    create: (
-        serverId: string,
-        request: ICreateSessionRequest,
-        accessToken: string
-    ): Promise<ISessionApiResponse<ISession>> => {
-        return ipcRenderer.invoke(ipc_channels.session.create, serverId, request, accessToken)
-    },
 
     /**
      * List sessions with pagination
@@ -61,6 +51,24 @@ export const sessionBridge = {
     ): Promise<ISessionApiResponse<ISession>> => {
         return ipcRenderer.invoke(
             ipc_channels.session.update,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
+    },
+
+    /**
+     * Update session participants (creator only)
+     */
+    updateParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.updateParticipants,
             serverId,
             sessionId,
             request,
