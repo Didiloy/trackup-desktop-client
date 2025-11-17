@@ -6,5 +6,7 @@ export const ACTIVITY_CHANNELS = {
     list: 'activity:list',
     getById: 'activity:getById',
     update: 'activity:update',
-    delete: 'activity:delete'
+    delete: 'activity:delete',
+    createSession: 'activity:createSession',
+    listSessions: 'activity:listSessions'
 } as const

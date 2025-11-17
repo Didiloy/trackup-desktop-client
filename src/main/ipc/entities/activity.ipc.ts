@@ -6,7 +6,9 @@ import type {
     IUpdateActivityRequest,
     IListActivitiesOptions,
     IActivityApiResponse,
-    IPaginatedActivities
+    IPaginatedActivities,
+    ICreateActivitySessionRequest,
+    IPaginatedActivitySessions
 } from '../../../shared/contracts/interfaces/entities/activity.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -16,6 +18,10 @@ import {
     combineValidations,
     buildRequestOptions
 } from '../../../shared/helpers/index.helpers'
+import type{
+    IListSessionsOptions,
+    ISession
+} from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 const logger = new Logger('IPC:Activity')
 
@@ -149,6 +155,62 @@ export function registerActivityIpc(): void {
             return apiService.delete<void>(
                 `/api/v1/servers/${serverId}/activities/${activityId}`,
                 accessToken
+            )
+        }
+    )
+
+    // Create a new session for an activity (RESTful route)
+    ipcMain.handle(
+        ipc_channels.activity.createSession,
+        async (
+            _event,
+            serverId: string,
+            activityId: string,
+            request: ICreateActivitySessionRequest,
+            accessToken: string
+        ): Promise<IActivityApiResponse<ISession>> => {
+            logger.info('Creating session for activity:', activityId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(activityId, 'Activity ID'),
+                validateRequired(request.duration, 'Duration'),
+                validateRequired(request.date, 'Date'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.post<ISession>(
+                `/api/v1/servers/${serverId}/activities/${activityId}/sessions`,
+                accessToken,
+                request
+            )
+        }
+    )
+
+    // List paginated sessions for a specific activity
+    ipcMain.handle(
+        ipc_channels.activity.listSessions,
+        async (
+            _event,
+            serverId: string,
+            activityId: string,
+            options: IListSessionsOptions | undefined,
+            accessToken: string
+        ): Promise<IActivityApiResponse<IPaginatedActivitySessions>> => {
+            logger.info('Listing sessions for activity:', activityId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(activityId, 'Activity ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<IPaginatedActivitySessions>(
+                `/api/v1/servers/${serverId}/activities/${activityId}/sessions`,
+                accessToken,
+                buildRequestOptions(options)
             )
         }
     )

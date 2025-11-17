@@ -2,7 +2,6 @@ import { useUserStore } from '@/stores/user'
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
     IListSessionsOptions,
     ISessionApiResponse,
@@ -12,10 +11,6 @@ import type {
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
-    createSession: (
-        serverId: string,
-        request: ICreateSessionRequest
-    ) => Promise<ISessionApiResponse<ISession>>
     listSessions: (
         serverId: string,
         options?: IListSessionsOptions
@@ -54,15 +49,7 @@ interface UseSessionCRUDReturn {
 export function useSessionCRUD(): UseSessionCRUDReturn {
     const user_store = useUserStore()
 
-    /**
-     * Create a new session
-     */
-    const createSession = async (
-        serverId: string,
-        request: ICreateSessionRequest
-    ): Promise<ISessionApiResponse<ISession>> => {
-        return window.api.session.create(serverId, request, user_store.getAccessToken!)
-    }
+
 
     /**
      * List paginated sessions
@@ -171,7 +158,6 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
     }
 
     return {
-        createSession,
         listSessions,
         getSessionById,
         updateSession,
