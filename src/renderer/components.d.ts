@@ -12,7 +12,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ActivityCreateDialog: typeof import('./src/components/activities/create/ActivityCreateDialog.vue')['default']
+    ActivityCreateForm: typeof import('./src/components/activities/create/ActivityCreateForm.vue')['default']
     ActivityFilterBar: typeof import('./src/components/activities/ActivityFilterBar.vue')['default']
+    ActivitySkillLevelsForm: typeof import('./src/components/activities/create/ActivitySkillLevelsForm.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']

@@ -17,7 +17,12 @@
         "or": "or",
         "settings": "Settings",
         "required": "Required",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "next": "Next",
+        "back": "Back",
+        "skip": "Skip",
+        "create": "Create",
+        "optional": "Optional"
     },
     "navigation": {
         "home": "Home",
@@ -214,7 +219,18 @@
                 "description": "Add a new activity for your server",
                 "name": "Activity name",
                 "description_input": "Describe the activity in a few words",
-                "createButton": "Create activity"
+                "createButton": "Create activity",
+                "skillLevelsTitle": "Skill levels",
+                "skillLevelsDescription": "Add the skill levels for your activity",
+                "displayOrder": "Display order",
+                "color": "Color",
+                "minSessions": "Minimum sessions",
+                "maxSessions": "Maximum sessions",
+                "minDuration": "Minimum duration (min)",
+                "maxDuration": "Maximum duration (min)",
+                "levels": "Levels",
+                "sessions": "sessions",
+                "minutes": "min"
             },
             "filters": {
                 "onlyMine": "Show only my activities",

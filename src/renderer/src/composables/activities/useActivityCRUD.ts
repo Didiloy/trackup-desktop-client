@@ -43,7 +43,7 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
         serverId: string,
         request: ICreateActivityRequest
     ): Promise<IActivityApiResponse<IActivity>> => {
-        return window.api.activity.create(serverId, request, user_store.getAccessToken!)
+        return await window.api.activity.create(serverId, JSON.parse(JSON.stringify(request)), user_store.getAccessToken!) //The JSON methods are used to ensure the request is a valid object because otherwise it does not pass                          
     }
 
     /**

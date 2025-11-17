@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import ActivityCreateDialog from '@/components/activities/create/ActivityCreateDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
 import { ref } from 'vue'
-import type { IActivity } from '../../../../shared/contracts/interfaces/entities/activity.interfaces'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 const i18n = useI18n()
 
 const showAddActivityDialog = ref(false)

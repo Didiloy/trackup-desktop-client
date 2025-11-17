@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
-import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
-import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
+import ActivityCreateForm from './ActivityCreateForm.vue'
+import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useServerStore } from '@/stores/server'
 import type {
     IActivity,
     ICreateActivityRequest
-} from '../../../../../shared/contracts/interfaces/entities/activity.interfaces'
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
 
 interface Props {
     modelValue: boolean
@@ -26,43 +29,57 @@ const { t } = useI18n()
 const route = useRoute()
 const toast = useToast()
 const { createActivity } = useActivityCRUD()
-
-const name = ref('')
-const description = ref('')
-const logo = ref<string>('')
-const banner = ref<string>('')
+const { createSkillLevel } = useActivitySkillLevelCRUD()
+const server_store = useServerStore()
 const submitting = ref(false)
 const error = ref<string | null>(null)
 
-const can_submit = computed(() => !submitting.value && !!name.value.trim())
+type Step = 'activity' | 'skill-levels'
+const currentStep = ref<Step>('activity')
+const activityPayload = ref<ICreateActivityRequest | null>(null)
 
-function updateLogo(newLogo: string): void {
-    logo.value = newLogo
-}
-function updateBanner(newBanner: string): void {
-    banner.value = newBanner
+function goToStep(step: Step): void {
+    currentStep.value = step
+    error.value = null
 }
 
 function close(): void {
+    // reset state on close
+    currentStep.value = 'activity'
+    activityPayload.value = null
+    error.value = null
     emit('update:modelValue', false)
 }
 
-async function submit(): Promise<void> {
-    if (!can_submit.value) return
+async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[]): Promise<void> {
+    if (!activityPayload.value) return
     submitting.value = true
     error.value = null
     try {
-        const serverId = (route.params.id as string) || ''
-        const payload: ICreateActivityRequest = {
-            name: name.value.trim(),
-            description: description.value.trim(),
-            logo: logo.value,
-            banner: banner.value
-        }
-        const res = await createActivity(serverId, payload)
+        const serverId = server_store.getPublicId!
+        const res = await createActivity(serverId, activityPayload.value)
         if (res.error || !res.data) {
+            toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
             throw new Error(res.error || 'Failed to create activity')
         }
+        // activity created successfully
+
+        // If no skill levels to create, finish here
+        if (!skillLevels.length) {
+            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+            emit('created', res.data)
+            close()
+            return
+        }
+
+        // Create skill levels sequentially to preserve display_order intent
+        for (const lvl of skillLevels) {
+            const levelRes = await createSkillLevel(serverId, res.data.public_id, lvl)
+            if (levelRes.error) {
+                throw new Error(levelRes.error)
+            }
+        }
+
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
         emit('created', res.data)
         close()
@@ -73,7 +90,23 @@ async function submit(): Promise<void> {
     }
 }
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
+function handleActivityNext(payload: ICreateActivityRequest): void {
+    activityPayload.value = {
+        name: payload.name.trim(),
+        description: (payload.description || '').trim(),
+        logo: payload.logo || '',
+        banner: payload.banner || ''
+    }
+    goToStep('skill-levels')
+}
+
+function handleSkillLevelsSubmit(levels: ICreateActivitySkillLevelRequest[]): void {
+    void finalizeCreation(levels)
+}
+
+function handleSkipSkillLevels(): void {
+    void finalizeCreation([])
+}
 </script>
 
 <template>
@@ -91,82 +124,30 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         t('userInterface.serverActivitiesView.addActivityModal.title')
                     }}</span>
                     <span class="text-xs text-surface-600">
-                        {{ t('userInterface.serverActivitiesView.addActivityModal.description') }}
+                        {{
+                            currentStep === 'activity'
+                                ? t('userInterface.serverActivitiesView.addActivityModal.description')
+                                : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') + ' (' + t('common.optional') + ')'
+                        }}
                     </span>
                 </div>
             </div>
         </template>
 
-        <div class="p-4 flex flex-col gap-5">
-            <!-- General information -->
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-file-edit text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">{{ t('common.name') }}</span>
-                </div>
-                <InputText
-                    v-model="name"
-                    :placeholder="t('userInterface.serverActivitiesView.addActivityModal.name')"
-                    class="w-full"
-                    :pt="{ root: { style: background_style } }"
-                />
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-pen-to-square text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">{{
-                        t('common.description')
-                    }}</span>
-                </div>
-                <Textarea
-                    v-model="description"
-                    rows="3"
-                    auto-resize
-                    :placeholder="
-                        t('userInterface.serverActivitiesView.addActivityModal.description_input')
-                    "
-                    :pt="{ root: { style: background_style } }"
-                />
-            </div>
-
-            <!-- Media -->
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-image text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">{{ t('common.logo') }}</span>
-                </div>
-                <EntityLogoHandling
-                    :logo="logo"
-                    :initial="name"
-                    :entity-name="name"
-                    :display-edit-button="true"
-                    @update-logo="updateLogo"
-                />
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-images text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">{{
-                        t('common.banner')
-                    }}</span>
-                </div>
-                <EntityBannerHandling
-                    :banner="banner"
-                    :display-edit-button="true"
-                    @update-banner="updateBanner"
-                />
-            </div>
-
-            <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
+        <div class="p-4">
+            <ActivityCreateForm
+                v-if="currentStep === 'activity'"
+                @next="handleActivityNext"
+                @cancel="close"
+            />
+            <ActivitySkillLevelsForm
+                v-else
+                :submitting="submitting"
+                @back="goToStep('activity')"
+                @skip="handleSkipSkillLevels"
+                @submit="handleSkillLevelsSubmit"
+            />
+            <div v-if="error" class="mt-4 text-sm text-red-500">{{ error }}</div>
         </div>
-
-        <template #footer>
-            <div class="flex justify-end gap-2 p-3">
-                <Button :label="t('common.cancel')" severity="secondary" text @click="close" />
-                <Button
-                    :label="t('userInterface.serverActivitiesView.addActivityModal.createButton')"
-                    :loading="submitting"
-                    :disabled="!can_submit"
-                    :style="{ background: 'var(--gradient-primary)' }"
-                    @click="submit"
-                />
-            </div>
-        </template>
     </AppDialog>
 </template>

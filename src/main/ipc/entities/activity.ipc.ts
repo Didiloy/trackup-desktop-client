@@ -40,6 +40,7 @@ export function registerActivityIpc(): void {
                 validateRequired(request.name, 'Activity name'),
                 validateAuth(accessToken)
             )
+            console.log('validationError', validationError)
             if (validationError) return validationError
 
             return apiService.post<IActivity>(

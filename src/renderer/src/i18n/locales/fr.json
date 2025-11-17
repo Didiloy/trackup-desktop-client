@@ -19,7 +19,12 @@
         "or": "ou",
         "settings": "Paramètres",
         "required": "Requis",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "next": "Suivant",
+        "back": "Retour",
+        "skip": "Passer",
+        "create": "Créer",
+        "optional": "Optionnel"
     },
     "navigation": {
         "home": "Accueil",
@@ -217,7 +222,18 @@
                 "description": "Ajoutez une nouvelle activité pour votre serveur",
                 "name": "Nom de l'activité",
                 "description_input": "Décris l'activité en quelques mots",
-                "createButton": "Créer l'activité"
+                "createButton": "Créer l'activité",
+                "skillLevelsTitle": "Niveaux de compétence",
+                "skillLevelsDescription": "Ajoutez les niveaux de compétence pour votre activité",
+                "displayOrder": "Ordre d'affichage",
+                "color": "Couleur",
+                "minSessions": "Nombre minimum de sessions",
+                "maxSessions": "Nombre maximum de sessions",
+                "minDuration": "Durée minimum (min)",
+                "maxDuration": "Durée maximum (min)",
+                "levels": "Niveaux",
+                "sessions": "sessions",
+                "minutes": "min"
             },
             "filters": {
                 "onlyMine": "Afficher seulement mes activités",
