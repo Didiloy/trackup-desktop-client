@@ -4,6 +4,7 @@ import type {
     ISession,
     IPaginatedSessions,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -97,6 +98,33 @@ export function registerSessionIpc(): void {
 
             return apiService.put<ISession>(
                 `/api/v1/servers/${serverId}/sessions/${sessionId}`,
+                accessToken,
+                request
+            )
+        }
+    )
+
+    // Update session participants (creator only)
+    ipcMain.handle(
+        ipc_channels.session.updateParticipants,
+        async (
+            _event,
+            serverId: string,
+            sessionId: string,
+            request: IUpdateSessionParticipantsRequest,
+            accessToken: string
+        ): Promise<ISessionApiResponse<ISession>> => {
+            logger.info('Updating session participants:', sessionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(sessionId, 'Session ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.patch<ISession>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/participants`,
                 accessToken,
                 request
             )

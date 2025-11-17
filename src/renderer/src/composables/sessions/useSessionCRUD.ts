@@ -3,6 +3,7 @@ import type {
     ISession,
     IPaginatedSessions,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -20,6 +21,11 @@ interface UseSessionCRUDReturn {
         serverId: string,
         sessionId: string,
         request: IUpdateSessionRequest
+    ) => Promise<ISessionApiResponse<ISession>>
+    updateSessionParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
     ) => Promise<ISessionApiResponse<ISession>>
     deleteSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
     likeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
@@ -80,6 +86,22 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         request: IUpdateSessionRequest
     ): Promise<ISessionApiResponse<ISession>> => {
         return window.api.session.update(serverId, sessionId, request, user_store.getAccessToken!)
+    }
+
+    /**
+     * Update session participants (creator only)
+     */
+    const updateSessionParticipants = async (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.updateParticipants(
+            serverId,
+            sessionId,
+            request,
+            user_store.getAccessToken!
+        )
     }
 
     /**
@@ -161,6 +183,7 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         listSessions,
         getSessionById,
         updateSession,
+        updateSessionParticipants,
         deleteSession,
         likeSession,
         unlikeSession,

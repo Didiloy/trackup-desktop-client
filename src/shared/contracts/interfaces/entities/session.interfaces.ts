@@ -48,6 +48,10 @@ export interface IUpdateSessionRequest {
     participants?: string[]
 }
 
+export interface IUpdateSessionParticipantsRequest {
+    participants: string[]
+}
+
 // Detailed enum selection with full enum definition context
 export interface ISessionEnumSelectionDetail {
     public_id: string

@@ -4,6 +4,7 @@ import type {
     ISession,
     IPaginatedSessions,
     IUpdateSessionRequest,
+    IUpdateSessionParticipantsRequest,
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
@@ -50,6 +51,24 @@ export const sessionBridge = {
     ): Promise<ISessionApiResponse<ISession>> => {
         return ipcRenderer.invoke(
             ipc_channels.session.update,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
+    },
+
+    /**
+     * Update session participants (creator only)
+     */
+    updateParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.updateParticipants,
             serverId,
             sessionId,
             request,
