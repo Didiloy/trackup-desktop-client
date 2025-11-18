@@ -55,8 +55,6 @@ interface UseSessionCRUDReturn {
 export function useSessionCRUD(): UseSessionCRUDReturn {
     const user_store = useUserStore()
 
-
-
     /**
      * List paginated sessions
      */

@@ -79,7 +79,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 </span>
                 <span class="text-xs text-surface-500">
                     {{
-                        t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription')
+                        t(
+                            'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription'
+                        )
                     }}
                 </span>
             </div>
@@ -89,12 +91,18 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         <div class="grid grid-cols-1 gap-3">
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{ t('common.name') }}</label>
-                <InputText v-model="draft.name" class="w-full" :pt="{ root: { style: background_style } }" />
+                <InputText
+                    v-model="draft.name"
+                    class="w-full"
+                    :pt="{ root: { style: background_style } }"
+                />
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.displayOrder') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.displayOrder')
+                    }}</label>
                     <InputText
                         v-model="draft.display_order"
                         type="number"
@@ -103,7 +111,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.color') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.color')
+                    }}</label>
                     <InputText
                         v-model="draft.color"
                         placeholder="#4CAF50"
@@ -115,7 +125,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.minSessions') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.minSessions')
+                    }}</label>
                     <InputText
                         v-model.number="draft.min_sessions"
                         type="number"
@@ -124,7 +136,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.maxSessions') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.maxSessions')
+                    }}</label>
                     <InputText
                         v-model.number="draft.max_sessions"
                         type="number"
@@ -136,7 +150,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.minDuration') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.minDuration')
+                    }}</label>
                     <InputText
                         v-model.number="draft.min_duration"
                         type="number"
@@ -145,7 +161,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{ t('userInterface.serverActivitiesView.addActivityModal.maxDuration') }}</label>
+                    <label class="text-sm text-surface-500">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.maxDuration')
+                    }}</label>
                     <InputText
                         v-model.number="draft.max_duration"
                         type="number"
@@ -178,7 +196,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 
         <!-- Levels list -->
         <div v-if="levels.length" class="flex flex-col gap-2">
-            <div class="text-sm font-medium text-surface-700">{{ t('userInterface.serverActivitiesView.addActivityModal.levels') }}</div>
+            <div class="text-sm font-medium text-surface-700">
+                {{ t('userInterface.serverActivitiesView.addActivityModal.levels') }}
+            </div>
             <div class="flex flex-col gap-2">
                 <div
                     v-for="(lvl, idx) in levels"
@@ -190,8 +210,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         <span class="text-xs text-surface-600">#{{ lvl.display_order }}</span>
                         <span class="text-sm text-surface-900">{{ lvl.name }}</span>
                         <span class="text-xs text-surface-600">
-                            {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }} {{ t('userInterface.serverActivitiesView.addActivityModal.sessions') }},
-                            {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }} {{ t('userInterface.serverActivitiesView.addActivityModal.minutes') }}
+                            {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }}
+                            {{ t('userInterface.serverActivitiesView.addActivityModal.sessions') }},
+                            {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }}
+                            {{ t('userInterface.serverActivitiesView.addActivityModal.minutes') }}
                         </span>
                     </div>
                     <Button
@@ -222,5 +244,3 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         </div>
     </div>
 </template>
-
-

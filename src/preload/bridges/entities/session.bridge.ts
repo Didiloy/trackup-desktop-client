@@ -17,7 +17,6 @@ import type {
  * Exposes session-related functions to the renderer
  */
 export const sessionBridge = {
-
     /**
      * List sessions with pagination
      */

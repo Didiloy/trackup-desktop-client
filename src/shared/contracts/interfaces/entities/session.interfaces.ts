@@ -39,8 +39,6 @@ export interface ISession {
  * References an enum value from an enum definition and specifies which key to use
  */
 
-
-
 export interface IUpdateSessionRequest {
     activity_id?: string
     duration?: number

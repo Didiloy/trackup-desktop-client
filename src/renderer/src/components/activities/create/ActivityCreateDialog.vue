@@ -52,12 +52,13 @@ function close(): void {
 }
 
 async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[]): Promise<void> {
-    if (!activityPayload.value) return
+    const payload: ICreateActivityRequest | null = activityPayload.value
+    if (!payload) return
     submitting.value = true
     error.value = null
     try {
         const serverId = server_store.getPublicId!
-        const res = await createActivity(serverId, activityPayload.value)
+        const res = await createActivity(serverId, payload)
         if (res.error || !res.data) {
             toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
             throw new Error(res.error || 'Failed to create activity')
@@ -72,9 +73,11 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
             return
         }
 
-        // Create skill levels sequentially to preserve display_order intent
-        for (const lvl of skillLevels) {
-            const levelRes = await createSkillLevel(serverId, res.data.public_id, lvl)
+        // Create skill levels in parallel
+        const activityId = res.data.public_id
+        const promises = skillLevels.map((lvl) => createSkillLevel(serverId, activityId, lvl))
+        const results = await Promise.all(promises)
+        for (const levelRes of results) {
             if (levelRes.error) {
                 throw new Error(levelRes.error)
             }
@@ -96,7 +99,7 @@ function handleActivityNext(payload: ICreateActivityRequest): void {
         description: (payload.description || '').trim(),
         logo: payload.logo || '',
         banner: payload.banner || ''
-    }
+    } as ICreateActivityRequest
     goToStep('skill-levels')
 }
 
@@ -126,8 +129,15 @@ function handleSkipSkillLevels(): void {
                     <span class="text-xs text-surface-600">
                         {{
                             currentStep === 'activity'
-                                ? t('userInterface.serverActivitiesView.addActivityModal.description')
-                                : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') + ' (' + t('common.optional') + ')'
+                                ? t(
+                                      'userInterface.serverActivitiesView.addActivityModal.description'
+                                  )
+                                : t(
+                                      'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription'
+                                  ) +
+                                  ' (' +
+                                  t('common.optional') +
+                                  ')'
                         }}
                     </span>
                 </div>

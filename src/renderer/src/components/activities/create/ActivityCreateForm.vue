@@ -18,7 +18,14 @@ const logo = ref<string>('')
 const banner = ref<string>('')
 
 const submitting = ref(false)
-const can_submit = computed(() => !submitting.value && !!name.value.trim() && !!description.value.trim() && !!logo.value && !!banner.value)
+const can_submit = computed(
+    () =>
+        !submitting.value &&
+        !!name.value.trim() &&
+        !!description.value.trim() &&
+        !!logo.value &&
+        !!banner.value
+)
 
 function updateLogo(newLogo: string): void {
     logo.value = newLogo
@@ -57,13 +64,17 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.description') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.description')
+                }}</span>
             </div>
             <Textarea
                 v-model="description"
                 rows="3"
                 auto-resize
-                :placeholder="t('userInterface.serverActivitiesView.addActivityModal.description_input')"
+                :placeholder="
+                    t('userInterface.serverActivitiesView.addActivityModal.description_input')
+                "
                 :pt="{ root: { style: background_style } }"
             />
         </div>
@@ -103,5 +114,3 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         </div>
     </div>
 </template>
-
-

@@ -26,7 +26,6 @@ const logger = new Logger('IPC:Session')
  * Register session-related IPC handlers
  */
 export function registerSessionIpc(): void {
-
     // List paginated sessions
     ipcMain.handle(
         ipc_channels.session.list,

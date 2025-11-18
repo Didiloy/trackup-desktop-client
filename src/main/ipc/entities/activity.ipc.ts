@@ -18,7 +18,7 @@ import {
     combineValidations,
     buildRequestOptions
 } from '../../../shared/helpers/index.helpers'
-import type{
+import type {
     IListSessionsOptions,
     ISession
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
