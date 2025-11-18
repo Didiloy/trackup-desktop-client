@@ -35,6 +35,8 @@ declare module 'vue' {
     MembersAside: typeof import('./src/components/asides/MembersAside.vue')['default']
     MembersList: typeof import('./src/components/members/list/MembersList.vue')['default']
     MembersListItems: typeof import('./src/components/members/list/MembersListItems.vue')['default']
+    MultistepsDialog: typeof import('./src/components/common/dialogs/MultistepsDialog.vue')['default']
+    MultiStepsDialog: typeof import('./src/components/common/dialogs/MultiStepsDialog.vue')['default']
     ProfileButton: typeof import('./src/components/ProfileButton.vue')['default']
     ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

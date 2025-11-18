@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import { ref, computed, unref } from 'vue'
+import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityCreateForm from './ActivityCreateForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
@@ -26,7 +25,6 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
-const route = useRoute()
 const toast = useToast()
 const { createActivity } = useActivityCRUD()
 const { createSkillLevel } = useActivitySkillLevelCRUD()
@@ -37,6 +35,30 @@ const error = ref<string | null>(null)
 type Step = 'activity' | 'skill-levels'
 const currentStep = ref<Step>('activity')
 const activityPayload = ref<ICreateActivityRequest | null>(null)
+
+const steps = computed(() => [
+    {
+        key: 'activity',
+        label: t('userInterface.serverActivitiesView.addActivityModal.activityStep') || 'Activité',
+        icon: 'pi pi-pencil'
+    },
+    {
+        key: 'skill-levels',
+        label: t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle'),
+        icon: 'pi pi-sliders-h'
+    }
+])
+
+const currentIndex = computed(() => (currentStep.value === 'activity' ? 0 : 1))
+
+const subtitle = computed(() =>
+    currentStep.value === 'activity'
+        ? t('userInterface.serverActivitiesView.addActivityModal.description')
+        : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') +
+          ' (' +
+          t('common.optional') +
+          ')'
+)
 
 function goToStep(step: Step): void {
     currentStep.value = step
@@ -58,13 +80,14 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
     error.value = null
     try {
         const serverId = server_store.getPublicId!
+        console.log('creating activity', payload)
         const res = await createActivity(serverId, payload)
         if (res.error || !res.data) {
             toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
             throw new Error(res.error || 'Failed to create activity')
         }
         // activity created successfully
-
+        console.log('activity created successfully', res.data)
         // If no skill levels to create, finish here
         if (!skillLevels.length) {
             toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
@@ -113,51 +136,31 @@ function handleSkipSkillLevels(): void {
 </script>
 
 <template>
-    <AppDialog
+    <MultiStepsDialog
         :model-value="modelValue"
-        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2'"
-        :content-class="'p-0 bg-surface-50'"
+        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-full'"
+        :content-class="'p-0 bg-surface-50 h-full'"
+        :title="t('userInterface.serverActivitiesView.addActivityModal.title')"
+        :subtitle="subtitle"
+        icon-class="pi pi-plus-circle"
+        :steps="steps"
+        :current="currentIndex"
         @update:model-value="emit('update:modelValue', $event)"
     >
-        <template #header>
-            <div class="flex items-center gap-2">
-                <i class="pi pi-plus-circle text-primary-500"></i>
-                <div class="flex flex-col">
-                    <span class="font-semibold text-surface-900">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.title')
-                    }}</span>
-                    <span class="text-xs text-surface-600">
-                        {{
-                            currentStep === 'activity'
-                                ? t(
-                                      'userInterface.serverActivitiesView.addActivityModal.description'
-                                  )
-                                : t(
-                                      'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription'
-                                  ) +
-                                  ' (' +
-                                  t('common.optional') +
-                                  ')'
-                        }}
-                    </span>
-                </div>
-            </div>
+        <ActivityCreateForm
+            v-if="currentStep === 'activity'"
+            @next="handleActivityNext"
+            @cancel="close"
+        />
+        <ActivitySkillLevelsForm
+            v-else
+            :submitting="submitting"
+            @back="goToStep('activity')"
+            @skip="handleSkipSkillLevels"
+            @submit="handleSkillLevelsSubmit"
+        />
+        <template #footer>
+            <div class="w-full text-sm text-red-500 px-4 border-none">{{ error }}</div>
         </template>
-
-        <div class="p-4">
-            <ActivityCreateForm
-                v-if="currentStep === 'activity'"
-                @next="handleActivityNext"
-                @cancel="close"
-            />
-            <ActivitySkillLevelsForm
-                v-else
-                :submitting="submitting"
-                @back="goToStep('activity')"
-                @skip="handleSkipSkillLevels"
-                @submit="handleSkillLevelsSubmit"
-            />
-            <div v-if="error" class="mt-4 text-sm text-red-500">{{ error }}</div>
-        </div>
-    </AppDialog>
+    </MultiStepsDialog>
 </template>

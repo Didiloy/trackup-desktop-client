@@ -230,7 +230,9 @@
                 "maxDuration": "Maximum duration (min)",
                 "levels": "Levels",
                 "sessions": "sessions",
-                "minutes": "min"
+                "minutes": "min",
+                "activityStep": "Activity",
+                "skillLevelsStep": "Skill levels"
             },
             "filters": {
                 "onlyMine": "Show only my activities",

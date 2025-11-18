@@ -18,14 +18,7 @@ const logo = ref<string>('')
 const banner = ref<string>('')
 
 const submitting = ref(false)
-const can_submit = computed(
-    () =>
-        !submitting.value &&
-        !!name.value.trim() &&
-        !!description.value.trim() &&
-        !!logo.value &&
-        !!banner.value
-)
+const can_submit = computed(() => !submitting.value && !!name.value.trim())
 
 function updateLogo(newLogo: string): void {
     logo.value = newLogo

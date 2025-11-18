@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
     closable: true,
     dismissableMask: true,
     styleClass: '',
-    contentClass: 'bg-surface-50',
+    contentClass: 'bg-surface-50 h-full',
     headerClass: 'bg-surface-50',
     footerClass: 'bg-surface-50'
 })
@@ -77,3 +77,4 @@ const rootClass = computed(() => `rounded-2xl overflow-hidden ${props.styleClass
         </template>
     </Dialog>
 </template>
+<style scoped></style>
