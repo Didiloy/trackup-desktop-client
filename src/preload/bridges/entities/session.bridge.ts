@@ -8,8 +8,7 @@ import type {
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IUpdateSessionEnumSelectionRequest,
-    ISessionEnumSelectionDetail
+    IAddSessionMetadataRequest
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
@@ -127,39 +126,19 @@ export const sessionBridge = {
     },
 
     /**
-     * Update enum selection in a session
+     * Add metadata to a session
      */
-    updateEnumSelection: (
+    addMetadata: (
         serverId: string,
         sessionId: string,
-        enumSelectionId: string,
-        request: IUpdateSessionEnumSelectionRequest,
+        request: IAddSessionMetadataRequest,
         accessToken: string
-    ): Promise<ISessionApiResponse<void>> => {
+    ): Promise<ISessionApiResponse<ISession>> => {
         return ipcRenderer.invoke(
-            ipc_channels.session.updateEnumSelection,
+            ipc_channels.session.addMetadata,
             serverId,
             sessionId,
-            enumSelectionId,
             request,
-            accessToken
-        )
-    },
-
-    /**
-     * Get enum selection details
-     */
-    getEnumSelection: (
-        serverId: string,
-        sessionId: string,
-        enumSelectionId: string,
-        accessToken: string
-    ): Promise<ISessionApiResponse<ISessionEnumSelectionDetail>> => {
-        return ipcRenderer.invoke(
-            ipc_channels.session.getEnumSelection,
-            serverId,
-            sessionId,
-            enumSelectionId,
             accessToken
         )
     }

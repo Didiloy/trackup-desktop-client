@@ -7,8 +7,9 @@ import type {
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IUpdateSessionEnumSelectionRequest,
-    ISessionEnumSelectionDetail
+    IAddSessionMetadataRequest
+    // IUpdateSessionEnumSelectionRequest,
+    // ISessionEnumSelectionDetail
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
@@ -35,17 +36,22 @@ interface UseSessionCRUDReturn {
         sessionId: string,
         request: IAddSessionEnumsRequest
     ) => Promise<ISessionApiResponse<ISession>>
-    updateSessionEnumSelection: (
+    addSessionMetadata: (
         serverId: string,
         sessionId: string,
-        enumSelectionId: string,
-        request: IUpdateSessionEnumSelectionRequest
-    ) => Promise<ISessionApiResponse<void>>
-    getSessionEnumSelection: (
-        serverId: string,
-        sessionId: string,
-        enumSelectionId: string
-    ) => Promise<ISessionApiResponse<ISessionEnumSelectionDetail>>
+        request: IAddSessionMetadataRequest
+    ) => Promise<ISessionApiResponse<ISession>>
+    // updateSessionEnumSelection: (
+    //     serverId: string,
+    //     sessionId: string,
+    //     enumSelectionId: string,
+    //     request: IUpdateSessionEnumSelectionRequest
+    // ) => Promise<ISessionApiResponse<void>>
+    // getSessionEnumSelection: (
+    //     serverId: string,
+    //     sessionId: string,
+    //     enumSelectionId: string
+    // ) => Promise<ISessionApiResponse<ISessionEnumSelectionDetail>>
 }
 
 /**
@@ -144,35 +150,17 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
     }
 
     /**
-     * Update enum selection in a session
+     * Add metadata to a session
      */
-    const updateSessionEnumSelection = async (
+    const addSessionMetadata = async (
         serverId: string,
         sessionId: string,
-        enumSelectionId: string,
-        request: IUpdateSessionEnumSelectionRequest
-    ): Promise<ISessionApiResponse<void>> => {
-        return window.api.session.updateEnumSelection(
+        request: IAddSessionMetadataRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.addMetadata(
             serverId,
             sessionId,
-            enumSelectionId,
             request,
-            user_store.getAccessToken!
-        )
-    }
-
-    /**
-     * Get enum selection details
-     */
-    const getSessionEnumSelection = async (
-        serverId: string,
-        sessionId: string,
-        enumSelectionId: string
-    ): Promise<ISessionApiResponse<ISessionEnumSelectionDetail>> => {
-        return window.api.session.getEnumSelection(
-            serverId,
-            sessionId,
-            enumSelectionId,
             user_store.getAccessToken!
         )
     }
@@ -186,7 +174,6 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         likeSession,
         unlikeSession,
         addSessionEnums,
-        updateSessionEnumSelection,
-        getSessionEnumSelection
+        addSessionMetadata
     }
 }

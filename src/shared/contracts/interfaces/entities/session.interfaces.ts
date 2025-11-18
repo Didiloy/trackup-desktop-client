@@ -15,12 +15,24 @@ export interface ISessionMember {
 
 /**
  * Enum data in a session
- * Reuses IEnumValue from enums-definition and adds the definition name and selected key
  */
 export interface ISessionEnum {
-    enum_selection_id: string
+    enum_selection_public_id: string
+    enum_definition_public_id: string
+    enum_value_public_id: string
     enum_definition_name: string
-    selected_value: string
+    selected_value: unknown
+}
+
+/**
+ * Metadata in a session
+ */
+export interface ISessionMetadata {
+    metadata_selection_public_id: string
+    metadata_definition_public_id: string
+    label: string
+    type: string
+    value: unknown
 }
 
 export interface ISession {
@@ -29,9 +41,10 @@ export interface ISession {
     duration: string
     activity: ISessionActivity
     server_member: ISessionMember[]
-    enums: ISessionEnum[]
+    enum_definitions: ISessionEnum[]
     likes_count: number
     liked_by_me: boolean
+    metadata: ISessionMetadata[]
 }
 
 /**
@@ -50,20 +63,6 @@ export interface IUpdateSessionParticipantsRequest {
     participants: string[]
 }
 
-// Detailed enum selection with full enum definition context
-export interface ISessionEnumSelectionDetail {
-    public_id: string
-    activity_session_id: string
-    enum_definition: {
-        public_id: string
-        name: string
-        description: string
-        enum_value_id: string
-    }
-    selected_key: string
-    selected_value: string
-}
-
 // New request to add enum selections to a session
 export interface IAddSessionEnumsSelection {
     enum_value_id: string
@@ -71,11 +70,6 @@ export interface IAddSessionEnumsSelection {
 }
 export interface IAddSessionEnumsRequest {
     selections: IAddSessionEnumsSelection[]
-}
-
-// New request to update an enum selection's selected_key
-export interface IUpdateSessionEnumSelectionRequest {
-    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
 }
 
 export interface ISessionListItem {
@@ -104,4 +98,13 @@ export interface IListSessionsOptions {
 export interface ISessionApiResponse<T = unknown> {
     data?: T
     error?: string
+}
+
+// New request to add metadata to a session
+export interface IAddSessionMetadataEntry {
+    metadata_definition_public_id: string
+    value: unknown
+}
+export interface IAddSessionMetadataRequest {
+    metadata: IAddSessionMetadataEntry[]
 }

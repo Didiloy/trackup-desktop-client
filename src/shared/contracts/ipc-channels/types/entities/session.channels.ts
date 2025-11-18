@@ -10,6 +10,5 @@ export const SESSION_CHANNELS = {
     like: 'session:like',
     unlike: 'session:unlike',
     addEnums: 'session:addEnums',
-    updateEnumSelection: 'session:updateEnumSelection',
-    getEnumSelection: 'session:getEnumSelection'
+    addMetadata: 'session:addMetadata'
 } as const

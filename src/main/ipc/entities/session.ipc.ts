@@ -8,8 +8,7 @@ import type {
     IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IUpdateSessionEnumSelectionRequest,
-    ISessionEnumSelectionDetail
+    IAddSessionMetadataRequest
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
@@ -235,66 +234,46 @@ export function registerSessionIpc(): void {
             }
 
             return apiService.post<ISession>(
-                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums`,
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/enum-definitions`,
                 accessToken,
                 request
             )
         }
     )
 
-    // Update a specific enum selection in a session
+    // Add metadata to a session
     ipcMain.handle(
-        ipc_channels.session.updateEnumSelection,
+        ipc_channels.session.addMetadata,
         async (
             _event,
             serverId: string,
             sessionId: string,
-            enumSelectionId: string,
-            request: IUpdateSessionEnumSelectionRequest,
+            request: IAddSessionMetadataRequest,
             accessToken: string
-        ): Promise<ISessionApiResponse<void>> => {
-            logger.info('Updating enum selection in session:', sessionId, enumSelectionId)
+        ): Promise<ISessionApiResponse<ISession>> => {
+            logger.info('Adding metadata to session:', sessionId)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(sessionId, 'Session ID'),
-                validateRequired(enumSelectionId, 'Enum Selection ID'),
-                validateRequired(request?.selected_key, 'Selected key'),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
 
-            return apiService.put<void>(
-                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums/${enumSelectionId}`,
+            // Basic validation of metadata
+            if (!request?.metadata?.length) {
+                return { error: 'At least one metadata entry is required' }
+            }
+            for (const meta of request.metadata) {
+                if (!meta.metadata_definition_public_id) {
+                    return { error: 'Invalid metadata entry' }
+                }
+            }
+
+            return apiService.post<ISession>(
+                `/api/v1/servers/${serverId}/sessions/${sessionId}/metadatas`,
                 accessToken,
                 request
-            )
-        }
-    )
-
-    // Get a specific enum selection detail
-    ipcMain.handle(
-        ipc_channels.session.getEnumSelection,
-        async (
-            _event,
-            serverId: string,
-            sessionId: string,
-            enumSelectionId: string,
-            accessToken: string
-        ): Promise<ISessionApiResponse<ISessionEnumSelectionDetail>> => {
-            logger.info('Getting enum selection details:', sessionId, enumSelectionId)
-
-            const validationError = combineValidations(
-                validateRequired(serverId, 'Server ID'),
-                validateRequired(sessionId, 'Session ID'),
-                validateRequired(enumSelectionId, 'Enum Selection ID'),
-                validateAuth(accessToken)
-            )
-            if (validationError) return validationError
-
-            return apiService.get<ISessionEnumSelectionDetail>(
-                `/api/v1/servers/${serverId}/sessions/${sessionId}/enums/${enumSelectionId}`,
-                accessToken
             )
         }
     )

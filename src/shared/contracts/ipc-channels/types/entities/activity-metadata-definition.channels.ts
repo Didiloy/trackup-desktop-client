@@ -9,4 +9,3 @@ export const ACTIVITY_METADATA_DEFINITION_CHANNELS = {
     update: 'activityMetadataDefinition:update',
     delete: 'activityMetadataDefinition:delete'
 } as const
-
