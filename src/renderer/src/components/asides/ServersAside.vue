@@ -20,10 +20,9 @@ const server_store = useServerStore()
 
 const { getServerTypeById } = useServerTypeCRUD()
 const serverTypeName = ref<string>('')
-const serverTypeId = computed<string>(() => server_store.getServerTypePublicId || '')
 
 async function refreshServerTypeName(): Promise<void> {
-    const id = serverTypeId.value
+    const id = server_store.getServerTypePublicId
     if (!id) {
         serverTypeName.value = ''
         return
@@ -33,7 +32,7 @@ async function refreshServerTypeName(): Promise<void> {
 }
 
 watch(
-    serverTypeId,
+    () => server_store.getServerTypePublicId,
     () => {
         void refreshServerTypeName()
     },

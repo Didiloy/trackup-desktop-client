@@ -20,7 +20,7 @@ const isServerAsideVisible = computed(
     >
         <ServersAside />
         <main
-            class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden"
+            class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden p-6"
             :class="{ 'rounded-l-xl': !isServerAsideVisible }"
         >
             <router-view v-slot="{ Component, route: currentRoute }">
