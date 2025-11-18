@@ -223,6 +223,7 @@ function handleSkipSkillLevels(): void {
         />
         <ActivityMetadataForm
             v-else-if="currentStep === 'metadata'"
+            :activity-id-for-types="undefined"
             @back="handleMetadataBack"
             @skip="handleSkipMetadata"
             @next="handleMetadataNext"

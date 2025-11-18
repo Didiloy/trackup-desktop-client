@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type {
     ICreateActivityMetadataDefinitionRequest
 } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
+import { useServerStore } from '@/stores/server'
 
 const emit = defineEmits<{
     (e: 'back'): void
@@ -12,14 +14,54 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { getMetadataTypes } = useActivityMetadataDefinitionCRUD()
+const server_store = useServerStore()
 
-// Static types (to avoid needing activityId before creation)
-const typeOptions = [
-    { label: 'STRING', value: 'STRING' },
-    { label: 'NUMBER', value: 'NUMBER' },
-    { label: 'BOOLEAN', value: 'BOOLEAN' },
-    { label: 'DATE', value: 'DATE' }
-]
+const props = withDefaults(
+    defineProps<{
+        activityIdForTypes?: string | null
+    }>(),
+    {
+        activityIdForTypes: null
+    }
+)
+
+const typeOptions = ref<{ label: string; value: string }[]>([])
+const loadingTypes = ref(false)
+const typesError = ref<string | null>(null)
+
+async function loadTypes(): Promise<void> {
+    loadingTypes.value = true
+    typesError.value = null
+    try {
+        const serverId = server_store.getPublicId
+        if (serverId && props.activityIdForTypes) {
+            const res = await getMetadataTypes(serverId, props.activityIdForTypes)
+            if (res.error) {
+                typesError.value = res.error
+            } else if (res.data && Array.isArray(res.data)) {
+                typeOptions.value = res.data.map((t) => ({ label: t, value: t }))
+            }
+        }
+    } catch (e) {
+        typesError.value = e instanceof Error ? e.message : 'Failed to load metadata types'
+    } finally {
+        // Fallback if nothing loaded
+        if (!typeOptions.value.length) {
+            typeOptions.value = [
+                { label: 'STRING', value: 'STRING' },
+                { label: 'NUMBER', value: 'NUMBER' },
+                { label: 'BOOLEAN', value: 'BOOLEAN' },
+                { label: 'DATE', value: 'DATE' }
+            ]
+        }
+        // Ensure draft has a valid type
+        if (!typeOptions.value.find((o) => o.value === draft.value.type)) {
+            draft.value.type = typeOptions.value[0].value as any
+        }
+        loadingTypes.value = false
+    }
+}
 
 const defs = ref<ICreateActivityMetadataDefinitionRequest[]>([])
 
@@ -31,6 +73,10 @@ const draft = ref<ICreateActivityMetadataDefinitionRequest>({
     required: false,
     allow_not_predefined_value: true,
     choices: []
+})
+
+onMounted(async () => {
+    await loadTypes()
 })
 
 const newChoice = ref<string>('')
