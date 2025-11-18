@@ -19,6 +19,7 @@ declare module 'vue' {
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']
     Button: typeof import('primevue/button')['default']
+    ColorPicker: typeof import('primevue/colorpicker')['default']
     ConfirmationDialog: typeof import('./src/components/common/dialogs/ConfirmationDialog.vue')['default']
     ContextActionMenu: typeof import('./src/components/common/ContextActionMenu.vue')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']

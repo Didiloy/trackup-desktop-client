@@ -114,12 +114,15 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.color')
                     }}</label>
-                    <InputText
-                        v-model="draft.color"
-                        placeholder="#4CAF50"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <div class="flex items-center gap-2">
+                    <ColorPicker v-model="draft.color" />
+                        <InputText
+                            v-model="draft.color"
+                            placeholder="#4CAF50"
+                            class="w-full"
+                            :pt="{ root: { style: background_style } }"
+                        />
+                    </div>
                 </div>
             </div>
 

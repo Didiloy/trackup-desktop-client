@@ -86,8 +86,6 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
             throw new Error('No server selected')
         }
 
-        console.log(serverId)
-
         // le payload est un objet simple
         const finalActivityPayload = {
             name: activityPayload.value.name,
@@ -96,7 +94,6 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
             banner: activityPayload.value.banner
         }
 
-        console.log('creating activity with plain object', finalActivityPayload)
         const res = await createActivity(serverId, finalActivityPayload)
 
         if (res.error || !res.data) {
@@ -105,7 +102,6 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
         }
 
         // activity created successfully
-        console.log('activity created successfully', res.data)
 
         // If no skill levels to create, finish here
         if (!skillLevels.length) {
@@ -141,8 +137,6 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
 }
 
 function handleActivityNext(payload: ICreateActivityRequest): void {
-    const rawPayload = toRaw(payload)
-    console.log('ActivityCreateDialog payload recieved', payload)
 
     activityPayload.value = {
         name: payload.name.trim(),
