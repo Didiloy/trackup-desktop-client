@@ -7,6 +7,10 @@ import type {
     IListMembersOptions,
     IMemberApiResponse
 } from '@shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IPaginatedSessions,
+    IListSessionsOptions
+} from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseMemberCRUDReturn {
     inviteMember: (
@@ -28,6 +32,17 @@ interface UseMemberCRUDReturn {
         memberId: string,
         request: IUpdateNicknameRequest
     ) => Promise<IMemberApiResponse<IServerMember>>
+    getMemberSessions: (
+        serverId: string,
+        memberId: string,
+        options?: IListSessionsOptions
+    ) => Promise<IMemberApiResponse<IPaginatedSessions>>
+    getMemberSessionsForActivity: (
+        serverId: string,
+        memberId: string,
+        activityId: string,
+        options?: IListSessionsOptions
+    ) => Promise<IMemberApiResponse<IPaginatedSessions>>
 }
 
 /**
@@ -100,12 +115,48 @@ export function useMemberCRUD(): UseMemberCRUDReturn {
         )
     }
 
+    /**
+     * Get member sessions
+     */
+    const getMemberSessions = async (
+        serverId: string,
+        memberId: string,
+        options?: IListSessionsOptions
+    ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+        return window.api.member.getSessions(
+            serverId,
+            memberId,
+            options,
+            user_store.getAccessToken!
+        )
+    }
+
+    /**
+     * Get member sessions for a specific activity
+     */
+    const getMemberSessionsForActivity = async (
+        serverId: string,
+        memberId: string,
+        activityId: string,
+        options?: IListSessionsOptions
+    ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+        return window.api.member.getSessionsForActivity(
+            serverId,
+            memberId,
+            activityId,
+            options,
+            user_store.getAccessToken!
+        )
+    }
+
     return {
         inviteMember,
         quitServer,
         listMembers,
         getMemberById,
         kickMember,
-        updateMemberNickname
+        updateMemberNickname,
+        getMemberSessions,
+        getMemberSessionsForActivity
     }
 }

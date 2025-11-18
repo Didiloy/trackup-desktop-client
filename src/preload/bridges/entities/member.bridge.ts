@@ -8,6 +8,10 @@ import type {
     IListMembersOptions,
     IMemberApiResponse
 } from '../../../shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IPaginatedSessions,
+    IListSessionsOptions
+} from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
  * Member API Bridge
@@ -79,6 +83,44 @@ export const memberBridge = {
             serverId,
             memberId,
             request,
+            accessToken
+        )
+    },
+
+    /**
+     * Get all sessions of a member across all activities
+     */
+    getSessions: (
+        serverId: string,
+        memberId: string,
+        options: IListSessionsOptions | undefined,
+        accessToken: string
+    ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.member.getSessions,
+            serverId,
+            memberId,
+            options,
+            accessToken
+        )
+    },
+
+    /**
+     * Get all sessions of a member for a specific activity
+     */
+    getSessionsForActivity: (
+        serverId: string,
+        memberId: string,
+        activityId: string,
+        options: IListSessionsOptions | undefined,
+        accessToken: string
+    ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.member.getSessionsForActivity,
+            serverId,
+            memberId,
+            activityId,
+            options,
             accessToken
         )
     }
