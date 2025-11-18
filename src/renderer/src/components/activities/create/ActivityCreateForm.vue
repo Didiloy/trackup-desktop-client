@@ -42,7 +42,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 </script>
 
 <template>
-    <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5 h-full">
         <!-- General information -->
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
@@ -96,7 +96,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             />
         </div>
 
-        <div class="flex justify-end gap-2 pt-2">
+        <div class="flex justify-end gap-2 pt-2 mt-auto">
             <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
                 :label="t('common.next')"

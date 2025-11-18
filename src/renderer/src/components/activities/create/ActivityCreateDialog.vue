@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, toRaw } from 'vue'
+import { ref, computed } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityCreateForm from './ActivityCreateForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
+import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
@@ -13,6 +14,8 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
+import type { ICreateActivityMetadataDefinitionRequest } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
 
 interface Props {
     modelValue: boolean
@@ -28,13 +31,15 @@ const { t } = useI18n()
 const toast = useToast()
 const { createActivity } = useActivityCRUD()
 const { createSkillLevel } = useActivitySkillLevelCRUD()
+const { createMetadataDefinition } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 const submitting = ref(false)
 const error = ref<string | null>(null)
 
-type Step = 'activity' | 'skill-levels'
+type Step = 'activity' | 'metadata' | 'skill-levels'
 const currentStep = ref<Step>('activity')
 const activityPayload = ref<ICreateActivityRequest | null>(null)
+const metadataPayloads = ref<ICreateActivityMetadataDefinitionRequest[]>([])
 
 const steps = computed(() => [
     {
@@ -43,21 +48,33 @@ const steps = computed(() => [
         icon: 'pi pi-pencil'
     },
     {
+        key: 'metadata',
+        label: t('userInterface.serverActivitiesView.addActivityModal.metadataStep') || 'Métadonnées',
+        icon: 'pi pi-database'
+    },
+    {
         key: 'skill-levels',
         label: t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle'),
         icon: 'pi pi-sliders-h'
     }
 ])
 
-const currentIndex = computed(() => (currentStep.value === 'activity' ? 0 : 1))
+const currentIndex = computed(() =>
+    currentStep.value === 'activity' ? 0 : currentStep.value === 'metadata' ? 1 : 2
+)
 
 const subtitle = computed(() =>
     currentStep.value === 'activity'
         ? t('userInterface.serverActivitiesView.addActivityModal.description')
-        : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') +
-          ' (' +
-          t('common.optional') +
-          ')'
+        : currentStep.value === 'metadata'
+          ? t('userInterface.serverActivitiesView.addActivityModal.metadataDescription') +
+            ' (' +
+            t('common.optional') +
+            ')'
+          : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') +
+            ' (' +
+            t('common.optional') +
+            ')'
 )
 
 function goToStep(step: Step): void {
@@ -73,7 +90,10 @@ function close(): void {
     emit('update:modelValue', false)
 }
 
-async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[]): Promise<void> {
+async function finalizeCreation(
+    metadataDefs: ICreateActivityMetadataDefinitionRequest[],
+    skillLevels: ICreateActivitySkillLevelRequest[]
+): Promise<void> {
     if (!activityPayload.value) return
 
     submitting.value = true
@@ -102,6 +122,21 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
         }
 
         // activity created successfully
+        const activityId = res.data.public_id
+
+        // Create metadata definitions first (if any)
+        if (metadataDefs.length) {
+            const mdPromises = metadataDefs.map((md) => {
+                const plain = { ...md }
+                return createMetadataDefinition(serverId, activityId, plain)
+            })
+            const mdResults = await Promise.all(mdPromises)
+            for (const r of mdResults) {
+                if (r.error) {
+                    throw new Error(r.error)
+                }
+            }
+        }
 
         // If no skill levels to create, finish here
         if (!skillLevels.length) {
@@ -112,7 +147,6 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
         }
 
         // Create skill levels in parallel
-        const activityId = res.data.public_id
         const promises = skillLevels.map((lvl) => {
             const plainLevel = { ...lvl }
             return createSkillLevel(serverId, activityId, plainLevel)
@@ -144,15 +178,29 @@ function handleActivityNext(payload: ICreateActivityRequest): void {
         logo: payload.logo || '',
         banner: payload.banner || ''
     } as ICreateActivityRequest
+    goToStep('metadata')
+}
+
+function handleMetadataNext(defs: ICreateActivityMetadataDefinitionRequest[]): void {
+    metadataPayloads.value = defs
+    goToStep('skill-levels')
+}
+
+function handleMetadataBack(): void {
+    goToStep('activity')
+}
+
+function handleSkipMetadata(): void {
+    metadataPayloads.value = []
     goToStep('skill-levels')
 }
 
 function handleSkillLevelsSubmit(levels: ICreateActivitySkillLevelRequest[]): void {
-    void finalizeCreation(levels)
+    void finalizeCreation(metadataPayloads.value, levels)
 }
 
 function handleSkipSkillLevels(): void {
-    void finalizeCreation([])
+    void finalizeCreation(metadataPayloads.value, [])
 }
 </script>
 
@@ -172,6 +220,12 @@ function handleSkipSkillLevels(): void {
             v-if="currentStep === 'activity'"
             @next="handleActivityNext"
             @cancel="close"
+        />
+        <ActivityMetadataForm
+            v-else-if="currentStep === 'metadata'"
+            @back="handleMetadataBack"
+            @skip="handleSkipMetadata"
+            @next="handleMetadataNext"
         />
         <ActivitySkillLevelsForm
             v-else

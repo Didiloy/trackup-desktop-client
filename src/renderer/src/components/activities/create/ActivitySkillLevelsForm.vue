@@ -70,7 +70,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 </script>
 
 <template>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 h-full">
         <div class="flex items-center gap-2">
             <i class="pi pi-sliders-h text-surface-500"></i>
             <div class="flex flex-col">
@@ -103,12 +103,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.displayOrder')
                     }}</label>
-                    <InputText
-                        v-model="draft.display_order"
-                        type="number"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputNumber v-model="draft.display_order" class="w-full" :pt="{ root: { style: background_style } }" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
@@ -131,23 +126,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minSessions')
                     }}</label>
-                    <InputText
-                        v-model.number="draft.min_sessions"
-                        type="number"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputNumber v-model="draft.min_sessions" class="w-full" :pt="{ root: { style: background_style } }" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxSessions')
                     }}</label>
-                    <InputText
-                        v-model.number="draft.max_sessions"
-                        type="number"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputNumber v-model="draft.max_sessions" class="w-full" :pt="{ root: { style: background_style } }" />
                 </div>
             </div>
 
@@ -156,23 +141,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minDuration')
                     }}</label>
-                    <InputText
-                        v-model.number="draft.min_duration"
-                        type="number"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputNumber v-model="draft.min_duration" class="w-full" :pt="{ root: { style: background_style } }" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxDuration')
                     }}</label>
-                    <InputText
-                        v-model.number="draft.max_duration"
-                        type="number"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputNumber v-model="draft.max_duration" class="w-full" :pt="{ root: { style: background_style } }" />
                 </div>
             </div>
 
@@ -231,7 +206,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             </div>
         </div>
 
-        <div class="flex justify-between gap-2 pt-2">
+        <div class="flex justify-between gap-2 pt-2 mt-auto">
             <div class="flex gap-2">
                 <Button :label="t('common.back')" text @click="emit('back')" />
             </div>
