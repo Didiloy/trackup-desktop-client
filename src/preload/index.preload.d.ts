@@ -6,6 +6,7 @@ import type { ServerBridge } from './bridges/entities/server.bridge'
 import type { EnumDefinitionBridge } from './bridges/entities/enum-definition.bridge'
 import type { ActivityBridge } from './bridges/entities/activity.bridge'
 import type { ActivitySkillLevelBridge } from './bridges/entities/activity-skill-level.bridge'
+import type { ActivityMetadataDefinitionBridge } from './bridges/entities/activity-metadata-definition.bridge'
 import type { SessionBridge } from './bridges/entities/session.bridge'
 import type { MemberBridge } from './bridges/entities/member.bridge'
 import type { UserBridge } from './bridges/entities/user.bridge'
@@ -29,6 +30,7 @@ export interface API {
     enumDefinition: EnumDefinitionBridge
     activity: ActivityBridge
     activitySkillLevel: ActivitySkillLevelBridge
+    activityMetadataDefinition: ActivityMetadataDefinitionBridge
     session: SessionBridge
     member: MemberBridge
     user: UserBridge

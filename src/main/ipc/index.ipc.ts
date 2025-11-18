@@ -5,6 +5,7 @@ import { registerServerIpc } from './entities/server.ipc'
 import { registerEnumDefinitionIpc } from './entities/enum-definition.ipc'
 import { registerActivityIpc } from './entities/activity.ipc'
 import { registerActivitySkillLevelIpc } from './entities/activity-skill-level.ipc'
+import { registerActivityMetadataDefinitionIpc } from './entities/activity-metadata-definition.ipc'
 import { registerSessionIpc } from './entities/session.ipc'
 import { registerMemberIpc } from './entities/member.ipc'
 import { registerUserIpc } from './entities/user.ipc'
@@ -32,6 +33,7 @@ export function registerAllIpc(): void {
     registerEnumDefinitionIpc()
     registerActivityIpc()
     registerActivitySkillLevelIpc()
+    registerActivityMetadataDefinitionIpc()
     registerSessionIpc()
     registerMemberIpc()
     registerUserIpc()

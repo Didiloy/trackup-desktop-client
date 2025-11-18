@@ -7,6 +7,7 @@ import { serverBridge } from './bridges/entities/server.bridge'
 import { enumDefinitionBridge } from './bridges/entities/enum-definition.bridge'
 import { activityBridge } from './bridges/entities/activity.bridge'
 import { activitySkillLevelBridge } from './bridges/entities/activity-skill-level.bridge'
+import { activityMetadataDefinitionBridge } from './bridges/entities/activity-metadata-definition.bridge'
 import { sessionBridge } from './bridges/entities/session.bridge'
 import { memberBridge } from './bridges/entities/member.bridge'
 import { userBridge } from './bridges/entities/user.bridge'
@@ -36,6 +37,7 @@ const api = {
     enumDefinition: enumDefinitionBridge,
     activity: activityBridge,
     activitySkillLevel: activitySkillLevelBridge,
+    activityMetadataDefinition: activityMetadataDefinitionBridge,
     session: sessionBridge,
     member: memberBridge,
     user: userBridge,

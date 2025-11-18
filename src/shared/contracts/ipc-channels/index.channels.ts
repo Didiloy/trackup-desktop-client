@@ -10,6 +10,7 @@ import { SERVER_CHANNELS } from './types/entities/server.channels'
 import { ENUM_DEFINITION_CHANNELS } from './types/entities/enum-definition.channels'
 import { ACTIVITY_CHANNELS } from './types/entities/activity.channels'
 import { ACTIVITY_SKILL_LEVEL_CHANNELS } from './types/entities/activity-skill-level.channels'
+import { ACTIVITY_METADATA_DEFINITION_CHANNELS } from './types/entities/activity-metadata-definition.channels'
 import { SESSION_CHANNELS } from './types/entities/session.channels'
 import { MEMBER_CHANNELS } from './types/entities/member.channels'
 import { USER_CHANNELS } from './types/entities/user.channels'
@@ -30,6 +31,7 @@ export const ipc_channels = {
     enumDefinition: ENUM_DEFINITION_CHANNELS,
     activity: ACTIVITY_CHANNELS,
     activitySkillLevel: ACTIVITY_SKILL_LEVEL_CHANNELS,
+    activityMetadataDefinition: ACTIVITY_METADATA_DEFINITION_CHANNELS,
     session: SESSION_CHANNELS,
     member: MEMBER_CHANNELS,
     user: USER_CHANNELS,
