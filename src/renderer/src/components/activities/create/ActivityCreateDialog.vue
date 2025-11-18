@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, unref } from 'vue'
+import { ref, computed, toRaw } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityCreateForm from './ActivityCreateForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
@@ -74,20 +74,39 @@ function close(): void {
 }
 
 async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[]): Promise<void> {
-    const payload: ICreateActivityRequest | null = activityPayload.value
-    if (!payload) return
+    if (!activityPayload.value) return
+
     submitting.value = true
     error.value = null
+
     try {
-        const serverId = server_store.getPublicId!
-        console.log('creating activity', payload)
-        const res = await createActivity(serverId, payload)
+        const serverId = server_store.getPublicId
+
+        if(!serverId) {
+            throw new Error('No server selected')
+        }
+
+        console.log(serverId)
+
+        // le payload est un objet simple
+        const finalActivityPayload = {
+            name: activityPayload.value.name,
+            description: activityPayload.value.description,
+            logo: activityPayload.value.logo,
+            banner: activityPayload.value.banner
+        }
+
+        console.log('creating activity with plain object', finalActivityPayload)
+        const res = await createActivity(serverId, finalActivityPayload)
+
         if (res.error || !res.data) {
             toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
             throw new Error(res.error || 'Failed to create activity')
         }
+
         // activity created successfully
         console.log('activity created successfully', res.data)
+
         // If no skill levels to create, finish here
         if (!skillLevels.length) {
             toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
@@ -98,7 +117,11 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
 
         // Create skill levels in parallel
         const activityId = res.data.public_id
-        const promises = skillLevels.map((lvl) => createSkillLevel(serverId, activityId, lvl))
+        const promises = skillLevels.map((lvl) => {
+            const plainLevel = { ...lvl }
+            return createSkillLevel(serverId, activityId, plainLevel)
+        })
+
         const results = await Promise.all(promises)
         for (const levelRes of results) {
             if (levelRes.error) {
@@ -111,12 +134,16 @@ async function finalizeCreation(skillLevels: ICreateActivitySkillLevelRequest[])
         close()
     } catch (e) {
         error.value = e instanceof Error ? e.message : 'Failed to create activity'
+        console.error('Error creating activity:', e)
     } finally {
         submitting.value = false
     }
 }
 
 function handleActivityNext(payload: ICreateActivityRequest): void {
+    const rawPayload = toRaw(payload)
+    console.log('ActivityCreateDialog payload recieved', payload)
+
     activityPayload.value = {
         name: payload.name.trim(),
         description: (payload.description || '').trim(),

@@ -4,10 +4,12 @@ import { useRoute, useRouter } from 'vue-router'
 import AvatarButton from '@/components/common/AvatarButton.vue'
 import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
+import { useServerStore } from '@/stores/server'
 
 const i18n = useI18n()
 
 const user_store = useUserStore()
+const server_store = useServerStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -15,6 +17,7 @@ const router = useRouter()
 const isActive = computed(() => route.path === '/')
 
 const goHome = (): void => {
+    server_store.setServer(null)
     router.push({ name: 'Home' })
 }
 </script>
