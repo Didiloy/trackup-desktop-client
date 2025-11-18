@@ -8,6 +8,10 @@ import type {
     IListMembersOptions,
     IMemberApiResponse
 } from '../../../shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IPaginatedSessions,
+    IListSessionsOptions
+} from '../../../shared/contracts/interfaces/entities/session.interfaces'
 import { Logger } from '../../../shared/logger'
 import { apiService } from '../../services/ApiService'
 import {
@@ -169,6 +173,62 @@ export function registerMemberIpc(): void {
                 `/api/v1/servers/${serverId}/members/${memberId}/nickname`,
                 accessToken,
                 request
+            )
+        }
+    )
+
+    // Get all sessions of a member across all activities
+    ipcMain.handle(
+        ipc_channels.member.getSessions,
+        async (
+            _event,
+            serverId: string,
+            memberId: string,
+            options: IListSessionsOptions | undefined,
+            accessToken: string
+        ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+            logger.info('Getting sessions for member:', memberId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(memberId, 'Member ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<IPaginatedSessions>(
+                `/api/v1/servers/${serverId}/members/${memberId}/sessions`,
+                accessToken,
+                buildRequestOptions(options)
+            )
+        }
+    )
+
+    // Get all sessions of a member for a specific activity
+    ipcMain.handle(
+        ipc_channels.member.getSessionsForActivity,
+        async (
+            _event,
+            serverId: string,
+            memberId: string,
+            activityId: string,
+            options: IListSessionsOptions | undefined,
+            accessToken: string
+        ): Promise<IMemberApiResponse<IPaginatedSessions>> => {
+            logger.info('Getting sessions for member and activity:', memberId, activityId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(memberId, 'Member ID'),
+                validateRequired(activityId, 'Activity ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<IPaginatedSessions>(
+                `/api/v1/servers/${serverId}/members/${memberId}/activities/${activityId}/sessions`,
+                accessToken,
+                buildRequestOptions(options)
             )
         }
     )
