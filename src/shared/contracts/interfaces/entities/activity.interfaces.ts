@@ -22,6 +22,7 @@ export interface ICreateActivitySessionRequest {
     duration: number
     date: string
     participants: string[]
+    comment?: string
 }
 
 export interface IUpdateActivityRequest {

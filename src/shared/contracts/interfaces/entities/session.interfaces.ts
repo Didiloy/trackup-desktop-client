@@ -39,6 +39,7 @@ export interface ISession {
     public_id: string
     date: string
     duration: string
+    comment?: string
     activity: ISessionActivity
     server_member: ISessionMember[]
     enum_definitions: ISessionEnum[]
@@ -57,6 +58,7 @@ export interface IUpdateSessionRequest {
     duration?: number
     date?: string
     participants?: string[]
+    comment?: string
 }
 
 export interface IUpdateSessionParticipantsRequest {
