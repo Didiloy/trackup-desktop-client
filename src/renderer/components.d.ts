@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActivitiesDataTable: typeof import('./src/components/activities/ActivitiesDataTable.vue')['default']
     ActivityCreateDialog: typeof import('./src/components/activities/create/ActivityCreateDialog.vue')['default']
     ActivityCreateForm: typeof import('./src/components/activities/create/ActivityCreateForm.vue')['default']
     ActivityFilterBar: typeof import('./src/components/activities/ActivityFilterBar.vue')['default']
@@ -22,10 +23,12 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
     ColorPicker: typeof import('primevue/colorpicker')['default']
+    Column: typeof import('primevue/column')['default']
     ConfirmationDialog: typeof import('./src/components/common/dialogs/ConfirmationDialog.vue')['default']
     ContextActionMenu: typeof import('./src/components/common/ContextActionMenu.vue')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateServerForm: typeof import('./src/components/servers/create-join/CreateServerForm.vue')['default']
+    DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']

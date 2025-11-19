@@ -155,7 +155,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         v-model="draft.max_sessions"
                         class="w-full"
                         show-buttons
-                        :pt="{ root: { style: background_style }, inputText: { style: background_style } }"
+                        :pt="{
+                            root: { style: background_style },
+                            inputText: { style: background_style }
+                        }"
                     />
                 </div>
             </div>
@@ -169,7 +172,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         v-model="draft.min_duration"
                         class="w-full"
                         show-buttons
-                        :pt="{ root: { style: background_style }, pcInputText: { style: background_style } }"
+                        :pt="{
+                            root: { style: background_style },
+                            pcInputText: { style: background_style }
+                        }"
                     />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -180,7 +186,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         v-model="draft.max_duration"
                         class="w-full"
                         show-buttons
-                        :pt="{ root: { style: background_style }, inputText: { style: background_style } }"
+                        :pt="{
+                            root: { style: background_style },
+                            inputText: { style: background_style }
+                        }"
                     />
                 </div>
             </div>

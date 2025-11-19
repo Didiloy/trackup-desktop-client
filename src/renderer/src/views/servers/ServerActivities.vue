@@ -2,26 +2,137 @@
 import { useI18n } from 'vue-i18n'
 import ActivityCreateDialog from '@/components/activities/create/ActivityCreateDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
-import { ref } from 'vue'
-import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import ActivitiesDataTable from '@/components/activities/ActivitiesDataTable.vue'
+import { ref, watch, onMounted, computed } from 'vue'
+import type {
+    IActivity,
+    IListActivitiesOptions
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
+import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useServerStore } from '@/stores/server'
+
 const i18n = useI18n()
+const { listActivities } = useActivityCRUD()
+const server_store = useServerStore()
 
 const showAddActivityDialog = ref(false)
+
+// Data state
+const activities = ref<IActivity[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+const totalRecords = ref(0)
+
+// Pagination state
+const lazyParams = ref({
+    page: 1,
+    limit: 20
+})
+
+// Filter state
+const filterQuery = ref('')
+const filterSearchMode = ref<'startsWith' | 'endsWith' | 'contains' | 'exact'>('contains')
+
+// Computed filter options that conform to IListActivitiesOptions
+const filterOptions = computed<IListActivitiesOptions>(() => ({
+    page: lazyParams.value.page,
+    limit: lazyParams.value.limit,
+    search: filterQuery.value || undefined,
+    searchMode: filterSearchMode.value
+}))
+
+/**
+ * Load activities from the server
+ */
+async function loadActivities(): Promise<void> {
+    if (!server_store.getPublicId) {
+        error.value = 'No server selected'
+        return
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+        const result = await listActivities(server_store.getPublicId, filterOptions.value)
+
+        if (result.error) {
+            error.value = result.error
+            activities.value = []
+            totalRecords.value = 0
+        } else if (result.data) {
+            activities.value = result.data.data
+            totalRecords.value = result.data.total
+        }
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'Failed to load activities'
+        activities.value = []
+        totalRecords.value = 0
+    } finally {
+        loading.value = false
+    }
+}
+
+/**
+ * Handle lazy loading page event from DataTable
+ */
+function onPage(event: any): void {
+    lazyParams.value.page = event.page + 1 // PrimeVue uses 0-based page index
+    lazyParams.value.limit = event.rows
+    loadActivities()
+}
+
+/**
+ * Handle filter changes
+ */
+function onFiltersChange(): void {
+    // Reset to first page when filters change
+    lazyParams.value.page = 1
+    loadActivities()
+}
+
+/**
+ * Handle activity creation
+ */
 function onActivityCreated(activity: IActivity): void {
     console.log('onActivityCreated', activity)
+    // Refresh the list
+    lazyParams.value.page = 1
+    loadActivities()
 }
+
+/**
+ * Handle add activity button click
+ */
 function onAddActivity(): void {
     showAddActivityDialog.value = true
 }
 
-//TODO créer les skills levels a la création des activités.
-
-const filterQuery = ref('')
-const filterSort = ref<'recent' | 'popular' | 'active'>('recent')
-const filterOnlyMine = ref(false)
-function onFiltersChange(): void {
-    // TODO: call list API with filters
+/**
+ * Handle view activity
+ */
+function onViewActivity(activityId: string): void {
+    console.log('View activity:', activityId)
+    // TODO: Navigate to activity detail view
 }
+
+/**
+ * Handle edit activity
+ */
+function onEditActivity(activityId: string): void {
+    console.log('Edit activity:', activityId)
+    // TODO: Open edit dialog or navigate to edit view
+}
+
+// Watch filter changes
+watch([filterQuery, filterSearchMode], () => {
+    onFiltersChange()
+})
+
+// Load activities on mount
+onMounted(() => {
+    loadActivities()
+})
 </script>
 
 <template>
@@ -34,29 +145,49 @@ function onFiltersChange(): void {
                 <Button
                     icon="pi pi-plus"
                     :label="i18n.t('userInterface.serverActivitiesView.addActivity')"
-                    @click="onAddActivity"
-                    severity="primary"
                     class=""
+                    severity="primary"
                     size="small"
                     :pt="{
                         label: { class: 'text-surface-100' },
                         icon: { class: 'text-surface-100' }
                     }"
+                    @click="onAddActivity"
                 />
             </div>
         </div>
         <div class="w-full px-2 pb-2">
             <ActivityFilterBar
                 :query="filterQuery"
-                :sort="filterSort"
-                :onlyMine="filterOnlyMine"
+                :search-mode="filterSearchMode"
                 @update:query="(v) => (filterQuery = v)"
-                @update:sort="(v) => (filterSort = v)"
-                @update:onlyMine="(v) => (filterOnlyMine = v)"
+                @update:search-mode="(v) => (filterSearchMode = v)"
                 @change="onFiltersChange"
             />
         </div>
-        <div class="flex flex-col items-center justify-start w-full h-full"></div>
+
+        <!-- Error Message -->
+        <div v-if="error" class="w-full px-2 pb-2">
+            <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                <i class="pi pi-exclamation-triangle mr-2"></i>
+                {{ error }}
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="flex-1 w-full px-2 overflow-hidden">
+            <ActivitiesDataTable
+                :activities="activities"
+                :loading="loading"
+                :total-records="totalRecords"
+                :page="lazyParams.page"
+                :rows="lazyParams.limit"
+                @page="onPage"
+                @view="onViewActivity"
+                @edit="onEditActivity"
+            />
+        </div>
+
         <ActivityCreateDialog v-model="showAddActivityDialog" @created="onActivityCreated" />
     </div>
 </template>
