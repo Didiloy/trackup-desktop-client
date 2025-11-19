@@ -81,7 +81,7 @@ const searchModeOptions = [
         </div>
 
         <!-- Search Mode -->
-        <div class="flex items-end gap-2 min-w-[180px]">
+        <div class="flex items-center gap-2 min-w-[180px]">
             <i class="pi pi-filter text-surface-800"></i>
             <Select
                 :model-value="localSearchMode"
