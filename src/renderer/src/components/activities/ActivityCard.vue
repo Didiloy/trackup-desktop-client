@@ -110,12 +110,12 @@ function toggleActions(event: MouseEvent): void {
     >
         <div
             v-if="activity.banner"
-            class="absolute inset-0 transition-opacity duration-500 rounded-2xl bg-cover bg-center"
+            class="absolute inset-1/8 transition-opacity duration-500 rounded-2xl bg-cover bg-center bg-no-repeat"
             :style="{ backgroundImage: `url(${activity.banner})` }"
         ></div>
         <div
             v-if="activity.banner"
-            class="absolute inset-0 bg-surface-100/60 backdrop-blur-3xl rounded-2xl"
+            class="absolute inset-0 bg-surface-100/82 backdrop-blur-3xl rounded-2xl"
         ></div>
 
         <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
