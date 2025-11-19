@@ -29,50 +29,52 @@ const placeholderCards = computed(() => Array.from({ length: 6 }))
 </script>
 
 <template>
-    <div class="w-full">
-        <TransitionGroup
-            name="activity-cards"
-            tag="div"
-            class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-        >
-            <ActivityCard
-                v-for="activity in activities"
-                :key="activity.public_id"
-                :activity="activity"
-                :metrics="metrics[activity.public_id]"
-                :loading="loading && !metrics[activity.public_id]"
-                @view="emit('view', activity.public_id)"
-                @edit="emit('edit', activity.public_id)"
-                @delete="emit('delete', activity.public_id)"
-            />
-            <template v-if="loading && !activities.length">
+    <div class="w-full h-full flex flex-col">
+        <div class="flex-1 overflow-auto pr-1">
+            <TransitionGroup
+                name="activity-cards"
+                tag="div"
+                class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+            >
                 <ActivityCard
-                    v-for="(_, index) in placeholderCards"
-                    :key="`placeholder-${index}`"
-                    :activity="{
-                        public_id: `placeholder-${index}`,
-                        name: 'Activity',
-                        description: '',
-                        banner: '',
-                        logo: '',
-                        server_public_id: ''
-                    }"
-                    :loading="true"
+                    v-for="activity in activities"
+                    :key="activity.public_id"
+                    :activity="activity"
+                    :metrics="metrics[activity.public_id]"
+                    :loading="loading && !metrics[activity.public_id]"
+                    @view="emit('view', activity.public_id)"
+                    @edit="emit('edit', activity.public_id)"
+                    @delete="emit('delete', activity.public_id)"
                 />
-            </template>
-        </TransitionGroup>
+                <template v-if="loading && !activities.length">
+                    <ActivityCard
+                        v-for="(_, index) in placeholderCards"
+                        :key="`placeholder-${index}`"
+                        :activity="{
+                            public_id: `placeholder-${index}`,
+                            name: 'Activity',
+                            description: '',
+                            banner: '',
+                            logo: '',
+                            server_public_id: ''
+                        }"
+                        :loading="true"
+                    />
+                </template>
+            </TransitionGroup>
 
-        <div
-            v-if="isEmpty"
-            class="flex flex-col items-center justify-center text-center py-16 rounded-2xl border border-dashed border-surface-200 text-surface-500"
-        >
-            <i class="pi pi-compass text-4xl mb-2 text-primary-500"></i>
-            <p class="font-semibold text-surface-900">
-                {{ t('userInterface.serverActivitiesView.card.empty.title') }}
-            </p>
-            <p class="text-sm text-surface-500 max-w-md">
-                {{ t('userInterface.serverActivitiesView.card.empty.description') }}
-            </p>
+            <div
+                v-if="isEmpty"
+                class="flex flex-col items-center justify-center text-center py-16 rounded-2xl border border-dashed border-surface-200 text-surface-500"
+            >
+                <i class="pi pi-compass text-4xl mb-2 text-primary-500"></i>
+                <p class="font-semibold text-surface-900">
+                    {{ t('userInterface.serverActivitiesView.card.empty.title') }}
+                </p>
+                <p class="text-sm text-surface-500 max-w-md">
+                    {{ t('userInterface.serverActivitiesView.card.empty.description') }}
+                </p>
+            </div>
         </div>
     </div>
 </template>

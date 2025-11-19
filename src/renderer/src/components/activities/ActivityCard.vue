@@ -160,7 +160,7 @@ function toggleActions(event: MouseEvent): void {
                         </p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <div
                         v-if="!loading"
                         class="flex items-center gap-1 text-red-500 font-semibold text-sm"
@@ -168,6 +168,14 @@ function toggleActions(event: MouseEvent): void {
                     >
                         <i class="pi pi-heart-fill"></i>
                         <span>{{ likesText }}</span>
+                    </div>
+                    <div
+                        v-if="!loading"
+                        class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
+                        v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
+                    >
+                        <i class="pi pi-chart-line"></i>
+                        <span>{{ avgLikesText }}</span>
                     </div>
                     <Button
                         icon="pi pi-ellipsis-h"
@@ -201,17 +209,6 @@ function toggleActions(event: MouseEvent): void {
                             value: avgSessionDurationText
                         })
                     }}</span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
-                    <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.avg_likes')
-                    }}</span>
-                    <span class="text-base font-semibold text-surface-900">
-                        {{ avgLikesText }}
-                    </span>
                 </div>
             </div>
 
