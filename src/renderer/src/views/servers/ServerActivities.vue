@@ -76,29 +76,29 @@ async function loadActivities(): Promise<void> {
 /**
  * Handle lazy loading page event from DataTable
  */
-function onPage(event: any): void {
+async function onPage(event: any): Promise<void> {
     lazyParams.value.page = event.page + 1 // PrimeVue uses 0-based page index
     lazyParams.value.limit = event.rows
-    loadActivities()
+    await loadActivities()
 }
 
 /**
  * Handle filter changes
  */
-function onFiltersChange(): void {
+async function onFiltersChange(): Promise<void> {
     // Reset to first page when filters change
     lazyParams.value.page = 1
-    loadActivities()
+    await loadActivities()
 }
 
 /**
  * Handle activity creation
  */
-function onActivityCreated(activity: IActivity): void {
+async function onActivityCreated(activity: IActivity): Promise<void> {
     console.log('onActivityCreated', activity)
     // Refresh the list
     lazyParams.value.page = 1
-    loadActivities()
+    await loadActivities()
 }
 
 /**
@@ -130,8 +130,8 @@ watch([filterQuery, filterSearchMode], () => {
 })
 
 // Load activities on mount
-onMounted(() => {
-    loadActivities()
+onMounted(async () => {
+    await loadActivities()
 })
 </script>
 
