@@ -59,5 +59,3 @@ const polylinePoints = computed(() => {
         —
     </div>
 </template>
-
-

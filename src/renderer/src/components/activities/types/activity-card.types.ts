@@ -13,5 +13,3 @@ export interface ActivityCardMetrics {
     topContributor?: string | null
     sparkline: number[]
 }
-
-

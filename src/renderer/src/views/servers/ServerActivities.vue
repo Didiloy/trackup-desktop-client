@@ -13,6 +13,7 @@ import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
+import { asyncPool } from '@/utils'
 
 const i18n = useI18n()
 const { listActivities } = useActivityCRUD()
@@ -87,15 +88,13 @@ async function loadActivityInsights(currentActivities: IActivity[]): Promise<voi
     }
     statsLoading.value = true
     try {
-        const results = await Promise.allSettled(
-            currentActivities.map(async (activity) => {
-                const res = await getActivityDetails(serverId, activity.public_id)
-                if (res.error || !res.data) {
-                    throw new Error(res.error || 'Failed to load activity stats')
-                }
-                return [activity.public_id, mapDetailsToMetrics(res.data)] as const
-            })
-        )
+        const results = await asyncPool(8, currentActivities, async (activity: IActivity) => {
+            const res = await getActivityDetails(serverId, activity.public_id)
+            if (res.error || !res.data)
+                throw new Error(res.error || 'Failed to load activity stats')
+
+            return [activity.public_id, mapDetailsToMetrics(res.data)] as const
+        })
         const next: Record<string, ActivityCardMetrics> = {}
         for (const result of results) {
             if (result.status === 'fulfilled') {
@@ -113,8 +112,7 @@ async function loadActivityInsights(currentActivities: IActivity[]): Promise<voi
 
 function mapDetailsToMetrics(details: IActivityStatsDetails): ActivityCardMetrics {
     const growthPercent = details.growth_trend?.growth_percent ?? 0
-    const timelineValues =
-        details.timeline?.map((entry) => entry.sessions_count) ?? []
+    const timelineValues = details.timeline?.map((entry) => entry.sessions_count) ?? []
     const sparkline = timelineValues.slice(-12)
     return {
         totalSessions: details.total_sessions,

@@ -30,7 +30,7 @@ const placeholderCards = computed(() => Array.from({ length: 6 }))
 
 <template>
     <div class="w-full h-full flex flex-col">
-        <div class="flex-1 overflow-auto pr-1">
+        <div class="flex-1 overflow-auto p-5">
             <TransitionGroup
                 name="activity-cards"
                 tag="div"
@@ -90,5 +90,3 @@ const placeholderCards = computed(() => Array.from({ length: 6 }))
     transform: translateY(12px) scale(0.98);
 }
 </style>
-
-

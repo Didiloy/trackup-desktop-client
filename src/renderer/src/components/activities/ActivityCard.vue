@@ -189,7 +189,9 @@ function toggleActions(event: MouseEvent): void {
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-sm">
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.sessions')
                     }}</span>
@@ -197,7 +199,9 @@ function toggleActions(event: MouseEvent): void {
                         {{ metrics?.totalSessions ?? '—' }}
                     </span>
                 </div>
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.duration')
                     }}</span>
@@ -213,7 +217,9 @@ function toggleActions(event: MouseEvent): void {
             </div>
 
             <div class="grid grid-cols-3 gap-3 text-xs">
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.unique_participants')
                     }}</span>
@@ -221,7 +227,9 @@ function toggleActions(event: MouseEvent): void {
                         {{ uniqueParticipantsText }}
                     </span>
                 </div>
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.avg_participants')
                     }}</span>
@@ -229,7 +237,9 @@ function toggleActions(event: MouseEvent): void {
                         {{ avgParticipantsText }}
                     </span>
                 </div>
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.popularity')
                     }}</span>
@@ -239,14 +249,18 @@ function toggleActions(event: MouseEvent): void {
                     <div class="h-1.5 bg-surface-200 rounded-full overflow-hidden mt-2">
                         <div
                             class="h-full bg-primary-500 rounded-full transition-all duration-300"
-                            :style="{ width: `${Math.min(props.metrics?.popularityScore ?? 0, 100)}%` }"
+                            :style="{
+                                width: `${Math.min(props.metrics?.popularityScore ?? 0, 100)}%`
+                            }"
                         ></div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs">
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.top_contributor')
                     }}</span>
@@ -254,7 +268,9 @@ function toggleActions(event: MouseEvent): void {
                         {{ topContributor }}
                     </span>
                 </div>
-                <div class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100">
+                <div
+                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
+                >
                     <span class="text-xs text-surface-500">{{
                         t('userInterface.serverActivitiesView.card.total_participants')
                     }}</span>
@@ -281,7 +297,4 @@ function toggleActions(event: MouseEvent): void {
     </div>
 </template>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>
