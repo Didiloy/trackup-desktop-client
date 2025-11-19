@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import ActivityCreateDialog from '@/components/activities/create/ActivityCreateDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
-import ActivitiesDataTable from '@/components/activities/ActivitiesDataTable.vue'
+import ActivityCardGrid from '@/components/activities/ActivityCardGrid.vue'
 import { ref, watch, onMounted, computed } from 'vue'
 import type {
     IActivity,
@@ -10,9 +10,13 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
+import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 
 const i18n = useI18n()
 const { listActivities } = useActivityCRUD()
+const { getActivityDetails } = useActivityStatsCRUD()
 const server_store = useServerStore()
 
 const showAddActivityDialog = ref(false)
@@ -22,6 +26,8 @@ const activities = ref<IActivity[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 const totalRecords = ref(0)
+const statsLoading = ref(false)
+const cardMetrics = ref<Record<string, ActivityCardMetrics>>({})
 
 // Pagination state
 const lazyParams = ref({
@@ -44,7 +50,7 @@ const filterOptions = computed<IListActivitiesOptions>(() => ({
 /**
  * Load activities from the server
  */
-async function loadActivities(): Promise<void> {
+async function fetchActivities(): Promise<void> {
     if (!server_store.getPublicId) {
         error.value = 'No server selected'
         return
@@ -73,13 +79,63 @@ async function loadActivities(): Promise<void> {
     }
 }
 
-/**
- * Handle lazy loading page event from DataTable
- */
-async function onPage(event: any): Promise<void> {
-    lazyParams.value.page = event.page + 1 // PrimeVue uses 0-based page index
-    lazyParams.value.limit = event.rows
-    await loadActivities()
+async function loadActivityInsights(currentActivities: IActivity[]): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId || !currentActivities.length) {
+        cardMetrics.value = {}
+        return
+    }
+    statsLoading.value = true
+    try {
+        const results = await Promise.allSettled(
+            currentActivities.map(async (activity) => {
+                const res = await getActivityDetails(serverId, activity.public_id)
+                if (res.error || !res.data) {
+                    throw new Error(res.error || 'Failed to load activity stats')
+                }
+                return [activity.public_id, mapDetailsToMetrics(res.data)] as const
+            })
+        )
+        const next: Record<string, ActivityCardMetrics> = {}
+        for (const result of results) {
+            if (result.status === 'fulfilled') {
+                const [activityId, metrics] = result.value
+                next[activityId] = metrics
+            }
+        }
+        cardMetrics.value = next
+    } catch (err) {
+        console.error('Failed to load activity insights', err)
+    } finally {
+        statsLoading.value = false
+    }
+}
+
+function mapDetailsToMetrics(details: IActivityStatsDetails): ActivityCardMetrics {
+    const growthPercent = details.growth_trend?.growth_percent ?? 0
+    const timelineValues =
+        details.timeline?.map((entry) => entry.sessions_count) ?? []
+    const sparkline = timelineValues.slice(-12)
+    return {
+        totalSessions: details.total_sessions,
+        totalDuration: details.total_duration,
+        avgSessionDuration: details.avg_duration,
+        totalLikes: details.total_likes,
+        avgLikesPerSession: details.avg_likes_per_session,
+        uniqueParticipants: details.unique_participants,
+        totalParticipants: details.total_participants,
+        avgParticipantsPerSession: details.avg_participants_per_session,
+        popularityScore: details.popularity_score,
+        growthPercent,
+        trendPositive: growthPercent >= 0,
+        topContributor: details.top_contributors?.[0]?.user_email ?? null,
+        sparkline
+    }
+}
+
+async function loadActivities(): Promise<void> {
+    await fetchActivities()
+    await loadActivityInsights(activities.value)
 }
 
 /**
@@ -122,6 +178,10 @@ function onViewActivity(activityId: string): void {
 function onEditActivity(activityId: string): void {
     console.log('Edit activity:', activityId)
     // TODO: Open edit dialog or navigate to edit view
+}
+
+function onDeleteActivity(activityId: string): void {
+    console.log('Delete activity:', activityId)
 }
 
 // Watch filter changes
@@ -176,15 +236,13 @@ onMounted(async () => {
 
         <!-- Data Table -->
         <div class="flex-1 w-full px-2 overflow-hidden">
-            <ActivitiesDataTable
+            <ActivityCardGrid
                 :activities="activities"
-                :loading="loading"
-                :total-records="totalRecords"
-                :page="lazyParams.page"
-                :rows="lazyParams.limit"
-                @page="onPage"
+                :metrics="cardMetrics"
+                :loading="loading || statsLoading"
                 @view="onViewActivity"
                 @edit="onEditActivity"
+                @delete="onDeleteActivity"
             />
         </div>
 

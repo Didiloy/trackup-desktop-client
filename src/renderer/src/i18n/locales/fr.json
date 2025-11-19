@@ -24,7 +24,8 @@
         "back": "Retour",
         "skip": "Passer",
         "create": "Créer",
-        "optional": "Optionnel"
+        "optional": "Optionnel",
+        "none": "Aucun"
     },
     "navigation": {
         "home": "Accueil",
@@ -256,6 +257,28 @@
                     "recent": "Plus récentes",
                     "popular": "Plus populaires",
                     "active": "Plus actives"
+                }
+            },
+            "card": {
+                "sessions": "sessions",
+                "duration": "durée",
+                "growth": "ce mois",
+                "top_contributor": "Top membre",
+                "avg_duration": "Durée moy. {value}",
+                "likes": "Total des mentions j'aime",
+                "avg_likes": "Mentions / session",
+                "unique_participants": "Membres uniques",
+                "total_participants": "Participants totaux",
+                "avg_participants": "Participants / session",
+                "popularity": "Popularité",
+                "empty": {
+                    "title": "Aucune activité ne correspond à votre recherche",
+                    "description": "Essayez un autre filtre ou créez une activité pour la voir apparaître ici."
+                },
+                "actions": {
+                    "edit": "Modifier",
+                    "delete": "Supprimer",
+                    "details": "Voir détails"
                 }
             }
         },

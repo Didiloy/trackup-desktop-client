@@ -12,11 +12,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ActivitiesDataTable: typeof import('./src/components/activities/ActivitiesDataTable.vue')['default']
+    ActivityCard: typeof import('./src/components/activities/ActivityCard.vue')['default']
+    ActivityCardGrid: typeof import('./src/components/activities/ActivityCardGrid.vue')['default']
     ActivityCreateDialog: typeof import('./src/components/activities/create/ActivityCreateDialog.vue')['default']
     ActivityCreateForm: typeof import('./src/components/activities/create/ActivityCreateForm.vue')['default']
     ActivityFilterBar: typeof import('./src/components/activities/ActivityFilterBar.vue')['default']
     ActivityMetadataForm: typeof import('./src/components/activities/create/ActivityMetadataForm.vue')['default']
     ActivitySkillLevelsForm: typeof import('./src/components/activities/create/ActivitySkillLevelsForm.vue')['default']
+    ActivitySparkline: typeof import('./src/components/activities/ActivitySparkline.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']

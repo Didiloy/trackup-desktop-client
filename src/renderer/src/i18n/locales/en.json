@@ -22,7 +22,8 @@
         "back": "Back",
         "skip": "Skip",
         "create": "Create",
-        "optional": "Optional"
+        "optional": "Optional",
+        "none": "None"
     },
     "navigation": {
         "home": "Home",
@@ -253,6 +254,28 @@
                     "recent": "Recent",
                     "popular": "Popular",
                     "active": "Active"
+                }
+            },
+            "card": {
+                "sessions": "sessions",
+                "duration": "duration",
+                "growth": "this month",
+                "top_contributor": "Top member",
+                "avg_duration": "Avg session {value}",
+                "likes": "Total likes",
+                "avg_likes": "Avg likes / session",
+                "unique_participants": "Unique members",
+                "total_participants": "Total participants",
+                "avg_participants": "Avg participants / session",
+                "popularity": "Popularity",
+                "empty": {
+                    "title": "No activities match your search",
+                    "description": "Try a different filter or create a new activity to see it appear here."
+                },
+                "actions": {
+                    "edit": "Edit",
+                    "delete": "Delete",
+                    "details": "View details"
                 }
             }
         },
