@@ -44,6 +44,10 @@ function normalizeColor(raw: string | null | undefined): string | undefined {
     return value.startsWith('#') ? value : `#${value}`
 }
 
+const normalized_color = computed(() => {
+    return normalizeColor(draft.value.color)
+})
+
 function addLevel(): void {
     if (!can_add.value) return
     levels.value.push({
@@ -125,6 +129,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         v-model="draft.color"
                         placeholder="#4CAF50"
                         class="w-full"
+                        :value="normalized_color"
                         :pt="{ root: { style: background_style } }"
                     />
                 </div>
@@ -139,6 +144,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         v-model="draft.min_sessions"
                         class="w-full"
                         :pt="{ root: { style: background_style } }"
+                        show-buttons
                     />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -148,7 +154,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <InputNumber
                         v-model="draft.max_sessions"
                         class="w-full"
-                        :pt="{ root: { style: background_style } }"
+                        show-buttons
+                        :pt="{ root: { style: background_style }, inputText: { style: background_style } }"
                     />
                 </div>
             </div>
@@ -161,7 +168,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <InputNumber
                         v-model="draft.min_duration"
                         class="w-full"
-                        :pt="{ root: { style: background_style } }"
+                        show-buttons
+                        :pt="{ root: { style: background_style }, pcInputText: { style: background_style } }"
                     />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -171,7 +179,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <InputNumber
                         v-model="draft.max_duration"
                         class="w-full"
-                        :pt="{ root: { style: background_style } }"
+                        show-buttons
+                        :pt="{ root: { style: background_style }, inputText: { style: background_style } }"
                     />
                 </div>
             </div>
