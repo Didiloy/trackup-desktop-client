@@ -115,7 +115,7 @@ function toggleActions(event: MouseEvent): void {
         ></div>
         <div
             v-if="activity.banner"
-            class="absolute inset-0 bg-surface-100/82 backdrop-blur-3xl rounded-2xl"
+            class="absolute inset-0 bg-surface-100/70 backdrop-blur-3xl rounded-2xl"
         ></div>
 
         <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
@@ -155,7 +155,7 @@ function toggleActions(event: MouseEvent): void {
                         <h3 class="text-base font-semibold text-surface-900">
                             {{ activity.name }}
                         </h3>
-                        <p class="text-xs text-surface-500 line-clamp-1">
+                        <p class="text-xs text-surface-700 line-clamp-1">
                             {{ activity.description }}
                         </p>
                     </div>
