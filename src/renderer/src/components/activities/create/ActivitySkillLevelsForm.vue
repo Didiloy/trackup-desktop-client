@@ -6,9 +6,11 @@ import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfa
 const props = withDefaults(
     defineProps<{
         submitting?: boolean
+        initialDisplayOrder?: number
     }>(),
     {
-        submitting: false
+        submitting: false,
+        initialDisplayOrder: 1
     }
 )
 
@@ -20,38 +22,43 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const levels = ref<ICreateActivitySkillLevelRequest[]>([])
+const nextDisplayOrder = ref(props.initialDisplayOrder)
 
-const draft = ref<ICreateActivitySkillLevelRequest>({
+const draft = ref({
     name: '',
-    display_order: 1,
     min_sessions: 0,
-    max_sessions: null,
+    max_sessions: null as number | null,
     min_duration: 0,
-    max_duration: null,
+    max_duration: null as number | null,
     description: '',
-    color: ''
+    color: '#4CAF50'
 })
 
 const can_add = computed(() => {
-    return !!draft.value.name.trim() && draft.value.display_order >= 0
+    return !!draft.value.name.trim()
 })
+
+function normalizeColor(raw: string | null | undefined): string | undefined {
+    const value = raw?.trim()
+    if (!value) return undefined
+    return value.startsWith('#') ? value : `#${value}`
+}
 
 function addLevel(): void {
     if (!can_add.value) return
     levels.value.push({
         name: draft.value.name.trim(),
-        display_order: draft.value.display_order,
+        display_order: nextDisplayOrder.value,
         min_sessions: Number(draft.value.min_sessions) || 0,
         max_sessions: draft.value.max_sessions ?? null,
         min_duration: Number(draft.value.min_duration) || 0,
         max_duration: draft.value.max_duration ?? null,
         description: draft.value.description?.trim() || undefined,
-        color: '#' + draft.value.color?.trim() || '4CAF50'
+        color: normalizeColor(draft.value.color) || undefined
     })
-    // reset draft
+    nextDisplayOrder.value += 1
     draft.value = {
         name: '',
-        display_order: draft.value.display_order + 1,
         min_sessions: 0,
         max_sessions: null,
         min_duration: 0,
@@ -108,30 +115,18 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 />
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.displayOrder')
-                    }}</label>
-                    <InputNumber
-                        v-model="draft.display_order"
+            <div class="flex flex-col gap-2">
+                <label class="text-sm text-surface-500">{{
+                    t('userInterface.serverActivitiesView.addActivityModal.color')
+                }}</label>
+                <div class="flex items-center gap-2">
+                    <ColorPicker v-model="draft.color" />
+                    <InputText
+                        v-model="draft.color"
+                        placeholder="#4CAF50"
                         class="w-full"
                         :pt="{ root: { style: background_style } }"
                     />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.color')
-                    }}</label>
-                    <div class="flex items-center gap-2">
-                        <ColorPicker v-model="draft.color" />
-                        <InputText
-                            v-model="draft.color"
-                            placeholder="#4CAF50"
-                            class="w-full"
-                            :pt="{ root: { style: background_style } }"
-                        />
-                    </div>
                 </div>
             </div>
 

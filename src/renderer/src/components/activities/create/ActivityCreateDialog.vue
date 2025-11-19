@@ -37,7 +37,7 @@ const submitting = ref(false)
 const error = ref<string | null>(null)
 
 type Step = 'activity' | 'metadata' | 'skill-levels'
-const currentStep = ref<Step>('activity')
+const currentStep = ref<Step>('skill-levels')
 const createdActivity = ref<IActivity | null>(null)
 
 const steps = computed(() => [
