@@ -17,6 +17,7 @@ import { registerMemberActivityStatsIpc } from './entities-stats/member-activity
 import { registerEnumDefinitionStatsIpc } from './entities-stats/enum-definition-stats.ipc'
 import { registerSnapshotStatsIpc } from './entities-stats/snapshot-stats.ipc'
 import { registerBillingIpc } from './billing.ipc'
+import { registerActivityMetadataDefinitionStatsIpc } from './entities-stats/activity-metadata-definition-stats.ipc'
 
 /**
  * Register all IPC handlers
@@ -46,6 +47,7 @@ export function registerAllIpc(): void {
     registerMemberActivityStatsIpc()
     registerEnumDefinitionStatsIpc()
     registerSnapshotStatsIpc()
+    registerActivityMetadataDefinitionStatsIpc()
 
     // Register billing IPC handlers
     registerBillingIpc()

@@ -18,6 +18,7 @@ import type { MemberActivityStatsBridge } from './bridges/entities-stats/member-
 import type { EnumDefinitionStatsBridge } from './bridges/entities-stats/enum-definition-stats.bridge'
 import type { SnapshotStatsBridge } from './bridges/entities-stats/snapshot-stats.bridge'
 import type { BillingBridge } from './bridges/billing.bridge'
+import type { ActivityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
 
 /**
  * Global type definitions for window.api
@@ -42,6 +43,7 @@ export interface API {
     enumDefinitionStats: EnumDefinitionStatsBridge
     snapshotStats: SnapshotStatsBridge
     billing: BillingBridge
+    activityMetadataDefinitionStats: ActivityMetadataDefinitionStatsBridge
 }
 
 declare global {
