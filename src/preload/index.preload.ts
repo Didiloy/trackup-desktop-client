@@ -20,6 +20,7 @@ import { enumDefinitionStatsBridge } from './bridges/entities-stats/enum-definit
 import { snapshotStatsBridge } from './bridges/entities-stats/snapshot-stats.bridge'
 import { billingBridge } from './bridges/billing.bridge'
 import { Logger } from '../shared/logger'
+import { activityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
 
 const logger = new Logger('Preload')
 
@@ -48,6 +49,7 @@ const api = {
     memberActivityStats: memberActivityStatsBridge,
     enumDefinitionStats: enumDefinitionStatsBridge,
     snapshotStats: snapshotStatsBridge,
+    activityMetadataDefinitionStats: activityMetadataDefinitionStatsBridge,
     billing: billingBridge
 }
 
