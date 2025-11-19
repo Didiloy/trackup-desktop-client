@@ -115,7 +115,7 @@ function toggleActions(event: MouseEvent): void {
         ></div>
         <div
             v-if="activity.banner"
-            class="absolute inset-0 bg-surface-100/60 backdrop-blur-xl rounded-2xl"
+            class="absolute inset-0 bg-surface-100/60 backdrop-blur-3xl rounded-2xl"
         ></div>
 
         <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
@@ -163,16 +163,16 @@ function toggleActions(event: MouseEvent): void {
                 <div class="flex items-center gap-3">
                     <div
                         v-if="!loading"
-                        class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                         v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
+                        class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                     >
                         <i class="pi pi-heart-fill"></i>
                         <span>{{ likesText }}</span>
                     </div>
                     <div
                         v-if="!loading"
-                        class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
                         v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
+                        class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
                     >
                         <i class="pi pi-chart-line"></i>
                         <span>{{ avgLikesText }}</span>

@@ -110,7 +110,7 @@ export const applyTheme = (
     return isDark
 }
 
-async function asyncPool<T, R>(
+export async function asyncPool<T, R>(
     concurrency: number,
     items: readonly T[],
     task: (item: T) => Promise<R>
