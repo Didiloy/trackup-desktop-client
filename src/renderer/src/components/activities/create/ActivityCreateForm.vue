@@ -5,8 +5,17 @@ import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
 import type { ICreateActivityRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
+const props = withDefaults(
+    defineProps<{
+        loading?: boolean
+    }>(),
+    {
+        loading: false
+    }
+)
+
 const emit = defineEmits<{
-    (e: 'next', payload: ICreateActivityRequest): void
+    (e: 'create', payload: ICreateActivityRequest): void
     (e: 'cancel'): void
 }>()
 
@@ -17,8 +26,9 @@ const description = ref('')
 const logo = ref<string>('')
 const banner = ref<string>('')
 
-const submitting = ref(false)
-const can_submit = computed(() => !submitting.value && !!name.value.trim())
+const can_submit = computed(() => {
+    return !props.loading && !!name.value.trim()
+})
 
 function updateLogo(newLogo: string): void {
     logo.value = newLogo
@@ -27,7 +37,7 @@ function updateBanner(newBanner: string): void {
     banner.value = newBanner
 }
 
-function onNext(): void {
+function onCreate(): void {
     if (!can_submit.value) return
     const payload: ICreateActivityRequest = {
         name: name.value.trim(),
@@ -35,7 +45,7 @@ function onNext(): void {
         logo: logo.value,
         banner: banner.value
     }
-    emit('next', payload)
+    emit('create', payload)
 }
 
 const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
@@ -99,10 +109,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         <div class="flex justify-end gap-2 pt-2 mt-auto">
             <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
-                :label="t('common.next')"
+                :label="t('userInterface.serverActivitiesView.addActivityModal.createButton')"
                 :disabled="!can_submit"
+                :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="onNext"
+                @click="onCreate"
             />
         </div>
     </div>

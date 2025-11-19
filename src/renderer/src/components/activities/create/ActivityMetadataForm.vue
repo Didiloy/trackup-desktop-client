@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type {
-    ICreateActivityMetadataDefinitionRequest
-} from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import type { ICreateActivityMetadataDefinitionRequest } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 
 const emit = defineEmits<{
-    (e: 'back'): void
     (e: 'skip'): void
-    (e: 'next', defs: ICreateActivityMetadataDefinitionRequest[]): void
+    (e: 'create', defs: ICreateActivityMetadataDefinitionRequest[]): void
 }>()
 
 const { t } = useI18n()
@@ -20,9 +17,11 @@ const server_store = useServerStore()
 const props = withDefaults(
     defineProps<{
         activityIdForTypes?: string | null
+        loading?: boolean
     }>(),
     {
-        activityIdForTypes: null
+        activityIdForTypes: null,
+        loading: false
     }
 )
 
@@ -122,7 +121,8 @@ function addDefinition(): void {
         description: draft.value.description?.trim() || undefined,
         required: !!draft.value.required,
         allow_not_predefined_value: !!draft.value.allow_not_predefined_value,
-        choices: draft.value.choices && draft.value.choices.length ? [...draft.value.choices] : undefined
+        choices:
+            draft.value.choices && draft.value.choices.length ? [...draft.value.choices] : undefined
     })
     // reset draft
     draft.value = {
@@ -140,8 +140,8 @@ function removeDefinition(index: number): void {
     defs.value.splice(index, 1)
 }
 
-function onNext(): void {
-    emit('next', defs.value)
+function submitMetadata(): void {
+    emit('create', defs.value)
 }
 
 const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
@@ -156,7 +156,16 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     {{ t('userInterface.serverActivitiesView.addActivityModal.metadataTitle') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{ t('userInterface.serverActivitiesView.addActivityModal.metadataDescription') }}
+                    {{
+                        t('userInterface.serverActivitiesView.addActivityModal.metadataDescription')
+                    }}
+                </span>
+                <span class="text-xs text-surface-500">
+                    {{
+                        t(
+                            'userInterface.serverActivitiesView.addActivityModal.metadataDescriptionDetail'
+                        )
+                    }}
                 </span>
             </div>
         </div>
@@ -168,7 +177,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.metadataLabel')
                     }}</label>
-                    <InputText v-model="draft.label" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputText
+                        v-model="draft.label"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
@@ -205,11 +218,17 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex items-center gap-2">
                     <Checkbox v-model="draft.required" binary />
-                    <label class="text-sm text-surface-700">{{ t('userInterface.serverActivitiesView.addActivityModal.metadataRequired') }}</label>
+                    <label class="text-sm text-surface-700">{{
+                        t('userInterface.serverActivitiesView.addActivityModal.metadataRequired')
+                    }}</label>
                 </div>
                 <div class="flex items-center gap-2">
                     <Checkbox v-model="draft.allow_not_predefined_value" binary />
-                    <label class="text-sm text-surface-700">{{ t('userInterface.serverActivitiesView.addActivityModal.metadataAllowNotPredefined') }}</label>
+                    <label class="text-sm text-surface-700">{{
+                        t(
+                            'userInterface.serverActivitiesView.addActivityModal.metadataAllowNotPredefined'
+                        )
+                    }}</label>
                 </div>
             </div>
 
@@ -239,14 +258,22 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         :style="background_style"
                     >
                         <span class="mr-2">{{ c }}</span>
-                        <Button icon="pi pi-times" text rounded size="small" @click="removeChoice(idx)" />
+                        <Button
+                            icon="pi pi-times"
+                            text
+                            rounded
+                            size="small"
+                            @click="removeChoice(idx)"
+                        />
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end">
                 <Button
-                    :label="t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')"
+                    :label="
+                        t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')
+                    "
                     icon="pi pi-plus"
                     :disabled="!can_add"
                     outlined
@@ -270,7 +297,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900">{{ d.key }}</span>
                         <span class="text-xs text-surface-600">({{ d.type }})</span>
-                        <span v-if="d.required" class="text-xs text-primary-600">• {{ t('common.required') }}</span>
+                        <span v-if="d.required" class="text-xs text-primary-600"
+                            >• {{ t('common.required') }}</span
+                        >
                     </div>
                     <Button
                         icon="pi pi-trash"
@@ -284,20 +313,14 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             </div>
         </div>
 
-        <div class="flex justify-between gap-2 pt-2 mt-auto">
-            <div class="flex gap-2">
-                <Button :label="t('common.back')" text @click="emit('back')" />
-            </div>
-            <div class="flex gap-2">
-                <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
-                <Button
-                    :label="t('common.next')"
-                    :style="{ background: 'var(--gradient-primary)' }"
-                    @click="onNext"
-                />
-            </div>
+        <div class="flex justify-end gap-2 pt-2 mt-auto">
+            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
+            <Button
+                :label="t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')"
+                :loading="props.loading"
+                :style="{ background: 'var(--gradient-primary)' }"
+                @click="submitMetadata"
+            />
         </div>
     </div>
 </template>
-
-

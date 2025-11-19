@@ -74,7 +74,9 @@ const safeCurrent = computed(() => {
                                 <div
                                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs"
                                     :class="
-                                        index === safeCurrent ? 'bg-primary-400 text-primary-600' : 'bg-surface-100'
+                                        index === safeCurrent
+                                            ? 'bg-primary-400 text-primary-600'
+                                            : 'bg-surface-100'
                                     "
                                 >
                                     <i v-if="step.icon" :class="step.icon"></i>

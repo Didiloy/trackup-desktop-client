@@ -3,14 +3,18 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 
-const props = defineProps<{
-    submitting?: boolean
-}>()
+const props = withDefaults(
+    defineProps<{
+        submitting?: boolean
+    }>(),
+    {
+        submitting: false
+    }
+)
 
 const emit = defineEmits<{
-    (e: 'back'): void
     (e: 'skip'): void
-    (e: 'submit', levels: ICreateActivitySkillLevelRequest[]): void
+    (e: 'create', levels: ICreateActivitySkillLevelRequest[]): void
 }>()
 
 const { t } = useI18n()
@@ -42,19 +46,18 @@ function addLevel(): void {
         min_duration: Number(draft.value.min_duration) || 0,
         max_duration: draft.value.max_duration ?? null,
         description: draft.value.description?.trim() || undefined,
-        color: draft.value.color?.trim() || undefined
+        color: '#' + draft.value.color?.trim() || '4CAF50'
     })
-    // reset draft, keep display_order incremented
-    const nextOrder = draft.value.display_order + 1
+    // reset draft
     draft.value = {
         name: '',
-        display_order: nextOrder,
+        display_order: draft.value.display_order + 1,
         min_sessions: 0,
         max_sessions: null,
         min_duration: 0,
         max_duration: null,
         description: '',
-        color: ''
+        color: '#4CAF50'
     }
 }
 
@@ -63,7 +66,7 @@ function removeLevel(index: number): void {
 }
 
 function submitLevels(): void {
-    emit('submit', levels.value)
+    emit('create', levels.value)
 }
 
 const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
@@ -81,6 +84,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     {{
                         t(
                             'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription'
+                        )
+                    }}
+                </span>
+                <span class="text-xs text-surface-500">
+                    {{
+                        t(
+                            'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescriptionDetail'
                         )
                     }}
                 </span>
@@ -103,14 +113,18 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.displayOrder')
                     }}</label>
-                    <InputNumber v-model="draft.display_order" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputNumber
+                        v-model="draft.display_order"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.color')
                     }}</label>
                     <div class="flex items-center gap-2">
-                    <ColorPicker v-model="draft.color" />
+                        <ColorPicker v-model="draft.color" />
                         <InputText
                             v-model="draft.color"
                             placeholder="#4CAF50"
@@ -126,13 +140,21 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minSessions')
                     }}</label>
-                    <InputNumber v-model="draft.min_sessions" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputNumber
+                        v-model="draft.min_sessions"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxSessions')
                     }}</label>
-                    <InputNumber v-model="draft.max_sessions" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputNumber
+                        v-model="draft.max_sessions"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
             </div>
 
@@ -141,13 +163,21 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minDuration')
                     }}</label>
-                    <InputNumber v-model="draft.min_duration" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputNumber
+                        v-model="draft.min_duration"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxDuration')
                     }}</label>
-                    <InputNumber v-model="draft.max_duration" class="w-full" :pt="{ root: { style: background_style } }" />
+                    <InputNumber
+                        v-model="draft.max_duration"
+                        class="w-full"
+                        :pt="{ root: { style: background_style } }"
+                    />
                 </div>
             </div>
 
@@ -206,19 +236,14 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             </div>
         </div>
 
-        <div class="flex justify-between gap-2 pt-2 mt-auto">
-            <div class="flex gap-2">
-                <Button :label="t('common.back')" text @click="emit('back')" />
-            </div>
-            <div class="flex gap-2">
-                <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
-                <Button
-                    :label="t('actions.create')"
-                    :loading="props.submitting"
-                    :style="{ background: 'var(--gradient-primary)' }"
-                    @click="submitLevels"
-                />
-            </div>
+        <div class="flex justify-end gap-2 pt-2 mt-auto">
+            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
+            <Button
+                :label="t('actions.create')"
+                :loading="props.submitting"
+                :style="{ background: 'var(--gradient-primary)' }"
+                @click="submitLevels"
+            />
         </div>
     </div>
 </template>

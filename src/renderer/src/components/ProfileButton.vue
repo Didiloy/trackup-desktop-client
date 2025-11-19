@@ -45,17 +45,11 @@ const goHome = (): void => {
     padding: 1.5px;
 }
 
-
-
 .profile-rainbow.is-active {
     --border-angle: 0deg;
     animation: border-angle-rotate 3s infinite linear;
-    background: conic-gradient(
-        from var(--border-angle),
-        #4a84ff, #8a5cf7, #d46eff, #4a84ff
-    );
+    background: conic-gradient(from var(--border-angle), #4a84ff, #8a5cf7, #d46eff, #4a84ff);
 }
-
 
 @keyframes border-angle-rotate {
     from {

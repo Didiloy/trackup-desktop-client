@@ -38,8 +38,7 @@ const error = ref<string | null>(null)
 
 type Step = 'activity' | 'metadata' | 'skill-levels'
 const currentStep = ref<Step>('activity')
-const activityPayload = ref<ICreateActivityRequest | null>(null)
-const metadataPayloads = ref<ICreateActivityMetadataDefinitionRequest[]>([])
+const createdActivity = ref<IActivity | null>(null)
 
 const steps = computed(() => [
     {
@@ -49,7 +48,8 @@ const steps = computed(() => [
     },
     {
         key: 'metadata',
-        label: t('userInterface.serverActivitiesView.addActivityModal.metadataStep') || 'Métadonnées',
+        label:
+            t('userInterface.serverActivitiesView.addActivityModal.metadataStep') || 'Métadonnées',
         icon: 'pi pi-database'
     },
     {
@@ -77,130 +77,164 @@ const subtitle = computed(() =>
             ')'
 )
 
-function goToStep(step: Step): void {
+function advanceTo(step: Step): void {
     currentStep.value = step
     error.value = null
 }
 
-function close(): void {
-    // reset state on close
+function resetState(): void {
     currentStep.value = 'activity'
-    activityPayload.value = null
+    createdActivity.value = null
     error.value = null
+    submitting.value = false
+}
+
+function close(): void {
+    resetState()
     emit('update:modelValue', false)
 }
 
-async function finalizeCreation(
-    metadataDefs: ICreateActivityMetadataDefinitionRequest[],
-    skillLevels: ICreateActivitySkillLevelRequest[]
-): Promise<void> {
-    if (!activityPayload.value) return
-
+async function handleActivityCreate(payload: ICreateActivityRequest): Promise<void> {
+    if (submitting.value) return
     submitting.value = true
     error.value = null
-
     try {
         const serverId = server_store.getPublicId
+        if (!serverId) throw new Error('No server selected')
 
-        if(!serverId) {
-            throw new Error('No server selected')
+        const sanitizedPayload: ICreateActivityRequest = {
+            name: payload.name.trim(),
+            description: (payload.description || '').trim(),
+            logo: payload.logo || '',
+            banner: payload.banner || ''
         }
 
-        // le payload est un objet simple
-        const finalActivityPayload = {
-            name: activityPayload.value.name,
-            description: activityPayload.value.description,
-            logo: activityPayload.value.logo,
-            banner: activityPayload.value.banner
-        }
-
-        const res = await createActivity(serverId, finalActivityPayload)
-
+        const res = await createActivity(serverId, sanitizedPayload)
         if (res.error || !res.data) {
             toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
             throw new Error(res.error || 'Failed to create activity')
         }
 
-        // activity created successfully
-        const activityId = res.data.public_id
-
-        // Create metadata definitions first (if any)
-        if (metadataDefs.length) {
-            const mdPromises = metadataDefs.map((md) => {
-                const plain = { ...md }
-                return createMetadataDefinition(serverId, activityId, plain)
-            })
-            const mdResults = await Promise.all(mdPromises)
-            for (const r of mdResults) {
-                if (r.error) {
-                    throw new Error(r.error)
-                }
-            }
-        }
-
-        // If no skill levels to create, finish here
-        if (!skillLevels.length) {
-            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
-            emit('created', res.data)
-            close()
-            return
-        }
-
-        // Create skill levels in parallel
-        const promises = skillLevels.map((lvl) => {
-            const plainLevel = { ...lvl }
-            return createSkillLevel(serverId, activityId, plainLevel)
+        createdActivity.value = res.data
+        toast.add({
+            severity: 'success',
+            summary: t('messages.success.create'),
+            life: 2500
         })
-
-        const results = await Promise.all(promises)
-        for (const levelRes of results) {
-            if (levelRes.error) {
-                throw new Error(levelRes.error)
-            }
-        }
-
-        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
-        emit('created', res.data)
-        close()
+        advanceTo('metadata')
     } catch (e) {
         error.value = e instanceof Error ? e.message : 'Failed to create activity'
-        console.error('Error creating activity:', e)
     } finally {
         submitting.value = false
     }
 }
 
-function handleActivityNext(payload: ICreateActivityRequest): void {
+async function handleMetadataCreate(
+    defs: ICreateActivityMetadataDefinitionRequest[]
+): Promise<void> {
+    if (!createdActivity.value) return
+    if (!defs.length) {
+        advanceTo('skill-levels')
+        return
+    }
+    submitting.value = true
+    error.value = null
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) throw new Error('No server selected')
+        const activityId = createdActivity.value.public_id
 
-    activityPayload.value = {
-        name: payload.name.trim(),
-        description: (payload.description || '').trim(),
-        logo: payload.logo || '',
-        banner: payload.banner || ''
-    } as ICreateActivityRequest
-    goToStep('metadata')
+        const sanitizedDefs = defs.map((def) => ({
+            ...def,
+            key: def.key.trim(),
+            label: def.label?.trim(),
+            description: def.description?.trim(),
+            choices: def.choices?.map((choice) => choice.toString()) || [],
+            required: def.required,
+            allow_not_predefined_value: def.allow_not_predefined_value
+        }))
+        const results = await Promise.all(
+            sanitizedDefs.map((def) => createMetadataDefinition(serverId, activityId, { ...def }))
+        )
+        for (const res of results) {
+            if (res.error) {
+                throw new Error(res.error)
+            }
+        }
+        toast.add({
+            severity: 'success',
+            summary: t('messages.success.create'),
+            life: 2500
+        })
+        advanceTo('skill-levels')
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'Failed to create metadata'
+    } finally {
+        submitting.value = false
+    }
 }
 
-function handleMetadataNext(defs: ICreateActivityMetadataDefinitionRequest[]): void {
-    metadataPayloads.value = defs
-    goToStep('skill-levels')
+function handleMetadataSkip(): void {
+    advanceTo('skill-levels')
 }
 
-function handleMetadataBack(): void {
-    goToStep('activity')
+async function handleSkillLevelsCreate(levels: ICreateActivitySkillLevelRequest[]): Promise<void> {
+    if (!createdActivity.value) {
+        close()
+        return
+    }
+    if (!levels.length) {
+        finishWizard()
+        return
+    }
+    submitting.value = true
+    error.value = null
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) throw new Error('No server selected')
+        const activityId = createdActivity.value.public_id
+
+        const sanitizedLevels = levels.map((lvl) => ({
+            ...lvl,
+            name: lvl.name.trim(),
+            display_order: lvl.display_order,
+            description: lvl.description?.trim() || undefined,
+            color: lvl.color?.trim(),
+            min_sessions: Number(lvl.min_sessions),
+            max_sessions: lvl.max_sessions ?? null,
+            min_duration: Number(lvl.min_duration),
+            max_duration: lvl.max_duration ?? null
+        }))
+        const results = await Promise.all(
+            sanitizedLevels.map((lvl) => createSkillLevel(serverId, activityId, { ...lvl }))
+        )
+        for (const res of results) {
+            if (res.error) {
+                throw new Error(res.error)
+            }
+        }
+        toast.add({
+            severity: 'success',
+            summary: t('messages.success.create'),
+            life: 2500
+        })
+        finishWizard()
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'Failed to create skill levels'
+    } finally {
+        submitting.value = false
+    }
 }
 
-function handleSkipMetadata(): void {
-    metadataPayloads.value = []
-    goToStep('skill-levels')
+function handleSkillLevelsSkip(): void {
+    finishWizard()
 }
 
-function handleSkillLevelsSubmit(levels: ICreateActivitySkillLevelRequest[]): void {
-    void finalizeCreation(metadataPayloads.value, levels)
-}
-
-function handleSkipSkillLevels(): void {
-    void finalizeCreation(metadataPayloads.value, [])
+function finishWizard(): void {
+    if (createdActivity.value) {
+        emit('created', createdActivity.value)
+    }
+    close()
 }
 </script>
 
@@ -218,25 +252,27 @@ function handleSkipSkillLevels(): void {
     >
         <ActivityCreateForm
             v-if="currentStep === 'activity'"
-            @next="handleActivityNext"
+            :loading="submitting"
+            @create="handleActivityCreate"
             @cancel="close"
         />
         <ActivityMetadataForm
             v-else-if="currentStep === 'metadata'"
-            :activity-id-for-types="undefined"
-            @back="handleMetadataBack"
-            @skip="handleSkipMetadata"
-            @next="handleMetadataNext"
+            :activity-id-for-types="createdActivity?.public_id ?? null"
+            :loading="submitting"
+            @skip="handleMetadataSkip"
+            @create="handleMetadataCreate"
         />
         <ActivitySkillLevelsForm
             v-else
             :submitting="submitting"
-            @back="goToStep('activity')"
-            @skip="handleSkipSkillLevels"
-            @submit="handleSkillLevelsSubmit"
+            @skip="handleSkillLevelsSkip"
+            @create="handleSkillLevelsCreate"
         />
         <template #footer>
-            <div class="w-full text-sm text-red-500 px-4 border-none">{{ error }}</div>
+            <div v-if="error" class="w-full text-sm text-red-500 px-4 border-none">
+                {{ error }}
+            </div>
         </template>
     </MultiStepsDialog>
 </template>
