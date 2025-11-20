@@ -17,7 +17,7 @@ import { asyncPool } from '@/utils'
 
 const i18n = useI18n()
 const { listActivities } = useActivityCRUD()
-const { getActivityDetails } = useActivityStatsCRUD()
+const { getActivityStatsDetails } = useActivityStatsCRUD()
 const server_store = useServerStore()
 
 const showAddActivityDialog = ref(false)
@@ -89,7 +89,7 @@ async function loadActivityInsights(currentActivities: IActivity[]): Promise<voi
     statsLoading.value = true
     try {
         const results = await asyncPool(8, currentActivities, async (activity: IActivity) => {
-            const res = await getActivityDetails(serverId, activity.public_id)
+            const res = await getActivityStatsDetails(serverId, activity.public_id)
             if (res.error || !res.data)
                 throw new Error(res.error || 'Failed to load activity stats')
 

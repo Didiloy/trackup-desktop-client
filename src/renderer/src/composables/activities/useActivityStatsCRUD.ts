@@ -17,11 +17,11 @@ import type {
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
 interface UseActivityStatsCRUDReturn {
-    getActivityLeaderboard: (
+    getActivitiesStatsLeaderboard: (
         serverId: string,
         params?: IActivityLeaderboardParams
     ) => Promise<IActivityStatsApiResponse<IActivityLeaderboard>>
-    getAllActivityStats: (
+    getAllActivitiesStats: (
         serverId: string,
         params: IActivityPaginationParams
     ) => Promise<IActivityStatsApiResponse<IPaginatedActivityStats>>
@@ -29,25 +29,25 @@ interface UseActivityStatsCRUDReturn {
         serverId: string,
         activityId: string
     ) => Promise<IActivityStatsApiResponse<IActivityStats>>
-    getActivityDetails: (
+    getActivityStatsDetails: (
         serverId: string,
         activityId: string
     ) => Promise<IActivityStatsApiResponse<IActivityStatsDetails>>
-    getActivityPatterns: (
+    getActivityStatsPatterns: (
         serverId: string,
         activityId: string
     ) => Promise<IActivityStatsApiResponse<IActivityTimePatterns>>
-    getActivityRanking: (
+    getActivityStatsRanking: (
         serverId: string,
         activityId: string,
         params?: IActivityRankingParams
     ) => Promise<IActivityStatsApiResponse<IActivityRanking>>
-    getActivityTimeline: (
+    getActivityStatsTimeline: (
         serverId: string,
         activityId: string,
         params?: IActivityTimelineParams
     ) => Promise<IActivityStatsApiResponse<IStatsTimeline[]>>
-    getActivityGrowthTrends: (
+    getActivityStatsGrowthTrends: (
         serverId: string,
         activityId: string,
         params?: IActivityGrowthParams
@@ -62,9 +62,9 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     const user_store = useUserStore()
 
     /**
-     * Get activity leaderboard
+     * Get activities leaderboard
      */
-    const getActivityLeaderboard = async (
+    const getActivitiesStatsLeaderboard = async (
         serverId: string,
         params?: IActivityLeaderboardParams
     ): Promise<IActivityStatsApiResponse<IActivityLeaderboard>> => {
@@ -74,7 +74,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get all activities statistics (paginated)
      */
-    const getAllActivityStats = async (
+    const getAllActivitiesStats = async (
         serverId: string,
         params: IActivityPaginationParams
     ): Promise<IActivityStatsApiResponse<IPaginatedActivityStats>> => {
@@ -94,7 +94,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get complete activity details
      */
-    const getActivityDetails = async (
+    const getActivityStatsDetails = async (
         serverId: string,
         activityId: string
     ): Promise<IActivityStatsApiResponse<IActivityStatsDetails>> => {
@@ -104,7 +104,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get activity time patterns
      */
-    const getActivityPatterns = async (
+    const getActivityStatsPatterns = async (
         serverId: string,
         activityId: string
     ): Promise<IActivityStatsApiResponse<IActivityTimePatterns>> => {
@@ -118,7 +118,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get activity ranking
      */
-    const getActivityRanking = async (
+    const getActivityStatsRanking = async (
         serverId: string,
         activityId: string,
         params?: IActivityRankingParams
@@ -134,7 +134,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get activity timeline
      */
-    const getActivityTimeline = async (
+    const getActivityStatsTimeline = async (
         serverId: string,
         activityId: string,
         params?: IActivityTimelineParams
@@ -150,7 +150,7 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     /**
      * Get activity growth trends
      */
-    const getActivityGrowthTrends = async (
+    const getActivityStatsGrowthTrends = async (
         serverId: string,
         activityId: string,
         params?: IActivityGrowthParams
@@ -164,13 +164,13 @@ export function useActivityStatsCRUD(): UseActivityStatsCRUDReturn {
     }
 
     return {
-        getActivityLeaderboard,
-        getAllActivityStats,
+        getActivitiesStatsLeaderboard,
+        getAllActivitiesStats,
         getActivityStats,
-        getActivityDetails,
-        getActivityPatterns,
-        getActivityRanking,
-        getActivityTimeline,
-        getActivityGrowthTrends
+        getActivityStatsDetails,
+        getActivityStatsPatterns,
+        getActivityStatsRanking,
+        getActivityStatsTimeline,
+        getActivityStatsGrowthTrends
     }
 }

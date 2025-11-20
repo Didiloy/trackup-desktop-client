@@ -18,7 +18,7 @@ interface UseEnumDefinitionStatsCRUDReturn {
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
     ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
-    getEnumValueDistribution: (
+    getEnumValueStatsDistribution: (
         serverId: string,
         enumDefinitionId: string
     ) => Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>>
@@ -64,7 +64,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     /**
      * Get enum value distribution
      */
-    const getEnumValueDistribution = async (
+    const getEnumValueStatsDistribution = async (
         serverId: string,
         enumDefinitionId: string
     ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
@@ -78,6 +78,6 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     return {
         getAllEnumDefinitionStats,
         getEnumDefinitionStats,
-        getEnumValueDistribution
+        getEnumValueStatsDistribution
     }
 }

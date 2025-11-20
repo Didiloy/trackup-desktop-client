@@ -16,11 +16,11 @@ import type {
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
 interface UseMemberStatsCRUDReturn {
-    getMemberLeaderboard: (
+    getMembersStatsLeaderboard: (
         serverId: string,
         params?: ILeaderboardParams
     ) => Promise<IMemberStatsApiResponse<IMemberLeaderboard>>
-    getAllMemberStats: (
+    getAllMembersStats: (
         serverId: string,
         params: IPaginationParams
     ) => Promise<IMemberStatsApiResponse<IPaginatedMemberStats>>
@@ -28,24 +28,24 @@ interface UseMemberStatsCRUDReturn {
         serverId: string,
         memberId: string
     ) => Promise<IMemberStatsApiResponse<IMemberStats>>
-    getMemberDetails: (
+    getMemberStatsDetails: (
         serverId: string,
         memberId: string
     ) => Promise<IMemberStatsApiResponse<IMemberStatsDetails>>
-    getMemberPatterns: (
+    getMemberStatsPatterns: (
         serverId: string,
         memberId: string
     ) => Promise<IMemberStatsApiResponse<IMemberActivityPatterns>>
-    getMemberRanking: (
+    getMemberStatsRanking: (
         serverId: string,
         memberId: string
     ) => Promise<IMemberStatsApiResponse<IMemberRanking>>
-    getMemberTimeline: (
+    getMemberStatsTimeline: (
         serverId: string,
         memberId: string,
         params?: IMemberTimelineParams
     ) => Promise<IMemberStatsApiResponse<IStatsTimeline[]>>
-    getMemberGrowthTrends: (
+    getMemberStatsGrowthTrends: (
         serverId: string,
         memberId: string,
         params?: IMemberGrowthParams
@@ -62,7 +62,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get member leaderboard
      */
-    const getMemberLeaderboard = async (
+    const getMembersStatsLeaderboard = async (
         serverId: string,
         params?: ILeaderboardParams
     ): Promise<IMemberStatsApiResponse<IMemberLeaderboard>> => {
@@ -72,7 +72,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get all members statistics (paginated)
      */
-    const getAllMemberStats = async (
+    const getAllMembersStats = async (
         serverId: string,
         params: IPaginationParams
     ): Promise<IMemberStatsApiResponse<IPaginatedMemberStats>> => {
@@ -92,7 +92,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get complete member details
      */
-    const getMemberDetails = async (
+    const getMemberStatsDetails = async (
         serverId: string,
         memberId: string
     ): Promise<IMemberStatsApiResponse<IMemberStatsDetails>> => {
@@ -102,7 +102,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get member activity patterns
      */
-    const getMemberPatterns = async (
+    const getMemberStatsPatterns = async (
         serverId: string,
         memberId: string
     ): Promise<IMemberStatsApiResponse<IMemberActivityPatterns>> => {
@@ -112,7 +112,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get member ranking
      */
-    const getMemberRanking = async (
+    const getMemberStatsRanking = async (
         serverId: string,
         memberId: string
     ): Promise<IMemberStatsApiResponse<IMemberRanking>> => {
@@ -122,7 +122,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get member timeline
      */
-    const getMemberTimeline = async (
+    const getMemberStatsTimeline = async (
         serverId: string,
         memberId: string,
         params?: IMemberTimelineParams
@@ -138,7 +138,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     /**
      * Get member growth trends
      */
-    const getMemberGrowthTrends = async (
+    const getMemberStatsGrowthTrends = async (
         serverId: string,
         memberId: string,
         params?: IMemberGrowthParams
@@ -152,13 +152,13 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
     }
 
     return {
-        getMemberLeaderboard,
-        getAllMemberStats,
+        getMembersStatsLeaderboard,
+        getAllMembersStats,
         getMemberStats,
-        getMemberDetails,
-        getMemberPatterns,
-        getMemberRanking,
-        getMemberTimeline,
-        getMemberGrowthTrends
+        getMemberStatsDetails,
+        getMemberStatsPatterns,
+        getMemberStatsRanking,
+        getMemberStatsTimeline,
+        getMemberStatsGrowthTrends
     }
 }
