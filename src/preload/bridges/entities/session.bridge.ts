@@ -5,10 +5,10 @@ import type {
     IPaginatedSessions,
     IUpdateSessionRequest,
     IUpdateSessionParticipantsRequest,
-    IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IAddSessionMetadataRequest
+    IAddSessionMetadataRequest,
+    ILiteListSessionsOptions
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
@@ -21,7 +21,7 @@ export const sessionBridge = {
      */
     list: (
         serverId: string,
-        options: IListSessionsOptions | undefined,
+        options: ILiteListSessionsOptions | undefined,
         accessToken: string
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
         return ipcRenderer.invoke(ipc_channels.session.list, serverId, options, accessToken)
