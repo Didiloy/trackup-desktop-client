@@ -260,10 +260,15 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         :pt="{ root: { style: background_style } }"
                         :placeholder="t('placeholder.enter')"
                         :disabled="!canUseChoices"
+                        @keydown.enter="addChoice"
                     />
                     <Button
+                        v-tooltip.top="
+                            t(
+                                'userInterface.serverActivitiesView.addActivityModal.metadataAddChoice'
+                            )
+                        "
                         icon="pi pi-plus"
-                        :label="t('actions.add')"
                         outlined
                         :disabled="!canUseChoices"
                         @click="addChoice"
@@ -273,32 +278,30 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-if="canUseChoices && draft.choices && draft.choices.length"
                     class="flex flex-wrap gap-2"
                 >
-                    <div
+                    <!-- using a timestamp to avoid key issues -->
+                    <Chip
                         v-for="(c, idx) in draft.choices"
-                        :key="idx"
-                        class="px-2 py-1 rounded-md text-xs"
-                        :style="background_style"
-                    >
-                        <span class="mr-2">{{ c }}</span>
-                        <Button
-                            icon="pi pi-times"
-                            text
-                            rounded
-                            size="small"
-                            @click="removeChoice(idx)"
-                        />
-                    </div>
+                        :key="idx + Date.now().toString()"
+                        :label="c.toString()"
+                        removable
+                        :style="{
+                            background: 'var(--p-surface-200)',
+                            color: 'var(--p-surface-900)'
+                        }"
+                        @remove="removeChoice(idx)"
+                    />
                 </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-center w-full">
                 <Button
                     :label="
                         t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')
                     "
-                    icon="pi pi-plus"
+                    icon="pi pi-check"
+                    class="w-full"
                     :disabled="!can_add"
-                    outlined
+                    :style="{ background: 'var(--gradient-secondary)' }"
                     @click="addDefinition"
                 />
             </div>
@@ -338,7 +341,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         <div class="flex justify-end gap-2 pt-2 mt-auto">
             <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
-                :label="t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')"
+                :label="t('common.create')"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="submitMetadata"

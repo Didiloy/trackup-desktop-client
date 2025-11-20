@@ -25,6 +25,7 @@ declare module 'vue' {
     AvatarButton: typeof import('./src/components/common/AvatarButton.vue')['default']
     Button: typeof import('primevue/button')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
+    Chip: typeof import('primevue/chip')['default']
     ColorPicker: typeof import('primevue/colorpicker')['default']
     Column: typeof import('primevue/column')['default']
     ConfirmationDialog: typeof import('./src/components/common/dialogs/ConfirmationDialog.vue')['default']
