@@ -25,7 +25,8 @@
         "skip": "Passer",
         "create": "Créer",
         "optional": "Optionnel",
-        "none": "Aucun"
+        "none": "Aucun",
+        "items": "éléments"
     },
     "navigation": {
         "home": "Accueil",
@@ -253,11 +254,11 @@
                 "skillLevelsStep": "Niveaux de compétence"
             },
             "filters": {
-                "onlyMine": "Afficher seulement mes activités",
+                "onlyMine": "Afficher seulement mes éléments",
                 "sort": {
-                    "recent": "Plus récentes",
+                    "recent": "Plus récents",
                     "popular": "Plus populaires",
-                    "active": "Plus actives"
+                    "active": "Plus actifs"
                 }
             },
             "card": {

@@ -23,7 +23,8 @@
         "skip": "Skip",
         "create": "Create",
         "optional": "Optional",
-        "none": "None"
+        "none": "None",
+        "items": "items"
     },
     "navigation": {
         "home": "Home",
