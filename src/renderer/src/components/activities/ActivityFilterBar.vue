@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 interface Props {
     query?: string
     searchMode?: 'startsWith' | 'endsWith' | 'contains' | 'exact'
+    count?: number
 }
 interface Emits {
     (e: 'update:query', value: string): void
@@ -17,7 +18,8 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
     query: '',
-    searchMode: 'contains'
+    searchMode: 'contains',
+    count: 0
 })
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
@@ -99,6 +101,11 @@ const searchModeOptions = [
                 }"
                 @update:model-value="onSearchModeChange"
             />
+        </div>
+
+        <div class="ml-auto flex items-center text-xs text-surface-600">
+            <i class="pi pi-list mr-2"></i>
+            <span>{{ props.count }} {{ t('common.items') ?? 'items' }}</span>
         </div>
     </div>
 </template>

@@ -136,6 +136,7 @@ onMounted(() => {
             <ActivityFilterBar
                 :query="filter_query"
                 :search-mode="filter_SearchMode"
+                :count="activities.length"
                 @update:query="(v) => (filter_query = v)"
                 @update:search-mode="(v) => (filter_SearchMode = v)"
             />
