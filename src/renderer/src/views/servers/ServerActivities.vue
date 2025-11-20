@@ -11,13 +11,13 @@ import type {
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
-import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import type { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 import { asyncPool } from '@/utils'
 
 const i18n = useI18n()
 const { listActivities } = useActivityCRUD()
-const { getActivityStatsDetails } = useActivityStatsCRUD()
+const { getActivityStats } = useActivityStatsCRUD()
 const server_store = useServerStore()
 
 const showAddActivityDialog = ref(false)
@@ -89,7 +89,8 @@ async function loadActivityInsights(currentActivities: IActivity[]): Promise<voi
     statsLoading.value = true
     try {
         const results = await asyncPool(8, currentActivities, async (activity: IActivity) => {
-            const res = await getActivityStatsDetails(serverId, activity.public_id)
+            // Use the slimmer getActivityStats API (returns IActivityStats)
+            const res = await getActivityStats(serverId, activity.public_id)
             if (res.error || !res.data)
                 throw new Error(res.error || 'Failed to load activity stats')
 
@@ -110,25 +111,15 @@ async function loadActivityInsights(currentActivities: IActivity[]): Promise<voi
     }
 }
 
-function mapDetailsToMetrics(details: IActivityStatsDetails): ActivityCardMetrics {
-    const growthPercent = details.growth_trend?.growth_percent ?? 0
-    const timelineValues = details.timeline?.map((entry) => entry.sessions_count) ?? []
-    const sparkline = timelineValues.slice(-12)
+function mapDetailsToMetrics(details: IActivityStats): ActivityCardMetrics {
     return {
         totalSessions: details.total_sessions,
         totalDuration: details.total_duration,
         avgSessionDuration: details.avg_duration,
         totalLikes: details.total_likes,
         avgLikesPerSession: details.avg_likes_per_session,
-        uniqueParticipants: details.unique_participants,
-        totalParticipants: details.total_participants,
-        avgParticipantsPerSession: details.avg_participants_per_session,
-        popularityScore: details.popularity_score,
-        growthPercent,
-        trendPositive: growthPercent >= 0,
-        topContributor: details.top_contributors?.[0]?.user_email ?? null,
-        sparkline
-    }
+        uniqueParticipants: details.unique_participants
+    } as ActivityCardMetrics
 }
 
 async function loadActivities(): Promise<void> {

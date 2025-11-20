@@ -138,3 +138,11 @@ export async function asyncPool<T, R>(
 
     return Promise.allSettled(results)
 }
+
+export function formatNumber(value?: number | null, fractionDigits = 0): string {
+    if (value === undefined || value === null || Number.isNaN(value)) return '—'
+    return value.toLocaleString(undefined, {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+    })
+}

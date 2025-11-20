@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed} from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
-import ActivitySparkline from './ActivitySparkline.vue'
+import { formatNumber } from '@/utils'
 
 interface Props {
     activity: IActivity
@@ -21,14 +21,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-function formatNumber(value?: number | null, fractionDigits = 0): string {
-    if (value === undefined || value === null || Number.isNaN(value)) return '—'
-    return value.toLocaleString(undefined, {
-        minimumFractionDigits: fractionDigits,
-        maximumFractionDigits: fractionDigits
-    })
-}
-
 const durationText = computed(() => {
     if (!props.metrics) return '--'
     const minutes = props.metrics.totalDuration || 0
@@ -45,33 +37,13 @@ const avgSessionDurationText = computed(() =>
         : '—'
 )
 
-const growthBadge = computed(() => {
-    if (!props.metrics) return { text: '--', positive: true }
-    const value = props.metrics.growthPercent || 0
-    const sign = value > 0 ? '+' : ''
-    return {
-        text: `${sign}${value.toFixed(1)}%`,
-        positive: value >= 0
-    }
-})
-
 const likesText = computed(() => formatNumber(props.metrics?.totalLikes))
 const avgLikesText = computed(() => formatNumber(props.metrics?.avgLikesPerSession, 1))
-const uniqueParticipantsText = computed(() => formatNumber(props.metrics?.uniqueParticipants))
-const avgParticipantsText = computed(() =>
-    formatNumber(props.metrics?.avgParticipantsPerSession, 1)
-)
-const popularityText = computed(() => formatNumber(props.metrics?.popularityScore, 0))
-
-// const sparklineData = computed(() => props.metrics?.sparkline ?? [0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 4])
-const sparklineData = computed(() => [0, 2, 2, 4, 5, 3, 2, 4, 5, 7])
-
 
 function onCardClick(): void {
     if (props.loading) return
     emit('view', props.activity.public_id)
 }
-
 </script>
 
 <template>
@@ -91,7 +63,7 @@ function onCardClick(): void {
 
         <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
             <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-3 w-full">
+                <div class="flex items-center gap-8 w-full">
                     <div class="w-12 h-12 rounded-xl bg-surface-200" />
                     <div class="flex-1 space-y-2">
                         <div class="h-4 bg-surface-200 rounded w-2/3"></div>
@@ -100,13 +72,11 @@ function onCardClick(): void {
                 </div>
                 <div class="w-8 h-8 rounded-full bg-surface-200"></div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
+                <div class="h-16 bg-surface-200 rounded-xl"></div>
                 <div class="h-16 bg-surface-200 rounded-xl"></div>
                 <div class="h-16 bg-surface-200 rounded-xl"></div>
             </div>
-            <div class="h-3 bg-surface-200 rounded w-2/3"></div>
-            <div class="h-3 bg-surface-200 rounded w-1/3"></div>
-            <div class="h-16 bg-surface-200 rounded-lg"></div>
         </div>
         <div v-else class="relative z-10 flex flex-col gap-4 p-5 h-full">
             <div class="flex items-start justify-between gap-3">
@@ -151,7 +121,7 @@ function onCardClick(): void {
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="grid grid-cols-3 gap-3 text-sm">
                 <div
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
@@ -177,9 +147,6 @@ function onCardClick(): void {
                         })
                     }}</span>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-3 gap-3 text-xs">
                 <div
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
@@ -187,52 +154,10 @@ function onCardClick(): void {
                         t('userInterface.serverActivitiesView.card.unique_participants')
                     }}</span>
                     <span class="text-base font-semibold text-surface-900">
-                        {{ uniqueParticipantsText }}
+                        {{ metrics?.uniqueParticipants }}
                     </span>
-                </div>
-                <div
-                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
-                >
-                    <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.avg_participants')
-                    }}</span>
-                    <span class="text-base font-semibold text-surface-900">
-                        {{ avgParticipantsText }}
-                    </span>
-                </div>
-                <div
-                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
-                >
-                    <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.popularity')
-                    }}</span>
-                    <span class="text-base font-semibold text-surface-900">
-                        {{ popularityText }}
-                    </span>
-                    <div class="h-1.5 bg-surface-200 rounded-full overflow-hidden mt-2">
-                        <div
-                            class="h-full bg-primary-500 rounded-full transition-all duration-300"
-                            :style="{
-                                width: `${Math.min(props.metrics?.popularityScore ?? 0, 100)}%`
-                            }"
-                        ></div>
-                    </div>
                 </div>
             </div>
-
-            <div class="flex items-center justify-between">
-                <span class="text-xs text-surface-700">{{
-                    t('userInterface.serverActivitiesView.card.growth')
-                }}</span>
-                <span
-                    class="text-sm font-semibold"
-                    :class="growthBadge.positive ? 'text-emerald-600' : 'text-red-500'"
-                >
-                    {{ growthBadge.text }}
-                </span>
-            </div>
-
-            <ActivitySparkline :data="sparklineData" />
         </div>
     </div>
 </template>

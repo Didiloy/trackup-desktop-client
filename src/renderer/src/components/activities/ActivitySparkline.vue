@@ -94,11 +94,7 @@ const fillPathData = computed(() => {
             </linearGradient>
         </defs>
         <!-- Fill area -->
-        <path
-            :d="fillPathData"
-            fill="url(#sparklineFill)"
-            stroke="none"
-        />
+        <path :d="fillPathData" fill="url(#sparklineFill)" stroke="none" />
         <!-- Line -->
         <path
             :d="pathData"

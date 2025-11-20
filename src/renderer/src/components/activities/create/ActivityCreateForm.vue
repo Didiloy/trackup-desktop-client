@@ -52,7 +52,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
 </script>
 
 <template>
-    <div class="flex flex-col gap-5 h-full">
+    <div class="flex flex-col gap-9 h-full">
         <!-- General information -->
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
@@ -106,7 +106,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             />
         </div>
 
-        <div class="flex justify-end gap-2 pt-2 mt-auto">
+        <div class="flex justify-end gap-2 pt-8">
             <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
                 :label="t('userInterface.serverActivitiesView.addActivityModal.createButton')"
