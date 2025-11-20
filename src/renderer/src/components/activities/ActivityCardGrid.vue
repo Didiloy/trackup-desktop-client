@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
     (e: 'view', activityId: string): void
+    (e: 'load-more'): void
 }>()
 
 const { t } = useI18n()
@@ -24,11 +25,21 @@ const { t } = useI18n()
 const isEmpty = computed(() => !props.loading && !props.activities.length)
 
 const placeholderCards = computed(() => Array.from({ length: 6 }))
+
+function handleScroll(event: Event): void {
+    const target = event.target as HTMLElement | null
+    if (!target) return
+    const { scrollTop, clientHeight, scrollHeight } = target
+    const threshold = 200
+    if (scrollTop + clientHeight + threshold >= scrollHeight) {
+        emit('load-more')
+    }
+}
 </script>
 
 <template>
     <div class="w-full h-full flex flex-col">
-        <div class="flex-1 overflow-auto p-5">
+        <div class="flex-1 overflow-auto p-5" @scroll.passive="handleScroll">
             <TransitionGroup
                 name="activity-cards"
                 tag="div"
