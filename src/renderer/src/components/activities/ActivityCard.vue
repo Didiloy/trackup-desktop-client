@@ -72,7 +72,8 @@ const avgParticipantsText = computed(() =>
 )
 const popularityText = computed(() => formatNumber(props.metrics?.popularityScore, 0))
 
-const sparklineData = computed(() => props.metrics?.sparkline ?? [])
+// const sparklineData = computed(() => props.metrics?.sparkline ?? [0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 4])
+const sparklineData = computed(() => [0, 2, 2, 4, 5, 3, 2, 4, 5, 7])
 
 const menuItems = computed(() => [
     {
@@ -115,7 +116,7 @@ function toggleActions(event: MouseEvent): void {
         ></div>
         <div
             v-if="activity.banner"
-            class="absolute inset-0 bg-surface-100/70 backdrop-blur-3xl rounded-2xl"
+            class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
         ></div>
 
         <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
@@ -281,7 +282,7 @@ function toggleActions(event: MouseEvent): void {
             </div>
 
             <div class="flex items-center justify-between">
-                <span class="text-xs text-surface-500">{{
+                <span class="text-xs text-surface-700">{{
                     t('userInterface.serverActivitiesView.card.growth')
                 }}</span>
                 <span
