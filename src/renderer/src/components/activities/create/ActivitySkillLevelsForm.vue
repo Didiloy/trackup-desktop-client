@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
+import { useServerStore } from '@/stores/server'
 
 const props = withDefaults(
     defineProps<{
         submitting?: boolean
         initialDisplayOrder?: number
+        activityId?: string | null
     }>(),
     {
         submitting: false,
-        initialDisplayOrder: 1
+        initialDisplayOrder: 1,
+        activityId: null
     }
 )
 
@@ -20,6 +24,8 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { listSkillLevels } = useActivitySkillLevelCRUD()
+const server_store = useServerStore()
 
 const levels = ref<ICreateActivitySkillLevelRequest[]>([])
 const nextDisplayOrder = ref(props.initialDisplayOrder)
@@ -48,6 +54,35 @@ const normalized_color = computed(() => {
     return normalizeColor(draft.value.color)
 })
 
+async function syncDisplayOrder(): Promise<void> {
+    if (!props.activityId) return
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+    try {
+        const res = await listSkillLevels(serverId, props.activityId)
+        if (res.error || !res.data?.length) {
+            nextDisplayOrder.value = props.initialDisplayOrder
+            return
+        }
+        const maxOrder = Math.max(...res.data.map((lvl) => lvl.display_order ?? 0))
+        nextDisplayOrder.value = maxOrder + 1
+    } catch (e) {
+        nextDisplayOrder.value = props.initialDisplayOrder
+    }
+}
+
+onMounted(async () => {
+    await syncDisplayOrder()
+})
+
+watch(
+    () => props.activityId,
+    async (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+            await syncDisplayOrder()
+        }
+    }
+)
 function addLevel(): void {
     if (!can_add.value) return
     levels.value.push({
