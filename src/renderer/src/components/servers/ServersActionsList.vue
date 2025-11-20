@@ -17,6 +17,8 @@ interface ServerAction {
 const actions: ServerAction[] = [
     { id: 'overview', label: 'Aperçu', icon: 'pi pi-home', routeName: 'ServerOverview' },
     { id: 'activities', label: 'Activités', icon: 'pi pi-clock', routeName: 'ServerActivities' },
+    { id: 'members', label: 'Membres', icon: 'pi pi-users', routeName: 'ServerMembers' },
+    { id: 'sessions', label: 'Sessions', icon: 'pi pi-calendar', routeName: 'ServerSessions' },
     {
         id: 'server-profile',
         label: 'Profil du serveur',

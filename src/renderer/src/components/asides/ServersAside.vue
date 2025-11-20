@@ -51,7 +51,7 @@ async function copyInvite(): Promise<void> {
     <aside
         id="ServersAside"
         class="flex flex-row items-center justify-start h-full bg-surface-200 transition-all duration-300 ease-in-out overflow-hidden select-none"
-        :class="[hasServerActions ? 'w-64 min-w-64' : 'w-16 min-w-16']"
+        :class="[hasServerActions ? 'w-100 min-w-64' : 'w-16 min-w-16']"
     >
         <div class="flex flex-col items-center w-16 min-w-16 h-full my-2 bg-surface-200 rounded-lg">
             <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
