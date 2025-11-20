@@ -4,10 +4,9 @@ import type {
     IPaginatedSessions,
     IUpdateSessionRequest,
     IUpdateSessionParticipantsRequest,
-    IListSessionsOptions,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IAddSessionMetadataRequest
+    IAddSessionMetadataRequest, ILiteListSessionsOptions
     // IUpdateSessionEnumSelectionRequest,
     // ISessionEnumSelectionDetail
 } from '@shared/contracts/interfaces/entities/session.interfaces'
@@ -15,7 +14,7 @@ import type {
 interface UseSessionCRUDReturn {
     listSessions: (
         serverId: string,
-        options?: IListSessionsOptions
+        options?: ILiteListSessionsOptions
     ) => Promise<ISessionApiResponse<IPaginatedSessions>>
     getSessionById: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<ISession>>
     updateSession: (
@@ -66,7 +65,7 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
      */
     const listSessions = async (
         serverId: string,
-        options?: IListSessionsOptions
+        options?: ILiteListSessionsOptions
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
         return window.api.session.list(serverId, options, user_store.getAccessToken!)
     }
