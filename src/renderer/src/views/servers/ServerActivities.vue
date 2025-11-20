@@ -3,114 +3,30 @@ import { useI18n } from 'vue-i18n'
 import ActivityCreateDialog from '@/components/activities/create/ActivityCreateDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
 import ActivityCardGrid from '@/components/activities/ActivityCardGrid.vue'
-import { ref, watch, onMounted, computed } from 'vue'
-import type {
-    IActivity,
-    IListActivitiesOptions
-} from '@shared/contracts/interfaces/entities/activity.interfaces'
+import { onMounted, ref } from 'vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
-import type { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 import { asyncPool } from '@/utils'
+import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
+import { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 
 const i18n = useI18n()
 const { listActivities } = useActivityCRUD()
 const { getActivityStats } = useActivityStatsCRUD()
 const server_store = useServerStore()
 
-const showAddActivityDialog = ref(false)
+const show_add_activity_dialog = ref(false)
+const card_metrics = ref<Record<string, ActivityCardMetrics>>({})
 
-// Data state
-const activities = ref<IActivity[]>([])
-const loading = ref(false)
-const error = ref<string | null>(null)
-const totalRecords = ref(0)
-const statsLoading = ref(false)
-const cardMetrics = ref<Record<string, ActivityCardMetrics>>({})
-
-// Pagination state
-const lazyParams = ref({
-    page: 1,
-    limit: 20
-})
-
-// Filter state
-const filterQuery = ref('')
-const filterSearchMode = ref<'startsWith' | 'endsWith' | 'contains' | 'exact'>('contains')
-
-// Computed filter options that conform to IListActivitiesOptions
-const filterOptions = computed<IListActivitiesOptions>(() => ({
-    page: lazyParams.value.page,
-    limit: lazyParams.value.limit,
-    search: filterQuery.value || undefined,
-    searchMode: filterSearchMode.value
-}))
+const filter_query = ref('')
+const filter_SearchMode = ref<'startsWith' | 'endsWith' | 'contains' | 'exact'>('contains')
 
 /**
- * Load activities from the server
+ * Fonction pour transformer les stats en metrics
  */
-async function fetchActivities(): Promise<void> {
-    if (!server_store.getPublicId) {
-        error.value = 'No server selected'
-        return
-    }
-
-    loading.value = true
-    error.value = null
-
-    try {
-        const result = await listActivities(server_store.getPublicId, filterOptions.value)
-
-        if (result.error) {
-            error.value = result.error
-            activities.value = []
-            totalRecords.value = 0
-        } else if (result.data) {
-            activities.value = result.data.data
-            totalRecords.value = result.data.total
-        }
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to load activities'
-        activities.value = []
-        totalRecords.value = 0
-    } finally {
-        loading.value = false
-    }
-}
-
-async function loadActivityInsights(currentActivities: IActivity[]): Promise<void> {
-    const serverId = server_store.getPublicId
-    if (!serverId || !currentActivities.length) {
-        cardMetrics.value = {}
-        return
-    }
-    statsLoading.value = true
-    try {
-        const results = await asyncPool(8, currentActivities, async (activity: IActivity) => {
-            // Use the slimmer getActivityStats API (returns IActivityStats)
-            const res = await getActivityStats(serverId, activity.public_id)
-            if (res.error || !res.data)
-                throw new Error(res.error || 'Failed to load activity stats')
-
-            return [activity.public_id, mapDetailsToMetrics(res.data)] as const
-        })
-        const next: Record<string, ActivityCardMetrics> = {}
-        for (const result of results) {
-            if (result.status === 'fulfilled') {
-                const [activityId, metrics] = result.value
-                next[activityId] = metrics
-            }
-        }
-        cardMetrics.value = next
-    } catch (err) {
-        console.error('Failed to load activity insights', err)
-    } finally {
-        statsLoading.value = false
-    }
-}
-
 function mapDetailsToMetrics(details: IActivityStats): ActivityCardMetrics {
     return {
         totalSessions: details.total_sessions,
@@ -119,56 +35,79 @@ function mapDetailsToMetrics(details: IActivityStats): ActivityCardMetrics {
         totalLikes: details.total_likes,
         avgLikesPerSession: details.avg_likes_per_session,
         uniqueParticipants: details.unique_participants
-    } as ActivityCardMetrics
-}
-
-async function loadActivities(): Promise<void> {
-    await fetchActivities()
-    await loadActivityInsights(activities.value)
+    }
 }
 
 /**
- * Handle filter changes
+ * Fonction pour charger les stats uniquement pour les nouvelles activités
  */
-async function onFiltersChange(): Promise<void> {
-    // Reset to first page when filters change
-    lazyParams.value.page = 1
-    await loadActivities()
+async function loadActivityInsights(newActivities: IActivity[]): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId || !newActivities.length) return
+
+    const results = await asyncPool(8, newActivities, async (activity: IActivity) => {
+        const res = await getActivityStats(serverId, activity.public_id)
+        if (res.error || !res.data) throw new Error(res.error || 'Failed to load activity stats')
+        return [activity.public_id, mapDetailsToMetrics(res.data)] as const
+    })
+
+    for (const result of results) {
+        if (result.status === 'fulfilled') {
+            const [id, metrics] = result.value
+            card_metrics.value[id] = metrics
+        }
+    }
 }
 
 /**
- * Handle activity creation
+ * Composable générique pour fetch + pagination
  */
-async function onActivityCreated(activity: IActivity): Promise<void> {
-    console.log('onActivityCreated', activity)
-    // Refresh the list
-    lazyParams.value.page = 1
-    await loadActivities()
-}
+const {
+    items: activities,
+    loading,
+    error,
+    load,
+    loadMore
+} = usePaginatedFetcher<IActivity>({
+    fetcher: async ({ page, limit }) => {
+        if (!server_store.getPublicId) {
+            return { data: [], total: 0, error: 'No server selected' }
+        }
 
-/**
- * Handle add activity button click
- */
-function onAddActivity(): void {
-    showAddActivityDialog.value = true
-}
+        const res = await listActivities(server_store.getPublicId, {
+            page,
+            limit,
+            search: filter_query.value || undefined,
+            searchMode: filter_SearchMode.value
+        })
 
-/**
- * Handle view activity
- */
-function onViewActivity(activityId: string): void {
-    console.log('View activity:', activityId)
-    // TODO: Navigate to activity detail view
-}
+        if (res.error) {
+            return { data: [], total: 0, error: res.error }
+        }
 
-// Watch filter changes
-watch([filterQuery, filterSearchMode], () => {
-    onFiltersChange()
+        return {
+            data: res.data?.data ?? [],
+            total: res.data?.total ?? 0
+        }
+    },
+    onItemsAdded: async (newItems) => {
+        await loadActivityInsights(newItems)
+        server_store.setActivities(activities.value)
+    },
+    limit: 20,
+    filters: [filter_query, filter_SearchMode]
 })
 
-// Load activities on mount
-onMounted(async () => {
-    await loadActivities()
+function onAddActivity(): void {
+    show_add_activity_dialog.value = true
+}
+
+function onViewActivity(activityId: string): void {
+    console.log('View activity:', activityId)
+}
+
+onMounted(() => {
+    load()
 })
 </script>
 
@@ -182,7 +121,6 @@ onMounted(async () => {
                 <Button
                     icon="pi pi-plus"
                     :label="i18n.t('userInterface.serverActivitiesView.addActivity')"
-                    class=""
                     severity="primary"
                     size="small"
                     :pt="{
@@ -193,17 +131,16 @@ onMounted(async () => {
                 />
             </div>
         </div>
+
         <div class="w-full px-2 pb-2">
             <ActivityFilterBar
-                :query="filterQuery"
-                :search-mode="filterSearchMode"
-                @update:query="(v) => (filterQuery = v)"
-                @update:search-mode="(v) => (filterSearchMode = v)"
-                @change="onFiltersChange"
+                :query="filter_query"
+                :search-mode="filter_SearchMode"
+                @update:query="(v) => (filter_query = v)"
+                @update:search-mode="(v) => (filter_SearchMode = v)"
             />
         </div>
 
-        <!-- Error Message -->
         <div v-if="error" class="w-full px-2 pb-2">
             <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
                 <i class="pi pi-exclamation-triangle mr-2"></i>
@@ -214,12 +151,13 @@ onMounted(async () => {
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
             <ActivityCardGrid
                 :activities="activities"
-                :metrics="cardMetrics"
-                :loading="loading || statsLoading"
+                :metrics="card_metrics"
+                :loading="loading"
                 @view="onViewActivity"
+                @load-more="loadMore"
             />
         </div>
 
-        <ActivityCreateDialog v-model="showAddActivityDialog" @created="onActivityCreated" />
+        <ActivityCreateDialog v-model="show_add_activity_dialog" @created="load" />
     </div>
 </template>

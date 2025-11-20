@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ComputedRef, reactive } from 'vue'
-import { IServer } from '../../../shared/contracts/interfaces/entities/server.interfaces'
-import { IServerMember } from '../../../shared/contracts/interfaces/entities/member.interfaces'
+import { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
+import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
+import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface ServerCache {
     server: IServer
@@ -19,6 +20,7 @@ export const useServerStore = defineStore('server', () => {
     const state = reactive({
         server: null as IServer | null,
         serverMembers: null as IServerMember[] | null,
+        serverActivities: null as IActivity[] | null,
         permissions: {
             canCreate: false,
             canUpdate: false,
@@ -39,6 +41,9 @@ export const useServerStore = defineStore('server', () => {
     )
     const getMembers: ComputedRef<IServerMember[] | null> = computed(
         () => state.serverMembers ?? null
+    )
+    const getActivities: ComputedRef<IActivity[] | null> = computed(
+        () => state.serverActivities ?? null
     )
     const getName: ComputedRef<string | null> = computed(() => state.server?.name ?? null)
     const getDescription: ComputedRef<string | null> = computed(
@@ -63,6 +68,10 @@ export const useServerStore = defineStore('server', () => {
 
     const setMembers = (members: IServerMember[] | never): void => {
         state.serverMembers = members
+    }
+
+    const setActivities = (activities: IActivity[] | never): void => {
+        state.serverActivities = activities
     }
 
     const resetState = (): void => {
@@ -121,11 +130,13 @@ export const useServerStore = defineStore('server', () => {
 
         setServer,
         setMembers,
+        setActivities,
         setLoading,
 
         getPublicId,
         getServerTypePublicId,
         getMembers,
+        getActivities,
         getName,
         getDescription,
         getLogo,
