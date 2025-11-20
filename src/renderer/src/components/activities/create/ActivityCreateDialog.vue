@@ -266,6 +266,7 @@ function finishWizard(): void {
         <ActivitySkillLevelsForm
             v-else
             :submitting="submitting"
+            :activity-id="createdActivity?.public_id ?? null"
             @skip="handleSkillLevelsSkip"
             @create="handleSkillLevelsCreate"
         />
