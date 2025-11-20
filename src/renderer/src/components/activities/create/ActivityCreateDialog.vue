@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityCreateForm from './ActivityCreateForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
@@ -24,7 +24,7 @@ interface Emits {
     (e: 'update:modelValue', value: boolean): void
     (e: 'created', activity: IActivity): void
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
@@ -93,6 +93,15 @@ function close(): void {
     resetState()
     emit('update:modelValue', false)
 }
+
+watch(
+    () => props.modelValue,
+    (value) => {
+        if (!value) {
+            resetState()
+        }
+    }
+)
 
 async function handleActivityCreate(payload: ICreateActivityRequest): Promise<void> {
     if (submitting.value) return
