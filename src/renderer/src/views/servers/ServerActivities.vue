@@ -12,8 +12,10 @@ import type { ActivityCardMetrics } from '@/components/activities/types/activity
 import { asyncPool } from '@/utils'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import { useRouter } from 'vue-router'
 
 const i18n = useI18n()
+const router = useRouter()
 const { listActivities } = useActivityCRUD()
 const { getActivityStats } = useActivityStatsCRUD()
 const server_store = useServerStore()
@@ -103,7 +105,10 @@ function onAddActivity(): void {
 }
 
 function onViewActivity(activityId: string): void {
-    console.log('View activity:', activityId)
+    router.push({
+        name: 'ServerActivity',
+        params: { id: server_store.getPublicId, activityId },
+    })
 }
 
 onMounted(() => {
