@@ -13,29 +13,29 @@ import type {
 } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
 interface UseSnapshotStatsCRUDReturn {
-    createSnapshot: (
+    createSnapshotStats: (
         serverId: string,
         request: ICreateSnapshotRequest
     ) => Promise<ISnapshotApiResponse<ISnapshot>>
-    getAllSnapshots: (
+    getAllSnapshotsStats: (
         serverId: string,
         params: IGetSnapshotsParams
     ) => Promise<ISnapshotApiResponse<IPaginatedSnapshots>>
-    getSnapshotById: (
+    getSnapshotStatsById: (
         serverId: string,
         snapshotId: string
     ) => Promise<ISnapshotApiResponse<ISnapshot>>
-    getLatestSnapshot: (
+    getLatestSnapshotStats: (
         serverId: string,
         params: IGetLatestSnapshotParams
     ) => Promise<ISnapshotApiResponse<ISnapshot>>
-    getSnapshotsSummary: (serverId: string) => Promise<ISnapshotApiResponse<ISnapshotSummary>>
-    compareSnapshots: (
+    getSnapshotsStatsSummary: (serverId: string) => Promise<ISnapshotApiResponse<ISnapshotSummary>>
+    compareSnapshotsStats: (
         serverId: string,
         snapshotId1: string,
         snapshotId2: string
     ) => Promise<ISnapshotApiResponse<ISnapshotComparisonResult>>
-    cleanupSnapshots: (
+    cleanupSnapshotsStats: (
         serverId: string,
         params?: ICleanupSnapshotsParams
     ) => Promise<ISnapshotApiResponse<ICleanupSnapshotsResponse>>
@@ -51,7 +51,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Create a manual snapshot
      */
-    const createSnapshot = async (
+    const createSnapshotStats = async (
         serverId: string,
         request: ICreateSnapshotRequest
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
@@ -61,7 +61,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Get all snapshots (paginated)
      */
-    const getAllSnapshots = async (
+    const getAllSnapshotsStats = async (
         serverId: string,
         params: IGetSnapshotsParams
     ): Promise<ISnapshotApiResponse<IPaginatedSnapshots>> => {
@@ -71,7 +71,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Get a specific snapshot
      */
-    const getSnapshotById = async (
+    const getSnapshotStatsById = async (
         serverId: string,
         snapshotId: string
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
@@ -81,7 +81,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Get the latest snapshot by type
      */
-    const getLatestSnapshot = async (
+    const getLatestSnapshotStats = async (
         serverId: string,
         params: IGetLatestSnapshotParams
     ): Promise<ISnapshotApiResponse<ISnapshot>> => {
@@ -91,7 +91,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Get summary of latest snapshots by type
      */
-    const getSnapshotsSummary = async (
+    const getSnapshotsStatsSummary = async (
         serverId: string
     ): Promise<ISnapshotApiResponse<ISnapshotSummary>> => {
         return window.api.snapshotStats.getSummary(serverId, user_store.getAccessToken!)
@@ -100,7 +100,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Compare two snapshots
      */
-    const compareSnapshots = async (
+    const compareSnapshotsStats = async (
         serverId: string,
         snapshotId1: string,
         snapshotId2: string
@@ -116,7 +116,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     /**
      * Cleanup old snapshots
      */
-    const cleanupSnapshots = async (
+    const cleanupSnapshotsStats = async (
         serverId: string,
         params?: ICleanupSnapshotsParams
     ): Promise<ISnapshotApiResponse<ICleanupSnapshotsResponse>> => {
@@ -124,12 +124,12 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     }
 
     return {
-        createSnapshot,
-        getAllSnapshots,
-        getSnapshotById,
-        getLatestSnapshot,
-        getSnapshotsSummary,
-        compareSnapshots,
-        cleanupSnapshots
+        createSnapshotStats,
+        getAllSnapshotsStats,
+        getSnapshotStatsById,
+        getLatestSnapshotStats,
+        getSnapshotsStatsSummary,
+        compareSnapshotsStats,
+        cleanupSnapshotsStats
     }
 }

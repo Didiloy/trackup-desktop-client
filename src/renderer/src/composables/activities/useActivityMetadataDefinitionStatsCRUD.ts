@@ -25,7 +25,7 @@ interface UseActivityMetadataDefinitionStatsCRUDReturn {
     ) => Promise<
         IActivityMetadataDefinitionStatsApiResponse<IPaginatedResponseOfMetadataDefinitionDetailDto>
     >
-    getMetadataValueDistribution: (
+    getMetadataValueStatsDistribution: (
         serverId: string,
         activityId: string,
         metadataDefinitionId: string
@@ -39,7 +39,7 @@ interface UseActivityMetadataDefinitionStatsCRUDReturn {
     ) => Promise<
         IActivityMetadataDefinitionStatsApiResponse<IPaginatedResponseOfMetadataDefinitionDetailDto>
     >
-    getMetadataDefinitionTimeline: (
+    getMetadataDefinitionStatsTimeline: (
         serverId: string,
         activityId: string,
         metadataDefinitionId: string,
@@ -95,7 +95,7 @@ export function useActivityMetadataDefinitionStatsCRUD(): UseActivityMetadataDef
     /**
      * Get metadata value distribution
      */
-    const getMetadataValueDistribution = async (
+    const getMetadataValueStatsDistribution = async (
         serverId: string,
         activityId: string,
         metadataDefinitionId: string
@@ -133,7 +133,7 @@ export function useActivityMetadataDefinitionStatsCRUD(): UseActivityMetadataDef
     /**
      * Get metadata definition timeline
      */
-    const getMetadataDefinitionTimeline = async (
+    const getMetadataDefinitionStatsTimeline = async (
         serverId: string,
         activityId: string,
         metadataDefinitionId: string,
@@ -151,8 +151,8 @@ export function useActivityMetadataDefinitionStatsCRUD(): UseActivityMetadataDef
     return {
         getAllMetadataDefinitionsStats,
         getMetadataDefinitionStats,
-        getMetadataValueDistribution,
+        getMetadataDefinitionStatsTimeline,
         getMetadataValueStats,
-        getMetadataDefinitionTimeline
+        getMetadataValueStatsDistribution
     }
 }

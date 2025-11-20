@@ -9,7 +9,7 @@ import type {
 } from '@shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
 
 interface UseMemberActivityStatsCRUDReturn {
-    getAllMemberActivities: (
+    getAllMemberActivitiesStats: (
         serverId: string,
         memberId: string,
         params: IMemberActivityPaginationParams
@@ -19,7 +19,7 @@ interface UseMemberActivityStatsCRUDReturn {
         memberId: string,
         activityId: string
     ) => Promise<IMemberActivityStatsApiResponse<IMemberActivityDetails>>
-    getMemberActivityProgression: (
+    getMemberActivityStatsProgression: (
         serverId: string,
         memberId: string,
         activityId: string,
@@ -37,7 +37,7 @@ export function useMemberActivityStatsCRUD(): UseMemberActivityStatsCRUDReturn {
     /**
      * Get all activities for a member (paginated)
      */
-    const getAllMemberActivities = async (
+    const getAllMemberActivitiesStats = async (
         serverId: string,
         memberId: string,
         params: IMemberActivityPaginationParams
@@ -69,7 +69,7 @@ export function useMemberActivityStatsCRUD(): UseMemberActivityStatsCRUDReturn {
     /**
      * Get member progression on an activity
      */
-    const getMemberActivityProgression = async (
+    const getMemberActivityStatsProgression = async (
         serverId: string,
         memberId: string,
         activityId: string,
@@ -85,8 +85,8 @@ export function useMemberActivityStatsCRUD(): UseMemberActivityStatsCRUDReturn {
     }
 
     return {
-        getAllMemberActivities,
+        getAllMemberActivitiesStats,
         getMemberActivityStats,
-        getMemberActivityProgression
+        getMemberActivityStatsProgression
     }
 }
