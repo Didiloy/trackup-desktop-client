@@ -17,8 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
     (e: 'view', activityId: string): void
-    (e: 'edit', activityId: string): void
-    (e: 'delete', activityId: string): void
 }>()
 
 const { t } = useI18n()
@@ -43,8 +41,6 @@ const placeholderCards = computed(() => Array.from({ length: 6 }))
                     :metrics="metrics[activity.public_id]"
                     :loading="loading && !metrics[activity.public_id]"
                     @view="emit('view', activity.public_id)"
-                    @edit="emit('edit', activity.public_id)"
-                    @delete="emit('delete', activity.public_id)"
                 />
                 <template v-if="loading && !activities.length">
                     <ActivityCard

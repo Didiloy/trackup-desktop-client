@@ -170,18 +170,6 @@ function onViewActivity(activityId: string): void {
     // TODO: Navigate to activity detail view
 }
 
-/**
- * Handle edit activity
- */
-function onEditActivity(activityId: string): void {
-    console.log('Edit activity:', activityId)
-    // TODO: Open edit dialog or navigate to edit view
-}
-
-function onDeleteActivity(activityId: string): void {
-    console.log('Delete activity:', activityId)
-}
-
 // Watch filter changes
 watch([filterQuery, filterSearchMode], () => {
     onFiltersChange()
@@ -238,8 +226,6 @@ onMounted(async () => {
                 :metrics="cardMetrics"
                 :loading="loading || statsLoading"
                 @view="onViewActivity"
-                @edit="onEditActivity"
-                @delete="onDeleteActivity"
             />
         </div>
 

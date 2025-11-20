@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed} from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 import ActivitySparkline from './ActivitySparkline.vue'
-import Menu from 'primevue/menu'
 
 interface Props {
     activity: IActivity
@@ -18,12 +17,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
     (e: 'view', activityId: string): void
-    (e: 'edit', activityId: string): void
-    (e: 'delete', activityId: string): void
 }>()
 
 const { t } = useI18n()
-const actionMenu = ref<InstanceType<typeof Menu> | null>(null)
 
 function formatNumber(value?: number | null, fractionDigits = 0): string {
     if (value === undefined || value === null || Number.isNaN(value)) return '—'
@@ -59,14 +55,9 @@ const growthBadge = computed(() => {
     }
 })
 
-const topContributor = computed(() => {
-    return props.metrics?.topContributor || t('common.none')
-})
-
 const likesText = computed(() => formatNumber(props.metrics?.totalLikes))
 const avgLikesText = computed(() => formatNumber(props.metrics?.avgLikesPerSession, 1))
 const uniqueParticipantsText = computed(() => formatNumber(props.metrics?.uniqueParticipants))
-const totalParticipantsText = computed(() => formatNumber(props.metrics?.totalParticipants))
 const avgParticipantsText = computed(() =>
     formatNumber(props.metrics?.avgParticipantsPerSession, 1)
 )
@@ -75,33 +66,12 @@ const popularityText = computed(() => formatNumber(props.metrics?.popularityScor
 // const sparklineData = computed(() => props.metrics?.sparkline ?? [0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 4])
 const sparklineData = computed(() => [0, 2, 2, 4, 5, 3, 2, 4, 5, 7])
 
-const menuItems = computed(() => [
-    {
-        label: t('userInterface.serverActivitiesView.card.actions.details'),
-        icon: 'pi pi-eye',
-        command: () => emit('view', props.activity.public_id)
-    },
-    {
-        label: t('userInterface.serverActivitiesView.card.actions.edit'),
-        icon: 'pi pi-pencil',
-        command: () => emit('edit', props.activity.public_id)
-    },
-    {
-        label: t('userInterface.serverActivitiesView.card.actions.delete'),
-        icon: 'pi pi-trash',
-        command: () => emit('delete', props.activity.public_id)
-    }
-])
 
 function onCardClick(): void {
     if (props.loading) return
     emit('view', props.activity.public_id)
 }
 
-function toggleActions(event: MouseEvent): void {
-    event.stopPropagation()
-    actionMenu.value?.toggle(event)
-}
 </script>
 
 <template>
@@ -178,14 +148,6 @@ function toggleActions(event: MouseEvent): void {
                         <i class="pi pi-chart-line"></i>
                         <span>{{ avgLikesText }}</span>
                     </div>
-                    <Button
-                        icon="pi pi-ellipsis-h"
-                        text
-                        rounded
-                        severity="secondary"
-                        @click.stop="toggleActions"
-                    />
-                    <Menu ref="actionMenu" :model="menuItems" popup />
                 </div>
             </div>
 
@@ -255,29 +217,6 @@ function toggleActions(event: MouseEvent): void {
                             }"
                         ></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 text-xs">
-                <div
-                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
-                >
-                    <span class="text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.top_contributor')
-                    }}</span>
-                    <span class="text-surface-900 font-medium truncate max-w-full">
-                        {{ topContributor }}
-                    </span>
-                </div>
-                <div
-                    class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
-                >
-                    <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.total_participants')
-                    }}</span>
-                    <span class="text-base font-semibold text-surface-900">
-                        {{ totalParticipantsText }}
-                    </span>
                 </div>
             </div>
 
