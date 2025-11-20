@@ -84,6 +84,23 @@ const can_add = computed(() => {
     return !!draft.value.key.trim() && !!draft.value.type
 })
 
+const canUseChoices = computed(() => {
+    const type = draft.value.type
+    const allowsChoices = draft.value.allow_not_predefined_value
+    const typeSupportsChoices = type !== 'BOOLEAN' && type !== 'DATE'
+    return allowsChoices && typeSupportsChoices
+})
+
+watch(
+    () => [draft.value.type, draft.value.allow_not_predefined_value],
+    () => {
+        if (!canUseChoices.value) {
+            draft.value.choices = []
+            newChoice.value = ''
+        }
+    }
+)
+
 function normalizeKeyFromLabel(label: string): string {
     if (!label) return ''
     // remove accents
@@ -242,15 +259,20 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         class="flex-1"
                         :pt="{ root: { style: background_style } }"
                         :placeholder="t('placeholder.enter')"
+                        :disabled="!canUseChoices"
                     />
                     <Button
                         icon="pi pi-plus"
                         :label="t('actions.add')"
                         outlined
+                        :disabled="!canUseChoices"
                         @click="addChoice"
                     />
                 </div>
-                <div v-if="draft.choices && draft.choices.length" class="flex flex-wrap gap-2">
+                <div
+                    v-if="canUseChoices && draft.choices && draft.choices.length"
+                    class="flex flex-wrap gap-2"
+                >
                     <div
                         v-for="(c, idx) in draft.choices"
                         :key="idx"

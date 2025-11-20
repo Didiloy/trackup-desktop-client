@@ -232,7 +232,6 @@ onMounted(async () => {
             </div>
         </div>
 
-        <!-- Data Table -->
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
             <ActivityCardGrid
                 :activities="activities"
