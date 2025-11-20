@@ -82,6 +82,7 @@ export interface ISessionListItem {
     likes_count: number
     liked_by_me: boolean
     participants_count: number
+    server_member: ISessionMember[]
 }
 
 export interface IPaginatedSessions {
@@ -95,6 +96,16 @@ export interface IPaginatedSessions {
 export interface IListSessionsOptions {
     page?: number
     limit?: number
+}
+
+export interface ILiteListSessionsOptions extends IListSessionsOptions {
+    activity_id?: string
+    participant_ids?: string
+    start_date?: string
+    end_date?: string
+    min_duration?: number
+    max_duration?: number
+    liked_by_me?: boolean
 }
 
 export interface ISessionApiResponse<T = unknown> {
