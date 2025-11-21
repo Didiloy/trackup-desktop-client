@@ -32,8 +32,8 @@ const mock_sessions = ref<ISessionListItem[]>([
         activity: {
             name: 'Morning Run',
             public_id: 'activity-123',
-            logo: "https://cdn2.steamgriddb.com/icon_thumb/12bb430be526cebb26b7248683b51fab.png",
-            banner: "https://cdn2.steamgriddb.com/hero_thumb/ae23fc20a0346df4e0b9594aefb7c26d.jpg"
+            logo: 'https://cdn2.steamgriddb.com/icon_thumb/12bb430be526cebb26b7248683b51fab.png',
+            banner: 'https://cdn2.steamgriddb.com/hero_thumb/ae23fc20a0346df4e0b9594aefb7c26d.jpg'
         },
         public_id: 'session-001',
         server_member: [

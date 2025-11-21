@@ -6,7 +6,8 @@ import type {
     IUpdateSessionParticipantsRequest,
     ISessionApiResponse,
     IAddSessionEnumsRequest,
-    IAddSessionMetadataRequest, ILiteListSessionsOptions
+    IAddSessionMetadataRequest,
+    ILiteListSessionsOptions
     // IUpdateSessionEnumSelectionRequest,
     // ISessionEnumSelectionDetail
 } from '@shared/contracts/interfaces/entities/session.interfaces'

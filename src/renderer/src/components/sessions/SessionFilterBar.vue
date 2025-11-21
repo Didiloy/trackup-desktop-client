@@ -102,7 +102,7 @@ function clearFilters(): void {
     localMinDuration.value = undefined
     localMaxDuration.value = undefined
     localLikedByMe.value = false
-    
+
     emit('update:activityQuery', '')
     emit('update:startDate', undefined)
     emit('update:endDate', undefined)
