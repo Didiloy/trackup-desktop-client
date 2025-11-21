@@ -22,15 +22,17 @@ type TransitionName =
 
 interface Props {
     name?: TransitionName
+    mode?: 'out-in' | 'in-out' | 'default'
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    name: 'fade'
+    name: 'fade',
+    mode: 'out-in'
 })
 </script>
 
 <template>
-    <transition :name="props.name" mode="out-in">
+    <transition :name="props.name" :mode="props.mode === 'default' ? undefined : props.mode">
         <slot />
     </transition>
 </template>
