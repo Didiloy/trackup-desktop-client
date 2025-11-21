@@ -76,7 +76,7 @@ router.beforeEach(async (to, _, next) => {
     if (to.meta.requiresAuth && !user_store.hasUser) {
         // For other protected routes
         next({
-            name: 'login',
+            name: 'Login',
             query: { redirect: to.fullPath }
         })
     } else {
