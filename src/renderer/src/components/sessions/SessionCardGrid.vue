@@ -19,22 +19,6 @@ const props = withDefaults(defineProps<Props>(), {
     loading: false
 })
 const emit = defineEmits<Emits>()
-const { t } = useI18n()
-
-function formatDuration(duration: string): string {
-    const seconds = parseInt(duration)
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-
-    if (hours > 0) {
-        return `${hours}h ${minutes}m`
-    }
-    return `${minutes}m`
-}
-
-function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString()
-}
 
 function toggleLike(session: ISessionListItem): void {
     if (session.liked_by_me) {
@@ -55,14 +39,6 @@ function handleScroll(event: Event): void {
 }
 
 const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
-
-function getParticipantTooltip(
-    participant: ISessionListItem['server_member'][number],
-    session: ISessionListItem
-): string {
-    const isCreator = participant.public_id === session.creator.member_public_id
-    return isCreator ? `${participant.nickname} • ${t('common.creator')}` : participant.nickname
-}
 </script>
 
 <template>
