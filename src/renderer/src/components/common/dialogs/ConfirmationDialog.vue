@@ -2,7 +2,6 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useDeviceStore } from '@/stores/deviceSize'
 
 const { t } = useI18n()
 
@@ -39,11 +38,9 @@ const props = defineProps({
     }
 })
 
-const device_store = useDeviceStore()
 
 const cancelLabel = computed(() => props.cancelLabel || t('actions.cancel'))
 const confirmLabel = computed(() => props.confirmLabel || t('actions.confirm'))
-const dialogWidth = computed(() => (device_store.isMobile ? '90vw' : '400px'))
 
 const emit = defineEmits(['update:modelValue', 'confirm'])
 
@@ -82,11 +79,18 @@ const confirmAction = (): void => {
         modal
         :header="props.title"
         :style="{
-            width: dialogWidth,
+            width: '400px',
             height: 'fit-content',
-            userSelect: 'none'
+            userSelect: 'none',
+            backgroundColor: 'var(--p-surface-50)',
+            color: 'var(--p-surface-900)'
         }"
         :draggable="false"
+        :pt="{
+            root: {
+                style: 'background-color: var(--p-surface-50); color: var(--p-surface-900)'
+            }
+        }"
     >
         <p>{{ props.message }}</p>
 

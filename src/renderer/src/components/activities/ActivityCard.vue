@@ -78,14 +78,14 @@ function onCardClick(): void {
                 <div class="h-16 bg-surface-200 rounded-xl"></div>
             </div>
         </div>
-        <div v-else class="relative z-10 flex flex-col gap-4 p-4 h-full">
+        <div v-else class="relative z-10 flex flex-col gap-4 pb-4 h-full">
             <!-- Banner -->
-            <div class="relative h-40 w-full overflow-hidden rounded-2xl">
+            <div class="relative h-40 w-full overflow-hidden">
                 <img
                     v-if="activity.banner"
                     :src="activity.banner"
                     :alt="activity.name"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    class="w-full h-full object-cover transition-transform duration-300"
                 />
                 <div
                     v-else
@@ -150,7 +150,7 @@ function onCardClick(): void {
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 text-sm">
+            <div class="grid grid-cols-3 gap-3 text-sm px-4">
                 <div
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >

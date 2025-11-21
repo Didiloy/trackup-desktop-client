@@ -69,6 +69,7 @@ declare module 'vue' {
     ServersListItems: typeof import('./src/components/servers/list/ServersListItems.vue')['default']
     SessionCard: typeof import('./src/components/sessions/SessionCard.vue')['default']
     SessionCardGrid: typeof import('./src/components/sessions/SessionCardGrid.vue')['default']
+    SessionCardList: typeof import('./src/components/sessions/SessionCardList.vue')['default']
     SessionFilterBar: typeof import('./src/components/sessions/SessionFilterBar.vue')['default']
     Skeleton: typeof import('primevue/skeleton')['default']
     Textarea: typeof import('primevue/textarea')['default']

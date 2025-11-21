@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
@@ -15,6 +15,12 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+onMounted(() => {
+    console.log('ActivityDetailHeader mounted')
+    console.log(props.activity)
+    console.log(props.stats)
+})
 
 const summaryMetrics = computed(() => {
     if (!props.stats) {
@@ -39,14 +45,20 @@ const summaryMetrics = computed(() => {
 
 <template>
     <div
-        class="relative rounded-3xl p-6 mb-6 overflow-hidden ring-1 ring-surface-200/40 bg-gradient-to-br from-primary-500/10 via-secondary-500/5 to-surface-0"
+        class="relative rounded-3xl p-6 mb-6 overflow-hidden ring-1 ring-surface-200/40 bg-linear-to-br from-primary-500/10 via-secondary-500/5 to-surface-0"
     >
         <div
-            class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.5),_transparent_60%)]"
+            v-if="activity?.banner"
+            class="absolute inset-1/8 transition-opacity duration-500 rounded-2xl bg-cover bg-center bg-no-repeat"
+            :style="{ backgroundImage: `url(${activity?.banner})` }"
+        ></div>
+        <div
+            v-if="activity?.banner"
+            class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
         ></div>
         <div class="relative z-10 flex flex-wrap items-center gap-6">
             <div
-                class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-semibold bg-surface-0/70 text-primary-600 ring-1 ring-white/50 shadow-lg overflow-hidden"
+                class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-semibold bg-surface-50 text-primary-600 ring-1 ring-white/50 shadow-lg overflow-hidden"
             >
                 <img
                     v-if="activity?.logo"
@@ -58,13 +70,10 @@ const summaryMetrics = computed(() => {
             </div>
 
             <div class="flex-1 min-w-[220px]">
-                <p class="text-xs uppercase tracking-widest text-white/80 font-semibold">
-                    {{ t('userInterface.serverActivitiesView.title') }}
-                </p>
-                <h1 class="text-3xl font-bold text-white drop-shadow-sm">
+                <h1 class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                     {{ activity?.name || '—' }}
                 </h1>
-                <p class="text-sm text-white/80 mt-1 max-w-2xl line-clamp-2">
+                <p class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                     {{ activity?.description || t('common.description') }}
                 </p>
             </div>
@@ -91,7 +100,7 @@ const summaryMetrics = computed(() => {
             <div
                 v-for="metric in summaryMetrics"
                 :key="metric.label"
-                class="rounded-2xl bg-white/80 backdrop-blur ring-1 ring-white/40 p-4 shadow-inner flex flex-col"
+                class="rounded-2xl bg-surface-50/80 backdrop-blur ring-1 ring-white/40 p-4 shadow-inner flex flex-col"
             >
                 <span class="text-xs text-surface-500">{{ metric.label }}</span>
                 <span class="text-2xl font-semibold text-surface-900">{{ metric.value }}</span>

@@ -7,6 +7,7 @@ import ActivityPerformanceSection from '@/components/activities/detail/ActivityP
 import ActivityTopContributors from '@/components/activities/detail/ActivityTopContributors.vue'
 import ActivitySessionsTable from '@/components/activities/detail/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/activities/detail/ActivityGrowthComparison.vue'
+import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
@@ -37,6 +38,7 @@ const sessions = ref<IActivitySessionListItem[]>([])
 const sessionsTotal = ref(0)
 const sessionsPage = ref(1)
 const sessionsRows = ref(10)
+const showDeleteConfirm = ref(false)
 
 const loading = ref(true)
 const sessionsLoading = ref(false)
@@ -102,6 +104,10 @@ function handleEdit(): void {
 }
 
 async function handleDelete(): Promise<void> {
+    showDeleteConfirm.value = true
+}
+
+async function confirmDelete(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
     try {
         const res = await deleteActivity(server_store.getPublicId, activityId.value)
@@ -127,10 +133,18 @@ watch(
     { immediate: true }
 )
 
-onMounted(() => {
+onMounted(async () => {
     if (server_store.getPublicId && activityId.value) {
-        void loadActivity()
+        await loadActivity()
     }
+    console.log('Activity mounted')
+    console.log(activity.value)
+    console.log(details.value)
+    console.log(skillLevels.value)
+    console.log(sessions.value)
+    console.log(sessionsTotal.value)
+    console.log(sessionsPage.value)
+    console.log(sessionsRows.value)
 })
 </script>
 
@@ -176,5 +190,14 @@ onMounted(() => {
                 @page="handleSessionPage"
             />
         </div>
+
+        <ConfirmationDialog
+            :model-value="showDeleteConfirm"
+            :title="t('actions.delete')"
+            :message="t('messages.warning.delete')"
+            :confirmation-name="activity?.name ?? ''"
+            @update:model-value="showDeleteConfirm = $event"
+            @confirm="confirmDelete"
+        />
     </div>
 </template>
