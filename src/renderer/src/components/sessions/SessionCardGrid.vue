@@ -45,10 +45,45 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         <!-- Loading State -->
         <div
             v-if="loading && sessions.length === 0"
-            class="flex flex-col items-center justify-center h-full min-h-[400px]"
+            class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 pb-8"
         >
-            <i class="pi pi-spin pi-spinner text-5xl text-primary-500"></i>
-            <p class="text-surface-600 mt-4">Loading sessions...</p>
+            <div
+                v-for="n in 6"
+                :key="n"
+                class="group relative rounded-2xl border border-surface-200 shadow-sm overflow-hidden"
+            >
+                <!-- Skeleton Banner -->
+                <div class="h-20 bg-surface-200 animate-pulse"></div>
+
+                <!-- Skeleton Body -->
+                <div class="p-5 flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-surface-200 animate-pulse rounded"></div>
+                            <div class="w-16 h-4 bg-surface-200 animate-pulse rounded"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-surface-200 animate-pulse rounded"></div>
+                            <div class="w-16 h-4 bg-surface-200 animate-pulse rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skeleton Footer -->
+                <div class="p-5 pt-0 flex justify-between items-end">
+                    <div>
+                        <div class="flex -space-x-3">
+                            <div
+                                v-for="i in 4"
+                                :key="i"
+                                class="w-10 h-10 rounded-full bg-surface-200 animate-pulse"
+                            ></div>
+                        </div>
+                        <div class="w-20 h-4 bg-surface-200 animate-pulse rounded mt-2"></div>
+                    </div>
+                    <div class="w-12 h-8 bg-surface-200 animate-pulse rounded"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Empty State -->
