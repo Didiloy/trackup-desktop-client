@@ -45,7 +45,7 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/servers/:id/activity/:activityId',
+        path: '/servers/:id/activities/:activityId',
         name: 'ServerActivityProfile',
         component: () => import('@/views/servers/activities/ServerActivityProfile.vue'),
         meta: { requiresAuth: true }
