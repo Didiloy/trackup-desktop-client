@@ -26,7 +26,8 @@
         "create": "Créer",
         "optional": "Optionnel",
         "none": "Aucun",
-        "items": "éléments"
+        "items": "éléments",
+        "creator": "Créateur"
     },
     "navigation": {
         "home": "Accueil",

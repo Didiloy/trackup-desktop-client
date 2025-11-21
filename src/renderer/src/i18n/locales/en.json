@@ -24,7 +24,8 @@
         "create": "Create",
         "optional": "Optional",
         "none": "None",
-        "items": "items"
+        "items": "items",
+        "creator": "Creator"
     },
     "navigation": {
         "home": "Home",

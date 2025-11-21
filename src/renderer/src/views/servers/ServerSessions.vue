@@ -29,6 +29,11 @@ const filter_likedByMe = ref<boolean | undefined>(undefined)
 
 const mock_sessions = ref<ISessionListItem[]>([
     {
+        creator: {
+            member_public_id: 'member-001',
+            nickname: 'johndoe',
+            avatar_url: 'https://cdn-icons-png.flaticon.com/512/2202/2202112.png'
+        },
         activity: {
             name: 'Morning Run',
             public_id: 'activity-123',
@@ -40,55 +45,68 @@ const mock_sessions = ref<ISessionListItem[]>([
             {
                 public_id: 'member-001',
                 nickname: 'johndoe',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/2202/2202112.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/2202/2202112.png'
             },
             {
                 public_id: 'member-002',
                 nickname: 'janedoe',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
             },
             {
                 public_id: 'member-003',
                 nickname: 'alice',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
             },
             {
                 public_id: 'member-004',
                 nickname: 'bob',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/1326/1326377.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/1326/1326377.png'
             }
         ],
         date: new Date('2023-10-01T06:30:00Z').toLocaleDateString(),
         duration: '3600',
         liked_by_me: false,
         likes_count: 5,
-        participants_count: 5
+        participants_count: 5,
+        title: 'A morning run with friends'
     },
     {
+        creator: {
+            member_public_id: 'member-002',
+            nickname: 'janedoe',
+            avatar_url: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+        },
         activity: {
             name: 'Evening Cycle',
-            public_id: 'activity-456'
+            public_id: 'activity-456',
+            banner: 'https://cdn2.steamgriddb.com/hero_thumb/e1c21364530057bc884be07f32491acc.jpg'
         },
         public_id: 'session-002',
         server_member: [
             {
                 public_id: 'member-005',
                 nickname: 'charlie',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/1999/1999625.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/1999/1999625.png'
             },
             {
                 public_id: 'member-006',
                 nickname: 'dave',
-                avatar: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
             }
         ],
         date: new Date('2023-10-02T18:00:00Z').toLocaleDateString(),
         duration: '5400',
         liked_by_me: true,
         likes_count: 8,
-        participants_count: 3
+        participants_count: 3,
+        title: 'An evening cycle with friends'
     },
     {
+        creator: {
+            member_public_id: 'member-003',
+            nickname: 'alice',
+            avatar_url: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
+        },
         activity: {
             name: 'Weekend Hike',
             public_id: 'activity-789'
@@ -98,16 +116,22 @@ const mock_sessions = ref<ISessionListItem[]>([
             {
                 public_id: 'member-007',
                 nickname: 'eve',
-                avatar: 'https://example.com/avatars/eve.png'
+                avatar_url: 'https://example.com/avatars/eve.png'
             }
         ],
         date: new Date('2023-10-03T09:00:00Z').toLocaleDateString(),
         duration: '7200',
         liked_by_me: false,
         likes_count: 2,
-        participants_count: 1
+        participants_count: 1,
+        title: ''
     },
     {
+        creator: {
+            member_public_id: 'member-004',
+            nickname: 'bob',
+            avatar_url: 'https://cdn-icons-png.flaticon.com/512/1326/1326377.png'
+        },
         activity: {
             name: 'Lunch Walk',
             public_id: 'activity-101'
@@ -117,19 +141,20 @@ const mock_sessions = ref<ISessionListItem[]>([
             {
                 public_id: 'member-008',
                 nickname: 'frank',
-                avatar: 'https://example.com/avatars/frank.png'
+                avatar_url: 'https://example.com/avatars/frank.png'
             },
             {
                 public_id: 'member-009',
                 nickname: 'grace',
-                avatar: 'https://example.com/avatars/grace.png'
+                avatar_url: 'https://example.com/avatars/grace.png'
             }
         ],
         date: new Date('2023-10-04T12:30:00Z').toLocaleDateString(),
         duration: '1800',
         liked_by_me: true,
         likes_count: 4,
-        participants_count: 2
+        participants_count: 2,
+        title: 'A lunch walk with friends'
     }
 ])
 
