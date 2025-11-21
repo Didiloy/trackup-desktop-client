@@ -49,13 +49,14 @@ const summaryMetrics = computed(() => {
     >
         <div
             v-if="activity?.banner"
-            class="absolute inset-1/8 transition-opacity duration-500 rounded-2xl bg-cover bg-center bg-no-repeat"
+            class="absolute inset-0 transition-opacity duration-500 rounded-2xl bg-cover bg-center bg-no-repeat"
             :style="{ backgroundImage: `url(${activity?.banner})` }"
         ></div>
         <div
-            v-if="activity?.banner"
-            class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
+            class="absolute inset-0 bg-linear-to-r from-black/65 via-black/35 to-black/65"
+            v-if="activity.banner"
         ></div>
+
         <div class="relative z-10 flex flex-wrap items-center gap-6">
             <div
                 class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-semibold bg-surface-50 text-primary-600 ring-1 ring-white/50 shadow-lg overflow-hidden"
@@ -80,6 +81,7 @@ const summaryMetrics = computed(() => {
                 >
                     {{ activity?.description || t('common.description') }}
                 </p>
+
             </div>
 
             <div class="flex flex-wrap gap-3">
