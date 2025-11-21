@@ -5,6 +5,8 @@
 export interface ISessionActivity {
     public_id: string
     name: string
+    logo?: string | null
+    banner?: string | null
 }
 
 export interface ISessionMember {
