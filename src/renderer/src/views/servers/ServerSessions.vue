@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import SessionFilterBar from '@/components/sessions/SessionFilterBar.vue'
-import SessionCardList from '@/components/sessions/SessionCardList.vue'
+import SessionCardGrid from '@/components/sessions/SessionCardGrid.vue'
 import { onMounted, ref } from 'vue'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useActivitySearch } from '@/composables/activities/useActivitySearch'
@@ -274,7 +274,7 @@ onMounted(() => {
         </div>
 
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
-            <SessionCardList
+            <SessionCardGrid
                 :sessions="mock_sessions"
                 :loading="loading"
                 @like="onLikeSession"
