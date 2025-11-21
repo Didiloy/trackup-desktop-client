@@ -115,7 +115,7 @@ async function confirmDelete(): Promise<void> {
         const res = await deleteActivity(server_store.getPublicId, activityId.value)
         if (res.error) throw new Error(res.error)
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
-        router.push({ name: 'ServerActivities', params: { id: server_store.getPublicId } })
+        await router.push({ name: 'ServerActivities', params: { id: server_store.getPublicId } })
     } catch (e) {
         toast.add({
             severity: 'error',

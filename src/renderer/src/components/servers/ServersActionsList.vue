@@ -29,10 +29,10 @@ const actions: ServerAction[] = [
     { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' }
 ]
 
-function onActionClick(action: ServerAction): void {
+async function onActionClick(action: ServerAction): Promise<void> {
     // Navigate to the route if routeName is defined
     if (action.routeName) {
-        router.push({
+        await router.push({
             name: action.routeName,
             params: { id: server_store.getPublicId },
             query: { ...route.query }

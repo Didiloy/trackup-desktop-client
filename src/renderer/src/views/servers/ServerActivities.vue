@@ -104,8 +104,8 @@ function onAddActivity(): void {
     show_add_activity_dialog.value = true
 }
 
-function onViewActivity(activityId: string): void {
-    router.push({
+async function onViewActivity(activityId: string): Promise<void> {
+    await router.push({
         name: 'ServerActivityProfile',
         params: { id: server_store.getPublicId, activityId }
     })

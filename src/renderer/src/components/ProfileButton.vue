@@ -16,9 +16,9 @@ const router = useRouter()
 
 const isActive = computed(() => route.path === '/')
 
-const goHome = (): void => {
+const goHome = async (): Promise<void> => {
     server_store.setServer(null)
-    router.push({ name: 'Home' })
+    await router.push({ name: 'Home' })
 }
 </script>
 
