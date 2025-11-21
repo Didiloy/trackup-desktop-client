@@ -19,11 +19,13 @@ import type {
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { useToast } from 'primevue/usetoast'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 const route = useRoute()
 const toast = useToast()
 const { t } = useI18n()
+const router = useRouter()
 const activityId = computed(() => route.params.activityId as string)
 
 const { getActivityById, listActivitySessions, deleteActivity } = useActivityCRUD()
@@ -113,6 +115,7 @@ async function confirmDelete(): Promise<void> {
         const res = await deleteActivity(server_store.getPublicId, activityId.value)
         if (res.error) throw new Error(res.error)
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
+        router.push({ name: 'ServerActivities', params: { id: server_store.getPublicId } })
     } catch (e) {
         toast.add({
             severity: 'error',
