@@ -50,16 +50,15 @@ function getParticipantTooltip(
 
 <template>
     <div
-        class="group relative rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-all overflow-hidden cursor-pointer"
+        class="group relative rounded-2xl border border-surface-200 shadow-sm hover:shadow-xl transition-all overflow-hidden cursor-pointer"
     >
         <div
             v-if="session.activity.banner"
-            class="z-0 absolute inset-1/8 transition-opacity duration-500 rounded-2xl bg-cover bg-center bg-no-repeat"
+            class="absolute inset-1 rounded-2xl bg-cover bg-center bg-no-repeat"
             :style="{ backgroundImage: `url(${session.activity.banner})` }"
         ></div>
         <div
-            v-if="session.activity.banner"
-            class="z-0 absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
+            class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
         ></div>
         <!-- Banner -->
         <div class="relative h-20 w-full overflow-hidden z-10">
