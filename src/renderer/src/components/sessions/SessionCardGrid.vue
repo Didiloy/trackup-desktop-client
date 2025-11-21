@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import SessionCard from '@/components/sessions/SessionCard.vue'
 
 interface Props {
