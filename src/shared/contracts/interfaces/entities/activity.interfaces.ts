@@ -1,6 +1,7 @@
 /**
  * Activity related interfaces
  */
+import { ISessionCreator } from './session.interfaces'
 
 export interface IActivity {
     public_id: string
@@ -23,6 +24,7 @@ export interface ICreateActivitySessionRequest {
     date: string
     participants: string[]
     comment?: string
+    title?: string
 }
 
 export interface IUpdateActivityRequest {
@@ -54,6 +56,8 @@ export interface IActivitySessionListItem {
     likes_count: number
     liked_by_me: boolean
     participants_count: number
+    title?: string
+    creator: ISessionCreator
 }
 
 export interface IPaginatedActivitySessions {

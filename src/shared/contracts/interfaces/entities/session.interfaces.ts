@@ -12,7 +12,13 @@ export interface ISessionActivity {
 export interface ISessionMember {
     public_id: string
     nickname: string
-    avatar: string | null
+    avatar_url: string | null
+}
+
+export interface ISessionCreator {
+    member_public_id: string
+    nickname: string
+    avatar_url: string | null
 }
 
 /**
@@ -41,7 +47,9 @@ export interface ISession {
     public_id: string
     date: string
     duration: string
+    title: string
     comment?: string
+    creator: ISessionCreator
     activity: ISessionActivity
     server_member: ISessionMember[]
     enum_definitions: ISessionEnum[]
@@ -80,11 +88,13 @@ export interface ISessionListItem {
     public_id: string
     date: string
     duration: string
+    title: string
     activity: ISessionActivity
     likes_count: number
     liked_by_me: boolean
     participants_count: number
     server_member: ISessionMember[]
+    creator: ISessionCreator
 }
 
 export interface IPaginatedSessions {
