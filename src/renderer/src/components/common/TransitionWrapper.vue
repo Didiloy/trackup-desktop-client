@@ -23,6 +23,7 @@ type TransitionName =
 interface Props {
     name?: TransitionName
     mode?: 'out-in' | 'in-out' | 'default'
+    duration?: number // in seconds
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -32,7 +33,11 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <transition :name="props.name" :mode="props.mode === 'default' ? undefined : props.mode">
+    <transition
+        :name="props.name"
+        :mode="props.mode === 'default' ? undefined : props.mode"
+        :style="props.duration ? { '--transition-duration': `${props.duration}s` } : undefined"
+    >
         <slot />
     </transition>
 </template>
@@ -41,7 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
 /* Fade */
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transition-duration, 0.3s) ease;
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -52,8 +57,8 @@ const props = withDefaults(defineProps<Props>(), {
 .slide-fade-enter-active,
 .slide-fade-leave-active {
     transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        opacity var(--transition-duration, 0.2s) ease,
+        transform var(--transition-duration, 0.2s) ease;
 }
 .slide-fade-enter-from {
     opacity: 0;
@@ -68,8 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
 .slide-up-enter-active,
 .slide-up-leave-active {
     transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        opacity var(--transition-duration, 0.2s) ease,
+        transform var(--transition-duration, 0.2s) ease;
 }
 .slide-up-enter-from {
     opacity: 0;
@@ -84,8 +89,8 @@ const props = withDefaults(defineProps<Props>(), {
 .slide-down-enter-active,
 .slide-down-leave-active {
     transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        opacity var(--transition-duration, 0.2s) ease,
+        transform var(--transition-duration, 0.2s) ease;
 }
 .slide-down-enter-from {
     opacity: 0;
@@ -100,8 +105,8 @@ const props = withDefaults(defineProps<Props>(), {
 .slide-left-enter-active,
 .slide-left-leave-active {
     transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        opacity var(--transition-duration, 0.2s) ease,
+        transform var(--transition-duration, 0.2s) ease;
 }
 .slide-left-enter-from {
     opacity: 0;
@@ -116,8 +121,8 @@ const props = withDefaults(defineProps<Props>(), {
 .slide-right-enter-active,
 .slide-right-leave-active {
     transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        opacity var(--transition-duration, 0.2s) ease,
+        transform var(--transition-duration, 0.2s) ease;
 }
 .slide-right-enter-from {
     opacity: 0;
@@ -132,8 +137,8 @@ const props = withDefaults(defineProps<Props>(), {
 .zoom-enter-active,
 .zoom-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+        opacity var(--transition-duration, 0.3s) ease,
+        transform var(--transition-duration, 0.3s) ease;
 }
 .zoom-enter-from,
 .zoom-leave-to {
@@ -145,8 +150,8 @@ const props = withDefaults(defineProps<Props>(), {
 .zoom-fade-enter-active,
 .zoom-fade-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        opacity var(--transition-duration, 0.3s) ease,
+        transform var(--transition-duration, 0.3s) cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .zoom-fade-enter-from {
     opacity: 0;
@@ -161,8 +166,8 @@ const props = withDefaults(defineProps<Props>(), {
 .rotate-fade-enter-active,
 .rotate-fade-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+        opacity var(--transition-duration, 0.3s) ease,
+        transform var(--transition-duration, 0.3s) ease;
 }
 .rotate-fade-enter-from {
     opacity: 0;
@@ -175,10 +180,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 /* Bounce */
 .bounce-enter-active {
-    animation: bounce-in 0.5s;
+    animation: bounce-in var(--transition-duration, 0.5s);
 }
 .bounce-leave-active {
-    animation: bounce-out 0.5s;
+    animation: bounce-out var(--transition-duration, 0.5s);
 }
 
 @keyframes bounce-in {
@@ -215,8 +220,8 @@ const props = withDefaults(defineProps<Props>(), {
 .flip-enter-active,
 .flip-leave-active {
     transition:
-        opacity 0.4s ease,
-        transform 0.4s ease;
+        opacity var(--transition-duration, 0.4s) ease,
+        transform var(--transition-duration, 0.4s) ease;
     transform-style: preserve-3d;
 }
 .flip-enter-from {
@@ -232,8 +237,8 @@ const props = withDefaults(defineProps<Props>(), {
 .scale-up-enter-active,
 .scale-up-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        opacity var(--transition-duration, 0.3s) ease,
+        transform var(--transition-duration, 0.3s) cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 .scale-up-enter-from {
     opacity: 0;
@@ -248,8 +253,8 @@ const props = withDefaults(defineProps<Props>(), {
 .scale-down-enter-active,
 .scale-down-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        opacity var(--transition-duration, 0.3s) ease,
+        transform var(--transition-duration, 0.3s) cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 .scale-down-enter-from {
     opacity: 0;
@@ -264,8 +269,8 @@ const props = withDefaults(defineProps<Props>(), {
 .rotate-3d-enter-active,
 .rotate-3d-leave-active {
     transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
+        opacity var(--transition-duration, 0.5s) ease,
+        transform var(--transition-duration, 0.5s) ease;
     transform-style: preserve-3d;
 }
 .rotate-3d-enter-from {
@@ -279,10 +284,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 /* Swing */
 .swing-enter-active {
-    animation: swing-in 0.6s ease-out;
+    animation: swing-in var(--transition-duration, 0.6s) ease-out;
 }
 .swing-leave-active {
-    animation: swing-out 0.6s ease-in;
+    animation: swing-out var(--transition-duration, 0.6s) ease-in;
 }
 
 @keyframes swing-in {
@@ -318,10 +323,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 /* Shake */
 .shake-enter-active {
-    animation: shake-in 0.5s;
+    animation: shake-in var(--transition-duration, 0.5s);
 }
 .shake-leave-active {
-    animation: shake-out 0.5s;
+    animation: shake-out var(--transition-duration, 0.5s);
 }
 
 @keyframes shake-in {
@@ -371,8 +376,8 @@ const props = withDefaults(defineProps<Props>(), {
 .roll-enter-active,
 .roll-leave-active {
     transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
+        opacity var(--transition-duration, 0.5s) ease,
+        transform var(--transition-duration, 0.5s) ease;
 }
 .roll-enter-from {
     opacity: 0;
@@ -387,10 +392,10 @@ const props = withDefaults(defineProps<Props>(), {
 .panel-right-enter-active,
 .panel-right-leave-active {
     transition:
-        width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        min-width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.4s ease,
-        transform 0.4s ease;
+        width var(--transition-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1),
+        min-width var(--transition-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1),
+        opacity var(--transition-duration, 0.4s) ease,
+        transform var(--transition-duration, 0.4s) ease;
     overflow: hidden;
     will-change: width;
 }
@@ -411,10 +416,10 @@ const props = withDefaults(defineProps<Props>(), {
 .panel-left-enter-active,
 .panel-left-leave-active {
     transition:
-        width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        min-width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.4s ease,
-        transform 0.4s ease;
+        width var(--transition-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1),
+        min-width var(--transition-duration, 0.4s) cubic-bezier(0.22, 1, 0.36, 1),
+        opacity var(--transition-duration, 0.4s) ease,
+        transform var(--transition-duration, 0.4s) ease;
     overflow: hidden;
     will-change: width;
 }

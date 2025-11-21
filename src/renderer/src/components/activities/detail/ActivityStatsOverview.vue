@@ -47,7 +47,7 @@ const cards = computed(() => {
             :key="card.label"
             class="rounded-2xl bg-surface-100 ring-1 ring-surface-200/50 p-4 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:ring-primary-500/40"
             :class="card.gradient"
-            >
+        >
             <div class="flex items-center justify-between">
                 <p class="text-xs uppercase tracking-wide text-surface-500 font-semibold">
                     {{ card.label }}

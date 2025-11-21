@@ -9,7 +9,7 @@ const route = useRoute()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 const isServerAsideVisible = computed(
-    () => typeof route.name === 'string' && route.name.startsWith('Server')
+    () => route.name && typeof route.name === 'string' && route.name.startsWith('Server')
 )
 </script>
 
@@ -23,11 +23,11 @@ const isServerAsideVisible = computed(
             class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden p-6"
             :class="{ 'rounded-l-xl': !isServerAsideVisible }"
         >
-            <router-view v-slot="{ Component, route: currentRoute }">
-                <TransitionWrapper name="fade">
-                    <component :is="Component" :key="currentRoute.path" />
-                </TransitionWrapper>
-            </router-view>
+            <TransitionWrapper name="fade" mode="out-in" :duration="0.8">
+                <router-view v-slot="{ Component, route: currentRoute }">
+                    <component :is="Component" :key="currentRoute.fullPath" />
+                </router-view>
+            </TransitionWrapper>
         </main>
         <TransitionWrapper name="panel-right">
             <MembersAside
