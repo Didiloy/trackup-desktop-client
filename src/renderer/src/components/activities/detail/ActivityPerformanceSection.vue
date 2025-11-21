@@ -18,9 +18,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-const sparkData = computed(() =>
-    props.timeline?.map((point) => point.sessions_count) ?? []
-)
+const sparkData = computed(() => props.timeline?.map((point) => point.sessions_count) ?? [])
 
 const growthBadge = computed(() => {
     const percent = props.growth?.growth_percent ?? 0
@@ -51,7 +49,11 @@ const skillDistribution = computed(() => {
                 </p>
                 <span
                     class="text-xs px-3 py-1 rounded-full"
-                    :class="growthBadge.positive ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'"
+                    :class="
+                        growthBadge.positive
+                            ? 'bg-emerald-100 text-emerald-600'
+                            : 'bg-red-100 text-red-600'
+                    "
                 >
                     {{ growthBadge.text }}
                 </span>
@@ -110,10 +112,7 @@ const skillDistribution = computed(() => {
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">Heatmap</p>
-            <div
-                class="grid grid-cols-7 gap-1"
-                v-if="patterns"
-            >
+            <div class="grid grid-cols-7 gap-1" v-if="patterns">
                 <div
                     v-for="hour in 35"
                     :key="hour"
@@ -139,10 +138,10 @@ const skillDistribution = computed(() => {
                 }}
             </p>
             <div class="mt-6">
-                <div class="h-24 w-full bg-gradient-to-r from-emerald-200 to-emerald-500 rounded-2xl shadow-inner"></div>
+                <div
+                    class="h-24 w-full bg-gradient-to-r from-emerald-200 to-emerald-500 rounded-2xl shadow-inner"
+                ></div>
             </div>
         </div>
     </div>
 </template>
-
-

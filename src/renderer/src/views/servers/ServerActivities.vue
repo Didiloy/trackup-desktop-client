@@ -107,7 +107,7 @@ function onAddActivity(): void {
 function onViewActivity(activityId: string): void {
     router.push({
         name: 'ServerActivity',
-        params: { id: server_store.getPublicId, activityId },
+        params: { id: server_store.getPublicId, activityId }
     })
 }
 

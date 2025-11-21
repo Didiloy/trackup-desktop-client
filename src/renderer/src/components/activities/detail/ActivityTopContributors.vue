@@ -30,12 +30,17 @@ const { t } = useI18n()
                         {{ member.user_email || '—' }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ member.sessions_count }} sessions · {{ Math.round(member.total_duration / 60) }}h
+                        {{ member.sessions_count }} sessions ·
+                        {{ Math.round(member.total_duration / 60) }}h
                     </p>
                 </div>
                 <span class="text-xl">
                     <i
-                        :class="member.rank === 1 ? 'pi pi-medal text-amber-500' : 'pi pi-star text-surface-400'"
+                        :class="
+                            member.rank === 1
+                                ? 'pi pi-medal text-amber-500'
+                                : 'pi pi-star text-surface-400'
+                        "
                     ></i>
                 </span>
             </div>
@@ -45,5 +50,3 @@ const { t } = useI18n()
         </div>
     </div>
 </template>
-
-

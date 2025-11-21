@@ -67,5 +67,3 @@ const cards = computed(() => {
         </div>
     </div>
 </template>
-
-

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type {
-    IActivitySessionListItem
-} from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 const props = defineProps<{
     sessions: IActivitySessionListItem[]
@@ -45,5 +43,3 @@ function onPage(event: any): void {
         <Column field="likes_count" header="Likes" />
     </DataTable>
 </template>
-
-

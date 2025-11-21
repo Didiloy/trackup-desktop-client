@@ -78,45 +78,74 @@ function onCardClick(): void {
                 <div class="h-16 bg-surface-200 rounded-xl"></div>
             </div>
         </div>
-        <div v-else class="relative z-10 flex flex-col gap-4 p-5 h-full">
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-semibold text-primary-700 shadow-inner overflow-hidden"
-                    >
+        <div v-else class="relative z-10 flex flex-col gap-4 p-4 h-full">
+            <!-- Banner -->
+            <div class="relative h-40 w-full overflow-hidden rounded-2xl">
+                <img
+                    v-if="activity.banner"
+                    :src="activity.banner"
+                    :alt="activity.name"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div
+                    v-else
+                    class="w-full h-full flex items-center justify-center bg-linear-to-br from-primary-500/10 via-secondary-500/5 to-primary-500/5"
+                ></div>
+
+                <!-- Gradient overlay -->
+                <div
+                    class="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-black/60"
+                    v-if="activity.banner"
+                ></div>
+
+                <!-- Logo + Title -->
+                <div
+                    class="absolute bottom-4 left-4 right-4 grid grid-cols-[auto_1fr_auto] items-center gap-3"
+                >
+                    <div class="w-14 h-14">
                         <img
                             v-if="activity.logo"
                             :src="activity.logo"
-                            :alt="activity.name"
-                            class="w-full h-full object-cover"
+                            class="w-14 h-14 rounded-xl object-cover shadow-lg ring-1 ring-black/20"
                         />
-                        <span v-else>{{ activity.name.charAt(0).toUpperCase() }}</span>
+                        <div
+                            v-else
+                            class="w-14 h-14 rounded-xl bg-surface-200 flex items-center justify-center text-lg font-bold text-surface-700 shadow-lg ring-1 ring-black/20"
+                        >
+                            {{ activity.name.charAt(0).toUpperCase() }}
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-base font-semibold text-surface-900">
+                    <div class="min-w-0">
+                        <h3
+                            class="text-lg font-semibold drop-shadow truncate"
+                            :class="activity.banner ? 'text-white' : 'text-surface-900'"
+                        >
                             {{ activity.name }}
                         </h3>
-                        <p class="text-xs text-surface-700 line-clamp-1">
+                        <p
+                            class="text-xs line-clamp-1"
+                            :class="activity.banner ? 'text-white/90' : 'text-surface-700'"
+                        >
                             {{ activity.description }}
                         </p>
                     </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div
-                        v-if="!loading"
-                        v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
-                        class="flex items-center gap-1 text-red-500 font-semibold text-sm"
-                    >
-                        <i class="pi pi-heart-fill"></i>
-                        <span>{{ likesText }}</span>
-                    </div>
-                    <div
-                        v-if="!loading"
-                        v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
-                        class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
-                    >
-                        <i class="pi pi-chart-line"></i>
-                        <span>{{ avgLikesText }}</span>
+                    <div class="flex items-start gap-3 justify-end">
+                        <div
+                            v-if="!loading"
+                            v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
+                            class="flex items-center gap-1 text-red-500 font-semibold text-sm"
+                        >
+                            <i class="pi pi-heart-fill"></i>
+                            <span>{{ likesText }}</span>
+                        </div>
+                        <div
+                            v-if="!loading"
+                            v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
+                            class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
+                        >
+                            <i class="pi pi-chart-line"></i>
+                            <span>{{ avgLikesText }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

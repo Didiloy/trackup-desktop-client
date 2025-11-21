@@ -32,30 +32,30 @@ const mock_sessions = ref<ISessionListItem[]>([
         activity: {
             name: 'Morning Run',
             public_id: 'activity-123',
-            logo: "https://cdn2.steamgriddb.com/icon_thumb/12bb430be526cebb26b7248683b51fab.png",
-            banner: "https://cdn2.steamgriddb.com/hero_thumb/ae23fc20a0346df4e0b9594aefb7c26d.jpg"
+            logo: 'https://cdn2.steamgriddb.com/icon_thumb/12bb430be526cebb26b7248683b51fab.png',
+            banner: 'https://cdn2.steamgriddb.com/hero_thumb/ae23fc20a0346df4e0b9594aefb7c26d.jpg'
         },
         public_id: 'session-001',
         server_member: [
             {
                 public_id: 'member-001',
                 nickname: 'johndoe',
-                avatar: 'https://example.com/avatars/johndoe.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/2202/2202112.png'
             },
             {
                 public_id: 'member-002',
                 nickname: 'janedoe',
-                avatar: 'https://example.com/avatars/janedoe.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
             },
             {
                 public_id: 'member-003',
                 nickname: 'alice',
-                avatar: 'https://example.com/avatars/alice.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
             },
             {
                 public_id: 'member-004',
                 nickname: 'bob',
-                avatar: 'https://example.com/avatars/bob.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/1326/1326377.png'
             }
         ],
         date: new Date('2023-10-01T06:30:00Z').toLocaleDateString(),
@@ -74,12 +74,12 @@ const mock_sessions = ref<ISessionListItem[]>([
             {
                 public_id: 'member-005',
                 nickname: 'charlie',
-                avatar: 'https://example.com/avatars/charlie.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/1999/1999625.png'
             },
             {
                 public_id: 'member-006',
                 nickname: 'dave',
-                avatar: 'https://example.com/avatars/dave.png'
+                avatar: 'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'
             }
         ],
         date: new Date('2023-10-02T18:00:00Z').toLocaleDateString(),

@@ -41,7 +41,9 @@ const summaryMetrics = computed(() => {
     <div
         class="relative rounded-3xl p-6 mb-6 overflow-hidden ring-1 ring-surface-200/40 bg-gradient-to-br from-primary-500/10 via-secondary-500/5 to-surface-0"
     >
-        <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.5),_transparent_60%)]"></div>
+        <div
+            class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.5),_transparent_60%)]"
+        ></div>
         <div class="relative z-10 flex flex-wrap items-center gap-6">
             <div
                 class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-semibold bg-surface-0/70 text-primary-600 ring-1 ring-white/50 shadow-lg overflow-hidden"
@@ -97,5 +99,3 @@ const summaryMetrics = computed(() => {
         </div>
     </div>
 </template>
-
-

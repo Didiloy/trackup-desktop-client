@@ -59,13 +59,19 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
 <template>
     <div class="w-full h-full overflow-y-auto p-2" @scroll.passive="handleScroll">
         <!-- Loading State -->
-        <div v-if="loading && sessions.length === 0" class="flex flex-col items-center justify-center h-full min-h-[400px]">
+        <div
+            v-if="loading && sessions.length === 0"
+            class="flex flex-col items-center justify-center h-full min-h-[400px]"
+        >
             <i class="pi pi-spin pi-spinner text-5xl text-primary-500"></i>
             <p class="text-surface-600 mt-4">Loading sessions...</p>
         </div>
 
         <!-- Empty State -->
-        <div v-else-if="isEmpty" class="flex flex-col items-center justify-center h-full min-h-[400px]">
+        <div
+            v-else-if="isEmpty"
+            class="flex flex-col items-center justify-center h-full min-h-[400px]"
+        >
             <i class="pi pi-calendar text-7xl text-surface-300 mb-4"></i>
             <p class="text-xl font-medium text-surface-600">No sessions found</p>
             <p class="text-sm text-surface-500 mt-2">Try adjusting your filters</p>
@@ -76,110 +82,111 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
             <div
                 v-for="session in sessions"
                 :key="session.public_id"
-                class="relative bg-white border border-surface-200 rounded-2xl p-6 flex flex-col gap-5 overflow-hidden shadow-sm hover:cursor-pointer hover:shadow-lg transition-all duration-250 hover:-translate-y-0.5 hover:border-primary-200"
+                class="group relative bg-white rounded-2xl border border-surface-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
+                @click="() => {}"
             >
-                <!-- Card Header with Date & Duration -->
-                <div class="flex justify-between items-center pt-1">
-                    <div class="flex items-center gap-2 text-surface-700 text-sm">
-                        <i class="pi pi-calendar text-primary-500 text-base"></i>
-                        <span class="font-medium">{{ formatDate(session.date) }}</span>
-                    </div>
-                    <div class="flex items-center gap-2 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 px-3.5 py-2 rounded-full text-sm font-semibold border border-primary-200">
-                        <i class="pi pi-clock text-sm"></i>
-                        <span>{{ formatDuration(session.duration) }}</span>
-                    </div>
-                </div>
-
-    
-
-                <!-- Activity Info with Banner Background -->
-                <div class="relative -mx-2 rounded-2xl overflow-hidden shadow-lg">
-                    <!-- Banner Background with Blur -->
-                    <div
+                <!-- Banner -->
+                <div class="relative h-40 w-full overflow-hidden">
+                    <img
                         v-if="session.activity.banner"
-                        class="absolute inset-0 bg-cover bg-center blur-[1px] scale-110 rounded-2xl"
-                        :style="{ backgroundImage: `url(${session.activity.banner})` }"
-                    ></div>
-                    <!-- Dark Overlay for readability -->
+                        :src="session.activity.banner"
+                        :alt="session.activity.name"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+
+                    <!-- Gradient overlay -->
                     <div
+                        class="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-black/60"
                         v-if="session.activity.banner"
-                        class="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-2xl"
                     ></div>
 
-                    <!-- Content -->
-                    <div class="relative flex items-center gap-3.5 py-4 px-4">
+                    <!-- Logo + Title -->
+                    <div class="absolute bottom-4 left-4 flex items-center gap-3">
                         <img
                             v-if="session.activity.logo"
                             :src="session.activity.logo"
-                            :alt="session.activity.name"
-                            class="w-[52px] h-[52px] rounded-[14px] object-cover shadow-2xl ring-2 ring-white/50"
+                            class="w-12 h-12 rounded-xl object-cover shadow-lg ring-1 ring-black/20"
                         />
-                        <div v-else class="w-[52px] h-[52px] rounded-[14px] overflow-hidden shrink-0 shadow-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold ring-2 ring-white/50">
+                        <div
+                            v-else
+                            class="w-12 h-12 rounded-xl bg-surface-200 flex items-center justify-center text-lg font-bold text-surface-700 shadow-lg ring-1 ring-black/20"
+                        >
                             {{ session.activity.name.charAt(0).toUpperCase() }}
                         </div>
-                        <div class="text-lg font-bold leading-relaxed" :class="session.activity.banner ? 'text-white drop-shadow-lg' : 'text-surface-900'">
+
+                        <h3
+                            class="text-lg font-semibold drop-shadow"
+                            :class="session.activity.banner ? 'text-white' : 'text-surface-900'"
+                        >
                             {{ session.activity.name }}
-                        </div>
+                        </h3>
                     </div>
                 </div>
 
-                <!-- Participants -->
-                <div class="flex flex-col gap-2.5">
-                    <div class="flex items-center">
-                        <div
-                            v-for="(participant, idx) in session.server_member.slice(0, 4)"
-                            :key="participant.public_id"
-                            class="w-10 h-10 rounded-full border-[3px] border-white overflow-hidden first:ml-0 -ml-2.5 bg-gradient-to-br from-primary-300 to-primary-400 flex items-center justify-center text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 hover:scale-110 hover:!z-[100] shadow-md hover:shadow-xl"
-                            :style="{ zIndex: 10 - idx }"
-                        >
-                            <img
-                                v-if="participant.avatar"
-                                :src="participant.avatar"
-                                :alt="participant.nickname"
-                                v-tooltip.top="participant.nickname"
-                                class="w-full h-full object-cover"
-                            />
-                            <span v-else v-tooltip.top="participant.nickname">
-                                {{ participant.nickname.charAt(0).toUpperCase() }}
-                            </span>
+                <!-- Body -->
+                <div class="p-5 flex flex-col gap-4">
+                    <!-- Meta: duration + date -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-surface-700 font-medium">
+                            <i class="pi pi-clock text-primary-500"></i>
+                            <span>{{ formatDuration(session.duration) }}</span>
                         </div>
-                        <div
-                            v-if="session.participants_count > 4"
-                            class="w-10 h-10 rounded-full border-[3px] border-white -ml-2.5 bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white font-bold text-xs shadow-md"
-                        >
-                            <span>+{{ session.participants_count - 4 }}</span>
+
+                        <div class="flex items-center gap-2 text-surface-600 font-medium">
+                            <i class="pi pi-calendar text-primary-500"></i>
+                            <span>{{ formatDate(session.date) }}</span>
                         </div>
                     </div>
-                    <span class="text-sm text-surface-600 font-medium">
-                        {{ session.participants_count }}
-                        {{ session.participants_count === 1 ? 'participant' : 'participants' }}
-                    </span>
+
+                    <!-- Participants -->
                 </div>
 
-                <!-- Footer with Like Button -->
-                <div class="flex justify-end pt-2">
+                <!-- Footer -->
+                <div class="p-5 pt-0 flex justify-between items-end">
+                    <div>
+                        <div class="flex -space-x-3">
+                            <div
+                                v-for="(participant, idx) in session.server_member.slice(0, 4)"
+                                :key="participant.public_id"
+                                class="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-surface-200 shadow-sm"
+                            >
+                                <img
+                                    v-if="participant.avatar"
+                                    :src="participant.avatar"
+                                    class="w-full h-full object-cover"
+                                />
+                                <span
+                                    v-else
+                                    class="flex items-center justify-center w-full h-full font-semibold text-surface-700"
+                                >
+                                    {{ participant.nickname.charAt(0).toUpperCase() }}
+                                </span>
+                            </div>
+
+                            <div
+                                v-if="session.participants_count > 4"
+                                class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-semibold border-2 border-white shadow-sm"
+                            >
+                                +{{ session.participants_count - 4 }}
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-surface-600 mt-2">
+                            {{ session.participants_count }}
+                            {{ session.participants_count === 1 ? 'participant' : 'participants' }}
+                        </p>
+                    </div>
                     <Button
                         :icon="session.liked_by_me ? 'pi pi-heart-fill' : 'pi pi-heart'"
                         :label="session.likes_count.toString()"
                         :severity="session.liked_by_me ? 'danger' : 'secondary'"
                         :outlined="!session.liked_by_me"
                         size="small"
-                        @click="toggleLike(session)"
+                        class="!px-4 !py-2 h-fit"
+                        @click.stop="toggleLike(session)"
                     />
-                </div>
-            </div>
-
-            <!-- Load More Trigger -->
-            <div
-                v-if="sessions.length > 0"
-                ref="loadMoreTrigger"
-                class="col-span-full flex justify-center p-6"
-            >
-                <div v-if="loading" class="p-4">
-                    <i class="pi pi-spin pi-spinner text-2xl text-primary-500"></i>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
