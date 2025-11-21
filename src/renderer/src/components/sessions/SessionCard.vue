@@ -57,9 +57,7 @@ function getParticipantTooltip(
             class="absolute inset-1 rounded-2xl bg-cover bg-center bg-no-repeat"
             :style="{ backgroundImage: `url(${session.activity.banner})` }"
         ></div>
-        <div
-            class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
-        ></div>
+        <div class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"></div>
         <!-- Banner -->
         <div class="relative h-20 w-full overflow-hidden z-10">
             <!-- Logo + Title -->
