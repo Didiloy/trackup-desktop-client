@@ -67,7 +67,8 @@
         "minimize": "Minimiser",
         "maximize": "Maximiser",
         "close_window": "Fermer",
-        "toggle_sidebar": "Voir les membres du serveur"
+        "toggle_sidebar": "Voir les membres du serveur",
+        "devtools": "Devtools"
     },
     "placeholder": {
         "search": "Rechercher...",

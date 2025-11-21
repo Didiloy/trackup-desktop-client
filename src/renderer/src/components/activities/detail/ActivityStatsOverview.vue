@@ -19,22 +19,22 @@ const cards = computed(() => {
                 value: `${Math.round(props.stats.avg_duration / 60)}m`
             }),
             icon: 'pi pi-clock',
-            gradient: 'from-primary-500/20 via-primary-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-primary-500/20 via-primary-500/10 to-transparent'
         },
         {
             label: t('userInterface.serverActivitiesView.card.popularity'),
             value: props.stats.popularity_score.toFixed(0),
             description: t('userInterface.serverActivitiesView.card.sessions'),
             icon: 'pi pi-bolt',
-            gradient: 'from-amber-500/20 via-amber-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-amber-500/20 via-amber-500/10 to-transparent'
         },
         {
-            label: t('userInterface.serverActivitiesView.card.unique_participants'),
-            value: props.stats.unique_participants.toLocaleString(),
-            description: t('userInterface.serverActivitiesView.card.total_participants'),
-            subvalue: props.stats.total_participants.toLocaleString(),
+            label: t('userInterface.serverActivitiesView.card.total_participants'),
+            value: props.stats.total_participants.toLocaleString(),
+            description: '',
+            subvalue: '',
             icon: 'pi pi-users',
-            gradient: 'from-emerald-500/20 via-emerald-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-emerald-500/20 via-emerald-500/10 to-transparent'
         }
     ]
 })
@@ -45,8 +45,9 @@ const cards = computed(() => {
         <div
             v-for="card in cards"
             :key="card.label"
-            class="rounded-2xl bg-surface-100 ring-1 ring-surface-200/50 p-4 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:ring-primary-500/40"
-        >
+            class="rounded-2xl bg-surface-100 ring-1 ring-surface-200/50 p-4 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:ring-primary-500/40"
+            :class="card.gradient"
+            >
             <div class="flex items-center justify-between">
                 <p class="text-xs uppercase tracking-wide text-surface-500 font-semibold">
                     {{ card.label }}

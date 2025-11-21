@@ -65,7 +65,8 @@
         "minimize": "Minimize",
         "maximize": "Maximize",
         "close_window": "Close",
-        "toggle_sidebar": "View server members"
+        "toggle_sidebar": "View server members",
+        "devtools": "Devtools"
     },
     "placeholder": {
         "search": "Search...",
