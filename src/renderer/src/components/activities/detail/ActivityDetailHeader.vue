@@ -70,10 +70,14 @@ const summaryMetrics = computed(() => {
             </div>
 
             <div class="flex-1 min-w-[220px]">
-                <h1 class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                <h1
+                    class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
+                >
                     {{ activity?.name || '—' }}
                 </h1>
-                <p class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                <p
+                    class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
+                >
                     {{ activity?.description || t('common.description') }}
                 </p>
             </div>

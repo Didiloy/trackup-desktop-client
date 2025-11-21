@@ -38,7 +38,6 @@ const props = defineProps({
     }
 })
 
-
 const cancelLabel = computed(() => props.cancelLabel || t('actions.cancel'))
 const confirmLabel = computed(() => props.confirmLabel || t('actions.confirm'))
 
