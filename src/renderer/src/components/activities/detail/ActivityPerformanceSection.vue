@@ -144,7 +144,10 @@ const skillDistribution = computed(() => {
             <p class="text-sm font-semibold text-surface-600 mb-4">
                 {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
             </p>
-            <div class="text-5xl font-bold" :class="growthBadge.positive ? 'text-emerald-600' : 'text-red-600'">
+            <div
+                class="text-5xl font-bold"
+                :class="growthBadge.positive ? 'text-emerald-600' : 'text-red-600'"
+            >
                 {{ growthBadge.text }}
             </div>
         </div>

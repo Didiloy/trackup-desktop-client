@@ -267,9 +267,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     />
                     <Button
                         v-tooltip.top="
-                            draft.type === 'BOOLEAN' || draft.type === 'DATE' ? t(
-                                'userInterface.serverActivitiesView.addActivityModal.notPossibleWithType'
-                            ) : t('userInterface.serverActivitiesView.addActivityModal.metadataAddChoice')
+                            draft.type === 'BOOLEAN' || draft.type === 'DATE'
+                                ? t(
+                                      'userInterface.serverActivitiesView.addActivityModal.notPossibleWithType'
+                                  )
+                                : t(
+                                      'userInterface.serverActivitiesView.addActivityModal.metadataAddChoice'
+                                  )
                         "
                         icon="pi pi-plus"
                         outlined

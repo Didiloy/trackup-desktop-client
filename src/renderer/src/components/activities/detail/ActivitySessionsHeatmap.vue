@@ -62,7 +62,6 @@ function intensity(count: number): string {
     if (count <= 6) return 'bg-primary-500/70'
     return 'bg-primary-500'
 }
-
 </script>
 
 <template>
