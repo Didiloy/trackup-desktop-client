@@ -46,7 +46,7 @@ const createdSession = ref<ISession | null>(null)
 
 type Step = 'info' | 'enums' | 'metadata'
 const current_step = ref<Step>('info')
-const has_enums = ref(false)
+const has_enums = ref(server_store.getEnumsDefinition !== null)
 const has_metadata = ref(false)
 const enum_definitions = ref<IEnumDefinition[]>([])
 const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
@@ -156,13 +156,8 @@ async function checkActivityMetadata(activityId: string): Promise<void> {
 
 watch(
     () => props.modelValue,
-    async (val) => {
-        if (val) {
-            resetState()
-            await checkServerEnums()
-        } else {
-            resetState()
-        }
+    () => {
+        resetState()
     }
 )
 
@@ -298,7 +293,6 @@ function finishWizard(): void {
         <SessionEnumsForm
             v-else-if="current_step === 'enums'"
             :loading="submitting"
-            :definitions="enum_definitions"
             @submit="handleAddEnums"
             @skip="handleSkipEnums"
         />
