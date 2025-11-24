@@ -23,7 +23,7 @@ const isServerAsideVisible = computed(
             class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden p-6"
             :class="{ 'rounded-l-xl': !isServerAsideVisible }"
         >
-            <TransitionWrapper name="fade" mode="out-in" :duration="0.8">
+            <TransitionWrapper name="fade" mode="out-in" :duration="1">
                 <router-view v-slot="{ Component, route: currentRoute }">
                     <component :is="Component" :key="currentRoute.path" />
                 </router-view>

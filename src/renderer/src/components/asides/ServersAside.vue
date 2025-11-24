@@ -60,25 +60,28 @@ async function copyInvite(): Promise<void> {
             </div>
             <ServersList />
         </div>
-        <TransitionWrapper name="fade">
+        <TransitionWrapper name="fade" >
             <div v-if="hasServerActions" class="flex-1 h-full">
                 <div
                     class="w-full h-full bg-surface-100 rounded-l-2xl overflow-hidden flex flex-col"
                 >
                     <!-- Header with banner and server meta -->
                     <div class="relative w-full" style="height: 120px; min-height: 120px">
-                        <div v-if="server_store.getBanner" class="absolute inset-0">
-                            <img
-                                :src="server_store.getBanner"
-                                alt="Server banner"
-                                class="w-full h-full object-cover not-draggable"
-                            />
-                        </div>
-                        <div
-                            v-else
-                            class="absolute inset-0"
-                            style="background: var(--gradient-primary)"
-                        ></div>
+                        <TransitionWrapper name="slide-fade">
+                            <div v-if="server_store.getBanner" class="absolute inset-0">
+                                <img
+                                    :src="server_store.getBanner"
+                                    alt="Server banner"
+                                    class="w-full h-full object-cover not-draggable"
+                                />
+                            </div>
+                            <div
+                                v-else
+                                class="absolute inset-0"
+                                style="background: var(--gradient-primary)"
+                            ></div>
+                        </TransitionWrapper>
+
                         <!-- Contrast overlays -->
                         <div class="absolute inset-0 backdrop-blur-[2px] bg-black/0"></div>
                         <div

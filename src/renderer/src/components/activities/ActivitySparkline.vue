@@ -67,7 +67,7 @@ const xyConfig = computed<VueUiXyConfig>(() => ({
             }
         },
         tooltip: {
-            show: true,
+            show: true
         },
         title: { show: false },
         userOptions: {

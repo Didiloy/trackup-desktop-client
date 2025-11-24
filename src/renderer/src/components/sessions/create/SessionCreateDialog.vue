@@ -172,7 +172,6 @@ async function handleCreateSession(payload: {
         created_session.value = res.data
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
 
-
         // Advance to next step
         if (has_enums.value) {
             current_step.value = 'enums'
