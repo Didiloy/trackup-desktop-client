@@ -6,12 +6,13 @@ import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type {
     IAddSessionMetadataRequest,
-    ISessionMetadataEntryDto
+    IAddSessionMetadataEntry
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 const props = defineProps<{
     loading?: boolean
     activityId: string
+    definitions?: IActivityMetadataDefinition[]
 }>()
 
 const emit = defineEmits<{
@@ -30,6 +31,13 @@ const values = ref<Record<string, any>>({}) // def_id -> value
 const isLoadingDefinitions = ref(true)
 
 onMounted(async () => {
+    if (props.definitions && props.definitions.length > 0) {
+        definitions.value = props.definitions
+        isLoadingDefinitions.value = false
+        emit('loaded', true)
+        return
+    }
+
     const serverId = server_store.getPublicId
     if (!serverId || !props.activityId) return
 
@@ -64,12 +72,31 @@ const can_submit = computed(() => {
     return !props.loading
 })
 
+function handleNumberInput(defId: string, event: any): void {
+    // When using editable dropdown for numbers, ensure the value is converted to number
+    const val = event.value
+    if (val !== undefined && val !== null && val !== '') {
+        const numVal = typeof val === 'string' ? parseFloat(val) : val
+        if (!isNaN(numVal)) {
+            values.value[defId] = numVal
+        }
+    }
+}
+
 function onSubmit(): void {
-    const metadataDtos: ISessionMetadataEntryDto[] = []
+    const metadataDtos: IAddSessionMetadataEntry[] = []
 
     for (const def of definitions.value) {
-        const val = values.value[def.public_id]
+        let val = values.value[def.public_id]
         if (val !== undefined && val !== null && val !== '') {
+            // Ensure number type for NUMBER definitions (in case of editable dropdown string input)
+            if (def.type === 'NUMBER' && typeof val === 'string') {
+                const num = parseFloat(val)
+                if (!isNaN(num)) {
+                    val = num
+                }
+            }
+
             metadataDtos.push({
                 metadata_definition_public_id: def.public_id,
                 value: val
@@ -120,21 +147,64 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     {{ def.description }}
                 </p>
 
-                <!-- NUMBER -->
-                <InputNumber
-                    v-if="def.type === 'NUMBER'"
+                <!-- NUMBER with choices (allow custom) -->
+                <Dropdown
+                    v-if="
+                        def.type === 'NUMBER' &&
+                        def.choices &&
+                        def.choices.length > 0 &&
+                        def.allow_not_predefined_value
+                    "
                     v-model="values[def.public_id]"
-                    :placeholder="def.label"
+                    :options="def.choices"
+                    :placeholder="def.label || ''"
+                    editable
+                    class="w-full"
+                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
+                    @change="handleNumberInput(def.public_id, $event)"
+                />
+
+                <!-- NUMBER with choices (strict) -->
+                <Dropdown
+                    v-else-if="def.type === 'NUMBER' && def.choices && def.choices.length > 0"
+                    v-model="values[def.public_id]"
+                    :options="def.choices"
+                    :placeholder="def.label || undefined"
+                    class="w-full"
+                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
+                />
+
+                <!-- NUMBER free input -->
+                <InputNumber
+                    v-else-if="def.type === 'NUMBER'"
+                    v-model="values[def.public_id]"
+                    :placeholder="def.label || undefined"
                     class="w-full"
                     :pt="{ input: { style: background_style } }"
                 />
 
-                <!-- STRING with choices -->
+                <!-- STRING with choices (allow custom) -->
+                <Dropdown
+                    v-else-if="
+                        def.type === 'STRING' &&
+                        def.choices &&
+                        def.choices.length > 0 &&
+                        def.allow_not_predefined_value
+                    "
+                    v-model="values[def.public_id]"
+                    :options="def.choices"
+                    :placeholder="def.label || ''"
+                    editable
+                    class="w-full"
+                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
+                />
+
+                <!-- STRING with choices (strict) -->
                 <Dropdown
                     v-else-if="def.type === 'STRING' && def.choices && def.choices.length > 0"
                     v-model="values[def.public_id]"
                     :options="def.choices"
-                    :placeholder="def.label"
+                    :placeholder="def.label || undefined"
                     class="w-full"
                     :pt="{ root: { style: background_style }, input: { style: background_style } }"
                 />
@@ -143,7 +213,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 <InputText
                     v-else-if="def.type === 'STRING'"
                     v-model="values[def.public_id]"
-                    :placeholder="def.label"
+                    :placeholder="def.label || undefined"
                     class="w-full"
                     :pt="{ root: { style: background_style } }"
                 />
@@ -162,7 +232,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-model="values[def.public_id]"
                     show-time
                     hour-format="24"
-                    :placeholder="def.label"
+                    :placeholder="def.label || undefined"
                     class="w-full"
                     :pt="{ input: { style: background_style } }"
                 />

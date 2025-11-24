@@ -6,11 +6,12 @@ import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import type {
     IAddSessionEnumsRequest,
-    ISessionEnumSelectionDto
+    IAddSessionEnumsSelection
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 const props = defineProps<{
     loading?: boolean
+    definitions?: IEnumDefinition[]
 }>()
 
 const emit = defineEmits<{
@@ -29,6 +30,13 @@ const selections = ref<Record<string, string>>({}) // enum_def_id -> selected_ke
 const isLoadingDefinitions = ref(true)
 
 onMounted(async () => {
+    if (props.definitions && props.definitions.length > 0) {
+        definitions.value = props.definitions
+        isLoadingDefinitions.value = false
+        emit('loaded', true)
+        return
+    }
+
     const serverId = server_store.getPublicId
     if (!serverId) return
 
@@ -57,7 +65,7 @@ const can_submit = computed(() => {
 })
 
 function onSubmit(): void {
-    const selectionDtos: ISessionEnumSelectionDto[] = []
+    const selectionDtos: IAddSessionEnumsSelection[] = []
 
     for (const def of definitions.value) {
         const selectedKey = selections.value[def.public_id]
@@ -90,7 +98,7 @@ function onSubmit(): void {
             if (valueObj) {
                 selectionDtos.push({
                     enum_value_id: valueObj.public_id,
-                    selected_key: selectedKey
+                    selected_key: selectedKey as any
                 })
             }
         }
@@ -103,8 +111,6 @@ function onSubmit(): void {
 
     emit('submit', { selections: selectionDtos })
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 
 function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
     // This logic depends heavily on how `values` are structured.
