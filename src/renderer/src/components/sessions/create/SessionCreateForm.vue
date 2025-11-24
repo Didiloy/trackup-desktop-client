@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
@@ -25,6 +25,7 @@ const props = withDefaults(
 const emit = defineEmits<{
     (e: 'create', payload: { activityId: string; request: ICreateActivitySessionRequest }): void
     (e: 'cancel'): void
+    (e: 'update:activityId', id: string | null): void
 }>()
 
 const { t } = useI18n()
@@ -50,6 +51,10 @@ const pre_selected_activity = ref<IActivity | null>(null)
 // Activity selection state
 const effectiveActivityId = computed(() => props.preSelectedActivityId || selectedActivityId.value)
 
+watch(effectiveActivityId, (newId) => {
+    emit('update:activityId', newId || null)
+})
+
 // Initialize
 onMounted(async () => {
     if (props.preSelectedActivityId && server_store.getPublicId) {
@@ -57,6 +62,10 @@ onMounted(async () => {
         if (!res.error && res.data) {
             pre_selected_activity.value = res.data
         }
+    }
+    // Emit initial value if present
+    if (effectiveActivityId.value) {
+        emit('update:activityId', effectiveActivityId.value)
     }
 })
 

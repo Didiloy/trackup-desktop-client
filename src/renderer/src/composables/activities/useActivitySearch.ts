@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
@@ -23,6 +23,12 @@ export function useActivitySearch(): UseActivitySearchReturn {
     const activityQuery = ref<string>('')
     const activitySuggestions = ref<IActivity[]>([])
     const selectedActivityId = ref<string | undefined>(undefined)
+
+    watch(activityQuery, (newVal) => {
+        if (!newVal) {
+            selectedActivityId.value = undefined
+        }
+    })
 
     /**
      * Search activities: first in store, then via API

@@ -8,7 +8,6 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
-import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
@@ -37,12 +36,11 @@ const { createActivitySession } = useActivityCRUD()
 const { addSessionEnums, addSessionMetadata } = useSessionCRUD()
 const server_store = useServerStore()
 
-const { listEnumDefinitions } = useEnumDefinitionCRUD()
 const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 
 const submitting = ref(false)
 const error = ref<string | null>(null)
-const createdSession = ref<ISession | null>(null)
+const created_session = ref<ISession | null>(null)
 
 type Step = 'info' | 'enums' | 'metadata'
 const current_step = ref<Step>('info')
@@ -102,7 +100,7 @@ const subtitle = computed(() => {
 
 function resetState(): void {
     current_step.value = 'info'
-    createdSession.value = null
+    created_session.value = null
     error.value = null
     submitting.value = false
     has_enums.value = false
@@ -114,25 +112,6 @@ function resetState(): void {
 function close(): void {
     resetState()
     emit('update:modelValue', false)
-}
-
-async function checkServerEnums(): Promise<void> {
-    const serverId = server_store.getPublicId
-    if (!serverId) return
-    try {
-        const res = await listEnumDefinitions(serverId)
-        if (res.data && res.data.length > 0) {
-            enum_definitions.value = res.data
-            has_enums.value = true
-        } else {
-            enum_definitions.value = []
-            has_enums.value = false
-        }
-    } catch (e) {
-        console.error('Failed to check enums', e)
-        has_enums.value = false
-        enum_definitions.value = []
-    }
 }
 
 async function checkActivityMetadata(activityId: string): Promise<void> {
@@ -154,12 +133,23 @@ async function checkActivityMetadata(activityId: string): Promise<void> {
     }
 }
 
+// Watch for dialog open/close
 watch(
     () => props.modelValue,
     () => {
         resetState()
     }
 )
+
+// When activity changes, check for metadata definitions
+async function handleActivityChange(activityId: string | null): Promise<void> {
+    if (activityId) {
+        await checkActivityMetadata(activityId)
+    } else {
+        has_metadata.value = false
+        metadata_definitions.value = []
+    }
+}
 
 // Step 1: Create Session
 async function handleCreateSession(payload: {
@@ -179,11 +169,9 @@ async function handleCreateSession(payload: {
             throw new Error(res.error || t('messages.error.createSessionFailed'))
         }
 
-        createdSession.value = res.data
+        created_session.value = res.data
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
 
-        // Check metadata availability for this activity
-        await checkActivityMetadata(res.data.activity.public_id)
 
         // Advance to next step
         if (has_enums.value) {
@@ -203,7 +191,7 @@ async function handleCreateSession(payload: {
 
 // Step 2: Add Enums
 async function handleAddEnums(payload: IAddSessionEnumsRequest): Promise<void> {
-    if (!createdSession.value) return
+    if (!created_session.value) return
     submitting.value = true
     error.value = null
 
@@ -211,7 +199,7 @@ async function handleAddEnums(payload: IAddSessionEnumsRequest): Promise<void> {
         const serverId = server_store.getPublicId
         if (!serverId) throw new Error(t('messages.error.noServerSelected'))
 
-        const res = await addSessionEnums(serverId, createdSession.value.public_id, payload)
+        const res = await addSessionEnums(serverId, created_session.value.public_id, payload)
         if (res.error) throw new Error(res.error)
 
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
@@ -238,7 +226,7 @@ function handleSkipEnums(): void {
 
 // Step 3: Add Metadata
 async function handleAddMetadata(payload: IAddSessionMetadataRequest): Promise<void> {
-    if (!createdSession.value) return
+    if (!created_session.value) return
     submitting.value = true
     error.value = null
 
@@ -246,7 +234,7 @@ async function handleAddMetadata(payload: IAddSessionMetadataRequest): Promise<v
         const serverId = server_store.getPublicId
         if (!serverId) throw new Error(t('messages.error.noServerSelected'))
 
-        const res = await addSessionMetadata(serverId, createdSession.value.public_id, payload)
+        const res = await addSessionMetadata(serverId, created_session.value.public_id, payload)
         if (res.error) throw new Error(res.error)
 
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
@@ -262,9 +250,10 @@ function handleSkipMetadata(): void {
     finishWizard()
 }
 
+// Finish Wizard
 function finishWizard(): void {
-    if (createdSession.value) {
-        emit('created', createdSession.value)
+    if (created_session.value) {
+        emit('created', created_session.value)
     }
     close()
 }
@@ -273,7 +262,7 @@ function finishWizard(): void {
 <template>
     <MultiStepsDialog
         :model-value="modelValue"
-        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-[83vh]'"
+        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('userInterface.serverSessionsView.addSessionModal.title') || 'Create Session'"
         :subtitle="subtitle"
@@ -288,6 +277,7 @@ function finishWizard(): void {
             :pre-selected-activity-id="props.preSelectedActivityId"
             @create="handleCreateSession"
             @cancel="close"
+            @update:activity-id="handleActivityChange"
         />
 
         <SessionEnumsForm
@@ -300,7 +290,7 @@ function finishWizard(): void {
         <SessionMetadataForm
             v-else-if="current_step === 'metadata'"
             :loading="submitting"
-            :activity-id="createdSession?.activity.public_id || ''"
+            :activity-id="created_session?.activity.public_id || ''"
             :definitions="metadata_definitions"
             @submit="handleAddMetadata"
             @skip="handleSkipMetadata"
