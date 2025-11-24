@@ -117,8 +117,10 @@ watch(
 )
 
 function addChoice(): void {
-    const value = newChoice.value.trim()
-    if (!value) return
+    const raw = newChoice.value.trim()
+    if (!raw) return
+    const value = draft.value.type === 'NUMBER' ? Number(raw) : raw
+    if (draft.value.type === 'NUMBER' && Number.isNaN(value)) return
     draft.value.choices = draft.value.choices || []
     draft.value.choices.push(value)
     newChoice.value = ''
@@ -261,6 +263,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         :placeholder="t('placeholder.enter')"
                         :disabled="!canUseChoices"
                         @keydown.enter="addChoice"
+                        :type="draft.type === 'NUMBER' ? 'number' : 'text'"
                     />
                     <Button
                         v-tooltip.top="
