@@ -243,6 +243,7 @@
         "serverActivitiesView": {
             "title": "Server activities",
             "addActivity": "Add activity",
+            "createSession": "Create session",
             "recentSessions": "Recent sessions",
             "evolution30Days": "Evolution 30 days",
             "ActivityPerformanceSection": {

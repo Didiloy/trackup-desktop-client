@@ -12,6 +12,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: 'edit'): void
     (e: 'delete'): void
+    (e: 'createSession'): void
 }>()
 
 const { t } = useI18n()
@@ -84,6 +85,12 @@ const summaryMetrics = computed(() => {
             </div>
 
             <div class="flex flex-wrap gap-3">
+                <Button
+                    icon="pi pi-plus"
+                    :label="t('userInterface.serverActivitiesView.createSession')"
+                    size="small"
+                    @click="emit('createSession')"
+                />
                 <Button
                     icon="pi pi-pencil"
                     :label="t('actions.edit')"
