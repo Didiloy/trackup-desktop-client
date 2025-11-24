@@ -34,5 +34,6 @@ $ npm run build:linux
 ```
 
 ## TODO
+
 - Montrer a l'utilisateur qu'il est bien sélectionné pour l'ajout de la session
 - Permettre a l'utilisateur de se désélectionné d'une session

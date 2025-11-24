@@ -8,6 +8,8 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
+import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
     ISession,
@@ -15,6 +17,8 @@ import type {
     IAddSessionMetadataRequest
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 import type { ICreateActivitySessionRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 interface Props {
     modelValue: boolean
@@ -33,14 +37,19 @@ const { createActivitySession } = useActivityCRUD()
 const { addSessionEnums, addSessionMetadata } = useSessionCRUD()
 const server_store = useServerStore()
 
+const { listEnumDefinitions } = useEnumDefinitionCRUD()
+const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
+
 const submitting = ref(false)
 const error = ref<string | null>(null)
 const createdSession = ref<ISession | null>(null)
 
 type Step = 'info' | 'enums' | 'metadata'
-const currentStep = ref<Step>('info')
-const hasEnums = ref(true) // Assume true initially, updated by form load
-const hasMetadata = ref(true) // Assume true initially, updated by form load
+const current_step = ref<Step>('info')
+const has_enums = ref(server_store.getEnumsDefinition !== null)
+const has_metadata = ref(false)
+const enum_definitions = ref<IEnumDefinition[]>([])
+const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
 
 const steps = computed(() => {
     const list = [
@@ -50,14 +59,14 @@ const steps = computed(() => {
             icon: 'pi pi-info-circle'
         }
     ]
-    if (hasEnums.value) {
+    if (has_enums.value) {
         list.push({
             key: 'enums',
             label: t('userInterface.serverSessionsView.addSessionModal.enumsStep') || 'Selections',
             icon: 'pi pi-list'
         })
     }
-    if (hasMetadata.value) {
+    if (has_metadata.value) {
         list.push({
             key: 'metadata',
             label: t('userInterface.serverSessionsView.addSessionModal.metadataStep') || 'Metadata',
@@ -67,10 +76,10 @@ const steps = computed(() => {
     return list
 })
 
-const currentIndex = computed(() => steps.value.findIndex((s) => s.key === currentStep.value))
+const currentIndex = computed(() => steps.value.findIndex((s) => s.key === current_step.value))
 
 const subtitle = computed(() => {
-    switch (currentStep.value) {
+    switch (current_step.value) {
         case 'info':
             return (
                 t('userInterface.serverSessionsView.addSessionModal.infoDescription') ||
@@ -92,12 +101,14 @@ const subtitle = computed(() => {
 })
 
 function resetState(): void {
-    currentStep.value = 'info'
+    current_step.value = 'info'
     createdSession.value = null
     error.value = null
     submitting.value = false
-    hasEnums.value = true
-    hasMetadata.value = true
+    has_enums.value = false
+    has_metadata.value = false
+    enum_definitions.value = []
+    metadata_definitions.value = []
 }
 
 function close(): void {
@@ -105,10 +116,48 @@ function close(): void {
     emit('update:modelValue', false)
 }
 
+async function checkServerEnums(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+    try {
+        const res = await listEnumDefinitions(serverId)
+        if (res.data && res.data.length > 0) {
+            enum_definitions.value = res.data
+            has_enums.value = true
+        } else {
+            enum_definitions.value = []
+            has_enums.value = false
+        }
+    } catch (e) {
+        console.error('Failed to check enums', e)
+        has_enums.value = false
+        enum_definitions.value = []
+    }
+}
+
+async function checkActivityMetadata(activityId: string): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+    try {
+        const res = await listMetadataDefinitions(serverId, activityId)
+        if (res.data && res.data.length > 0) {
+            metadata_definitions.value = res.data
+            has_metadata.value = true
+        } else {
+            metadata_definitions.value = []
+            has_metadata.value = false
+        }
+    } catch (e) {
+        console.error('Failed to check metadata', e)
+        has_metadata.value = false
+        metadata_definitions.value = []
+    }
+}
+
 watch(
     () => props.modelValue,
-    (val) => {
-        if (!val) resetState()
+    () => {
+        resetState()
     }
 )
 
@@ -133,8 +182,17 @@ async function handleCreateSession(payload: {
         createdSession.value = res.data
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
 
+        // Check metadata availability for this activity
+        await checkActivityMetadata(res.data.activity.public_id)
+
         // Advance to next step
-        currentStep.value = 'enums'
+        if (has_enums.value) {
+            current_step.value = 'enums'
+        } else if (has_metadata.value) {
+            current_step.value = 'metadata'
+        } else {
+            finishWizard()
+        }
     } catch (e) {
         error.value = e instanceof Error ? e.message : t('messages.error.createSessionFailed')
         toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
@@ -157,7 +215,12 @@ async function handleAddEnums(payload: IAddSessionEnumsRequest): Promise<void> {
         if (res.error) throw new Error(res.error)
 
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
-        currentStep.value = 'metadata'
+
+        if (has_metadata.value) {
+            current_step.value = 'metadata'
+        } else {
+            finishWizard()
+        }
     } catch (e) {
         error.value = e instanceof Error ? e.message : t('messages.error.addEnumsFailed')
     } finally {
@@ -166,14 +229,10 @@ async function handleAddEnums(payload: IAddSessionEnumsRequest): Promise<void> {
 }
 
 function handleSkipEnums(): void {
-    currentStep.value = 'metadata'
-}
-
-function handleEnumsLoaded(has: boolean): void {
-    hasEnums.value = has
-    if (!has) {
-        // If no enums, auto-skip to metadata
-        currentStep.value = 'metadata'
+    if (has_metadata.value) {
+        current_step.value = 'metadata'
+    } else {
+        finishWizard()
     }
 }
 
@@ -203,14 +262,6 @@ function handleSkipMetadata(): void {
     finishWizard()
 }
 
-function handleMetadataLoaded(has: boolean): void {
-    hasMetadata.value = has
-    if (!has) {
-        // If no metadata, and we are here, we are done
-        finishWizard()
-    }
-}
-
 function finishWizard(): void {
     if (createdSession.value) {
         emit('created', createdSession.value)
@@ -232,7 +283,7 @@ function finishWizard(): void {
         @update:model-value="emit('update:modelValue', $event)"
     >
         <SessionCreateForm
-            v-if="currentStep === 'info'"
+            v-if="current_step === 'info'"
             :loading="submitting"
             :pre-selected-activity-id="props.preSelectedActivityId"
             @create="handleCreateSession"
@@ -240,20 +291,19 @@ function finishWizard(): void {
         />
 
         <SessionEnumsForm
-            v-else-if="currentStep === 'enums'"
+            v-else-if="current_step === 'enums'"
             :loading="submitting"
             @submit="handleAddEnums"
             @skip="handleSkipEnums"
-            @loaded="handleEnumsLoaded"
         />
 
         <SessionMetadataForm
-            v-else-if="currentStep === 'metadata'"
+            v-else-if="current_step === 'metadata'"
             :loading="submitting"
             :activity-id="createdSession?.activity.public_id || ''"
+            :definitions="metadata_definitions"
             @submit="handleAddMetadata"
             @skip="handleSkipMetadata"
-            @loaded="handleMetadataLoaded"
         />
 
         <template #footer>

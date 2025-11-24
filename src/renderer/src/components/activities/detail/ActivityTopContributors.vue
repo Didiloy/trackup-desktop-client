@@ -31,7 +31,13 @@ const { t } = useI18n()
                         {{ member.user_email || '—' }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ member.sessions_count }} {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.sessions') }} ·
+                        {{ member.sessions_count }}
+                        {{
+                            t(
+                                'userInterface.serverActivitiesView.ActivityPerformanceSection.sessions'
+                            )
+                        }}
+                        ·
                         {{ convertMinuteToHoursMinute(member.total_duration) }}
                     </p>
                 </div>

@@ -3,10 +3,12 @@ import { computed, ComputedRef, reactive } from 'vue'
 import { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 
 interface ServerCache {
     server: IServer
     members: IServerMember[]
+    enumDefinition: IEnumDefinition[]
     timestamp: number
 }
 
@@ -21,12 +23,7 @@ export const useServerStore = defineStore('server', () => {
         server: null as IServer | null,
         serverMembers: null as IServerMember[] | null,
         serverActivities: null as IActivity[] | null,
-        permissions: {
-            canCreate: false,
-            canUpdate: false,
-            canDelete: false,
-            canJoin: false
-        },
+        serverEnumsDefinition: null as IEnumDefinition[] | null,
         ownership: false as boolean,
         isLoading: false as boolean
     })
@@ -45,6 +42,10 @@ export const useServerStore = defineStore('server', () => {
     const getActivities: ComputedRef<IActivity[] | null> = computed(
         () => state.serverActivities ?? null
     )
+    const getEnumsDefinition: ComputedRef<IEnumDefinition[] | null> = computed(
+        () => state.serverEnumsDefinition ?? null
+    )
+
     const getName: ComputedRef<string | null> = computed(() => state.server?.name ?? null)
     const getDescription: ComputedRef<string | null> = computed(
         () => state.server?.description ?? null
@@ -66,17 +67,23 @@ export const useServerStore = defineStore('server', () => {
         state.server = srv
     }
 
-    const setMembers = (members: IServerMember[] | never): void => {
+    const setMembers = (members: IServerMember[] | null): void => {
         state.serverMembers = members
     }
 
-    const setActivities = (activities: IActivity[] | never): void => {
+    const setActivities = (activities: IActivity[] | null): void => {
         state.serverActivities = activities
+    }
+
+    const setEnumsDefinition = (enums: IEnumDefinition[] | null): void => {
+        state.serverEnumsDefinition = enums
     }
 
     const resetState = (): void => {
         state.server = null
         state.serverMembers = null
+        state.serverActivities = null
+        state.serverEnumsDefinition = null
         state.ownership = false
         state.isLoading = false
     }
@@ -102,10 +109,16 @@ export const useServerStore = defineStore('server', () => {
         return cached
     }
 
-    const setCachedServer = (serverId: string, server: IServer, members: IServerMember[]): void => {
+    const setCachedServer = (
+        serverId: string,
+        server: IServer,
+        members: IServerMember[],
+        enumDefinition: IEnumDefinition[]
+    ): void => {
         cache.set(serverId, {
             server,
             members,
+            enumDefinition,
             timestamp: Date.now()
         })
     }
@@ -116,6 +129,7 @@ export const useServerStore = defineStore('server', () => {
 
         state.server = cached.server
         state.serverMembers = cached.members
+        state.serverEnumsDefinition = cached.enumDefinition
         return true
     }
 
@@ -131,12 +145,14 @@ export const useServerStore = defineStore('server', () => {
         setServer,
         setMembers,
         setActivities,
+        setEnumsDefinition,
         setLoading,
 
         getPublicId,
         getServerTypePublicId,
         getMembers,
         getActivities,
+        getEnumsDefinition,
         getName,
         getDescription,
         getLogo,

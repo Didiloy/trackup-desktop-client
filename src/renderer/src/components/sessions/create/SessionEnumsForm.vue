@@ -4,9 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import type {
+import {
     IAddSessionEnumsRequest,
-    ISessionEnumSelectionDto
+    IAddSessionEnumsSelection,
+    TSessionEnumSelectionKey
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 const props = defineProps<{
@@ -24,11 +25,17 @@ const { t } = useI18n()
 const server_store = useServerStore()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()
 
-const definitions = ref<IEnumDefinition[]>([])
+const definitions = ref<IEnumDefinition[]>(server_store.getEnumsDefinition || [])
 const selections = ref<Record<string, string>>({}) // enum_def_id -> selected_key
 const isLoadingDefinitions = ref(true)
 
 onMounted(async () => {
+    if (definitions.value.length > 0) {
+        isLoadingDefinitions.value = false
+        emit('loaded', true)
+        return
+    }
+
     const serverId = server_store.getPublicId
     if (!serverId) return
 
@@ -57,40 +64,16 @@ const can_submit = computed(() => {
 })
 
 function onSubmit(): void {
-    const selectionDtos: ISessionEnumSelectionDto[] = []
+    const selectionDtos: IAddSessionEnumsSelection[] = []
 
     for (const def of definitions.value) {
         const selectedKey = selections.value[def.public_id]
         if (selectedKey) {
-            // Find the value object to get the ID (though the API asks for enum_value_id,
-            // the structure implies we need to find the specific value entry)
-            // Wait, the API says: enum_value_id (The enum_value ID being selected) AND selected_key.
-            // Usually enum values are stored in `values` array in definition.
-
-            // Let's look at IEnumDefinition structure from previous file view if possible,
-            // or infer. The user request showed:
-            // values: List [ OrderedMap { "public_id": "enumval_111", "value1": "easy", ... } ]
-            // Actually usually it's one value object per definition in some designs, or a list of possible values.
-            // The user request example shows "values" as a list of objects.
-            // But the selection DTO asks for `enum_value_id`.
-
-            // Let's assume `values` is an array of options.
-            // Wait, the user request example:
-            // values: [ { "public_id": "enumval_111", "value1": "easy", "value2": "hard" } ]
-            // This looks like a single object containing multiple keys?
-            // "selected_key": "value3"
-
-            // If the definition has a list of values, we need to know which one is selected.
-            // But the example `selected_key` suggests the keys are dynamic (value1, value2...).
-
-            // Let's assume for now that `def.values[0]` contains the map of keys to labels,
-            // and `def.values[0].public_id` is the `enum_value_id`.
-
             const valueObj = def.values?.[0]
             if (valueObj) {
                 selectionDtos.push({
                     enum_value_id: valueObj.public_id,
-                    selected_key: selectedKey
+                    selected_key: selectedKey as TSessionEnumSelectionKey
                 })
             }
         }
@@ -103,8 +86,6 @@ function onSubmit(): void {
 
     emit('submit', { selections: selectionDtos })
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 
 function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
     // This logic depends heavily on how `values` are structured.
@@ -155,7 +136,7 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
                     <div v-for="opt in getOptions(def)" :key="opt.value" class="flex items-center">
                         <RadioButton
                             v-model="selections[def.public_id]"
-                            :inputId="`${def.public_id}_${opt.value}`"
+                            :input-id="`${def.public_id}_${opt.value}`"
                             :value="opt.value"
                         />
                         <label

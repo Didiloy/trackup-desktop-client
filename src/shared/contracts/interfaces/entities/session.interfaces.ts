@@ -75,10 +75,11 @@ export interface IUpdateSessionParticipantsRequest {
     participants: string[]
 }
 
+export type TSessionEnumSelectionKey = 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
 // New request to add enum selections to a session
 export interface IAddSessionEnumsSelection {
     enum_value_id: string
-    selected_key: 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
+    selected_key: TSessionEnumSelectionKey
 }
 export interface IAddSessionEnumsRequest {
     selections: IAddSessionEnumsSelection[]

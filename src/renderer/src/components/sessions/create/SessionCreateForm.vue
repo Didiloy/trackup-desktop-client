@@ -114,9 +114,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     class="w-full"
                     :pt="{
                         input: { class: 'bg-surface-100', style: background_style },
-                        overlay: { class: 'bg-surface-100', style: background_style },
+                        overlay: { class: 'bg-surface-100', style: background_style }
                     }"
-
                     @complete="searchActivities($event.query)"
                     @item-select="(e) => onActivityQueryChange(e.value.name)"
                 >
