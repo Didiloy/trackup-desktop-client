@@ -221,6 +221,12 @@
         "serverActivitiesView": {
             "title": "Activités du serveur",
             "addActivity": "Ajouter une activité",
+            "ActivityPerformanceSection": {
+                "sessions_timeline": "Timeline des sessions",
+                "growth": "ce mois",
+                "popularity": "Popularité",
+                "skillLevels": "Niveaux de compétence"
+            },
             "addActivityModal": {
                 "title": "Ajouter une activité",
                 "description": "Ajoutez une nouvelle activité pour votre serveur",

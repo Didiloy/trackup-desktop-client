@@ -45,7 +45,7 @@ const skillDistribution = computed(() => {
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{ t('userInterface.serverActivitiesView.card.sessions') }} timeline
+                    {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.sessions_timeline') }}
                 </p>
                 <span
                     class="text-xs px-3 py-1 rounded-full"
@@ -63,7 +63,7 @@ const skillDistribution = computed(() => {
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">
-                {{ t('userInterface.serverActivitiesView.card.popularity') }}
+                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.popularity') }}
             </p>
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
@@ -71,7 +71,7 @@ const skillDistribution = computed(() => {
                         {{ props.growth?.trend ?? '—' }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        {{ t('userInterface.serverActivitiesView.card.growth') }}
+                        {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
                     </p>
                 </div>
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
@@ -86,7 +86,7 @@ const skillDistribution = computed(() => {
             </div>
             <div class="mt-6">
                 <p class="text-xs text-surface-500 mb-2">
-                    {{ t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle') }}
+                    {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.skillLevels') }}
                 </p>
                 <div class="space-y-2">
                     <div
@@ -124,7 +124,7 @@ const skillDistribution = computed(() => {
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">
-                {{ t('userInterface.serverActivitiesView.card.growth') }}
+                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
             </p>
             <div class="text-5xl font-bold text-surface-900">
                 {{ growthBadge.text }}
