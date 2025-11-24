@@ -49,7 +49,6 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
                 listEnumDefinitions(serverId)
             ])
 
-
             // Stop si une seule est rejetée
             if (responses.some((r) => r.status === 'rejected')) {
                 throw new Error('At least one request failed')
@@ -79,7 +78,7 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
             //     members.value.data?.data,
             //     enums.value.data
             // )
-        } catch  {
+        } catch {
             server_store.resetState()
             await router.push({
                 name: 'Home'
