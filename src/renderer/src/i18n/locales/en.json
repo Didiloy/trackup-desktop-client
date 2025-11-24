@@ -360,7 +360,7 @@
                 "enumsDescription": "Select options",
                 "metadataDescription": "Add extra data",
                 "titlePlaceholder": "Optional title",
-                "selectParticipants": "Select participants",
+                "selectParticipants": "Select additional participants",
                 "commentPlaceholder": "Comment...",
                 "noEnums": "No selections available",
                 "noMetadata": "No metadata available",
