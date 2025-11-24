@@ -19,14 +19,14 @@ const cards = computed(() => {
                 value: `${Math.round(props.stats.avg_duration / 60)}m`
             }),
             icon: 'pi pi-clock',
-            gradient: 'bg-linear-to-br from-primary-500/20 via-primary-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-primary-500/40 via-primary-500/30 to-primary-500/20'
         },
         {
             label: t('userInterface.serverActivitiesView.card.popularity'),
             value: props.stats.popularity_score.toFixed(0),
             description: t('userInterface.serverActivitiesView.card.sessions'),
             icon: 'pi pi-bolt',
-            gradient: 'bg-linear-to-br from-amber-500/20 via-amber-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-amber-500/40 via-amber-500/30 to-amber-500/20'
         },
         {
             label: t('userInterface.serverActivitiesView.card.total_participants'),
@@ -34,7 +34,7 @@ const cards = computed(() => {
             description: '',
             subvalue: '',
             icon: 'pi pi-users',
-            gradient: 'bg-linear-to-br from-emerald-500/20 via-emerald-500/10 to-transparent'
+            gradient: 'bg-linear-to-br from-emerald-500/40 via-emerald-500/30 to-emerald-500/20'
         }
     ]
 })
@@ -49,7 +49,7 @@ const cards = computed(() => {
             :class="card.gradient"
         >
             <div class="flex items-center justify-between">
-                <p class="text-xs uppercase tracking-wide text-surface-500 font-semibold">
+                <p class="text-xs uppercase tracking-wide text-surface-900 font-semibold">
                     {{ card.label }}
                 </p>
                 <span
@@ -59,7 +59,7 @@ const cards = computed(() => {
                 </span>
             </div>
             <div class="mt-3 text-3xl font-semibold text-surface-900">{{ card.value }}</div>
-            <div class="mt-1 text-sm text-surface-500">
+            <div class="mt-1 text-sm text-surface-800">
                 {{ card.description }}
                 <span v-if="card.subvalue" class="font-semibold text-surface-800 ml-1">
                     {{ card.subvalue }}

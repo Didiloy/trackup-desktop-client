@@ -66,8 +66,7 @@ const skillDistribution = computed(() => {
                 {{ t('userInterface.serverActivitiesView.card.popularity') }}
             </p>
             <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white/80 rounded-2xl p-4 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('common.name') }}</p>
+                <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
                     <p class="text-lg font-semibold text-surface-900">
                         {{ props.growth?.trend ?? '—' }}
                     </p>
@@ -75,7 +74,7 @@ const skillDistribution = computed(() => {
                         {{ t('userInterface.serverActivitiesView.card.growth') }}
                     </p>
                 </div>
-                <div class="bg-white/80 rounded-2xl p-4 ring-1 ring-surface-200/60">
+                <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
                     <p class="text-xs text-surface-500">Weekly sessions</p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ props.growth?.sessions_this_week ?? '—' }}
@@ -95,7 +94,7 @@ const skillDistribution = computed(() => {
                         :key="lvl.name"
                         class="flex items-center gap-3"
                     >
-                        <span class="text-xs text-surface-500 w-20 truncate">{{ lvl.name }}</span>
+                        <span class="text-xs text-surface-500 w-20 truncate" v-tooltip.top="lvl.name">{{ lvl.name }}</span>
                         <div class="flex-1 h-2 rounded-full bg-surface-200 overflow-hidden">
                             <div
                                 class="h-full rounded-full transition-all duration-300"
@@ -139,7 +138,7 @@ const skillDistribution = computed(() => {
             </p>
             <div class="mt-6">
                 <div
-                    class="h-24 w-full bg-gradient-to-r from-emerald-200 to-emerald-500 rounded-2xl shadow-inner"
+                    class="h-24 w-full bg-linear-to-r from-emerald-200 to-emerald-500 rounded-2xl shadow-inner"
                 ></div>
             </div>
         </div>

@@ -152,7 +152,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    <!-- TODO voir tout les fichiers générés -->
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
         <div v-if="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700">
             {{ error }}
