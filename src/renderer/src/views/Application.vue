@@ -25,7 +25,7 @@ const isServerAsideVisible = computed(
         >
             <TransitionWrapper name="fade" mode="out-in" :duration="0.8">
                 <router-view v-slot="{ Component, route: currentRoute }">
-                    <component :is="Component" :key="currentRoute.fullPath" />
+                    <component :is="Component" :key="currentRoute.path" />
                 </router-view>
             </TransitionWrapper>
         </main>
