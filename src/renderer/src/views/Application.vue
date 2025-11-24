@@ -9,7 +9,7 @@ const route = useRoute()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
 const isServerAsideVisible = computed(
-    () => route.name && typeof route.name === 'string' && route.name.startsWith('Server')
+    () => route.name && typeof route.name === 'string' && route.fullPath.startsWith('Server')
 )
 </script>
 
