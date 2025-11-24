@@ -19,8 +19,6 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-const sparkData = computed(() => props.timeline?.map((point) => point.sessions_count) ?? [])
-
 const growthBadge = computed(() => {
     const percent = props.growth?.growth_percent ?? 0
     const positive = percent >= 0
@@ -63,7 +61,7 @@ const skillDistribution = computed(() => {
                     {{ growthBadge.text }}
                 </span>
             </div>
-            <ActivitySparkline :data="sparkData" />
+            <ActivitySparkline :data="props.timeline ?? []" :height="120" />
         </div>
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
