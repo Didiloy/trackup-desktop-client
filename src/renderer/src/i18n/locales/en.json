@@ -6,6 +6,7 @@
         "loading": "Loading...",
         "error": "Error",
         "success": "Success",
+        "title": "Title",
         "name": "Name",
         "description": "Description",
         "type": "Type",
@@ -36,7 +37,16 @@
                 "friday": "Fri",
                 "saturday": "Sat"
             }
-        }
+        },
+        "yes": "Yes",
+        "no": "No",
+        "minutes_short": "min",
+        "activity": "Activity",
+        "participants": "Participants",
+        "comment": "Comment",
+        "date": "Date",
+        "duration": "Duration",
+        "finish": "Finish"
     },
     "navigation": {
         "home": "Home",
@@ -135,7 +145,11 @@
             "refresh": "Refresh failed",
             "save": "Save failed",
             "emptyFields": "Empty fields",
-            "copyClipBoard": "Failed to copy to clipboard"
+            "copyClipBoard": "Failed to copy to clipboard",
+            "noServerSelected": "No server selected",
+            "createSessionFailed": "Failed to create session",
+            "addEnumsFailed": "Failed to add selections",
+            "addMetadataFailed": "Failed to add metadata"
         },
         "warning": {
             "title": "Warning",
@@ -333,6 +347,23 @@
                     "dark": "Dark",
                     "system": "System"
                 }
+            }
+        },
+        "serverSessionsView": {
+            "addSessionModal": {
+                "title": "Create Session",
+                "infoStep": "Session Info",
+                "enumsStep": "Selections",
+                "metadataStep": "Metadata",
+                "infoDescription": "Enter session details",
+                "enumsDescription": "Select options",
+                "metadataDescription": "Add extra data",
+                "titlePlaceholder": "Optional title",
+                "selectParticipants": "Select participants",
+                "commentPlaceholder": "Comment...",
+                "noEnums": "No selections available",
+                "noMetadata": "No metadata available",
+                "searchActivityPlaceholder": "Search activity..."
             }
         }
     }

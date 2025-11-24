@@ -9,6 +9,7 @@ import ActivitySessionsTable from '@/components/activities/detail/ActivitySessio
 import ActivityGrowthComparison from '@/components/activities/detail/ActivityGrowthComparison.vue'
 import ActivitySessionsHeatmap from '@/components/activities/detail/ActivitySessionsHeatmap.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
@@ -42,6 +43,7 @@ const sessionsTotal = ref(0)
 const sessionsPage = ref(1)
 const sessionsRows = ref(10)
 const showDeleteConfirm = ref(false)
+const showCreateSessionDialog = ref(false)
 
 const loading = ref(true)
 const sessionsLoading = ref(false)
@@ -127,6 +129,17 @@ async function confirmDelete(): Promise<void> {
     }
 }
 
+async function handleSessionCreated(): Promise<void> {
+    await loadSessions()
+    // Also reload stats as they might have changed
+    if (server_store.getPublicId && activityId.value) {
+        const detailsRes = await getActivityStatsDetails(server_store.getPublicId, activityId.value)
+        if (!detailsRes.error && detailsRes.data) {
+            details.value = detailsRes.data
+        }
+    }
+}
+
 watch(
     () => [server_store.getPublicId, activityId.value],
     () => {
@@ -161,6 +174,7 @@ onMounted(async () => {
         <ActivityDetailHeader
             :activity="activity"
             :stats="details"
+            @create-session="showCreateSessionDialog = true"
             @edit="handleEdit"
             @delete="handleDelete"
         />
@@ -204,6 +218,12 @@ onMounted(async () => {
             :confirmation-name="activity?.name ?? ''"
             @update:model-value="showDeleteConfirm = $event"
             @confirm="confirmDelete"
+        />
+
+        <SessionCreateDialog
+            v-model="showCreateSessionDialog"
+            :pre-selected-activity-id="activityId"
+            @created="handleSessionCreated"
         />
     </div>
 </template>
