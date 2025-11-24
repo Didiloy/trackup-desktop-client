@@ -2,6 +2,7 @@
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { convertMinuteToHoursMinute } from '@/utils'
 
 const props = defineProps<{
     sessions: IActivitySessionListItem[]
@@ -22,21 +23,31 @@ const heatmapData = computed(() => {
     const start = new Date(today)
     start.setDate(start.getDate() - (days - 1))
 
-    const counts = new Map<string, number>()
+    const stats = new Map<string, { count: number; duration: number }>()
     for (const session of props.sessions) {
         const key = normalizeDate(session.date)
-        counts.set(key, (counts.get(key) ?? 0) + 1)
+        const durationMinutes = parseInt(session.duration)
+        const current = stats.get(key) ?? { count: 0, duration: 0 }
+        stats.set(key, {
+            count: current.count + 1,
+            duration: current.duration + durationMinutes
+        })
     }
 
-    const data: { date: Date; count: number }[] = []
+    const data: { date: Date; count: number; duration: number }[] = []
     const cursor = new Date(start)
     while (cursor <= today) {
         const key = cursor.toISOString().slice(0, 10)
-        data.push({ date: new Date(cursor), count: counts.get(key) ?? 0 })
+        const entry = stats.get(key)
+        data.push({
+            date: new Date(cursor),
+            count: entry?.count ?? 0,
+            duration: entry?.duration ?? 0
+        })
         cursor.setDate(cursor.getDate() + 1)
     }
 
-    const weeks: { date: Date; count: number }[][] = []
+    const weeks: { date: Date; count: number; duration: number }[][] = []
     for (let i = 0; i < data.length; i += 7) {
         weeks.push(data.slice(i, i + 7))
     }
@@ -51,6 +62,7 @@ function intensity(count: number): string {
     if (count <= 6) return 'bg-primary-500/70'
     return 'bg-primary-500'
 }
+
 </script>
 
 <template>
@@ -76,7 +88,7 @@ function intensity(count: number): string {
                         class="w-3 h-3 rounded-sm transition-colors duration-200"
                         :class="intensity(day.count)"
                         v-tooltip.bottom="
-                            `${day.date.toLocaleDateString()}: ${day.count} ${t('common.items')}`
+                            `${day.date.toLocaleDateString()}: ${day.count} ${t('common.items')} • ${convertMinuteToHoursMinute(day.duration)}`
                         "
                     ></div>
                 </div>
