@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
+import { useUserStore } from '@/stores/user'
 import type {
     ICreateActivitySessionRequest,
     IActivity
@@ -28,6 +29,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const server_store = useServerStore()
+const user_store = useUserStore()
 const { getActivityById } = useActivityCRUD()
 const {
     activityQuery,
@@ -41,14 +43,11 @@ const {
 const title = ref('')
 const duration = ref<number>(60)
 const date = ref<Date>(new Date())
-const selectedParticipants = ref<IServerMember[]>([])
+const selected_participants = ref<IServerMember[]>([])
 const comment = ref('')
-const preSelectedActivity = ref<IActivity | null>(null)
+const pre_selected_activity = ref<IActivity | null>(null)
 
 // Activity selection state
-const isActivitySelected = computed(
-    () => !!selectedActivityId.value || !!props.preSelectedActivityId
-)
 const effectiveActivityId = computed(() => props.preSelectedActivityId || selectedActivityId.value)
 
 // Initialize
@@ -56,23 +55,28 @@ onMounted(async () => {
     if (props.preSelectedActivityId && server_store.getPublicId) {
         const res = await getActivityById(server_store.getPublicId, props.preSelectedActivityId)
         if (!res.error && res.data) {
-            preSelectedActivity.value = res.data
+            pre_selected_activity.value = res.data
         }
     }
 })
 
-const can_submit = computed(() => {
+const canSubmit = computed(() => {
     return !props.loading && !!effectiveActivityId.value && duration.value > 0 && !!date.value
 })
 
+const filteredMembers = computed(
+    () => server_store.getMembers?.filter((m) => m.user_email !== user_store.getEmail) || []
+)
+
+// Participants
 function onCreate(): void {
-    if (!can_submit.value || !effectiveActivityId.value) return
+    if (!canSubmit.value || !effectiveActivityId.value) return
 
     const payload: ICreateActivitySessionRequest = {
         title: title.value.trim() || undefined, // Optional, backend generates if missing
         duration: Number(duration.value),
         date: date.value.toISOString(),
-        participants: selectedParticipants.value.map((m) => m.public_id),
+        participants: selected_participants.value.map((m) => m.public_id),
         comment: comment.value.trim() || undefined
     }
 
@@ -108,7 +112,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         )
                     "
                     class="w-full"
-                    :pt="{ input: { style: background_style } }"
+                    :pt="{
+                        input: { class: 'bg-surface-100', style: background_style },
+                        overlay: { class: 'bg-surface-100', style: background_style },
+                    }"
+
                     @complete="searchActivities($event.query)"
                     @item-select="(e) => onActivityQueryChange(e.value.name)"
                 >
@@ -132,7 +140,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 </AutoComplete>
                 <InputText
                     v-else
-                    :model-value="preSelectedActivity?.name || ''"
+                    :model-value="pre_selected_activity?.name || ''"
                     disabled
                     class="w-full"
                     :pt="{ root: { style: background_style } }"
@@ -206,8 +214,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 }}</span>
             </div>
             <MultiSelect
-                v-model="selectedParticipants"
-                :options="server_store.getMembers || []"
+                v-model="selected_participants"
+                :options="filteredMembers"
                 option-label="nickname"
                 filter
                 display="chip"
@@ -215,7 +223,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     t('userInterface.serverSessionsView.addSessionModal.selectParticipants')
                 "
                 class="w-full"
-                :pt="{ root: { style: background_style }, label: { style: background_style } }"
+                :pt="{
+                    root: { class: 'bg-surface-100', style: background_style },
+                    overlay: { class: 'bg-surface-100', style: background_style },
+                    listContainer: { class: 'bg-surface-100', style: background_style }
+                }"
             >
                 <template #option="slotProps">
                     <div class="flex items-center gap-2">
@@ -253,7 +265,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
                 :label="t('common.next')"
-                :disabled="!can_submit"
+                :disabled="!canSubmit"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onCreate"
