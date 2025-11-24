@@ -146,3 +146,18 @@ export function formatNumber(value?: number | null, fractionDigits = 0): string 
         maximumFractionDigits: fractionDigits
     })
 }
+
+export function convertMinuteToHoursMinute(min: number): string {
+    if (min === 0) return "0m";
+    if (Number.isNaN(min)) return "0m";
+    return (
+      ((min - (min % 60)) / 60 > 0
+        ? ((min - (min % 60)) / 60).toFixed(0) + "h "
+        : "") +
+      (min % 60 === 0
+        ? ""
+        : min % 60 > 9
+          ? (min % 60).toFixed(0) + "m"
+          : "0" + (min % 60).toFixed(0) + "m")
+    );
+  }

@@ -2,6 +2,7 @@
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { convertMinuteToHoursMinute } from '@/utils'
 
 const props = defineProps<{
     stats: IActivityStatsDetails | null
@@ -13,28 +14,25 @@ const cards = computed(() => {
     if (!props.stats) return []
     return [
         {
-            label: t('userInterface.serverActivitiesView.card.duration'),
-            value: `${Math.round(props.stats.total_duration / 60)}h`,
-            description: t('userInterface.serverActivitiesView.card.avg_duration', {
-                value: `${Math.round(props.stats.avg_duration / 60)}m`
-            }),
+            label: t('userInterface.serverActivitiesView.card.avg_duration'),
+            value: convertMinuteToHoursMinute(props.stats.avg_duration),
             icon: 'pi pi-clock',
             gradient: 'bg-linear-to-br from-primary-500/40 via-primary-500/30 to-primary-500/20'
         },
         {
             label: t('userInterface.serverActivitiesView.card.popularity'),
             value: props.stats.popularity_score.toFixed(0),
-            description: t('userInterface.serverActivitiesView.card.sessions'),
             icon: 'pi pi-bolt',
             gradient: 'bg-linear-to-br from-amber-500/40 via-amber-500/30 to-amber-500/20'
         },
         {
-            label: t('userInterface.serverActivitiesView.card.total_participants'),
-            value: props.stats.total_participants.toLocaleString(),
-            description: '',
-            subvalue: '',
-            icon: 'pi pi-users',
-            gradient: 'bg-linear-to-br from-emerald-500/40 via-emerald-500/30 to-emerald-500/20'
+            label: t('userInterface.serverActivitiesView.card.likes'),
+            value: props.stats.total_likes.toLocaleString(),
+            description: t('userInterface.serverActivitiesView.card.avg_likes', {
+                value: props.stats.avg_likes_per_session.toFixed(1)
+            }),
+            icon: 'pi pi-heart-fill',
+            gradient: 'bg-linear-to-br from-red-500/40 via-red-500/30 to-red-500/20'
         }
     ]
 })
@@ -61,9 +59,6 @@ const cards = computed(() => {
             <div class="mt-3 text-3xl font-semibold text-surface-900">{{ card.value }}</div>
             <div class="mt-1 text-sm text-surface-800">
                 {{ card.description }}
-                <span v-if="card.subvalue" class="font-semibold text-surface-800 ml-1">
-                    {{ card.subvalue }}
-                </span>
             </div>
         </div>
     </div>

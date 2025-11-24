@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ITopContributor } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useI18n } from 'vue-i18n'
+import { convertMinuteToHoursMinute } from '@/utils'
 
 const props = defineProps<{
     contributors: ITopContributor[] | undefined
@@ -31,7 +32,7 @@ const { t } = useI18n()
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }} {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.sessions') }} ·
-                        {{ Math.round(member.total_duration / 60) }}h
+                        {{ convertMinuteToHoursMinute(member.total_duration) }}
                     </p>
                 </div>
                 <span class="text-xl">

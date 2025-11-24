@@ -318,7 +318,7 @@
                 "top_contributor": "Top participant",
                 "avg_duration": "Durée moy. {value}",
                 "likes": "Total des mentions j'aime",
-                "avg_likes": "Moyenne des mentions j'aime / session",
+                "avg_likes": "Moy. mentions j'aime / session {value}",
                 "unique_participants": "Participants uniques",
                 "total_participants": "Participants totaux",
                 "avg_participants": "Moyenne des participants / session",
