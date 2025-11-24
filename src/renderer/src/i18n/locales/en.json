@@ -297,7 +297,8 @@
                 "sessions": "sessions",
                 "minutes": "min",
                 "activityStep": "Activity",
-                "skillLevelsStep": "Skill levels"
+                "skillLevelsStep": "Skill levels",
+                "notPossibleWithType": "Not possible with boolean or date type"
             },
             "filters": {
                 "onlyMine": "Show only my activities",

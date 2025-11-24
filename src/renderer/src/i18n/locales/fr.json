@@ -300,7 +300,8 @@
                 "sessions": "sessions",
                 "minutes": "min",
                 "activityStep": "Activité",
-                "skillLevelsStep": "Niveaux de compétence"
+                "skillLevelsStep": "Niveaux de compétence",
+                "notPossibleWithType": "Impossible avec le type booléen ou date"
             },
             "filters": {
                 "onlyMine": "Afficher seulement mes éléments",
