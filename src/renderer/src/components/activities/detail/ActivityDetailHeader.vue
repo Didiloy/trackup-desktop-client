@@ -90,13 +90,21 @@ const summaryMetrics = computed(() => {
                     icon="pi pi-plus"
                     :label="t('userInterface.serverActivitiesView.createSession')"
                     size="small"
+                    :pt="{
+                        label: { class: 'text-surface-100' },
+                        icon: { class: 'text-surface-100' }
+                    }"
                     @click="emit('createSession')"
                 />
                 <Button
                     icon="pi pi-pencil"
                     :label="t('actions.edit')"
-                    severity="secondary"
+                    severity="help"
                     class="shadow"
+                    :pt="{
+                        label: { class: 'text-surface-100' },
+                        icon: { class: 'text-surface-100' }
+                    }"
                     @click="emit('edit')"
                 />
                 <Button
@@ -104,6 +112,10 @@ const summaryMetrics = computed(() => {
                     :label="t('actions.delete')"
                     severity="danger"
                     class="shadow"
+                    :pt="{
+                        label: { class: 'text-surface-100' },
+                        icon: { class: 'text-surface-100' }
+                    }"
                     @click="emit('delete')"
                 />
             </div>
