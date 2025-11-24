@@ -7,6 +7,7 @@ import ActivityPerformanceSection from '@/components/activities/detail/ActivityP
 import ActivityTopContributors from '@/components/activities/detail/ActivityTopContributors.vue'
 import ActivitySessionsTable from '@/components/activities/detail/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/activities/detail/ActivityGrowthComparison.vue'
+import ActivitySessionsHeatmap from '@/components/activities/detail/ActivitySessionsHeatmap.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
@@ -183,6 +184,7 @@ onMounted(async () => {
             <div class="flex items-center justify-between mb-4">
                 <p class="text-sm font-semibold text-surface-600">Sessions récentes</p>
             </div>
+            <ActivitySessionsHeatmap :sessions="sessions" class="mb-6" />
             <ActivitySessionsTable
                 :sessions="sessions"
                 :loading="sessionsLoading"

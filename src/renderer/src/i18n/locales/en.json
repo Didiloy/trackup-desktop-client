@@ -25,7 +25,18 @@
         "optional": "Optional",
         "none": "None",
         "items": "items",
-        "creator": "Creator"
+        "creator": "Creator",
+        "weekdays": {
+            "short": {
+                "sunday": "Sun",
+                "monday": "Mon",
+                "tuesday": "Tue",
+                "wednesday": "Wed",
+                "thursday": "Thu",
+                "friday": "Fri",
+                "saturday": "Sat"
+            }
+        }
     },
     "navigation": {
         "home": "Home",
@@ -219,10 +230,22 @@
             "title": "Server activities",
             "addActivity": "Add activity",
             "ActivityPerformanceSection": {
-                "sessions_timeline": "Sessions timeline",
-                "growth": "this month",
-                "popularity": "Popularity",
-                "skillLevels": "Skill levels"
+                "sessions_timeline": "Sessions over time",
+                "popularity": "Performance",
+                "growth": "Growth",
+                "skillLevels": "Skill level distribution",
+                "weekly_sessions": "Sessions this week",
+                "weekly_sessions_last_week": "vs last week",
+                "heatmap": "Heatmap",
+                "patterns": "Patterns",
+                "peak_day": "Peak day",
+                "peak_hour": "Peak hour",
+                "current_streak": "Current streak",
+                "longest_streak": "Longest streak",
+                "likes_per_session": "Likes per session",
+                "unique_participants": "Unique participants",
+                "days": "days",
+                "last_year": "Last 52 weeks"
             },
             "addActivityModal": {
                 "title": "Add an activity",

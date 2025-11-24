@@ -27,7 +27,18 @@
         "optional": "Optionnel",
         "none": "Aucun",
         "items": "éléments",
-        "creator": "Créateur"
+        "creator": "Créateur",
+        "weekdays": {
+            "short": {
+                "sunday": "Dim",
+                "monday": "Lun",
+                "tuesday": "Mar",
+                "wednesday": "Mer",
+                "thursday": "Jeu",
+                "friday": "Ven",
+                "saturday": "Sam"
+            }
+        }
     },
     "navigation": {
         "home": "Accueil",
@@ -222,10 +233,22 @@
             "title": "Activités du serveur",
             "addActivity": "Ajouter une activité",
             "ActivityPerformanceSection": {
-                "sessions_timeline": "Timeline des sessions",
-                "growth": "ce mois",
-                "popularity": "Popularité",
-                "skillLevels": "Niveaux de compétence"
+                "sessions_timeline": "Sessions dans le temps",
+                "growth": "Croissance",
+                "popularity": "Performance",
+                "skillLevels": "Répartition des niveaux",
+                "weekly_sessions": "Sessions cette semaine",
+                "weekly_sessions_last_week": "vs semaine dernière",
+                "heatmap": "Heatmap",
+                "patterns": "Patrons d'activité",
+                "peak_day": "Jour de pic",
+                "peak_hour": "Heure de pic",
+                "current_streak": "Série en cours",
+                "longest_streak": "Plus longue série",
+                "likes_per_session": "Mentions j'aime / session",
+                "unique_participants": "Participants uniques",
+                "days": "jours",
+                "last_year": "52 dernières semaines"
             },
             "addActivityModal": {
                 "title": "Ajouter une activité",

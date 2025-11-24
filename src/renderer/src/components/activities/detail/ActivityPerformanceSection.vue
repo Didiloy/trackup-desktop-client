@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import type {
-    IStatsTimeline,
+    IActivityGrowthTrend,
     IActivityTimePatterns
-} from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
-import type { IActivityGrowthTrend } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+} from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { computed } from 'vue'
 import ActivitySparkline from '@/components/activities/ActivitySparkline.vue'
+import ActivityPatternsSummary from './ActivityPatternsSummary.vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
@@ -35,7 +36,7 @@ const skillDistribution = computed(() => {
     return props.skillLevels.map((lvl) => ({
         name: lvl.name,
         color: lvl.color || '#64748b',
-        ratio: ((lvl.display_order ?? 1) / Math.max(maxOrder, 1)) * 100
+        ratio: ((lvl.display_order ?? 1) / Math.max(maxOrder, 1)) * 100 //TODO CHANGER CECI PAR UN VRAI RATIO
     }))
 })
 </script>
@@ -75,12 +76,12 @@ const skillDistribution = computed(() => {
                     </p>
                 </div>
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">Weekly sessions</p>
+                    <p class="text-xs text-surface-500">{{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions') }}</p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ props.growth?.sessions_this_week ?? '—' }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        vs {{ props.growth?.sessions_last_week ?? '—' }}
+                        {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions_last_week') }} {{ props.growth?.sessions_last_week ?? '—' }}
                     </p>
                 </div>
             </div>
@@ -97,7 +98,8 @@ const skillDistribution = computed(() => {
                         <span class="text-xs text-surface-500 w-20 truncate" v-tooltip.top="lvl.name">{{ lvl.name }}</span>
                         <div class="flex-1 h-2 rounded-full bg-surface-200 overflow-hidden">
                             <div
-                                class="h-full rounded-full transition-all duration-300"
+                            v-tooltip.top="lvl.ratio + '%'"
+                                class="h-full rounded-full transition-all duration-300 "
                                 :style="{ width: `${lvl.ratio}%`, background: lvl.color }"
                             ></div>
                         </div>
@@ -109,18 +111,7 @@ const skillDistribution = computed(() => {
             </div>
         </div>
 
-        <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
-            <p class="text-sm font-semibold text-surface-600 mb-4">Heatmap</p>
-            <div class="grid grid-cols-7 gap-1" v-if="patterns">
-                <div
-                    v-for="hour in 35"
-                    :key="hour"
-                    class="h-6 rounded-md"
-                    :class="'bg-primary-500/' + ((hour % 5) + 2) * 10"
-                ></div>
-            </div>
-            <div v-else class="text-xs text-surface-400">{{ t('common.none') }}</div>
-        </div>
+        <ActivityPatternsSummary :patterns="patterns" />
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">
