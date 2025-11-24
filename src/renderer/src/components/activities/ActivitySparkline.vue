@@ -1,110 +1,99 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+import { VueUiXy } from 'vue-data-ui'
+import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
+import 'vue-data-ui/style.css'
+import { useI18n } from 'vue-i18n'
 
 const props = withDefaults(
     defineProps<{
-        data?: number[]
+        data?: IStatsTimeline[]
         height?: number
     }>(),
     {
         data: () => [],
-        height: 48
+        height: 100
     }
 )
 
-const viewBoxHeight = computed(() => props.height)
-const viewBoxWidth = computed(() => (props.data.length > 1 ? props.data.length - 1 : 1) * 10)
+const { t } = useI18n()
 
-// Helper to calculate control points for smooth bezier curves
-const getControlPoint = (
-    current: number[],
-    previous: number[],
-    next: number[],
-    reverse: boolean = false
-) => {
-    const p = previous || current
-    const n = next || current
-    const smoothing = 0.2
-    const o = line(p, n)
-    const angle = o.angle + (reverse ? Math.PI : 0)
-    const length = o.length * smoothing
-    const x = current[0] + Math.cos(angle) * length
-    const y = current[1] + Math.sin(angle) * length
-    return [x, y]
-}
-
-const line = (pointA: number[], pointB: number[]) => {
-    const lengthX = pointB[0] - pointA[0]
-    const lengthY = pointB[1] - pointA[1]
-    return {
-        length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
-        angle: Math.atan2(lengthY, lengthX)
-    }
-}
-
-const points = computed(() => {
-    if (!props.data.length) return []
-    const max = Math.max(...props.data)
-    const min = Math.min(...props.data)
-    const range = max - min || 1
-
-    return props.data.map((value, index) => {
-        const x = (index / Math.max(props.data.length - 1, 1)) * viewBoxWidth.value
-        const y = viewBoxHeight.value - ((value - min) / range) * viewBoxHeight.value
-        return [x, y]
+const sortedData = computed<IStatsTimeline[]>(() => {
+    const data = props.data ?? []
+    return [...data].sort((a, b) => {
+        const dateA = new Date(a.period).getTime()
+        const dateB = new Date(b.period).getTime()
+        return dateA - dateB
     })
 })
 
-const pathData = computed(() => {
-    if (points.value.length === 0) return ''
-    if (points.value.length === 1) return `M${points.value[0][0]},${points.value[0][1]}`
+const periods = computed(() => sortedData.value.map((entry) => entry.period))
 
-    const p = points.value
-    let d = `M${p[0][0]},${p[0][1]}`
-
-    for (let i = 0; i < p.length - 1; i++) {
-        const cp1 = getControlPoint(p[i], p[i - 1], p[i + 1])
-        const cp2 = getControlPoint(p[i + 1], p[i], p[i + 2], true)
-        d += ` C${cp1[0]},${cp1[1]} ${cp2[0]},${cp2[1]} ${p[i + 1][0]},${p[i + 1][1]}`
+const dataset = computed<VueUiXyDatasetItem[]>(() => [
+    {
+        name: t('userInterface.serverActivitiesView.card.sessions'),
+        type: 'line',
+        smooth: true,
+        useArea: true,
+        color: '#4a84ff',
+        series: sortedData.value.map((entry) => entry.sessions_count ?? 0)
     }
-    return d
-})
+])
 
-const fillPathData = computed(() => {
-    if (!pathData.value) return ''
-    return `${pathData.value} L${viewBoxWidth.value},${viewBoxHeight.value} L0,${viewBoxHeight.value} Z`
-})
+const xyConfig = computed<VueUiXyConfig>(() => ({
+    responsive: true,
+    chart: {
+        backgroundColor: 'transparent',
+        height: props.height,
+        padding: { top: 0, right: 0, bottom: 0, left: 0 },
+        legend: { show: false },
+        labels: { fontSize: 0 },
+        grid: {
+            showHorizontalLines: false,
+            showVerticalLines: false,
+            stroke: 'transparent',
+            labels: {
+                show: false,
+                xAxisLabels: {
+                    show: false,
+                    values: periods.value
+                },
+                yAxis: {
+                    showBaseline: false,
+                    showCrosshairs: false
+                },
+                xAxis: { showBaseline: false, showCrosshairs: false }
+            }
+        },
+        tooltip: {
+            show: true,
+        },
+        title: { show: false },
+        userOptions: {
+            show: false
+        },
+        bar: {
+            borderRadius: 4
+        }
+    },
+    line: {
+        useGradient: true,
+        strokeWidth: 2,
+        dot: {
+            useSerieColor: true,
+            hideAboveMaxSerieLength: 1e3
+        }
+    }
+}))
+
+const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <svg
-        v-if="data.length"
-        :viewBox="`0 -2 ${viewBoxWidth} ${viewBoxHeight}`"
-        preserveAspectRatio="none"
-        class="w-full h-18"
-    >
-        <defs>
-            <linearGradient id="sparklineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4a84ff" />
-                <stop offset="100%" stop-color="#d46eff" />
-            </linearGradient>
-            <linearGradient id="sparklineFill" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4a84ff" stop-opacity="1" />
-                <stop offset="100%" stop-color="#d46eff" stop-opacity="1" />
-            </linearGradient>
-        </defs>
-        <!-- Fill area -->
-        <path :d="fillPathData" fill="url(#sparklineFill)" stroke="none" />
-        <!-- Line -->
-        <path
-            :d="pathData"
-            fill="none"
-            stroke="url(#sparklineGradient)"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-    </svg>
+    <div v-if="hasData" :style="{ minHeight: `${height}px`, height: `${height}px` }">
+        <VueUiXy :dataset="dataset" :config="xyConfig" />
+    </div>
     <div
         v-else
         class="w-full h-16 rounded-md bg-surface-100 flex items-center justify-center text-xs text-surface-500"

@@ -251,7 +251,7 @@
             "evolution30Days": "Évolution 30 jours",
             "ActivityPerformanceSection": {
                 "sessions": "sessions",
-                "sessions_timeline": "Sessions dans le temps",
+                "sessions_timeline": "Évolution des sessions sur les dernières semaines",
                 "growth": "Croissance",
                 "popularity": "Performance",
                 "skillLevels": "Répartition des niveaux",
