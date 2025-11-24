@@ -4,6 +4,7 @@ import type { IServer } from '@shared/contracts/interfaces/entities/server.inter
 import { useUserCRUD } from '@/composables/users/useUserCRUD'
 import { useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import { useServerNavigation } from '@/composables/servers/useServerNavigation'
 
 interface UseServerListReturn {
     servers: Ref<IUserServer[]>
@@ -18,8 +19,7 @@ export function useServerList(): UseServerListReturn {
     const isLoading = ref(false)
     const error = ref<string | null>(null)
     const { getMyServers } = useUserCRUD()
-    const router = useRouter()
-    const server_store = useServerStore()
+    const { navigateToServer } = useServerNavigation(servers)
 
     async function fetchServers(): Promise<void> {
         isLoading.value = true
@@ -39,11 +39,7 @@ export function useServerList(): UseServerListReturn {
     async function handleServerCreated(server: IServer): Promise<void> {
         await fetchServers()
         if (server?.public_id) {
-            server_store.setServer(server)
-            await router.push({
-                name: `ServerOverview`,
-                params: { id: server.public_id }
-            })
+            await navigateToServer(server.public_id)
         }
     }
 
