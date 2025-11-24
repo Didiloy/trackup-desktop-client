@@ -59,7 +59,9 @@ function intensity(count: number): string {
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.heatmap') }}
             </p>
-            <p class="text-xs text-surface-500">{{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.last_year') }}</p>
+            <p class="text-xs text-surface-500">
+                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.last_year') }}
+            </p>
         </div>
         <div class="overflow-x-auto">
             <div class="flex gap-1">
@@ -73,12 +75,12 @@ function intensity(count: number): string {
                         :key="day.date.toISOString()"
                         class="w-3 h-3 rounded-sm transition-colors duration-200"
                         :class="intensity(day.count)"
-                        v-tooltip.bottom="`${day.date.toLocaleDateString()}: ${day.count} ${t('common.items')}`"
+                        v-tooltip.bottom="
+                            `${day.date.toLocaleDateString()}: ${day.count} ${t('common.items')}`
+                        "
                     ></div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
-

@@ -4,7 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
-import type { ICreateActivitySessionRequest, IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    ICreateActivitySessionRequest,
+    IActivity
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 
 const props = withDefaults(
@@ -100,7 +103,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     :suggestions="activitySuggestions"
                     option-label="name"
                     :placeholder="
-                        t('userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder')
+                        t(
+                            'userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder'
+                        )
                     "
                     class="w-full"
                     :pt="{ input: { style: background_style } }"
@@ -178,7 +183,8 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 <div class="flex items-center gap-2">
                     <i class="pi pi-clock text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700"
-                        >{{ t('common.duration') }} ({{ t('common.minutes_short') }}) <span class="text-red-500">*</span></span
+                        >{{ t('common.duration') }} ({{ t('common.minutes_short') }})
+                        <span class="text-red-500">*</span></span
                     >
                 </div>
                 <InputNumber

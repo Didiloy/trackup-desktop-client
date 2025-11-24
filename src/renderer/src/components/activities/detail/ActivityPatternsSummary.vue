@@ -42,19 +42,27 @@ const cards = computed(() => {
             value: formatHour(p?.peak_hour)
         },
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.current_streak'),
+            label: t(
+                'userInterface.serverActivitiesView.ActivityPerformanceSection.current_streak'
+            ),
             value: `${p?.streak_current ?? 0} ${t('userInterface.serverActivitiesView.ActivityPerformanceSection.days')}`
         },
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.longest_streak'),
+            label: t(
+                'userInterface.serverActivitiesView.ActivityPerformanceSection.longest_streak'
+            ),
             value: `${p?.streak_longest ?? 0} ${t('userInterface.serverActivitiesView.ActivityPerformanceSection.days')}`
         },
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.likes_per_session'),
+            label: t(
+                'userInterface.serverActivitiesView.ActivityPerformanceSection.likes_per_session'
+            ),
             value: (p?.likes_per_session ?? 0).toFixed(1)
         },
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.unique_participants'),
+            label: t(
+                'userInterface.serverActivitiesView.ActivityPerformanceSection.unique_participants'
+            ),
             value: (p?.unique_participants ?? 0).toLocaleString()
         }
     ]
@@ -78,5 +86,3 @@ const cards = computed(() => {
         </div>
     </div>
 </template>
-
-

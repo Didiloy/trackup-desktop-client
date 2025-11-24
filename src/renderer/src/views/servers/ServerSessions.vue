@@ -9,12 +9,11 @@ import { useServerStore } from '@/stores/server'
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
+import { useDebounceFn } from '@vueuse/core'
 
 const i18n = useI18n()
 const { listSessions, likeSession, unlikeSession } = useSessionCRUD()
 const server_store = useServerStore()
-
-const showCreateSessionDialog = ref(false)
 
 // Activity search composable
 const {
@@ -29,6 +28,7 @@ const filter_endDate = ref<Date | undefined>(undefined)
 const filter_minDuration = ref<number | undefined>(undefined)
 const filter_maxDuration = ref<number | undefined>(undefined)
 const filter_likedByMe = ref<boolean | undefined>(undefined)
+const show_create_session_dialog = ref(false)
 
 const mock_sessions = ref<ISessionListItem[]>([
     {
@@ -208,10 +208,12 @@ const {
     ]
 })
 
-async function onLikeSession(sessionId: string): Promise<void> {
-    if (!server_store.getPublicId) return
+// Debounced like/unlike handlers to prevent API spam
+const onLikeSession = useDebounceFn(async (sessionId: string): Promise<void> => {
+    const serverId = server_store.getPublicId
+    if (!serverId) return
 
-    const res = await likeSession(server_store.getPublicId, sessionId)
+    const res = await likeSession(serverId, sessionId)
     if (!res.error) {
         // Update the local session to reflect the like
         const session = sessions.value.find((s) => s.public_id === sessionId)
@@ -220,12 +222,13 @@ async function onLikeSession(sessionId: string): Promise<void> {
             session.likes_count += 1
         }
     }
-}
+}, 500)
 
-async function onUnlikeSession(sessionId: string): Promise<void> {
-    if (!server_store.getPublicId) return
+const onUnlikeSession = useDebounceFn(async (sessionId: string): Promise<void> => {
+    const serverId = server_store.getPublicId
+    if (!serverId) return
 
-    const res = await unlikeSession(server_store.getPublicId, sessionId)
+    const res = await unlikeSession(serverId, sessionId)
     if (!res.error) {
         // Update the local session to reflect the unlike
         const session = sessions.value.find((s) => s.public_id === sessionId)
@@ -234,7 +237,7 @@ async function onUnlikeSession(sessionId: string): Promise<void> {
             session.likes_count -= 1
         }
     }
-}
+}, 500)
 
 onMounted(() => {
     load()
@@ -252,7 +255,7 @@ onMounted(() => {
                     icon="pi pi-plus"
                     :label="i18n.t('userInterface.serverSessionsView.addSessionModal.title')"
                     size="small"
-                    @click="showCreateSessionDialog = true"
+                    @click="show_create_session_dialog = true"
                 />
             </div>
         </div>
@@ -286,15 +289,14 @@ onMounted(() => {
 
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
             <SessionCardGrid
-                :sessions="mock_sessions"
+                :sessions="sessions"
                 :loading="loading"
                 @like="onLikeSession"
                 @unlike="onUnlikeSession"
                 @load-more="loadMore"
             />
         </div>
-
-        <SessionCreateDialog v-model="showCreateSessionDialog" @created="load" />
+        <SessionCreateDialog v-model="show_create_session_dialog" @created="load" />
     </div>
 </template>
 

@@ -46,7 +46,11 @@ const skillDistribution = computed(() => {
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.sessions_timeline') }}
+                    {{
+                        t(
+                            'userInterface.serverActivitiesView.ActivityPerformanceSection.sessions_timeline'
+                        )
+                    }}
                 </p>
                 <span
                     class="text-xs px-3 py-1 rounded-full"
@@ -72,22 +76,41 @@ const skillDistribution = computed(() => {
                         {{ props.growth?.trend ?? '—' }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
+                        {{
+                            t(
+                                'userInterface.serverActivitiesView.ActivityPerformanceSection.growth'
+                            )
+                        }}
                     </p>
                 </div>
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions') }}</p>
+                    <p class="text-xs text-surface-500">
+                        {{
+                            t(
+                                'userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions'
+                            )
+                        }}
+                    </p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ props.growth?.sessions_this_week ?? '—' }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions_last_week') }} {{ props.growth?.sessions_last_week ?? '—' }}
+                        {{
+                            t(
+                                'userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions_last_week'
+                            )
+                        }}
+                        {{ props.growth?.sessions_last_week ?? '—' }}
                     </p>
                 </div>
             </div>
             <div class="mt-6">
                 <p class="text-xs text-surface-500 mb-2">
-                    {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.skillLevels') }}
+                    {{
+                        t(
+                            'userInterface.serverActivitiesView.ActivityPerformanceSection.skillLevels'
+                        )
+                    }}
                 </p>
                 <div class="space-y-2">
                     <div
@@ -102,8 +125,8 @@ const skillDistribution = computed(() => {
                         >
                         <div class="flex-1 h-2 rounded-full bg-surface-200 overflow-hidden">
                             <div
-                            v-tooltip.top="lvl.ratio + '%'"
-                                class="h-full rounded-full transition-all duration-300 "
+                                v-tooltip.top="lvl.ratio + '%'"
+                                class="h-full rounded-full transition-all duration-300"
                                 :style="{ width: `${lvl.ratio}%`, background: lvl.color }"
                             ></div>
                         </div>
