@@ -4,7 +4,6 @@ import SessionFilterBar from '@/components/sessions/SessionFilterBar.vue'
 import SessionCardGrid from '@/components/sessions/SessionCardGrid.vue'
 import { onMounted, ref } from 'vue'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
-import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useServerStore } from '@/stores/server'
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
@@ -15,14 +14,10 @@ const i18n = useI18n()
 const { listSessions, likeSession, unlikeSession } = useSessionCRUD()
 const server_store = useServerStore()
 
-// Activity search composable
-const {
-    activityQuery: filter_activityQuery,
-    activitySuggestions: filter_activitySuggestions,
-    selectedActivityId: filter_selectedActivityId,
-    searchActivities,
-    onActivityQueryChange
-} = useActivitySearch()
+// Activity search state
+const filter_activityQuery = ref('')
+const filter_selectedActivityId = ref<string | undefined>(undefined)
+
 const filter_startDate = ref<Date | undefined>(undefined)
 const filter_endDate = ref<Date | undefined>(undefined)
 const filter_minDuration = ref<number | undefined>(undefined)
@@ -198,7 +193,6 @@ const {
     },
     limit: 20,
     filters: [
-        filter_activityQuery,
         filter_selectedActivityId,
         filter_startDate,
         filter_endDate,
@@ -263,15 +257,14 @@ onMounted(() => {
         <div class="w-full px-2 pb-2">
             <SessionFilterBar
                 :activity-query="filter_activityQuery"
-                :activity-suggestions="filter_activitySuggestions"
                 :start-date="filter_startDate"
                 :end-date="filter_endDate"
                 :min-duration="filter_minDuration"
                 :max-duration="filter_maxDuration"
                 :liked-by-me="filter_likedByMe"
                 :count="sessions.length"
-                @update:activity-query="onActivityQueryChange"
-                @search-activity="searchActivities"
+                @update:activity-query="(v) => (filter_activityQuery = v)"
+                @select-activity="(a) => (filter_selectedActivityId = a?.public_id)"
                 @update:start-date="(v) => (filter_startDate = v)"
                 @update:end-date="(v) => (filter_endDate = v)"
                 @update:min-duration="(v) => (filter_minDuration = v)"

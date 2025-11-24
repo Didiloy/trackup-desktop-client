@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useI18n } from 'vue-i18n'
+import { convertMinuteToHoursMinute } from '@/utils'
 
 interface Props {
     session: ISessionListItem
@@ -15,17 +16,6 @@ interface Emits {
 defineProps<Props>()
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
-
-function formatDuration(duration: string): string {
-    const seconds = parseInt(duration)
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-
-    if (hours > 0) {
-        return `${hours}h ${minutes}m`
-    }
-    return `${minutes}m`
-}
 
 function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString()
@@ -95,7 +85,9 @@ function getParticipantTooltip(
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2 text-surface-700 font-medium z-10">
                     <i class="pi pi-clock text-primary-500"></i>
-                    <span>{{ formatDuration(session.duration) }}</span>
+                    <span>{{
+                        convertMinuteToHoursMinute(session.duration as unknown as number)
+                    }}</span>
                 </div>
 
                 <div class="flex items-center gap-2 text-surface-600 font-medium z-10">

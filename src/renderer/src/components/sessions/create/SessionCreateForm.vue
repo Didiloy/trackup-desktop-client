@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
@@ -10,6 +9,7 @@ import type {
     IActivity
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
+import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -32,13 +32,6 @@ const { t } = useI18n()
 const server_store = useServerStore()
 const user_store = useUserStore()
 const { getActivityById } = useActivityCRUD()
-const {
-    activityQuery,
-    activitySuggestions,
-    selectedActivityId,
-    searchActivities,
-    onActivityQueryChange
-} = useActivitySearch()
 
 // Form fields
 const title = ref('')
@@ -47,9 +40,14 @@ const date = ref<Date>(new Date())
 const selected_participants = ref<IServerMember[]>([])
 const comment = ref('')
 const pre_selected_activity = ref<IActivity | null>(null)
+const selected_activity = ref<IActivity | null>(null)
+const activity_name = ref('')
 
 // Activity selection state
-const effectiveActivityId = computed(() => props.preSelectedActivityId || selectedActivityId.value)
+const effectiveActivityId = computed(() => {
+    if (props.preSelectedActivityId) return props.preSelectedActivityId
+    return selected_activity.value?.public_id
+})
 
 watch(effectiveActivityId, (newId) => {
     emit('update:activityId', newId || null)
@@ -61,6 +59,8 @@ onMounted(async () => {
         const res = await getActivityById(server_store.getPublicId, props.preSelectedActivityId)
         if (!res.error && res.data) {
             pre_selected_activity.value = res.data
+            selected_activity.value = res.data
+            activity_name.value = res.data.name
         }
     }
     // Emit initial value if present
@@ -110,42 +110,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         >{{ t('common.activity') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <AutoComplete
+                <ActivityAutocomplete
                     v-if="!props.preSelectedActivityId"
-                    v-model="activityQuery"
-                    :suggestions="activitySuggestions"
-                    option-label="name"
-                    :placeholder="
-                        t(
-                            'userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder'
-                        )
-                    "
-                    class="w-full"
-                    :pt="{
-                        input: { class: 'bg-surface-100', style: background_style },
-                        overlay: { class: 'bg-surface-100', style: background_style }
-                    }"
-                    @complete="searchActivities($event.query)"
-                    @item-select="(e) => onActivityQueryChange(e.value.name)"
-                >
-                    <template #option="slotProps">
-                        <div class="flex items-center gap-2">
-                            <img
-                                v-if="slotProps.option.logo"
-                                :src="slotProps.option.logo"
-                                class="w-6 h-6 rounded object-cover"
-                                alt="logo"
-                            />
-                            <div
-                                v-else
-                                class="w-6 h-6 rounded bg-surface-200 flex items-center justify-center text-xs"
-                            >
-                                {{ slotProps.option.name.charAt(0).toUpperCase() }}
-                            </div>
-                            <span>{{ slotProps.option.name }}</span>
-                        </div>
-                    </template>
-                </AutoComplete>
+                    v-model="activity_name"
+                    :initial-activity="pre_selected_activity"
+                    size="large"
+                    @select="(a) => (selected_activity = a)"
+                />
                 <InputText
                     v-else
                     :model-value="pre_selected_activity?.name || ''"

@@ -3,10 +3,11 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
+import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
+
 interface Props {
     count?: number
     activityQuery?: string
-    activitySuggestions?: IActivity[]
     startDate?: Date
     endDate?: Date
     minDuration?: number
@@ -16,7 +17,7 @@ interface Props {
 
 interface Emits {
     (e: 'update:activityQuery', value: string): void
-    (e: 'search-activity', query: string): void
+    (e: 'select-activity', activity: IActivity | null): void
     (e: 'update:startDate', value: Date | undefined): void
     (e: 'update:endDate', value: Date | undefined): void
     (e: 'update:minDuration', value: number | undefined): void
@@ -59,15 +60,15 @@ watch(
     }
 )
 
-function onActivityQueryChange(value: string | IActivity): void {
-    const query = typeof value === 'string' ? value : value.name
-    localActivityQuery.value = query
-    emit('update:activityQuery', query)
+function onActivityQueryChange(value: string): void {
+    localActivityQuery.value = value
+    emit('update:activityQuery', value)
     emit('change')
 }
 
-function searchActivities(event: { query: string }): void {
-    emit('search-activity', event.query)
+function onActivitySelect(activity: IActivity | null): void {
+    emit('select-activity', activity)
+    emit('change')
 }
 
 function onStartDateChange(value: Date | Date[] | (Date | null)[] | null | undefined): void {
@@ -104,6 +105,7 @@ function clearFilters(): void {
     localLikedByMe.value = false
 
     emit('update:activityQuery', '')
+    emit('select-activity', null)
     emit('update:startDate', undefined)
     emit('update:endDate', undefined)
     emit('update:minDuration', undefined)
@@ -120,15 +122,15 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         <!-- Activity Search -->
         <div class="filter-group">
             <i class="pi pi-search text-surface-800"></i>
-            <AutoComplete
+            <ActivityAutocomplete
                 :model-value="localActivityQuery"
-                :suggestions="activitySuggestions"
-                option-label="name"
-                placeholder="Search activity..."
-                size="small"
-                :pt="{ root: { style: background_style } }"
+                :placeholder="
+                    t('userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder')
+                "
+                class="w-full"
+                :size="'small'"
                 @update:model-value="onActivityQueryChange"
-                @complete="searchActivities"
+                @select="onActivitySelect"
             />
         </div>
 

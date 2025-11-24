@@ -60,7 +60,7 @@ async function copyInvite(): Promise<void> {
             </div>
             <ServersList />
         </div>
-        <TransitionWrapper name="fade" >
+        <TransitionWrapper name="fade">
             <div v-if="hasServerActions" class="flex-1 h-full">
                 <div
                     class="w-full h-full bg-surface-100 rounded-l-2xl overflow-hidden flex flex-col"
