@@ -8,6 +8,7 @@
             "refresh": "Échec du rafraîchissement"
         },
         "success": "Succès",
+        "title": "Titre",
         "name": "Nom",
         "description": "Description",
         "type": "Type",
@@ -38,7 +39,16 @@
                 "friday": "Ven",
                 "saturday": "Sam"
             }
-        }
+        },
+        "yes": "Oui",
+        "no": "Non",
+        "minutes_short": "min",
+        "activity": "Activité",
+        "participants": "Participants",
+        "comment": "Commentaire",
+        "date": "Date",
+        "duration": "Durée",
+        "finish": "Terminer"
     },
     "navigation": {
         "home": "Accueil",
@@ -138,7 +148,11 @@
             "refresh": "Échec du rafraîchissement",
             "save": "Échec de l'enregistrement",
             "emptyFields": "Champs vides",
-            "copyClipBoard": "Échec de la copie dans le presse-papiers"
+            "copyClipBoard": "Échec de la copie dans le presse-papiers",
+            "noServerSelected": "Aucun serveur sélectionné",
+            "createSessionFailed": "Échec de la création de session",
+            "addEnumsFailed": "Échec de l'ajout des sélections",
+            "addMetadataFailed": "Échec de l'ajout des métadonnées"
         },
         "warning": {
             "title": "Avertissement",
@@ -333,6 +347,23 @@
                     "dark": "Sombre",
                     "system": "Système"
                 }
+            }
+        },
+        "serverSessionsView": {
+            "addSessionModal": {
+                "title": "Créer une session",
+                "infoStep": "Infos Session",
+                "enumsStep": "Sélections",
+                "metadataStep": "Métadonnées",
+                "infoDescription": "Entrez les détails de la session",
+                "enumsDescription": "Sélectionnez les options",
+                "metadataDescription": "Ajoutez des données supplémentaires",
+                "titlePlaceholder": "Titre optionnel",
+                "selectParticipants": "Sélectionner les participants",
+                "commentPlaceholder": "Commentaire...",
+                "noEnums": "Aucune sélection disponible",
+                "noMetadata": "Aucune métadonnée disponible",
+                "searchActivityPlaceholder": "Rechercher une activité..."
             }
         }
     }

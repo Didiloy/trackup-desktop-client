@@ -81,7 +81,6 @@ const summaryMetrics = computed(() => {
                 >
                     {{ activity?.description || t('common.description') }}
                 </p>
-
             </div>
 
             <div class="flex flex-wrap gap-3">

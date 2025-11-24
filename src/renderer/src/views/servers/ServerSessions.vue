@@ -8,10 +8,13 @@ import { useActivitySearch } from '@/composables/activities/useActivitySearch'
 import { useServerStore } from '@/stores/server'
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
+import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 
 const i18n = useI18n()
 const { listSessions, likeSession, unlikeSession } = useSessionCRUD()
 const server_store = useServerStore()
+
+const showCreateSessionDialog = ref(false)
 
 // Activity search composable
 const {
@@ -241,9 +244,17 @@ onMounted(() => {
 <template>
     <div class="flex flex-col items-center justify-start w-full h-full">
         <div class="flex flex-row items-center justify-between w-full h-12 p-2">
-            <h2 class="text-2xl font-bold">
-                {{ i18n.t('userInterface.serverSessionsView.title') || 'Sessions' }}
-            </h2>
+            <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-bold">
+                    {{ i18n.t('userInterface.serverSessionsView.title') || 'Sessions' }}
+                </h2>
+                <Button
+                    icon="pi pi-plus"
+                    :label="i18n.t('userInterface.serverSessionsView.addSessionModal.title')"
+                    size="small"
+                    @click="showCreateSessionDialog = true"
+                />
+            </div>
         </div>
 
         <div class="w-full px-2 pb-2">
@@ -282,6 +293,8 @@ onMounted(() => {
                 @load-more="loadMore"
             />
         </div>
+
+        <SessionCreateDialog v-model="showCreateSessionDialog" @created="load" />
     </div>
 </template>
 

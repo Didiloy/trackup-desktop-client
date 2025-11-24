@@ -95,7 +95,11 @@ const skillDistribution = computed(() => {
                         :key="lvl.name"
                         class="flex items-center gap-3"
                     >
-                        <span class="text-xs text-surface-500 w-20 truncate" v-tooltip.top="lvl.name">{{ lvl.name }}</span>
+                        <span
+                            class="text-xs text-surface-500 w-20 truncate"
+                            v-tooltip.top="lvl.name"
+                            >{{ lvl.name }}</span
+                        >
                         <div class="flex-1 h-2 rounded-full bg-surface-200 overflow-hidden">
                             <div
                             v-tooltip.top="lvl.ratio + '%'"
