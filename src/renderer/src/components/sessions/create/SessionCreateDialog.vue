@@ -133,12 +133,23 @@ async function checkActivityMetadata(activityId: string): Promise<void> {
     }
 }
 
+// Watch for dialog open/close
 watch(
     () => props.modelValue,
     () => {
         resetState()
     }
 )
+
+// When activity changes, check for metadata definitions
+async function handleActivityChange(activityId: string | null): Promise<void> {
+    if (activityId) {
+        await checkActivityMetadata(activityId)
+    } else {
+        has_metadata.value = false
+        metadata_definitions.value = []
+    }
+}
 
 // Step 1: Create Session
 async function handleCreateSession(payload: {
@@ -161,8 +172,6 @@ async function handleCreateSession(payload: {
         created_session.value = res.data
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
 
-        // Check metadata availability for this activity
-        await checkActivityMetadata(res.data.activity.public_id)
 
         // Advance to next step
         if (has_enums.value) {
@@ -241,6 +250,7 @@ function handleSkipMetadata(): void {
     finishWizard()
 }
 
+// Finish Wizard
 function finishWizard(): void {
     if (created_session.value) {
         emit('created', created_session.value)
@@ -252,7 +262,7 @@ function finishWizard(): void {
 <template>
     <MultiStepsDialog
         :model-value="modelValue"
-        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-[83vh]'"
+        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('userInterface.serverSessionsView.addSessionModal.title') || 'Create Session'"
         :subtitle="subtitle"
@@ -267,6 +277,7 @@ function finishWizard(): void {
             :pre-selected-activity-id="props.preSelectedActivityId"
             @create="handleCreateSession"
             @cancel="close"
+            @update:activity-id="handleActivityChange"
         />
 
         <SessionEnumsForm
