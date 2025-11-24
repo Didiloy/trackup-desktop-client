@@ -117,20 +117,8 @@ const skillDistribution = computed(() => {
             <p class="text-sm font-semibold text-surface-600 mb-4">
                 {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
             </p>
-            <div class="text-5xl font-bold text-surface-900">
+            <div class="text-5xl font-bold" :class="growthBadge.positive ? 'text-emerald-600' : 'text-red-600'">
                 {{ growthBadge.text }}
-            </div>
-            <p class="text-xs text-surface-500 mt-1">
-                {{
-                    growthBadge.positive
-                        ? 'En hausse par rapport à la période précédente'
-                        : 'En baisse par rapport à la période précédente'
-                }}
-            </p>
-            <div class="mt-6">
-                <div
-                    class="h-24 w-full bg-linear-to-r from-emerald-200 to-emerald-500 rounded-2xl shadow-inner"
-                ></div>
             </div>
         </div>
     </div>

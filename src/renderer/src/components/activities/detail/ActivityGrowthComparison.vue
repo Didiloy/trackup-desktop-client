@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { IActivityGrowthTrend } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
     growth?: IActivityGrowthTrend | null
 }>()
+
+const { t } = useI18n()
 
 const statusText = computed(() => {
     const value = props.growth?.growth_percent ?? 0
@@ -16,7 +19,9 @@ const statusText = computed(() => {
     <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs uppercase text-surface-500 font-semibold">Évolution 30 jours</p>
+                <p class="text-xs uppercase text-surface-500 font-semibold">
+                    {{ t('userInterface.serverActivitiesView.evolution30Days') }}
+                </p>
                 <p class="text-4xl font-bold text-surface-900">
                     {{ props.growth?.growth_percent?.toFixed(1) ?? '0' }}%
                 </p>

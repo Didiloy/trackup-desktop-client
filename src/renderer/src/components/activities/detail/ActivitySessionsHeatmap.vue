@@ -54,7 +54,7 @@ function intensity(count: number): string {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.heatmap') }}

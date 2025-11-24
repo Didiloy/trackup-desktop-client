@@ -26,9 +26,23 @@ function onPage(event: any): void {
         :totalRecords="total"
         :first="((page ?? 1) - 1) * (rows ?? 10)"
         :loading="loading"
-        class="rounded-2xl overflow-hidden shadow-sm"
+        class="rounded-2xl overflow-hidden bg-surface-100 ring-1 ring-surface-200 p-5"
         @page="onPage"
+        :pt="{
+            root: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            header: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            tableContainer: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            headerRow: { class: 'bg-surface-50', style: { backgroundColor: 'var(--p-surface-50)' } },
+            headerCell: { class: 'bg-surface-50', style: { backgroundColor: 'var(--p-surface-50)' } },
+            bodyRow: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            bodyCell: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            footerRow: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            footerCell: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            pagination: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+            paginationItem: { class: 'bg-surface-100', style: { backgroundColor: 'var(--p-surface-100)' } },
+        }"
     >
+    <!-- TODO voir pourquoi le pt ne fonctionne pas pour le background color -->
         <Column field="date" header="Date">
             <template #body="slotProps">
                 {{ new Date(slotProps.data.date).toLocaleString() }}

@@ -22,7 +22,7 @@ const { t } = useI18n()
             <div
                 v-for="member in props.contributors"
                 :key="member.member_id"
-                class="flex items-center gap-3 p-3 rounded-2xl bg-white/80 ring-1 ring-surface-200/60"
+                class="flex items-center gap-3 p-3 rounded-2xl bg-surface-100 ring-1 ring-surface-200/60"
             >
                 <span class="text-lg font-semibold text-primary-500">#{{ member.rank }}</span>
                 <div class="flex-1">
@@ -30,7 +30,7 @@ const { t } = useI18n()
                         {{ member.user_email || '—' }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ member.sessions_count }} sessions ·
+                        {{ member.sessions_count }} {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.sessions') }} ·
                         {{ Math.round(member.total_duration / 60) }}h
                     </p>
                 </div>

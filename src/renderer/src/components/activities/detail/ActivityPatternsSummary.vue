@@ -70,7 +70,7 @@ const cards = computed(() => {
             <div
                 v-for="card in cards"
                 :key="card.label"
-                class="rounded-2xl bg-surface-0/80 p-4 ring-1 ring-surface-200/60"
+                class="rounded-2xl bg-surface-200/80 p-4 ring-1 ring-surface-200/60"
             >
                 <p class="text-xs text-surface-500">{{ card.label }}</p>
                 <p class="text-lg font-semibold text-surface-900">{{ card.value }}</p>

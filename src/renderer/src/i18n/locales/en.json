@@ -229,7 +229,10 @@
         "serverActivitiesView": {
             "title": "Server activities",
             "addActivity": "Add activity",
+            "recentSessions": "Recent sessions",
+            "evolution30Days": "Evolution 30 days",
             "ActivityPerformanceSection": {
+                "sessions": "sessions",
                 "sessions_timeline": "Sessions over time",
                 "popularity": "Performance",
                 "growth": "Growth",
