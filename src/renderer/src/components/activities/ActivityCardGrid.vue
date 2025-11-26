@@ -25,8 +25,6 @@ const { t } = useI18n()
 
 const isEmpty = computed(() => !props.loading && !props.activities.length)
 
-const placeholderCards = computed(() => Array.from({ length: 6 }))
-
 function handleScroll(event: Event): void {
     const target = event.target as HTMLElement | null
     if (!target) return
