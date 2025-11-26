@@ -4,7 +4,7 @@ import UpdateModal from '@/components/UpdateModal.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import LoginOrSignup from '@/views/LoginOrSignup.vue'
 import Application from '@/views/Application.vue'
-import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 const { isAuthenticated } = useAuth()
 </script>

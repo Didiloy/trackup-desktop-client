@@ -4,6 +4,7 @@ import type { IActivity } from '@shared/contracts/interfaces/entities/activity.i
 import ActivityCard from './ActivityCard.vue'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 import { useI18n } from 'vue-i18n'
+import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
 
 interface Props {
     activities: IActivity[]
@@ -40,10 +41,10 @@ function handleScroll(event: Event): void {
 <template>
     <div class="w-full h-full flex flex-col">
         <div class="flex-1 overflow-auto p-5" @scroll.passive="handleScroll">
-            <TransitionGroup
-                name="activity-cards"
+            <TransitionGroupWrapper
+                name="bounce"
                 tag="div"
-                class="grid gap-4 grid-cols-1 sm:grid-cols-1 xl:grid-cols-3"
+                class="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-4"
             >
                 <ActivityCard
                     v-for="activity in activities"
@@ -68,7 +69,7 @@ function handleScroll(event: Event): void {
                         :loading="true"
                     />
                 </template>
-            </TransitionGroup>
+            </TransitionGroupWrapper>
 
             <div
                 v-if="isEmpty"
@@ -85,15 +86,3 @@ function handleScroll(event: Event): void {
         </div>
     </div>
 </template>
-
-<style scoped>
-.activity-cards-enter-active,
-.activity-cards-leave-active {
-    transition: all 0.25s ease;
-}
-.activity-cards-enter-from,
-.activity-cards-leave-to {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-}
-</style>

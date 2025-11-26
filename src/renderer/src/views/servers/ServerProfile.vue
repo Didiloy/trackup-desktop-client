@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import { useServerStore } from '@/stores/server'
 
 const route = useRoute()

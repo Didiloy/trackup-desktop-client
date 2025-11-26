@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ServersAside from '@/components/asides/ServersAside.vue'
-import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import MembersAside from '@/components/asides/MembersAside.vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
