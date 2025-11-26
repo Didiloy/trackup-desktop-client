@@ -8,12 +8,9 @@ import { formatNumber } from '@/utils'
 interface Props {
     activity: IActivity
     metrics?: ActivityCardMetrics
-    loading?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    loading: false
-})
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     (e: 'view', activityId: string): void
@@ -41,7 +38,6 @@ const likesText = computed(() => formatNumber(props.metrics?.totalLikes))
 const avgLikesText = computed(() => formatNumber(props.metrics?.avgLikesPerSession, 1))
 
 function onCardClick(): void {
-    if (props.loading) return
     emit('view', props.activity.public_id)
 }
 </script>
@@ -61,24 +57,7 @@ function onCardClick(): void {
             class="absolute inset-0 bg-surface-100/65 backdrop-blur-3xl rounded-2xl"
         ></div>
 
-        <div v-if="loading" class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse">
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-8 w-full">
-                    <div class="w-12 h-12 rounded-xl bg-surface-200" />
-                    <div class="flex-1 space-y-2">
-                        <div class="h-4 bg-surface-200 rounded w-2/3"></div>
-                        <div class="h-3 bg-surface-200 rounded w-1/2"></div>
-                    </div>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-surface-200"></div>
-            </div>
-            <div class="grid grid-cols-3 gap-3">
-                <div class="h-16 bg-surface-200 rounded-xl"></div>
-                <div class="h-16 bg-surface-200 rounded-xl"></div>
-                <div class="h-16 bg-surface-200 rounded-xl"></div>
-            </div>
-        </div>
-        <div v-else class="relative z-10 flex flex-col gap-4 pb-4 h-full">
+        <div class="relative z-10 flex flex-col gap-4 pb-4 h-full">
             <!-- Banner -->
             <div class="relative h-40 w-full overflow-hidden">
                 <img
@@ -131,7 +110,7 @@ function onCardClick(): void {
                     </div>
                     <div class="flex items-start gap-3 justify-end">
                         <div
-                            v-if="!loading"
+
                             v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
                             class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                         >
@@ -139,7 +118,6 @@ function onCardClick(): void {
                             <span>{{ likesText }}</span>
                         </div>
                         <div
-                            v-if="!loading"
                             v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
                             class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
                         >

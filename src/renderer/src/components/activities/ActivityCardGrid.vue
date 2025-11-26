@@ -41,10 +41,11 @@ function handleScroll(event: Event): void {
 <template>
     <div class="w-full h-full flex flex-col">
         <div class="flex-1 overflow-auto p-5" @scroll.passive="handleScroll">
+            <!-- Activities Grid -->
             <TransitionGroupWrapper
-                name="bounce"
+                name="fade"
                 tag="div"
-                class="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-4"
+                class="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
             >
                 <ActivityCard
                     v-for="activity in activities"
@@ -54,23 +55,37 @@ function handleScroll(event: Event): void {
                     :loading="loading && !metrics[activity.public_id]"
                     @view="emit('view', activity.public_id)"
                 />
-                <template v-if="loading && !activities.length">
-                    <ActivityCard
-                        v-for="(_, index) in placeholderCards"
-                        :key="`placeholder-${index}`"
-                        :activity="{
-                            public_id: `placeholder-${index}`,
-                            name: 'Activity',
-                            description: '',
-                            banner: '',
-                            logo: '',
-                            server_public_id: ''
-                        }"
-                        :loading="true"
-                    />
-                </template>
             </TransitionGroupWrapper>
 
+            <!-- Loading State -->
+            <div
+                v-if="loading && activities.length === 0"
+                class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse"
+            >
+                <div
+                    v-for="n in 6"
+                    :key="n"
+                    class="group relative rounded-2xl bg-surface-100 border border-surface-100 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
+                >
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-8 w-full">
+                            <div class="w-12 h-12 rounded-xl bg-surface-200" />
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 bg-surface-200 rounded w-2/3"></div>
+                                <div class="h-3 bg-surface-200 rounded w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surface-200"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="h-16 bg-surface-200 rounded-xl"></div>
+                        <div class="h-16 bg-surface-200 rounded-xl"></div>
+                        <div class="h-16 bg-surface-200 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
             <div
                 v-if="isEmpty"
                 class="flex flex-col items-center justify-center text-center py-16 rounded-2xl border border-dashed border-surface-200 text-surface-500"

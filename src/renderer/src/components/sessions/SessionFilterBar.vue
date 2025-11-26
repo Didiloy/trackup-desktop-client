@@ -208,9 +208,7 @@ function clearFilters(): void {
                 :popover-class="'w-fit-content'"
             >
                 <template #content>
-                    <div
-                        class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md"
-                    >
+                    <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold text-surface-900">Filters</span>
                             <Button
