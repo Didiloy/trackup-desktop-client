@@ -110,12 +110,14 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         >{{ t('common.activity') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <ActivityAutocomplete
-                    v-if="!props.preSelectedActivityId"
-                    v-model="activity_name"
-                    :initial-activity="pre_selected_activity"
-                    @select="(a) => (selected_activity = a)"
-                />
+                <div v-if="!props.preSelectedActivityId">
+                    <ActivityAutocomplete
+                        v-model="activity_name"
+                        :pt="{ root: { style: background_style } }"
+                        :initial-activity="pre_selected_activity"
+                        @select="(a) => (selected_activity = a)"
+                    />
+                </div>
                 <InputText
                     v-else
                     :model-value="pre_selected_activity?.name || ''"

@@ -68,8 +68,7 @@ onMounted(() => {
     }
 })
 
-const background_style =
-    'background-color: var(--p-surface-100); color: var(--p-surface-900)'
+const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -128,4 +127,3 @@ const background_style =
     width: 100% !important;
 }
 </style>
-
