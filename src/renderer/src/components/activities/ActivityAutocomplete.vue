@@ -45,7 +45,6 @@ watch(
 // Sync internal ref to emit
 watch(activityQuery, (newVal) => {
     emit('update:modelValue', newVal || '')
-    // If cleared, emit null select
     if (!newVal) {
         emit('select', null)
     }
@@ -69,7 +68,8 @@ onMounted(() => {
     }
 })
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
+const background_style =
+    'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -81,10 +81,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             placeholder ||
             t('userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder')
         "
-        class="w-full"
         :size="size"
         :disabled="disabled"
         :pt="{
+            root: { style: 'width: 100%;' },
             input: { class: 'bg-surface-100', style: background_style },
             overlay: { class: 'bg-surface-100', style: background_style }
         }"
@@ -110,3 +110,22 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         </template>
     </AutoComplete>
 </template>
+
+<style scoped>
+:deep(.p-autocomplete) {
+    width: 100% !important;
+}
+
+:deep(.p-autocomplete-input-wrapper) {
+    width: 100% !important;
+}
+
+:deep(.p-inputtext) {
+    width: 100% !important;
+}
+
+:deep(.p-autocomplete-panel) {
+    width: 100% !important;
+}
+</style>
+

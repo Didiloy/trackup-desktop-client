@@ -45,9 +45,9 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         class="w-full"
         append-to="body"
         :pt="{
-            root: { class: 'bg-surface-100', style: background_style  },
-            overlay: { class: 'bg-surface-100', style: background_style  },
-            listContainer: { class: 'bg-surface-100', style: background_style  },
+            root: { class: 'bg-surface-100', style: background_style },
+            overlay: { class: 'bg-surface-100', style: background_style },
+            listContainer: { class: 'bg-surface-100', style: background_style }
         }"
         @update:model-value="onChange"
     />

@@ -174,18 +174,16 @@ function clearFilters(): void {
     <GenericFilterBar :count="count">
         <!-- Primary Filter: Activity Search -->
         <template #primary-filters>
-            <FilterGroup icon="pi pi-search" class="flex-1 min-w-[220px]">
-                <ActivityAutocomplete
-                    :model-value="localActivityQuery"
-                    :placeholder="
-                        t(
-                            'placeholder.search'
-                        )
-                    "
-                    :size="'small'"
-                    @update:model-value="onActivityQueryChange"
-                    @select="onActivitySelect"
-                />
+            <FilterGroup icon="pi pi-search" class="flex-1">
+                <span class="w-[220px]">
+                    <ActivityAutocomplete
+                        :model-value="localActivityQuery"
+                        :placeholder="t('placeholder.search')"
+                        :size="'small'"
+                        @update:model-value="onActivityQueryChange"
+                        @select="onActivitySelect"
+                    />
+                </span>
             </FilterGroup>
         </template>
 
@@ -195,7 +193,6 @@ function clearFilters(): void {
                 ref="filtersPopoverRef"
                 button-label="Filters"
                 button-icon="pi pi-filter"
-
                 :button-class="`${activeFiltersCount > 0 ? 'p-button-badge' : ''}`"
             >
                 <template #content>
