@@ -43,7 +43,7 @@ function handleScroll(event: Event): void {
             <TransitionGroup
                 name="activity-cards"
                 tag="div"
-                class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                class="grid gap-4 grid-cols-1 sm:grid-cols-1 xl:grid-cols-3"
             >
                 <ActivityCard
                     v-for="activity in activities"
