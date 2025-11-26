@@ -8,8 +8,8 @@ import { computed } from 'vue'
 const route = useRoute()
 
 const isMembersAsideVisible = computed(() => route.query.members === 'true')
-const isServerAsideVisible = computed(
-    () => route.name && typeof route.name === 'string' && route.fullPath.startsWith('Server')
+const isServerActionsAsideVisible = computed(
+    () => route.name && typeof route.name === 'string' && route.name.startsWith('Server')
 )
 </script>
 
@@ -21,7 +21,7 @@ const isServerAsideVisible = computed(
         <ServersAside />
         <main
             class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden p-6"
-            :class="{ 'rounded-l-xl': !isServerAsideVisible }"
+            :class="{ 'rounded-l-xl': !isServerActionsAsideVisible }"
         >
             <TransitionWrapper name="fade" mode="out-in" :duration="1">
                 <router-view v-slot="{ Component, route: currentRoute }">

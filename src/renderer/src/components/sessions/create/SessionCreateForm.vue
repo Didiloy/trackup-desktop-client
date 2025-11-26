@@ -189,7 +189,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             <div class="flex items-center gap-2">
                 <i class="pi pi-users text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700">{{
-                    t('common.participants')
+                    t('common.extra_participants')
                 }}</span>
             </div>
             <MultiSelect
