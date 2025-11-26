@@ -60,27 +60,33 @@ function handleScroll(event: Event): void {
             <!-- Loading State -->
             <div
                 v-if="loading && activities.length === 0"
-                class="relative z-10 flex flex-col gap-4 p-5 h-full animate-pulse"
+                class="relative z-10 grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 p-5 animate-pulse"
             >
                 <div
                     v-for="n in 6"
                     :key="n"
-                    class="group relative rounded-2xl bg-surface-100 border border-surface-100 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
+                    class="group relative rounded-2xl bg-surface-100 border border-surface-100 shadow-sm overflow-hidden"
                 >
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex items-center gap-8 w-full">
-                            <div class="w-12 h-12 rounded-xl bg-surface-200" />
-                            <div class="flex-1 space-y-2">
-                                <div class="h-4 bg-surface-200 rounded w-2/3"></div>
-                                <div class="h-3 bg-surface-200 rounded w-1/2"></div>
+                    <div class="relative z-10 flex flex-col gap-4 pb-4 h-full">
+                        <!-- Banner Area -->
+                        <div class="relative h-40 w-full bg-surface-200">
+                            <div
+                                class="absolute bottom-4 left-4 right-4 grid grid-cols-[auto_1fr_auto] items-center gap-3"
+                            >
+                                <div class="w-14 h-14 rounded-xl bg-surface-300"></div>
+                                <div class="min-w-0 space-y-2">
+                                    <div class="h-5 w-32 bg-surface-300 rounded"></div>
+                                    <div class="h-3 w-24 bg-surface-300 rounded"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="w-8 h-8 rounded-full bg-surface-200"></div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="h-16 bg-surface-200 rounded-xl"></div>
-                        <div class="h-16 bg-surface-200 rounded-xl"></div>
-                        <div class="h-16 bg-surface-200 rounded-xl"></div>
+
+                        <!-- Metrics Grid -->
+                        <div class="grid grid-cols-3 gap-3 px-4">
+                            <div class="h-[72px] rounded-xl bg-surface-200"></div>
+                            <div class="h-[72px] rounded-xl bg-surface-200"></div>
+                            <div class="h-[72px] rounded-xl bg-surface-200"></div>
+                        </div>
                     </div>
                 </div>
             </div>
