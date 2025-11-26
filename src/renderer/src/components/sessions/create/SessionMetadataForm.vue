@@ -227,7 +227,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 </div>
 
                 <!-- DATE -->
-                <Calendar
+                <DatePicker
                     v-else-if="def.type === 'DATE'"
                     v-model="values[def.public_id]"
                     show-time

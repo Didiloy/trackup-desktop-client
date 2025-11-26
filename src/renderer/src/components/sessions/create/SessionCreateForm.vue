@@ -157,7 +157,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         >{{ t('common.date') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <Calendar
+                <DatePicker
                     v-model="date"
                     show-time
                     hour-format="24"
