@@ -353,6 +353,7 @@
             }
         },
         "serverSessionsView": {
+            "title": "Server Sessions",
             "addSessionModal": {
                 "title": "Create Session",
                 "infoStep": "Session Info",

@@ -241,10 +241,10 @@ onMounted(() => {
 <template>
     <div class="flex flex-col items-center justify-start w-full h-full">
         <div class="flex flex-row items-center justify-between w-full h-12 p-2">
-            <div class="flex items-center gap-2">
-                <h2 class="text-2xl font-bold">
-                    {{ i18n.t('userInterface.serverSessionsView.title') || 'Sessions' }}
-                </h2>
+            <h2 class="text-2xl font-bold">
+                {{ i18n.t('userInterface.serverSessionsView.title')}}
+            </h2>
+            <div class="flex flex-row items-center justify-center">
                 <Button
                     icon="pi pi-plus"
                     :label="i18n.t('userInterface.serverSessionsView.addSessionModal.title')"
@@ -257,6 +257,7 @@ onMounted(() => {
         <div class="w-full px-2 pb-2">
             <SessionFilterBar
                 :activity-query="filter_activityQuery"
+                :participant-ids="filter_participantIds"
                 :start-date="filter_startDate"
                 :end-date="filter_endDate"
                 :min-duration="filter_minDuration"
@@ -265,6 +266,7 @@ onMounted(() => {
                 :count="sessions.length"
                 @update:activity-query="(v) => (filter_activityQuery = v)"
                 @select-activity="(a) => (filter_selectedActivityId = a?.public_id)"
+                @update:participant-ids="(v) => (filter_participantIds = v)"
                 @update:start-date="(v) => (filter_startDate = v)"
                 @update:end-date="(v) => (filter_endDate = v)"
                 @update:min-duration="(v) => (filter_minDuration = v)"
