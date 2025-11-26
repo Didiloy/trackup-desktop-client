@@ -23,8 +23,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-
 function onMinChange(value: number | undefined): void {
     emit('update:min', value)
 }
@@ -42,7 +40,6 @@ function onMaxChange(value: number | undefined): void {
             :use-grouping="useGrouping"
             :size="size"
             class="w-full"
-            :pt="{ root: { style: background_style } }"
             @update:model-value="onMinChange"
         />
         <span class="text-surface-500">-</span>
@@ -52,7 +49,6 @@ function onMaxChange(value: number | undefined): void {
             :use-grouping="useGrouping"
             :size="size"
             class="w-full"
-            :pt="{ root: { style: background_style } }"
             @update:model-value="onMaxChange"
         />
     </div>

@@ -27,8 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-
 function onChange(value: any): void {
     emit('update:modelValue', value)
 }
@@ -44,15 +42,13 @@ function onChange(value: any): void {
             :option-value="optionValue"
             :placeholder="placeholder"
             class="w-full"
-            append-to="self"
-            :size="size"
-            :pt="{
-                root: { style: background_style },
-                label: { style: 'color: var(--p-surface-900)' },
-                overlay: { style: background_style },
-                listContainer: { style: background_style }
-            }"
+            append-to="body"
             @update:model-value="onChange"
+            :pt="{
+                root: { class: 'bg-surface-100' },
+                overlay: { class: 'bg-surface-100' },
+                listContainer: { class: 'bg-surface-100' }
+            }"
         />
     </div>
 </template>

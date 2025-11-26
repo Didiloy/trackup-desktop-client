@@ -17,8 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-
 function onInput(value: string | undefined): void {
     emit('update:modelValue', value ?? '')
 }
@@ -32,7 +30,6 @@ function onInput(value: string | undefined): void {
             :placeholder="placeholder"
             class="w-full"
             :size="size"
-            :pt="{ root: { style: background_style } }"
             @update:model-value="onInput"
         />
     </div>

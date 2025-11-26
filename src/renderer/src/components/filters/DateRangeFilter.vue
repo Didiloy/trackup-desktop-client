@@ -19,8 +19,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-
 function onChange(value: Date | Date[] | (Date | null)[] | null | undefined): void {
     let dateArray: Date[] | null = null
     if (Array.isArray(value)) {
@@ -40,7 +38,7 @@ function onChange(value: Date | Date[] | (Date | null)[] | null | undefined): vo
         show-icon
         :size="size"
         class="w-full"
-        :pt="{ root: { style: background_style } }"
+        append-to="body"
         @update:model-value="onChange"
     />
 </template>

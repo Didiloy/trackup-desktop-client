@@ -26,8 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-
 function onChange(value: string[]): void {
     emit('update:modelValue', value)
 }
@@ -44,9 +42,11 @@ function onChange(value: string[]): void {
         :display="display"
         :size="size"
         class="w-full"
+        append-to="body"
         :pt="{
-            root: { style: background_style },
-            label: { style: 'color: var(--p-surface-900)' }
+            root: { class: 'bg-surface-100' },
+            overlay: { class: 'bg-surface-100' },
+            listContainer: { class: 'bg-surface-100' }
         }"
         @update:model-value="onChange"
     />
