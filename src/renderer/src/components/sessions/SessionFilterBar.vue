@@ -179,10 +179,9 @@ function clearFilters(): void {
                     :model-value="localActivityQuery"
                     :placeholder="
                         t(
-                            'userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder'
+                            'placeholder.search'
                         )
                     "
-                    class="max-w-[280px]"
                     :size="'small'"
                     @update:model-value="onActivityQueryChange"
                     @select="onActivitySelect"
@@ -196,8 +195,7 @@ function clearFilters(): void {
                 ref="filtersPopoverRef"
                 button-label="Filters"
                 button-icon="pi pi-filter"
-                button-variant="secondary"
-                popover-class="bg-surface-50"
+
                 :button-class="`${activeFiltersCount > 0 ? 'p-button-badge' : ''}`"
             >
                 <template #content>

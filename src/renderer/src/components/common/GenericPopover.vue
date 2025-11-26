@@ -93,12 +93,4 @@ defineExpose({
 </template>
 
 <style scoped>
-.generic-popover {
-    display: inline-flex;
-}
-
-.popover-content {
-    display: flex;
-    flex-direction: column;
-}
 </style>
