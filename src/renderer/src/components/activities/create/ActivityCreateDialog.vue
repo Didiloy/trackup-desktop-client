@@ -250,7 +250,7 @@ function finishWizard(): void {
 <template>
     <MultiStepsDialog
         :model-value="modelValue"
-        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-[83vh]'"
+        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('userInterface.serverActivitiesView.addActivityModal.title')"
         :subtitle="subtitle"
