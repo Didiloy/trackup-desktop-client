@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import Button from 'primevue/button'
 import Popover from 'primevue/popover'
 
-const props = defineProps({
+defineProps({
     // Button props
     buttonLabel: {
         type: String,
@@ -92,4 +92,18 @@ defineExpose({
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.generic-popover {
+    display: inline-flex;
+}
+
+.popover-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: var(--p-surface-0);
+    border-radius: 0.5rem;
+    box-shadow: var(--p-shadow-2);
+}
+
+</style>

@@ -189,15 +189,27 @@ function clearFilters(): void {
 
         <!-- Advanced Filters in Popover -->
         <template #advanced-filters>
+            <ToggleFilter
+                :model-value="localLikedByMe"
+                icon="pi pi-heart"
+                icon-active="pi pi-heart-fill"
+                tooltip="Liked by me"
+                :class="localLikedByMe ? 'text-red-500' : 'text-surface-600'"
+                @update:model-value="onLikedByMeToggle"
+            />
+        </template>
+
+        <!-- Actions: Liked Toggle -->
+        <template #actions>
             <GenericPopover
                 ref="filtersPopoverRef"
-                button-label="Filters"
                 button-icon="pi pi-filter"
                 :button-class="`${activeFiltersCount > 0 ? 'p-button-badge' : ''}`"
+                :popover-class="'w-fit-content'"
             >
                 <template #content>
                     <div
-                        class="flex flex-col gap-4 w-full max-w-[280px] p-4 bg-surface-0 rounded-md"
+                        class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md"
                     >
                         <div class="flex items-center justify-between">
                             <span class="font-semibold text-surface-900">Filters</span>
@@ -249,18 +261,6 @@ function clearFilters(): void {
                     </div>
                 </template>
             </GenericPopover>
-        </template>
-
-        <!-- Actions: Liked Toggle -->
-        <template #actions>
-            <ToggleFilter
-                :model-value="localLikedByMe"
-                icon="pi pi-heart"
-                icon-active="pi pi-heart-fill"
-                tooltip="Liked by me"
-                :class="localLikedByMe ? 'text-red-500' : 'text-surface-600'"
-                @update:model-value="onLikedByMeToggle"
-            />
         </template>
     </GenericFilterBar>
 </template>
