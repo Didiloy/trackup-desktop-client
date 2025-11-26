@@ -114,7 +114,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-if="!props.preSelectedActivityId"
                     v-model="activity_name"
                     :initial-activity="pre_selected_activity"
-                    size="large"
+         
                     @select="(a) => (selected_activity = a)"
                 />
                 <InputText
