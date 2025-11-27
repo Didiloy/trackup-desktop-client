@@ -7,6 +7,7 @@ import ActivityPerformanceSection from '@/components/activities/detail/ActivityP
 import ActivityTopContributors from '@/components/activities/detail/ActivityTopContributors.vue'
 import ActivitySessionsTable from '@/components/activities/detail/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/activities/detail/ActivityGrowthComparison.vue'
+import ActivitySkillDistribution from '@/components/activities/detail/ActivitySkillDistribution.vue'
 import ActivitySessionsHeatmap from '@/components/activities/detail/ActivitySessionsHeatmap.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
@@ -186,12 +187,12 @@ onMounted(async () => {
             :timeline="details?.timeline"
             :growth="details?.growth_trend"
             :patterns="details?.time_patterns"
-            :skill-levels="skillLevels"
         />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
             <ActivityTopContributors :contributors="details?.top_contributors" />
-            <ActivityGrowthComparison :growth="details?.growth_trend" />
+            <ActivitySkillDistribution :skill-levels="skillLevels" />
+            <ActivityGrowthComparison :growth="details?.growth_trend" class="lg:col-span-2" />
         </div>
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
