@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useMetadataForm } from '@/composables/metadata/useMetadataForm'
+import { useMetadataForm } from '@/composables/activities/metadata/useMetadataForm'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IAddSessionMetadataRequest } from '@shared/contracts/interfaces/entities/session.interfaces'
 
