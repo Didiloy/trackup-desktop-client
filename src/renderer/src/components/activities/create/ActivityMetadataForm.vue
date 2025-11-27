@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ICreateActivityMetadataDefinitionRequest } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
@@ -86,8 +86,7 @@ const can_add = computed(() => {
 
 const canUseChoices = computed(() => {
     const type = draft.value.type
-    const typeSupportsChoices = type !== 'BOOLEAN' && type !== 'DATE'
-    return typeSupportsChoices
+    return type !== 'BOOLEAN' && type !== 'DATE'
 })
 
 watch(
@@ -241,7 +240,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     }}</label>
                 </div>
                 <div class="flex items-center gap-2">
-                    <Checkbox v-model="draft.allow_not_predefined_value" binary />
+                    <Checkbox v-model="draft.allow_not_predefined_value" binary :disabled="!canUseChoices" />
                     <label class="text-sm text-surface-700">{{
                         t(
                             'userInterface.serverActivitiesView.addActivityModal.metadataAllowNotPredefined'
