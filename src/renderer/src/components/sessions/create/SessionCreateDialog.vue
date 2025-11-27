@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
-import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
     ISession,

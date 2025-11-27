@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IAddSessionMetadataEntry } from '@shared/contracts/interfaces/entities/session.interfaces'

@@ -12,7 +12,7 @@ import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.v
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
-import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
+import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
     IActivity,

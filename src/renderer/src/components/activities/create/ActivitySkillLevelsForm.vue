@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
-import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
+import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
 
 const props = withDefaults(
