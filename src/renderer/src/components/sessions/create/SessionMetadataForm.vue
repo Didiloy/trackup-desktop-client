@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
-import { useServerStore } from '@/stores/server'
+import { useMetadataForm } from '@/composables/metadata/useMetadataForm'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
-import type {
-    IAddSessionMetadataRequest,
-    IAddSessionMetadataEntry
-} from '@shared/contracts/interfaces/entities/session.interfaces'
+import type { IAddSessionMetadataRequest } from '@shared/contracts/interfaces/entities/session.interfaces'
+
+import MetadataInputString from '@/components/activities/metadata/MetadataInputString.vue'
+import MetadataInputNumber from '@/components/activities/metadata/MetadataInputNumber.vue'
+import MetadataInputBoolean from '@/components/activities/metadata/MetadataInputBoolean.vue'
+import MetadataInputDate from '@/components/activities/metadata/MetadataInputDate.vue'
 
 const props = defineProps<{
     loading?: boolean
@@ -23,96 +24,36 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const server_store = useServerStore()
-const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 
-const definitions = ref<IActivityMetadataDefinition[]>([])
-const values = ref<Record<string, any>>({}) // def_id -> value
-const isLoadingDefinitions = ref(true)
+const { definitions, values, isLoadingDefinitions, loadDefinitions, canSubmit, getSubmissionData } =
+    useMetadataForm(props.activityId, props.definitions)
 
-onMounted(async () => {
-    if (props.definitions && props.definitions.length > 0) {
-        definitions.value = props.definitions
-        isLoadingDefinitions.value = false
-        emit('loaded', true)
-        return
-    }
-
-    const serverId = server_store.getPublicId
-    if (!serverId || !props.activityId) return
-
-    isLoadingDefinitions.value = true
-    try {
-        const res = await listMetadataDefinitions(serverId, props.activityId)
-        if (!res.error && res.data) {
-            definitions.value = res.data
-            emit('loaded', definitions.value.length > 0)
-
-            // Initialize default values if any (though API doesn't show defaults in response explicitly in user prompt,
-            // but good to have empty state)
-        } else {
-            emit('loaded', false)
-        }
-    } catch (e) {
-        console.error('Failed to load metadata definitions', e)
-        emit('loaded', false)
-    } finally {
-        isLoadingDefinitions.value = false
-    }
-})
-
-const can_submit = computed(() => {
-    // Check required fields
-    for (const def of definitions.value) {
-        if (def.required) {
-            const val = values.value[def.public_id]
-            if (val === undefined || val === null || val === '') return false
-        }
-    }
-    return !props.loading
-})
-
-function handleNumberInput(defId: string, event: any): void {
-    // When using editable dropdown for numbers, ensure the value is converted to number
-    const val = event.value
-    if (val !== undefined && val !== null && val !== '') {
-        const numVal = typeof val === 'string' ? parseFloat(val) : val
-        if (!isNaN(numVal)) {
-            values.value[defId] = numVal
-        }
-    }
+const componentMap: Record<string, any> = {
+    STRING: MetadataInputString,
+    NUMBER: MetadataInputNumber,
+    BOOLEAN: MetadataInputBoolean,
+    DATE: MetadataInputDate
 }
 
+function getComponent(type: string) {
+    return componentMap[type] || MetadataInputString
+}
+
+onMounted(async () => {
+    const hasMetadata = await loadDefinitions()
+    emit('loaded', hasMetadata)
+})
+
 function onSubmit(): void {
-    const metadataDtos: IAddSessionMetadataEntry[] = []
+    const metadata = getSubmissionData()
 
-    for (const def of definitions.value) {
-        let val = values.value[def.public_id]
-        if (val !== undefined && val !== null && val !== '') {
-            // Ensure number type for NUMBER definitions (in case of editable dropdown string input)
-            if (def.type === 'NUMBER' && typeof val === 'string') {
-                const num = parseFloat(val)
-                if (!isNaN(num)) {
-                    val = num
-                }
-            }
-
-            metadataDtos.push({
-                metadata_definition_public_id: def.public_id,
-                value: val
-            })
-        }
-    }
-
-    if (metadataDtos.length === 0) {
+    if (metadata.length === 0) {
         emit('skip')
         return
     }
 
-    emit('submit', { metadata: metadataDtos })
+    emit('submit', { metadata })
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -135,106 +76,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         </div>
 
         <div v-else class="flex flex-col gap-4 overflow-y-auto max-h-[60vh] px-1">
-            <div v-for="def in definitions" :key="def.public_id" class="flex flex-col gap-2">
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-database text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">
-                        {{ def.label || def.key }}
-                        <span v-if="def.required" class="text-red-500">*</span>
-                    </span>
-                </div>
-                <p v-if="def.description" class="text-xs text-surface-500 -mt-1">
-                    {{ def.description }}
-                </p>
-
-                <!-- NUMBER with choices (allow custom) -->
-                <Dropdown
-                    v-if="
-                        def.type === 'NUMBER' &&
-                        def.choices &&
-                        def.choices.length > 0 &&
-                        def.allow_not_predefined_value
-                    "
+            <div v-for="def in definitions" :key="def.public_id">
+                <component
+                    :is="getComponent(def.type)"
                     v-model="values[def.public_id]"
-                    :options="def.choices"
-                    :placeholder="def.label || ''"
-                    editable
-                    class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
-                    @change="handleNumberInput(def.public_id, $event)"
-                />
-
-                <!-- NUMBER with choices (strict) -->
-                <Dropdown
-                    v-else-if="def.type === 'NUMBER' && def.choices && def.choices.length > 0"
-                    v-model="values[def.public_id]"
-                    :options="def.choices"
-                    :placeholder="def.label || undefined"
-                    class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
-                />
-
-                <!-- NUMBER free input -->
-                <InputNumber
-                    v-else-if="def.type === 'NUMBER'"
-                    v-model="values[def.public_id]"
-                    :placeholder="def.label || undefined"
-                    class="w-full"
-                    :pt="{ input: { style: background_style } }"
-                />
-
-                <!-- STRING with choices (allow custom) -->
-                <Dropdown
-                    v-else-if="
-                        def.type === 'STRING' &&
-                        def.choices &&
-                        def.choices.length > 0 &&
-                        def.allow_not_predefined_value
-                    "
-                    v-model="values[def.public_id]"
-                    :options="def.choices"
-                    :placeholder="def.label || ''"
-                    editable
-                    class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
-                />
-
-                <!-- STRING with choices (strict) -->
-                <Dropdown
-                    v-else-if="def.type === 'STRING' && def.choices && def.choices.length > 0"
-                    v-model="values[def.public_id]"
-                    :options="def.choices"
-                    :placeholder="def.label || undefined"
-                    class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
-                />
-
-                <!-- STRING free text -->
-                <InputText
-                    v-else-if="def.type === 'STRING'"
-                    v-model="values[def.public_id]"
-                    :placeholder="def.label || undefined"
-                    class="w-full"
-                    :pt="{ root: { style: background_style } }"
-                />
-
-                <!-- BOOLEAN -->
-                <div v-else-if="def.type === 'BOOLEAN'" class="flex items-center gap-2">
-                    <InputSwitch v-model="values[def.public_id]" />
-                    <span class="text-sm text-surface-600">{{
-                        values[def.public_id] ? t('common.yes') : t('common.no')
-                    }}</span>
-                </div>
-
-                <!-- DATE -->
-                <DatePicker
-                    v-else-if="def.type === 'DATE'"
-                    v-model="values[def.public_id]"
-                    show-time
-                    hour-format="24"
-                    :placeholder="def.label || undefined"
-                    class="w-full"
-                    :pt="{ input: { style: background_style } }"
+                    :def="def"
                 />
             </div>
         </div>
@@ -244,7 +90,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
             <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
                 :label="t('common.finish')"
-                :disabled="!can_submit"
+                :disabled="!canSubmit || props.loading"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onSubmit"

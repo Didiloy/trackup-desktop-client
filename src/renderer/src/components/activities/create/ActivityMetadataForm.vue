@@ -240,7 +240,11 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     }}</label>
                 </div>
                 <div class="flex items-center gap-2">
-                    <Checkbox v-model="draft.allow_not_predefined_value" binary :disabled="!canUseChoices" />
+                    <Checkbox
+                        v-model="draft.allow_not_predefined_value"
+                        binary
+                        :disabled="!canUseChoices"
+                    />
                     <label class="text-sm text-surface-700">{{
                         t(
                             'userInterface.serverActivitiesView.addActivityModal.metadataAllowNotPredefined'
