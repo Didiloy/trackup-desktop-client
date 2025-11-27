@@ -115,11 +115,6 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
             option-label="name"
             option-value="value"
             class="w-full max-w-[135px]"
-            :pt="{
-                root: { class: 'bg-surface-100' },
-                overlay: { class: 'bg-surface-100' },
-                listContainer: { class: 'bg-surface-100' }
-            }"
             @change="handleThemeChange"
         >
             <template #value="slotProps">

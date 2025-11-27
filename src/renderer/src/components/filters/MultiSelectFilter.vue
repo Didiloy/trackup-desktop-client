@@ -29,7 +29,6 @@ const emit = defineEmits<Emits>()
 function onChange(value: string[]): void {
     emit('update:modelValue', value)
 }
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -44,11 +43,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         :size="size"
         class="w-full"
         append-to="body"
-        :pt="{
-            root: { class: 'bg-surface-100', style: background_style },
-            overlay: { class: 'bg-surface-100', style: background_style },
-            listContainer: { class: 'bg-surface-100', style: background_style }
-        }"
         @update:model-value="onChange"
     />
 </template>

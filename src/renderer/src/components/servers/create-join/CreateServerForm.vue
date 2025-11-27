@@ -80,8 +80,6 @@ async function createNewServer(): Promise<void> {
 onMounted(async () => {
     await loadServerTypes()
 })
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -112,11 +110,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 v-model="name"
                 :placeholder="t('userInterface.createServerView.placeholder.name')"
                 class="w-full"
-                :pt="{
-                    root: {
-                        style: background_style
-                    }
-                }"
             />
         </div>
 
@@ -130,13 +123,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 :placeholder="t('userInterface.createServerView.placeholder.type')"
                 class="w-full"
                 append-to="self"
-                :pt="{
-                    root: { style: background_style },
-                    list: { class: 'bg-surface-100' },
-                    label: { style: background_style },
-                    item: { class: 'text-surface-900 dark:text-surface-0' },
-                    itemLabel: { class: 'text-surface-900 dark:text-surface-0' }
-                }"
             />
         </div>
 
@@ -147,11 +133,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 rows="2"
                 auto-resize
                 :placeholder="t('userInterface.createServerView.placeholder.description')"
-                :pt="{
-                    root: {
-                        style: background_style
-                    }
-                }"
             />
         </div>
 

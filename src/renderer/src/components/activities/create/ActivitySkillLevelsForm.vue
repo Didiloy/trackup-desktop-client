@@ -114,8 +114,6 @@ function removeLevel(index: number): void {
 function submitLevels(): void {
     emit('create', levels.value)
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -147,11 +145,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         <div class="grid grid-cols-1 gap-3">
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{ t('common.name') }}</label>
-                <InputText
-                    v-model="draft.name"
-                    class="w-full"
-                    :pt="{ root: { style: background_style } }"
-                />
+                <InputText v-model="draft.name" class="w-full" />
             </div>
 
             <div class="flex flex-col gap-2">
@@ -165,7 +159,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         placeholder="#4CAF50"
                         class="w-full"
                         :value="normalized_color"
-                        :pt="{ root: { style: background_style } }"
                     />
                 </div>
             </div>
@@ -175,26 +168,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minSessions')
                     }}</label>
-                    <InputNumber
-                        v-model="draft.min_sessions"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                        show-buttons
-                    />
+                    <InputNumber v-model="draft.min_sessions" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxSessions')
                     }}</label>
-                    <InputNumber
-                        v-model="draft.max_sessions"
-                        class="w-full"
-                        show-buttons
-                        :pt="{
-                            root: { style: background_style },
-                            inputText: { style: background_style }
-                        }"
-                    />
+                    <InputNumber v-model="draft.max_sessions" class="w-full" show-buttons />
                 </div>
             </div>
 
@@ -203,40 +183,19 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.minDuration')
                     }}</label>
-                    <InputNumber
-                        v-model="draft.min_duration"
-                        class="w-full"
-                        show-buttons
-                        :pt="{
-                            root: { style: background_style },
-                            pcInputText: { style: background_style }
-                        }"
-                    />
+                    <InputNumber v-model="draft.min_duration" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.maxDuration')
                     }}</label>
-                    <InputNumber
-                        v-model="draft.max_duration"
-                        class="w-full"
-                        show-buttons
-                        :pt="{
-                            root: { style: background_style },
-                            inputText: { style: background_style }
-                        }"
-                    />
+                    <InputNumber v-model="draft.max_duration" class="w-full" show-buttons />
                 </div>
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
-                <Textarea
-                    v-model="draft.description"
-                    rows="2"
-                    auto-resize
-                    :pt="{ root: { style: background_style } }"
-                />
+                <Textarea v-model="draft.description" rows="2" auto-resize />
             </div>
 
             <div class="flex justify-end">
@@ -260,7 +219,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-for="(lvl, idx) in levels"
                     :key="idx"
                     class="flex items-center justify-between p-2 rounded-md"
-                    :style="background_style"
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-xs text-surface-600">#{{ lvl.display_order }}</span>

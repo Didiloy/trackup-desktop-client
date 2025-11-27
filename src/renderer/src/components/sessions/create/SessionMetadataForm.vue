@@ -111,8 +111,6 @@ function onSubmit(): void {
 
     emit('submit', { metadata: metadataDtos })
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -160,7 +158,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     :placeholder="def.label || ''"
                     editable
                     class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
                     @change="handleNumberInput(def.public_id, $event)"
                 />
 
@@ -171,7 +168,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     :options="def.choices"
                     :placeholder="def.label || undefined"
                     class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
                 />
 
                 <!-- NUMBER free input -->
@@ -180,7 +176,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-model="values[def.public_id]"
                     :placeholder="def.label || undefined"
                     class="w-full"
-                    :pt="{ input: { style: background_style } }"
                 />
 
                 <!-- STRING with choices (allow custom) -->
@@ -196,7 +191,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     :placeholder="def.label || ''"
                     editable
                     class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
                 />
 
                 <!-- STRING with choices (strict) -->
@@ -206,7 +200,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     :options="def.choices"
                     :placeholder="def.label || undefined"
                     class="w-full"
-                    :pt="{ root: { style: background_style }, input: { style: background_style } }"
                 />
 
                 <!-- STRING free text -->
@@ -215,7 +208,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-model="values[def.public_id]"
                     :placeholder="def.label || undefined"
                     class="w-full"
-                    :pt="{ root: { style: background_style } }"
                 />
 
                 <!-- BOOLEAN -->
@@ -234,7 +226,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     hour-format="24"
                     :placeholder="def.label || undefined"
                     class="w-full"
-                    :pt="{ input: { style: background_style } }"
                 />
             </div>
         </div>

@@ -59,14 +59,76 @@ export const TrackupPreset = definePreset(Aura, {
                     900: '#0f172a',
                     950: '#020617'
                 },
+                primary: {
+                    color: '{primary.500}',
+                    contrastColor: '#ffffff',
+                    hoverColor: '{primary.600}',
+                    activeColor: '{primary.700}'
+                },
+                formField: {
+                    background: '{surface.100}',
+                    disabledBackground: '{surface.200}',
+                    filledBackground: '{surface.50}',
+                    filledHoverBackground: '{surface.50}',
+                    filledFocusBackground: '{surface.50}',
+                    borderColor: '{surface.300}',
+                    hoverBorderColor: '{surface.400}',
+                    focusBorderColor: '{primary.color}',
+                    invalidBorderColor: '{red.400}',
+                    color: '{surface.800}',
+                    disabledColor: '{surface.500}',
+                    placeholderColor: '{surface.500}',
+                    invalidPlaceholderColor: '{red.600}',
+                    floatLabelColor: '{surface.500}',
+                    floatLabelFocusColor: '{primary.600}',
+                    floatLabelActiveColor: '{surface.500}',
+                    floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
+                    iconColor: '{surface.400}',
+                    shadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgba(18, 18, 23, 0.05)'
+                },
+                overlay: {
+                    select: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    },
+                    popover: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    },
+                    modal: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    }
+                },
+                list: {
+                    option: {
+                        focusBackground: '{surface.100}',
+                        selectedBackground: '{surface.200}',
+                        selectedFocusBackground: '{surface.200}',
+                        color: '{text.color}',
+                        focusColor: '{primary.500}',
+                        selectedColor: '{highlight.color}',
+                        selectedFocusColor: '{highlight.focus.color}',
+                        icon: {
+                            color: '{surface.400}',
+                            focusColor: '{surface.500}'
+                        }
+                    },
+                    optionGroup: {
+                        background: '{surface.100}',
+                        color: '{text.muted.color}'
+                    }
+                },
                 text: {
                     color: '#0f172a',
                     muted: '#475569'
                 },
                 border: '#e2e8f0',
                 focusRing: '#4a84ff',
-                highlight: '#eef2ff',
-                overlay: 'rgba(255, 255, 255, 0.8)'
+                highlight: '#eef2ff'
             },
             dark: {
                 surface: {
@@ -83,14 +145,76 @@ export const TrackupPreset = definePreset(Aura, {
                     900: '#cbd5e1',
                     950: '#f8fafc'
                 },
+                primary: {
+                    color: '{primary.500}',
+                    contrastColor: '#000000',
+                    hoverColor: '{primary.600}',
+                    activeColor: '{primary.700}'
+                },
+                formField: {
+                    background: '{surface.100}',
+                    disabledBackground: '{surface.200}',
+                    filledBackground: '{surface.50}',
+                    filledHoverBackground: '{surface.50}',
+                    filledFocusBackground: '{surface.50}',
+                    borderColor: '{surface.300}',
+                    hoverBorderColor: '{surface.400}',
+                    focusBorderColor: '{primary.color}',
+                    invalidBorderColor: '{red.400}',
+                    color: '{surface.800}',
+                    disabledColor: '{surface.500}',
+                    placeholderColor: '{surface.500}',
+                    invalidPlaceholderColor: '{red.600}',
+                    floatLabelColor: '{surface.500}',
+                    floatLabelFocusColor: '{primary.600}',
+                    floatLabelActiveColor: '{surface.500}',
+                    floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
+                    iconColor: '{surface.400}',
+                    shadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgba(18, 18, 23, 0.05)'
+                },
+                overlay: {
+                    select: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    },
+                    popover: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    },
+                    modal: {
+                        background: '{surface.100}',
+                        borderColor: '{surface.200}',
+                        color: '{text.color}'
+                    }
+                },
+                list: {
+                    option: {
+                        focusBackground: '{surface.100}',
+                        selectedBackground: '{surface.200}',
+                        selectedFocusBackground: '{surface.200}',
+                        color: '{text.color}',
+                        focusColor: '{primary.500}',
+                        selectedColor: '{highlight.color}',
+                        selectedFocusColor: '{highlight.focus.color}',
+                        icon: {
+                            color: '{surface.400}',
+                            focusColor: '{surface.500}'
+                        }
+                    },
+                    optionGroup: {
+                        background: '{surface.100}',
+                        color: '{text.muted.color}'
+                    }
+                },
                 text: {
                     color: '#e2e8f0',
                     muted: '#94a3b8'
                 },
                 border: '#2e3a49',
                 focusRing: '#8a5cf7',
-                highlight: '#1e3a8a',
-                overlay: 'rgba(0, 0, 0, 0.5)'
+                highlight: '#1e3a8a'
             }
         }
     }

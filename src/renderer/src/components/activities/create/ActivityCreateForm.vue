@@ -47,8 +47,6 @@ function onCreate(): void {
     }
     emit('create', payload)
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -63,7 +61,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 v-model="name"
                 :placeholder="t('userInterface.serverActivitiesView.addActivityModal.name')"
                 class="w-full"
-                :pt="{ root: { style: background_style } }"
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
@@ -78,7 +75,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 :placeholder="
                     t('userInterface.serverActivitiesView.addActivityModal.description_input')
                 "
-                :pt="{ root: { style: background_style } }"
             />
         </div>
 

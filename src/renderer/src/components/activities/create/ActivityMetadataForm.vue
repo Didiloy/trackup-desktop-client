@@ -161,8 +161,6 @@ function removeDefinition(index: number): void {
 function submitMetadata(): void {
     emit('create', defs.value)
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -195,11 +193,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <label class="text-sm text-surface-500">{{
                         t('userInterface.serverActivitiesView.addActivityModal.metadataLabel')
                     }}</label>
-                    <InputText
-                        v-model="draft.label"
-                        class="w-full"
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputText v-model="draft.label" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
@@ -212,25 +206,13 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         option-value="value"
                         append-to="self"
                         class="w-full"
-                        :pt="{
-                            root: { style: background_style },
-                            list: { class: 'bg-surface-100' },
-                            label: { style: background_style },
-                            item: { class: 'text-surface-900 dark:text-surface-0' },
-                            itemLabel: { class: 'text-surface-900 dark:text-surface-0' }
-                        }"
                     />
                 </div>
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
-                <Textarea
-                    v-model="draft.description"
-                    rows="2"
-                    auto-resize
-                    :pt="{ root: { style: background_style } }"
-                />
+                <Textarea v-model="draft.description" rows="2" auto-resize />
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -258,7 +240,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <InputText
                         v-model="newChoice"
                         class="flex-1"
-                        :pt="{ root: { style: background_style } }"
                         :placeholder="t('placeholder.enter')"
                         :disabled="!canUseChoices"
                         @keydown.enter="addChoice"
@@ -323,7 +304,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     v-for="(d, idx) in defs"
                     :key="idx"
                     class="flex items-center justify-between p-2 rounded-md"
-                    :style="background_style"
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900">{{ d.key }}</span>

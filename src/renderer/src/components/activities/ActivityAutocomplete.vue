@@ -67,8 +67,6 @@ onMounted(() => {
         onActivityQueryChange(props.initialActivity.name)
     }
 })
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -83,9 +81,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
         :size="size"
         :disabled="disabled"
         :pt="{
-            root: { style: 'width: 100%;' },
-            input: { class: 'bg-surface-100', style: background_style },
-            overlay: { class: 'bg-surface-100', style: background_style }
+            root: { style: 'width: 100%;' }
         }"
         @complete="handleComplete"
         @item-select="handleItemSelect"

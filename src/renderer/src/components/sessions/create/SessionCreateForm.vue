@@ -94,8 +94,6 @@ function onCreate(): void {
         request: payload
     })
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -114,16 +112,10 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     <ActivityAutocomplete
                         v-if="!props.preSelectedActivityId"
                         v-model="activity_name"
-                        :pt="{ root: { style: background_style } }"
                         :initial-activity="pre_selected_activity"
                         @select="(a) => (selected_activity = a)"
                     />
-                    <InputText
-                        v-else
-                        :model-value="pre_selected_activity?.name || ''"
-                        disabled
-                        :pt="{ root: { style: background_style } }"
-                    />
+                    <InputText v-else :model-value="pre_selected_activity?.name || ''" disabled />
                 </div>
             </div>
 
@@ -142,7 +134,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         'Optional title'
                     "
                     class="w-full"
-                    :pt="{ root: { style: background_style } }"
                 />
             </div>
         </div>
@@ -157,13 +148,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         >{{ t('common.date') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <DatePicker
-                    v-model="date"
-                    show-time
-                    hour-format="24"
-                    :pt="{ input: { style: background_style } }"
-                    class="w-full"
-                />
+                <DatePicker v-model="date" show-time hour-format="24" class="w-full" />
             </div>
 
             <!-- Duration -->
@@ -175,13 +160,7 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                         <span class="text-red-500">*</span></span
                     >
                 </div>
-                <InputNumber
-                    v-model="duration"
-                    :min="1"
-                    show-buttons
-                    class="w-full"
-                    :pt="{ input: { style: background_style } }"
-                />
+                <InputNumber v-model="duration" :min="1" show-buttons class="w-full" />
             </div>
         </div>
 
@@ -203,11 +182,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                     t('userInterface.serverSessionsView.addSessionModal.selectParticipants')
                 "
                 class="w-full"
-                :pt="{
-                    root: { class: 'bg-surface-100', style: background_style },
-                    overlay: { class: 'bg-surface-100', style: background_style },
-                    listContainer: { class: 'bg-surface-100', style: background_style }
-                }"
             >
                 <template #option="slotProps">
                     <div class="flex items-center gap-2">
@@ -236,7 +210,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 :placeholder="
                     t('userInterface.serverSessionsView.addSessionModal.commentPlaceholder')
                 "
-                :pt="{ root: { style: background_style } }"
             />
         </div>
 

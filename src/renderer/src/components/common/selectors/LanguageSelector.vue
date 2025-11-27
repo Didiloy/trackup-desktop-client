@@ -47,7 +47,7 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
             })
         }
     } catch (error) {
-        // console.error('Error switching language:', error)
+        console.error('Error switching language:', error)
         toast.add({
             severity: 'error',
             summary: i18n.t('userInterface.userProfileMenu.preferences.language.switch.error'),
@@ -69,11 +69,6 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
             option-label="name"
             option-value="code"
             class="language-select"
-            :pt="{
-                root: { class: 'bg-surface-100' },
-                overlay: { class: 'bg-surface-100' },
-                listContainer: { class: 'bg-surface-100' }
-            }"
             @change="switchLanguage"
         >
             <template #value="slotProps">

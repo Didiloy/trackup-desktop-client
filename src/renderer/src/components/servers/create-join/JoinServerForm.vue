@@ -40,8 +40,6 @@ async function submit(): Promise<void> {
         emit('joined', res.data!)
     }
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
@@ -54,11 +52,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 v-model="invitationCode"
                 :placeholder="t('userInterface.joinServerView.placeholder.invitationCode')"
                 class="w-full"
-                :pt="{
-                    root: {
-                        style: background_style
-                    }
-                }"
             />
             <small class="text-xs text-surface-500">
                 {{ t('userInterface.joinServerView.invitationCodeHint') }}
