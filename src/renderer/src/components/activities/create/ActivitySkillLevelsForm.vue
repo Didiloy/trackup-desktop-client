@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+import type { ICreateActivitySkillLevelRequest, IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
 
@@ -24,10 +24,11 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const { listSkillLevels } = useActivitySkillLevelCRUD()
+const { listSkillLevels, deleteSkillLevel } = useActivitySkillLevelCRUD()
 const server_store = useServerStore()
 
 const levels = ref<ICreateActivitySkillLevelRequest[]>([])
+const existingLevels = ref<IActivitySkillLevel[]>([])
 const nextDisplayOrder = ref(props.initialDisplayOrder)
 
 const draft = ref({
@@ -64,6 +65,7 @@ async function syncDisplayOrder(): Promise<void> {
             nextDisplayOrder.value = props.initialDisplayOrder
             return
         }
+        existingLevels.value = res.data
         const maxOrder = Math.max(...res.data.map((lvl) => lvl.display_order ?? 0))
         nextDisplayOrder.value = maxOrder + 1
     } catch (e) {
@@ -109,6 +111,16 @@ function addLevel(): void {
 
 function removeLevel(index: number): void {
     levels.value.splice(index, 1)
+}
+
+async function removeExistingLevel(levelId: string): Promise<void> {
+    if (!props.activityId || !server_store.getPublicId) return
+    try {
+        await deleteSkillLevel(server_store.getPublicId, props.activityId, levelId)
+        await syncDisplayOrder()
+    } catch (e) {
+        console.error('Failed to delete skill level', e)
+    }
 }
 
 function submitLevels(): void {
@@ -210,15 +222,42 @@ function submitLevels(): void {
         </div>
 
         <!-- Levels list -->
-        <div v-if="levels.length" class="flex flex-col gap-2">
+        <div v-if="levels.length || existingLevels.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
                 {{ t('userInterface.serverActivitiesView.addActivityModal.levels') }}
             </div>
             <div class="flex flex-col gap-2">
+                <!-- Existing levels -->
+                <div
+                    v-for="lvl in existingLevels"
+                    :key="lvl.public_id"
+                    class="flex items-center justify-between p-2 rounded-md bg-surface-100 opacity-75"
+                >
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-surface-600">#{{ lvl.display_order }}</span>
+                        <span class="text-sm text-surface-900 font-medium">{{ lvl.name }}</span>
+                        <span class="text-xs text-surface-600">
+                            {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }}
+                            {{ t('userInterface.serverActivitiesView.addActivityModal.sessions') }},
+                            {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }}
+                            {{ t('userInterface.serverActivitiesView.addActivityModal.minutes') }}
+                        </span>
+                    </div>
+                    <Button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        text
+                        rounded
+                        size="small"
+                        @click="removeExistingLevel(lvl.public_id)"
+                    />
+                </div>
+
+                <!-- New levels (drafts) -->
                 <div
                     v-for="(lvl, idx) in levels"
                     :key="idx"
-                    class="flex items-center justify-between p-2 rounded-md"
+                    class="flex items-center justify-between p-2 rounded-md bg-surface-50 border border-surface-200"
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-xs text-surface-600">#{{ lvl.display_order }}</span>
