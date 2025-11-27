@@ -56,7 +56,7 @@ const xyConfig = computed<VueUiXyConfig>(() => ({
             labels: {
                 show: false,
                 xAxisLabels: {
-                    show: false,
+                    show: true,
                     values: periods.value
                 },
                 yAxis: {
