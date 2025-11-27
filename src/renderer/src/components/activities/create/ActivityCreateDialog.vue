@@ -13,9 +13,9 @@ import type {
     ICreateActivityRequest
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ICreateActivitySkillLevelRequest } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
-import { useActivitySkillLevelCRUD } from '@/composables/activities/useActivitySkillLevelCRUD'
+import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import type { ICreateActivityMetadataDefinitionRequest } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
-import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/useActivityMetadataDefinitionCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 
 interface Props {
     modelValue: boolean

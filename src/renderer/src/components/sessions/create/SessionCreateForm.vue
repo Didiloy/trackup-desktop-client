@@ -108,7 +108,7 @@ function onCreate(): void {
                         >{{ t('common.activity') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <div>
+                <div class="max-w-[180px]">
                     <ActivityAutocomplete
                         v-if="!props.preSelectedActivityId"
                         v-model="activity_name"

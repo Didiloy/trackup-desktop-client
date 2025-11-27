@@ -104,7 +104,6 @@ function onCardClick(): void {
                     </div>
                     <div class="flex items-start gap-3 justify-end">
                         <div
-
                             v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
                             class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                         >
@@ -144,7 +143,9 @@ function onCardClick(): void {
                     </span>
                     <span class="text-xs text-surface-400 mt-1">{{
                         t('userInterface.serverActivitiesView.card.avg_duration', {
-                            value: convertMinuteToHoursMinute(Number(props.metrics?.avgSessionDuration ?? 0))
+                            value: convertMinuteToHoursMinute(
+                                Number(props.metrics?.avgSessionDuration ?? 0)
+                            )
                         })
                     }}</span>
                 </div>
