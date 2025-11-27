@@ -35,7 +35,7 @@ const componentMap: Record<string, any> = {
     DATE: MetadataInputDate
 }
 
-function getComponent(type: string) {
+function getComponent(type: string): any {
     return componentMap[type] || MetadataInputString
 }
 
@@ -75,7 +75,7 @@ function onSubmit(): void {
             </p>
         </div>
 
-        <div v-else class="flex flex-col gap-4 overflow-y-auto max-h-[60vh] px-1">
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[60vh] px-1">
             <div v-for="def in definitions" :key="def.public_id">
                 <component
                     :is="getComponent(def.type)"

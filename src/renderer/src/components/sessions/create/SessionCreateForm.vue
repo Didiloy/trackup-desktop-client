@@ -158,8 +158,6 @@ const background_style = 'background-color: var(--p-surface-100); color: var(--p
                 </div>
                 <DatePicker
                     v-model="date"
-                    show-time
-                    hour-format="24"
                     :pt="{ input: { style: background_style } }"
                     class="w-full"
                 />

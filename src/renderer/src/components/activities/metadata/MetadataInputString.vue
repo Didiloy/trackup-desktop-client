@@ -16,25 +16,36 @@ const value = computed({
     set: (val) => emit('update:modelValue', val)
 })
 
-const background_class = '!bg-surface-100 !text-surface-900'
+const background_class = '!bg-surface-0 !text-surface-900'
 </script>
 
 <template>
-    <div class="flex flex-col gap-1">
-        <!-- Label -->
-        <div class="flex items-center gap-2">
-            <i class="pi pi-database text-surface-500"></i>
-            <span class="text-sm font-medium text-surface-700">
-                {{ def.label || def.key }}
-                <span v-if="def.required" class="text-red-500">*</span>
-            </span>
+    <div
+        class="flex flex-col gap-2 p-3 border border-surface-200 rounded-lg bg-surface-50/50 hover:border-primary-200 transition-colors h-full"
+    >
+        <!-- Header -->
+        <div class="flex items-start gap-2">
+            <div
+                class="flex items-center justify-center w-6 h-6 rounded bg-blue-100 text-blue-600 shrink-0 mt-0.5"
+            >
+                <i class="pi pi-align-left text-xs"></i>
+            </div>
+            <div class="flex flex-col min-w-0">
+                <span class="text-sm font-medium text-surface-700 truncate">
+                    {{ def.label || def.key }}
+                    <span v-if="def.required" class="text-red-500">*</span>
+                </span>
+                <p v-if="def.description" class="text-xs text-surface-500 line-clamp-2">
+                    {{ def.description }}
+                </p>
+            </div>
+            <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
+                {{ def.type }}
+            </div>
         </div>
-        <p v-if="def.description" class="text-xs text-surface-500">
-            {{ def.description }}
-        </p>
 
         <!-- Input -->
-        <div class="mt-1">
+        <div class="mt-auto pt-1">
             <!-- With choices (allow custom) -->
             <Dropdown
                 v-if="def.choices && def.choices.length > 0 && def.allow_not_predefined_value"
@@ -42,7 +53,7 @@ const background_class = '!bg-surface-100 !text-surface-900'
                 :options="def.choices"
                 :placeholder="def.label || ''"
                 editable
-                class="w-full"
+                class="w-full p-inputtext-sm"
                 :pt="{ root: { class: background_class }, input: { class: background_class } }"
             />
 
@@ -52,7 +63,7 @@ const background_class = '!bg-surface-100 !text-surface-900'
                 v-model="value"
                 :options="def.choices"
                 :placeholder="def.label || undefined"
-                class="w-full"
+                class="w-full p-inputtext-sm"
                 :pt="{ root: { class: background_class }, input: { class: background_class } }"
             />
 
@@ -61,7 +72,7 @@ const background_class = '!bg-surface-100 !text-surface-900'
                 v-else
                 v-model="value"
                 :placeholder="def.label || undefined"
-                class="w-full"
+                class="w-full p-inputtext-sm"
                 :class="background_class"
             />
         </div>
