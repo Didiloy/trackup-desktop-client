@@ -86,9 +86,8 @@ const can_add = computed(() => {
 
 const canUseChoices = computed(() => {
     const type = draft.value.type
-    const allowsChoices = draft.value.allow_not_predefined_value
     const typeSupportsChoices = type !== 'BOOLEAN' && type !== 'DATE'
-    return allowsChoices && typeSupportsChoices
+    return typeSupportsChoices
 })
 
 watch(
