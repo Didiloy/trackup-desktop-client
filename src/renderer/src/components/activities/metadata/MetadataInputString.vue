@@ -16,7 +16,6 @@ const value = computed({
     set: (val) => emit('update:modelValue', val)
 })
 
-const background_class = '!bg-surface-0 !text-surface-900'
 </script>
 
 <template>
@@ -54,7 +53,6 @@ const background_class = '!bg-surface-0 !text-surface-900'
                 :placeholder="def.label || ''"
                 editable
                 class="w-full p-inputtext-sm"
-                :pt="{ root: { class: background_class }, input: { class: background_class } }"
             />
 
             <!-- With choices (strict) -->
@@ -64,16 +62,6 @@ const background_class = '!bg-surface-0 !text-surface-900'
                 :options="def.choices"
                 :placeholder="def.label || undefined"
                 class="w-full p-inputtext-sm"
-                :pt="{ root: { class: background_class }, input: { class: background_class } }"
-            />
-
-            <!-- Free text -->
-            <InputText
-                v-else
-                v-model="value"
-                :placeholder="def.label || undefined"
-                class="w-full p-inputtext-sm"
-                :class="background_class"
             />
         </div>
     </div>

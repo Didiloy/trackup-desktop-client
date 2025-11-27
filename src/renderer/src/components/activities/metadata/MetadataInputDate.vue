@@ -16,7 +16,6 @@ const value = computed({
     set: (val) => emit('update:modelValue', val)
 })
 
-const background_class = '!bg-surface-0 !text-surface-900'
 </script>
 
 <template>
@@ -52,7 +51,6 @@ const background_class = '!bg-surface-0 !text-surface-900'
                 hour-format="24"
                 :placeholder="def.label || undefined"
                 class="w-full p-inputtext-sm"
-                :pt="{ input: { class: background_class } }"
             />
         </div>
     </div>

@@ -16,8 +16,6 @@ const value = computed({
     set: (val) => emit('update:modelValue', val)
 })
 
-const background_class = '!bg-surface-0 !text-surface-900'
-
 function handleEditableInput(event: any): void {
     const val = event.value
     if (val !== undefined && val !== null && val !== '') {
@@ -25,6 +23,23 @@ function handleEditableInput(event: any): void {
         if (!isNaN(numVal)) {
             emit('update:modelValue', numVal)
         }
+    }
+}
+
+function filterNumeric(event: KeyboardEvent): void {
+    const allowedKeys = [
+        'Backspace',
+        'Delete',
+        'Tab',
+        'Enter',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown'
+    ]
+    const char = event.key
+    if (!/[0-9.-]/.test(char) && !allowedKeys.includes(char)) {
+        event.preventDefault()
     }
 }
 </script>
@@ -64,8 +79,8 @@ function handleEditableInput(event: any): void {
                 :placeholder="def.label || ''"
                 editable
                 class="w-full p-inputtext-sm"
-                :pt="{ root: { class: background_class }, input: { class: background_class } }"
                 @change="handleEditableInput"
+                @keydown="filterNumeric"
             />
 
             <!-- With choices (strict) -->
@@ -75,17 +90,9 @@ function handleEditableInput(event: any): void {
                 :options="def.choices"
                 :placeholder="def.label || undefined"
                 class="w-full p-inputtext-sm"
-                :pt="{ root: { class: background_class }, input: { class: background_class } }"
             />
 
-            <!-- Free input -->
-            <InputNumber
-                v-else
-                v-model="value"
-                :placeholder="def.label || undefined"
-                class="w-full p-inputtext-sm"
-                :pt="{ input: { class: background_class } }"
-            />
+
         </div>
     </div>
 </template>
