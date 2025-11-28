@@ -30,7 +30,7 @@ declare module 'vue' {
     ActivitySessionsTable: typeof import('./src/components/activities/detail/ActivitySessionsTable.vue')['default']
     ActivitySkillDistribution: typeof import('./src/components/activities/detail/ActivitySkillDistribution.vue')['default']
     ActivitySkillLevelsForm: typeof import('./src/components/activities/create/ActivitySkillLevelsForm.vue')['default']
-    ActivitySparkline: typeof import('./src/components/activities/ActivitySparkline.vue')['default']
+    ActivitySparkline: typeof import('./src/components/activities/detail/ActivitySparkline.vue')['default']
     ActivityStatsOverview: typeof import('./src/components/activities/detail/ActivityStatsOverview.vue')['default']
     ActivityTopContributors: typeof import('./src/components/activities/detail/ActivityTopContributors.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']

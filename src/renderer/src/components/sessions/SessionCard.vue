@@ -34,7 +34,9 @@ function getParticipantTooltip(
     session: ISessionListItem
 ): string {
     const isCreator = participant.public_id === session.creator.member_public_id
-    return isCreator ? `${participant.nickname} • ${t('common.creator')}` : participant.nickname
+    return isCreator
+        ? `${participant.nickname} • ${t('common.fields.creator')}`
+        : participant.nickname
 }
 </script>
 
@@ -56,7 +58,7 @@ function getParticipantTooltip(
                     v-if="session.activity.logo"
                     :src="session.activity.logo"
                     class="w-12 h-12 rounded-xl object-cover ring-black/20"
-                    alt="Activity Logo"
+                    :alt="session.activity.name"
                 />
                 <div
                     v-else
@@ -113,7 +115,7 @@ function getParticipantTooltip(
                             v-if="participant.avatar_url"
                             :src="participant.avatar_url"
                             class="w-full h-full object-cover"
-                            alt="Participant Avatar"
+                            :alt="participant.nickname"
                         />
                         <span
                             v-else
@@ -133,7 +135,11 @@ function getParticipantTooltip(
 
                 <p class="z-10 text-sm text-surface-600 mt-2 relative">
                     {{ session.participants_count }}
-                    {{ session.participants_count === 1 ? 'participant' : 'participants' }}
+                    {{
+                        session.participants_count === 1
+                            ? t('views.server_sessions.session_details.participant')
+                            : t('views.server_sessions.session_details.participants')
+                    }}
                 </p>
             </div>
             <Button

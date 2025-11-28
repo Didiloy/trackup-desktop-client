@@ -28,15 +28,15 @@ const { t } = useI18n()
 const { definitions, values, isLoadingDefinitions, loadDefinitions, canSubmit, getSubmissionData } =
     useMetadataForm(props.activityId, props.definitions)
 
-const componentMap: Record<string, any> = {
+const componentMap: Record<string, unknown> = {
     STRING: MetadataInputString,
     NUMBER: MetadataInputNumber,
     BOOLEAN: MetadataInputBoolean,
     DATE: MetadataInputDate
 }
 
-function getComponent(type: string): any {
-    return componentMap[type] || MetadataInputString
+function getComponent(type: string): unknown {
+    return (componentMap as Record<string, unknown>)[type] || MetadataInputString
 }
 
 onMounted(async () => {
@@ -68,7 +68,7 @@ function onSubmit(): void {
         >
             <i class="pi pi-info-circle text-2xl mb-2"></i>
             <p>
-                {{ t('userInterface.serverSessionsView.addSessionModal.noMetadata') }}
+                {{ t('views.server_sessions.add_modal.no_metadata') }}
             </p>
         </div>
 
@@ -84,9 +84,14 @@ function onSubmit(): void {
 
         <!-- Actions -->
         <div class="flex justify-end gap-2 mt-auto pt-4">
-            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
-                :label="t('common.finish')"
+                :label="t('common.actions.skip')"
+                severity="secondary"
+                text
+                @click="emit('skip')"
+            />
+            <Button
+                :label="t('common.actions.finish')"
                 :disabled="!canSubmit || props.loading"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"

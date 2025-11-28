@@ -49,7 +49,7 @@ onMounted(async () => {
             emit('loaded', false)
         }
     } catch (e) {
-        console.error('Failed to load enum definitions', e)
+        console.error(t('messages.error.fetch'), e)
         emit('loaded', false)
     } finally {
         isLoadingDefinitions.value = false
@@ -115,7 +115,7 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
         >
             <i class="pi pi-info-circle text-2xl mb-2"></i>
             <p>
-                {{ t('userInterface.serverSessionsView.addSessionModal.noEnums') }}
+                {{ t('views.server_sessions.add_modal.no_enums') }}
             </p>
         </div>
 
@@ -149,9 +149,14 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
 
         <!-- Actions -->
         <div class="flex justify-end gap-2 mt-auto pt-4">
-            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
-                :label="t('common.next')"
+                :label="t('common.actions.skip')"
+                severity="secondary"
+                text
+                @click="emit('skip')"
+            />
+            <Button
+                :label="t('common.actions.next')"
                 :disabled="!can_submit"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"

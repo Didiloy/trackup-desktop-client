@@ -437,6 +437,7 @@
                 "title": "Détails de la session",
                 "activity": "Activité",
                 "participants": "Participants",
+                "participant": "Participant",
                 "extra_participants": "Participants supplémentaires",
                 "select_participants": "Sélectionner les participants",
                 "comment": "Commentaire",
