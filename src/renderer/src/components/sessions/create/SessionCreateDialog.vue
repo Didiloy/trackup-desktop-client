@@ -49,25 +49,31 @@ const has_metadata = ref(false)
 const enum_definitions = ref<IEnumDefinition[]>([])
 const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
 
+// Track metadata form validity
+const metadata_valid = ref(true)
+function setMetadataValid(v: boolean): void {
+    metadata_valid.value = v
+}
+
 const steps = computed(() => {
     const list = [
         {
             key: 'info',
-            label: t('userInterface.serverSessionsView.addSessionModal.infoStep'),
+            label: t('common.steps.info'),
             icon: 'pi pi-info-circle'
         }
     ]
     if (has_enums.value) {
         list.push({
             key: 'enums',
-            label: t('userInterface.serverSessionsView.addSessionModal.enumsStep'),
+            label: t('common.steps.enums'),
             icon: 'pi pi-list'
         })
     }
     if (has_metadata.value) {
         list.push({
             key: 'metadata',
-            label: t('userInterface.serverSessionsView.addSessionModal.metadataStep'),
+            label: t('common.steps.metadata'),
             icon: 'pi pi-database'
         })
     }
@@ -79,11 +85,11 @@ const currentIndex = computed(() => steps.value.findIndex((s) => s.key === curre
 const subtitle = computed(() => {
     switch (current_step.value) {
         case 'info':
-            return t('userInterface.serverSessionsView.addSessionModal.infoDescription')
+            return t('views.server_sessions.add_modal.info_description')
         case 'enums':
-            return t('userInterface.serverSessionsView.addSessionModal.enumsDescription')
+            return t('views.server_sessions.add_modal.enums_description')
         case 'metadata':
-            return t('userInterface.serverSessionsView.addSessionModal.metadataDescription')
+            return t('views.server_sessions.add_modal.metadata_description')
         default:
             return ''
     }
@@ -118,7 +124,7 @@ async function checkActivityMetadata(activityId: string): Promise<void> {
             has_metadata.value = false
         }
     } catch (e) {
-        console.error('Failed to check metadata', e)
+        console.error(t('messages.error.fetch'), e)
         has_metadata.value = false
         metadata_definitions.value = []
     }
@@ -247,6 +253,14 @@ function finishWizard(): void {
     }
     close()
 }
+
+// Compute whether the dialog should be closable. It's not closable when on the metadata step and metadata is invalid
+const isClosable = computed(() => {
+    if (current_step.value !== 'metadata') return true
+    // If there are metadata definitions and metadata is invalid, prevent closing
+    if (has_metadata.value && !metadata_valid.value) return false
+    return true
+})
 </script>
 
 <template>
@@ -254,11 +268,13 @@ function finishWizard(): void {
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
-        :title="t('userInterface.serverSessionsView.addSessionModal.title')"
+        :title="t('views.server_sessions.add_modal.title')"
         :subtitle="subtitle"
         icon-class="pi pi-plus-circle"
         :steps="steps"
         :current="currentIndex"
+        :closable="isClosable"
+        :dismissable-mask="isClosable"
         @update:model-value="emit('update:modelValue', $event)"
     >
         <SessionCreateForm
@@ -284,6 +300,7 @@ function finishWizard(): void {
             :definitions="metadata_definitions"
             @submit="handleAddMetadata"
             @skip="handleSkipMetadata"
+            @valid="setMetadataValid"
         />
 
         <template #footer>

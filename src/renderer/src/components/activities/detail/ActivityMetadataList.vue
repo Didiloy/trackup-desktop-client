@@ -45,7 +45,9 @@ function getIconForType(type: string): string {
                 :key="meta.public_id"
                 class="bg-surface-50 rounded-xl p-3 border border-surface-200 flex items-center gap-3"
             >
-                <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center">
+                <div
+                    class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center"
+                >
                     <i :class="getIconForType(meta.type)"></i>
                 </div>
 
@@ -68,7 +70,9 @@ function getIconForType(type: string): string {
                     </p>
 
                     <div class="flex flex-wrap gap-1 mt-1">
-                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 text-surface-600 font-medium">
+                        <span
+                            class="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 text-surface-600 font-medium"
+                        >
                             {{ formatTypeLabel(meta.type) }}
                         </span>
 
@@ -84,7 +88,9 @@ function getIconForType(type: string): string {
         </div>
 
         <div v-else class="flex flex-col items-center justify-center py-8 text-center">
-            <div class="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-3">
+            <div
+                class="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-3"
+            >
                 <i class="pi pi-database text-surface-400 text-xl"></i>
             </div>
 

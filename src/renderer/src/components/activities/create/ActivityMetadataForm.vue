@@ -403,12 +403,7 @@ function formatTypeLabel(type?: string): string {
                 <Button
                     :label="
                         editingMetadataId
-                            ? t(
-                                  'common.actions.update',
-                                  {
-                                      entity: t('views.activity.add_modal.metadata_label')
-                                  }
-                              )
+                            ? t('common.actions.update')
                             : t('views.activity.add_modal.metadata_validate')
                     "
                     :icon="editingMetadataId ? 'pi pi-save' : 'pi pi-check'"
@@ -441,7 +436,9 @@ function formatTypeLabel(type?: string): string {
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900 font-medium">{{ meta.key }}</span>
-                        <span class="text-xs text-surface-600">({{ formatTypeLabel(meta.type) }})</span>
+                        <span class="text-xs text-surface-600"
+                            >({{ formatTypeLabel(meta.type) }})</span
+                        >
                         <span v-if="meta.required" class="text-xs text-primary-600"
                             >• {{ t('common.fields.required') }}</span
                         >
@@ -470,7 +467,9 @@ function formatTypeLabel(type?: string): string {
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900">{{ d.key }}</span>
-                        <span class="text-xs text-surface-600">({{ formatTypeLabel(d.type) }})</span>
+                        <span class="text-xs text-surface-600"
+                            >({{ formatTypeLabel(d.type) }})</span
+                        >
                         <span v-if="d.required" class="text-xs text-primary-600"
                             >• {{ t('common.fields.required') }}</span
                         >

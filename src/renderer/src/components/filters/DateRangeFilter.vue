@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
 
-const placeholderText = computed(() => props.placeholder ?? t('filters.date_range'))
+const placeholderText = computed(() => props.placeholder ?? t('common.filters.date_range'))
 
 function onChange(value: Date | Date[] | (Date | null)[] | null | undefined): void {
     let dateArray: Date[] | null = null

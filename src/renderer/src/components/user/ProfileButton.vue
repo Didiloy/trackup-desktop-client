@@ -15,6 +15,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isActive = computed(() => route.path === '/')
+const profileTitle = computed(() => user_store.getUsername ?? undefined)
 
 const goHome = async (): Promise<void> => {
     server_store.resetState()
@@ -26,12 +27,12 @@ const goHome = async (): Promise<void> => {
     <AvatarButton
         id="ProfileButton"
         :image-url="user_store.getAvatar"
-        :label="i18n.t('userInterface.userProfileMenu.title')"
+        :label="i18n.t('views.user_profile.title')"
         size="normal"
         shape="rounded"
         hover-scale
-        :title="user_store.getUsername"
-        :disabled="$route.fullPath === '/'"
+        :title="profileTitle"
+        :disabled="route.fullPath === '/'"
         :button-class="'profile-rainbow'"
         :class="{ 'is-active': isActive }"
         @click="goHome"

@@ -67,10 +67,10 @@ function onSearchModeChange(value: 'startsWith' | 'endsWith' | 'contains' | 'exa
 }
 
 const searchModeOptions = computed(() => [
-    { label: t('filters.search_modes.contains'), value: 'contains' },
-    { label: t('filters.search_modes.starts_with'), value: 'startsWith' },
-    { label: t('filters.search_modes.ends_with'), value: 'endsWith' },
-    { label: t('filters.search_modes.exact_match'), value: 'exact' }
+    { label: t('common.filters.search_modes.contains'), value: 'contains' },
+    { label: t('common.filters.search_modes.starts_with'), value: 'startsWith' },
+    { label: t('common.filters.search_modes.ends_with'), value: 'endsWith' },
+    { label: t('common.filters.search_modes.exact_match'), value: 'exact' }
 ])
 </script>
 

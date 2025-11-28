@@ -193,7 +193,7 @@ function clearFilters(): void {
                 :model-value="localLikedByMe"
                 icon="pi pi-heart"
                 icon-active="pi pi-heart-fill"
-                :tooltip="t('filters.liked_by_me')"
+                :tooltip="t('common.filters.liked_by_me')"
                 :class="localLikedByMe ? 'text-red-500' : 'text-surface-600'"
                 @update:model-value="onLikedByMeToggle"
             />
@@ -211,10 +211,10 @@ function clearFilters(): void {
                     <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold text-surface-900">{{
-                                t('filters.title')
+                                t('common.filters.title')
                             }}</span>
                             <Button
-                                :label="t('actions.clear_all')"
+                                :label="t('common.actions.clear_all')"
                                 link
                                 size="small"
                                 class="p-0"
@@ -225,11 +225,11 @@ function clearFilters(): void {
                         <!-- Participants Filter -->
                         <div class="flex flex-col gap-2">
                             <label class="text-sm font-medium text-surface-700">{{
-                                t('filters.participants')
+                                t('common.filters.participants')
                             }}</label>
                             <MultiSelectFilter
                                 :model-value="localParticipantIds"
-                                :options="server_store.getMembers || []"
+                                :options="(server_store.getMembers || []) as unknown as string[]"
                                 option-label="nickname"
                                 option-value="public_id"
                                 :placeholder="t('placeholder.select_participants')"
@@ -240,7 +240,7 @@ function clearFilters(): void {
                         <!-- Date Range Filter -->
                         <div class="flex flex-col gap-2">
                             <label class="text-sm font-medium text-surface-700">{{
-                                t('filters.date_range')
+                                t('common.filters.date_range')
                             }}</label>
                             <DateRangeFilter
                                 :model-value="localDateRange"
@@ -251,13 +251,13 @@ function clearFilters(): void {
                         <!-- Duration Filter -->
                         <div class="flex flex-col gap-2">
                             <label class="text-sm font-medium text-surface-700">{{
-                                t('filters.duration.title')
+                                t('common.filters.duration.title')
                             }}</label>
                             <NumberRangeFilter
                                 :min="localMinDuration"
                                 :max="localMaxDuration"
-                                :placeholder-min="t('common.min')"
-                                :placeholder-max="t('common.max')"
+                                :placeholder-min="t('common.actions.min')"
+                                :placeholder-max="t('common.actions.max')"
                                 @update:min="onMinDurationChange"
                                 @update:max="onMaxDurationChange"
                             />

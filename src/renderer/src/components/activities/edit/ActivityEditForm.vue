@@ -3,7 +3,10 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
-import type { IActivity, IUpdateActivityRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    IActivity,
+    IUpdateActivityRequest
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 const props = defineProps<{
     activity: IActivity
@@ -70,7 +73,9 @@ function onUpdate(): void {
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.description') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.description')
+                }}</span>
             </div>
             <Textarea
                 v-model="description"
@@ -84,7 +89,9 @@ function onUpdate(): void {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-image text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.logo') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.logo')
+                }}</span>
             </div>
             <EntityLogoHandling
                 :logo="logo"
@@ -95,7 +102,9 @@ function onUpdate(): void {
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-images text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.banner') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.banner')
+                }}</span>
             </div>
             <EntityBannerHandling
                 :banner="banner"
@@ -105,7 +114,12 @@ function onUpdate(): void {
         </div>
 
         <div class="flex justify-end gap-2 pt-2 mt-auto">
-            <Button :label="t('common.actions.next')" severity="secondary" text @click="emit('next')" />
+            <Button
+                :label="t('common.actions.next')"
+                severity="secondary"
+                text
+                @click="emit('next')"
+            />
             <Button
                 :label="t('common.actions.save')"
                 :disabled="!can_submit"

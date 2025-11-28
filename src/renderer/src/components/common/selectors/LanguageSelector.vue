@@ -26,14 +26,14 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
         if (result) {
             toast.add({
                 severity: 'success',
-                summary: i18n.t('views.user_profile_menu.preferences.language.switch.success'),
+                summary: i18n.t('views.user_profile.preferences.language.switch.success'),
                 life: 3000
             })
         } else {
             toast.add({
                 severity: 'error',
-                summary: i18n.t('views.user_profile_menu.preferences.language.switch.error'),
-                detail: i18n.t('views.user_profile_menu.preferences.language.switch.error_detail'),
+                summary: i18n.t('views.user_profile.preferences.language.switch.error'),
+                detail: i18n.t('views.user_profile.preferences.language.switch.error_detail'),
                 life: 3000
             })
         }
@@ -41,8 +41,8 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
         console.error('Error switching language:', error)
         toast.add({
             severity: 'error',
-            summary: i18n.t('views.user_profile_menu.preferences.language.switch.error'),
-            detail: i18n.t('views.user_profile_menu.preferences.language.switch.error_detail'),
+            summary: i18n.t('views.user_profile.preferences.language.switch.error'),
+            detail: i18n.t('views.user_profile.preferences.language.switch.error_detail'),
             life: 3000
         })
     }
@@ -51,7 +51,7 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
 
 <template>
     <div class="language-switcher">
-        <h3>{{ i18n.t('views.user_profile_menu.preferences.language.title') }}</h3>
+        <h3>{{ i18n.t('views.user_profile.preferences.language.title') }}</h3>
         <Select
             v-model="current_language"
             :options="languages"
@@ -69,7 +69,7 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
                         languages.find((lang) => lang.code === slotProps.value)?.name || ''
                     }}</span>
                 </div>
-                <span v-else>{{ i18n.t('views.user_profile_menu.preferences.language.title') }}</span>
+                <span v-else>{{ i18n.t('views.user_profile.preferences.language.title') }}</span>
             </template>
             <template #option="slotProps">
                 <div class="language-option">

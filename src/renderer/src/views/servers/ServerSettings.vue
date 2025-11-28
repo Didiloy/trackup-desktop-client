@@ -5,7 +5,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div class="p-4">{{ t('server.settings') }}</div>
+    <div class="p-4">{{ t('views.server_settings.title') }}</div>
 </template>
 
 <style scoped></style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActionsList from '@/components/servers/ServersActionsList.vue'
-import ProfileButton from '@/components/ProfileButton.vue'
+import ProfileButton from '@/components/user/ProfileButton.vue'
 import { useRoute } from 'vue-router'
 import { computed, ref, watch } from 'vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 interface Props {
     modelValue: string[]
     options: string[]
@@ -16,7 +18,7 @@ interface Emits {
 }
 
 withDefaults(defineProps<Props>(), {
-    placeholder: 'Select items',
+    placeholder: undefined,
     size: 'small',
     optionLabel: 'label',
     optionValue: 'value',
@@ -25,6 +27,11 @@ withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+const placeholderText = computed(() => {
+    const ph = ({} as Props).placeholder
+    return typeof ph !== 'undefined' ? ph : t('placeholder.select')
+})
 
 function onChange(value: string[]): void {
     emit('update:modelValue', value)
@@ -37,7 +44,7 @@ function onChange(value: string[]): void {
         :options="options"
         :option-label="optionLabel"
         :option-value="optionValue"
-        :placeholder="placeholder"
+        :placeholder="placeholderText"
         :filter="filter"
         :display="display"
         :size="size"

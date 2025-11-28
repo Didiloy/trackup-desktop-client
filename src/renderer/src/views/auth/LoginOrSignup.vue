@@ -10,7 +10,7 @@
                     class="w-12 h-12"
                 />
                 <h1 class="text-xl font-semibold">{{ t('app.title') }}</h1>
-                <p class="text-sm text-gray-600">{{ t('userInterface.loginView.description') }}</p>
+                <p class="text-sm text-gray-600">{{ t('views.login.description') }}</p>
             </div>
 
             <div class="flex flex-col gap-3">
@@ -32,7 +32,7 @@
             </div>
 
             <div class="mt-6 text-xs text-gray-500 text-center">
-                {{ t('userInterface.loginView.terms') }}
+                {{ t('views.login.terms') }}
             </div>
         </div>
     </div>
@@ -51,28 +51,25 @@ const available_providers: { provider: Provider; icon: string; label: string }[]
     {
         provider: 'google',
         icon: 'pi-google',
-        label: t('userInterface.loginView.google'),
+        label: t('views.login.continue_with_google')
     },
     {
         provider: 'github',
         icon: 'pi-github',
-        label: t('userInterface.loginView.github'),
+        label: t('views.login.continue_with_github')
     },
     {
         provider: 'gitlab',
         icon: 'pi-gitlab',
-        label: t('userInterface.loginView.gitlab'),
-    },
+        label: t('views.login.continue_with_gitlab')
+    }
 ]
 
 async function handleOAuth(provider: Provider): Promise<void> {
-    // Use custom deep-link scheme to return to the app after browser auth
     const redirectTo = 'trackup://auth/callback'
     const data = (await signInWithOAuth(provider, redirectTo)) as { url?: string } | undefined
-    // When skipBrowserRedirect is used, Supabase returns a URL to open
     const url = data?.url
     if (url) {
-        // Use bridge to open externally in main (validation & security)
         await window.api.app.openExternal(url)
     }
 }

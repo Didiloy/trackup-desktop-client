@@ -5,7 +5,7 @@ import type {
     IActivityTimePatterns
 } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
-import ActivitySparkline from '@/components/activities/ActivitySparkline.vue'
+import ActivitySparkline from '@/components/activities/detail/ActivitySparkline.vue'
 import ActivityPatternsSummary from './ActivityPatternsSummary.vue'
 import { useI18n } from 'vue-i18n'
 
@@ -29,9 +29,12 @@ const growthBadge = computed(() => {
 const trendText = computed(() => {
     const raw = (props.growth?.trend || '').toString().toLowerCase()
     if (!raw) return t('views.activity.performance_section.trend_unknown')
-    if (raw === 'up' || raw === 'increasing') return t('views.activity.performance_section.trend_up')
-    if (raw === 'down' || raw === 'decreasing') return t('views.activity.performance_section.trend_down')
-    if (raw === 'steady' || raw === 'stable') return t('views.activity.performance_section.trend_steady')
+    if (raw === 'up' || raw === 'increasing')
+        return t('views.activity.performance_section.trend_up')
+    if (raw === 'down' || raw === 'decreasing')
+        return t('views.activity.performance_section.trend_down')
+    if (raw === 'steady' || raw === 'stable')
+        return t('views.activity.performance_section.trend_steady')
     return raw
 })
 </script>

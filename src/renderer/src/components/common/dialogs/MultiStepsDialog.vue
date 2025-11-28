@@ -13,13 +13,15 @@ interface StepItem {
 
 interface Props {
     modelValue: boolean
-    steps: StepItem[]
-    current: number
+    steps?: StepItem[]
+    current?: number
     title?: string
     subtitle?: string
     iconClass?: string
     styleClass?: string
     contentClass?: string
+    closable?: boolean
+    dismissableMask?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,7 +31,9 @@ const props = withDefaults(defineProps<Props>(), {
     steps: () => [],
     current: 0,
     styleClass: 'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2',
-    contentClass: 'p-0 bg-surface-50'
+    contentClass: 'p-0 bg-surface-50',
+    closable: true,
+    dismissableMask: true
 })
 
 const emit = defineEmits<{
@@ -49,6 +53,8 @@ const safeCurrent = computed(() => {
         :model-value="modelValue"
         :style-class="styleClass"
         :content-class="contentClass"
+        :closable="closable"
+        :dismissable-mask="dismissableMask"
         @update:model-value="(v: boolean) => emit('update:modelValue', v)"
         @hide="emit('hide')"
         @show="emit('show')"

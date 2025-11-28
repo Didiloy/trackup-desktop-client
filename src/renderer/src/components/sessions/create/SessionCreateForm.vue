@@ -105,7 +105,7 @@ function onCreate(): void {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-trophy text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700"
-                        >{{ t('common.activity') }} <span class="text-red-500">*</span></span
+                        >{{ t('common.steps.activity') }} <span class="text-red-500">*</span></span
                     >
                 </div>
                 <div class="max-w-[180px]">
@@ -124,14 +124,12 @@ function onCreate(): void {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-tag text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700">{{
-                        t('common.title')
+                        t('common.fields.title')
                     }}</span>
                 </div>
                 <InputText
                     v-model="title"
-                    :placeholder="
-                        t('userInterface.serverSessionsView.addSessionModal.titlePlaceholder')
-                    "
+                    :placeholder="t('views.server_sessions.add_modal.title_placeholder')"
                     class="w-full"
                 />
             </div>
@@ -144,7 +142,7 @@ function onCreate(): void {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-calendar text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700"
-                        >{{ t('common.date') }} <span class="text-red-500">*</span></span
+                        >{{ t('common.fields.date') }} <span class="text-red-500">*</span></span
                     >
                 </div>
                 <DatePicker v-model="date" show-time hour-format="24" class="w-full" />
@@ -155,8 +153,9 @@ function onCreate(): void {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-clock text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700"
-                        >{{ t('common.duration') }} ({{ t('common.minutes_short') }})
-                        <span class="text-red-500">*</span></span
+                        >{{ t('views.server_sessions.session_details.duration') }} ({{
+                            t('common.misc.minutes_short')
+                        }}) <span class="text-red-500">*</span></span
                     >
                 </div>
                 <InputNumber v-model="duration" :min="1" show-buttons class="w-full" />
@@ -168,7 +167,7 @@ function onCreate(): void {
             <div class="flex items-center gap-2">
                 <i class="pi pi-users text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700">{{
-                    t('common.extra_participants')
+                    t('views.server_sessions.session_details.extra_participants')
                 }}</span>
             </div>
             <MultiSelect
@@ -177,9 +176,7 @@ function onCreate(): void {
                 option-label="nickname"
                 filter
                 display="chip"
-                :placeholder="
-                    t('userInterface.serverSessionsView.addSessionModal.selectParticipants')
-                "
+                :placeholder="t('views.server_sessions.add_modal.select_participants')"
                 class="w-full"
             >
                 <template #option="slotProps">
@@ -200,23 +197,28 @@ function onCreate(): void {
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <i class="pi pi-comment text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.comment') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('views.server_sessions.session_details.comment')
+                }}</span>
             </div>
             <Textarea
                 v-model="comment"
                 rows="3"
                 auto-resize
-                :placeholder="
-                    t('userInterface.serverSessionsView.addSessionModal.commentPlaceholder')
-                "
+                :placeholder="t('views.server_sessions.add_modal.comment_placeholder')"
             />
         </div>
 
         <!-- Actions -->
         <div class="flex justify-end gap-2 mt-auto pt-4">
-            <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
-                :label="t('common.next')"
+                :label="t('common.actions.cancel')"
+                severity="secondary"
+                text
+                @click="emit('cancel')"
+            />
+            <Button
+                :label="t('common.actions.next')"
                 :disabled="!canSubmit"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"

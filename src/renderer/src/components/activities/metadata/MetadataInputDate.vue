@@ -33,16 +33,6 @@ const descriptionText = computed(() => {
     if (te(d)) return t(d)
     return d
 })
-
-const typeText = computed(() => {
-    const type = props.def?.type
-    if (!type) return ''
-    // try common.fields.<type> first, then the raw type as a key, then fallback to raw value
-    const candidate = `common.fields.${type}`
-    if (te(candidate)) return t(candidate)
-    if (te(type)) return t(type as string)
-    return type
-})
 </script>
 
 <template>
@@ -66,7 +56,7 @@ const typeText = computed(() => {
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ typeText }}
+                {{ t('views.activity.add_modal.metadata_type_date') }}
             </div>
         </div>
 

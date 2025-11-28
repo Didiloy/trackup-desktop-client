@@ -266,23 +266,20 @@
                 "invitation_code": "Entrez le code d'invitation"
             }
         },
-        "update_modal": {
+        "app_update_modal": {
             "title": "Mise à jour disponible",
             "version": "Version",
-            "type": "Type",
             "major": "Majeure",
             "minor": "Mineure",
             "release_notes": "Notes de version",
             "release_date": "Date de sortie",
             "downloading": "Téléchargement en cours...",
-            "error": "Erreur",
-            "skip": "Ignorer",
             "update_now": "Mettre à jour maintenant",
             "install_and_restart": "Installer et redémarrer",
             "download_error": "Erreur lors du téléchargement"
         },
-        "user_profile_menu": {
-            "title": "Profil Utilisateur",
+        "user_profile": {
+            "title": "Profil",
             "preferences": {
                 "title": "Préférences",
                 "language": {
@@ -302,7 +299,7 @@
             }
         },
         "server_profile": {
-            "title": "Accueil",
+            "title": "Profil du serveur",
             "general_info": "Informations générales",
             "manage_server": "Gérer le serveur",
             "server_details": "Détails du serveur",
@@ -437,6 +434,7 @@
                 "title": "Détails de la session",
                 "activity": "Activité",
                 "participants": "Participants",
+                "participant": "Participant",
                 "extra_participants": "Participants supplémentaires",
                 "select_participants": "Sélectionner les participants",
                 "comment": "Commentaire",

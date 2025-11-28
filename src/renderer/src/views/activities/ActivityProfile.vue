@@ -47,15 +47,14 @@ const details = ref<IActivityStatsDetails | null>(null)
 const skillLevels = ref<IActivitySkillLevel[]>([])
 const metadataDefinitions = ref<IActivityMetadataDefinition[]>([])
 const sessions = ref<IActivitySessionListItem[]>([])
-const sessionsTotal = ref(0)
-const sessionsPage = ref(1)
-const sessionsRows = ref(10)
-const showDeleteConfirm = ref(false)
-const showCreateSessionDialog = ref(false)
-const showEditDialog = ref(false)
-
+const sessions_total = ref(0)
+const sessions_page = ref(1)
+const sessions_rows = ref(10)
+const show_delete_confirm = ref(false)
+const show_create_session_dialog = ref(false)
+const show_edit_dialog = ref(false)
 const loading = ref(true)
-const sessionsLoading = ref(false)
+const sessions_loading = ref(false)
 const error = ref<string | null>(null)
 
 async function loadActivity(): Promise<void> {
@@ -80,15 +79,15 @@ async function loadActivity(): Promise<void> {
         metadataDefinitions.value = metadataRes.data ?? []
         await loadSessions()
     } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to load activity'
+        error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {
         loading.value = false
     }
 }
 
-async function loadSessions(page = sessionsPage.value, rows = sessionsRows.value): Promise<void> {
+async function loadSessions(page = sessions_page.value, rows = sessions_rows.value): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
-    sessionsLoading.value = true
+    sessions_loading.value = true
     try {
         const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
             page,
@@ -96,13 +95,13 @@ async function loadSessions(page = sessionsPage.value, rows = sessionsRows.value
         })
         if (res.error || !res.data) throw new Error(res.error)
         sessions.value = res.data.data as unknown as IActivitySessionListItem[]
-        sessionsTotal.value = res.data.total
-        sessionsPage.value = res.data.page
-        sessionsRows.value = res.data.limit
+        sessions_total.value = res.data.total
+        sessions_page.value = res.data.page
+        sessions_rows.value = res.data.limit
     } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to load sessions'
+        error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {
-        sessionsLoading.value = false
+        sessions_loading.value = false
     }
 }
 
@@ -111,11 +110,11 @@ function handleSessionPage(event: { page: number; rows: number }): void {
 }
 
 function handleEdit(): void {
-    showEditDialog.value = true
+    show_edit_dialog.value = true
 }
 
 async function handleDelete(): Promise<void> {
-    showDeleteConfirm.value = true
+    show_delete_confirm.value = true
 }
 
 async function confirmDelete(): Promise<void> {
@@ -160,14 +159,6 @@ onMounted(async () => {
     if (server_store.getPublicId && activityId.value) {
         await loadActivity()
     }
-    console.log('Activity mounted')
-    console.log(activity.value)
-    console.log(details.value)
-    console.log(skillLevels.value)
-    console.log(sessions.value)
-    console.log(sessionsTotal.value)
-    console.log(sessionsPage.value)
-    console.log(sessionsRows.value)
 })
 </script>
 
@@ -180,7 +171,7 @@ onMounted(async () => {
         <ActivityDetailHeader
             :activity="activity"
             :stats="details"
-            @create-session="showCreateSessionDialog = true"
+            @create-session="show_create_session_dialog = true"
             @edit="handleEdit"
             @delete="handleDelete"
         />
@@ -204,38 +195,38 @@ onMounted(async () => {
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{ t('userInterface.serverActivitiesView.recentSessions') }}
+                    {{ t('views.activity.recent_sessions') }}
                 </p>
             </div>
             <ActivitySessionsHeatmap :sessions="sessions" class="mb-6" />
             <ActivitySessionsTable
                 :sessions="sessions"
-                :loading="sessionsLoading"
-                :total="sessionsTotal"
-                :page="sessionsPage"
-                :rows="sessionsRows"
+                :loading="sessions_loading"
+                :total="sessions_total"
+                :page="sessions_page"
+                :rows="sessions_rows"
                 @page="handleSessionPage"
             />
         </div>
 
         <ConfirmationDialog
-            :model-value="showDeleteConfirm"
-            :title="t('actions.delete')"
+            :model-value="show_delete_confirm"
+            :title="t('common.actions.delete')"
             :message="t('messages.warning.delete')"
             :confirmation-name="activity?.name ?? ''"
-            @update:model-value="showDeleteConfirm = $event"
+            @update:model-value="show_delete_confirm = $event"
             @confirm="confirmDelete"
         />
 
         <SessionCreateDialog
-            v-model="showCreateSessionDialog"
+            v-model="show_create_session_dialog"
             :pre-selected-activity-id="activityId"
             @created="handleSessionCreated"
         />
 
         <ActivityEditDialog
             v-if="activity"
-            v-model="showEditDialog"
+            v-model="show_edit_dialog"
             :activity="activity"
             @updated="loadActivity"
         />

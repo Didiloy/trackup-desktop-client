@@ -102,7 +102,9 @@ const avatarSizeProp = computed(() => {
     return undefined
 })
 
-const ariaLabel = computed(() => props.ariaLabel || props.title || props.label || t('views.user_profile_menu.title'))
+const ariaLabel = computed(
+    () => props.ariaLabel || props.title || props.label || t('views.user_profile.title')
+)
 
 // Determine content mode
 const isImage = computed(() => !!props.imageUrl)

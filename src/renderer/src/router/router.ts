@@ -1,6 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteRecordRaw, Router } from 'vue-router'
-import Home from '@/views/Home.vue'
+import Home from '@/views/app/Home.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes: RouteRecordRaw[] = [
@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import('@/views/LoginOrSignup.vue')
+        component: () => import('@/views/auth/LoginOrSignup.vue')
     },
     {
         path: '/servers/:id/stats',
@@ -47,7 +47,7 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/servers/:id/activities/:activityId',
         name: 'ServerActivityProfile',
-        component: () => import('@/views/servers/activities/ServerActivityProfile.vue'),
+        component: () => import('@/views/activities/ActivityProfile.vue'),
         meta: { requiresAuth: true }
     },
     {
