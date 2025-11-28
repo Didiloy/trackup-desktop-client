@@ -7,7 +7,13 @@ const props = defineProps<{
     metadataDefinitions?: IActivityMetadataDefinition[]
 }>()
 
-const { t } = useI18n()
+const { t, te } = useI18n()
+
+function formatTypeLabel(type?: string): string {
+    if (!type) return ''
+    const key = `views.activity.add_modal.metadata_type_${String(type).toLowerCase()}`
+    return te(key) ? t(key) : String(type)
+}
 
 const hasMetadata = computed(() => {
     return !!(props.metadataDefinitions && props.metadataDefinitions.length > 0)
@@ -63,7 +69,7 @@ function getIconForType(type: string): string {
 
                     <div class="flex flex-wrap gap-1 mt-1">
                         <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 text-surface-600 font-medium">
-                            {{ meta.type }}
+                            {{ formatTypeLabel(meta.type) }}
                         </span>
 
                         <span

@@ -15,7 +15,7 @@ const emit = defineEmits<{
     (e: 'create', defs: ICreateActivityMetadataDefinitionRequest[]): void
 }>()
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const {
     getMetadataTypes,
     listMetadataDefinitions,
@@ -54,7 +54,7 @@ async function syncExistingMetadata(): Promise<void> {
             existingMetadataList.value = res.data
         }
     } catch (e) {
-        console.error('Failed to sync metadata', e)
+        console.error(t('messages.error.fetch'), e)
     }
 }
 
@@ -69,7 +69,7 @@ async function removeExistingMetadata(id: string): Promise<void> {
             resetDraft()
         }
     } catch (e) {
-        console.error('Failed to delete metadata', e)
+        console.error(t('messages.error.delete'), e)
     }
 }
 
@@ -91,7 +91,7 @@ function resetDraft(): void {
     draft.value = {
         key: '',
         label: '',
-        type: 'STRING' as string,
+        type: 'STRING' as ActivityMetadataType,
         description: '',
         required: false,
         allow_not_predefined_value: true,
@@ -122,7 +122,7 @@ async function updateExistingMetadata(): Promise<void> {
         await syncExistingMetadata()
         resetDraft()
     } catch (e) {
-        console.error('Failed to update metadata', e)
+        console.error(t('messages.error.update'), e)
     }
 }
 
@@ -136,19 +136,28 @@ async function loadTypes(): Promise<void> {
             if (res.error) {
                 types_error.value = res.error
             } else if (res.data && Array.isArray(res.data)) {
-                type_options.value = res.data.map((t) => ({ label: t, value: t }))
+                // Map API-provided types to options. Prefer translated labels when available.
+                type_options.value = res.data.map((val) => {
+                    const upper = String(val).toUpperCase()
+                    const key = `views.activity.add_modal.metadata_type_${String(upper).toLowerCase()}`
+                    return {
+                        label: te(key) ? t(key) : String(val),
+                        value: upper
+                    }
+                })
             }
         }
     } catch (e) {
-        types_error.value = e instanceof Error ? e.message : 'Failed to load metadata types'
+        types_error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {
         // Fallback if nothing loaded
         if (!type_options.value.length) {
+            // Use translated labels for types when available to avoid hardcoded strings
             type_options.value = [
-                { label: 'STRING', value: 'STRING' },
-                { label: 'NUMBER', value: 'NUMBER' },
-                { label: 'BOOLEAN', value: 'BOOLEAN' },
-                { label: 'DATE', value: 'DATE' }
+                { label: t('views.activity.add_modal.metadata_type_string'), value: 'STRING' },
+                { label: t('views.activity.add_modal.metadata_type_number'), value: 'NUMBER' },
+                { label: t('views.activity.add_modal.metadata_type_boolean'), value: 'BOOLEAN' },
+                { label: t('views.activity.add_modal.metadata_type_date'), value: 'DATE' }
             ]
         }
         // Ensure draft has a valid type
@@ -164,7 +173,7 @@ const defs = ref<ICreateActivityMetadataDefinitionRequest[]>([])
 const draft = ref<ICreateActivityMetadataDefinitionRequest>({
     key: '',
     label: '',
-    type: 'STRING' as string,
+    type: 'STRING' as ActivityMetadataType,
     description: '',
     required: false,
     allow_not_predefined_value: true,
@@ -264,6 +273,12 @@ function submitMetadata(): void {
 
 function handleCancelEdit(): void {
     resetDraft()
+}
+
+function formatTypeLabel(type?: string): string {
+    if (!type) return ''
+    const key = `views.activity.add_modal.metadata_type_${String(type).toLowerCase()}`
+    return te(key) ? t(key) : String(type)
 }
 </script>
 
@@ -378,11 +393,7 @@ function handleCancelEdit(): void {
             <div class="flex justify-center w-full gap-2">
                 <Button
                     v-if="editingMetadataId"
-                    :label="t('views.activity.add_modal.metadata_validate')"
-                    icon="pi pi-check"
-                    class="w-full"
-                    :disabled="!canAdd"
-                    :label="t('actions.cancel')"
+                    :label="t('common.actions.cancel')"
                     icon="pi pi-times"
                     severity="secondary"
                     outlined
@@ -392,10 +403,13 @@ function handleCancelEdit(): void {
                 <Button
                     :label="
                         editingMetadataId
-                            ? t('actions.update', { entity: 'Metadata' })
-                            : t(
-                                  'userInterface.serverActivitiesView.addActivityModal.metadataValidate'
+                            ? t(
+                                  'common.actions.update',
+                                  {
+                                      entity: t('views.activity.add_modal.metadata_label')
+                                  }
                               )
+                            : t('views.activity.add_modal.metadata_validate')
                     "
                     :icon="editingMetadataId ? 'pi pi-save' : 'pi pi-check'"
                     class="w-full"
@@ -427,9 +441,9 @@ function handleCancelEdit(): void {
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900 font-medium">{{ meta.key }}</span>
-                        <span class="text-xs text-surface-600">({{ meta.type }})</span>
+                        <span class="text-xs text-surface-600">({{ formatTypeLabel(meta.type) }})</span>
                         <span v-if="meta.required" class="text-xs text-primary-600"
-                            >• {{ t('common.required') }}</span
+                            >• {{ t('common.fields.required') }}</span
                         >
                     </div>
                     <div class="flex items-center gap-2">
@@ -456,7 +470,7 @@ function handleCancelEdit(): void {
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900">{{ d.key }}</span>
-                        <span class="text-xs text-surface-600">({{ d.type }})</span>
+                        <span class="text-xs text-surface-600">({{ formatTypeLabel(d.type) }})</span>
                         <span v-if="d.required" class="text-xs text-primary-600"
                             >• {{ t('common.fields.required') }}</span
                         >

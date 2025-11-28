@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityEditForm from './ActivityEditForm.vue'
 import ActivitySkillLevelsForm from '../create/ActivitySkillLevelsForm.vue'
@@ -43,18 +43,17 @@ const currentStep = ref<Step>('activity')
 const steps = computed(() => [
     {
         key: 'activity',
-        label: t('userInterface.serverActivitiesView.addActivityModal.activityStep') || 'Activité',
+        label: t('common.steps.activity'),
         icon: 'pi pi-pencil'
     },
     {
         key: 'metadata',
-        label:
-            t('userInterface.serverActivitiesView.addActivityModal.metadataStep') || 'Métadonnées',
+        label: t('common.steps.metadata'),
         icon: 'pi pi-database'
     },
     {
         key: 'skill-levels',
-        label: t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle'),
+        label: t('common.steps.skill_levels'),
         icon: 'pi pi-sliders-h'
     }
 ])
@@ -65,10 +64,10 @@ const currentIndex = computed(() =>
 
 const subtitle = computed(() =>
     currentStep.value === 'activity'
-        ? t('userInterface.serverActivitiesView.addActivityModal.description')
+        ? t('views.activity.add_modal.description')
         : currentStep.value === 'metadata'
-          ? t('userInterface.serverActivitiesView.addActivityModal.metadataDescription')
-          : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription')
+        ? t('views.activity.add_modal.metadata_description')
+        : t('views.activity.add_modal.skill_levels_description')
 )
 
 function advanceTo(step: Step): void {
@@ -102,7 +101,7 @@ async function handleActivityUpdate(payload: IUpdateActivityRequest): Promise<vo
     error.value = null
     try {
         const serverId = server_store.getPublicId
-        if (!serverId) throw new Error('No server selected')
+        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
 
         const res = await updateActivity(serverId, props.activity.public_id, payload)
         if (res.error) {
@@ -116,7 +115,7 @@ async function handleActivityUpdate(payload: IUpdateActivityRequest): Promise<vo
         })
         emit('updated')
     } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to update activity'
+        error.value = e instanceof Error ? e.message : t('messages.error.update')
     } finally {
         submitting.value = false
     }
@@ -133,7 +132,7 @@ async function handleMetadataCreate(
     error.value = null
     try {
         const serverId = server_store.getPublicId
-        if (!serverId) throw new Error('No server selected')
+        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
         const activityId = props.activity.public_id
 
         const sanitizedDefs = defs.map((def) => ({
@@ -161,7 +160,7 @@ async function handleMetadataCreate(
         emit('updated')
     advanceTo('skill-levels')
     } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to create metadata'
+        error.value = e instanceof Error ? e.message : t('messages.error.addMetadataFailed')
     } finally {
         submitting.value = false
     }
@@ -175,7 +174,7 @@ async function handleSkillLevelsCreate(levels: ICreateActivitySkillLevelRequest[
     error.value = null
     try {
         const serverId = server_store.getPublicId
-        if (!serverId) throw new Error('No server selected')
+        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
         const activityId = props.activity.public_id
 
         const sanitizedLevels = levels.map((lvl) => ({
@@ -204,7 +203,7 @@ async function handleSkillLevelsCreate(levels: ICreateActivitySkillLevelRequest[
         })
         emit('updated')
     } catch (e) {
-        error.value = e instanceof Error ? e.message : 'Failed to create skill levels'
+        error.value = e instanceof Error ? e.message : t('messages.error.addSkillLevelsFailed')
     } finally {
         submitting.value = false
     }
@@ -216,7 +215,7 @@ async function handleSkillLevelsCreate(levels: ICreateActivitySkillLevelRequest[
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
-        :title="t('actions.edit', { entity: activity.name })"
+        :title="`${t('common.actions.edit')} ${activity.name}`"
         :subtitle="subtitle"
         icon-class="pi pi-pencil"
         :steps="steps"
@@ -253,4 +252,3 @@ async function handleSkillLevelsCreate(levels: ICreateActivitySkillLevelRequest[
         </template>
     </MultiStepsDialog>
 </template>
-

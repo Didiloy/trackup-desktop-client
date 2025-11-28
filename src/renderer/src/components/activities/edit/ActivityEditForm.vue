@@ -58,29 +58,25 @@ function onUpdate(): void {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-file-edit text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700"
-                    >{{ t('common.name') }} <span class="text-red-500">*</span></span
-                >
+                <span class="text-sm font-medium text-surface-700">
+                    {{ t('common.fields.name') }} <span class="text-red-500">*</span>
+                </span>
             </div>
             <InputText
                 v-model="name"
-                :placeholder="t('userInterface.serverActivitiesView.addActivityModal.name')"
+                :placeholder="t('views.activity.add_modal.name')"
                 class="w-full"
                 disabled
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{
-                    t('common.description')
-                }}</span>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.description') }}</span>
             </div>
             <Textarea
                 v-model="description"
                 rows="3"
                 auto-resize
-                :placeholder="
-                    t('userInterface.serverActivitiesView.addActivityModal.description_input')
-                "
+                :placeholder="t('views.activity.add_modal.description_input')"
             />
         </div>
 
@@ -88,7 +84,7 @@ function onUpdate(): void {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-image text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.logo') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.logo') }}</span>
             </div>
             <EntityLogoHandling
                 :logo="logo"
@@ -99,7 +95,7 @@ function onUpdate(): void {
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-images text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.banner') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.fields.banner') }}</span>
             </div>
             <EntityBannerHandling
                 :banner="banner"
@@ -109,9 +105,9 @@ function onUpdate(): void {
         </div>
 
         <div class="flex justify-end gap-2 pt-2 mt-auto">
-            <Button :label="t('common.next')" severity="secondary" text @click="emit('next')" />
+            <Button :label="t('common.actions.next')" severity="secondary" text @click="emit('next')" />
             <Button
-                :label="t('actions.save')"
+                :label="t('common.actions.save')"
                 :disabled="!can_submit"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
@@ -120,4 +116,3 @@ function onUpdate(): void {
         </div>
     </div>
 </template>
-

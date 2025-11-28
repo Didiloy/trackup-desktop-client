@@ -169,7 +169,8 @@
             "noServerSelected": "Aucun serveur sélectionné",
             "createSessionFailed": "Échec de la création de session",
             "addEnumsFailed": "Échec de l'ajout des sélections",
-            "addMetadataFailed": "Échec de l'ajout des métadonnées"
+            "addMetadataFailed": "Échec de l'ajout des métadonnées",
+            "addSkillLevelsFailed": "Échec de l'ajout des niveaux de compétence"
         },
         "warning": {
             "title": "Avertissement",
@@ -307,6 +308,10 @@
                 "metadata_allow_not_predefined": "Autoriser les valeurs non prédéfinies",
                 "metadata_choices": "Choix (optionnel)",
                 "metadata_list": "Liste des attributs",
+                "metadata_type_string": "Texte",
+                "metadata_type_number": "Nombre",
+                "metadata_type_boolean": "Booléen",
+                "metadata_type_date": "Date",
                 "skill_levels_title": "Niveaux de compétence",
                 "skill_levels_description": "Ajoutez les niveaux de compétence pour votre activité.",
                 "skill_levels_description_detail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",
