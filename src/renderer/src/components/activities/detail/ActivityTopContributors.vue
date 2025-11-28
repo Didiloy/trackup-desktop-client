@@ -45,8 +45,8 @@ const { t } = useI18n()
                     <i
                         :class="
                             member.rank === 1
-                                ? 'pi pi-medal text-amber-500'
-                                : 'pi pi-star text-surface-400'
+                                ? 'pi pi-crown text-amber-500'
+                                : 'text-surface-400'
                         "
                     ></i>
                 </span>
