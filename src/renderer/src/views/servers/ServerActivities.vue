@@ -14,7 +14,7 @@ import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useRouter } from 'vue-router'
 
-const i18n = useI18n()
+const { t } = useI18n()
 const router = useRouter()
 const { listActivities } = useActivityCRUD()
 const { getActivityStats } = useActivityStatsCRUD()
@@ -49,7 +49,7 @@ async function loadActivityInsights(newActivities: IActivity[]): Promise<void> {
 
     const results = await asyncPool(8, newActivities, async (activity: IActivity) => {
         const res = await getActivityStats(serverId, activity.public_id)
-        if (res.error || !res.data) throw new Error(res.error || 'Failed to load activity stats')
+        if (res.error || !res.data) throw new Error(t('messages.error.fetch'))
         return [activity.public_id, mapDetailsToMetrics(res.data)] as const
     })
 
@@ -73,7 +73,7 @@ const {
 } = usePaginatedFetcher<IActivity>({
     fetcher: async ({ page, limit }) => {
         if (!server_store.getPublicId) {
-            return { data: [], total: 0, error: 'No server selected' }
+            return { data: [], total: 0, error: t('messages.error.noServerSelected') }
         }
 
         const res = await listActivities(server_store.getPublicId, {
@@ -120,12 +120,12 @@ onMounted(() => {
     <div class="flex flex-col items-center justify-start w-full h-full">
         <div class="flex flex-row items-center justify-between w-full h-12 p-2">
             <h2 class="text-2xl font-bold">
-                {{ i18n.t('userInterface.serverActivitiesView.title') }}
+                {{ t('views.activity.title') }}
             </h2>
             <div class="flex flex-row items-center justify-center">
                 <Button
                     icon="pi pi-plus"
-                    :label="i18n.t('userInterface.serverActivitiesView.addActivity')"
+                    :label="t('views.activity.add_modal.title')"
                     severity="primary"
                     size="small"
                     :pt="{

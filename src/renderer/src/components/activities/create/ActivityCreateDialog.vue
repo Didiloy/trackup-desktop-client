@@ -58,7 +58,7 @@ const subtitle = computed(() =>
     currentStep.value === 'activity'
         ? t('views.activity.add_modal.description')
         : currentStep.value === 'metadata'
-          ? t('views.activity.add_modal.metadata_description') + ' (' + t('common.optional') + ')'
+          ? t('views.activity.add_modal.metadata_description') + ' (' + t('common.fields.optional') + ')'
           : t('views.activity.add_modal.skill_levels_description') +
             ' (' +
             t('common.optional') +

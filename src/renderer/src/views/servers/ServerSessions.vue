@@ -38,7 +38,7 @@ const {
 } = usePaginatedFetcher<ISessionListItem>({
     fetcher: async ({ page, limit }) => {
         if (!server_store.getPublicId) {
-            return { data: [], total: 0, error: 'No server selected' }
+            return { data: [], total: 0, error: i18n.t('messages.error.noServerSelected') }
         }
 
         const res = await listSessions(server_store.getPublicId, {
@@ -84,7 +84,6 @@ const onLikeSession = useDebounceFn(async (sessionId: string): Promise<void> => 
 
     const res = await likeSession(serverId, sessionId)
     if (!res.error) {
-        // Update the local session to reflect the like
         const session = sessions.value.find((s) => s.public_id === sessionId)
         if (session) {
             session.liked_by_me = true
@@ -99,7 +98,6 @@ const onUnlikeSession = useDebounceFn(async (sessionId: string): Promise<void> =
 
     const res = await unlikeSession(serverId, sessionId)
     if (!res.error) {
-        // Update the local session to reflect the unlike
         const session = sessions.value.find((s) => s.public_id === sessionId)
         if (session) {
             session.liked_by_me = false
@@ -117,12 +115,12 @@ onMounted(() => {
     <div class="flex flex-col items-center justify-start w-full h-full">
         <div class="flex flex-row items-center justify-between w-full h-12 p-2">
             <h2 class="text-2xl font-bold">
-                {{ i18n.t('userInterface.serverSessionsView.title') }}
+                {{ i18n.t('views.server_sessions.title') }}
             </h2>
             <div class="flex flex-row items-center justify-center">
                 <Button
                     icon="pi pi-plus"
-                    :label="i18n.t('userInterface.serverSessionsView.addSessionModal.title')"
+                    :label="i18n.t('views.server_sessions.add_modal.title')"
                     size="small"
                     @click="show_create_session_dialog = true"
                 />
@@ -171,5 +169,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Additional session-specific styling if needed */
 </style>
