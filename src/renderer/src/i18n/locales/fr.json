@@ -281,8 +281,8 @@
             "install_and_restart": "Installer et redémarrer",
             "download_error": "Erreur lors du téléchargement"
         },
-        "user_profile_menu": {
-            "title": "Profil Utilisateur",
+        "user_profile": {
+            "title": "Profil",
             "preferences": {
                 "title": "Préférences",
                 "language": {
