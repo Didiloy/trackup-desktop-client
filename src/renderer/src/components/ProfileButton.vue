@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AvatarButton from '@/components/common/AvatarButton.vue'
+import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
