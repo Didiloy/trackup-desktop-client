@@ -29,6 +29,7 @@
         "none": "Aucun",
         "items": "éléments",
         "creator": "Créateur",
+        "choices": "Choix",
         "weekdays": {
             "short": {
                 "sunday": "Dim",
@@ -250,6 +251,8 @@
             "createSession": "Créer une session",
             "recentSessions": "Sessions récentes",
             "evolution30Days": "Évolution 30 jours",
+            "noMetadata": "Aucune métadonnée disponible",
+            "noMetadataDescription": "Cette activité n'a pas de champs personnalisés configurés.",
             "ActivityPerformanceSection": {
                 "sessions": "sessions",
                 "sessions_timeline": "Évolution des sessions sur les dernières semaines",

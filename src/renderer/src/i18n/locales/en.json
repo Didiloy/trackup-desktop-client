@@ -27,6 +27,7 @@
         "none": "None",
         "items": "items",
         "creator": "Creator",
+        "choices": "Choices",
         "weekdays": {
             "short": {
                 "sunday": "Sun",
@@ -247,6 +248,8 @@
             "createSession": "Create session",
             "recentSessions": "Recent sessions",
             "evolution30Days": "Evolution 30 days",
+            "noMetadata": "No metadata available",
+            "noMetadataDescription": "This activity has no custom fields configured.",
             "ActivityPerformanceSection": {
                 "sessions": "sessions",
                 "sessions_timeline": "Sessions evolution over the last weeks",

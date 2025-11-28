@@ -8,12 +8,14 @@ import ActivityTopContributors from '@/components/activities/detail/ActivityTopC
 import ActivitySessionsTable from '@/components/activities/detail/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/activities/detail/ActivityGrowthComparison.vue'
 import ActivitySkillDistribution from '@/components/activities/detail/ActivitySkillDistribution.vue'
+import ActivityMetadataList from '@/components/activities/detail/ActivityMetadataList.vue'
 import ActivitySessionsHeatmap from '@/components/activities/detail/ActivitySessionsHeatmap.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
     IActivity,
@@ -21,6 +23,7 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -34,11 +37,13 @@ const activityId = computed(() => route.params.activityId as string)
 const { getActivityById, listActivitySessions, deleteActivity } = useActivityCRUD()
 const { getActivityStatsDetails } = useActivityStatsCRUD()
 const { listSkillLevels } = useActivitySkillLevelCRUD()
+const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
 const activity = ref<IActivity | null>(null)
 const details = ref<IActivityStatsDetails | null>(null)
 const skillLevels = ref<IActivitySkillLevel[]>([])
+const metadataDefinitions = ref<IActivityMetadataDefinition[]>([])
 const sessions = ref<IActivitySessionListItem[]>([])
 const sessionsTotal = ref(0)
 const sessionsPage = ref(1)
@@ -56,10 +61,11 @@ async function loadActivity(): Promise<void> {
     error.value = null
     try {
         const serverId = server_store.getPublicId
-        const [activityRes, detailsRes, skillRes] = await Promise.all([
+        const [activityRes, detailsRes, skillRes, metadataRes] = await Promise.all([
             getActivityById(serverId, activityId.value),
             getActivityStatsDetails(serverId, activityId.value),
-            listSkillLevels(serverId, activityId.value)
+            listSkillLevels(serverId, activityId.value),
+            listMetadataDefinitions(serverId, activityId.value)
         ])
 
         if (activityRes.error || !activityRes.data) throw new Error(activityRes.error)
@@ -68,6 +74,7 @@ async function loadActivity(): Promise<void> {
         activity.value = activityRes.data
         details.value = detailsRes.data
         skillLevels.value = skillRes.data ?? []
+        metadataDefinitions.value = metadataRes.data ?? []
         await loadSessions()
     } catch (e) {
         error.value = e instanceof Error ? e.message : 'Failed to load activity'
@@ -191,8 +198,9 @@ onMounted(async () => {
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
             <ActivityTopContributors :contributors="details?.top_contributors" />
+            <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
             <ActivitySkillDistribution :skill-levels="skillLevels" />
-            <ActivityGrowthComparison :growth="details?.growth_trend" class="lg:col-span-2" />
+            <ActivityGrowthComparison :growth="details?.growth_trend" />
         </div>
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">

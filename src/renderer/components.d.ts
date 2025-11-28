@@ -21,6 +21,7 @@ declare module 'vue' {
     ActivityFilterBar: typeof import('./src/components/activities/ActivityFilterBar.vue')['default']
     ActivityGrowthComparison: typeof import('./src/components/activities/detail/ActivityGrowthComparison.vue')['default']
     ActivityMetadataForm: typeof import('./src/components/activities/create/ActivityMetadataForm.vue')['default']
+    ActivityMetadataList: typeof import('./src/components/activities/detail/ActivityMetadataList.vue')['default']
     ActivityPatternsSummary: typeof import('./src/components/activities/detail/ActivityPatternsSummary.vue')['default']
     ActivityPerformanceSection: typeof import('./src/components/activities/detail/ActivityPerformanceSection.vue')['default']
     ActivitySessionsHeatmap: typeof import('./src/components/activities/detail/ActivitySessionsHeatmap.vue')['default']
