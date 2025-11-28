@@ -36,7 +36,7 @@ const descriptionText = computed(() => {
 const typeText = computed(() => {
     const type = props.def?.type
     if (!type) return ''
-    const candidate = `common.fields.${type}`
+    const candidate = `views.activity.add_modal.${type}`
     if (te(candidate)) return t(candidate)
     if (te(type as string)) return t(type as string)
     return type as string
@@ -64,7 +64,7 @@ const typeText = computed(() => {
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ typeText }}
+                {{ t('views.activity.add_modal.metadata_type_string') }}
             </div>
         </div>
 

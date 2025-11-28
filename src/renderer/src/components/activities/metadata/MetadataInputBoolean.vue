@@ -48,7 +48,7 @@ const value = computed({
                 </span>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-1">
-                {{ def.type }}
+                {{ t('views.activity.add_modal.metadata_type_boolean') }}
             </div>
         </div>
     </div>
