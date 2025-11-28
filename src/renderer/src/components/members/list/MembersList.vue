@@ -53,7 +53,9 @@ const grouped = computed(() => {
                             : 'text-surface-600'
                     "
                 >
-                    {{ group.role }}
+                    {{
+                        group.role.toLowerCase() === 'creator' ? t('common.creator') : group.role
+                    }}
                 </span>
                 <span class="text-2xs text-surface-500">- {{ group.members.length }}</span>
             </div>

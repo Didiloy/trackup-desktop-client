@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 interface Props {
@@ -20,7 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
-const { t } = useI18n()
 const file_input = ref<HTMLInputElement>()
 const banner_url = ref('')
 
@@ -94,7 +95,7 @@ function removeBanner(): void {
                 class="w-full h-full flex items-center justify-center text-surface-500"
                 style="background: var(--p-surface-100)"
             >
-                <span class="text-sm">{{ entityName || 'Banner' }}</span>
+                <span class="text-sm">{{ entityName || t('common.banner') }}</span>
             </div>
 
             <!-- Overlay action buttons -->

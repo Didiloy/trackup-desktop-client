@@ -83,7 +83,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 select-none">
+    <div class="flex flex-col gap-3 select-none">
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <i class="pi pi-file-edit text-surface-500"></i>

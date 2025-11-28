@@ -130,8 +130,7 @@ function onCreate(): void {
                 <InputText
                     v-model="title"
                     :placeholder="
-                        t('userInterface.serverSessionsView.addSessionModal.titlePlaceholder') ||
-                        'Optional title'
+                        t('userInterface.serverSessionsView.addSessionModal.titlePlaceholder')
                     "
                     class="w-full"
                 />

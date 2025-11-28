@@ -28,7 +28,7 @@ const { t } = useI18n()
         <!-- Count Display -->
         <div v-if="showCount" class="ml-auto flex items-center text-xs text-surface-600">
             <i class="pi pi-list mr-2"></i>
-            <span>{{ count }} {{ t('common.items') ?? 'items' }}</span>
+            <span>{{ count }} {{ t('common.items') }}</span>
         </div>
 
         <!-- Custom Count Slot (overrides default count) -->
