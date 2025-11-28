@@ -51,12 +51,12 @@ const available_providers: { provider: Provider; icon: string; label: string }[]
     {
         provider: 'google',
         icon: 'pi-google',
-        label: t('views.login.continue_with_google'),
+        label: t('views.login.continue_with_google')
     },
     {
         provider: 'github',
         icon: 'pi-github',
-        label: t('views.login.continue_with_github'),
+        label: t('views.login.continue_with_github')
     },
     {
         provider: 'gitlab',

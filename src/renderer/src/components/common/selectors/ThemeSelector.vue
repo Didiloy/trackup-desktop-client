@@ -156,5 +156,4 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
     </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

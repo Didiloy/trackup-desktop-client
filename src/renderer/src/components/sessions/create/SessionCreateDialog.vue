@@ -51,7 +51,7 @@ const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
 
 // Track metadata form validity
 const metadata_valid = ref(true)
-function setMetadataValid(v: boolean) : void {
+function setMetadataValid(v: boolean): void {
     metadata_valid.value = v
 }
 

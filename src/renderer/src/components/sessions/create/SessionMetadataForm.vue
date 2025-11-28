@@ -52,7 +52,6 @@ watch([() => canSubmit.value, () => definitions.value], () => {
     emit('valid', canSubmit.value)
 })
 
-
 // Don't show skip at all when there is any required definition
 const hasAnyRequired = computed(() => definitions.value.some((d) => d.required))
 

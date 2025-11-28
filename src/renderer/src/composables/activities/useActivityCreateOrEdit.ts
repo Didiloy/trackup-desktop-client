@@ -74,7 +74,11 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
             } else {
                 // Edit mode
                 if (!props.activityId) throw new Error('Activity ID required for edit mode')
-                res = await updateActivity(serverId, props.activityId, payload as IUpdateActivityRequest)
+                res = await updateActivity(
+                    serverId,
+                    props.activityId,
+                    payload as IUpdateActivityRequest
+                )
             }
 
             if (res.error || !res.data) {
@@ -113,15 +117,16 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
     async function handleMetadataSubmit(
         defs: ICreateActivityMetadataDefinitionRequest[]
     ): Promise<void> {
-        const targetActivityId = props.mode === 'create' ? createdActivity.value?.public_id : props.activityId
-        
+        const targetActivityId =
+            props.mode === 'create' ? createdActivity.value?.public_id : props.activityId
+
         if (!targetActivityId) {
-             if (props.mode === 'create') {
-                 // Should not happen if flow is correct
-                 return
-             } else {
-                 throw new Error('Activity ID missing')
-             }
+            if (props.mode === 'create') {
+                // Should not happen if flow is correct
+                return
+            } else {
+                throw new Error('Activity ID missing')
+            }
         }
 
         if (!defs.length) {
@@ -144,27 +149,29 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
                 required: def.required,
                 allow_not_predefined_value: def.allow_not_predefined_value
             }))
-            
+
             const results = await Promise.all(
-                sanitizedDefs.map((def) => createMetadataDefinition(serverId, targetActivityId, { ...def }))
+                sanitizedDefs.map((def) =>
+                    createMetadataDefinition(serverId, targetActivityId, { ...def })
+                )
             )
-            
+
             for (const res of results) {
                 if (res.error) {
                     throw new Error(res.error)
                 }
             }
-            
+
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.update'), // Generic success message for metadata addition
                 life: 2500
             })
-            
+
             if (props.mode === 'edit' && props.onUpdate) {
                 props.onUpdate()
             }
-            
+
             advanceTo('skill-levels')
         } catch (e) {
             error.value = e instanceof Error ? e.message : t('messages.error.addMetadataFailed')
@@ -177,15 +184,16 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
         levels: ICreateActivitySkillLevelRequest[],
         onComplete: () => void
     ): Promise<void> {
-        const targetActivityId = props.mode === 'create' ? createdActivity.value?.public_id : props.activityId
+        const targetActivityId =
+            props.mode === 'create' ? createdActivity.value?.public_id : props.activityId
 
         if (!targetActivityId) {
-             if (props.mode === 'create') {
-                 onComplete()
-                 return
-             } else {
-                 throw new Error('Activity ID missing')
-             }
+            if (props.mode === 'create') {
+                onComplete()
+                return
+            } else {
+                throw new Error('Activity ID missing')
+            }
         }
 
         if (!levels.length) {
@@ -213,17 +221,19 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
                 min_duration: Number(lvl.min_duration),
                 max_duration: lvl.max_duration ?? null
             }))
-            
+
             const results = await Promise.all(
-                sanitizedLevels.map((lvl) => createSkillLevel(serverId, targetActivityId, { ...lvl }))
+                sanitizedLevels.map((lvl) =>
+                    createSkillLevel(serverId, targetActivityId, { ...lvl })
+                )
             )
-            
+
             for (const res of results) {
                 if (res.error) {
                     throw new Error(res.error)
                 }
             }
-            
+
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.update'), // Generic success for skill levels
@@ -235,7 +245,7 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
             } else if (props.mode === 'edit' && props.onUpdate) {
                 props.onUpdate()
             }
-            
+
             onComplete()
         } catch (e) {
             error.value = e instanceof Error ? e.message : t('messages.error.addSkillLevelsFailed')
@@ -257,4 +267,3 @@ export function useActivityCreateOrEdit(props: UseActivityCreateOrEditProps) {
         handleSkillLevelsSubmit
     }
 }
-

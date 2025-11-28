@@ -42,7 +42,8 @@ const buttonLabelText = computed(() => {
 })
 
 const buttonAriaLabelComputed = computed(() => {
-    if (props.buttonAriaLabel && te(props.buttonAriaLabel)) return t(props.buttonAriaLabel) as string
+    if (props.buttonAriaLabel && te(props.buttonAriaLabel))
+        return t(props.buttonAriaLabel) as string
     if (props.buttonAriaLabel) return props.buttonAriaLabel
     return buttonLabelText.value || ''
 })

@@ -77,9 +77,7 @@ const updateNow = async (): Promise<void> => {
     } catch (err) {
         downloading.value = false
         error.value =
-            err instanceof Error
-                ? err.message
-                : t('views.app_update_modal.download_error')
+            err instanceof Error ? err.message : t('views.app_update_modal.download_error')
     }
 }
 

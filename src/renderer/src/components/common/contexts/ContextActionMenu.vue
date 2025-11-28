@@ -28,7 +28,8 @@ const handleItemClick = (item: MenuItem): void => {
 
 const resolveLabel = (item?: MenuItem): string => {
     if (!item) return ''
-    if (item.labelKey && te(item.labelKey)) return t(item.labelKey, item.labelParams || {}) as string
+    if (item.labelKey && te(item.labelKey))
+        return t(item.labelKey, item.labelParams || {}) as string
     if (typeof item.label === 'string') {
         if (te(item.label)) return t(item.label) as string
         return item.label

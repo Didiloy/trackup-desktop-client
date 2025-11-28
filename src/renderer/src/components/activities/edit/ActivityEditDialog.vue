@@ -5,7 +5,10 @@ import ActivityEditForm from './ActivityEditForm.vue'
 import ActivitySkillLevelsForm from '../create/ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from '../create/ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityCreateOrEdit, type Step } from '@/composables/activities/useActivityCreateOrEdit'
+import {
+    useActivityCreateOrEdit,
+    type Step
+} from '@/composables/activities/useActivityCreateOrEdit'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface Props {
