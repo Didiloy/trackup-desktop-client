@@ -55,7 +55,7 @@ function onCreate(): void {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-file-edit text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.name') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.name') }} <span class="text-red-500">*</span></span>
             </div>
             <InputText
                 v-model="name"

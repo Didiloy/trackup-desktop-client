@@ -85,27 +85,10 @@ onMounted(async () => {
 <template>
     <div class="flex flex-col gap-2 select-none">
         <div class="flex flex-col gap-2">
-            <div class="flex flex-col gap-3">
-                <label class="text-sm text-surface-500">{{ t('common.logo') }}</label>
-                <EntityLogoHandling
-                    :logo="logo"
-                    :initial="name"
-                    :entity-name="name"
-                    :display-edit-button="true"
-                    @update-logo="updateLogo"
-                />
+            <div class="flex items-center gap-2">
+                <i class="pi pi-file-edit text-surface-500"></i>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.name') }} <span class="text-red-500">*</span></span>
             </div>
-
-            <div class="flex flex-col gap-3">
-                <label class="text-sm text-surface-500">{{ t('common.banner') }}</label>
-                <EntityBannerHandling
-                    :banner="banner"
-                    :display-edit-button="true"
-                    @update-banner="updateBanner"
-                />
-            </div>
-
-            <label class="text-sm text-surface-500">{{ t('common.name') }}</label>
             <InputText
                 v-model="name"
                 :placeholder="t('userInterface.createServerView.placeholder.name')"
@@ -114,7 +97,10 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="text-sm text-surface-500">{{ t('common.type') }}</label>
+            <div class="flex items-center gap-2">
+                <i class="pi pi-tags text-surface-500"></i>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.type') }} <span class="text-red-500">*</span></span>
+            </div>
             <Select
                 v-model="selected_type"
                 :options="server_types"
@@ -127,12 +113,43 @@ onMounted(async () => {
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
+            <div class="flex items-center gap-2">
+                <i class="pi pi-pen-to-square text-surface-500"></i>
+                <span class="text-sm font-medium text-surface-700">{{
+                        t('common.description')
+                    }}</span>
+            </div>
             <Textarea
                 v-model="description"
                 rows="2"
                 auto-resize
                 :placeholder="t('userInterface.createServerView.placeholder.description')"
+            />
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-2">
+                <i class="pi pi-image text-surface-500"></i>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.logo') }}</span>
+            </div>
+            <EntityLogoHandling
+                :logo="logo"
+                :initial="name"
+                :entity-name="name"
+                :display-edit-button="true"
+                @update-logo="updateLogo"
+            />
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-2">
+                <i class="pi pi-images text-surface-500"></i>
+                <span class="text-sm font-medium text-surface-700">{{ t('common.banner') }}</span>
+            </div>
+            <EntityBannerHandling
+                :banner="banner"
+                :display-edit-button="true"
+                @update-banner="updateBanner"
             />
         </div>
 
