@@ -403,9 +403,7 @@ function formatTypeLabel(type?: string): string {
                 <Button
                     :label="
                         editingMetadataId
-                            ? t('common.actions.update', {
-                                  entity: t('views.activity.add_modal.metadata_label')
-                              })
+                            ? t('common.actions.update')
                             : t('views.activity.add_modal.metadata_validate')
                     "
                     :icon="editingMetadataId ? 'pi pi-save' : 'pi pi-check'"
