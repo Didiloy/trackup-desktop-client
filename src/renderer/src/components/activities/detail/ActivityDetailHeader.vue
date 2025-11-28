@@ -18,12 +18,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-onMounted(() => {
-    console.log('ActivityDetailHeader mounted')
-    console.log(props.activity)
-    console.log(props.stats)
-})
-
 const summaryMetrics = computed(() => {
     if (!props.stats) {
         return []
@@ -55,8 +49,8 @@ const summaryMetrics = computed(() => {
             :style="{ backgroundImage: `url(${activity?.banner})` }"
         ></div>
         <div
-            class="absolute inset-0 bg-linear-to-r from-black/65 via-black/35 to-black/65"
             v-if="activity.banner"
+            class="absolute inset-0 bg-linear-to-r from-black/65 via-black/35 to-black/65"
         ></div>
 
         <div class="relative z-10 flex flex-wrap items-center gap-6">

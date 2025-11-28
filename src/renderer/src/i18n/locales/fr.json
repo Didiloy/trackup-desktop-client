@@ -4,32 +4,70 @@
     },
     "common": {
         "loading": "Chargement en cours...",
+        "success": "Succès",
         "error": {
             "refresh": "Échec du rafraîchissement"
         },
-        "success": "Succès",
-        "title": "Titre",
-        "name": "Nom",
-        "description": "Description",
-        "type": "Type",
-        "logo": "Logo",
-        "banner": "Bannière",
-        "choose": "Choisir",
-        "change": "Changer",
-        "clear": "Effacer",
-        "or": "ou",
-        "settings": "Paramètres",
-        "required": "Requis",
-        "cancel": "Annuler",
-        "next": "Suivant",
-        "back": "Retour",
-        "skip": "Passer",
-        "create": "Créer",
-        "optional": "Optionnel",
-        "none": "Aucun",
-        "items": "éléments",
-        "creator": "Créateur",
-        "choices": "Choix",
+        "fields": {
+            "title": "Titre",
+            "name": "Nom",
+            "description": "Description",
+            "type": "Type",
+            "logo": "Logo",
+            "banner": "Bannière",
+            "creator": "Créateur",
+            "items": "éléments",
+            "choices": "Choix",
+            "required": "Requis",
+            "optional": "Optionnel",
+            "none": "Aucun"
+        },
+        "actions": {
+            "choose": "Choisir",
+            "change": "Changer",
+            "clear": "Effacer",
+            "cancel": "Annuler",
+            "next": "Suivant",
+            "back": "Retour",
+            "skip": "Passer",
+            "create": "Créer",
+            "finish": "Terminer",
+            "min": "Min",
+            "max": "Max",
+            "save": "Enregistrer",
+            "confirm": "Confirmer",
+            "select": "Sélectionner",
+            "select_short": "Sélec.",
+            "add": "Ajouter {entity}",
+            "remove": "Retirer {entity}",
+            "view": "Voir {entity}",
+            "update": "Mettre à jour {entity}",
+            "import": "Importer {entity}",
+            "refresh": "Rafraîchir {entity}",
+            "restore": "Restaurer {entity}",
+            "previous": "Précédent",
+            "enter": "Entrer",
+            "search": "Rechercher {entity}",
+            "submit": "Soumettre",
+            "upload": "Télécharger {entity}",
+            "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
+            "close": "Fermer",
+            "leave": "Quitter {entity}",
+            "rename": "Renommer",
+            "minimize": "Minimiser",
+            "maximize": "Maximiser",
+            "close_window": "Fermer",
+            "toggle_sidebar": "Voir les membres du serveur",
+            "devtools": "Devtools",
+            "clear_all": "Tout effacer"
+        },
+        "misc": {
+            "or": "ou",
+            "settings": "Paramètres",
+            "yes": "Oui",
+            "no": "Non",
+            "minutes_short": "min"
+        },
         "weekdays": {
             "short": {
                 "sunday": "Dim",
@@ -41,62 +79,29 @@
                 "saturday": "Sam"
             }
         },
-        "yes": "Oui",
-        "no": "Non",
-        "minutes_short": "min",
-        "activity": "Activité",
-        "extra_participants": "Participants supplémentaires",
-        "participants": "Participants",
-        "comment": "Commentaire",
-        "date": "Date",
-        "duration": "Durée",
-        "finish": "Terminer",
-        "min": "Min",
-        "max": "Max",
-        "step": "Étape {index}"
+        "steps": {
+            "generic": "Étape {index}",
+            "info": "Infos Session",
+            "enums": "Sélections",
+            "metadata": "Attributs de l'activité",
+            "activity": "Activité",
+            "skill_levels": "Niveaux de compétence"
+        },
+        "session_details": {
+            "activity": "Activité",
+            "participants": "Participants",
+            "extra_participants": "Participants supplémentaires",
+            "select_participants": "Sélectionner les participants",
+            "comment": "Commentaire",
+            "date": "Date",
+            "duration": "Durée"
+        }
     },
     "navigation": {
         "home": "Accueil",
         "back": "Retour",
         "redirecting": "Redirection...",
         "server": "Serveur"
-    },
-    "actions": {
-        "title": "Actions",
-        "create": "Créer {entity}",
-        "edit": "Modifier {entity}",
-        "delete": "Supprimer {entity}",
-        "confirm": "Confirmer",
-        "save": "Enregistrer",
-        "cancel": "Annuler",
-        "select": "Sélectionner",
-        "choose": "Choisir",
-        "add": "Ajouter {entity}",
-        "remove": "Retirer {entity}",
-        "view": "Voir {entity}",
-        "update": "Mettre à jour {entity}",
-        "import": "Importer {entity}",
-        "refresh": "Rafraîchir {entity}",
-        "restore": "Restaurer {entity}",
-        "next": "Suivant",
-        "previous": "Précédent",
-        "enter": "Entrer",
-        "search": "Rechercher {entity}",
-        "submit": "Soumettre",
-        "upload": "Télécharger {entity}",
-        "change": "Changer {entity}",
-        "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
-        "close": "Fermer",
-        "leave": "Quitter {entity}",
-        "select_short": "Sélec.",
-        "rename": "Renommer",
-        "minimize": "Minimiser",
-        "maximize": "Maximiser",
-        "close_window": "Fermer",
-        "toggle_sidebar": "Voir les membres du serveur",
-        "devtools": "Devtools",
-        "clear_all": "Tout effacer",
-        "select_participants": "Sélectionner les participants"
     },
     "placeholder": {
         "search": "Rechercher...",
@@ -106,7 +111,6 @@
         "upload": "Télécharger un fichier",
         "import": "Importer un fichier",
         "choose_file": "Choisir un fichier",
-        "select_short": "Sélec.",
         "search_by_name": "Rechercher par Nom",
         "filter_by_type": "Rechercher par Type",
         "select_participants": "Sélectionner des participants"
@@ -178,20 +182,18 @@
             "copyClipBoard": "Copie dans le presse-papiers en cours"
         }
     },
-    "entities": {},
-    "userInterface": {
-        "loginView": {
+    "views": {
+        "login": {
             "welcome": "Bienvenue !",
             "welcome_back": "Content de vous revoir !",
-            "login": "Se connecter",
+            "login_button": "Se connecter",
             "description": "Connectez-vous pour continuer",
-            "google": "Continuer avec Google",
-            "github": "Continuer avec GitHub",
-            "gitlab": "Continuer avec GitLab",
+            "continue_with_google": "Continuer avec Google",
+            "continue_with_github": "Continuer avec GitHub",
+            "continue_with_gitlab": "Continuer avec GitLab",
             "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité",
-            "logout": "se déconnecter",
-            "signup": "S'inscrire",
-            "or": "ou",
+            "logout_button": "se déconnecter",
+            "signup_button": "S'inscrire",
             "no_account": "Vous n'avez pas de compte ?",
             "already_have_account": "Vous avez déjà un compte ?",
             "error": {
@@ -199,7 +201,7 @@
                 "invalid_email": "Veuillez entrer une adresse email valide"
             }
         },
-        "createServerView": {
+        "create_server": {
             "title": "Créer un serveur",
             "subtitle": "Créez votre propre espace communautaire",
             "description": "Créez un nouveau serveur",
@@ -207,11 +209,9 @@
                 "name": "Nom du serveur ex: Ma communauté",
                 "type": "Type de serveur",
                 "description": "Description du serveur ex: Une communauté pour partager vos idées"
-            },
-            "create": "Créer",
-            "cancel": "Annuler"
+            }
         },
-        "membersAside": {
+        "members_aside": {
             "title": "Membres du serveur",
             "description": "Liste des membres du serveur",
             "no_members": "Aucun membre",
@@ -222,49 +222,49 @@
             "new_nickname": "Nouveau surnom",
             "enter_nickname": "Entrez le surnom"
         },
-        "joinServerView": {
+        "join_server": {
             "title": "Rejoindre un serveur",
             "subtitle": "Entrez un code d'invitation",
-            "invitationCodeLabel": "Code d'invitation",
-            "invitationCodeHint": "Exemple : ABC123XYZ",
-            "joinButton": "Rejoindre",
+            "invitation_code_label": "Code d'invitation",
+            "invitation_code_hint": "Exemple : ABC123XYZ",
+            "join_button": "Rejoindre",
             "placeholder": {
-                "invitationCode": "Entrez le code d'invitation"
+                "invitation_code": "Entrez le code d'invitation"
             }
         },
-        "serverActionView": {
+        "server_action": {
             "title": "Ajouter un serveur",
             "description": "Choisissez comment vous voulez ajouter un serveur"
         },
-        "updateModal": {
+        "update_modal": {
             "title": "Mise à jour disponible",
             "version": "Version",
             "type": "Type",
             "major": "Majeure",
             "minor": "Mineure",
-            "releaseNotes": "Notes de version",
-            "releaseDate": "Date de sortie",
+            "release_notes": "Notes de version",
+            "release_date": "Date de sortie",
             "downloading": "Téléchargement en cours...",
             "error": "Erreur",
             "skip": "Ignorer",
-            "updateNow": "Mettre à jour maintenant",
-            "installAndRestart": "Installer et redémarrer",
-            "downloadError": "Erreur lors du téléchargement"
+            "update_now": "Mettre à jour maintenant",
+            "install_and_restart": "Installer et redémarrer",
+            "download_error": "Erreur lors du téléchargement"
         },
-        "serverActivitiesView": {
+        "activity": {
             "title": "Activités du serveur",
-            "addActivity": "Ajouter une activité",
-            "createSession": "Créer une session",
-            "recentSessions": "Sessions récentes",
-            "evolution30Days": "Évolution 30 jours",
-            "noMetadata": "Aucune métadonnée disponible",
-            "noMetadataDescription": "Cette activité n'a pas de champs personnalisés configurés.",
-            "ActivityPerformanceSection": {
+            "add_button": "Ajouter une activité",
+            "create_session": "Créer une session",
+            "recent_sessions": "Sessions récentes",
+            "evolution_30_days": "Évolution 30 jours",
+            "no_metadata": "Aucune métadonnée disponible",
+            "no_metadata_description": "Cette activité n'a pas de champs personnalisés configurés.",
+            "performance_section": {
                 "sessions": "sessions",
                 "sessions_timeline": "Évolution des sessions sur les dernières semaines",
                 "growth": "Croissance",
                 "popularity": "Performance",
-                "skillLevels": "Répartition des niveaux",
+                "skill_levels_title": "Répartition des niveaux",
                 "weekly_sessions": "Sessions cette semaine",
                 "weekly_sessions_last_week": "vs semaine dernière",
                 "heatmap": "Heatmap",
@@ -278,40 +278,35 @@
                 "days": "jours",
                 "last_year": "52 dernières semaines"
             },
-            "addActivityModal": {
+            "add_modal": {
                 "title": "Ajouter une activité",
                 "description": "Ajoutez une nouvelle activité pour votre serveur",
                 "name": "Nom de l'activité",
                 "description_input": "Décris l'activité en quelques mots",
-                "createButton": "Créer l'activité",
-                "metadataTitle": "Attributs de l'activité",
-                "metadataDescription": "Ajoutez des attributs pour votre activité.",
-                "metadataDescriptionDetail": "Cela peut être des informations que vous voulez traquer sur les activités comme le nombre de buts marqués, le nombre de passes décisives, etc pour du football.",
-                "metadataStep": "Attributs",
-                "metadataKey": "Clé",
-                "metadataLabel": "Label",
-                "metadataType": "Type",
-                "metadataRequired": "Requis",
-                "metadataAddChoice": "Ajouter un choix prédéfini",
-                "metadataValidate": "Valider l'attribut",
-                "metadataAllowNotPredefined": "Autoriser les valeurs non prédéfinies",
-                "metadataChoices": "Choix (optionnel)",
-                "metadataList": "Liste des attributs",
-                "skillLevelsTitle": "Niveaux de compétence",
-                "skillLevelsDescription": "Ajoutez les niveaux de compétence pour votre activité.",
-                "skillLevelsDescriptionDetail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",
-                "displayOrder": "Ordre d'affichage",
+                "create_button": "Créer l'activité",
+                "metadata_title": "Attributs de l'activité",
+                "metadata_description": "Ajoutez des attributs pour votre activité.",
+                "metadata_description_detail": "Cela peut être des informations que vous voulez traquer sur les activités comme le nombre de buts marqués, le nombre de passes décisives, etc pour du football.",
+                "metadata_key": "Clé",
+                "metadata_label": "Label",
+                "metadata_required": "Requis",
+                "metadata_add_choice": "Ajouter un choix prédéfini",
+                "metadata_validate": "Valider l'attribut",
+                "metadata_allow_not_predefined": "Autoriser les valeurs non prédéfinies",
+                "metadata_choices": "Choix (optionnel)",
+                "metadata_list": "Liste des attributs",
+                "skill_levels_title": "Niveaux de compétence",
+                "skill_levels_description": "Ajoutez les niveaux de compétence pour votre activité.",
+                "skill_levels_description_detail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",
+                "display_order": "Ordre d'affichage",
                 "color": "Couleur",
-                "minSessions": "Nombre minimum de sessions",
-                "maxSessions": "Nombre maximum de sessions",
-                "minDuration": "Durée minimum (min)",
-                "maxDuration": "Durée maximum (min)",
+                "min_sessions": "Nombre minimum de sessions",
+                "max_sessions": "Nombre maximum de sessions",
+                "min_duration": "Durée minimum (min)",
+                "max_duration": "Durée maximum (min)",
                 "levels": "Niveaux",
-                "sessions": "sessions",
                 "minutes": "min",
-                "activityStep": "Activité",
-                "skillLevelsStep": "Niveaux de compétence",
-                "notPossibleWithType": "Impossible avec le type booléen ou date"
+                "not_possible_with_type": "Impossible avec le type booléen ou date"
             },
             "card": {
                 "sessions": "sessions",
@@ -332,7 +327,7 @@
                 }
             }
         },
-        "userProfileMenu": {
+        "user_profile_menu": {
             "title": "Profil Utilisateur",
             "preferences": {
                 "title": "Préférences",
@@ -352,22 +347,19 @@
                 }
             }
         },
-        "serverSessionsView": {
+        "server_sessions": {
             "title": "Sessions du serveur",
-            "addSessionModal": {
+            "add_modal": {
                 "title": "Créer une session",
-                "infoStep": "Infos Session",
-                "enumsStep": "Sélections",
-                "metadataStep": "Attributs de l'activité",
-                "infoDescription": "Entrez les détails de la session",
-                "enumsDescription": "Sélectionnez les options",
-                "metadataDescription": "Remplissez les attributs liés à l'activité",
-                "titlePlaceholder": "Titre optionnel",
-                "selectParticipants": "Sélectionner des participants supplémentaires",
-                "commentPlaceholder": "Commentaire...",
-                "noEnums": "Aucune sélection disponible",
-                "noMetadata": "Aucun attribut disponible",
-                "searchActivityPlaceholder": "Rechercher une activité..."
+                "info_description": "Entrez les détails de la session",
+                "enums_description": "Sélectionnez les options",
+                "metadata_description": "Remplissez les attributs liés à l'activité",
+                "title_placeholder": "Titre optionnel",
+                "select_participants": "Sélectionner des participants supplémentaires",
+                "comment_placeholder": "Commentaire...",
+                "no_enums": "Aucune sélection disponible",
+                "no_metadata": "Aucun attribut disponible",
+                "search_activity_placeholder": "Rechercher une activité..."
             }
         }
     },
