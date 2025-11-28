@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ICreateActivitySkillLevelRequest, IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
+import type {
+    ICreateActivitySkillLevelRequest,
+    IActivitySkillLevel
+} from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
 

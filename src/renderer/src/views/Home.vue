@@ -27,13 +27,16 @@ onMounted(() => {
 <template>
     <div class="w-full h-full flex flex-col items-center justify-center">
         <div class="creator">{{ t('home.powered_by') }}</div>
-        <div class="text" v-html="t('home.build_desc', { vue: 'Vue', typescript: 'TypeScript' })"></div>
+        <div
+            class="text"
+            v-html="t('home.build_desc', { vue: 'Vue', typescript: 'TypeScript' })"
+        ></div>
         <p class="tip" v-html="t('home.dev_tool_tip')"></p>
         <div class="actions">
             <div class="action">
-                <a href="https://electron-vite.org/" target="_blank" rel="noreferrer"
-                    >{{ t('home.documentation') }}</a
-                >
+                <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">{{
+                    t('home.documentation')
+                }}</a>
             </div>
             <div class="action">
                 <Button

@@ -113,5 +113,7 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
             <p class="text-xl font-medium text-surface-600">{{ t('filters.no_results') }}</p>
             <p class="text-sm text-surface-500 mt-2">{{ t('filters.try_adjusting') }}</p>
         </div>
+
+
     </div>
 </template>

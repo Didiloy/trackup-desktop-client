@@ -44,4 +44,3 @@ const skillDistribution = computed(() => {
         </div>
     </div>
 </template>
-

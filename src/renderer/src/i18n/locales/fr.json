@@ -310,14 +310,6 @@
                 "skillLevelsStep": "Niveaux de compétence",
                 "notPossibleWithType": "Impossible avec le type booléen ou date"
             },
-            "filters": {
-                "onlyMine": "Afficher seulement mes éléments",
-                "sort": {
-                    "recent": "Plus récents",
-                    "popular": "Plus populaires",
-                    "active": "Plus actifs"
-                }
-            },
             "card": {
                 "sessions": "sessions",
                 "duration": "durée",
@@ -330,10 +322,6 @@
                 "total_participants": "Participants totaux",
                 "avg_participants": "Moyenne des participants / session",
                 "popularity": "Popularité",
-                "empty": {
-                    "title": "Aucune activité ne correspond à votre recherche",
-                    "description": "Essayez un autre filtre ou créez une activité pour la voir apparaître ici."
-                },
                 "actions": {
                     "edit": "Modifier",
                     "delete": "Supprimer",
@@ -375,7 +363,7 @@
                 "selectParticipants": "Sélectionner des participants supplémentaires",
                 "commentPlaceholder": "Commentaire...",
                 "noEnums": "Aucune sélection disponible",
-                "noMetadata": "Aucune attributs disponible",
+                "noMetadata": "Aucun attribut disponible",
                 "searchActivityPlaceholder": "Rechercher une activité..."
             }
         }

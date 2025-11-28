@@ -307,14 +307,6 @@
                 "skillLevelsStep": "Skill levels",
                 "notPossibleWithType": "Not possible with boolean or date type"
             },
-            "filters": {
-                "onlyMine": "Show only my activities",
-                "sort": {
-                    "recent": "Recent",
-                    "popular": "Popular",
-                    "active": "Active"
-                }
-            },
             "card": {
                 "sessions": "sessions",
                 "duration": "duration",
@@ -327,10 +319,6 @@
                 "total_participants": "Total participants",
                 "avg_participants": "Average participants / session",
                 "popularity": "Popularity",
-                "empty": {
-                    "title": "No activities match your search",
-                    "description": "Try a different filter or create a new activity to see it appear here."
-                },
                 "actions": {
                     "edit": "Edit",
                     "delete": "Delete",

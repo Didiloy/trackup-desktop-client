@@ -87,7 +87,9 @@ onMounted(async () => {
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <i class="pi pi-file-edit text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.name') }} <span class="text-red-500">*</span></span>
+                <span class="text-sm font-medium text-surface-700"
+                    >{{ t('common.name') }} <span class="text-red-500">*</span></span
+                >
             </div>
             <InputText
                 v-model="name"
@@ -99,7 +101,9 @@ onMounted(async () => {
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <i class="pi pi-tags text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.type') }} <span class="text-red-500">*</span></span>
+                <span class="text-sm font-medium text-surface-700"
+                    >{{ t('common.type') }} <span class="text-red-500">*</span></span
+                >
             </div>
             <Select
                 v-model="selected_type"
@@ -116,8 +120,8 @@ onMounted(async () => {
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700">{{
-                        t('common.description')
-                    }}</span>
+                    t('common.description')
+                }}</span>
             </div>
             <Textarea
                 v-model="description"

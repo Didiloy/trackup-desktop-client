@@ -44,8 +44,8 @@ const value = computed({
             <div class="m-auto flex items-center gap-2">
                 <InputSwitch v-model="value" />
                 <span class="text-sm text-surface-600 font-medium">
-                {{ value ? t('common.yes') : t('common.no') }}
-            </span>
+                    {{ value ? t('common.yes') : t('common.no') }}
+                </span>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-1">
                 {{ def.type }}

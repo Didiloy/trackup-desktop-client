@@ -210,7 +210,9 @@ function clearFilters(): void {
                 <template #content>
                     <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
                         <div class="flex items-center justify-between">
-                            <span class="font-semibold text-surface-900">{{ t('filters.title') }}</span>
+                            <span class="font-semibold text-surface-900">{{
+                                t('filters.title')
+                            }}</span>
                             <Button
                                 :label="t('actions.clear_all')"
                                 link
@@ -222,7 +224,9 @@ function clearFilters(): void {
 
                         <!-- Participants Filter -->
                         <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-surface-700">{{ t('filters.participants') }}</label>
+                            <label class="text-sm font-medium text-surface-700">{{
+                                t('filters.participants')
+                            }}</label>
                             <MultiSelectFilter
                                 :model-value="localParticipantIds"
                                 :options="server_store.getMembers || []"
@@ -235,7 +239,9 @@ function clearFilters(): void {
 
                         <!-- Date Range Filter -->
                         <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-surface-700">{{ t('filters.date_range') }}</label>
+                            <label class="text-sm font-medium text-surface-700">{{
+                                t('filters.date_range')
+                            }}</label>
                             <DateRangeFilter
                                 :model-value="localDateRange"
                                 @update:model-value="onDateRangeChange"
@@ -244,9 +250,9 @@ function clearFilters(): void {
 
                         <!-- Duration Filter -->
                         <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-surface-700"
-                                >{{ t('filters.duration.title') }}</label
-                            >
+                            <label class="text-sm font-medium text-surface-700">{{
+                                t('filters.duration.title')
+                            }}</label>
                             <NumberRangeFilter
                                 :min="localMinDuration"
                                 :max="localMaxDuration"
