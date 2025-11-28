@@ -68,10 +68,7 @@ function onSubmit(): void {
         >
             <i class="pi pi-info-circle text-2xl mb-2"></i>
             <p>
-                {{
-                    t('userInterface.serverSessionsView.addSessionModal.noMetadata') ||
-                    'No metadata available'
-                }}
+                {{ t('userInterface.serverSessionsView.addSessionModal.noMetadata') }}
             </p>
         </div>
 

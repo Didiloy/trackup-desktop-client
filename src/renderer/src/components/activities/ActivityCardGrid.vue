@@ -91,16 +91,12 @@ function handleScroll(event: Event): void {
 
             <!-- Empty State -->
             <div
-                v-if="isEmpty"
-                class="flex flex-col items-center justify-center text-center py-16 rounded-2xl border border-dashed border-surface-200 text-surface-500"
+                v-else-if="isEmpty"
+                class="flex flex-col items-center justify-center h-full min-h-[400px]"
             >
-                <i class="pi pi-compass text-4xl mb-2 text-primary-500"></i>
-                <p class="font-semibold text-surface-900">
-                    {{ t('userInterface.serverActivitiesView.card.empty.title') }}
-                </p>
-                <p class="text-sm text-surface-500 max-w-md">
-                    {{ t('userInterface.serverActivitiesView.card.empty.description') }}
-                </p>
+                <i class="pi pi-calendar text-7xl text-surface-300 mb-4"></i>
+                <p class="text-xl font-medium text-surface-600">{{ t('filters.no_results') }}</p>
+                <p class="text-sm text-surface-500 mt-2">{{ t('filters.try_adjusting') }}</p>
             </div>
         </div>
     </div>

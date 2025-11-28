@@ -91,8 +91,6 @@ function filterNumeric(event: KeyboardEvent): void {
                 :placeholder="def.label || undefined"
                 class="w-full p-inputtext-sm"
             />
-
-
         </div>
     </div>
 </template>

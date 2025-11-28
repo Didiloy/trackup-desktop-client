@@ -4,6 +4,9 @@ import { useRoute } from 'vue-router'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import { useServerStore } from '@/stores/server'
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const route = useRoute()
 const server_id = ref<string>(route.params.id as string)
 const server_store = useServerStore()
@@ -18,11 +21,11 @@ const server_store = useServerStore()
                 <Skeleton width="80%" height="1.5rem" />
             </div>
             <div v-else-if="server_store.hasServer" :key="server_id">
-                <h1>Server {{ server_store.getPublicId }}</h1>
+                <h1>{{ t('server.profile', { id: server_store.getPublicId }) }}</h1>
                 <p>
                     {{ server_store.getName }}
                     {{ server_store.getInvitationCode }}
-                    {{ server_store.getMembers?.length }} members
+                    {{ server_store.getMembers?.length }} {{ t('server.members') }}
                     {{ server_store.getDescription }}
                     {{ server_store.getInvitationCodeExpDate }}
                     {{ server_store.getServerTypePublicId }}

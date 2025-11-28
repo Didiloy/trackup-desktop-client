@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface StepItem {
     label?: string
@@ -83,7 +86,7 @@ const safeCurrent = computed(() => {
                                     <span v-else>{{ index + 1 }}</span>
                                 </div>
                                 <span class="text-xs font-medium">
-                                    {{ step.label || `Step ${index + 1}` }}
+                                    {{ step.label || t('common.step', { index: index + 1 }) }}
                                 </span>
                             </div>
                         </div>

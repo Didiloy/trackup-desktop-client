@@ -5,6 +5,9 @@ import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/composables/auth/useAuth'
 import ThemeSelector from '@/components/common/selectors/ThemeSelector.vue'
 import LanguageSelector from '@/components/common/selectors/LanguageSelector.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const ipcHandle = (): void => window.api.app.ping()
 const user_store = useUserStore()
@@ -23,28 +26,26 @@ onMounted(() => {
 
 <template>
     <div class="w-full h-full flex flex-col items-center justify-center">
-        <div class="creator">Powered by electron-vite</div>
-        <div class="text">
-            Build an Electron app with
-            <span class="vue">Vue</span>
-            and
-            <span class="ts">TypeScript</span>
-        </div>
-        <p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
+        <div class="creator">{{ t('home.powered_by') }}</div>
+        <div
+            class="text"
+            v-html="t('home.build_desc', { vue: 'Vue', typescript: 'TypeScript' })"
+        ></div>
+        <p class="tip" v-html="t('home.dev_tool_tip')"></p>
         <div class="actions">
             <div class="action">
-                <a href="https://electron-vite.org/" target="_blank" rel="noreferrer"
-                    >Documentation</a
-                >
+                <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">{{
+                    t('home.documentation')
+                }}</a>
             </div>
             <div class="action">
                 <Button
-                    label="Send IPC"
+                    :label="t('home.send_ipc')"
                     class="text-white border-0 px-4 py-2 rounded-lg transition hover:opacity-90"
                     :style="{ background: 'var(--gradient-primary)' }"
                     @click="ipcHandle"
                 />
-                <Button label="signout" @click="signOut"></Button>
+                <Button :label="t('userInterface.loginView.logout')" @click="signOut"></Button>
             </div>
         </div>
         <Versions />

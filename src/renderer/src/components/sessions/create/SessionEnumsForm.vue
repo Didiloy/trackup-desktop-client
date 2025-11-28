@@ -115,10 +115,7 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
         >
             <i class="pi pi-info-circle text-2xl mb-2"></i>
             <p>
-                {{
-                    t('userInterface.serverSessionsView.addSessionModal.noEnums') ||
-                    'No selections available'
-                }}
+                {{ t('userInterface.serverSessionsView.addSessionModal.noEnums') }}
             </p>
         </div>
 

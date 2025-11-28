@@ -50,7 +50,10 @@
         "comment": "Commentaire",
         "date": "Date",
         "duration": "Durée",
-        "finish": "Terminer"
+        "finish": "Terminer",
+        "min": "Min",
+        "max": "Max",
+        "step": "Étape {index}"
     },
     "navigation": {
         "home": "Accueil",
@@ -91,7 +94,9 @@
         "maximize": "Maximiser",
         "close_window": "Fermer",
         "toggle_sidebar": "Voir les membres du serveur",
-        "devtools": "Devtools"
+        "devtools": "Devtools",
+        "clear_all": "Tout effacer",
+        "select_participants": "Sélectionner les participants"
     },
     "placeholder": {
         "search": "Rechercher...",
@@ -103,7 +108,8 @@
         "choose_file": "Choisir un fichier",
         "select_short": "Sélec.",
         "search_by_name": "Rechercher par Nom",
-        "filter_by_type": "Rechercher par Type"
+        "filter_by_type": "Rechercher par Type",
+        "select_participants": "Sélectionner des participants"
     },
     "messages": {
         "info": {
@@ -278,19 +284,19 @@
                 "name": "Nom de l'activité",
                 "description_input": "Décris l'activité en quelques mots",
                 "createButton": "Créer l'activité",
-                "metadataTitle": "Détails",
-                "metadataDescription": "Ajoutez des champs de détails pour votre activité.",
+                "metadataTitle": "Attributs de l'activité",
+                "metadataDescription": "Ajoutez des attributs pour votre activité.",
                 "metadataDescriptionDetail": "Cela peut être des informations que vous voulez traquer sur les activités comme le nombre de buts marqués, le nombre de passes décisives, etc pour du football.",
-                "metadataStep": "Détails",
+                "metadataStep": "Attributs",
                 "metadataKey": "Clé",
                 "metadataLabel": "Label",
                 "metadataType": "Type",
                 "metadataRequired": "Requis",
                 "metadataAddChoice": "Ajouter un choix prédéfini",
-                "metadataValidate": "Valider le champ de détails",
+                "metadataValidate": "Valider l'attribut",
                 "metadataAllowNotPredefined": "Autoriser les valeurs non prédéfinies",
                 "metadataChoices": "Choix (optionnel)",
-                "metadataList": "Liste des détails",
+                "metadataList": "Liste des attributs",
                 "skillLevelsTitle": "Niveaux de compétence",
                 "skillLevelsDescription": "Ajoutez les niveaux de compétence pour votre activité.",
                 "skillLevelsDescriptionDetail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",
@@ -307,14 +313,6 @@
                 "skillLevelsStep": "Niveaux de compétence",
                 "notPossibleWithType": "Impossible avec le type booléen ou date"
             },
-            "filters": {
-                "onlyMine": "Afficher seulement mes éléments",
-                "sort": {
-                    "recent": "Plus récents",
-                    "popular": "Plus populaires",
-                    "active": "Plus actifs"
-                }
-            },
             "card": {
                 "sessions": "sessions",
                 "duration": "durée",
@@ -327,10 +325,6 @@
                 "total_participants": "Participants totaux",
                 "avg_participants": "Moyenne des participants / session",
                 "popularity": "Popularité",
-                "empty": {
-                    "title": "Aucune activité ne correspond à votre recherche",
-                    "description": "Essayez un autre filtre ou créez une activité pour la voir apparaître ici."
-                },
                 "actions": {
                     "edit": "Modifier",
                     "delete": "Supprimer",
@@ -364,17 +358,51 @@
                 "title": "Créer une session",
                 "infoStep": "Infos Session",
                 "enumsStep": "Sélections",
-                "metadataStep": "Métadonnées",
+                "metadataStep": "Attributs de l'activité",
                 "infoDescription": "Entrez les détails de la session",
                 "enumsDescription": "Sélectionnez les options",
-                "metadataDescription": "Ajoutez des données supplémentaires",
+                "metadataDescription": "Remplissez les attributs liés à l'activité",
                 "titlePlaceholder": "Titre optionnel",
                 "selectParticipants": "Sélectionner des participants supplémentaires",
                 "commentPlaceholder": "Commentaire...",
                 "noEnums": "Aucune sélection disponible",
-                "noMetadata": "Aucune métadonnée disponible",
+                "noMetadata": "Aucun attribut disponible",
                 "searchActivityPlaceholder": "Rechercher une activité..."
             }
         }
+    },
+    "server": {
+        "widgets": "Widgets du serveur",
+        "settings": "Paramètres du serveur",
+        "profile": "Serveur {id}",
+        "members": "Membres du serveur"
+    },
+    "home": {
+        "powered_by": "Propulsé par electron-vite",
+        "build_desc": "Construisez une application Electron avec <span class=\"vue\">{vue}</span> et <span class=\"ts\">{typescript}</span>",
+        "vue": "Vue",
+        "typescript": "TypeScript",
+        "dev_tool_tip": "Veuillez essayer d'appuyer sur <code>F12</code> pour ouvrir les outils de développement",
+        "documentation": "Documentation",
+        "send_ipc": "Envoyer IPC"
+    },
+    "versions": {
+        "electron": "Electron v{version}",
+        "chromium": "Chromium v{version}",
+        "node": "Node v{version}"
+    },
+    "filters": {
+        "title": "Filtres",
+        "participants": "Participants",
+        "date_range": "Plage de dates",
+        "duration": {
+            "title": "Durée (minutes)"
+        },
+        "no_results": "Aucun résultat trouvé",
+        "try_adjusting": "Essayez d'ajuster vos filtres",
+        "liked_by_me": "Aimé par moi"
+    },
+    "auth": {
+        "provider_continue": "Continuer avec {provider}"
     }
 }

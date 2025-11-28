@@ -2,6 +2,9 @@
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { computed } from 'vue'
 import SessionCard from '@/components/sessions/SessionCard.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
     sessions: ISessionListItem[]
@@ -107,8 +110,10 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
             class="flex flex-col items-center justify-center h-full min-h-[400px]"
         >
             <i class="pi pi-calendar text-7xl text-surface-300 mb-4"></i>
-            <p class="text-xl font-medium text-surface-600">No sessions found</p>
-            <p class="text-sm text-surface-500 mt-2">Try adjusting your filters</p>
+            <p class="text-xl font-medium text-surface-600">{{ t('filters.no_results') }}</p>
+            <p class="text-sm text-surface-500 mt-2">{{ t('filters.try_adjusting') }}</p>
         </div>
+
+
     </div>
 </template>

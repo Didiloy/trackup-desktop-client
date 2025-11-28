@@ -53,21 +53,21 @@ const steps = computed(() => {
     const list = [
         {
             key: 'info',
-            label: t('userInterface.serverSessionsView.addSessionModal.infoStep') || 'Session Info',
+            label: t('userInterface.serverSessionsView.addSessionModal.infoStep'),
             icon: 'pi pi-info-circle'
         }
     ]
     if (has_enums.value) {
         list.push({
             key: 'enums',
-            label: t('userInterface.serverSessionsView.addSessionModal.enumsStep') || 'Selections',
+            label: t('userInterface.serverSessionsView.addSessionModal.enumsStep'),
             icon: 'pi pi-list'
         })
     }
     if (has_metadata.value) {
         list.push({
             key: 'metadata',
-            label: t('userInterface.serverSessionsView.addSessionModal.metadataStep') || 'Metadata',
+            label: t('userInterface.serverSessionsView.addSessionModal.metadataStep'),
             icon: 'pi pi-database'
         })
     }
@@ -79,20 +79,11 @@ const currentIndex = computed(() => steps.value.findIndex((s) => s.key === curre
 const subtitle = computed(() => {
     switch (current_step.value) {
         case 'info':
-            return (
-                t('userInterface.serverSessionsView.addSessionModal.infoDescription') ||
-                'Enter session details'
-            )
+            return t('userInterface.serverSessionsView.addSessionModal.infoDescription')
         case 'enums':
-            return (
-                t('userInterface.serverSessionsView.addSessionModal.enumsDescription') ||
-                'Select options'
-            )
+            return t('userInterface.serverSessionsView.addSessionModal.enumsDescription')
         case 'metadata':
-            return (
-                t('userInterface.serverSessionsView.addSessionModal.metadataDescription') ||
-                'Add extra data'
-            )
+            return t('userInterface.serverSessionsView.addSessionModal.metadataDescription')
         default:
             return ''
     }
@@ -263,7 +254,7 @@ function finishWizard(): void {
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
-        :title="t('userInterface.serverSessionsView.addSessionModal.title') || 'Create Session'"
+        :title="t('userInterface.serverSessionsView.addSessionModal.title')"
         :subtitle="subtitle"
         icon-class="pi pi-plus-circle"
         :steps="steps"

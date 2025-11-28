@@ -48,7 +48,10 @@
         "comment": "Comment",
         "date": "Date",
         "duration": "Duration",
-        "finish": "Finish"
+        "finish": "Finish",
+        "min": "Min",
+        "max": "Max",
+        "step": "Step {index}"
     },
     "navigation": {
         "home": "Home",
@@ -89,7 +92,9 @@
         "maximize": "Maximize",
         "close_window": "Close",
         "toggle_sidebar": "View server members",
-        "devtools": "Devtools"
+        "devtools": "Devtools",
+        "clear_all": "Clear All",
+        "select_participants": "Select participants"
     },
     "placeholder": {
         "search": "Search...",
@@ -100,7 +105,8 @@
         "import": "Import a file",
         "choose_file": "Choose a file",
         "search_by_name": "Search by Name",
-        "filter_by_type": "Search by Type"
+        "filter_by_type": "Search by Type",
+        "select_participants": "Select participants"
     },
     "messages": {
         "info": {
@@ -275,19 +281,19 @@
                 "name": "Activity name",
                 "description_input": "Describe the activity in a few words",
                 "createButton": "Create activity",
-                "metadataTitle": "Details",
-                "metadataDescription": "Add details fields for your activity",
+                "metadataTitle": "Attributes",
+                "metadataDescription": "Add custom attributes linked to the activity",
                 "metadataDescriptionDetail": "This can be information you want to track on activities like the number of goals scored, the number of decisive passes, etc for football.",
-                "metadataStep": "Details",
+                "metadataStep": "Attributs",
                 "metadataKey": "Key",
                 "metadataLabel": "Label",
                 "metadataType": "Type",
                 "metadataRequired": "Required",
                 "metadataAddChoice": "Add a predefined choice",
-                "metadataValidate": "Validate details field",
+                "metadataValidate": "Validate attribut field",
                 "metadataAllowNotPredefined": "Allow non predefined values",
                 "metadataChoices": "Choices (optional)",
-                "metadataList": "Details list",
+                "metadataList": "Attributs list",
                 "skillLevelsTitle": "Skill levels",
                 "skillLevelsDescription": "Add the skill levels for your activity",
                 "skillLevelsDescriptionDetail": "This can be skill levels you want to assign like 'Beginner', 'Intermediate', 'Expert', etc.",
@@ -304,14 +310,6 @@
                 "skillLevelsStep": "Skill levels",
                 "notPossibleWithType": "Not possible with boolean or date type"
             },
-            "filters": {
-                "onlyMine": "Show only my activities",
-                "sort": {
-                    "recent": "Recent",
-                    "popular": "Popular",
-                    "active": "Active"
-                }
-            },
             "card": {
                 "sessions": "sessions",
                 "duration": "duration",
@@ -324,10 +322,6 @@
                 "total_participants": "Total participants",
                 "avg_participants": "Average participants / session",
                 "popularity": "Popularity",
-                "empty": {
-                    "title": "No activities match your search",
-                    "description": "Try a different filter or create a new activity to see it appear here."
-                },
                 "actions": {
                     "edit": "Edit",
                     "delete": "Delete",
@@ -361,17 +355,51 @@
                 "title": "Create Session",
                 "infoStep": "Session Info",
                 "enumsStep": "Selections",
-                "metadataStep": "Metadata",
+                "metadataStep": "Attributes of the activity",
                 "infoDescription": "Enter session details",
                 "enumsDescription": "Select options",
-                "metadataDescription": "Add extra data",
+                "metadataDescription": "Add attributes linked to the activity",
                 "titlePlaceholder": "Optional title",
                 "selectParticipants": "Select additional participants",
                 "commentPlaceholder": "Comment...",
                 "noEnums": "No selections available",
-                "noMetadata": "No metadata available",
+                "noMetadata": "No attributes available",
                 "searchActivityPlaceholder": "Search activity..."
             }
         }
+    },
+    "server": {
+        "widgets": "Server Widgets",
+        "settings": "Server Settings",
+        "profile": "Server {id}",
+        "members": "Server Members"
+    },
+    "home": {
+        "powered_by": "Powered by electron-vite",
+        "build_desc": "Build an Electron app with <span class=\"vue\">{vue}</span> and <span class=\"ts\">{typescript}</span>",
+        "vue": "Vue",
+        "typescript": "TypeScript",
+        "dev_tool_tip": "Please try pressing <code>F12</code> to open the devTool",
+        "documentation": "Documentation",
+        "send_ipc": "Send IPC"
+    },
+    "versions": {
+        "electron": "Electron v{version}",
+        "chromium": "Chromium v{version}",
+        "node": "Node v{version}"
+    },
+    "filters": {
+        "title": "Filters",
+        "participants": "Participants",
+        "date_range": "Date Range",
+        "duration": {
+            "title": "Duration (minutes)"
+        },
+        "no_results": "No sessions found",
+        "try_adjusting": "Try adjusting your filters",
+        "liked_by_me": "Liked by me"
+    },
+    "auth": {
+        "provider_continue": "Continue with {provider}"
     }
 }
