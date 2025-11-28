@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMetadataForm } from '@/composables/activities/metadata/useMetadataForm'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
@@ -21,6 +21,7 @@ const emit = defineEmits<{
     (e: 'skip'): void
     (e: 'cancel'): void
     (e: 'loaded', hasMetadata: boolean): void
+    (e: 'valid', isValid: boolean): void
 }>()
 
 const { t } = useI18n()
@@ -42,7 +43,18 @@ function getComponent(type: string): unknown {
 onMounted(async () => {
     const hasMetadata = await loadDefinitions()
     emit('loaded', hasMetadata)
+    // emit initial validity state
+    emit('valid', canSubmit.value)
 })
+
+// Emit validity whenever definitions or values change
+watch([() => canSubmit.value, () => definitions.value], () => {
+    emit('valid', canSubmit.value)
+})
+
+
+// Don't show skip at all when there is any required definition
+const hasAnyRequired = computed(() => definitions.value.some((d) => d.required))
 
 function onSubmit(): void {
     const metadata = getSubmissionData()
@@ -85,6 +97,7 @@ function onSubmit(): void {
         <!-- Actions -->
         <div class="flex justify-end gap-2 mt-auto pt-4">
             <Button
+                v-if="!hasAnyRequired"
                 :label="t('common.actions.skip')"
                 severity="secondary"
                 text

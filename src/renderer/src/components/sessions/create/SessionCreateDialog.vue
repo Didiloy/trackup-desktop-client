@@ -49,6 +49,12 @@ const has_metadata = ref(false)
 const enum_definitions = ref<IEnumDefinition[]>([])
 const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
 
+// Track metadata form validity
+const metadata_valid = ref(true)
+function setMetadataValid(v: boolean) : void {
+    metadata_valid.value = v
+}
+
 const steps = computed(() => {
     const list = [
         {
@@ -247,6 +253,14 @@ function finishWizard(): void {
     }
     close()
 }
+
+// Compute whether the dialog should be closable. It's not closable when on the metadata step and metadata is invalid
+const isClosable = computed(() => {
+    if (current_step.value !== 'metadata') return true
+    // If there are metadata definitions and metadata is invalid, prevent closing
+    if (has_metadata.value && !metadata_valid.value) return false
+    return true
+})
 </script>
 
 <template>
@@ -259,6 +273,8 @@ function finishWizard(): void {
         icon-class="pi pi-plus-circle"
         :steps="steps"
         :current="currentIndex"
+        :closable="isClosable"
+        :dismissable-mask="isClosable"
         @update:model-value="emit('update:modelValue', $event)"
     >
         <SessionCreateForm
@@ -284,6 +300,7 @@ function finishWizard(): void {
             :definitions="metadata_definitions"
             @submit="handleAddMetadata"
             @skip="handleSkipMetadata"
+            @valid="setMetadataValid"
         />
 
         <template #footer>
