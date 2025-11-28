@@ -7,6 +7,7 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
+import { useToast } from 'primevue/usetoast'
 
 const props = withDefaults(
     defineProps<{
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
 const { listSkillLevels, deleteSkillLevel } = useActivitySkillLevelCRUD()
 const server_store = useServerStore()
 
@@ -119,10 +121,19 @@ function removeLevel(index: number): void {
 async function removeExistingLevel(levelId: string): Promise<void> {
     if (!props.activityId || !server_store.getPublicId) return
     try {
-        await deleteSkillLevel(server_store.getPublicId, props.activityId, levelId)
+        const res = await deleteSkillLevel(server_store.getPublicId, props.activityId, levelId)
+        if (res.error) {
+            throw new Error(res.error)
+        }
         await syncDisplayOrder()
     } catch (e) {
         console.error('Failed to delete skill level', e)
+        toast.add({
+            severity: 'error',
+            summary: t('messages.error.delete'),
+            detail: e instanceof Error ? e.message : String(e),
+            life: 2500
+        })
     }
 }
 
