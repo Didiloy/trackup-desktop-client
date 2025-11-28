@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import AvatarButton from '@/components/common/AvatarButton.vue'
+import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 
 interface Props {
     imageUrl?: string | null

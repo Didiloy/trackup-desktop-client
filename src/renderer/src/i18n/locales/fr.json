@@ -118,7 +118,9 @@
         "choose_file": "Choisir un fichier",
         "search_by_name": "Rechercher par Nom",
         "filter_by_type": "Rechercher par Type",
-        "select_participants": "Sélectionner des participants"
+        "select_participants": "Sélectionner des participants",
+        "banner_url": "URL de la bannière",
+        "logo_url": "URL du logo"
     },
     "messages": {
         "info": {

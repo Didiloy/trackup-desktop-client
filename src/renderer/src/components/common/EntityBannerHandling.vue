@@ -87,7 +87,7 @@ function removeBanner(): void {
             <img
                 v-if="banner"
                 :src="banner"
-                :alt="entityName"
+                :alt="entityName || t('views.servers_aside.banner_alt')"
                 class="w-full h-full object-cover not-draggable"
             />
             <div
@@ -95,7 +95,7 @@ function removeBanner(): void {
                 class="w-full h-full flex items-center justify-center text-surface-500"
                 style="background: var(--p-surface-100)"
             >
-                <span class="text-sm">{{ entityName || t('common.banner') }}</span>
+                <span class="text-sm">{{ entityName || t('common.fields.banner') }}</span>
             </div>
 
             <!-- Overlay action buttons -->
@@ -132,12 +132,12 @@ function removeBanner(): void {
                 @click="triggerFileInput"
             >
                 <FontAwesomeIcon icon="fa-solid fa-upload" class="mr-1" />
-                {{ t('common.choose') }}
+                {{ t('common.actions.choose') }}
             </Button>
-            <span class="text-sm text-surface-500">{{ t('common.or') }}</span>
+            <span class="text-sm text-surface-500">{{ t('common.misc.or') }}</span>
             <InputText
                 v-model="banner_url"
-                placeholder="https://example.com/banner.png"
+                :placeholder="t('placeholder.banner_url')"
                 class="flex-1"
                 :pt="{
                     root: {
