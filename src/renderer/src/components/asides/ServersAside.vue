@@ -41,6 +41,7 @@ watch(
 
 const toast = useToast()
 const i18n = useI18n()
+const { t } = i18n
 async function copyInvite(): Promise<void> {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
@@ -71,7 +72,7 @@ async function copyInvite(): Promise<void> {
                             <div v-if="server_store.getBanner" class="absolute inset-0">
                                 <img
                                     :src="server_store.getBanner"
-                                    alt="Server banner"
+                                    :alt="t('views.servers_aside.banner_alt')"
                                     class="w-full h-full object-cover not-draggable"
                                 />
                             </div>
@@ -89,7 +90,7 @@ async function copyInvite(): Promise<void> {
                         ></div>
                         <div class="absolute bottom-0 left-0 right-0 p-3">
                             <div class="text-white font-semibold text-sm truncate text-elevated">
-                                {{ server_store.getName || 'Server' }}
+                                {{ server_store.getName || t('views.servers_aside.fallback_name') }}
                             </div>
                             <div class="text-white/90 text-xs text-elevated">
                                 {{ serverTypeName }}

@@ -218,6 +218,7 @@
         },
         "members_aside": {
             "title": "Membres du serveur",
+            "title_with_count": "{title} — {count}",
             "description": "Liste des membres du serveur",
             "no_members": "Aucun membre",
             "loading": "Chargement des membres...",
@@ -226,6 +227,10 @@
             "update_nickname_message": "Entrez un nouveau surnom pour votre profil.",
             "new_nickname": "Nouveau surnom",
             "enter_nickname": "Entrez le surnom"
+        },
+        "servers_aside": {
+            "fallback_name": "Serveur",
+            "banner_alt": "Bannière du serveur"
         },
         "join_server": {
             "title": "Rejoindre un serveur",

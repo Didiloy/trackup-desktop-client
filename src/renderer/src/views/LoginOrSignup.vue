@@ -14,27 +14,16 @@
             </div>
 
             <div class="flex flex-col gap-3">
-                <ProviderButton
+                <button
+                    v-for="{ provider, icon, label } in available_providers"
+                    :key="provider"
+                    class="w-full h-11 px-3 rounded-lg bg-surface-100 hover:bg-surface-200 text-surface-900 flex items-center justify-center gap-2 border border-surface-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     :disabled="loading"
-                    provider="google"
-                    :label="t('userInterface.loginView.google')"
-                    icon="pi-google"
-                    @click="handleOAuth"
-                />
-                <ProviderButton
-                    :disabled="loading"
-                    provider="github"
-                    :label="t('userInterface.loginView.github')"
-                    icon="pi-github"
-                    @click="handleOAuth"
-                />
-                <ProviderButton
-                    :disabled="loading"
-                    provider="gitlab"
-                    :label="t('userInterface.loginView.gitlab')"
-                    icon="pi-gitlab"
-                    @click="handleOAuth"
-                />
+                    @click="handleOAuth(provider)"
+                >
+                    <i v-if="icon" :class="['pi', icon]"></i>
+                    <span class="font-medium">{{ label }}</span>
+                </button>
             </div>
 
             <div v-if="error" class="mt-4 text-sm text-red-600">{{ error }}</div>
@@ -50,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import ProviderButton from '@/components/auth/ProviderButton.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import type { Provider } from '@supabase/supabase-js'
 import { useI18n } from 'vue-i18n'
@@ -58,6 +46,24 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 const { signInWithOAuth, loading, error } = useAuth()
+
+const available_providers: { provider: Provider; icon: string; label: string }[] = [
+    {
+        provider: 'google',
+        icon: 'pi-google',
+        label: t('userInterface.loginView.google'),
+    },
+    {
+        provider: 'github',
+        icon: 'pi-github',
+        label: t('userInterface.loginView.github'),
+    },
+    {
+        provider: 'gitlab',
+        icon: 'pi-gitlab',
+        label: t('userInterface.loginView.gitlab'),
+    },
+]
 
 async function handleOAuth(provider: Provider): Promise<void> {
     // Use custom deep-link scheme to return to the app after browser auth
