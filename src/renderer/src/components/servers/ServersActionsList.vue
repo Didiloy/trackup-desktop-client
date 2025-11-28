@@ -18,16 +18,16 @@ interface ServerAction {
 
 const actions: ServerAction[] = [
     {
-        id: 'server-profile',
-        label: t('views.server_profile.title'),
-        icon: 'pi pi-home',
-        routeName: 'ServerProfile'
-    },
-    {
         id: 'stats',
         label: t('views.server_stats.title'),
         icon: 'pi pi-chart-bar',
         routeName: 'ServerStats'
+    },
+    {
+        id: 'server-profile',
+        label: t('views.server_profile.title'),
+        icon: 'pi pi-home',
+        routeName: 'ServerProfile'
     },
     {
         id: 'activities',

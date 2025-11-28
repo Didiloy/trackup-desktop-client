@@ -299,7 +299,7 @@
             }
         },
         "server_profile": {
-            "title": "Accueil",
+            "title": "Profil du serveur",
             "general_info": "Informations générales",
             "manage_server": "Gérer le serveur",
             "server_details": "Détails du serveur",
