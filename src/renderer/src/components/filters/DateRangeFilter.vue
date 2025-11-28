@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface Props {
     modelValue: Date[] | null
     placeholder?: string
@@ -12,18 +15,24 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    placeholder: 'Select date range',
+    placeholder: undefined,
     size: 'small',
     dateFormat: 'yy-mm-dd'
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+
+const placeholderText = computed(() => props.placeholder ?? t('filters.date_range'))
 
 function onChange(value: Date | Date[] | (Date | null)[] | null | undefined): void {
     let dateArray: Date[] | null = null
     if (Array.isArray(value)) {
-        const filtered = value.filter((d): d is Date => d instanceof Date)
-        dateArray = filtered.length > 0 ? filtered : null
+        const collected: Date[] = []
+        for (const item of value as unknown[]) {
+            if (item instanceof Date) collected.push(item)
+        }
+        dateArray = collected.length > 0 ? collected : null
     }
     emit('update:modelValue', dateArray)
 }
@@ -33,7 +42,7 @@ function onChange(value: Date | Date[] | (Date | null)[] | null | undefined): vo
     <DatePicker
         :model-value="modelValue"
         selection-mode="range"
-        :placeholder="placeholder"
+        :placeholder="placeholderText"
         :date-format="dateFormat"
         show-icon
         :size="size"

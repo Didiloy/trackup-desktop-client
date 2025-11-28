@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface Props {
     modelValue: string
     placeholder?: string
@@ -11,11 +14,13 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    placeholder: 'Search...',
+    placeholder: undefined,
     size: 'small'
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+const placeholderText = computed(() => props.placeholder ?? t('placeholder.search'))
 
 function onInput(value: string | undefined): void {
     emit('update:modelValue', value ?? '')
@@ -27,7 +32,7 @@ function onInput(value: string | undefined): void {
         <i v-if="icon" :class="[icon, 'text-surface-800']"></i>
         <InputText
             :model-value="modelValue"
-            :placeholder="placeholder"
+            :placeholder="placeholderText"
             class="w-full"
             :size="size"
             @update:model-value="onInput"

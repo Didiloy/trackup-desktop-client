@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
     modelValue: string[]
-    options: any[]
+    options: string[]
     placeholder?: string
     icon?: string
     size?: 'small' | 'large'
@@ -15,7 +15,7 @@ interface Emits {
     (e: 'update:modelValue', value: string[]): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     placeholder: 'Select items',
     size: 'small',
     optionLabel: 'label',

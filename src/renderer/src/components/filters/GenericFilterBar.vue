@@ -6,7 +6,7 @@ interface Props {
     showCount?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     count: 0,
     showCount: true
 })
@@ -28,7 +28,7 @@ const { t } = useI18n()
         <!-- Count Display -->
         <div v-if="showCount" class="ml-auto flex items-center text-xs text-surface-600">
             <i class="pi pi-list mr-2"></i>
-            <span>{{ count }} {{ t('common.items') }}</span>
+            <span>{{ count }} {{ t('common.fields.items') }}</span>
         </div>
 
         <!-- Custom Count Slot (overrides default count) -->

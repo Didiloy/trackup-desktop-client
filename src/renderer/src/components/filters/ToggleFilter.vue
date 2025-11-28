@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface Props {
     modelValue: boolean
     icon?: string
@@ -18,6 +21,17 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+
+const tooltipText = computed(() => {
+    if (!props.tooltip) return undefined
+    return props.tooltip.includes('.') ? t(props.tooltip) : props.tooltip
+})
+
+const labelText = computed(() => {
+    if (!props.label) return undefined
+    return props.label.includes('.') ? t(props.label) : props.label
+})
 
 function onToggle(): void {
     emit('update:modelValue', !props.modelValue)
@@ -26,10 +40,10 @@ function onToggle(): void {
 
 <template>
     <Button
-        :v-tooltip="tooltip"
+        :v-tooltip="tooltipText"
         :icon="modelValue && iconActive ? iconActive : icon"
         :class="[rounded ? 'p-button-rounded' : '', 'p-button-text']"
-        :aria-label="label || tooltip"
+        :aria-label="labelText || tooltipText"
         @click="onToggle"
     />
 </template>

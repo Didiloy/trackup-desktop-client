@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface Props {
     min?: number
     max?: number
@@ -15,13 +18,17 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    placeholderMin: 'Min',
-    placeholderMax: 'Max',
+    placeholderMin: undefined,
+    placeholderMax: undefined,
     size: 'small',
     useGrouping: false
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+
+const placeholderMinText = computed(() => props.placeholderMin ?? t('common.actions.min'))
+const placeholderMaxText = computed(() => props.placeholderMax ?? t('common.actions.max'))
 
 function onMinChange(value: number | undefined): void {
     emit('update:min', value)
@@ -36,7 +43,7 @@ function onMaxChange(value: number | undefined): void {
     <div class="flex items-center gap-2">
         <InputNumber
             :model-value="min"
-            :placeholder="placeholderMin"
+            :placeholder="placeholderMinText"
             :use-grouping="useGrouping"
             :size="size"
             class="w-full"
@@ -45,7 +52,7 @@ function onMaxChange(value: number | undefined): void {
         <span class="text-surface-500">-</span>
         <InputNumber
             :model-value="max"
-            :placeholder="placeholderMax"
+            :placeholder="placeholderMaxText"
             :use-grouping="useGrouping"
             :size="size"
             class="w-full"

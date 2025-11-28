@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 interface SelectOption {
     label: string
-    value: any
+    value: unknown
 }
 
 interface Props {
-    modelValue: any
+    modelValue: unknown
     options: SelectOption[]
     placeholder?: string
     icon?: string
@@ -15,19 +18,21 @@ interface Props {
 }
 
 interface Emits {
-    (e: 'update:modelValue', value: any): void
+    (e: 'update:modelValue', value: unknown): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    placeholder: 'Select...',
+    placeholder: undefined,
     size: 'small',
     optionLabel: 'label',
     optionValue: 'value'
 })
 
 const emit = defineEmits<Emits>()
+const { t } = useI18n()
+const placeholderText = computed(() => props.placeholder ?? t('placeholder.select'))
 
-function onChange(value: any): void {
+function onChange(value: unknown): void {
     emit('update:modelValue', value)
 }
 </script>
@@ -40,15 +45,15 @@ function onChange(value: any): void {
             :options="options"
             :option-label="optionLabel"
             :option-value="optionValue"
-            :placeholder="placeholder"
+            :placeholder="placeholderText"
             class="w-full"
             append-to="body"
-            @update:model-value="onChange"
             :pt="{
                 root: { class: 'bg-surface-100' },
                 overlay: { class: 'bg-surface-100' },
                 listContainer: { class: 'bg-surface-100' }
             }"
+            @update:model-value="onChange"
         />
     </div>
 </template>
