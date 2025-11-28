@@ -40,7 +40,7 @@ const typeText = computed(() => {
     // try common.fields.<type> first, then the raw type as a key, then fallback to raw value
     const candidate = `common.fields.${type}`
     if (te(candidate)) return t(candidate)
-    if (te(type)) return t(type as any)
+    if (te(type)) return t(type as string)
     return type
 })
 </script>

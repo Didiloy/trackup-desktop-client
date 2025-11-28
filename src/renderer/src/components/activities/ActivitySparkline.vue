@@ -19,6 +19,9 @@ const props = withDefaults(
 
 const { t } = useI18n()
 
+// expose height for template use
+const height = props.height
+
 const sortedData = computed<IStatsTimeline[]>(() => {
     const data = props.data ?? []
     return [...data].sort((a, b) => {
@@ -32,7 +35,7 @@ const periods = computed(() => sortedData.value.map((entry) => entry.period))
 
 const dataset = computed<VueUiXyDatasetItem[]>(() => [
     {
-        name: t('userInterface.serverActivitiesView.card.sessions'),
+        name: t('views.activity.card.sessions'),
         type: 'line',
         smooth: true,
         useArea: true,
@@ -98,6 +101,6 @@ const hasData = computed(() => !!sortedData.value.length)
         v-else
         class="w-full h-16 rounded-md bg-surface-100 flex items-center justify-center text-xs text-surface-500"
     >
-        —
+        {{ t('common.fields.none') }}
     </div>
 </template>

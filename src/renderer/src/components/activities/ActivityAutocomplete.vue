@@ -75,8 +75,8 @@ onMounted(() => {
         :suggestions="activitySuggestions"
         option-label="name"
         :placeholder="
-            placeholder ||
-            t('userInterface.serverSessionsView.addSessionModal.searchActivityPlaceholder')
+            /* Use the provided placeholder translation key from the new structure. */
+            placeholder || t('views.server_sessions.add_modal.search_activity_placeholder')
         "
         :size="size"
         :disabled="disabled"
@@ -92,7 +92,7 @@ onMounted(() => {
                     v-if="slotProps.option.logo"
                     :src="slotProps.option.logo"
                     class="w-6 h-6 rounded object-cover"
-                    alt="logo"
+                    :alt="t('common.fields.logo')"
                 />
                 <div
                     v-else

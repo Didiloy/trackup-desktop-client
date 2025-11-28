@@ -1,19 +1,45 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 const props = defineProps<{
     def: IActivityMetadataDefinition
-    modelValue: any
+    modelValue: string | undefined
 }>()
 
 const emit = defineEmits<{
-    (e: 'update:modelValue', value: any): void
+    (e: 'update:modelValue', value: string | undefined): void
 }>()
+
+const { t, te } = useI18n()
 
 const value = computed({
     get: () => props.modelValue,
     set: (val) => emit('update:modelValue', val)
+})
+
+const labelText = computed(() => {
+    const label = props.def?.label
+    if (!label) return props.def?.key ?? ''
+    if (te(label as string)) return t(label as string)
+    return label as string
+})
+
+const descriptionText = computed(() => {
+    const d = props.def?.description
+    if (!d) return ''
+    if (te(d as string)) return t(d as string)
+    return d as string
+})
+
+const typeText = computed(() => {
+    const type = props.def?.type
+    if (!type) return ''
+    const candidate = `common.fields.${type}`
+    if (te(candidate)) return t(candidate)
+    if (te(type as string)) return t(type as string)
+    return type as string
 })
 </script>
 
@@ -30,15 +56,15 @@ const value = computed({
             </div>
             <div class="flex flex-col min-w-0">
                 <span class="text-sm font-medium text-surface-700 truncate">
-                    {{ def.label || def.key }}
+                    {{ labelText || def.key }}
                     <span v-if="def.required" class="text-red-500">*</span>
                 </span>
                 <p v-if="def.description" class="text-xs text-surface-500 line-clamp-2">
-                    {{ def.description }}
+                    {{ descriptionText }}
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ def.type }}
+                {{ typeText }}
             </div>
         </div>
 
@@ -49,7 +75,7 @@ const value = computed({
                 v-if="def.choices && def.choices.length > 0 && def.allow_not_predefined_value"
                 v-model="value"
                 :options="def.choices"
-                :placeholder="def.label || ''"
+                :placeholder="labelText || ''"
                 editable
                 class="w-full p-inputtext-sm"
             />
@@ -59,7 +85,7 @@ const value = computed({
                 v-else-if="def.choices && def.choices.length > 0"
                 v-model="value"
                 :options="def.choices"
-                :placeholder="def.label || undefined"
+                :placeholder="labelText || undefined"
                 class="w-full p-inputtext-sm"
             />
         </div>

@@ -19,7 +19,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const durationText = computed(() => {
-    if (!props.metrics) return '--'
+    if (!props.metrics) return t('common.fields.none')
     const minutes = props.metrics.totalDuration || 0
     const hours = Math.floor(minutes / 60)
     const remainingMinutes = minutes % 60
@@ -67,8 +67,8 @@ function onCardClick(): void {
 
                 <!-- Gradient overlay -->
                 <div
-                    class="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-black/60"
                     v-if="activity.banner"
+                    class="absolute inset-0 bg-linear-to-b from-black/20 via-black/40 to-black/60"
                 ></div>
 
                 <!-- Logo + Title -->
@@ -104,14 +104,14 @@ function onCardClick(): void {
                     </div>
                     <div class="flex items-start gap-3 justify-end">
                         <div
-                            v-tooltip.left="t('userInterface.serverActivitiesView.card.likes')"
+                            v-tooltip.left="t('views.activity.card.likes')"
                             class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                         >
                             <i class="pi pi-heart-fill"></i>
                             <span>{{ likesText }}</span>
                         </div>
                         <div
-                            v-tooltip.left="t('userInterface.serverActivitiesView.card.avg_likes')"
+                            v-tooltip.left="t('views.activity.card.avg_likes')"
                             class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
                         >
                             <i class="pi pi-chart-line"></i>
@@ -126,23 +126,23 @@ function onCardClick(): void {
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.sessions')
+                        t('views.activity.card.sessions')
                     }}</span>
                     <span class="text-lg font-semibold text-surface-900">
-                        {{ metrics?.totalSessions ?? '—' }}
+                        {{ metrics?.totalSessions ?? t('common.misc.none') }}
                     </span>
                 </div>
                 <div
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.duration')
+                        t('views.activity.card.duration')
                     }}</span>
                     <span class="text-lg font-semibold text-surface-900">
                         {{ durationText }}
                     </span>
                     <span class="text-xs text-surface-400 mt-1">{{
-                        t('userInterface.serverActivitiesView.card.avg_duration', {
+                        t('views.activity.card.avg_duration', {
                             value: convertMinuteToHoursMinute(
                                 Number(props.metrics?.avgSessionDuration ?? 0)
                             )
@@ -153,10 +153,10 @@ function onCardClick(): void {
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('userInterface.serverActivitiesView.card.unique_participants')
+                        t('views.activity.card.unique_participants')
                     }}</span>
                     <span class="text-base font-semibold text-surface-900">
-                        {{ metrics?.uniqueParticipants }}
+                        {{ metrics?.uniqueParticipants ?? t('common.fields.none') }}
                     </span>
                 </div>
             </div>

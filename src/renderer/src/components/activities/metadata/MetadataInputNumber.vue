@@ -1,29 +1,39 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 const props = defineProps<{
     def: IActivityMetadataDefinition
-    modelValue: any
+    modelValue: number | undefined
 }>()
 
 const emit = defineEmits<{
-    (e: 'update:modelValue', value: any): void
+    (e: 'update:modelValue', value: number | undefined): void
 }>()
+
+const { t, te } = useI18n()
 
 const value = computed({
     get: () => props.modelValue,
     set: (val) => emit('update:modelValue', val)
 })
 
-function handleEditableInput(event: any): void {
-    const val = event.value
-    if (val !== undefined && val !== null && val !== '') {
-        const numVal = typeof val === 'string' ? parseFloat(val) : val
-        if (!isNaN(numVal)) {
-            emit('update:modelValue', numVal)
+function handleEditableInput(event: unknown): void {
+    // event is expected to be an object with a `value` prop (PrimeVue Dropdown editable)
+    if (isValueEvent(event)) {
+        const val = event.value
+        if (val !== undefined && val !== null && val !== '') {
+            const numVal = typeof val === 'string' ? parseFloat(val) : val
+            if (!isNaN(Number(numVal))) {
+                emit('update:modelValue', Number(numVal))
+            }
         }
     }
+}
+
+function isValueEvent(e: unknown): e is { value: unknown } {
+    return typeof e === 'object' && e !== null && 'value' in e
 }
 
 function filterNumeric(event: KeyboardEvent): void {
@@ -42,6 +52,30 @@ function filterNumeric(event: KeyboardEvent): void {
         event.preventDefault()
     }
 }
+
+// i18n computed helpers
+const labelText = computed(() => {
+    const label = props.def?.label
+    if (!label) return props.def?.key ?? ''
+    if (te(label as string)) return t(label as string)
+    return label as string
+})
+
+const descriptionText = computed(() => {
+    const d = props.def?.description
+    if (!d) return ''
+    if (te(d as string)) return t(d as string)
+    return d as string
+})
+
+const typeText = computed(() => {
+    const type = props.def?.type
+    if (!type) return ''
+    const candidate = `common.fields.${type}`
+    if (te(candidate)) return t(candidate)
+    if (te(type as string)) return t(type as string)
+    return type as string
+})
 </script>
 
 <template>
@@ -57,15 +91,15 @@ function filterNumeric(event: KeyboardEvent): void {
             </div>
             <div class="flex flex-col min-w-0">
                 <span class="text-sm font-medium text-surface-700 truncate">
-                    {{ def.label || def.key }}
+                    {{ labelText || def.key }}
                     <span v-if="def.required" class="text-red-500">*</span>
                 </span>
                 <p v-if="def.description" class="text-xs text-surface-500 line-clamp-2">
-                    {{ def.description }}
+                    {{ descriptionText }}
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ def.type }}
+                {{ typeText }}
             </div>
         </div>
 
@@ -76,7 +110,7 @@ function filterNumeric(event: KeyboardEvent): void {
                 v-if="def.choices && def.choices.length > 0 && def.allow_not_predefined_value"
                 v-model="value"
                 :options="def.choices"
-                :placeholder="def.label || ''"
+                :placeholder="labelText || ''"
                 editable
                 class="w-full p-inputtext-sm"
                 @change="handleEditableInput"
@@ -88,7 +122,7 @@ function filterNumeric(event: KeyboardEvent): void {
                 v-else-if="def.choices && def.choices.length > 0"
                 v-model="value"
                 :options="def.choices"
-                :placeholder="def.label || undefined"
+                :placeholder="labelText || undefined"
                 class="w-full p-inputtext-sm"
             />
         </div>

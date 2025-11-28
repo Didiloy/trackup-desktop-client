@@ -395,7 +395,13 @@
         },
         "no_results": "Aucun résultat trouvé",
         "try_adjusting": "Essayez d'ajuster vos filtres",
-        "liked_by_me": "Aimé par moi"
+        "liked_by_me": "Aimé par moi",
+        "search_modes": {
+            "contains": "Contient",
+            "starts_with": "Commence par",
+            "ends_with": "Se termine par",
+            "exact_match": "Correspondance exacte"
+        }
     },
     "auth": {
         "provider_continue": "Continuer avec {provider}"

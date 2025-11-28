@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
 import TextFilter from '@/components/filters/TextFilter.vue'
 import SelectFilter from '@/components/filters/SelectFilter.vue'
 import FilterGroup from '@/components/filters/FilterGroup.vue'
-import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
 
 interface Props {
     query?: string
@@ -67,12 +66,12 @@ function onSearchModeChange(value: 'startsWith' | 'endsWith' | 'contains' | 'exa
     notify()
 }
 
-const searchModeOptions = [
-    { label: 'Contains', value: 'contains' },
-    { label: 'Starts With', value: 'startsWith' },
-    { label: 'Ends With', value: 'endsWith' },
-    { label: 'Exact Match', value: 'exact' }
-]
+const searchModeOptions = computed(() => [
+    { label: t('filters.search_modes.contains'), value: 'contains' },
+    { label: t('filters.search_modes.starts_with'), value: 'startsWith' },
+    { label: t('filters.search_modes.ends_with'), value: 'endsWith' },
+    { label: t('filters.search_modes.exact_match'), value: 'exact' }
+])
 </script>
 
 <template>
