@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Versions from '@/components/Versions.vue'
+import Versions from '@/components/app-updates/Versions.vue'
 import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/composables/auth/useAuth'

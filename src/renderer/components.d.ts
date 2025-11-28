@@ -34,6 +34,7 @@ declare module 'vue' {
     ActivityStatsOverview: typeof import('./src/components/activities/detail/ActivityStatsOverview.vue')['default']
     ActivityTopContributors: typeof import('./src/components/activities/detail/ActivityTopContributors.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
+    AppUpdateModal: typeof import('./src/components/app-updates/AppUpdateModal.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/buttons/AvatarButton.vue')['default']
@@ -77,7 +78,7 @@ declare module 'vue' {
     MultiStepsDialog: typeof import('./src/components/common/dialogs/MultiStepsDialog.vue')['default']
     NumberRangeFilter: typeof import('./src/components/filters/NumberRangeFilter.vue')['default']
     Popover: typeof import('primevue/popover')['default']
-    ProfileButton: typeof import('./src/components/ProfileButton.vue')['default']
+    ProfileButton: typeof import('./src/components/user/ProfileButton.vue')['default']
     ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -108,8 +109,7 @@ declare module 'vue' {
     Topbar: typeof import('./src/components/asides/topbar.vue')['default']
     TransitionGroupWrapper: typeof import('./src/components/common/transitions/TransitionGroupWrapper.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
-    UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']
-    Versions: typeof import('./src/components/Versions.vue')['default']
+    Versions: typeof import('./src/components/app-updates/Versions.vue')['default']
   }
   export interface GlobalDirectives {
     Ripple: typeof import('primevue/ripple')['default']
