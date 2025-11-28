@@ -41,7 +41,7 @@ const grouped = computed(() => {
 <template>
     <div v-if="server_store.hasServerMembers" class="p-2">
         <div v-if="!grouped.length" class="text-xs text-surface-500 px-2 py-1">
-            {{ t('userInterface.membersAside.no_members') }}
+            {{ t('views.members_aside.no_members') }}
         </div>
 
         <div v-for="group in grouped" :key="group.role" class="mb-3">
@@ -53,7 +53,11 @@ const grouped = computed(() => {
                             : 'text-surface-600'
                     "
                 >
-                    {{ group.role.toLowerCase() === 'creator' ? t('common.creator') : group.role }}
+                    {{
+                        group.role.toLowerCase() === 'creator'
+                            ? t('common.fields.creator')
+                            : group.role
+                    }}
                 </span>
                 <span class="text-2xs text-surface-500">- {{ group.members.length }}</span>
             </div>

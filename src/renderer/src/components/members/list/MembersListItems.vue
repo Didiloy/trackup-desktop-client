@@ -75,7 +75,7 @@ const handleUpdateNickname = async (nickname: string): Promise<void> => {
 const items = computed(() => {
     const baseItems = [
         {
-            label: t('userInterface.membersAside.view_profile'),
+            label: t('views.members_aside.view_profile'),
             icon: 'pi pi-user',
             command: () => {
                 console.log('View profile for', props.member?.nickname)
@@ -86,7 +86,7 @@ const items = computed(() => {
     // Only add Update Nickname option if the current member is the logged-in user
     if (props.member?.user_email === user_store.getEmail) {
         baseItems.push({
-            label: t('userInterface.membersAside.update_nickname'),
+            label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
             command: openNicknameDialog
         })
@@ -124,12 +124,12 @@ const onItemSelected = (item: unknown): void => {
     <InputDialog
         v-model="show_nickname_dialog"
         v-model:input-value="new_nickname"
-        :title="t('userInterface.membersAside.update_nickname')"
-        :message="t('userInterface.membersAside.update_nickname_message')"
-        :input-label="t('userInterface.membersAside.new_nickname')"
-        :input-placeholder="t('userInterface.membersAside.enter_nickname')"
-        :confirm-label="t('actions.update')"
-        :cancel-label="t('actions.cancel')"
+        :title="t('views.members_aside.update_nickname')"
+        :message="t('views.members_aside.update_nickname_message')"
+        :input-label="t('views.members_aside.new_nickname')"
+        :input-placeholder="t('views.members_aside.enter_nickname')"
+        :confirm-label="t('views.members_aside.update_nickname')"
+        :cancel-label="t('common.actions.cancel')"
         confirm-severity="primary"
         :loading="is_updating"
         @confirm="handleUpdateNickname"
