@@ -106,6 +106,11 @@
                 "starts_with": "Commence par",
                 "ends_with": "Se termine par",
                 "exact_match": "Correspondance exacte"
+            },
+            "sort": {
+                "name": "Nom",
+                "date": "Date",
+                "joined_at": "Date d'inscription"
             }
         }
     },
@@ -325,7 +330,12 @@
             "title": "Membres",
             "members_count": "Membres ({count})",
             "no_members": "Aucun membre dans ce serveur.",
-            "invite_members": "Inviter des membres"
+            "invite_members": "Inviter des membres",
+            "kick_member": "Expulser un membre",
+            "member_kicked": "Membre expulsé",
+            "member_kicked_detail": "Le membre a été expulsé avec succès",
+            "member_kicked_error": "Échec de l'expulsion du membre",
+            "member_kicked_error_detail": "Veuillez réessayer."
         },
         "server_stats": {
             "title": "Statistiques Générales",

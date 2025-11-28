@@ -4,6 +4,13 @@ import { useI18n } from 'vue-i18n'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useServerStore } from '@/stores/server'
+import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useToast } from 'primevue/usetoast'
+
+const emit = defineEmits<{
+    (e: 'refresh'): void
+}>()
 
 const props = defineProps<{
     member: IServerMember
@@ -11,6 +18,15 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const user_store = useUserStore()
+const server_store = useServerStore()
+const { kickMember } = useMemberCRUD()
+const toast = useToast()
+const current_user_is_creator = computed(() => {
+    const currentMember = server_store.getMembers?.find(
+        (m) => m.user_email === user_store.getEmail
+    )
+    return currentMember?.role_name === 'creator'
+})
 
 function formatDate(date: string): string {
     return new Date(date).toLocaleDateString(undefined, { 
@@ -30,12 +46,30 @@ const items = computed(() => {
         }
     ]
 
-    if (props.member?.role_name === 'creator') {
+    if (current_user_is_creator.value) {
         baseItems.push({
             label: t('views.server_members.kick_member'),
-            icon: 'pi pi-user-times',
-            command: () => {
-                console.log('Kick member', props.member?.nickname)
+            icon: 'pi pi-times',
+            command: async () => {
+                const result = await kickMember(server_store.getPublicId!, props.member?.public_id)
+                if (result.data) {
+                    toast.add({
+                        severity: 'success',
+                        summary: t('views.server_members.member_kicked'),
+                        detail: t('views.server_members.member_kicked_detail'),
+                        life: 3000
+                    })
+                    console.log('Member kicked', result.data)
+                    emit('refresh')
+                } else {
+                    console.error('Failed to kick member', result)
+                    toast.add({
+                        severity: 'error',
+                        summary: t('views.server_members.member_kicked_error'),
+                        detail: t('views.server_members.member_kicked_error_detail'),
+                        life: 3000
+                    })
+                }
             }
         })
     }
@@ -47,6 +81,11 @@ const { menu, onRightClick } = useContextMenu(items.value)
 
 const handleContextMenu = (event: MouseEvent): void => {
     onRightClick(event)
+}
+
+const onItemSelected = (item: unknown): void => {
+    const menuItem = item as { command?: () => void }
+    menuItem.command?.()
 }
 </script>
 
@@ -84,7 +123,7 @@ const handleContextMenu = (event: MouseEvent): void => {
                 </span>
             </div>
             <p class="text-xs text-surface-500 truncate mt-0.5">
-                {{ t('common.joined_at') }}: {{ formatDate(member.created_at) }}
+                {{ t('common.filters.sort.joined_at') }}: {{ formatDate(member.created_at) }}
             </p>
         </div>
 
@@ -92,13 +131,14 @@ const handleContextMenu = (event: MouseEvent): void => {
         <Button
             icon="pi pi-ellipsis-v"
             severity="secondary"
-            text
             rounded
-            class="opacity-0 group-hover:opacity-100 transition-opacity text-surface-900"
+            variant="outlined"
+            class="opacity-0 group-hover:opacity-100 transition-opacity"
             @contextmenu="handleContextMenu"
+            @click="handleContextMenu"
         >
-            <ContextActionMenu :menu="menu" />
         </Button>
+        <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected"/>
     </div>
 </template>
 

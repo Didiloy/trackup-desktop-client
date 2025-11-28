@@ -34,6 +34,12 @@ async function handleInvite() {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
 }
+
+const handleRefresh = () => {
+    if (serverId.value) {
+        fetchMembers(serverId.value)
+    }
+}
 </script>
 
 <template>
@@ -64,6 +70,7 @@ async function handleInvite() {
                 v-for="member in filteredMembers"
                 :key="member.public_id"
                 :member="member"
+                @refresh="handleRefresh"
             />
         </div>
     </div>
