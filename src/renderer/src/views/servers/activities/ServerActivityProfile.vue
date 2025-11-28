@@ -28,6 +28,8 @@ import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
+import ActivityEditDialog from '@/components/activities/edit/ActivityEditDialog.vue'
+
 const route = useRoute()
 const toast = useToast()
 const { t } = useI18n()
@@ -50,6 +52,7 @@ const sessionsPage = ref(1)
 const sessionsRows = ref(10)
 const showDeleteConfirm = ref(false)
 const showCreateSessionDialog = ref(false)
+const showEditDialog = ref(false)
 
 const loading = ref(true)
 const sessionsLoading = ref(false)
@@ -108,12 +111,7 @@ function handleSessionPage(event: { page: number; rows: number }): void {
 }
 
 function handleEdit(): void {
-    toast.add({
-        severity: 'info',
-        summary: t('actions.edit'),
-        detail: 'TODO: implement edit screen',
-        life: 2000
-    })
+    showEditDialog.value = true
 }
 
 async function handleDelete(): Promise<void> {
@@ -233,6 +231,13 @@ onMounted(async () => {
             v-model="showCreateSessionDialog"
             :pre-selected-activity-id="activityId"
             @created="handleSessionCreated"
+        />
+
+        <ActivityEditDialog
+            v-if="activity"
+            v-model="showEditDialog"
+            :activity="activity"
+            @updated="loadActivity"
         />
     </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ICreateActivityMetadataDefinitionRequest } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import type { ICreateActivityMetadataDefinitionRequest, IUpdateActivityMetadataDefinitionRequest, IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 
@@ -11,19 +11,101 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const { getMetadataTypes } = useActivityMetadataDefinitionCRUD()
+const { getMetadataTypes, listMetadataDefinitions, deleteMetadataDefinition, updateMetadataDefinition } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
 const props = withDefaults(
     defineProps<{
         activityIdForTypes?: string | null
         loading?: boolean
+        modify?: boolean
     }>(),
     {
         activityIdForTypes: null,
-        loading: false
+        loading: false,
+        modify: false
     }
 )
+
+const existingMetadataList = ref<IActivityMetadataDefinition[]>([])
+const editingMetadataId = ref<string | null>(null)
+
+async function syncExistingMetadata(): Promise<void> {
+    if (!props.activityIdForTypes) return
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+    try {
+        const res = await listMetadataDefinitions(serverId, props.activityIdForTypes)
+        if (!res.error && res.data) {
+            existingMetadataList.value = res.data
+        }
+    } catch (e) {
+        console.error('Failed to sync metadata', e)
+    }
+}
+
+async function removeExistingMetadata(id: string): Promise<void> {
+    if (!props.activityIdForTypes) return
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+    try {
+        await deleteMetadataDefinition(serverId, props.activityIdForTypes, id)
+        await syncExistingMetadata()
+        if (editingMetadataId.value === id) {
+            resetDraft()
+        }
+    } catch (e) {
+        console.error('Failed to delete metadata', e)
+    }
+}
+
+function editExistingMetadata(meta: IActivityMetadataDefinition): void {
+    editingMetadataId.value = meta.public_id
+    draft.value = {
+        key: meta.key,
+        label: meta.label || '',
+        type: meta.type,
+        description: meta.description || '',
+        required: meta.required,
+        allow_not_predefined_value: meta.allow_not_predefined_value,
+        choices: meta.choices?.map(String) || []
+    }
+}
+
+function resetDraft(): void {
+    editingMetadataId.value = null
+    draft.value = {
+        key: '',
+        label: '',
+        type: 'STRING' as any,
+        description: '',
+        required: false,
+        allow_not_predefined_value: true,
+        choices: []
+    }
+}
+
+async function updateExistingMetadata(): Promise<void> {
+    if (!editingMetadataId.value || !props.activityIdForTypes) return
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+
+    const payload: IUpdateActivityMetadataDefinitionRequest = {
+        label: draft.value.label?.trim(),
+        description: draft.value.description?.trim(),
+        required: draft.value.required,
+        allow_not_predefined_value: draft.value.allow_not_predefined_value,
+        choices: draft.value.choices?.map((c) => c.toString())
+    }
+
+    try {
+        await updateMetadataDefinition(serverId, props.activityIdForTypes, editingMetadataId.value, payload)
+        await syncExistingMetadata()
+        resetDraft()
+    } catch (e) {
+        console.error('Failed to update metadata', e)
+    }
+}
 
 const typeOptions = ref<{ label: string; value: string }[]>([])
 const loadingTypes = ref(false)
@@ -76,6 +158,9 @@ const draft = ref<ICreateActivityMetadataDefinitionRequest>({
 
 onMounted(async () => {
     await loadTypes()
+    if (props.modify) {
+        await syncExistingMetadata()
+    }
 })
 
 const newChoice = ref<string>('')
@@ -110,7 +195,10 @@ function normalizeKeyFromLabel(label: string): string {
 watch(
     () => draft.value.label,
     (val) => {
-        draft.value.key = normalizeKeyFromLabel(val || '')
+        // Only update key if not editing an existing metadata (where key is fixed)
+        if (!editingMetadataId.value) {
+            draft.value.key = normalizeKeyFromLabel(val || '')
+        }
     }
 )
 
@@ -131,6 +219,13 @@ function removeChoice(index: number): void {
 
 function addDefinition(): void {
     if (!can_add.value) return
+    
+    // If editing, we handle update logic instead of adding to draft list
+    if (editingMetadataId.value) {
+        updateExistingMetadata()
+        return
+    }
+
     defs.value.push({
         key: normalizeKeyFromLabel(draft.value.label || draft.value.key).trim(),
         label: draft.value.label?.trim() || draft.value.key.trim(),
@@ -141,16 +236,7 @@ function addDefinition(): void {
         choices:
             draft.value.choices && draft.value.choices.length ? [...draft.value.choices] : undefined
     })
-    // reset draft
-    draft.value = {
-        key: '',
-        label: '',
-        type: 'STRING' as any,
-        description: '',
-        required: false,
-        allow_not_predefined_value: true,
-        choices: []
-    }
+    resetDraft()
 }
 
 function removeDefinition(index: number): void {
@@ -159,6 +245,10 @@ function removeDefinition(index: number): void {
 
 function submitMetadata(): void {
     emit('create', defs.value)
+}
+
+function handleCancelEdit(): void {
+    resetDraft()
 }
 </script>
 
@@ -205,6 +295,7 @@ function submitMetadata(): void {
                         option-value="value"
                         append-to="self"
                         class="w-full"
+                        :disabled="!!editingMetadataId" 
                     />
                 </div>
             </div>
@@ -283,13 +374,21 @@ function submitMetadata(): void {
                 </div>
             </div>
 
-            <div class="flex justify-center w-full">
+            <div class="flex justify-center w-full gap-2">
                 <Button
-                    :label="
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')
-                    "
-                    icon="pi pi-check"
+                   v-if="editingMetadataId"
+                   :label="t('actions.cancel')"
+                   icon="pi pi-times"
+                   severity="secondary"
+                   outlined
+                   class="w-1/2"
+                   @click="handleCancelEdit"
+                />
+                <Button
+                    :label="editingMetadataId ? t('actions.update', { entity: 'Metadata' }) : t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')"
+                    :icon="editingMetadataId ? 'pi pi-save' : 'pi pi-check'"
                     class="w-full"
+                    :class="editingMetadataId ? 'w-1/2' : ''"
                     :disabled="!can_add"
                     :style="{ background: 'var(--gradient-secondary)' }"
                     @click="addDefinition"
@@ -298,15 +397,44 @@ function submitMetadata(): void {
         </div>
 
         <!-- Definitions list -->
-        <div v-if="defs.length" class="flex flex-col gap-2">
+        <div v-if="defs.length || existingMetadataList.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
                 {{ t('userInterface.serverActivitiesView.addActivityModal.metadataList') }}
             </div>
             <div class="flex flex-col gap-2">
+                <!-- Existing Metadata -->
+                 <div
+                    v-for="meta in existingMetadataList"
+                    :key="meta.public_id"
+                    class="flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-surface-200 transition-colors"
+                    :class="editingMetadataId === meta.public_id ? 'bg-primary-50 border border-primary-200' : 'bg-surface-100 opacity-75'"
+                    @click="editExistingMetadata(meta)"
+                >
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-surface-900 font-medium">{{ meta.key }}</span>
+                        <span class="text-xs text-surface-600">({{ meta.type }})</span>
+                        <span v-if="meta.required" class="text-xs text-primary-600"
+                            >• {{ t('common.required') }}</span
+                        >
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i v-if="editingMetadataId === meta.public_id" class="pi pi-pencil text-primary-500 text-sm"></i>
+                        <Button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            text
+                            rounded
+                            size="small"
+                            @click.stop="removeExistingMetadata(meta.public_id)"
+                        />
+                    </div>
+                </div>
+
+                <!-- New Metadata (Drafts) -->
                 <div
                     v-for="(d, idx) in defs"
                     :key="idx"
-                    class="flex items-center justify-between p-2 rounded-md"
+                    class="flex items-center justify-between p-2 rounded-md bg-surface-50 border border-surface-200"
                 >
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-surface-900">{{ d.key }}</span>
