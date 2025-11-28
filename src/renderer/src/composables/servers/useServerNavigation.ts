@@ -102,7 +102,7 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
         if (!hasCache) server_store.resetState()
 
         await router.push({
-            name: 'ServerOverview',
+            name: 'ServerStats',
             params: { id: serverId },
             query: { ...route.query }
         })

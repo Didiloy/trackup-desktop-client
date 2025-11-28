@@ -39,11 +39,15 @@ async function loadServerTypes(): Promise<void> {
     loading_types.value = true
     const res = await getAllServerTypes()
     if (res.error) {
-        error.value = 'Failed to load servers types'
+        error.value = t('messages.error.fetch')
         loading_types.value = false
         return
     }
-    server_types.value = res.data ?? []
+    const data = res.data ?? []
+    server_types.value = data.map((st) => ({
+        ...st,
+        label: t(`views.create_server.types.${st.name}`)
+    }))
     loading_types.value = false
 }
 
@@ -88,12 +92,12 @@ onMounted(async () => {
             <div class="flex items-center gap-2">
                 <i class="pi pi-file-edit text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700"
-                    >{{ t('common.name') }} <span class="text-red-500">*</span></span
+                    >{{ t('common.fields.name') }} <span class="text-red-500">*</span></span
                 >
             </div>
             <InputText
                 v-model="name"
-                :placeholder="t('userInterface.createServerView.placeholder.name')"
+                :placeholder="t('views.create_server.placeholder.name')"
                 class="w-full"
             />
         </div>
@@ -102,15 +106,15 @@ onMounted(async () => {
             <div class="flex items-center gap-2">
                 <i class="pi pi-tags text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700"
-                    >{{ t('common.type') }} <span class="text-red-500">*</span></span
+                    >{{ t('common.fields.type') }} <span class="text-red-500">*</span></span
                 >
             </div>
             <Select
                 v-model="selected_type"
                 :options="server_types"
-                option-label="name"
+                option-label="label"
                 :loading="loading_types"
-                :placeholder="t('userInterface.createServerView.placeholder.type')"
+                :placeholder="t('views.create_server.placeholder.type')"
                 class="w-full"
                 append-to="self"
             />
@@ -120,21 +124,23 @@ onMounted(async () => {
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700">{{
-                    t('common.description')
+                    t('common.fields.description')
                 }}</span>
             </div>
             <Textarea
                 v-model="description"
                 rows="2"
                 auto-resize
-                :placeholder="t('userInterface.createServerView.placeholder.description')"
+                :placeholder="t('views.create_server.placeholder.description')"
             />
         </div>
 
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-image text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.logo') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.logo')
+                }}</span>
             </div>
             <EntityLogoHandling
                 :logo="logo"
@@ -148,7 +154,9 @@ onMounted(async () => {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-images text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.banner') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.banner')
+                }}</span>
             </div>
             <EntityBannerHandling
                 :banner="banner"
@@ -160,9 +168,14 @@ onMounted(async () => {
         <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
 
         <div class="flex justify-end gap-2 pt-2">
-            <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
-                :label="t('actions.create')"
+                :label="t('common.actions.cancel')"
+                severity="secondary"
+                text
+                @click="emit('cancel')"
+            />
+            <Button
+                :label="t('common.actions.create')"
                 :loading="submitting"
                 :disabled="!can_submit"
                 :style="{ background: 'var(--gradient-primary)' }"

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const route = useRoute()
 const server_store = useServerStore()
+const { t } = useI18n()
 
 interface ServerAction {
     id: string
@@ -15,18 +17,49 @@ interface ServerAction {
 }
 
 const actions: ServerAction[] = [
-    { id: 'overview', label: 'Aperçu', icon: 'pi pi-home', routeName: 'ServerOverview' },
-    { id: 'activities', label: 'Activités', icon: 'pi pi-clock', routeName: 'ServerActivities' },
-    { id: 'members', label: 'Membres', icon: 'pi pi-users', routeName: 'ServerMembers' },
-    { id: 'sessions', label: 'Sessions', icon: 'pi pi-calendar', routeName: 'ServerSessions' },
     {
         id: 'server-profile',
-        label: 'Profil du serveur',
-        icon: 'pi pi-user',
+        label: t('views.server_profile.title'),
+        icon: 'pi pi-home',
         routeName: 'ServerProfile'
     },
-    { id: 'widgets', label: 'Widgets', icon: 'pi pi-th-large', routeName: 'ServerWidgets' },
-    { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' }
+    {
+        id: 'stats',
+        label: t('views.server_stats.title'),
+        icon: 'pi pi-chart-bar',
+        routeName: 'ServerStats'
+    },
+    {
+        id: 'activities',
+        label: t('views.activity.title_base'),
+        icon: 'pi pi-clock',
+        routeName: 'ServerActivities'
+    },
+    {
+        id: 'members',
+        label: t('views.server_members.title'),
+        icon: 'pi pi-users',
+        routeName: 'ServerMembers'
+    },
+    {
+        id: 'sessions',
+        label: t('views.server_sessions.title_base'),
+        icon: 'pi pi-calendar',
+        routeName: 'ServerSessions'
+    },
+
+    {
+        id: 'widgets',
+        label: t('views.server_widgets.title'),
+        icon: 'pi pi-th-large',
+        routeName: 'ServerWidgets'
+    },
+    {
+        id: 'settings',
+        label: t('views.server_settings.title'),
+        icon: 'pi pi-cog',
+        routeName: 'ServerSettings'
+    }
 ]
 
 async function onActionClick(action: ServerAction): Promise<void> {

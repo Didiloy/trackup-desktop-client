@@ -16,7 +16,7 @@ const { servers, fetchServers, handleServerCreated } = useServerList()
 const { currentServerId, navigateToServer } = useServerNavigation(servers)
 
 // Dialog state
-const showActionDialog = ref(false)
+const show_action_dialog = ref(false)
 
 // Lifecycle
 onMounted(async () => {
@@ -25,11 +25,11 @@ onMounted(async () => {
 
 // Event handlers
 function handleOpenActionDialog(): void {
-    showActionDialog.value = true
+    show_action_dialog.value = true
 }
 
 async function handleServerAction(server: IServer): Promise<void> {
-    showActionDialog.value = false
+    show_action_dialog.value = false
     await handleServerCreated(server)
 }
 </script>
@@ -37,10 +37,10 @@ async function handleServerAction(server: IServer): Promise<void> {
     <ServersListItems
         :servers="servers"
         :active-server-id="currentServerId"
-        :create-server-label="i18n.t('userInterface.serverActionView.title')"
+        :create-server-label="i18n.t('views.create_server.action.title')"
         @server-click="navigateToServer"
         @server-action-click="handleOpenActionDialog"
     />
 
-    <ServerCreateJoinDialog v-model="showActionDialog" @server-action="handleServerAction" />
+    <ServerCreateJoinDialog v-model="show_action_dialog" @server-action="handleServerAction" />
 </template>
