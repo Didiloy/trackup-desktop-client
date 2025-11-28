@@ -38,8 +38,9 @@ const props = defineProps({
     }
 })
 
-const cancelLabel = computed(() => props.cancelLabel || t('actions.cancel'))
-const confirmLabel = computed(() => props.confirmLabel || t('actions.confirm'))
+// Use new translation key paths under `common.actions` to match provided fr.json
+const cancelLabel = computed(() => props.cancelLabel || t('common.actions.cancel'))
+const confirmLabel = computed(() => props.confirmLabel || t('common.actions.confirm'))
 
 const emit = defineEmits(['update:modelValue', 'confirm'])
 
@@ -96,7 +97,12 @@ const confirmAction = (): void => {
         <div v-if="props.confirmationName" class="confirmation-input">
             <div class="icon-text-container">
                 <font-awesome-icon :icon="['fas', 'circle-exclamation']" />
-                <p v-html="t('actions.write_to_confirm', { entity: props.confirmationName })" />
+                <!-- use new key path under common.actions.write_to_confirm -->
+                <p
+                    v-html="
+                        t('common.actions.write_to_confirm', { entity: props.confirmationName })
+                    "
+                />
             </div>
             <InputText v-model="userInput" class="w-full" @keyup.enter="confirmAction" />
         </div>
@@ -104,10 +110,10 @@ const confirmAction = (): void => {
         <div class="o-delete-buttons">
             <Button :label="cancelLabel" :severity="props.cancelSeverity" @click="closeDialog" />
             <Button
-                v-if="confirmationName"
+                v-if="props.confirmationName"
                 :label="confirmLabel"
                 :severity="props.confirmSeverity"
-                :disabled="props.confirmationName && !isInputValid"
+                :disabled="props.confirmationName ? !isInputValid : false"
                 @click="confirmAction"
             />
             <Button

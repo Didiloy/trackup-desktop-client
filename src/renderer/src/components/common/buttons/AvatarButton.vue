@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { getInitials, type IInitialsOptions } from '@/utils'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 type SizeProp = 'small' | 'normal' | 'large' | 'xlarge' | number
 
@@ -99,7 +102,7 @@ const avatarSizeProp = computed(() => {
     return undefined
 })
 
-const ariaLabel = computed(() => props.ariaLabel || props.title || props.label || undefined)
+const ariaLabel = computed(() => props.ariaLabel || props.title || props.label || t('views.user_profile_menu.title'))
 
 // Determine content mode
 const isImage = computed(() => !!props.imageUrl)
@@ -108,7 +111,6 @@ const isImage = computed(() => !!props.imageUrl)
 const wrapperContrastClass = computed(() => {
     if (isImage.value) return null
     if (props.buttonClass) return null
-    // apply only when no explicit bg variant
     return props.bgVariant === 'transparent' ? 'bg-surface-500' : null
 })
 
@@ -126,7 +128,7 @@ const onClick = (e: MouseEvent): void => {
 
 <template>
     <button
-        v-tooltip.right="label || title || ''"
+        v-tooltip.right="ariaLabel"
         :type="buttonType"
         :disabled="disabled"
         :aria-label="ariaLabel"

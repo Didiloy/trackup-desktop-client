@@ -13,11 +13,11 @@ interface StepItem {
 
 interface Props {
     modelValue: boolean
+    steps: StepItem[]
+    current: number
     title?: string
     subtitle?: string
     iconClass?: string
-    steps: StepItem[]
-    current: number
     styleClass?: string
     contentClass?: string
 }
@@ -86,7 +86,10 @@ const safeCurrent = computed(() => {
                                     <span v-else>{{ index + 1 }}</span>
                                 </div>
                                 <span class="text-xs font-medium">
-                                    {{ step.label || t('common.step', { index: index + 1 }) }}
+                                    {{
+                                        step.label ||
+                                        t('common.steps.generic', { index: index + 1 })
+                                    }}
                                 </span>
                             </div>
                         </div>
