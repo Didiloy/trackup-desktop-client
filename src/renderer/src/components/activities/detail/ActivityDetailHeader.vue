@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { convertMinuteToHoursMinute } from '@/utils'
 
@@ -24,15 +24,15 @@ const summaryMetrics = computed(() => {
     }
     return [
         {
-            label: t('userInterface.serverActivitiesView.card.sessions'),
+            label: t('views.activity.card.sessions'),
             value: props.stats.total_sessions.toLocaleString()
         },
         {
-            label: t('userInterface.serverActivitiesView.card.duration'),
+            label: t('views.activity.card.duration'),
             value: `${convertMinuteToHoursMinute(props.stats.total_duration)}`
         },
         {
-            label: t('userInterface.serverActivitiesView.card.unique_participants'),
+            label: t('views.activity.card.unique_participants'),
             value: props.stats.unique_participants.toLocaleString()
         }
     ]
@@ -49,7 +49,7 @@ const summaryMetrics = computed(() => {
             :style="{ backgroundImage: `url(${activity?.banner})` }"
         ></div>
         <div
-            v-if="activity.banner"
+            v-if="activity?.banner"
             class="absolute inset-0 bg-linear-to-r from-black/65 via-black/35 to-black/65"
         ></div>
 
@@ -70,19 +70,19 @@ const summaryMetrics = computed(() => {
                 <h1
                     class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
                 >
-                    {{ activity?.name || '—' }}
+                    {{ activity?.name || t('common.fields.none') }}
                 </h1>
                 <p
                     class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
                 >
-                    {{ activity?.description || t('common.description') }}
+                    {{ activity?.description || t('common.fields.description') }}
                 </p>
             </div>
 
             <div class="flex flex-wrap gap-3">
                 <Button
                     icon="pi pi-plus"
-                    :label="t('userInterface.serverActivitiesView.createSession')"
+                    :label="t('views.activity.create_session')"
                     size="small"
                     :pt="{
                         label: { class: 'text-surface-100' },
@@ -92,7 +92,7 @@ const summaryMetrics = computed(() => {
                 />
                 <Button
                     icon="pi pi-pencil"
-                    :label="t('actions.edit')"
+                    :label="t('common.actions.edit')"
                     severity="help"
                     class="shadow"
                     :pt="{
@@ -103,7 +103,7 @@ const summaryMetrics = computed(() => {
                 />
                 <Button
                     icon="pi pi-trash"
-                    :label="t('actions.delete')"
+                    :label="t('common.actions.delete')"
                     severity="danger"
                     class="shadow"
                     :pt="{

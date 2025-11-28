@@ -25,29 +25,29 @@ const props = withDefaults(
     }
 )
 
-const typeOptions = ref<{ label: string; value: string }[]>([])
-const loadingTypes = ref(false)
-const typesError = ref<string | null>(null)
+const type_options = ref<{ label: string; value: string }[]>([])
+const loading_types = ref(false)
+const types_error = ref<string | null>(null)
 
 async function loadTypes(): Promise<void> {
-    loadingTypes.value = true
-    typesError.value = null
+    loading_types.value = true
+    types_error.value = null
     try {
         const serverId = server_store.getPublicId
         if (serverId && props.activityIdForTypes) {
             const res = await getMetadataTypes(serverId, props.activityIdForTypes)
             if (res.error) {
-                typesError.value = res.error
+                types_error.value = res.error
             } else if (res.data && Array.isArray(res.data)) {
-                typeOptions.value = res.data.map((t) => ({ label: t, value: t }))
+                type_options.value = res.data.map((t) => ({ label: t, value: t }))
             }
         }
     } catch (e) {
-        typesError.value = e instanceof Error ? e.message : 'Failed to load metadata types'
+        types_error.value = e instanceof Error ? e.message : 'Failed to load metadata types'
     } finally {
         // Fallback if nothing loaded
-        if (!typeOptions.value.length) {
-            typeOptions.value = [
+        if (!type_options.value.length) {
+            type_options.value = [
                 { label: 'STRING', value: 'STRING' },
                 { label: 'NUMBER', value: 'NUMBER' },
                 { label: 'BOOLEAN', value: 'BOOLEAN' },
@@ -55,10 +55,10 @@ async function loadTypes(): Promise<void> {
             ]
         }
         // Ensure draft has a valid type
-        if (!typeOptions.value.find((o) => o.value === draft.value.type)) {
-            draft.value.type = typeOptions.value[0].value as any
+        if (!type_options.value.find((o) => o.value === draft.value.type)) {
+            draft.value.type = type_options.value[0].value as any
         }
-        loadingTypes.value = false
+        loading_types.value = false
     }
 }
 
@@ -78,9 +78,9 @@ onMounted(async () => {
     await loadTypes()
 })
 
-const newChoice = ref<string>('')
+const new_choice = ref<string>('')
 
-const can_add = computed(() => {
+const canAdd = computed(() => {
     return !!draft.value.key.trim() && !!draft.value.type
 })
 
@@ -94,7 +94,7 @@ watch(
     () => {
         if (!canUseChoices.value) {
             draft.value.choices = []
-            newChoice.value = ''
+            new_choice.value = ''
         }
     }
 )
@@ -115,13 +115,13 @@ watch(
 )
 
 function addChoice(): void {
-    const raw = newChoice.value.trim()
+    const raw = new_choice.value.trim()
     if (!raw) return
     const value = draft.value.type === 'NUMBER' ? Number(raw) : raw
     if (draft.value.type === 'NUMBER' && Number.isNaN(value)) return
     draft.value.choices = draft.value.choices || []
     draft.value.choices.push(value)
-    newChoice.value = ''
+    new_choice.value = ''
 }
 
 function removeChoice(index: number): void {
@@ -130,7 +130,7 @@ function removeChoice(index: number): void {
 }
 
 function addDefinition(): void {
-    if (!can_add.value) return
+    if (!canAdd.value) return
     defs.value.push({
         key: normalizeKeyFromLabel(draft.value.label || draft.value.key).trim(),
         label: draft.value.label?.trim() || draft.value.key.trim(),
@@ -168,19 +168,13 @@ function submitMetadata(): void {
             <i class="pi pi-database text-surface-500"></i>
             <div class="flex flex-col">
                 <span class="text-sm font-medium text-surface-700">
-                    {{ t('userInterface.serverActivitiesView.addActivityModal.metadataTitle') }}
+                    {{ t('views.activity.add_modal.metadata_title') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataDescription')
-                    }}
+                    {{ t('views.activity.add_modal.metadata_description') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{
-                        t(
-                            'userInterface.serverActivitiesView.addActivityModal.metadataDescriptionDetail'
-                        )
-                    }}
+                    {{ t('views.activity.add_modal.metadata_description_detail') }}
                 </span>
             </div>
         </div>
@@ -190,17 +184,17 @@ function submitMetadata(): void {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataLabel')
+                        t('views.activity.add_modal.metadata_label')
                     }}</label>
                     <InputText v-model="draft.label" class="w-full" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataType')
+                        t('common.fields.type')
                     }}</label>
                     <Select
                         v-model="draft.type"
-                        :options="typeOptions"
+                        :options="type_options"
                         option-label="label"
                         option-value="value"
                         append-to="self"
@@ -210,7 +204,9 @@ function submitMetadata(): void {
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
+                <label class="text-sm text-surface-500">{{
+                    t('common.fields.description')
+                }}</label>
                 <Textarea v-model="draft.description" rows="2" auto-resize />
             </div>
 
@@ -218,7 +214,7 @@ function submitMetadata(): void {
                 <div class="flex items-center gap-2">
                     <Checkbox v-model="draft.required" binary />
                     <label class="text-sm text-surface-700">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataRequired')
+                        t('views.activity.add_modal.metadata_required')
                     }}</label>
                 </div>
                 <div class="flex items-center gap-2">
@@ -228,20 +224,18 @@ function submitMetadata(): void {
                         :disabled="!canUseChoices"
                     />
                     <label class="text-sm text-surface-700">{{
-                        t(
-                            'userInterface.serverActivitiesView.addActivityModal.metadataAllowNotPredefined'
-                        )
+                        t('views.activity.add_modal.metadata_allow_not_predefined')
                     }}</label>
                 </div>
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{
-                    t('userInterface.serverActivitiesView.addActivityModal.metadataChoices')
+                    t('views.activity.add_modal.metadata_choices')
                 }}</label>
                 <div class="flex gap-2">
                     <InputText
-                        v-model="newChoice"
+                        v-model="new_choice"
                         class="flex-1"
                         :placeholder="t('placeholder.enter')"
                         :disabled="!canUseChoices"
@@ -251,12 +245,8 @@ function submitMetadata(): void {
                     <Button
                         v-tooltip.top="
                             draft.type === 'BOOLEAN' || draft.type === 'DATE'
-                                ? t(
-                                      'userInterface.serverActivitiesView.addActivityModal.notPossibleWithType'
-                                  )
-                                : t(
-                                      'userInterface.serverActivitiesView.addActivityModal.metadataAddChoice'
-                                  )
+                                ? t('views.activity.add_modal.not_possible_with_type')
+                                : t('views.activity.add_modal.metadata_add_choice')
                         "
                         icon="pi pi-plus"
                         outlined
@@ -285,12 +275,10 @@ function submitMetadata(): void {
 
             <div class="flex justify-center w-full">
                 <Button
-                    :label="
-                        t('userInterface.serverActivitiesView.addActivityModal.metadataValidate')
-                    "
+                    :label="t('views.activity.add_modal.metadata_validate')"
                     icon="pi pi-check"
                     class="w-full"
-                    :disabled="!can_add"
+                    :disabled="!canAdd"
                     :style="{ background: 'var(--gradient-secondary)' }"
                     @click="addDefinition"
                 />
@@ -300,7 +288,7 @@ function submitMetadata(): void {
         <!-- Definitions list -->
         <div v-if="defs.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
-                {{ t('userInterface.serverActivitiesView.addActivityModal.metadataList') }}
+                {{ t('views.activity.add_modal.metadata_list') }}
             </div>
             <div class="flex flex-col gap-2">
                 <div
@@ -312,7 +300,7 @@ function submitMetadata(): void {
                         <span class="text-sm text-surface-900">{{ d.key }}</span>
                         <span class="text-xs text-surface-600">({{ d.type }})</span>
                         <span v-if="d.required" class="text-xs text-primary-600"
-                            >• {{ t('common.required') }}</span
+                            >• {{ t('common.fields.required') }}</span
                         >
                     </div>
                     <Button
@@ -328,9 +316,14 @@ function submitMetadata(): void {
         </div>
 
         <div class="flex justify-end gap-2 pt-2 mt-auto">
-            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
-                :label="t('common.create')"
+                :label="t('common.actions.skip')"
+                severity="secondary"
+                text
+                @click="emit('skip')"
+            />
+            <Button
+                :label="t('common.actions.create')"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="submitMetadata"

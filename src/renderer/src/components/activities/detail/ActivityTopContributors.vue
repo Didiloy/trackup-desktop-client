@@ -14,46 +14,40 @@ const { t } = useI18n()
     <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
-                {{ t('userInterface.serverActivitiesView.card.top_contributor') }}
+                {{ t('views.activity.card.top_contributor') }}
             </p>
             <span class="text-xs text-surface-400">{{ props.contributors?.length || 0 }} </span>
         </div>
 
         <div class="space-y-3">
             <div
-                v-for="member in props.contributors"
+                v-for="member in props.contributors || []"
                 :key="member.member_id"
                 class="flex items-center gap-3 p-3 rounded-2xl bg-surface-100 ring-1 ring-surface-200/60"
             >
                 <span class="text-lg font-semibold text-primary-500">#{{ member.rank }}</span>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-surface-900">
-                        {{ member.user_email || '—' }}
+                        {{ member.user_email || t('common.fields.none') }}
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }}
-                        {{
-                            t(
-                                'userInterface.serverActivitiesView.ActivityPerformanceSection.sessions'
-                            )
-                        }}
-                        ·
+                        {{ t('views.activity.performance_section.sessions') }} ·
                         {{ convertMinuteToHoursMinute(member.total_duration) }}
                     </p>
                 </div>
                 <span class="text-xl">
                     <i
                         :class="
-                            member.rank === 1
-                                ? 'pi pi-crown text-amber-500'
-                                : 'text-surface-400'
+                            member.rank === 1 ? 'pi pi-crown text-amber-500' : 'text-surface-400'
                         "
                     ></i>
                 </span>
             </div>
         </div>
+
         <div v-if="!props.contributors?.length" class="text-sm text-surface-400 text-center py-4">
-            {{ t('common.none') }}
+            {{ t('common.fields.none') }}
         </div>
     </div>
 </template>

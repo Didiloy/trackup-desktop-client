@@ -25,6 +25,15 @@ const growthBadge = computed(() => {
         positive
     }
 })
+
+const trendText = computed(() => {
+    const raw = (props.growth?.trend || '').toString().toLowerCase()
+    if (!raw) return t('views.activity.performance_section.trend_unknown')
+    if (raw === 'up' || raw === 'increasing') return t('views.activity.performance_section.trend_up')
+    if (raw === 'down' || raw === 'decreasing') return t('views.activity.performance_section.trend_down')
+    if (raw === 'steady' || raw === 'stable') return t('views.activity.performance_section.trend_steady')
+    return raw
+})
 </script>
 
 <template>
@@ -32,11 +41,7 @@ const growthBadge = computed(() => {
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{
-                        t(
-                            'userInterface.serverActivitiesView.ActivityPerformanceSection.sessions_timeline'
-                        )
-                    }}
+                    {{ t('views.activity.performance_section.sessions_timeline') }}
                 </p>
                 <span
                     class="text-xs px-3 py-1 rounded-full"
@@ -54,39 +59,27 @@ const growthBadge = computed(() => {
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">
-                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.popularity') }}
+                {{ t('views.activity.performance_section.popularity') }}
             </p>
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
                     <p class="text-lg font-semibold text-surface-900">
-                        {{ props.growth?.trend ?? '—' }}
+                        {{ trendText }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        {{
-                            t(
-                                'userInterface.serverActivitiesView.ActivityPerformanceSection.growth'
-                            )
-                        }}
+                        {{ t('views.activity.performance_section.growth') }}
                     </p>
                 </div>
                 <div class="bg-surface-200 rounded-2xl p-4 ring-1 ring-surface-200/60">
                     <p class="text-xs text-surface-500">
-                        {{
-                            t(
-                                'userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions'
-                            )
-                        }}
+                        {{ t('views.activity.performance_section.weekly_sessions') }}
                     </p>
                     <p class="text-lg font-semibold text-surface-900">
-                        {{ props.growth?.sessions_this_week ?? '—' }}
+                        {{ props.growth?.sessions_this_week ?? t('common.fields.none') }}
                     </p>
                     <p class="text-xs text-surface-500 mt-1">
-                        {{
-                            t(
-                                'userInterface.serverActivitiesView.ActivityPerformanceSection.weekly_sessions_last_week'
-                            )
-                        }}
-                        {{ props.growth?.sessions_last_week ?? '—' }}
+                        {{ t('views.activity.performance_section.weekly_sessions_last_week') }}
+                        {{ props.growth?.sessions_last_week ?? t('common.fields.none') }}
                     </p>
                 </div>
             </div>
@@ -96,7 +89,7 @@ const growthBadge = computed(() => {
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
             <p class="text-sm font-semibold text-surface-600 mb-4">
-                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.growth') }}
+                {{ t('views.activity.performance_section.growth') }}
             </p>
             <div
                 class="text-5xl font-bold"

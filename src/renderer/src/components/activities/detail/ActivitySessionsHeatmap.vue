@@ -62,16 +62,20 @@ function intensity(count: number): string {
     if (count <= 6) return 'bg-primary-500/70'
     return 'bg-primary-500'
 }
+
+function tooltipFor(day: { date: Date; count: number; duration: number }): string {
+    return `${day.date.toLocaleDateString()}: ${day.count} ${t('common.fields.items')} • ${convertMinuteToHoursMinute(day.duration)}`
+}
 </script>
 
 <template>
     <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
-                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.heatmap') }}
+                {{ t('views.activity.performance_section.heatmap') }}
             </p>
             <p class="text-xs text-surface-500">
-                {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.last_year') }}
+                {{ t('views.activity.performance_section.last_year') }}
             </p>
         </div>
         <div class="overflow-x-auto">
@@ -84,11 +88,9 @@ function intensity(count: number): string {
                     <div
                         v-for="day in week"
                         :key="day.date.toISOString()"
+                        v-tooltip.bottom="tooltipFor(day)"
                         class="w-3 h-3 rounded-sm transition-colors duration-200"
                         :class="intensity(day.count)"
-                        v-tooltip.bottom="
-                            `${day.date.toLocaleDateString()}: ${day.count} ${t('common.items')} • ${convertMinuteToHoursMinute(day.duration)}`
-                        "
                     ></div>
                 </div>
             </div>

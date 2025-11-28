@@ -61,22 +61,20 @@ function onCreate(): void {
             </div>
             <InputText
                 v-model="name"
-                :placeholder="t('userInterface.serverActivitiesView.addActivityModal.name')"
+                :placeholder="t('views.activity.add_modal.name')"
                 class="w-full"
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-pen-to-square text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700">{{
-                    t('common.description')
+                    t('common.fields.description')
                 }}</span>
             </div>
             <Textarea
                 v-model="description"
                 rows="3"
                 auto-resize
-                :placeholder="
-                    t('userInterface.serverActivitiesView.addActivityModal.description_input')
-                "
+                :placeholder="t('views.activity.add_modal.description_input')"
             />
         </div>
 
@@ -84,7 +82,9 @@ function onCreate(): void {
         <div class="flex flex-col gap-3">
             <div class="flex items-center gap-2">
                 <i class="pi pi-image text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.logo') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.logo')
+                }}</span>
             </div>
             <EntityLogoHandling
                 :logo="logo"
@@ -95,7 +95,9 @@ function onCreate(): void {
             />
             <div class="flex items-center gap-2">
                 <i class="pi pi-images text-surface-500"></i>
-                <span class="text-sm font-medium text-surface-700">{{ t('common.banner') }}</span>
+                <span class="text-sm font-medium text-surface-700">{{
+                    t('common.fields.banner')
+                }}</span>
             </div>
             <EntityBannerHandling
                 :banner="banner"
@@ -105,9 +107,14 @@ function onCreate(): void {
         </div>
 
         <div class="flex justify-end gap-2">
-            <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
-                :label="t('userInterface.serverActivitiesView.addActivityModal.createButton')"
+                :label="t('common.actions.cancel')"
+                severity="secondary"
+                text
+                @click="emit('cancel')"
+            />
+            <Button
+                :label="t('common.actions.create')"
                 :disabled="!can_submit"
                 :loading="props.loading"
                 :style="{ background: 'var(--gradient-primary)' }"

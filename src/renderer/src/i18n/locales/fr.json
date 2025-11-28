@@ -10,6 +10,7 @@
         },
         "fields": {
             "title": "Titre",
+            "no_title": "Sans titre",
             "name": "Nom",
             "description": "Description",
             "type": "Type",
@@ -20,7 +21,8 @@
             "choices": "Choix",
             "required": "Requis",
             "optional": "Optionnel",
-            "none": "Aucun"
+            "none": "Aucun",
+            "date": "Date"
         },
         "actions": {
             "choose": "Choisir",
@@ -52,6 +54,8 @@
             "upload": "Télécharger {entity}",
             "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
             "close": "Fermer",
+            "edit": "Modifier",
+            "delete": "Supprimer",
             "leave": "Quitter {entity}",
             "rename": "Renommer",
             "minimize": "Minimiser",
@@ -88,6 +92,7 @@
             "skill_levels": "Niveaux de compétence"
         },
         "session_details": {
+            "title": "Détails de la session",
             "activity": "Activité",
             "participants": "Participants",
             "extra_participants": "Participants supplémentaires",
@@ -253,7 +258,6 @@
         },
         "activity": {
             "title": "Activités du serveur",
-            "add_button": "Ajouter une activité",
             "create_session": "Créer une session",
             "recent_sessions": "Sessions récentes",
             "evolution_30_days": "Évolution 30 jours",
@@ -275,6 +279,10 @@
                 "longest_streak": "Plus longue série",
                 "likes_per_session": "Mentions j'aime / session",
                 "unique_participants": "Participants uniques",
+                "trend_up": "En hausse",
+                "trend_down": "En baisse",
+                "trend_steady": "Stable",
+                "trend_unknown": "Inconnu",
                 "days": "jours",
                 "last_year": "52 dernières semaines"
             },
@@ -283,7 +291,6 @@
                 "description": "Ajoutez une nouvelle activité pour votre serveur",
                 "name": "Nom de l'activité",
                 "description_input": "Décris l'activité en quelques mots",
-                "create_button": "Créer l'activité",
                 "metadata_title": "Attributs de l'activité",
                 "metadata_description": "Ajoutez des attributs pour votre activité.",
                 "metadata_description_detail": "Cela peut être des informations que vous voulez traquer sur les activités comme le nombre de buts marqués, le nombre de passes décisives, etc pour du football.",
@@ -305,6 +312,7 @@
                 "min_duration": "Durée minimum (min)",
                 "max_duration": "Durée maximum (min)",
                 "levels": "Niveaux",
+                "add_level": "Ajouter un niveau",
                 "minutes": "min",
                 "not_possible_with_type": "Impossible avec le type booléen ou date"
             },
@@ -319,12 +327,7 @@
                 "unique_participants": "Participants uniques",
                 "total_participants": "Participants totaux",
                 "avg_participants": "Moyenne des participants / session",
-                "popularity": "Popularité",
-                "actions": {
-                    "edit": "Modifier",
-                    "delete": "Supprimer",
-                    "details": "Voir détails"
-                }
+                "popularity": "Popularité"
             }
         },
         "user_profile_menu": {

@@ -43,18 +43,17 @@ const createdActivity = ref<IActivity | null>(null)
 const steps = computed(() => [
     {
         key: 'activity',
-        label: t('userInterface.serverActivitiesView.addActivityModal.activityStep') || 'Activité',
+        label: t('common.steps.activity'),
         icon: 'pi pi-pencil'
     },
     {
         key: 'metadata',
-        label:
-            t('userInterface.serverActivitiesView.addActivityModal.metadataStep') || 'Métadonnées',
+        label: t('common.steps.metadata'),
         icon: 'pi pi-database'
     },
     {
         key: 'skill-levels',
-        label: t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle'),
+        label: t('common.steps.skill_levels'),
         icon: 'pi pi-sliders-h'
     }
 ])
@@ -65,13 +64,10 @@ const currentIndex = computed(() =>
 
 const subtitle = computed(() =>
     currentStep.value === 'activity'
-        ? t('userInterface.serverActivitiesView.addActivityModal.description')
+        ? t('views.activity.add_modal.description')
         : currentStep.value === 'metadata'
-          ? t('userInterface.serverActivitiesView.addActivityModal.metadataDescription') +
-            ' (' +
-            t('common.optional') +
-            ')'
-          : t('userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription') +
+          ? t('views.activity.add_modal.metadata_description') + ' (' + t('common.optional') + ')'
+          : t('views.activity.add_modal.skill_levels_description') +
             ' (' +
             t('common.optional') +
             ')'
@@ -252,7 +248,7 @@ function finishWizard(): void {
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
-        :title="t('userInterface.serverActivitiesView.addActivityModal.title')"
+        :title="t('views.activity.add_modal.title')"
         :subtitle="subtitle"
         icon-class="pi pi-plus-circle"
         :steps="steps"

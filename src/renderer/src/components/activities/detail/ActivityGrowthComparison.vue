@@ -11,7 +11,25 @@ const { t } = useI18n()
 
 const statusText = computed(() => {
     const value = props.growth?.growth_percent ?? 0
-    return value >= 0 ? 'En hausse' : 'En baisse'
+    return value >= 0
+        ? t('views.activity.performance_section.trend_up')
+        : t('views.activity.performance_section.trend_down')
+})
+
+const trendText = computed(() => {
+    const raw = (props.growth?.trend || '').toString().toLowerCase()
+    if (!raw) return t('views.activity.performance_section.trend_unknown')
+    if (raw === 'up' || raw === 'increasing') {
+        return t('views.activity.performance_section.trend_up')
+    }
+    if (raw === 'down' || raw === 'decreasing') {
+        return t('views.activity.performance_section.trend_down')
+    }
+    if (raw === 'steady' || raw === 'stable') {
+        return t('views.activity.performance_section.trend_steady')
+    }
+    // fallback to raw if not matched
+    return raw
 })
 </script>
 
@@ -20,7 +38,7 @@ const statusText = computed(() => {
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-xs uppercase text-surface-500 font-semibold">
-                    {{ t('userInterface.serverActivitiesView.evolution30Days') }}
+                    {{ t('views.activity.evolution_30_days') }}
                 </p>
                 <p class="text-4xl font-bold text-surface-900">
                     {{ props.growth?.growth_percent?.toFixed(1) ?? '0' }}%
@@ -30,7 +48,7 @@ const statusText = computed(() => {
                 </p>
             </div>
             <div class="text-xs px-3 py-1 rounded-full bg-primary-100 text-primary-600">
-                {{ props.growth?.trend || 'Trend' }}
+                {{ trendText }}
             </div>
         </div>
     </div>

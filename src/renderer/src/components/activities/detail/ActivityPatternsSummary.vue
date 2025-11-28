@@ -20,12 +20,12 @@ const dayNames = computed(() => [
 ])
 
 function formatDay(value: number | null | undefined): string {
-    if (value === null || value === undefined) return t('common.none')
-    return dayNames.value[value] ?? t('common.none')
+    if (value === null || value === undefined) return t('common.fields.none')
+    return dayNames.value[value] ?? t('common.fields.none')
 }
 
 function formatHour(value: number | null | undefined): string {
-    if (value === null || value === undefined) return t('common.none')
+    if (value === null || value === undefined) return t('common.fields.none')
     const hours = Math.floor(value)
     return `${hours}h`
 }
@@ -34,35 +34,27 @@ const cards = computed(() => {
     const p = props.patterns
     return [
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.peak_day'),
+            label: t('views.activity.performance_section.peak_day'),
             value: formatDay(p?.peak_day_of_week)
         },
         {
-            label: t('userInterface.serverActivitiesView.ActivityPerformanceSection.peak_hour'),
+            label: t('views.activity.performance_section.peak_hour'),
             value: formatHour(p?.peak_hour)
         },
         {
-            label: t(
-                'userInterface.serverActivitiesView.ActivityPerformanceSection.current_streak'
-            ),
-            value: `${p?.streak_current ?? 0} ${t('userInterface.serverActivitiesView.ActivityPerformanceSection.days')}`
+            label: t('views.activity.performance_section.current_streak'),
+            value: `${p?.streak_current ?? 0} ${t('views.activity.performance_section.days')}`
         },
         {
-            label: t(
-                'userInterface.serverActivitiesView.ActivityPerformanceSection.longest_streak'
-            ),
-            value: `${p?.streak_longest ?? 0} ${t('userInterface.serverActivitiesView.ActivityPerformanceSection.days')}`
+            label: t('views.activity.performance_section.longest_streak'),
+            value: `${p?.streak_longest ?? 0} ${t('views.activity.performance_section.days')}`
         },
         {
-            label: t(
-                'userInterface.serverActivitiesView.ActivityPerformanceSection.likes_per_session'
-            ),
+            label: t('views.activity.performance_section.likes_per_session'),
             value: (p?.likes_per_session ?? 0).toFixed(1)
         },
         {
-            label: t(
-                'userInterface.serverActivitiesView.ActivityPerformanceSection.unique_participants'
-            ),
+            label: t('views.activity.performance_section.unique_participants'),
             value: (p?.unique_participants ?? 0).toLocaleString()
         }
     ]
@@ -72,7 +64,7 @@ const cards = computed(() => {
 <template>
     <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <p class="text-sm font-semibold text-surface-600 mb-4">
-            {{ t('userInterface.serverActivitiesView.ActivityPerformanceSection.patterns') }}
+            {{ t('views.activity.performance_section.patterns') }}
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div

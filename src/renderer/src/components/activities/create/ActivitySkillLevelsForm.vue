@@ -71,7 +71,7 @@ async function syncDisplayOrder(): Promise<void> {
         existingLevels.value = res.data
         const maxOrder = Math.max(...res.data.map((lvl) => lvl.display_order ?? 0))
         nextDisplayOrder.value = maxOrder + 1
-    } catch (e) {
+    } catch {
         nextDisplayOrder.value = props.initialDisplayOrder
     }
 }
@@ -137,21 +137,13 @@ function submitLevels(): void {
             <i class="pi pi-sliders-h text-surface-500"></i>
             <div class="flex flex-col">
                 <span class="text-sm font-medium text-surface-700">
-                    {{ t('userInterface.serverActivitiesView.addActivityModal.skillLevelsTitle') }}
+                    {{ t('views.activity.add_modal.skill_levels_title') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{
-                        t(
-                            'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescription'
-                        )
-                    }}
+                    {{ t('views.activity.add_modal.skill_levels_description') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{
-                        t(
-                            'userInterface.serverActivitiesView.addActivityModal.skillLevelsDescriptionDetail'
-                        )
-                    }}
+                    {{ t('views.activity.add_modal.skill_levels_description_detail') }}
                 </span>
             </div>
         </div>
@@ -159,13 +151,13 @@ function submitLevels(): void {
         <!-- Draft form -->
         <div class="grid grid-cols-1 gap-3">
             <div class="flex flex-col gap-2">
-                <label class="text-sm text-surface-500">{{ t('common.name') }}</label>
+                <label class="text-sm text-surface-500">{{ t('common.fields.name') }}</label>
                 <InputText v-model="draft.name" class="w-full" />
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{
-                    t('userInterface.serverActivitiesView.addActivityModal.color')
+                    t('views.activity.add_modal.color')
                 }}</label>
                 <div class="flex items-center gap-2">
                     <ColorPicker v-model="draft.color" />
@@ -181,13 +173,13 @@ function submitLevels(): void {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.minSessions')
+                        t('views.activity.add_modal.min_sessions')
                     }}</label>
                     <InputNumber v-model="draft.min_sessions" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.maxSessions')
+                        t('views.activity.add_modal.max_sessions')
                     }}</label>
                     <InputNumber v-model="draft.max_sessions" class="w-full" show-buttons />
                 </div>
@@ -196,26 +188,26 @@ function submitLevels(): void {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.minDuration')
+                        t('views.activity.add_modal.min_duration')
                     }}</label>
                     <InputNumber v-model="draft.min_duration" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('userInterface.serverActivitiesView.addActivityModal.maxDuration')
+                        t('views.activity.add_modal.max_duration')
                     }}</label>
                     <InputNumber v-model="draft.max_duration" class="w-full" show-buttons />
                 </div>
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="text-sm text-surface-500">{{ t('common.description') }}</label>
+                <label class="text-sm text-surface-500">{{ t('common.fields.description') }}</label>
                 <Textarea v-model="draft.description" rows="2" auto-resize />
             </div>
 
             <div class="flex justify-end">
                 <Button
-                    :label="t('actions.add') || 'Add level'"
+                    :label="t('views.activity.add_modal.add_level')"
                     icon="pi pi-plus"
                     :disabled="!can_add"
                     outlined
@@ -227,7 +219,7 @@ function submitLevels(): void {
         <!-- Levels list -->
         <div v-if="levels.length || existingLevels.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
-                {{ t('userInterface.serverActivitiesView.addActivityModal.levels') }}
+                {{ t('views.activity.add_modal.levels') }}
             </div>
             <div class="flex flex-col gap-2">
                 <!-- Existing levels -->
@@ -240,10 +232,10 @@ function submitLevels(): void {
                         <span class="text-xs text-surface-600">#{{ lvl.display_order }}</span>
                         <span class="text-sm text-surface-900 font-medium">{{ lvl.name }}</span>
                         <span class="text-xs text-surface-600">
-                            {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }}
-                            {{ t('userInterface.serverActivitiesView.addActivityModal.sessions') }},
-                            {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }}
-                            {{ t('userInterface.serverActivitiesView.addActivityModal.minutes') }}
+                            {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? ' ∞' }}
+                            {{ t('views.activity.performance_section.sessions') }},
+                            {{ lvl.min_duration }}-{{ lvl.max_duration ?? ' ∞' }}
+                            {{ t('views.activity.add_modal.minutes') }}
                         </span>
                     </div>
                     <Button
@@ -267,9 +259,9 @@ function submitLevels(): void {
                         <span class="text-sm text-surface-900">{{ lvl.name }}</span>
                         <span class="text-xs text-surface-600">
                             {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }}
-                            {{ t('userInterface.serverActivitiesView.addActivityModal.sessions') }},
+                            {{ t('views.activity.performance_section.sessions') }},
                             {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }}
-                            {{ t('userInterface.serverActivitiesView.addActivityModal.minutes') }}
+                            {{ t('views.activity.add_modal.minutes') }}
                         </span>
                     </div>
                     <Button
@@ -285,9 +277,14 @@ function submitLevels(): void {
         </div>
 
         <div class="flex justify-end gap-2 pt-2 mt-auto">
-            <Button :label="t('common.skip')" severity="secondary" text @click="emit('skip')" />
             <Button
-                :label="t('actions.create')"
+                :label="t('common.actions.skip')"
+                severity="secondary"
+                text
+                @click="emit('skip')"
+            />
+            <Button
+                :label="t('common.actions.create')"
                 :loading="props.submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="submitLevels"

@@ -1,19 +1,47 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 const props = defineProps<{
     def: IActivityMetadataDefinition
-    modelValue: any
+    modelValue: Date | undefined
 }>()
 
 const emit = defineEmits<{
-    (e: 'update:modelValue', value: any): void
+    (e: 'update:modelValue', value: Date | undefined): void
 }>()
+
+const { t, te } = useI18n()
 
 const value = computed({
     get: () => props.modelValue,
     set: (val) => emit('update:modelValue', val)
+})
+
+// Translate label if it's a translation key (or return raw label/key)
+const labelText = computed(() => {
+    const label = props.def?.label
+    if (!label) return props.def?.key ?? ''
+    if (te(label)) return t(label)
+    return label
+})
+
+const descriptionText = computed(() => {
+    const d = props.def?.description
+    if (!d) return ''
+    if (te(d)) return t(d)
+    return d
+})
+
+const typeText = computed(() => {
+    const type = props.def?.type
+    if (!type) return ''
+    // try common.fields.<type> first, then the raw type as a key, then fallback to raw value
+    const candidate = `common.fields.${type}`
+    if (te(candidate)) return t(candidate)
+    if (te(type)) return t(type as any)
+    return type
 })
 </script>
 
@@ -30,15 +58,15 @@ const value = computed({
             </div>
             <div class="flex flex-col min-w-0">
                 <span class="text-sm font-medium text-surface-700 truncate">
-                    {{ def.label || def.key }}
+                    {{ labelText || def.key }}
                     <span v-if="def.required" class="text-red-500">*</span>
                 </span>
                 <p v-if="def.description" class="text-xs text-surface-500 line-clamp-2">
-                    {{ def.description }}
+                    {{ descriptionText }}
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ def.type }}
+                {{ typeText }}
             </div>
         </div>
 
@@ -48,7 +76,7 @@ const value = computed({
                 v-model="value"
                 show-time
                 hour-format="24"
-                :placeholder="def.label || undefined"
+                :placeholder="labelText || undefined"
                 class="w-full p-inputtext-sm"
             />
         </div>

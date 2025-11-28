@@ -5,11 +5,11 @@ import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/e
 
 const props = defineProps<{
     def: IActivityMetadataDefinition
-    modelValue: any
+    modelValue: boolean | undefined
 }>()
 
 const emit = defineEmits<{
-    (e: 'update:modelValue', value: any): void
+    (e: 'update:modelValue', value: boolean | undefined): void
 }>()
 
 const { t } = useI18n()
@@ -44,7 +44,7 @@ const value = computed({
             <div class="m-auto flex items-center gap-2">
                 <InputSwitch v-model="value" />
                 <span class="text-sm text-surface-600 font-medium">
-                    {{ value ? t('common.yes') : t('common.no') }}
+                    {{ value ? t('common.misc.yes') : t('common.misc.no') }}
                 </span>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-1">
