@@ -10,6 +10,8 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
+import Select from 'primevue/select'
+import { useChronos, type IChrono } from '@/composables/useChronos'
 
 const props = withDefaults(
     defineProps<{
@@ -32,6 +34,7 @@ const { t } = useI18n()
 const server_store = useServerStore()
 const user_store = useUserStore()
 const { getActivityById } = useActivityCRUD()
+const { chronos, removeChrono } = useChronos()
 
 // Form fields
 const title = ref('')
@@ -42,6 +45,10 @@ const comment = ref('')
 const pre_selected_activity = ref<IActivity | null>(null)
 const selected_activity = ref<IActivity | null>(null)
 const activity_name = ref('')
+const selected_chrono = ref<IChrono | null>(null)
+
+// Duration Input Model for Editable Select
+const durationInputModel = ref<string | number | IChrono>(60)
 
 // Activity selection state
 const effectiveActivityId = computed(() => {
@@ -51,6 +58,51 @@ const effectiveActivityId = computed(() => {
 
 watch(effectiveActivityId, (newId) => {
     emit('update:activityId', newId || null)
+})
+
+// Chrono Options with Label
+const availableChronos = computed(() => {
+    return chronos.value.filter((c) => !c.isRunning)
+})
+
+const chronoOptions = computed(() => {
+    return availableChronos.value.map((c) => ({
+        ...c,
+        label: `${Math.ceil(c.elapsed / 60000)}`
+    }))
+})
+
+// Watch durationInputModel to update duration and handle chrono selection
+watch(durationInputModel, (val) => {
+    if (val && typeof val === 'object' && 'id' in val) {
+        // Chrono selected
+        const chrono = val as IChrono
+        selected_chrono.value = chrono
+        const minutes = Math.ceil(chrono.elapsed / 60000)
+        duration.value = Math.max(1, minutes)
+        if (chrono.title) {
+            title.value = chrono.title
+        }
+    } else {
+        // Manual input
+        selected_chrono.value = null
+        const num = Number(val)
+        if (!isNaN(num) && num > 0) {
+            duration.value = num
+        }
+    }
+})
+
+// Sync duration back to input model (if changed externally or init)
+watch(duration, (newVal) => {
+    // Only update if the current model is not the chrono object (to preserve display)
+    // and if the numeric value differs
+    if (
+        typeof durationInputModel.value !== 'object' &&
+        Number(durationInputModel.value) !== newVal
+    ) {
+        durationInputModel.value = newVal
+    }
 })
 
 // Initialize
@@ -67,6 +119,9 @@ onMounted(async () => {
     if (effectiveActivityId.value) {
         emit('update:activityId', effectiveActivityId.value)
     }
+
+    // Init duration model
+    durationInputModel.value = duration.value
 })
 
 const canSubmit = computed(() => {
@@ -93,6 +148,10 @@ function onCreate(): void {
         activityId: effectiveActivityId.value,
         request: payload
     })
+
+    if (selected_chrono.value) {
+        removeChrono(selected_chrono.value.id)
+    }
 }
 </script>
 
@@ -158,7 +217,39 @@ function onCreate(): void {
                         }}) <span class="text-red-500">*</span></span
                     >
                 </div>
-                <InputNumber v-model="duration" :min="1" show-buttons class="w-full" />
+
+                <!-- Editable Select if chronos exist -->
+                <Select
+                    v-if="availableChronos.length > 0"
+                    v-model="durationInputModel"
+                    :options="chronoOptions"
+                    option-label="label"
+                    editable
+                    :placeholder="t('common.fields.duration') || 'Duration'"
+                    class="w-full"
+                >
+                    <template #option="slotProps">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-2 h-2 rounded-full"
+                                :style="{ backgroundColor: slotProps.option.color }"
+                            ></div>
+                            <div>{{ slotProps.option.title }}</div>
+                            <div class="text-xs text-surface-500 ml-auto">
+                                {{ Math.ceil(slotProps.option.elapsed / 60000) }}m
+                            </div>
+                        </div>
+                    </template>
+                </Select>
+
+                <!-- Standard InputNumber if no chronos -->
+                <InputNumber
+                    v-else
+                    v-model="duration"
+                    :min="1"
+                    show-buttons
+                    class="w-full"
+                />
             </div>
         </div>
 

@@ -111,6 +111,7 @@ declare module 'vue' {
     ToggleFilter: typeof import('./src/components/filters/ToggleFilter.vue')['default']
     TopAside: typeof import('./src/components/asides/TopAside.vue')['default']
     Topbar: typeof import('./src/components/asides/topbar.vue')['default']
+    TopBarChronos: typeof import('./src/components/common/TopBarChronos.vue')['default']
     TransitionGroupWrapper: typeof import('./src/components/common/transitions/TransitionGroupWrapper.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
     Versions: typeof import('./src/components/app-updates/Versions.vue')['default']

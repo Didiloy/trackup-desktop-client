@@ -22,7 +22,12 @@
             "required": "Requis",
             "optional": "Optionnel",
             "none": "Aucun",
-            "date": "Date"
+            "date": "Date",
+            "new_chrono": "Nouveau chrono",
+            "saved_chronos": "Chronos enregistrés",
+            "chronos": "Chronos",
+            "select_chrono": "Sélectionner un chrono",
+            "duration": "Durée"
         },
         "actions": {
             "choose": "Choisir",
@@ -63,14 +68,19 @@
             "close_window": "Fermer",
             "toggle_sidebar": "Voir les membres du serveur",
             "devtools": "Devtools",
-            "clear_all": "Tout effacer"
+            "clear_all": "Tout effacer",
+            "start": "Démarrer",
+            "add_manual": "Ajout manuel",
+            "pause": "Pause",
+            "resume": "Reprendre"
         },
         "misc": {
             "or": "ou",
             "settings": "Paramètres",
             "yes": "Oui",
             "no": "Non",
-            "minutes_short": "min"
+            "minutes_short": "min",
+            "no_chronos": "Aucun chrono enregistré"
         },
         "weekdays": {
             "short": {
@@ -185,7 +195,8 @@
             "addEnumsFailed": "Échec de l'ajout des sélections",
             "addMetadataFailed": "Échec de l'ajout des métadonnées",
             "addSkillLevelsFailed": "Échec de l'ajout des niveaux de compétence",
-            "joinServerFailed": "Échec de la connexion au serveur"
+            "joinServerFailed": "Échec de la connexion au serveur",
+            "pause_to_delete": "Mettez en pause pour supprimer"
         },
         "warning": {
             "title": "Avertissement",
