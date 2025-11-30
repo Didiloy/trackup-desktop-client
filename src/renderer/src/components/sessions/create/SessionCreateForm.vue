@@ -65,12 +65,6 @@ const availableChronos = computed(() => {
     return chronos.value.filter((c) => !c.isRunning)
 })
 
-const chronoOptions = computed(() => {
-    return availableChronos.value.map((c) => ({
-        ...c,
-        label: `${Math.ceil(c.elapsed / 60000)}`
-    }))
-})
 
 // Watch selected_chrono to update duration and title
 watch(selected_chrono, (chrono) => {
@@ -203,7 +197,7 @@ function onCreate(): void {
                     <!-- Select if chronos exist -->
                     <Select
                         v-model="selected_chrono"
-                        :options="chronoOptions"
+                        :options="availableChronos"
                         option-label="title"
                         :placeholder="t('common.actions.select_short')"
                         class="h-9 w-28"
