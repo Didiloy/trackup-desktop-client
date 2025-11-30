@@ -20,33 +20,9 @@ export function useServerMembers() {
     const error = ref<string | null>(null)
 
     // Filters
-    const searchQuery = ref('')
-    const sortBy = ref('joined_at')
-    const sortOrder = ref<'asc' | 'desc'>('desc')
 
-    const filteredMembers = computed(() => {
-        // Client-side filtering for immediate feedback if list is small
-        // But ideally we should use server-side filtering if implemented
-        let result = [...members.value]
 
-        if (searchQuery.value) {
-            const query = searchQuery.value.toLowerCase()
-            result = result.filter(
-                (m) =>
-                    m.nickname.toLowerCase().includes(query) ||
-                    m.user_email.toLowerCase().includes(query)
-            )
-        }
 
-        return result.sort((a, b) => {
-            const aValue = a[sortBy.value]
-            const bValue = b[sortBy.value]
-
-            if (aValue < bValue) return sortOrder.value === 'asc' ? -1 : 1
-            if (aValue > bValue) return sortOrder.value === 'asc' ? 1 : -1
-            return 0
-        })
-    })
 
     async function fetchMembers(serverId: string, force = false) {
         if (loading.value) return

@@ -7,37 +7,37 @@ import ServerMembersHeader from '@/components/server/members/ServerMembersHeader
 import ServerMemberCard from '@/components/server/members/ServerMemberCard.vue'
 import { useToast } from 'primevue/usetoast'
 import { copyKeyToClipBoard } from '@/utils'
+import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 
 const { t } = useI18n()
 const server_store = useServerStore()
-const { filteredMembers, total, loading, searchQuery, sortBy, fetchMembers } = useServerMembers()
+// const { filteredMembers, total, loading, searchQuery, sortBy, fetchMembers } = useServerMembers()
 
-const serverId = computed(() => server_store.getPublicId)
-
-onMounted(() => {
-    if (serverId.value) {
-        fetchMembers(serverId.value)
-    }
-})
 
 const toast = useToast()
 const i18n = useI18n()
-async function handleInvite() {
+const searchQuery = ref('')
+const sortBy = ref('joined_at')
+const sortOrder = ref<'asc' | 'desc'>('desc')
+const loading = ref(true)
+const members = ref<IServerMember[]>(server_store.getMembers || [])
+
+const filteredMembers = computed(() => {
+    // TODO: FILTER AND SORT MEMBERS FROM BACKEND
+
+})
+
+async function handleInvite(): Promise<void> {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
 }
 
-const handleRefresh = () => {
-    if (serverId.value) {
-        fetchMembers(serverId.value)
-    }
-}
 </script>
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
         <ServerMembersHeader
-            :total-members="total"
+            :total-members="server_store.getMembers?.length || 0"
             :loading="loading"
             @update:search="searchQuery = $event"
             @update:sort="sortBy = $event"
@@ -46,7 +46,7 @@ const handleRefresh = () => {
 
         <!-- Loading State -->
         <div
-            v-if="loading && !filteredMembers.length"
+            v-if="!server_store.getMembers?.length"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
         >
             <div
@@ -58,7 +58,7 @@ const handleRefresh = () => {
 
         <!-- Empty State -->
         <div
-            v-else-if="!filteredMembers.length"
+            v-else-if="!server_store.getMembers.length"
             class="flex flex-col items-center justify-center py-20 text-surface-500"
         >
             <i class="pi pi-users text-4xl mb-4 opacity-50"></i>
@@ -72,10 +72,9 @@ const handleRefresh = () => {
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-10"
         >
             <ServerMemberCard
-                v-for="member in filteredMembers"
+                v-for="member in members"
                 :key="member.public_id"
                 :member="member"
-                @refresh="handleRefresh"
             />
         </div>
     </div>

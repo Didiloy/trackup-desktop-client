@@ -9,10 +9,6 @@ import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useToast } from 'primevue/usetoast'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 
-const emit = defineEmits<{
-    (e: 'refresh'): void
-}>()
-
 const props = defineProps<{
     member: IServerMember
 }>()
@@ -20,7 +16,7 @@ const props = defineProps<{
 const { t } = useI18n()
 const user_store = useUserStore()
 const server_store = useServerStore()
-const { kickMember } = useMemberCRUD()
+const { kickMember, listMembers } = useMemberCRUD()
 const toast = useToast()
 const current_user_is_creator = computed(() => {
     const currentMember = server_store.getMembers?.find((m) => m.user_email === user_store.getEmail)
@@ -52,14 +48,16 @@ const items = computed(() => {
             command: async () => {
                 const result = await kickMember(server_store.getPublicId!, props.member?.public_id)
                 if (result.data) {
+                    const resMembers = await listMembers(server_store.getPublicId!)
+                    if (resMembers.data) {
+                        server_store.setMembers(resMembers.data.data)
+                    }
                     toast.add({
                         severity: 'success',
                         summary: t('views.server_members.member_kicked'),
                         detail: t('views.server_members.member_kicked_detail'),
                         life: 3000
                     })
-                    console.log('Member kicked', result.data)
-                    emit('refresh')
                 } else {
                     console.error('Failed to kick member', result)
                     toast.add({
