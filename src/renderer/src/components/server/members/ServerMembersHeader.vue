@@ -36,7 +36,10 @@ watch(sort, (val) => emit('update:sort', val))
                 </h1>
                 <p class="text-surface-500 mt-1">
                     {{ t('views.members_aside.description') }}
-                    <span v-if="totalMembers" class="ml-1 text-sm font-medium bg-surface-200 px-2 py-0.5 rounded-full text-surface-600">
+                    <span
+                        v-if="totalMembers"
+                        class="ml-1 text-sm font-medium bg-surface-200 px-2 py-0.5 rounded-full text-surface-600"
+                    >
                         {{ totalMembers }}
                     </span>
                 </p>
@@ -53,13 +56,9 @@ watch(sort, (val) => emit('update:sort', val))
         <div class="flex flex-col sm:flex-row gap-4">
             <IconField class="w-full sm:w-96 flex-1">
                 <InputIcon class="pi pi-search" />
-                <InputText
-                    v-model="search"
-                    :placeholder="t('placeholder.search')"
-                    class="w-full"
-                />
+                <InputText v-model="search" :placeholder="t('placeholder.search')" class="w-full" />
             </IconField>
-            
+
             <div class="flex gap-2 ml-auto">
                 <Select
                     v-model="sort"
@@ -72,4 +71,3 @@ watch(sort, (val) => emit('update:sort', val))
         </div>
     </div>
 </template>
-

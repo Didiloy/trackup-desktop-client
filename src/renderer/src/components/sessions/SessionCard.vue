@@ -87,9 +87,7 @@ function getParticipantTooltip(
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2 text-surface-700 font-medium z-10">
                     <i class="pi pi-clock text-primary-500"></i>
-                    <span>{{
-                        formatMinutesToLabel(session.duration as unknown as number)
-                    }}</span>
+                    <span>{{ formatMinutesToLabel(session.duration as unknown as number) }}</span>
                 </div>
 
                 <div class="flex items-center gap-2 text-surface-600 font-medium z-10">

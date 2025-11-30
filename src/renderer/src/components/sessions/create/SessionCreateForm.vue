@@ -64,7 +64,6 @@ const availableChronos = computed(() => {
     return chronos.value.filter((c) => !c.isRunning)
 })
 
-
 // Watch selected_chrono to update duration and title
 watch(selected_chrono, (chrono) => {
     if (chrono) {

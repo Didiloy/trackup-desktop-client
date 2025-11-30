@@ -17,8 +17,6 @@ const mode = ref<'stopwatch' | 'manual'>('stopwatch')
 const newChronoTitle = ref('')
 const newChronoDuration = ref<number>(60)
 
-
-
 function handleStartChrono(): void {
     startChrono(newChronoTitle.value)
     newChronoTitle.value = ''
@@ -29,8 +27,6 @@ function handleAddManualChrono(): void {
     newChronoTitle.value = ''
     newChronoDuration.value = 60
 }
-
-
 </script>
 
 <template>

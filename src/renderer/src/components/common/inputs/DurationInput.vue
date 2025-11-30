@@ -31,11 +31,7 @@ const seconds = ref<number>(0)
 watch(
     () => props.modelValue,
     (newVal) => {
-        const {
-            hours: h,
-            minutes: m,
-            seconds: s
-        } = convertMinutesToHMS(newVal)
+        const { hours: h, minutes: m, seconds: s } = convertMinutesToHMS(newVal)
 
         // Only update if different to avoid cursor jumping or unnecessary updates
         if (hours.value !== h) hours.value = h

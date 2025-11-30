@@ -22,16 +22,14 @@ const server_store = useServerStore()
 const { kickMember } = useMemberCRUD()
 const toast = useToast()
 const current_user_is_creator = computed(() => {
-    const currentMember = server_store.getMembers?.find(
-        (m) => m.user_email === user_store.getEmail
-    )
+    const currentMember = server_store.getMembers?.find((m) => m.user_email === user_store.getEmail)
     return currentMember?.role_name === 'creator'
 })
 
 function formatDate(date: string): string {
-    return new Date(date).toLocaleDateString(undefined, { 
-        month: 'short', 
-        year: 'numeric' 
+    return new Date(date).toLocaleDateString(undefined, {
+        month: 'short',
+        year: 'numeric'
     })
 }
 
@@ -95,7 +93,9 @@ const onItemSelected = (item: unknown): void => {
     >
         <!-- Avatar -->
         <div class="relative shrink-0">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-200 ring-2 ring-surface-100">
+            <div
+                class="w-12 h-12 rounded-full overflow-hidden bg-surface-200 ring-2 ring-surface-100"
+            >
                 <img
                     v-if="member.avatar_url"
                     :src="member.avatar_url"
@@ -109,16 +109,24 @@ const onItemSelected = (item: unknown): void => {
                     {{ member.nickname.charAt(0).toUpperCase() }}
                 </div>
             </div>
-            <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-surface-100" title="Online"></div>
+            <div
+                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-surface-100"
+                title="Online"
+            ></div>
         </div>
 
         <!-- Info -->
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-                <h3 class="text-sm font-bold text-surface-900 truncate" v-tooltip.top="member.nickname">
+                <h3
+                    class="text-sm font-bold text-surface-900 truncate"
+                    v-tooltip.top="member.nickname"
+                >
                     {{ member.nickname }}
                 </h3>
-                <span class="text-xs px-1.5 py-0.5 rounded bg-primary-50 text-primary-700 font-medium uppercase tracking-wide text-[10px]">
+                <span
+                    class="text-xs px-1.5 py-0.5 rounded bg-primary-50 text-primary-700 font-medium uppercase tracking-wide text-[10px]"
+                >
                     {{ member.role_name }}
                 </span>
             </div>
@@ -138,7 +146,6 @@ const onItemSelected = (item: unknown): void => {
             @click="handleContextMenu"
         >
         </Button>
-        <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected"/>
+        <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected" />
     </div>
 </template>
-

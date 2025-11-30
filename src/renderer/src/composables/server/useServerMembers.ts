@@ -3,7 +3,10 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
-import type { IServerMember, IInviteMemberRequest } from '@shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IServerMember,
+    IInviteMemberRequest
+} from '@shared/contracts/interfaces/entities/member.interfaces'
 
 export function useServerMembers() {
     const { t } = useI18n()
@@ -15,7 +18,7 @@ export function useServerMembers() {
     const total = ref(0)
     const loading = ref(false)
     const error = ref<string | null>(null)
-    
+
     // Filters
     const searchQuery = ref('')
     const sortBy = ref('joined_at')
@@ -28,16 +31,17 @@ export function useServerMembers() {
 
         if (searchQuery.value) {
             const query = searchQuery.value.toLowerCase()
-            result = result.filter(m => 
-                m.nickname.toLowerCase().includes(query) || 
-                m.user_email.toLowerCase().includes(query)
+            result = result.filter(
+                (m) =>
+                    m.nickname.toLowerCase().includes(query) ||
+                    m.user_email.toLowerCase().includes(query)
             )
         }
 
         return result.sort((a, b) => {
             const aValue = a[sortBy.value]
             const bValue = b[sortBy.value]
-            
+
             if (aValue < bValue) return sortOrder.value === 'asc' ? -1 : 1
             if (aValue > bValue) return sortOrder.value === 'asc' ? 1 : -1
             return 0
@@ -46,7 +50,7 @@ export function useServerMembers() {
 
     async function fetchMembers(serverId: string, force = false) {
         if (loading.value) return
-        
+
         // Check cache if not forcing
         if (!force && members.value.length > 0 && server_store.getPublicId === serverId) {
             return
@@ -54,7 +58,7 @@ export function useServerMembers() {
 
         loading.value = true
         error.value = null
-        
+
         try {
             const res = await listMembers(serverId)
 
@@ -85,7 +89,6 @@ export function useServerMembers() {
         searchQuery,
         sortBy,
         sortOrder,
-        fetchMembers,
+        fetchMembers
     }
 }
-
