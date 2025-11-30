@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
-import TopBarChronos from '@/components/common/TopBarChronos.vue'
+import ChronosButton from '@/components/chronos/ChronosButton.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -77,7 +77,7 @@ function handleToggleMembersAside(): void {
             class="flex items-center justify-center h-full w-fit bg-surface-200"
         >
             <div class="h-full flex items-center justify-center px-1">
-                <TopBarChronos />
+                <ChronosButton />
             </div>
             <div
                 v-if="showMembersAsideToggle"

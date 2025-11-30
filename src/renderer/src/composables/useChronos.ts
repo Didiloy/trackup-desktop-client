@@ -1,4 +1,5 @@
 import { createSharedComposable, useStorage } from '@vueuse/core'
+import { Ref } from 'vue'
 
 export interface IChrono {
     id: string
@@ -9,11 +10,25 @@ export interface IChrono {
     color: string
 }
 
-function _useChronos() {
+export interface IUseChronos {
+  chronos:  Ref<IChrono[]>
+  startChrono: (title?: string) => void
+  addManualChrono: (title: string | undefined, durationMinutes: number) => void
+  pauseChrono: (id: string) => void
+  resumeChrono: (id: string) => void
+  removeChrono: (id: string) => void
+}
+
+function _useChronos() : IUseChronos {
     const chronos = useStorage<IChrono[]>('trackup-chronos', [])
 
     function getRandomColor(): string {
-        return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
+        return (
+            '#' +
+            Math.floor(Math.random() * 16777215)
+                .toString(16)
+                .padStart(6, '0')
+        )
     }
 
     // Start a new live chrono

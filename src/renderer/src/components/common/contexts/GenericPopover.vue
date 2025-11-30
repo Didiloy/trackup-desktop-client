@@ -73,17 +73,19 @@ defineExpose({
 
 <template>
     <div class="generic-popover">
-        <Button
-            :label="buttonLabelText"
-            :icon="props.buttonIcon"
-            :class="props.buttonClass"
-            :variant="props.buttonVariant"
-            :rounded="props.buttonRounded"
-            :aria-label="buttonAriaLabelComputed"
-            @click="togglePopover"
-        >
-            <slot name="button"></slot>
-        </Button>
+        <slot name="trigger" :toggle="togglePopover" :props="props">
+            <Button
+                :label="buttonLabelText"
+                :icon="props.buttonIcon"
+                :class="props.buttonClass"
+                :variant="props.buttonVariant"
+                :rounded="props.buttonRounded"
+                :aria-label="buttonAriaLabelComputed"
+                @click="togglePopover"
+            >
+                <slot name="button"></slot>
+            </Button>
+        </slot>
 
         <Popover ref="popoverRef" :class="props.popoverClass">
             <div class="popover-content">
