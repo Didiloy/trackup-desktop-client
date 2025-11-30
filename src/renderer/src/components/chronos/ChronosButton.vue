@@ -3,11 +3,12 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
-import InputNumber from 'primevue/inputnumber'
+
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import { useChronos } from '@/composables/useChronos'
 import ChronosList from '@/components/chronos/ChronosList.vue'
+import DurationInput from '@/components/common/inputs/DurationInput.vue'
 
 const { t } = useI18n()
 const { startChrono, addManualChrono } = useChronos()
@@ -92,19 +93,17 @@ function handleAddManualChrono(): void {
 
                         <!-- Manual Mode -->
                         <div v-else key="manual" class="flex gap-2">
-                            <InputNumber
+                            <DurationInput
                                 v-model="newChronoDuration"
-                                :min="1"
-                                suffix=" min"
+                                :show-seconds="true"
                                 class="flex-1"
-                                size="small"
-                                :placeholder="t('common.fields.duration') || 'Duration'"
                                 @keydown.enter="handleAddManualChrono"
                             />
                             <Button
                                 icon="pi pi-plus"
                                 :label="t('common.actions.add') || 'Add'"
                                 size="small"
+                                class="h-9"
                                 @click="handleAddManualChrono"
                             />
                         </div>

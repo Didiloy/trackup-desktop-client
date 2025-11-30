@@ -55,6 +55,7 @@ declare module 'vue' {
     DateRangeFilter: typeof import('./src/components/filters/DateRangeFilter.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Dropdown: typeof import('primevue/dropdown')['default']
+    DurationInput: typeof import('./src/components/common/inputs/DurationInput.vue')['default']
     EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
     FilterGroup: typeof import('./src/components/filters/FilterGroup.vue')['default']

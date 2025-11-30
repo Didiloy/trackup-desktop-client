@@ -45,7 +45,7 @@ function onPage(event: { page: number; rows: number }): void {
         <Column
             field="duration"
             :header="
-                t('common.session_details.duration') + ' (' + t('common.misc.minutes_short') + ')'
+                t('common.session_details.duration') + ' (' + t('common.time.minutes_short') + ')'
             "
         >
             <template #body="slotProps">

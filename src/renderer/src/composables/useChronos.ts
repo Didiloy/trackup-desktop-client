@@ -11,15 +11,15 @@ export interface IChrono {
 }
 
 export interface IUseChronos {
-  chronos:  Ref<IChrono[]>
-  startChrono: (title?: string) => void
-  addManualChrono: (title: string | undefined, durationMinutes: number) => void
-  pauseChrono: (id: string) => void
-  resumeChrono: (id: string) => void
-  removeChrono: (id: string) => void
+    chronos: Ref<IChrono[]>
+    startChrono: (title?: string) => void
+    addManualChrono: (title: string | undefined, durationMinutes: number) => void
+    pauseChrono: (id: string) => void
+    resumeChrono: (id: string) => void
+    removeChrono: (id: string) => void
 }
 
-function _useChronos() : IUseChronos {
+function _useChronos(): IUseChronos {
     const chronos = useStorage<IChrono[]>('trackup-chronos', [])
 
     function getRandomColor(): string {

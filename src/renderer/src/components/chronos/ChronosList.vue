@@ -5,27 +5,13 @@ import { useNow } from '@vueuse/core'
 import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
 import { useChronos, type IChrono } from '@/composables/useChronos'
+import { formatDuration } from '@/utils/time.utils'
 
 const { t } = useI18n()
 const { chronos, pauseChrono, resumeChrono, removeChrono } = useChronos()
 const now = useNow()
 
 const selected_ids = ref<string[]>([])
-
-// Helper to format duration (ms) to mm:ss or hh:mm:ss
-function formatDuration(ms: number): string {
-    const totalSeconds = Math.floor(ms / 1000)
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-    const seconds = totalSeconds % 60
-
-    const pad = (n: number): string => n.toString().padStart(2, '0')
-
-    if (hours > 0) {
-        return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-    }
-    return `${pad(minutes)}:${pad(seconds)}`
-}
 
 function getChronoDuration(chrono: IChrono): string {
     if (chrono.isRunning && chrono.startTime) {

@@ -79,8 +79,24 @@
             "settings": "Paramètres",
             "yes": "Oui",
             "no": "Non",
-            "minutes_short": "min",
             "no_chronos": "Aucun chrono enregistré"
+        },
+        "time": {
+            "hours": "heures",
+            "hour": "heure",
+            "hours_short": "h",
+            "minutes": "minutes",
+            "minute": "minute",
+            "minutes_short": "min",
+            "seconds": "secondes",
+            "second": "seconde",
+            "seconds_short": "s",
+            "ago": "il y a {time}",
+            "in_future": "dans {time}",
+            "just_now": "à l'instant",
+            "today": "Aujourd'hui",
+            "yesterday": "Hier",
+            "tomorrow": "Demain"
         },
         "weekdays": {
             "short": {
