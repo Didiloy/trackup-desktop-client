@@ -32,7 +32,7 @@ const actions: ServerAction[] = [
     {
         id: 'activities',
         label: t('views.activity.title_base'),
-        icon: 'pi pi-clock',
+        icon: 'pi pi-trophy',
         routeName: 'ServerActivities'
     },
     {

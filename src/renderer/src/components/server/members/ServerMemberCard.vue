@@ -7,6 +7,7 @@ import { useUserStore } from '@/stores/user'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useToast } from 'primevue/usetoast'
+import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 
 const emit = defineEmits<{
     (e: 'refresh'): void

@@ -94,9 +94,9 @@ function handleScroll(event: Event): void {
                 v-else-if="isEmpty"
                 class="flex flex-col items-center justify-center h-full min-h-[400px]"
             >
-                <i class="pi pi-calendar text-7xl text-surface-300 mb-4"></i>
-                <p class="text-xl font-medium text-surface-600">{{ t('filters.no_results') }}</p>
-                <p class="text-sm text-surface-500 mt-2">{{ t('filters.try_adjusting') }}</p>
+                <i class="pi pi-trophy text-7xl text-surface-300 mb-4"></i>
+                <p class="text-xl font-medium text-surface-600">{{ t('common.filters.no_results') }}</p>
+                <p class="text-sm text-surface-500 mt-2">{{ t('common.filters.try_adjusting') }}</p>
             </div>
         </div>
     </div>
