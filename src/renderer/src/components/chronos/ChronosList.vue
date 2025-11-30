@@ -71,7 +71,7 @@ const selectionCount = computed(() => selected_ids.value.length)
     <div v-if="chronos.length > 0" class="mt-2">
         <div class="flex items-center justify-between mb-2">
             <span class="font-medium text-sm text-surface-500">{{
-                t('common.fields.saved_chronos') || 'Saved Chronos'
+                t('common.fields.saved_chronos')
             }}</span>
 
             <!-- Bulk Actions Controls -->

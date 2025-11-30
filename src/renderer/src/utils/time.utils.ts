@@ -7,8 +7,5 @@ export function formatDuration(ms: number): string {
 
   const pad = (n: number): string => n.toString().padStart(2, '0')
 
-  if (hours > 0) {
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-  }
-  return `${pad(minutes)}:${pad(seconds)}`
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
 }
