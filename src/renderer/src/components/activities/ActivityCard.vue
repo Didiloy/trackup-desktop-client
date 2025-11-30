@@ -3,7 +3,8 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
-import { convertMinuteToHoursMinute, formatNumber } from '@/utils'
+import { formatNumber } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 interface Props {
     activity: IActivity
@@ -20,12 +21,7 @@ const { t } = useI18n()
 
 const durationText = computed(() => {
     if (!props.metrics) return t('common.fields.none')
-    const minutes = props.metrics.totalDuration || 0
-    const hours = Math.floor(minutes / 60)
-    const remainingMinutes = minutes % 60
-    if (hours && remainingMinutes) return `${hours}h ${remainingMinutes}m`
-    if (hours) return `${hours}h`
-    return `${remainingMinutes}m`
+    return formatMinutesToLabel(props.metrics.totalDuration || 0)
 })
 
 const likesText = computed(() => formatNumber(props.metrics?.totalLikes))
@@ -143,7 +139,7 @@ function onCardClick(): void {
                     </span>
                     <span class="text-xs text-surface-400 mt-1">{{
                         t('views.activity.card.avg_duration', {
-                            value: convertMinuteToHoursMinute(
+                            value: formatMinutesToLabel(
                                 Number(props.metrics?.avgSessionDuration ?? 0)
                             )
                         })

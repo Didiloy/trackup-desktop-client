@@ -2,7 +2,7 @@
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { convertMinuteToHoursMinute } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 const props = defineProps<{
     sessions: IActivitySessionListItem[]
@@ -64,7 +64,7 @@ function intensity(count: number): string {
 }
 
 function tooltipFor(day: { date: Date; count: number; duration: number }): string {
-    return `${day.date.toLocaleDateString()}: ${day.count} ${t('common.fields.items')} • ${convertMinuteToHoursMinute(day.duration)}`
+    return `${day.date.toLocaleDateString()}: ${day.count} ${t('common.fields.items')} • ${formatMinutesToLabel(day.duration)}`
 }
 </script>
 

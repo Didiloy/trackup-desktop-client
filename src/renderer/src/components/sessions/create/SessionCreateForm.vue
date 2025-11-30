@@ -13,8 +13,7 @@ import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.v
 import Select from 'primevue/select'
 import { useChronos, type IChrono } from '@/composables/useChronos'
 import DurationInput from '@/components/common/inputs/DurationInput.vue'
-import InputNumber from 'primevue/inputnumber'
-import { formatDuration } from '@/utils/time.utils'
+import { formatDuration, convertMsToMinutes } from '@/utils/time.utils'
 
 const props = withDefaults(
     defineProps<{
@@ -69,8 +68,7 @@ const availableChronos = computed(() => {
 // Watch selected_chrono to update duration and title
 watch(selected_chrono, (chrono) => {
     if (chrono) {
-        const minutes = Math.ceil(chrono.elapsed / 60000)
-        duration.value = Math.max(1, minutes)
+        duration.value = convertMsToMinutes(chrono.elapsed)
         if (chrono.title) {
             title.value = chrono.title
         }

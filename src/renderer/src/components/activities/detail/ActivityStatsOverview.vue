@@ -2,7 +2,7 @@
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { convertMinuteToHoursMinute } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 const props = defineProps<{
     stats: IActivityStatsDetails | null
@@ -15,9 +15,9 @@ const cards = computed(() => {
     return [
         {
             label: t('views.activity.card.avg_duration', {
-                value: convertMinuteToHoursMinute(props.stats.avg_duration)
+                value: formatMinutesToLabel(props.stats.avg_duration)
             }),
-            value: convertMinuteToHoursMinute(props.stats.avg_duration),
+            value: formatMinutesToLabel(props.stats.avg_duration),
             icon: 'pi pi-clock',
             gradient: 'bg-linear-to-br from-primary-500/40 via-primary-500/30 to-primary-500/20'
         },

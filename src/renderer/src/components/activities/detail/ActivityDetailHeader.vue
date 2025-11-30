@@ -3,7 +3,7 @@ import type { IActivity } from '@shared/contracts/interfaces/entities/activity.i
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { convertMinuteToHoursMinute } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 const props = defineProps<{
     activity: IActivity | null
@@ -29,7 +29,7 @@ const summaryMetrics = computed(() => {
         },
         {
             label: t('views.activity.card.duration'),
-            value: `${convertMinuteToHoursMinute(props.stats.total_duration)}`
+            value: `${formatMinutesToLabel(props.stats.total_duration)}`
         },
         {
             label: t('views.activity.card.unique_participants'),

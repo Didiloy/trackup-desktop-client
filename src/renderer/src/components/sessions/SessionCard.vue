@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useI18n } from 'vue-i18n'
-import { convertMinuteToHoursMinute } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 interface Props {
     session: ISessionListItem
@@ -88,7 +88,7 @@ function getParticipantTooltip(
                 <div class="flex items-center gap-2 text-surface-700 font-medium z-10">
                     <i class="pi pi-clock text-primary-500"></i>
                     <span>{{
-                        convertMinuteToHoursMinute(session.duration as unknown as number)
+                        formatMinutesToLabel(session.duration as unknown as number)
                     }}</span>
                 </div>
 

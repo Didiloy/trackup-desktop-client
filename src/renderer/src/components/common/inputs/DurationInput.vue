@@ -3,6 +3,8 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import InputNumber from 'primevue/inputnumber'
 
+import { convertHMSToMinutes, convertMinutesToHMS } from '@/utils/time.utils'
+
 const props = withDefaults(
     defineProps<{
         modelValue: number // Duration in minutes
@@ -29,14 +31,11 @@ const seconds = ref<number>(0)
 watch(
     () => props.modelValue,
     (newVal) => {
-        // Avoid infinite loops if the update came from us
-        const totalMinutes = newVal || 0
-        const totalSeconds = totalMinutes * 60
-
-        // Calculate hours, minutes, seconds
-        const h = Math.floor(totalSeconds / 3600)
-        const m = Math.floor((totalSeconds % 3600) / 60)
-        const s = Math.floor(totalSeconds % 60)
+        const {
+            hours: h,
+            minutes: m,
+            seconds: s
+        } = convertMinutesToHMS(newVal)
 
         // Only update if different to avoid cursor jumping or unnecessary updates
         if (hours.value !== h) hours.value = h
@@ -48,9 +47,7 @@ watch(
 
 // Sync from local state to modelValue (minutes)
 function updateModel(): void {
-    const totalSeconds =
-        (hours.value || 0) * 3600 + (minutes.value || 0) * 60 + (seconds.value || 0)
-    const totalMinutes = totalSeconds / 60
+    const totalMinutes = convertHMSToMinutes(hours.value, minutes.value, seconds.value)
     emit('update:modelValue', totalMinutes)
 }
 
