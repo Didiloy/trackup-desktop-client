@@ -72,6 +72,7 @@ declare module 'vue' {
     Member: typeof import('./src/components/members/Member.vue')['default']
     MemberCard: typeof import('./src/components/members/MemberCard.vue')['default']
     MembersAside: typeof import('./src/components/asides/MembersAside.vue')['default']
+    MembersCardGrid: typeof import('./src/components/members/MembersCardGrid.vue')['default']
     MembersHeader: typeof import('./src/components/members/MembersHeader.vue')['default']
     MembersList: typeof import('./src/components/members/list/MembersList.vue')['default']
     MembersListItems: typeof import('./src/components/members/list/MembersListItems.vue')['default']

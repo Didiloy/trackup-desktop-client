@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
+import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
+import TextFilter from '@/components/filters/TextFilter.vue'
+import SelectFilter from '@/components/filters/SelectFilter.vue'
+import SessionFilterBar from '@/components/sessions/SessionFilterBar.vue'
 
 defineProps<{
     totalMembers?: number
@@ -27,46 +31,41 @@ watch(sort, (val) => emit('update:sort', val))
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 mb-6">
-        <div class="flex justify-between items-end">
-            <div>
-                <h1 class="text-2xl font-bold text-surface-900">
-                    {{ t('views.server_members.title') }}
-                </h1>
-                <p class="text-surface-500 mt-1">
-                    {{ t('views.members_aside.description') }}
-                    <span
-                        v-if="totalMembers"
-                        class="ml-1 text-sm font-medium bg-surface-200 px-2 py-0.5 rounded-full text-surface-600"
-                    >
-                        {{ totalMembers }}
-                    </span>
-                </p>
-            </div>
-            <Button
-                :label="t('views.server_members.invite_members')"
-                icon="pi pi-user-plus"
-                size="small"
-                :style="{ background: 'var(--gradient-primary)' }"
-                @click="emit('invite')"
-            />
-        </div>
 
-        <div class="flex flex-col sm:flex-row gap-4">
-            <IconField class="w-full sm:w-96 flex-1">
-                <InputIcon class="pi pi-search" />
-                <InputText v-model="search" :placeholder="t('placeholder.search')" class="w-full" />
-            </IconField>
-
-            <div class="flex gap-2 ml-auto">
-                <Select
-                    v-model="sort"
-                    :options="sortOptions"
-                    option-label="label"
-                    option-value="value"
-                    class="w-40"
+        <div class="flex flex-row items-center justify-between w-full h-12 p-2">
+            <h2 class="text-2xl font-bold">
+                {{ t('views.server_members.title') }}
+            </h2>
+            <div class="flex flex-row items-center justify-center">
+                <Button
+                    :label="t('views.server_members.invite_members')"
+                    icon="pi pi-user-plus"
+                    size="small"
+                    :style="{ background: 'var(--gradient-primary)' }"
+                    @click="emit('invite')"
                 />
             </div>
         </div>
-    </div>
+
+        <div class="w-full px-2 pb-2">
+            <GenericFilterBar :count="totalMembers">
+                <template #primary-filters>
+                    <TextFilter
+                        v-model="search"
+                        :placeholder="t('placeholder.search')"
+                        icon="pi pi-search"
+                        class="sm:w-96"
+                    />
+                </template>
+
+                <template #actions>
+                    <SelectFilter
+                        v-model="sort"
+                        :options="sortOptions"
+                        class="w-40"
+                    />
+                </template>
+            </GenericFilterBar>
+        </div>
+
 </template>
