@@ -355,7 +355,8 @@
             "preview": "Aperçu du widget"
         },
         "server_members": {
-            "title": "Membres",
+            "title": "Membres du serveur",
+            "title_base": "Membres",
             "members_count": "Membres ({count})",
             "no_members": "Aucun membre dans ce serveur.",
             "invite_members": "Inviter des membres",

@@ -125,7 +125,7 @@ function clearFilters(): void {
                             <!-- Name Or Email Sort -->
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-medium text-surface-700">{{
-                                        t('views.server_members.title').toLowerCase()
+                                        t('views.server_members.title_base').toLowerCase()
                                 }}</label>
                                 <SelectFilter
                                     v-model="searchField"
