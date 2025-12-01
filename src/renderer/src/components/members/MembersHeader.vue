@@ -7,8 +7,7 @@ import SelectFilter from '@/components/filters/SelectFilter.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
 import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
 import { useServerStore } from '@/stores/server'
-import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
-import FilterGroup from '@/components/filters/FilterGroup.vue'
+import Button from 'primevue/button'
 
 defineProps<{
     totalMembers?: number
@@ -17,7 +16,6 @@ defineProps<{
 const emit = defineEmits<{
     (e: 'update:search', value: string): void
     (e: 'update:searchField', value: 'nickname' | 'email'): void
-    (e: 'update:sort', value: string): void
     (e: 'update:joinedStartDate', value: Date | undefined): void
     (e: 'update:joinedEndDate', value: Date | undefined): void
     (e: 'invite'): void
@@ -25,28 +23,26 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const search = ref('')
-const searchField = ref<'nickname' | 'email'>('nickname')
-const sort = ref('joined_at')
-const joinedDateRange = ref<Date[] | null>(null)
+const search_field = ref<'nickname' | 'email'>('nickname')
+const joined_date_range = ref<Date[] | null>(null)
 const server_store = useServerStore()
 
 const searchFieldOptions = computed(() => [
     { label: t('common.filters.search_modes.by_nickname'), value: 'nickname' },
-    { label: t('common.filters.search_modes.by_email'), value: 'joined_at' }
+    { label: t('common.filters.search_modes.by_email'), value: 'email' }
 ])
 
 const activeFiltersCount = computed(() => {
     let count = 0
-    if (joinedDateRange.value && joinedDateRange.value.length > 0) count++
+    if (joined_date_range.value && joined_date_range.value.length > 0) count++
     return count
 })
 
 watch(search, (val) => emit('update:search', val))
-watch(searchField, (val) => emit('update:searchField', val))
-watch(sort, (val) => emit('update:sort', val))
+watch(search_field, (val) => emit('update:searchField', val))
 
 function onDateRangeChange(value: Date[] | null): void {
-    joinedDateRange.value = value
+    joined_date_range.value = value
     if (value && value.length === 2) {
         emit('update:joinedStartDate', value[0])
         emit('update:joinedEndDate', value[1])
@@ -60,7 +56,7 @@ function onDateRangeChange(value: Date[] | null): void {
 }
 
 function clearFilters(): void {
-    joinedDateRange.value = null
+    joined_date_range.value = null
     emit('update:joinedStartDate', undefined)
     emit('update:joinedEndDate', undefined)
 }
@@ -85,11 +81,11 @@ function clearFilters(): void {
     <div class="w-full px-2 pb-2">
         <GenericFilterBar :count="totalMembers">
             <template #primary-filters>
-                <span class="flex-1 w-[220px]">
+                <span class="flex-1 w-[20px]">
                     <TextFilter
                         v-model="search"
                         :placeholder="
-                            searchField === 'nickname'
+                            search_field === 'nickname'
                                 ? t('placeholder.search_nickname')
                                 : t('placeholder.search_email')
                         "
@@ -102,8 +98,11 @@ function clearFilters(): void {
             <template #actions>
                 <GenericPopover
                     button-icon="pi pi-filter"
-                    :button-class="`${activeFiltersCount > 0 ? 'p-button-badge' : ''}`"
                     :popover-class="'w-fit-content'"
+                    :button-badge="
+                        activeFiltersCount > 0 ? activeFiltersCount.toString() : undefined
+                    "
+                    button-badge-severity="info"
                 >
                     <template #content>
                         <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
@@ -126,7 +125,7 @@ function clearFilters(): void {
                                     t('views.server_members.title_base').toLowerCase()
                                 }}</label>
                                 <SelectFilter
-                                    v-model="searchField"
+                                    v-model="search_field"
                                     :options="searchFieldOptions"
                                     class="w-48"
                                 />
@@ -138,7 +137,7 @@ function clearFilters(): void {
                                     t('common.filters.joined_date')
                                 }}</label>
                                 <DateRangeFilter
-                                    :model-value="joinedDateRange"
+                                    :model-value="joined_date_range"
                                     @update:model-value="onDateRangeChange"
                                 />
                             </div>

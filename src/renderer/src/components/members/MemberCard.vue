@@ -122,10 +122,10 @@ const onItemSelected = (item: unknown): void => {
                     {{ getInitials(member.nickname, { mode: 'all', maxInitials: 2 }) }}
                 </div>
             </div>
-            <div
-                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-sm"
-                title="Online"
-            ></div>
+<!--            <div-->
+<!--                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-sm"-->
+<!--                title="Online"-->
+<!--            />-->
         </div>
 
         <!-- Info -->

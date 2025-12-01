@@ -38,6 +38,7 @@ declare module 'vue' {
     AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/buttons/AvatarButton.vue')['default']
+    Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
     Calendar: typeof import('primevue/calendar')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
@@ -127,6 +128,7 @@ declare module 'vue' {
     Versions: typeof import('./src/components/app-updates/Versions.vue')['default']
   }
   export interface GlobalDirectives {
+    BadgeDirective: typeof import('primevue/badgedirective')['default']
     Ripple: typeof import('primevue/ripple')['default']
     Tooltip: typeof import('primevue/tooltip')['default']
   }

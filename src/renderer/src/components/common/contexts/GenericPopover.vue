@@ -14,6 +14,8 @@ interface Props {
     buttonRounded?: boolean
     buttonAriaLabel?: string
     popoverClass?: string
+    buttonBadge?: string
+    buttonBadgeSeverity?: string
 }
 
 interface PopoverRef {
@@ -27,9 +29,10 @@ const props = withDefaults(defineProps<Props>(), {
     buttonIcon: '',
     buttonClass: '',
     buttonVariant: 'text',
-    buttonRounded: false,
     buttonAriaLabel: '',
-    popoverClass: ''
+    popoverClass: '',
+    buttonBadge: undefined,
+    buttonBadgeSeverity: 'danger'
 })
 
 const emit = defineEmits<{ (e: 'toggle', value: boolean): void }>()
@@ -85,6 +88,16 @@ defineExpose({
             >
                 <slot name="button"></slot>
             </Button>
+            <span
+                v-if="props.buttonBadge"
+                class="p-badge p-component p-badge-circle"
+                :class="[
+                    props.buttonBadgeSeverity ? `p-badge-${props.buttonBadgeSeverity}` : '',
+                    'custom-badge-position'
+                ]"
+            >
+                {{ props.buttonBadge }}
+            </span>
         </slot>
 
         <Popover ref="popoverRef" :class="props.popoverClass">
@@ -98,6 +111,20 @@ defineExpose({
 <style scoped>
 .generic-popover {
     display: inline-flex;
+    position: relative;
+}
+
+.custom-badge-position {
+    position: absolute;
+    top: 0.1rem;
+    right: -0.15rem;
+    min-width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    padding: 0;
+    margin: 0;
+    font-size: 0.75rem;
+    z-index: 1;
 }
 
 .popover-content {
@@ -108,4 +135,5 @@ defineExpose({
     border-radius: 0.5rem;
     box-shadow: var(--p-shadow-2);
 }
+
 </style>
