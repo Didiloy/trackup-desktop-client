@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -11,11 +11,13 @@ import ChronosList from '@/components/chronos/ChronosList.vue'
 import DurationInput from '@/components/common/inputs/DurationInput.vue'
 
 const { t } = useI18n()
-const { startChrono, addManualChrono } = useChronos()
+const { chronos, startChrono, addManualChrono } = useChronos()
 
 const mode = ref<'stopwatch' | 'manual'>('stopwatch')
 const newChronoTitle = ref('')
 const newChronoDuration = ref<number>(60)
+
+const hasRunningChronos = computed(() => chronos.value.some((chrono) => chrono.isRunning))
 
 function handleStartChrono(): void {
     startChrono(newChronoTitle.value)
@@ -30,18 +32,52 @@ function handleAddManualChrono(): void {
 </script>
 
 <template>
-    <GenericPopover
-        :button-icon="'pi pi-stopwatch'"
-        :button-variant="'text'"
-        :button-aria-label="t('common.fields.chronos')"
-        popover-class="w-[30rem]"
-    >
+    <GenericPopover popover-class="w-[30rem] select-none">
+        <template #trigger="{ toggle }">
+            <Button
+                variant="text"
+                :aria-label="t('common.fields.chronos')"
+                @click="toggle"
+            >
+                <template #icon>
+                    <svg
+                       
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-6 h-6"
+                    >
+                        <!-- Stopwatch body -->
+                        <circle cx="12" cy="13" r="7" />
+                        <!-- Stopwatch button -->
+                        <path d="M12 6v-2" />
+                        <path d="M10 4h4" />
+                        <!-- Hour hand (animated) -->
+                        <line
+                            x1="12"
+                            y1="13"
+                            x2="12"
+                            y2="10"
+                            :class="hasRunningChronos ? 'hour-hand' : ''"
+                            stroke-width="2.5"
+                        />
+                        <!-- Minute hand (animated) -->
+                        <line x1="12" y1="13" x2="14.5" y2="13" :class="hasRunningChronos ? 'minute-hand' : ''" stroke-width="2" />
+                    </svg>
+                   
+                </template>
+            </Button>
+        </template>
         <template #content>
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 ">
                 <!-- Header / Mode Switch -->
                 <div class="flex items-center justify-between mb-2">
                     <span class="font-medium text-surface-900">{{
-                        t('common.fields.new_chrono') || 'New Chrono'
+                        t('common.fields.new_chrono')
                     }}</span>
                     <div class="flex bg-surface-100 rounded-lg p-1">
                         <Button
@@ -113,4 +149,32 @@ function handleAddManualChrono(): void {
     </GenericPopover>
 </template>
 
-<style scoped></style>
+<style scoped>
+.hour-hand {
+    transform-origin: 12px 13px;
+    animation: rotate-hour 4s linear infinite;
+}
+
+.minute-hand {
+    transform-origin: 12px 13px;
+    animation: rotate-minute 2s linear infinite;
+}
+
+@keyframes rotate-hour {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate-minute {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>
