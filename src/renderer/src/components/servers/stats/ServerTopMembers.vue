@@ -13,7 +13,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm h-full">
+    <div
+        class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm h-full"
+    >
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-bold text-surface-900 dark:text-surface-50">
                 {{ t('views.server_stats.top_members', 'Most Active Members') }}
@@ -45,11 +47,7 @@ const { t } = useI18n()
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
 
-                <AvatarButton
-                    :src="undefined" 
-                    :name="member.user_email"
-                    size="normal"
-                />
+                <AvatarButton :src="undefined" :name="member.user_email" size="normal" />
                 <!-- Using undefined for src as ITopMember doesn't seem to have avatar_url yet, fallback to initials -->
 
                 <div class="flex-1 min-w-0">
@@ -57,12 +55,15 @@ const { t } = useI18n()
                         {{ member.user_email }}
                     </p>
                     <p class="text-xs text-surface-500 truncate">
-                        {{ member.total_sessions }} {{ t('views.activity.performance_section.sessions', 'sessions') }}
+                        {{ member.total_sessions }}
+                        {{ t('views.activity.performance_section.sessions', 'sessions') }}
                     </p>
                 </div>
 
                 <div class="text-right shrink-0">
-                    <span class="text-sm font-medium text-primary-600 bg-primary-200 px-2 py-1 rounded-md select-none">
+                    <span
+                        class="text-sm font-medium text-primary-600 bg-primary-200 px-2 py-1 rounded-md select-none"
+                    >
                         {{ formatMinutesToLabel(member.total_duration) }}
                     </span>
                 </div>
@@ -70,4 +71,3 @@ const { t } = useI18n()
         </div>
     </div>
 </template>
-

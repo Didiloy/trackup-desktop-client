@@ -30,10 +30,12 @@ const sortedData = computed<IStatsTimeline[]>(() => {
     })
 })
 
-const periods = computed(() => sortedData.value.map((entry) => {
-    const date = new Date(entry.period)
-    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
-}))
+const periods = computed(() =>
+    sortedData.value.map((entry) => {
+        const date = new Date(entry.period)
+        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    })
+)
 
 const dataset = computed<VueUiXyDatasetItem[]>(() => [
     {
@@ -58,9 +60,9 @@ const xyConfig = computed<VueUiXyConfig>(() => ({
         backgroundColor: 'transparent',
         height: props.height,
         padding: { top: 20, right: 20, bottom: 20, left: 20 },
-        legend: { 
+        legend: {
             show: true,
-            color: '#64748b' 
+            color: '#64748b'
         },
         labels: { fontSize: 12, color: '#64748b' },
         grid: {
@@ -84,7 +86,7 @@ const xyConfig = computed<VueUiXyConfig>(() => ({
             fontSize: 12,
             borderRadius: 8,
             borderColor: '#e2e8f0',
-            showPercentage: false,
+            showPercentage: false
         },
         title: { show: false },
         userOptions: {
@@ -109,7 +111,9 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm mb-6">
+    <div
+        class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm mb-6"
+    >
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-bold text-surface-900 dark:text-surface-50">
                 {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
@@ -119,11 +123,11 @@ const hasData = computed(() => !!sortedData.value.length)
         <div v-if="loading" class="h-[300px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
         </div>
-        
+
         <div v-else-if="hasData" :style="{ minHeight: `${height}px` }">
             <VueUiXy :dataset="dataset" :config="xyConfig" />
         </div>
-        
+
         <div
             v-else
             class="h-[300px] rounded-md flex items-center justify-center text-sm text-surface-400"
@@ -132,4 +136,3 @@ const hasData = computed(() => !!sortedData.value.length)
         </div>
     </div>
 </template>
-

@@ -2,7 +2,10 @@
 import { ref, computed, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsCRUD } from '@/composables/servers/useServerStatsCRUD'
-import type { IServerStatsDetails, IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+import type {
+    IServerStatsDetails,
+    IStatsTimeline
+} from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import ServerStatsHeader from '@/components/servers/stats/ServerStatsHeader.vue'
 import ServerStatsOverview from '@/components/servers/stats/ServerStatsOverview.vue'
@@ -31,7 +34,7 @@ const period = ref<Date[] | null>([
 
 const filteredTimeline = computed<IStatsTimeline[]>(() => {
     if (!details.value?.timeline) return []
-    
+
     // If a period type is selected (API filtered), return the whole timeline
     if (selectedPeriodType.value) return details.value.timeline
 
@@ -46,29 +49,27 @@ const filteredTimeline = computed<IStatsTimeline[]>(() => {
     const endDate = new Date(end)
     endDate.setHours(23, 59, 59, 999)
 
-    return details.value.timeline.filter(item => {
+    return details.value.timeline.filter((item) => {
         const itemDate = new Date(item.period)
         return itemDate >= startDate && itemDate <= endDate
     })
 })
 
-
 async function loadStats() {
     if (!server_store.getPublicId) return
     loading.value = true
     error.value = null
-    
+
     try {
         const res = await getServerStatsDetails(server_store.getPublicId)
         if (res.error) throw new Error(res.error)
         if (res.data) {
             details.value = res.data
         }
-        
-        if (selectedPeriodType.value) {
-             await fetchTimelineForPeriod(selectedPeriodType.value)
-        }
 
+        if (selectedPeriodType.value) {
+            await fetchTimelineForPeriod(selectedPeriodType.value)
+        }
     } catch (e) {
         error.value = e instanceof Error ? e.message : t('messages.error.fetch')
         toast.add({
@@ -112,10 +113,9 @@ watch(selectedPeriodType, async (newType) => {
 
 watch(period, async (newPeriod) => {
     if (newPeriod) {
-       selectedPeriodType.value = null
+        selectedPeriodType.value = null
     }
 })
-
 
 watch(
     () => server_store.getPublicId,
@@ -139,7 +139,6 @@ function handlePeriodTypeUpdate(newType: EPeriod | null) {
 function handlePeriodUpdate(newPeriod: Date[] | null) {
     period.value = newPeriod
 }
-
 </script>
 
 <template>
@@ -148,7 +147,7 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
             {{ error }}
         </div>
 
-        <ServerStatsHeader 
+        <ServerStatsHeader
             :server-name="server_store.getName ?? ''"
             v-model:period="period"
             v-model:selected-period-type="selectedPeriodType"
@@ -158,21 +157,14 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
             @update:period="handlePeriodUpdate"
         />
 
-        <ServerStatsOverview 
-            :stats="details?.server_stats"
-            :loading="loading"
-        />
+        <ServerStatsOverview :stats="details?.server_stats" :loading="loading" />
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
             <div class="xl:col-span-2">
-                <ServerTimelineChart 
-                    :data="filteredTimeline"
-                    :loading="loading"
-                    :height="340"
-                />
+                <ServerTimelineChart :data="filteredTimeline" :loading="loading" :height="340" />
             </div>
             <div>
-                <ServerActivitiesDistribution 
+                <ServerActivitiesDistribution
                     :activities="details?.top_activities"
                     :loading="loading"
                 />
@@ -180,14 +172,8 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ServerTopMembers 
-                :members="details?.top_members"
-                :loading="loading"
-            />
-            <ServerTopActivities 
-                :activities="details?.top_activities"
-                :loading="loading"
-            />
+            <ServerTopMembers :members="details?.top_members" :loading="loading" />
+            <ServerTopActivities :activities="details?.top_activities" :loading="loading" />
         </div>
     </div>
 </template>

@@ -15,7 +15,7 @@ const { t } = useI18n()
 
 const dataset = computed<VueUiDonutDatasetItem[]>(() => {
     if (!props.activities) return []
-    
+
     return props.activities.map((activity, index) => {
         const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4']
         return {
@@ -30,7 +30,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
     responsive: true,
     useBlurOnHover: true,
     userOptions: {
-        show: false,
+        show: false
     },
     style: {
         chart: {
@@ -42,12 +42,12 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
                 curvedMarkers: true,
                 donut: {
                     useShadow: false,
-                    radiusRatio: 0.31,
+                    radiusRatio: 0.31
                 },
                 labels: {
                     dataLabels: {
                         show: true,
-                        hideUnderValue: 3,
+                        hideUnderValue: 3
                     },
                     value: {
                         show: true,
@@ -91,13 +91,13 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
                 backgroundColor: 'transparent',
                 color: 'var(--surface-700)',
                 showPercentage: false,
-                showValue: false,
+                showValue: false
             },
             tooltip: {
-            show: true,
-            customFormat: ({ datapoint}) => {
-                    const content = `${datapoint?.name}: ${formatMinutesToLabel(datapoint?.value ?? 0)}`;
-                    return `<div style="background-color: #ffffff; color: var(--surface-900); padding: 4px 8px; border-radius: 8px; font-size: 12px; text-align: center; white-space: nowrap; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">${content}</div>`;
+                show: true,
+                customFormat: ({ datapoint }) => {
+                    const content = `${datapoint?.name}: ${formatMinutesToLabel(datapoint?.value ?? 0)}`
+                    return `<div style="background-color: #ffffff; color: var(--surface-900); padding: 4px 8px; border-radius: 8px; font-size: 12px; text-align: center; white-space: nowrap; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">${content}</div>`
                 }
             }
         }
@@ -106,7 +106,9 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm h-full">
+    <div
+        class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm h-full"
+    >
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-surface-900 dark:text-surface-50">
                 {{ t('views.server_stats.distribution', 'Activity Distribution') }}
@@ -128,6 +130,5 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
 </template>
 <style scoped>
 .vue-data-ui-custom-tooltip {
-
 }
 </style>

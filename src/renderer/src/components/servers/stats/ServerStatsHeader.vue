@@ -29,10 +29,8 @@ const periodTypes = [
 function selectPeriodType(type: EPeriod) {
     emit('update:periodType', type)
     // Optional: Clear custom date range because we want mutually exclusive behavior
-    emit('update:period', null) 
+    emit('update:period', null)
 }
-
-
 </script>
 
 <template>
@@ -48,13 +46,13 @@ function selectPeriodType(type: EPeriod) {
 
         <div class="flex items-center gap-3">
             <div class="flex items-center gap-1 mr-2">
-                <Button 
+                <Button
                     v-for="type in periodTypes"
                     :key="type.value"
-                    :label="type.label" 
-                    size="small" 
-                    :severity="props.selectedPeriodType === type.value ? 'primary' : 'secondary'" 
-                    text 
+                    :label="type.label"
+                    size="small"
+                    :severity="props.selectedPeriodType === type.value ? 'primary' : 'secondary'"
+                    text
                     @click="selectPeriodType(type.value)"
                 />
             </div>
@@ -75,4 +73,3 @@ function selectPeriodType(type: EPeriod) {
         </div>
     </div>
 </template>
-
