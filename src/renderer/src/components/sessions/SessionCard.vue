@@ -42,14 +42,14 @@ function getParticipantTooltip(
 
 <template>
     <div
-        class="group relative rounded-2xl border border-surface-200 shadow-sm hover:shadow-xl transition-all overflow-hidden cursor-pointer"
+        class="group relative rounded-2xl border border-surface-200 shadow-sm hover:shadow-xl transition-all overflow-hidden cursor-pointer transform-gpu will-change-transform"
     >
         <div
             v-if="session.activity.banner"
-            class="absolute inset-1 rounded-2xl bg-cover bg-cente bg-no-repeat"
+            class="absolute inset-1 rounded-2xl bg-cover bg-center bg-no-repeat"
             :style="{ backgroundImage: `url(${session.activity.banner})` }"
         />
-        <div class="absolute inset-0 bg-surface-100/55 backdrop-blur-3xl rounded-2xl" />
+        <div class="absolute inset-0 bg-surface-100/55 backdrop-blur-xl rounded-2xl" />
         <!-- Banner -->
         <div class="relative h-20 w-full overflow-hidden z-10">
             <!-- Logo + Title -->
