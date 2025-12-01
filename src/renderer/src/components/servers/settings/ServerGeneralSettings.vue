@@ -13,20 +13,11 @@ const toast = useToast()
 const server_store = useServerStore()
 const { updateServer } = useServerCRUD()
 
-const name = ref('')
-const description = ref('')
-const logo = ref<string>('')
-const banner = ref<string>('')
+const name = ref(server_store.getName ?? '')
+const description = ref(server_store.getDescription ?? '')
+const logo = ref<string>(server_store.getLogo ?? '')
+const banner = ref<string>(server_store.getBanner ?? '')
 const loading = ref(false)
-
-onMounted(() => {
-    if (server_store.hasServer) {
-        name.value = server_store.getName ?? ''
-        description.value = server_store.getDescription ?? ''
-        logo.value = server_store.getLogo ?? ''
-        banner.value = server_store.getBanner ?? ''
-    }
-})
 
 const has_changes = computed(() => {
     if (!server_store.hasServer) return false
@@ -42,14 +33,6 @@ const can_submit = computed(() => {
     return !loading.value && has_changes.value && !!name.value.trim()
 })
 
-function updateLogo(newLogo: string): void {
-    logo.value = newLogo
-}
-
-function updateBanner(newBanner: string): void {
-    banner.value = newBanner
-}
-
 async function handleUpdate(): Promise<void> {
     if (!can_submit.value || !server_store.getPublicId) return
 
@@ -63,7 +46,7 @@ async function handleUpdate(): Promise<void> {
         }
 
         const res = await updateServer(server_store.getPublicId, payload)
-        
+
         if (res.error || !res.data) {
             throw new Error(res.error || 'Failed to update server')
         }
@@ -89,8 +72,10 @@ async function handleUpdate(): Promise<void> {
 
 <template>
     <div class="bg-surface-0 rounded-2xl p-6 shadow-sm border border-surface-200">
-        <h2 class="text-xl font-bold text-surface-900 mb-6">{{ t('views.server_settings.general.title') }}</h2>
-        
+        <h2 class="text-xl font-bold text-surface-900 mb-6">
+            {{ t('views.server_settings.general.title') }}
+        </h2>
+
         <div class="flex flex-col gap-6">
             <!-- General information -->
             <div class="flex flex-col gap-4">
@@ -121,22 +106,26 @@ async function handleUpdate(): Promise<void> {
             <!-- Media -->
             <div class="grid grid-rows-1 gap-0">
                 <div class="flex-1 flex flex-col gap-3">
-                    <label class="text-sm font-medium text-surface-700">{{ t('common.fields.logo') }}</label>
+                    <label class="text-sm font-medium text-surface-700">{{
+                        t('common.fields.logo')
+                    }}</label>
                     <EntityLogoHandling
                         :logo="logo"
                         :initial="name"
                         :entity-name="name"
                         :display-edit-button="true"
-                        @update-logo="updateLogo"
+                        @update-logo="logo = $event"
                     />
                 </div>
 
                 <div class="flex-1 flex flex-col gap-3">
-                    <label class="text-sm font-medium text-surface-700">{{ t('common.fields.banner') }}</label>
+                    <label class="text-sm font-medium text-surface-700">{{
+                        t('common.fields.banner')
+                    }}</label>
                     <EntityBannerHandling
                         :banner="banner"
                         :display-edit-button="true"
-                        @update-banner="updateBanner"
+                        @update-banner="banner = $event"
                     />
                 </div>
             </div>
@@ -155,4 +144,3 @@ async function handleUpdate(): Promise<void> {
         </div>
     </div>
 </template>
-

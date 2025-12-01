@@ -12,23 +12,29 @@ import { useI18n } from 'vue-i18n'
 import { copyKeyToClipBoard } from '@/utils'
 
 const route = useRoute()
+const toast = useToast()
+const i18n = useI18n()
+const server_store = useServerStore()
+const { t } = useI18n()
+const server_type_name = ref<string>('')
+
 const hasServerActions = computed(
     () => typeof route.name === 'string' && route.name.startsWith('Server')
 )
-
-const server_store = useServerStore()
-
 const { getServerTypeById } = useServerTypeCRUD()
-const serverTypeName = ref<string>('')
 
 async function refreshServerTypeName(): Promise<void> {
     const id = server_store.getServerTypePublicId
     if (!id) {
-        serverTypeName.value = ''
+        server_type_name.value = ''
         return
     }
     const res = await getServerTypeById(id)
-    serverTypeName.value = res.data?.name || ''
+    if (res.error) {
+        server_type_name.value = ''
+        return
+    }
+    server_type_name.value = t(`views.create_server.types.${res.data?.name}`)
 }
 
 watch(
@@ -39,9 +45,6 @@ watch(
     { immediate: true }
 )
 
-const toast = useToast()
-const i18n = useI18n()
-const { t } = i18n
 async function copyInvite(): Promise<void> {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
@@ -93,7 +96,7 @@ async function copyInvite(): Promise<void> {
                                 {{ server_store.getName || t('views.servers_aside.fallback_name') }}
                             </div>
                             <div class="text-white/90 text-xs text-elevated">
-                                {{ serverTypeName }}
+                                {{ server_type_name }}
                             </div>
                             <div class="mt-2 flex items-center gap-2 absolute bottom-0 right-0 p-3">
                                 <button
