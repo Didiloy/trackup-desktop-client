@@ -13,14 +13,14 @@ const { t } = useI18n()
 
 const cards = computed(() => {
     if (!props.stats) return []
-    
+
     return [
         {
             label: t('views.server_stats.total_sessions', 'Total Sessions'),
             value: props.stats.total_sessions.toLocaleString(),
             icon: 'pi pi-calendar',
             color: 'text-blue-500',
-            bg: 'bg-blue-500/10',
+            bg: 'bg-blue-500/10'
         },
         {
             label: t('views.server_stats.active_members', 'Active Members'),
@@ -28,21 +28,21 @@ const cards = computed(() => {
             subValue: `/ ${props.stats.total_members} ${t('common.fields.total')}`,
             icon: 'pi pi-users',
             color: 'text-green-500',
-            bg: 'bg-green-500/10',
+            bg: 'bg-green-500/10'
         },
         {
             label: t('views.server_stats.total_duration', 'Total Duration'),
             value: formatMinutesToLabel(props.stats.total_duration),
             icon: 'pi pi-clock',
             color: 'text-purple-500',
-            bg: 'bg-purple-500/10',
+            bg: 'bg-purple-500/10'
         },
         {
             label: t('views.server_stats.total_activities', 'Activities'),
             value: props.stats.total_activities.toLocaleString(),
             icon: 'pi pi-bolt',
             color: 'text-amber-500',
-            bg: 'bg-amber-500/10',
+            bg: 'bg-amber-500/10'
         }
     ]
 })
@@ -51,7 +51,11 @@ const cards = computed(() => {
 <template>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <template v-if="loading || !stats">
-            <div v-for="i in 4" :key="i" class="h-32 rounded-2xl bg-surface-100 animate-pulse"></div>
+            <div
+                v-for="i in 4"
+                :key="i"
+                class="h-32 rounded-2xl bg-surface-100 animate-pulse"
+            ></div>
         </template>
         <template v-else>
             <div
@@ -79,4 +83,3 @@ const cards = computed(() => {
         </template>
     </div>
 </template>
-

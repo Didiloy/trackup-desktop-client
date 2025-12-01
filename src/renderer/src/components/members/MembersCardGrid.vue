@@ -26,11 +26,7 @@ const isEmpty = computed(() => props.members.length === 0 && !props.loading)
             tag="div"
             class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 pb-8"
         >
-            <MemberCard
-                v-for="member in members"
-                :key="member.public_id"
-                :member="member"
-            />
+            <MemberCard v-for="member in members" :key="member.public_id" :member="member" />
         </TransitionGroup>
 
         <!-- Loading State -->

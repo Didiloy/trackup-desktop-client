@@ -27,8 +27,6 @@ const search_field = ref<'nickname' | 'email'>('nickname')
 const joined_date_range = ref<Date[] | null>(null)
 const server_store = useServerStore()
 
-
-
 const searchFieldOptions = computed(() => [
     { label: t('common.filters.search_modes.by_nickname'), value: 'nickname' },
     { label: t('common.filters.search_modes.by_email'), value: 'email' }
@@ -124,7 +122,7 @@ function clearFilters(): void {
                             <!-- Name Or Email Sort -->
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-medium text-surface-700">{{
-                                        t('views.server_members.title_base').toLowerCase()
+                                    t('views.server_members.title_base').toLowerCase()
                                 }}</label>
                                 <SelectFilter
                                     v-model="search_field"

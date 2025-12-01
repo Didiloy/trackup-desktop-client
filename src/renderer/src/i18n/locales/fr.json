@@ -99,6 +99,13 @@
             "yesterday": "Hier",
             "tomorrow": "Demain"
         },
+        "periods": {
+            "all_time": "Depuis le début",
+            "daily": "Journalier",
+            "weekly": "Hebdomadaire",
+            "monthly": "Mensuel",
+            "yearly": "Annuel"
+        },
         "weekdays": {
             "short": {
                 "sunday": "Dim",
