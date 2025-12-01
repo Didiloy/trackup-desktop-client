@@ -8,6 +8,7 @@ import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useToast } from 'primevue/usetoast'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
+import { formatDate, getInitials } from '@/utils'
 
 const props = defineProps<{
     member: IServerMember
@@ -18,17 +19,6 @@ const user_store = useUserStore()
 const server_store = useServerStore()
 const { kickMember, listMembers } = useMemberCRUD()
 const toast = useToast()
-const current_user_is_creator = computed(() => {
-    const currentMember = server_store.getMembers?.find((m) => m.user_email === user_store.getEmail)
-    return currentMember?.role_name === 'creator'
-})
-
-function formatDate(date: string): string {
-    return new Date(date).toLocaleDateString(undefined, {
-        month: 'short',
-        year: 'numeric'
-    })
-}
 
 const items = computed(() => {
     const baseItems = [
@@ -41,7 +31,7 @@ const items = computed(() => {
         }
     ]
 
-    if (current_user_is_creator.value) {
+    if (server_store.isOwnership && props.member?.user_email !== user_store.getEmail) {
         baseItems.push({
             label: t('views.server_members.kick_member'),
             icon: 'pi pi-times',
@@ -88,12 +78,13 @@ const onItemSelected = (item: unknown): void => {
 
 <template>
     <div
-        class="group relative rounded-2xl border border-surface-200 bg-surface-100/50 hover:bg-surface-100 hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer p-4 flex items-center gap-4"
+        class="group relative rounded-2xl border border-surface-200 bg-white hover:bg-surface-50 hover:shadow-md hover:border-primary-200 transition-all duration-300 overflow-hidden cursor-pointer p-5 flex items-center gap-4 w-full"
+        @contextmenu="handleContextMenu"
     >
         <!-- Avatar -->
         <div class="relative shrink-0">
             <div
-                class="w-12 h-12 rounded-full overflow-hidden bg-surface-200 ring-2 ring-surface-100"
+                class="w-14 h-14 rounded-full overflow-hidden bg-primary-200 ring-2 ring-white shadow-sm"
             >
                 <img
                     v-if="member.avatar_url"
@@ -103,33 +94,35 @@ const onItemSelected = (item: unknown): void => {
                 />
                 <div
                     v-else
-                    class="w-full h-full flex items-center justify-center text-lg font-bold text-surface-600 bg-surface-200"
+                    class="w-full h-full flex items-center justify-center text-base font-bold text-primary-800"
                 >
-                    {{ member.nickname.charAt(0).toUpperCase() }}
+                    {{
+                        getInitials(member.nickname, { mode: 'all', maxInitials: 2 })
+                    }}
                 </div>
             </div>
             <div
-                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-surface-100"
+                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-sm"
                 title="Online"
             ></div>
         </div>
 
         <!-- Info -->
         <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 mb-1">
                 <h3
-                    class="text-sm font-bold text-surface-900 truncate"
                     v-tooltip.top="member.nickname"
+                    class="text-base font-semibold text-surface-900 truncate"
                 >
                     {{ member.nickname }}
                 </h3>
                 <span
-                    class="text-xs px-1.5 py-0.5 rounded bg-primary-50 text-primary-700 font-medium uppercase tracking-wide text-[10px]"
+                    class="text-xs px-2 py-0.5 rounded-full bg-primary-100 text-primary-800 font-semibold uppercase tracking-wide"
                 >
                     {{ member.role_name }}
                 </span>
             </div>
-            <p class="text-xs text-surface-500 truncate mt-0.5">
+            <p class="text-xs text-surface-600 truncate">
                 {{ t('common.filters.sort.joined_at') }}: {{ formatDate(member.created_at) }}
             </p>
         </div>
@@ -138,11 +131,10 @@ const onItemSelected = (item: unknown): void => {
         <Button
             icon="pi pi-ellipsis-v"
             severity="secondary"
+            text
             rounded
-            variant="outlined"
-            class="opacity-0 group-hover:opacity-100 transition-opacity"
-            @contextmenu="handleContextMenu"
-            @click="handleContextMenu"
+            class="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+            @click.stop="handleContextMenu"
         >
         </Button>
         <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected" />

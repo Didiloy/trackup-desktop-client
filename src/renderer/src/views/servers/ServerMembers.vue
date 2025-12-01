@@ -16,7 +16,6 @@ const i18n = useI18n()
 const searchQuery = ref('')
 const sortBy = ref('joined_at')
 const sortOrder = ref<'asc' | 'desc'>('desc')
-const loading = ref(true)
 const members = ref<IServerMember[]>(server_store.getMembers || [])
 
 const filteredMembers = computed(() => {
@@ -51,7 +50,6 @@ async function handleInvite(): Promise<void> {
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
         <MembersHeader
             :total-members="server_store.getMembers?.length || 0"
-            :loading="loading"
             @update:search="searchQuery = $event"
             @update:sort="sortBy = $event"
             @invite="handleInvite"
@@ -67,10 +65,11 @@ async function handleInvite(): Promise<void> {
             <p class="text-sm opacity-75">{{ t('views.server_members.no_members') }}</p>
         </div>
 
+
         <!-- Members Grid -->
         <div
             v-else
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-10"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mt-6"
         >
             <MemberCard
                 v-for="member in filteredMembers"

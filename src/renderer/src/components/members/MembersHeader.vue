@@ -2,8 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 
-const props = defineProps<{
-    loading?: boolean
+defineProps<{
     totalMembers?: number
 }>()
 
