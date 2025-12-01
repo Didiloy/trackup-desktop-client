@@ -61,7 +61,7 @@ const cards = computed(() => {
             <div
                 v-for="(card, index) in cards"
                 :key="index"
-                class="p-5 rounded-2xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 shadow-sm hover:shadow-md transition-shadow"
+                class="p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm hover:shadow-md transition-shadow"
             >
                 <div class="flex items-start justify-between mb-4">
                     <div :class="`p-3 rounded-xl ${card.bg} ${card.color}`">
@@ -69,10 +69,10 @@ const cards = computed(() => {
                     </div>
                 </div>
                 <div>
-                    <p class="text-sm text-surface-500 dark:text-surface-400 font-medium mb-1">
+                    <p class="text-sm text-surface-500 font-medium mb-1">
                         {{ card.label }}
                     </p>
-                    <h3 class="text-2xl font-bold text-surface-900 dark:text-surface-50">
+                    <h3 class="text-2xl font-bold text-surface-900">
                         {{ card.value }}
                     </h3>
                     <p v-if="card.subValue" class="text-xs text-surface-400 mt-1">

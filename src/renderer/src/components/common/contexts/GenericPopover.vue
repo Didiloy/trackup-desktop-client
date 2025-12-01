@@ -135,5 +135,4 @@ defineExpose({
     border-radius: 0.5rem;
     box-shadow: var(--p-shadow-2);
 }
-
 </style>

@@ -87,7 +87,10 @@ async function fetchTimelineForPeriod(periodType: EPeriod) {
     if (!server_store.getPublicId || !details.value) return
     loading.value = true
     try {
-        const res = await getServerStatsTimeline(server_store.getPublicId, { period: periodType, limit: 365 })
+        const res = await getServerStatsTimeline(server_store.getPublicId, {
+            period: periodType,
+            limit: 365
+        })
         if (res.error) throw new Error(res.error)
         if (res.data) {
             details.value.timeline = res.data

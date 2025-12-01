@@ -42,8 +42,7 @@ const filteredMembers = computed(() => {
             if (joined_start_date.value && memberDate < joined_start_date.value) {
                 return false
             }
-            return !(joined_end_date.value && memberDate > joined_end_date.value);
-
+            return !(joined_end_date.value && memberDate > joined_end_date.value)
         })
     }
 
