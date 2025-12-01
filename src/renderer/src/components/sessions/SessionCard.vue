@@ -46,10 +46,10 @@ function getParticipantTooltip(
     >
         <div
             v-if="session.activity.banner"
-            class="absolute inset-1 rounded-2xl bg-cover bg-center bg-no-repeat"
+            class="absolute inset-0 rounded-2xl bg-cover bg-center bg-no-repeat filter blur-xl scale-105"
             :style="{ backgroundImage: `url(${session.activity.banner})` }"
         />
-        <div class="absolute inset-0 bg-surface-100/55 backdrop-blur-xl rounded-2xl" />
+        <div class="absolute inset-0 bg-surface-100/55 rounded-2xl" />
         <!-- Banner -->
         <div class="relative h-20 w-full overflow-hidden z-10">
             <!-- Logo + Title -->
