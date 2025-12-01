@@ -101,6 +101,10 @@ function clearFilters(): void {
                 <GenericPopover
                     button-icon="pi pi-filter"
                     :popover-class="'w-fit-content'"
+                    :button-badge="
+                        activeFiltersCount > 0 ? activeFiltersCount.toString() : undefined
+                    "
+                    button-badge-severity="info"
                 >
                     <template #content>
                         <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
