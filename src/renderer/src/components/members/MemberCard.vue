@@ -144,7 +144,7 @@ const onItemSelected = (item: unknown): void => {
                 </span>
             </div>
             <p class="text-xs text-surface-600 truncate">
-                {{ t('common.filters.sort.joined_at') }}: {{ formatDate(member.created_at) }}
+                {{ t('common.filters.joined_date') }}: {{ formatDate(member.created_at) }}
             </p>
         </div>
 

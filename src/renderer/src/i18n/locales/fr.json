@@ -121,6 +121,8 @@
             "title": "Filtres",
             "participants": "Participants",
             "date_range": "Plage de dates",
+            "joined_date": "Date d'inscription",
+            "search_field": "Champ de recherche",
             "duration": {
                 "title": "Durée (minutes)"
             },
@@ -131,12 +133,9 @@
                 "contains": "Contient",
                 "starts_with": "Commence par",
                 "ends_with": "Se termine par",
-                "exact_match": "Correspondance exacte"
-            },
-            "sort": {
-                "name": "Nom",
-                "date": "Date",
-                "joined_at": "Date d'inscription"
+                "exact_match": "Correspondance exacte",
+                "by_nickname": "Par surnom",
+                "by_email": "Par email"
             }
         }
     },
@@ -148,6 +147,8 @@
     },
     "placeholder": {
         "search": "Rechercher...",
+        "search_nickname": "Rechercher par surnom...",
+        "search_email": "Rechercher par email...",
         "select": "Sélectionner une option",
         "choose": "Choisir une option",
         "enter": "Entrer une valeur",
