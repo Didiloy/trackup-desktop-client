@@ -61,16 +61,18 @@ watch(effectiveActivityId, (newId) => {
 
 // Chrono Options with Label
 const availableChronos = computed(() => {
-    return chronos.value.filter((c) => !c.isRunning)
+    const chronos_running: IChrono[] = chronos.value.filter((c) => !c.isRunning)
+    return chronos_running.map((c) => ({
+        ...c,
+        label: c.title || c.color
+    }))
 })
 
 // Watch selected_chrono to update duration and title
 watch(selected_chrono, (chrono) => {
     if (chrono) {
         duration.value = convertMsToMinutes(chrono.elapsed)
-        if (chrono.title) {
-            title.value = chrono.title
-        }
+        title.value = chrono.title || ''
     }
 })
 
@@ -118,6 +120,10 @@ function onCreate(): void {
     if (selected_chrono.value) {
         removeChrono(selected_chrono.value.id)
     }
+}
+const isHexColor = (v?: string): boolean => {
+    if (!v) return false
+    return /^#([0-9A-F]{3}){1,2}$/i.test(v)
 }
 </script>
 
@@ -195,7 +201,7 @@ function onCreate(): void {
                     <Select
                         v-model="selected_chrono"
                         :options="availableChronos"
-                        option-label="title"
+                        option-label="label"
                         :placeholder="t('common.actions.select_short')"
                         class="h-9 w-28"
                     >
@@ -213,6 +219,26 @@ function onCreate(): void {
                                 </div>
                                 <div class="text-xs text-surface-500 ml-auto">
                                     {{ formatDuration(slotProps.option.elapsed) }}
+                                </div>
+                            </div>
+                        </template>
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex items-center gap-2">
+                                <div
+                                    class="rounded-full"
+                                    :style="{
+                                        backgroundColor: slotProps.value.color
+                                    }"
+                                    :class="[
+                                        isHexColor(slotProps.value?.label) ? 'w-12 h-5' : 'w-3 h-3'
+                                    ]"
+                                />
+                                <div
+                                    v-if="!isHexColor(slotProps.value?.label)"
+                                    v-tooltip.right="slotProps.value.title"
+                                    class="truncate max-w-[120px]"
+                                >
+                                    {{ slotProps.value?.label }}
                                 </div>
                             </div>
                         </template>
