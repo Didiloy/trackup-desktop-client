@@ -50,7 +50,7 @@ function handleAddManualChrono(): void {
                     class="w-6 h-6"
                     :class="
                         hasRunningChronos
-                            ? ''
+                            ? 'text-primary-600 group-hover:text-black dark:text-primary-400 dark:group-hover:text-gray-50'
                             : 'text-gray-600 group-hover:text-black dark:text-gray-400 dark:group-hover:text-gray-50'
                     "
                     style="shape-rendering: geometricPrecision"
