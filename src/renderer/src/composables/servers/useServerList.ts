@@ -16,7 +16,7 @@ export function useServerList(): UseServerListReturn {
     const error = ref<string | null>(null)
     const { getMyServers } = useUserCRUD()
     const { navigateToServer } = useServerNavigation()
-    const user_store = useUserStore();
+    const user_store = useUserStore()
 
     async function fetchServers(): Promise<void> {
         isLoading.value = true

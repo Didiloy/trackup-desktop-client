@@ -119,9 +119,7 @@ const onItemSelected = (item: unknown): void => {
                     v-else
                     class="w-full h-full flex items-center justify-center text-base font-bold text-primary-800"
                 >
-                    {{
-                        getInitials(member.nickname, { mode: 'all', maxInitials: 2 })
-                    }}
+                    {{ getInitials(member.nickname, { mode: 'all', maxInitials: 2 }) }}
                 </div>
             </div>
             <div

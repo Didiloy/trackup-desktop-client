@@ -7,11 +7,13 @@ import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import type { IUpdateServerRequest } from '@shared/contracts/interfaces/entities/server.interfaces'
+import { useServerList } from '@/composables/servers/useServerList'
 
 const { t } = useI18n()
 const toast = useToast()
 const server_store = useServerStore()
 const { updateServer } = useServerCRUD()
+const { fetchServers: fetchUserServers, error: errorFetchingUserServers } = useServerList()
 
 const name = ref(server_store.getName ?? '')
 const description = ref(server_store.getDescription ?? '')
@@ -52,6 +54,13 @@ async function handleUpdate(): Promise<void> {
         }
 
         server_store.setServer(res.data)
+
+        await fetchUserServers()
+
+        if (errorFetchingUserServers.value) {
+            throw new Error(errorFetchingUserServers.value)
+        }
+
         toast.add({
             severity: 'success',
             summary: t('messages.success.update'),

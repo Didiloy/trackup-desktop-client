@@ -9,7 +9,6 @@ import { IUserServer } from '@shared/contracts/interfaces/entities/user.interfac
  * User is automatically updated by the auth composable
  */
 export const useUserStore = defineStore('user', () => {
-
     const state = reactive({
         servers: null as IUserServer[] | null
     })

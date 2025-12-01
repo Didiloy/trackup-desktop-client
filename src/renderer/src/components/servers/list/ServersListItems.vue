@@ -5,7 +5,6 @@ import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 
-
 interface Emits {
     (e: 'server-click', id: string): void
     (e: 'server-action-click'): void
@@ -21,7 +20,8 @@ const { t } = useI18n()
     <div class="flex-1 w-full scroll-y-hide mb-8">
         <div class="flex flex-col items-center gap-2 pb-2">
             <Server
-                v-for="server in user_store.getMyServers" :key="server.public_id"
+                v-for="server in user_store.getMyServers"
+                :key="server.public_id"
                 :image-url="
                     server_store.getPublicId === server.public_id
                         ? (server_store.getLogo ?? server.logo)

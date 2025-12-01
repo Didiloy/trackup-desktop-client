@@ -32,7 +32,7 @@ export function useServerNavigation(): UseServerNavigationResult {
     const { getServerDetails } = useServerCRUD()
     const { listMembers } = useMemberCRUD()
     const { listEnumDefinitions } = useEnumDefinitionCRUD()
-    
+
     async function getServerInfos(serverId: string, force = false): Promise<void> {
         if (!force && server_store.loadFromCache(serverId)) return
 
@@ -91,7 +91,7 @@ export function useServerNavigation(): UseServerNavigationResult {
     }
 
     async function navigateToServer(serverId: string): Promise<void> {
-        if(server_store.getPublicId === serverId) return
+        if (server_store.getPublicId === serverId) return
 
         const hasCache = server_store.loadFromCache(serverId)
         if (!hasCache) server_store.resetState()

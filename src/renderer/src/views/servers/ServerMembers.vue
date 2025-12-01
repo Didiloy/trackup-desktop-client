@@ -65,7 +65,6 @@ async function handleInvite(): Promise<void> {
             <p class="text-sm opacity-75">{{ t('views.server_members.no_members') }}</p>
         </div>
 
-
         <!-- Members Grid -->
         <div
             v-else
