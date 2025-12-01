@@ -13,11 +13,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div
-        class="rounded-3xl bg-surface-0 dark:bg-surface-800 ring-1 ring-surface-200/60 dark:ring-surface-700 p-5 shadow-sm h-full"
-    >
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
         <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-surface-900 dark:text-surface-50">
+            <h3 class="text-lg font-bold text-surface-900">
                 {{ t('views.server_stats.top_members', 'Most Active Members') }}
             </h3>
         </div>
@@ -40,7 +38,7 @@ const { t } = useI18n()
             <div
                 v-for="(member, index) in members"
                 :key="member.member_id"
-                class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors"
+                class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-50 transition-colors"
             >
                 <div class="relative shrink-0 font-bold text-surface-400 w-6 text-center">
                     <i v-if="index === 0" class="pi pi-crown text-amber-500 text-lg"></i>
@@ -51,7 +49,7 @@ const { t } = useI18n()
                 <!-- Using undefined for src as ITopMember doesn't seem to have avatar_url yet, fallback to initials -->
 
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-surface-900 dark:text-surface-50 truncate">
+                    <p class="text-sm font-semibold text-surface-900 truncate">
                         {{ member.user_email }}
                     </p>
                     <p class="text-xs text-surface-500 truncate">
