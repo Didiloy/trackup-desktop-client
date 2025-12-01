@@ -34,46 +34,60 @@ function handleAddManualChrono(): void {
 <template>
     <GenericPopover popover-class="w-[30rem] select-none">
         <template #trigger="{ toggle }">
-            <Button
-                variant="text"
+            <div
+                class="group h-8 w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer"
                 :aria-label="t('common.fields.chronos')"
                 @click="toggle"
             >
-                <template #icon>
-                    <svg
-                       
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 25 25"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-6 h-6"
+                    :class="
+                        hasRunningChronos
+                            ? ''
+                            : 'text-gray-600 group-hover:text-black dark:text-gray-400 dark:group-hover:text-gray-50'
+                    "
+                    style="shape-rendering: geometricPrecision"
+                >
+                    <!-- Stopwatch body -->
+                    <circle
+                        cx="12"
+                        cy="13"
+                        r="7"
+                        :class="hasRunningChronos ? 'heartbeat-circle' : ''"
+                    />
+                    <!-- Stopwatch button -->
+                    <path d="M12 6v-2" :class="hasRunningChronos ? 'heartbeat-circle' : ''" />
+                    <path d="M10 4h4" :class="hasRunningChronos ? 'heartbeat-circle' : ''" />
+                    <!-- Hour hand (animated) -->
+                    <line
+                        x1="12"
+                        y1="13"
+                        x2="12"
+                        y2="10"
+                        :class="hasRunningChronos ? 'hour-hand' : ''"
+                        stroke-width="2.5"
+                    />
+                    <!-- Minute hand (animated) -->
+                    <line
+                        x1="12"
+                        y1="13"
+                        x2="14.5"
+                        y2="13"
+                        :class="hasRunningChronos ? 'minute-hand' : ''"
                         stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="w-6 h-6"
-                    >
-                        <!-- Stopwatch body -->
-                        <circle cx="12" cy="13" r="7" />
-                        <!-- Stopwatch button -->
-                        <path d="M12 6v-2" />
-                        <path d="M10 4h4" />
-                        <!-- Hour hand (animated) -->
-                        <line
-                            x1="12"
-                            y1="13"
-                            x2="12"
-                            y2="10"
-                            :class="hasRunningChronos ? 'hour-hand' : ''"
-                            stroke-width="2.5"
-                        />
-                        <!-- Minute hand (animated) -->
-                        <line x1="12" y1="13" x2="14.5" y2="13" :class="hasRunningChronos ? 'minute-hand' : ''" stroke-width="2" />
-                    </svg>
-                   
-                </template>
-            </Button>
+                    />
+                </svg>
+            </div>
         </template>
         <template #content>
-            <div class="flex flex-col gap-4 ">
+            <div class="flex flex-col gap-4">
                 <!-- Header / Mode Switch -->
                 <div class="flex items-center justify-between mb-2">
                     <span class="font-medium text-surface-900">{{
@@ -81,7 +95,7 @@ function handleAddManualChrono(): void {
                     }}</span>
                     <div class="flex bg-surface-100 rounded-lg p-1">
                         <Button
-                            :label="t('common.actions.start') || 'Start'"
+                            :label="t('common.actions.start')"
                             size="small"
                             text
                             :class="{ '!bg-surface-0  shadow-sm': mode === 'stopwatch' }"
@@ -89,7 +103,7 @@ function handleAddManualChrono(): void {
                             @click="mode = 'stopwatch'"
                         />
                         <Button
-                            :label="t('common.actions.add_manual') || 'Manual'"
+                            :label="t('common.actions.add_manual')"
                             size="small"
                             text
                             :class="{ '!bg-surface-0 shadow-sm': mode === 'manual' }"
@@ -150,6 +164,11 @@ function handleAddManualChrono(): void {
 </template>
 
 <style scoped>
+.heartbeat-circle {
+    transform-origin: 12px 13px;
+    animation: heartbeat 1.2s ease-in-out infinite;
+}
+
 .hour-hand {
     transform-origin: 12px 13px;
     animation: rotate-hour 4s linear infinite;
@@ -158,6 +177,25 @@ function handleAddManualChrono(): void {
 .minute-hand {
     transform-origin: 12px 13px;
     animation: rotate-minute 2s linear infinite;
+}
+
+@keyframes heartbeat {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    14% {
+        transform: scale(1.15);
+    }
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.15);
+    }
+    56% {
+        transform: scale(1);
+    }
 }
 
 @keyframes rotate-hour {
