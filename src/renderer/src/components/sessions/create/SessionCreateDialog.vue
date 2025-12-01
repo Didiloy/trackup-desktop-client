@@ -258,15 +258,15 @@ function finishWizard(): void {
 const isClosable = computed(() => {
     if (current_step.value !== 'metadata') return true
     // If there are metadata definitions and metadata is invalid, prevent closing
-    if (has_metadata.value && !metadata_valid.value) return false
-    return true
+    return !(has_metadata.value && !metadata_valid.value);
+
 })
 </script>
 
 <template>
     <MultiStepsDialog
         :model-value="modelValue"
-        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
+        :style-class="'w-[650px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('views.server_sessions.add_modal.title')"
         :subtitle="subtitle"
