@@ -16,7 +16,6 @@ const wrapperBgClass = computed(() => (props.active ? 'bg-surface-100' : ''))
 // Rounding class handled via buttonClass now
 const buttonClass = computed(() => {
     const classes = ['hover:scale-110']
-    classes.push(props.active ? 'rounded-xl' : 'rounded-2xl')
     if (!props.imageUrl) {
         classes.push('bg-surface-300', 'hover:bg-primary-300', 'click:bg-primary-400')
     }
