@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import { useServerMembers } from '@/composables/server/useServerMembers'
-import ServerMembersHeader from '@/components/server/members/ServerMembersHeader.vue'
-import ServerMemberCard from '@/components/server/members/ServerMemberCard.vue'
+import MembersHeader from '@/components/members/MembersHeader.vue'
+import MemberCard from '@/components/members/MemberCard.vue'
 import { useToast } from 'primevue/usetoast'
 import { copyKeyToClipBoard } from '@/utils'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 
 const { t } = useI18n()
 const server_store = useServerStore()
-// const { filteredMembers, total, loading, searchQuery, sortBy, fetchMembers } = useServerMembers()
-
 
 const toast = useToast()
 const i18n = useI18n()
@@ -23,20 +20,36 @@ const loading = ref(true)
 const members = ref<IServerMember[]>(server_store.getMembers || [])
 
 const filteredMembers = computed(() => {
-    // TODO: FILTER AND SORT MEMBERS FROM BACKEND
+    let result = [...members.value]
 
+    if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase()
+        result = result.filter(
+            (m) =>
+                m.nickname.toLowerCase().includes(query) ||
+                m.user_email.toLowerCase().includes(query)
+        )
+    }
+
+    return result.sort((a, b) => {
+        const aValue = a[sortBy.value]
+        const bValue = b[sortBy.value]
+
+        if (aValue < bValue) return sortOrder.value === 'asc' ? -1 : 1
+        if (aValue > bValue) return sortOrder.value === 'asc' ? 1 : -1
+        return 0
+    })
 })
 
 async function handleInvite(): Promise<void> {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
 }
-
 </script>
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
-        <ServerMembersHeader
+        <MembersHeader
             :total-members="server_store.getMembers?.length || 0"
             :loading="loading"
             @update:search="searchQuery = $event"
@@ -44,21 +57,9 @@ async function handleInvite(): Promise<void> {
             @invite="handleInvite"
         />
 
-        <!-- Loading State -->
-        <div
-            v-if="!server_store.getMembers?.length"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-        >
-            <div
-                v-for="i in 8"
-                :key="i"
-                class="h-24 rounded-2xl bg-surface-100 animate-pulse"
-            ></div>
-        </div>
-
         <!-- Empty State -->
         <div
-            v-else-if="!server_store.getMembers.length"
+            v-if="!server_store.getMembers?.length"
             class="flex flex-col items-center justify-center py-20 text-surface-500"
         >
             <i class="pi pi-users text-4xl mb-4 opacity-50"></i>
@@ -71,8 +72,8 @@ async function handleInvite(): Promise<void> {
             v-else
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-10"
         >
-            <ServerMemberCard
-                v-for="member in members"
+            <MemberCard
+                v-for="member in filteredMembers"
                 :key="member.public_id"
                 :member="member"
             />
