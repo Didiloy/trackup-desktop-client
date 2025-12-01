@@ -131,7 +131,7 @@ const isHexColor = (v?: string): boolean => {
     <div class="flex flex-col gap-6 h-full ">
         <!-- Activity and Title Row -->
         <!-- Row 1: Title, Activity, Date -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-amber-900">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 ">
             <!-- Title -->
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
@@ -184,7 +184,7 @@ const isHexColor = (v?: string): boolean => {
         </div>
 
         <!-- Row 2: Duration -->
-        <div class="flex flex-col gap-2 bg-amber-400">
+        <div class="flex flex-col gap-2 ">
             <div class="flex items-center gap-2">
                 <i class="pi pi-clock text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700"
