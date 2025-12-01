@@ -6,8 +6,10 @@ import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useMemberNickname } from '@/composables/members/useMemberNickname'
 import { useToast } from 'primevue/usetoast'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
+import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { formatDate, getInitials } from '@/utils'
 
 const props = defineProps<{
@@ -20,6 +22,18 @@ const server_store = useServerStore()
 const { kickMember, listMembers } = useMemberCRUD()
 const toast = useToast()
 
+const {
+    show_nickname_dialog,
+    new_nickname,
+    is_updating,
+    openNicknameDialog,
+    handleUpdateNickname
+} = useMemberNickname()
+
+const confirmUpdateNickname = (nickname: string): void => {
+    handleUpdateNickname(props.member.public_id, nickname, props.member.nickname)
+}
+
 const items = computed(() => {
     const baseItems = [
         {
@@ -30,6 +44,15 @@ const items = computed(() => {
             }
         }
     ]
+
+    // Only add Update Nickname option if the current member is the logged-in user
+    if (props.member?.user_email === user_store.getEmail) {
+        baseItems.push({
+            label: t('views.members_aside.update_nickname'),
+            icon: 'pi pi-user-edit',
+            command: () => openNicknameDialog(props.member.nickname)
+        })
+    }
 
     if (server_store.isOwnership && props.member?.user_email !== user_store.getEmail) {
         baseItems.push({
@@ -138,5 +161,20 @@ const onItemSelected = (item: unknown): void => {
         >
         </Button>
         <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected" />
+
+        <!-- Nickname Update Dialog -->
+        <InputDialog
+            v-model="show_nickname_dialog"
+            v-model:input-value="new_nickname"
+            :title="t('views.members_aside.update_nickname')"
+            :message="t('views.members_aside.update_nickname_message')"
+            :input-label="t('views.members_aside.new_nickname')"
+            :input-placeholder="t('views.members_aside.enter_nickname')"
+            :confirm-label="t('views.members_aside.update_nickname')"
+            :cancel-label="t('common.actions.cancel')"
+            confirm-severity="primary"
+            :loading="is_updating"
+            @confirm="confirmUpdateNickname"
+        />
     </div>
 </template>

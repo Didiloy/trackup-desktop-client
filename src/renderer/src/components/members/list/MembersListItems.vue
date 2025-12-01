@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
-import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useMemberNickname } from '@/composables/members/useMemberNickname'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import Member from '@/components/members/Member.vue'
 
@@ -17,59 +16,17 @@ interface Props {
 const props = defineProps<Props>()
 
 const { t } = useI18n()
-const server_store = useServerStore()
 const user_store = useUserStore()
-const { updateMemberNickname, listMembers } = useMemberCRUD()
+const {
+    show_nickname_dialog,
+    new_nickname,
+    is_updating,
+    openNicknameDialog,
+    handleUpdateNickname
+} = useMemberNickname()
 
-const show_nickname_dialog = ref(false)
-const new_nickname = ref('')
-const is_updating = ref(false)
-
-const openNicknameDialog = (): void => {
-    new_nickname.value = props.member.nickname || ''
-    show_nickname_dialog.value = true
-}
-
-const closeNicknameDialog = (): void => {
-    show_nickname_dialog.value = false
-    new_nickname.value = ''
-    is_updating.value = false
-}
-
-const handleUpdateNickname = async (nickname: string): Promise<void> => {
-    if (!props.member?.public_id || !server_store.getPublicId) return
-    if (!nickname || nickname === props.member?.nickname) {
-        closeNicknameDialog()
-        return
-    }
-
-    is_updating.value = true
-
-    try {
-        const result = await updateMemberNickname(
-            server_store.getPublicId,
-            props.member.public_id,
-            {
-                nickname
-            }
-        )
-
-        if (result.data) {
-            // Refresh the members list by fetching again
-            const membersResult = await listMembers(server_store.getPublicId)
-            if (membersResult.data) {
-                server_store.setMembers(membersResult.data.data)
-            }
-            closeNicknameDialog()
-        } else {
-            console.error('Failed to update nickname:', result.error)
-            // Keep dialog open to show error
-            is_updating.value = false
-        }
-    } catch (error) {
-        console.error('Error updating nickname:', error)
-        is_updating.value = false
-    }
+const confirmUpdateNickname = (nickname: string): void => {
+    handleUpdateNickname(props.member.public_id, nickname, props.member.nickname)
 }
 
 const items = computed(() => {
@@ -88,7 +45,7 @@ const items = computed(() => {
         baseItems.push({
             label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
-            command: openNicknameDialog
+            command: () => openNicknameDialog(props.member.nickname)
         })
     }
 
@@ -132,6 +89,6 @@ const onItemSelected = (item: unknown): void => {
         :cancel-label="t('common.actions.cancel')"
         confirm-severity="primary"
         :loading="is_updating"
-        @confirm="handleUpdateNickname"
+        @confirm="confirmUpdateNickname"
     />
 </template>
