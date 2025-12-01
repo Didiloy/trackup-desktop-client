@@ -12,22 +12,22 @@ const server_store = useServerStore()
 const toast = useToast()
 const i18n = useI18n()
 
-const searchQuery = ref('')
-const searchField = ref<'nickname' | 'email'>('nickname')
-const joinedStartDate = ref<Date | undefined>(undefined)
-const joinedEndDate = ref<Date | undefined>(undefined)
+const search_query = ref('')
+const search_field = ref<'nickname' | 'email'>('nickname')
+const joined_start_date = ref<Date | undefined>(undefined)
+const joined_end_date = ref<Date | undefined>(undefined)
 const loading = ref(false)
 
-const members = computed<IServerMember[]>(() => server_store.getMembers || [])
+const members = ref<IServerMember[]>(server_store.getMembers || [])
 
 const filteredMembers = computed(() => {
     let result = [...members.value]
 
     // Filter by search query based on selected field
-    if (searchQuery.value) {
-        const query = searchQuery.value.toLowerCase()
+    if (search_query.value) {
+        const query = search_query.value.toLowerCase()
         result = result.filter((m) => {
-            if (searchField.value === 'nickname') {
+            if (search_field.value === 'nickname') {
                 return m.nickname.toLowerCase().includes(query)
             } else {
                 return m.user_email.toLowerCase().includes(query)
@@ -36,16 +36,14 @@ const filteredMembers = computed(() => {
     }
 
     // Filter by joined date range
-    if (joinedStartDate.value || joinedEndDate.value) {
+    if (joined_start_date.value || joined_end_date.value) {
         result = result.filter((m) => {
             const memberDate = new Date(m.created_at)
-            if (joinedStartDate.value && memberDate < joinedStartDate.value) {
+            if (joined_start_date.value && memberDate < joined_start_date.value) {
                 return false
             }
-            if (joinedEndDate.value && memberDate > joinedEndDate.value) {
-                return false
-            }
-            return true
+            return !(joined_end_date.value && memberDate > joined_end_date.value);
+
         })
     }
 
@@ -62,10 +60,10 @@ async function handleInvite(): Promise<void> {
     <div class="flex flex-col items-center justify-start w-full h-full">
         <MembersHeader
             :total-members="server_store.getMembers?.length || 0"
-            @update:search="searchQuery = $event"
-            @update:search-field="searchField = $event"
-            @update:joined-start-date="joinedStartDate = $event"
-            @update:joined-end-date="joinedEndDate = $event"
+            @update:search="search_query = $event"
+            @update:search-field="search_field = $event"
+            @update:joined-start-date="joined_start_date = $event"
+            @update:joined-end-date="joined_end_date = $event"
             @invite="handleInvite"
         />
 
