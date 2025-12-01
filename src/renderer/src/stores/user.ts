@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { computed, ComputedRef } from 'vue'
+import { computed, ComputedRef, reactive } from 'vue'
 import { user, session } from '@/composables/auth/utils/authState'
+import { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 
 /**
  * User store - Pure getter/wrapper around auth state
@@ -8,9 +9,14 @@ import { user, session } from '@/composables/auth/utils/authState'
  * User is automatically updated by the auth composable
  */
 export const useUserStore = defineStore('user', () => {
+    const state = reactive({
+        servers: null as IUserServer[] | null
+    })
+
     // Reactive getters based on auth state
     const hasUser: ComputedRef<boolean> = computed(() => user.value !== null)
-    const hasSession: ComputedRef<boolean> = computed(() => session.value !== null)
+    const hasAuthSession: ComputedRef<boolean> = computed(() => session.value !== null)
+    const hasServers: ComputedRef<boolean> = computed(() => state.servers !== null)
 
     const getId: ComputedRef<string | null> = computed(() => user.value?.id ?? null)
     const getEmail: ComputedRef<string | null> = computed(() => user.value?.email ?? null)
@@ -24,6 +30,12 @@ export const useUserStore = defineStore('user', () => {
         () => session.value?.access_token ?? null
     )
 
+    const getMyServers: ComputedRef<IUserServer[] | null> = computed(() => state.servers)
+
+    const setMyServers = (servers: IUserServer[] | null): void => {
+        state.servers = servers
+    }
+
     return {
         // State from auth (readonly)
         user,
@@ -31,11 +43,16 @@ export const useUserStore = defineStore('user', () => {
 
         // Computed getters
         hasUser,
-        hasSession,
+        hasAuthSession,
+        hasServers,
         getId,
         getEmail,
         getAvatar,
         getUsername,
-        getAccessToken
+        getAccessToken,
+        getMyServers,
+
+        // Actions
+        setMyServers
     }
 })

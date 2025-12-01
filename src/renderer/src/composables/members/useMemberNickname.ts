@@ -25,7 +25,11 @@ export function useMemberNickname() {
         is_updating.value = false
     }
 
-    const handleUpdateNickname = async (memberId: string, nickname: string, currentNickname?: string): Promise<void> => {
+    const handleUpdateNickname = async (
+        memberId: string,
+        nickname: string,
+        currentNickname?: string
+    ): Promise<void> => {
         if (!memberId || !server_store.getPublicId) return
         if (!nickname || nickname === currentNickname) {
             closeNicknameDialog()
@@ -35,13 +39,9 @@ export function useMemberNickname() {
         is_updating.value = true
 
         try {
-            const result = await updateMemberNickname(
-                server_store.getPublicId,
-                memberId,
-                {
-                    nickname
-                }
-            )
+            const result = await updateMemberNickname(server_store.getPublicId, memberId, {
+                nickname
+            })
 
             if (result.data) {
                 // Refresh the members list by fetching again
@@ -87,4 +87,3 @@ export function useMemberNickname() {
         handleUpdateNickname
     }
 }
-

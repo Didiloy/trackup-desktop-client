@@ -1,6 +1,4 @@
-import { computed, type Ref, type ComputedRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 import { useServerStore } from '@/stores/server'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
@@ -21,11 +19,10 @@ import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 
 interface UseServerNavigationResult {
-    currentServerId: ComputedRef<string | undefined>
     navigateToServer: (serverId: string) => Promise<void>
 }
 
-export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavigationResult {
+export function useServerNavigation(): UseServerNavigationResult {
     const route = useRoute()
     const router = useRouter()
     const server_store = useServerStore()
@@ -35,8 +32,6 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
     const { getServerDetails } = useServerCRUD()
     const { listMembers } = useMemberCRUD()
     const { listEnumDefinitions } = useEnumDefinitionCRUD()
-
-    const isServerActive = (id: string): boolean => route.params.id === id
 
     async function getServerInfos(serverId: string, force = false): Promise<void> {
         if (!force && server_store.loadFromCache(serverId)) return
@@ -96,7 +91,7 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
     }
 
     async function navigateToServer(serverId: string): Promise<void> {
-        if (isServerActive(serverId)) return
+        if (server_store.getPublicId === serverId) return
 
         const hasCache = server_store.loadFromCache(serverId)
         if (!hasCache) server_store.resetState()
@@ -110,9 +105,5 @@ export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavig
         await getServerInfos(serverId)
     }
 
-    const currentServerId = computed<string | undefined>(
-        () => servers.value.find((s) => isServerActive(s.public_id))?.public_id
-    )
-
-    return { currentServerId, navigateToServer }
+    return { navigateToServer }
 }

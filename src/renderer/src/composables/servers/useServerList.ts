@@ -1,11 +1,10 @@
 import { ref, type Ref } from 'vue'
-import type { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 import { useUserCRUD } from '@/composables/users/useUserCRUD'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
+import { useUserStore } from '@/stores/user'
 
 interface UseServerListReturn {
-    servers: Ref<IUserServer[]>
     isLoading: Ref<boolean>
     error: Ref<string | null>
     fetchServers: () => Promise<void>
@@ -13,11 +12,11 @@ interface UseServerListReturn {
 }
 
 export function useServerList(): UseServerListReturn {
-    const servers = ref<IUserServer[]>([])
     const isLoading = ref(false)
     const error = ref<string | null>(null)
     const { getMyServers } = useUserCRUD()
-    const { navigateToServer } = useServerNavigation(servers)
+    const { navigateToServer } = useServerNavigation()
+    const user_store = useUserStore()
 
     async function fetchServers(): Promise<void> {
         isLoading.value = true
@@ -26,11 +25,10 @@ export function useServerList(): UseServerListReturn {
         const res = await getMyServers()
         if (res.error) {
             error.value = res.error
-            servers.value = []
             isLoading.value = false
             return
         }
-        servers.value = res.data ?? []
+        user_store.setMyServers(res.data || [])
         isLoading.value = false
     }
 
@@ -42,7 +40,6 @@ export function useServerList(): UseServerListReturn {
     }
 
     return {
-        servers,
         isLoading,
         error,
         fetchServers,

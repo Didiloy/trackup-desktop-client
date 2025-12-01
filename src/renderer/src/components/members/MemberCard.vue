@@ -119,9 +119,7 @@ const onItemSelected = (item: unknown): void => {
                     v-else
                     class="w-full h-full flex items-center justify-center text-base font-bold text-primary-800"
                 >
-                    {{
-                        getInitials(member.nickname, { mode: 'all', maxInitials: 2 })
-                    }}
+                    {{ getInitials(member.nickname, { mode: 'all', maxInitials: 2 }) }}
                 </div>
             </div>
             <div
@@ -146,7 +144,7 @@ const onItemSelected = (item: unknown): void => {
                 </span>
             </div>
             <p class="text-xs text-surface-600 truncate">
-                {{ t('common.filters.sort.joined_at') }}: {{ formatDate(member.created_at) }}
+                {{ t('common.filters.joined_date') }}: {{ formatDate(member.created_at) }}
             </p>
         </div>
 

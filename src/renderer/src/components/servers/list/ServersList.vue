@@ -10,10 +10,10 @@ import type { IServer } from '@shared/contracts/interfaces/entities/server.inter
 const i18n = useI18n()
 
 // Server list management
-const { servers, fetchServers, handleServerCreated } = useServerList()
+const { fetchServers, handleServerCreated } = useServerList()
 
 // Navigation
-const { currentServerId, navigateToServer } = useServerNavigation(servers)
+const { navigateToServer } = useServerNavigation()
 
 // Dialog state
 const show_action_dialog = ref(false)
@@ -35,9 +35,6 @@ async function handleServerAction(server: IServer): Promise<void> {
 </script>
 <template>
     <ServersListItems
-        :servers="servers"
-        :active-server-id="currentServerId"
-        :create-server-label="i18n.t('views.create_server.action.title')"
         @server-click="navigateToServer"
         @server-action-click="handleOpenActionDialog"
     />

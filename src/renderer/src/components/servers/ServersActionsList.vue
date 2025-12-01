@@ -37,7 +37,7 @@ const actions: ServerAction[] = [
     },
     {
         id: 'members',
-        label: t('views.server_members.title'),
+        label: t('views.server_members.title_base'),
         icon: 'pi pi-users',
         routeName: 'ServerMembers'
     },
