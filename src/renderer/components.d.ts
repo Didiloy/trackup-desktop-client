@@ -94,6 +94,7 @@ declare module 'vue' {
     SelectFilter: typeof import('./src/components/filters/SelectFilter.vue')['default']
     Server: typeof import('./src/components/servers/Server.vue')['default']
     ServerCreateJoinDialog: typeof import('./src/components/servers/create-join/ServerCreateJoinDialog.vue')['default']
+    ServerGeneralSettings: typeof import('./src/components/servers/settings/ServerGeneralSettings.vue')['default']
     ServersActionsList: typeof import('./src/components/servers/ServersActionsList.vue')['default']
     ServersAside: typeof import('./src/components/asides/ServersAside.vue')['default']
     ServersList: typeof import('./src/components/servers/list/ServersList.vue')['default']

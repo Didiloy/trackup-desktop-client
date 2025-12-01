@@ -481,6 +481,7 @@
         },
         "server_settings": {
             "title": "Paramètres",
+            "subtitle": "Gérez les paramètres de votre serveur",
             "general": {
                 "title": "Général",
                 "server_name": "Nom du serveur",
