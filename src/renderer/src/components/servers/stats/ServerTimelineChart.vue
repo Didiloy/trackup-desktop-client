@@ -111,7 +111,7 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6 h-full">
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-bold text-surface-900">
                 {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
