@@ -8,7 +8,6 @@ defineProps<{
     members: ITopMember[] | undefined
     loading?: boolean
 }>()
-
 const { t } = useI18n()
 </script>
 
@@ -45,12 +44,12 @@ const { t } = useI18n()
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
 
-                <AvatarButton :src="undefined" :name="member.user_email" size="normal" />
+                <AvatarButton :src="undefined" :name="member.member_name" size="normal" />
                 <!-- Using undefined for src as ITopMember doesn't seem to have avatar_url yet, fallback to initials -->
 
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-surface-900 truncate">
-                        {{ member.user_email }}
+                        {{ member.member_name }}
                     </p>
                     <p class="text-xs text-surface-500 truncate">
                         {{ member.total_sessions }}
