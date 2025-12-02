@@ -406,7 +406,7 @@
             "create_session": "Créer une session",
             "recent_sessions": "Sessions récentes",
             "evolution_30_days": "Évolution 30 jours",
-            "no_metadata": "Aucune métadonnée disponible",
+            "no_metadata": "Aucun attribut disponible",
             "no_metadata_description": "Cette activité n'a pas de champs personnalisés configurés.",
             "performance_section": {
                 "sessions": "sessions",
