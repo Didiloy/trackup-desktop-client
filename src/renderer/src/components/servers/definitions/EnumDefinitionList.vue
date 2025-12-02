@@ -93,11 +93,11 @@ function countChoices(def: IEnumDefinition): number {
 
 function getBadgeColor(index: number) {
     const colors = [
-        'bg-blue-50 text-blue-600 ring-blue-500/20',
-        'bg-green-50 text-green-600 ring-green-500/20',
-        'bg-purple-50 text-purple-600 ring-purple-500/20',
-        'bg-orange-50 text-orange-600 ring-orange-500/20',
-        'bg-pink-50 text-pink-600 ring-pink-500/20'
+        'bg-blue-200 text-blue-600 ring-blue-500/20',
+        'bg-green-200 text-green-600 ring-green-500/20',
+        'bg-purple-200 text-purple-600 ring-purple-500/20',
+        'bg-orange-200 text-orange-600 ring-orange-500/20',
+        'bg-pink-200 text-pink-600 ring-pink-500/20'
     ]
     return colors[index % colors.length]
 }
@@ -107,7 +107,7 @@ function getBadgeColor(index: number) {
     <div class="flex flex-col gap-6 w-full">
         <div class="flex justify-between items-center w-full">
             <div class="flex items-center gap-2">
-                <div class="p-2 rounded-lg bg-primary-50 text-primary-600">
+                <div class="p-2 rounded-lg bg-primary-200 text-primary-600 w-9 h-9 flex items-center justify-center">
                     <i class="pi pi-list text-lg"></i>
                 </div>
                 <h2 class="text-lg font-bold text-surface-900">
@@ -119,7 +119,7 @@ function getBadgeColor(index: number) {
                 icon="pi pi-plus"
                 size="small"
                 @click="showCreateDialog = true"
-            />
+                />
         </div>
 
         <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
