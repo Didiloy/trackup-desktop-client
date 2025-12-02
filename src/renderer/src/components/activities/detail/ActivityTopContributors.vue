@@ -15,7 +15,6 @@ const server_store = useServerStore()
 onMounted(async () => {
     console.log(server_store.getMembers)
     console.log(props.contributors)
-
 })
 </script>
 
@@ -37,9 +36,7 @@ onMounted(async () => {
                 <span class="text-lg font-semibold text-primary-500">#{{ member.rank }}</span>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-surface-900">
-                        {{
-                            server_store.getMemberById(member.member_id)?.nickname
-                        }}
+                        {{ server_store.getMemberById(member.member_id)?.nickname }}
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }}

@@ -28,7 +28,8 @@
             "saved_chronos": "Chronos enregistrés",
             "chronos": "Chronos",
             "select_chrono": "Sélectionner un chrono",
-            "duration": "Durée"
+            "duration": "Durée",
+            "no_description": "Aucune description"
         },
         "actions": {
             "choose": "Choisir",
@@ -359,7 +360,25 @@
                 "title": "Vous avez des modifications non enregistrées",
                 "description": "Vous avez des modifications non enregistrées. Voulez-vous les enregistrer ?",
                 "save": "Enregistrer"
-            } 
+            }
+        },
+        "server_definitions": {
+            "title": "Définitions du serveur",
+            "description": "Définissez les définitions pour votre serveur",
+            "add_definition": "Ajouter une définition",
+            "edit_definition": "Modifier une définition",
+            "delete_definition": "Supprimer une définition",
+            "enums_list_title": "Liste des définitions",
+            "no_definitions": "Aucune définition trouvée. Créez une pour commencer.",
+            "create_modal": {
+                "title": "Créer une définition",
+                "subtitle": "Définissez une nouvelle définition pour votre serveur",
+                "name_placeholder": "Ex: Amusement, Difficulté, Météo...",
+                "description_placeholder": "Décris la définition en quelques mots",
+                "choices_placeholder": "Choix (optionnel)",
+                "choices_placeholder_detail": "Cela peut être des choix que vous souhaitez vous attribuer comme 'Cool', 'Neutre', 'Nul', etc.",
+                "max_choices_reached": "Vous ne pouvez pas ajouter plus de 5 choix"
+            }
         },
         "server_widgets": {
             "title": "Widgets",

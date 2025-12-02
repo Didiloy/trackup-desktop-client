@@ -81,7 +81,7 @@ export interface IComparativeAnalysis {
 export interface ITopMember {
     rank: number
     member_id: string
-    user_email: string,
+    user_email: string
     total_sessions: number
     total_duration: number
 }

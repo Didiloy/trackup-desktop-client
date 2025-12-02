@@ -45,7 +45,11 @@ const { t } = useI18n()
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
 
-                <AvatarButton :src="server_store.getMemberById(member.member_id)?.avatar_url" :name="server_store.getMemberById(member.member_id)?.nickname" size="normal" />
+                <AvatarButton
+                    :src="server_store.getMemberById(member.member_id)?.avatar_url"
+                    :name="server_store.getMemberById(member.member_id)?.nickname"
+                    size="normal"
+                />
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-surface-900 truncate">
                         {{ server_store.getMemberById(member.member_id)?.nickname }}

@@ -15,7 +15,6 @@ const { t } = useI18n()
                     {{ t('views.server_settings.subtitle') }}
                 </p>
             </div>
-
         </div>
     </div>
 </template>

@@ -128,10 +128,10 @@ const isHexColor = (v?: string): boolean => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 h-full ">
+    <div class="flex flex-col gap-6 h-full">
         <!-- Activity and Title Row -->
         <!-- Row 1: Title, Activity, Date -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 ">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Title -->
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
@@ -179,12 +179,18 @@ const isHexColor = (v?: string): boolean => {
                         >{{ t('common.fields.date') }} <span class="text-red-500">*</span></span
                     >
                 </div>
-                <DatePicker v-model="date" show-time hour-format="24" date-format="dd/mm/yy" class="w-full date-picker-full"  />
+                <DatePicker
+                    v-model="date"
+                    show-time
+                    hour-format="24"
+                    date-format="dd/mm/yy"
+                    class="w-full date-picker-full"
+                />
             </div>
         </div>
 
         <!-- Row 2: Duration -->
-        <div class="flex flex-col gap-2 ">
+        <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <i class="pi pi-clock text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700"
@@ -193,7 +199,7 @@ const isHexColor = (v?: string): boolean => {
                 >
             </div>
 
-            <div class="flex gap-2 ">
+            <div class="flex gap-2">
                 <DurationInput v-model="duration" :show-seconds="false" class="flex-1" />
 
                 <div v-if="availableChronos.length > 0" class="flex flex-col gap-1">

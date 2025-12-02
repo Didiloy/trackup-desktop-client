@@ -20,7 +20,7 @@ const { t } = useI18n()
                             {{ t('views.server_profile.subtitle') }}
                         </p>
                     </div>
-                    
+
                     <!-- Content -->
                     <ServerGeneralProfile />
                 </div>

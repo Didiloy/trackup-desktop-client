@@ -84,7 +84,9 @@ async function handleUpdate(): Promise<void> {
         <!-- General Info Card -->
         <section class="bg-surface-0 rounded-3xl p-6 md:p-8 shadow-sm ring-1 ring-surface-200/60">
             <div class="flex items-center gap-4 mb-8 border-b border-surface-100 pb-6">
-                <div class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-500 ring-1 ring-primary-100 dark:ring-primary-500/20">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-500 ring-1 ring-primary-100 dark:ring-primary-500/20"
+                >
                     <i class="pi pi-info-circle text-xl"></i>
                 </div>
                 <div>
@@ -92,7 +94,8 @@ async function handleUpdate(): Promise<void> {
                         {{ t('views.server_profile.general_info') }}
                     </h2>
                     <p class="text-surface-500 text-sm mt-1">
-                        {{ t('views.server_settings.general.server_name') }} & {{ t('views.server_settings.general.server_description') }}
+                        {{ t('views.server_settings.general.server_name') }} &
+                        {{ t('views.server_settings.general.server_description') }}
                     </p>
                 </div>
             </div>
@@ -120,9 +123,7 @@ async function handleUpdate(): Promise<void> {
                         :placeholder="t('views.create_server.placeholder.description')"
                         class="w-full bg-surface-50 border-surface-200 hover:border-primary-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                     />
-                    <p class="text-xs text-surface-400 text-right">
-                        {{ description.length }}/500
-                    </p>
+                    <p class="text-xs text-surface-400 text-right">{{ description.length }}/500</p>
                 </div>
             </div>
         </section>
@@ -130,7 +131,9 @@ async function handleUpdate(): Promise<void> {
         <!-- Branding Card -->
         <section class="bg-surface-0 rounded-3xl p-6 md:p-8 shadow-sm ring-1 ring-surface-200/60">
             <div class="flex items-center gap-4 mb-8 border-b border-surface-100 pb-6">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-500 ring-1 ring-purple-100">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-500 ring-1 ring-purple-100"
+                >
                     <i class="pi pi-palette text-xl"></i>
                 </div>
                 <div>
@@ -138,7 +141,8 @@ async function handleUpdate(): Promise<void> {
                         {{ t('common.fields.logo') }} & {{ t('common.fields.banner') }}
                     </h2>
                     <p class="text-surface-500 text-sm mt-1">
-                        {{ t('views.server_settings.general.update_logo') }} & {{ t('views.server_settings.general.update_banner') }}
+                        {{ t('views.server_settings.general.update_logo') }} &
+                        {{ t('views.server_settings.general.update_banner') }}
                     </p>
                 </div>
             </div>
@@ -182,7 +186,7 @@ async function handleUpdate(): Promise<void> {
 
         <!-- Floating Action Bar -->
         <div class="fixed bottom-6 right-6 z-20">
-            <Transition 
+            <Transition
                 enter-active-class="transform ease-out duration-300 transition"
                 enter-from-class="translate-y-10 opacity-0"
                 enter-to-class="translate-y-0 opacity-100"
@@ -190,13 +194,20 @@ async function handleUpdate(): Promise<void> {
                 leave-from-class="opacity-100"
                 leave-to-class="translate-y-10 opacity-0"
             >
-                <div v-if="has_changes" class="bg-primary-900/80 backdrop-blur-lg text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-6 border border-surface-700/50">
+                <div
+                    v-if="has_changes"
+                    class="bg-primary-900/80 backdrop-blur-lg text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-6 border border-surface-700/50"
+                >
                     <div class="flex flex-col">
-                        <span class="font-semibold text-sm">{{ t('views.server_profile.update_floating_bar.title') }}</span>
-                        <span class="text-xs text-gray-300">{{ t('views.server_profile.update_floating_bar.description') }}</span>
+                        <span class="font-semibold text-sm">{{
+                            t('views.server_profile.update_floating_bar.title')
+                        }}</span>
+                        <span class="text-xs text-gray-300">{{
+                            t('views.server_profile.update_floating_bar.description')
+                        }}</span>
                     </div>
                     <div class="flex items-center gap-3">
-                         <Button
+                        <Button
                             :label="t('views.server_profile.update_floating_bar.save')"
                             icon="pi pi-check"
                             :loading="loading"
@@ -210,4 +221,3 @@ async function handleUpdate(): Promise<void> {
         </div>
     </div>
 </template>
-

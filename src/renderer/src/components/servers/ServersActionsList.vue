@@ -47,7 +47,12 @@ const actions: ServerAction[] = [
         icon: 'pi pi-calendar',
         routeName: 'ServerSessions'
     },
-
+    {
+        id: 'definitions',
+        label: t('views.server_definitions.title'),
+        icon: 'pi pi-list',
+        routeName: 'ServerDefinitions'
+    },
     {
         id: 'widgets',
         label: t('views.server_widgets.title'),

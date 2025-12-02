@@ -59,6 +59,8 @@ declare module 'vue' {
     DurationInput: typeof import('./src/components/common/inputs/DurationInput.vue')['default']
     EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
+    EnumDefinitionCreateDialog: typeof import('./src/components/servers/definitions/EnumDefinitionCreateDialog.vue')['default']
+    EnumDefinitionList: typeof import('./src/components/servers/definitions/EnumDefinitionList.vue')['default']
     FilterGroup: typeof import('./src/components/filters/FilterGroup.vue')['default']
     GenericFilterBar: typeof import('./src/components/filters/GenericFilterBar.vue')['default']
     GenericPopover: typeof import('./src/components/common/contexts/GenericPopover.vue')['default']

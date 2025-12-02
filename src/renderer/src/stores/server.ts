@@ -95,9 +95,7 @@ export const useServerStore = defineStore('server', () => {
 
     const getMemberById = (memberId: string): IServerMember | null => {
         if (!state.serverMembers) return null
-        return (
-            state.serverMembers.find((member) => member.public_id === memberId) || null
-        )
+        return state.serverMembers.find((member) => member.public_id === memberId) || null
     }
 
     const isLoading: ComputedRef<boolean> = computed(() => state.isLoading)
