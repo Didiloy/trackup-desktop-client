@@ -3,7 +3,8 @@ import type { ITopMember } from '@shared/contracts/interfaces/entities-stats/ser
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
-
+import { useServerStore } from '@/stores/server'
+const server_store = useServerStore()
 defineProps<{
     members: ITopMember[] | undefined
     loading?: boolean
@@ -44,12 +45,10 @@ const { t } = useI18n()
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
 
-                <AvatarButton :src="undefined" :name="member.member_name" size="normal" />
-                <!-- Using undefined for src as ITopMember doesn't seem to have avatar_url yet, fallback to initials -->
-
+                <AvatarButton :src="server_store.getMemberById(member.member_id)?.avatar_url" :name="server_store.getMemberById(member.member_id)?.nickname" size="normal" />
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-surface-900 truncate">
-                        {{ member.member_name }}
+                        {{ server_store.getMemberById(member.member_id)?.nickname }}
                     </p>
                     <p class="text-xs text-surface-500 truncate">
                         {{ member.total_sessions }}

@@ -82,7 +82,6 @@ export interface ITopMember {
     rank: number
     member_id: string
     user_email: string,
-    member_name: string
     total_sessions: number
     total_duration: number
 }
