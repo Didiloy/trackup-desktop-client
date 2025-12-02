@@ -1,30 +1,66 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
-import type { ICreateEnumDefinitionRequest } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import type { ICreateEnumDefinitionRequest, IEnumDefinition, IUpdateEnumDefinitionRequest, IEnumValueUpdate } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 
-defineProps<{
+const props = defineProps<{
     modelValue: boolean
+    definitionToEdit?: IEnumDefinition | null
 }>()
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
     (e: 'created'): void
+    (e: 'updated'): void
 }>()
 
 const { t } = useI18n()
 const toast = useToast()
 const server_store = useServerStore()
-const { createEnumDefinition } = useEnumDefinitionCRUD()
+const { createEnumDefinition, updateEnumDefinition } = useEnumDefinitionCRUD()
 
 const name = ref('')
 const description = ref('')
 const choices = ref<string[]>([''])
 const loading = ref(false)
+
+const isEditing = computed(() => !!props.definitionToEdit)
+
+// Initialize form when editing
+watch(
+    () => props.definitionToEdit,
+    (def) => {
+        if (def) {
+            name.value = def.name
+            description.value = def.description || ''
+            
+            const valueObj = def.values?.[0]
+            if (valueObj) {
+                choices.value = Object.entries(valueObj)
+                    .filter(([key, val]) => key !== 'public_id' && val)
+                    .sort((a, b) => a[0].localeCompare(b[0])) // Ensure value1, value2 order
+                    .map(([_, val]) => val as string)
+            } else {
+                choices.value = ['']
+            }
+        } else {
+            // Reset if no definition passed (create mode)
+            resetForm()
+        }
+    },
+    { immediate: true }
+)
+
+function resetForm() {
+    name.value = ''
+    description.value = ''
+    choices.value = ['']
+}
+
 
 function addChoice() {
     choices.value.push('')
@@ -47,29 +83,68 @@ async function handleSubmit() {
     try {
         const valuesArray = choices.value.map((c) => c.trim()).filter((label) => label !== '')
 
-        const payload: ICreateEnumDefinitionRequest = {
-            name: name.value.trim(),
-            description: description.value.trim(),
-            values: valuesArray
+        if (isEditing.value && props.definitionToEdit) {
+            // Edit Mode
+            const valueObj = props.definitionToEdit.values?.[0]
+            if (!valueObj) throw new Error('No values found to update')
+
+            const valueUpdates: IEnumValueUpdate[] = []
+            
+            valuesArray.forEach((val, index) => {
+                if (index < 5) {
+                    const key = `value${index + 1}` as 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
+                    valueUpdates.push({
+                        enum_value_id: valueObj.public_id,
+                        key: key,
+                        value: val
+                    })
+                }
+            })
+
+            for (let i = valuesArray.length; i < 5; i++) {
+                 const key = `value${i + 1}` as 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
+                 // Check if it had a value previously
+                 if (valueObj[key]) {
+                     valueUpdates.push({
+                        enum_value_id: valueObj.public_id,
+                        key: key,
+                        value: ''
+                    })
+                 }
+            }
+
+            const payload: IUpdateEnumDefinitionRequest = {
+                name: name.value.trim(),
+                description: description.value.trim(),
+                value_updates: valueUpdates
+            }
+
+            const res = await updateEnumDefinition(server_store.getPublicId, props.definitionToEdit.public_id, payload)
+            if (res.error) throw new Error(res.error)
+
+            toast.add({ severity: 'success', summary: t('messages.success.update'), life: 3000 })
+            emit('updated')
+
+        } else {
+            // Create Mode
+            const payload: ICreateEnumDefinitionRequest = {
+                name: name.value.trim(),
+                description: description.value.trim(),
+                values: valuesArray
+            }
+
+            const res = await createEnumDefinition(server_store.getPublicId, payload)
+            if (res.error) throw new Error(res.error)
+
+            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 3000 })
+            emit('created')
         }
-
-        const res = await createEnumDefinition(server_store.getPublicId, payload)
-
-        if (res.error) {
-            throw new Error(res.error)
-        }
-
-        toast.add({
-            severity: 'success',
-            summary: t('messages.success.create'),
-            life: 3000
-        })
-        emit('created')
+        
         handleClose()
     } catch (e) {
         toast.add({
             severity: 'error',
-            summary: t('messages.error.create'),
+            summary: isEditing.value ? t('messages.error.update') : t('messages.error.create'),
             detail: e instanceof Error ? e.message : 'Unknown error',
             life: 3000
         })
@@ -79,11 +154,10 @@ async function handleSubmit() {
 }
 
 function handleClose() {
-    name.value = ''
-    description.value = ''
-    choices.value = ['']
+    resetForm()
     emit('update:modelValue', false)
 }
+
 </script>
 
 <template>
@@ -93,8 +167,9 @@ function handleClose() {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-plus-circle text-primary-500"></i>
                     <span class="font-semibold text-surface-900">
-                        {{ t('views.server_definitions.create_modal.title') }}
+                        {{ isEditing ? t('common.actions.update', { entity: t('views.server_definitions.entity_name', 'Definition') }) : t('views.server_definitions.create_modal.title') }}
                     </span>
+
                 </div>
                 <span class="text-xs text-surface-600">
                     {{ t('views.server_definitions.create_modal.subtitle') }}
@@ -187,7 +262,7 @@ function handleClose() {
                     @click="handleClose"
                 />
                 <Button
-                    :label="t('common.actions.create')"
+                    :label="isEditing ? t('common.actions.save') : t('common.actions.create')"
                     :loading="loading"
                     :disabled="!canSubmit"
                     @click="handleSubmit"

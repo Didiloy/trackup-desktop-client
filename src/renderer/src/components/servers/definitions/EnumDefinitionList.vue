@@ -16,6 +16,7 @@ const { listEnumDefinitions, deleteEnumDefinition } = useEnumDefinitionCRUD()
 const definitions = ref<IEnumDefinition[]>([])
 const loading = ref(true)
 const showCreateDialog = ref(false)
+const definitionToEdit = ref<IEnumDefinition | null>(null)
 const showDeleteConfirm = ref(false)
 const deleteTargetId = ref<string | null>(null)
 const deleteTargetName = ref<string>('')
@@ -38,6 +39,16 @@ async function loadDefinitions() {
     } finally {
         loading.value = false
     }
+}
+
+function openCreateDialog() {
+    definitionToEdit.value = null
+    showCreateDialog.value = true
+}
+
+function openEditDialog(def: IEnumDefinition) {
+    definitionToEdit.value = def
+    showCreateDialog.value = true
 }
 
 function confirmDelete(def: IEnumDefinition) {
@@ -118,8 +129,8 @@ function getBadgeColor(index: number) {
                 :label="t('views.server_definitions.add_definition')"
                 icon="pi pi-plus"
                 size="small"
-                @click="showCreateDialog = true"
-                />
+                @click="openCreateDialog"
+            />
         </div>
 
         <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
@@ -150,7 +161,7 @@ function getBadgeColor(index: number) {
                 size="small"
                 rounded
                 outlined
-                @click="showCreateDialog = true"
+                @click="openCreateDialog"
             />
         </div>
 
@@ -162,15 +173,24 @@ function getBadgeColor(index: number) {
             >
                 <!-- Actions (visible on hover) -->
                 <div
-                    class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2"
                 >
+                    <Button
+                        icon="pi pi-pencil"
+                        text
+                        rounded
+                        severity="secondary"
+                        size="small"
+                        class="w-8 h-8 bg-surface-0/80 backdrop-blur hover:bg-surface-100"
+                        @click="openEditDialog(def)"
+                    />
                     <Button
                         icon="pi pi-trash"
                         text
                         rounded
                         severity="danger"
                         size="small"
-                        class="w-8 h-8"
+                        class="w-8 h-8 bg-surface-0/80 backdrop-blur hover:bg-red-50"
                         @click="confirmDelete(def)"
                     />
                 </div>
@@ -198,25 +218,24 @@ function getBadgeColor(index: number) {
 
                     <div class="flex flex-wrap gap-2">
                         <span
-                            v-for="(choice, idx) in getChoicesPreview(def).slice(0, 4)"
+                            v-for="(choice, idx) in getChoicesPreview(def)"
                             :key="idx"
                             class="text-xs font-medium px-2.5 py-1 rounded-lg ring-1 ring-inset"
                             :class="getBadgeColor(idx)"
                         >
                             {{ choice }}
                         </span>
-                        <span
-                            v-if="getChoicesPreview(def).length > 4"
-                            class="text-xs font-medium px-2 py-1 rounded-lg bg-surface-100 text-surface-500 ring-1 ring-inset ring-surface-200"
-                        >
-                            +{{ getChoicesPreview(def).length - 4 }}
-                        </span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <EnumDefinitionCreateDialog v-model="showCreateDialog" @created="loadDefinitions" />
+        <EnumDefinitionCreateDialog 
+            v-model="showCreateDialog" 
+            :definition-to-edit="definitionToEdit"
+            @created="loadDefinitions" 
+            @updated="loadDefinitions"
+        />
 
         <ConfirmationDialog
             :model-value="showDeleteConfirm"
