@@ -341,6 +341,7 @@
         },
         "server_profile": {
             "title": "Profil du serveur",
+            "subtitle": "Voir et modifier les informations de votre serveur",
             "general_info": "Informations générales",
             "manage_server": "Gérer le serveur",
             "server_details": "Détails du serveur",
@@ -353,7 +354,12 @@
             "activities_count": "Nombre d'activités",
             "sessions_count": "Nombre de sessions",
             "update_banner": "Mettre à jour la bannière du serveur",
-            "update_logo": "Mettre à jour le logo du serveur"
+            "update_logo": "Mettre à jour le logo du serveur",
+            "update_floating_bar": {
+                "title": "Vous avez des modifications non enregistrées",
+                "description": "Vous avez des modifications non enregistrées. Voulez-vous les enregistrer ?",
+                "save": "Enregistrer"
+            } 
         },
         "server_widgets": {
             "title": "Widgets",

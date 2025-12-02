@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import ServerGeneralSettings from '@/components/servers/settings/ServerGeneralSettings.vue'
 
 const { t } = useI18n()
 </script>
@@ -17,7 +16,6 @@ const { t } = useI18n()
                 </p>
             </div>
 
-            <ServerGeneralSettings />
         </div>
     </div>
 </template>
