@@ -36,6 +36,7 @@ export const useServerStore = defineStore('server', () => {
     const getServerTypePublicId: ComputedRef<string | null> = computed(
         () => state.server?.server_type_public_id ?? null
     )
+    // Getter for all members
     const getMembers: ComputedRef<IServerMember[] | null> = computed(
         () => state.serverMembers ?? null
     )
@@ -90,6 +91,13 @@ export const useServerStore = defineStore('server', () => {
 
     const setLoading = (loading: boolean): void => {
         state.isLoading = loading
+    }
+
+    const getMemberById = (memberId: string): IServerMember | null => {
+        if (!state.serverMembers) return null
+        return (
+            state.serverMembers.find((member) => member.public_id === memberId) || null
+        )
     }
 
     const isLoading: ComputedRef<boolean> = computed(() => state.isLoading)
@@ -151,6 +159,7 @@ export const useServerStore = defineStore('server', () => {
         getPublicId,
         getServerTypePublicId,
         getMembers,
+        getMemberById,
         getActivities,
         getEnumsDefinition,
         getName,

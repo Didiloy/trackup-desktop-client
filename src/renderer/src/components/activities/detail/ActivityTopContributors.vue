@@ -2,12 +2,21 @@
 import type { ITopContributor } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import { useServerStore } from '@/stores/server'
+import { onMounted } from 'vue'
 
 const props = defineProps<{
     contributors: ITopContributor[] | undefined
 }>()
 
 const { t } = useI18n()
+const server_store = useServerStore()
+
+onMounted(async () => {
+    console.log(server_store.getMembers)
+    console.log(props.contributors)
+
+})
 </script>
 
 <template>
@@ -28,7 +37,9 @@ const { t } = useI18n()
                 <span class="text-lg font-semibold text-primary-500">#{{ member.rank }}</span>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-surface-900">
-                        {{ member.user_email || t('common.fields.none') }}
+                        {{
+                            server_store.getMemberById(member.member_id)?.nickname
+                        }}
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }}
