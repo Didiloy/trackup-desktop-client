@@ -113,7 +113,7 @@ function handleSkipSkillLevels(): void {
             v-if="current_step === 'info'"
             :activity="activity"
             mode="edit"
-            @success="handleActivityUpdate"
+            @updated="handleActivityUpdate"
             @cancel="close"
         />
         <ActivityMetadataForm
