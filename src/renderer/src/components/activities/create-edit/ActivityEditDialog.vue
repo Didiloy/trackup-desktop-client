@@ -2,8 +2,8 @@
 import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityEditForm from './ActivityEditForm.vue'
-import ActivitySkillLevelsForm from '../create/ActivitySkillLevelsForm.vue'
-import ActivityMetadataForm from '../create/ActivityMetadataForm.vue'
+import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
+import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import type {
@@ -12,6 +12,7 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
+import ActivityCreateEditForm from '@/components/activities/create-edit/ActivityCreateEditForm.vue'
 
 interface Props {
     modelValue: boolean
@@ -135,12 +136,12 @@ function handleSkipSkillLevels(): void {
         @update:model-value="emit('update:modelValue', $event)"
         @step-click="(step) => (current_step = step.key as Step)"
     >
-        <ActivityEditForm
+        <ActivityCreateEditForm
             v-if="current_step === 'info'"
             :activity="activity"
-            :loading="submitting"
-            @update="handleActivityUpdate"
-            @next="current_step = 'metadata'"
+            mode="edit"
+            @success="handleActivityUpdate"
+            @cancel="close"
         />
         <ActivityMetadataForm
             v-else-if="current_step === 'metadata'"

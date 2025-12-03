@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
-import ActivityCreateForm from './ActivityCreateForm.vue'
+import ActivityCreateEditForm from './ActivityCreateEditForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
@@ -131,7 +131,7 @@ function finishWizard(): void {
         :current="currentIndex"
         @update:model-value="emit('update:modelValue', $event)"
     >
-        <ActivityCreateForm
+        <ActivityCreateEditForm
             v-if="current_step === 'info'"
             mode="create"
             @success="handleActivityCreated"

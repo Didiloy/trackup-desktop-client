@@ -279,7 +279,6 @@ function removeDefinition(index: number): void {
     defs.value.splice(index, 1)
 }
 
-
 async function onSubmit(): Promise<void> {
     if (defs.value.length === 0) {
         emit('success')
@@ -309,10 +308,10 @@ async function onSubmit(): Promise<void> {
             }
         }
 
-        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+        toast.add({ severity: 'success', summary: t('messages.success.create-edit'), life: 2500 })
         emit('success')
     } catch (e) {
-        const message = e instanceof Error ? e.message : t('messages.error.create')
+        const message = e instanceof Error ? e.message : t('messages.error.create-edit')
         toast.add({ severity: 'error', summary: message, life: 3000 })
     } finally {
         submitting.value = false
@@ -541,7 +540,7 @@ function formatTypeLabel(type?: string): string {
                 @click="emit('skip')"
             />
             <Button
-                :label="t('common.actions.create')"
+                :label="t('common.actions.create-edit')"
                 :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onSubmit"
