@@ -70,6 +70,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
                             color: '#64748b',
                             text: t('common.fields.total'),
                             value: {
+                                color: '#64748b',
                                 formatter: ({ value }) => {
                                     return formatMinutesToLabel(value)
                                 }
@@ -78,6 +79,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
                         average: {
                             show: true,
                             value: {
+                                color: '#64748b',
                                 formatter: ({ value }) => {
                                     return formatMinutesToLabel(value)
                                 }
@@ -97,7 +99,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
                 show: true,
                 customFormat: ({ datapoint }) => {
                     const content = `${datapoint?.name}: ${formatMinutesToLabel(datapoint?.value ?? 0)}`
-                    return `<div style="background-color: #ffffff; color: var(--surface-900); padding: 4px 8px; border-radius: 8px; font-size: 12px; text-align: center; white-space: nowrap; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">${content}</div>`
+                    return `<div style="background-color: var(--p-surface-0); color: var(--surface-900); padding: 4px 8px; border-radius: 8px; font-size: 12px; text-align: center; white-space: nowrap; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">${content}</div>`
                 }
             }
         }
