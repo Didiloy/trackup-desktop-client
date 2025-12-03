@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivityCreateForm from './ActivityCreateForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityCreateOrEdit } from '@/composables/activities/useActivityCreateOrEdit'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 interface Props {
@@ -20,53 +19,60 @@ const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
 
-const {
-    currentStep,
-    currentIndex,
-    submitting,
-    error,
-    createdActivity,
-    advanceTo,
-    resetState,
-    handleActivitySubmit,
-    handleMetadataSubmit,
-    handleSkillLevelsSubmit
-} = useActivityCreateOrEdit({
-    mode: 'create',
-    onSuccess: (activity) => emit('created', activity)
+const created_activity = ref<IActivity | null>(null)
+
+type Step = 'info' | 'metadata' | 'skill-levels'
+const current_step = ref<Step>('info')
+
+const steps = computed(() => {
+    return [
+        {
+            key: 'info',
+            label: t('common.steps.activity'),
+            icon: 'pi pi-pencil'
+        },
+        {
+            key: 'metadata',
+            label: t('common.steps.metadata'),
+            icon: 'pi pi-database'
+        },
+        {
+            key: 'skill-levels',
+            label: t('common.steps.skill_levels'),
+            icon: 'pi pi-sliders-h'
+        }
+    ]
 })
 
-const steps = computed(() => [
-    {
-        key: 'activity',
-        label: t('common.steps.activity'),
-        icon: 'pi pi-pencil'
-    },
-    {
-        key: 'metadata',
-        label: t('common.steps.metadata'),
-        icon: 'pi pi-database'
-    },
-    {
-        key: 'skill-levels',
-        label: t('common.steps.skill_levels'),
-        icon: 'pi pi-sliders-h'
-    }
-])
+const currentIndex = computed(() => steps.value.findIndex((s) => s.key === current_step.value))
 
-const subtitle = computed(() =>
-    currentStep.value === 'activity'
-        ? t('views.activity.add_modal.description')
-        : currentStep.value === 'metadata'
-          ? t('views.activity.add_modal.metadata_description') +
-            ' (' +
-            t('common.fields.optional') +
-            ')'
-          : t('views.activity.add_modal.skill_levels_description') +
-            ' (' +
-            t('common.optional') +
-            ')'
-)
+const subtitle = computed(() => {
+    switch (current_step.value) {
+        case 'info':
+            return t('views.activity.add_modal.description')
+        case 'metadata':
+            return (
+                t('views.activity.add_modal.metadata_description') +
+                ' (' +
+                t('common.fields.optional') +
+                ')'
+            )
+        case 'skill-levels':
+            return (
+                t('views.activity.add_modal.skill_levels_description') +
+                ' (' +
+                t('common.fields.optional') +
+                ')'
+            )
+        default:
+            return ''
+    }
+})
+
+function resetState(): void {
+    current_step.value = 'info'
+    created_activity.value = null
+}
 
 function close(): void {
     resetState()
@@ -75,12 +81,42 @@ function close(): void {
 
 watch(
     () => props.modelValue,
-    (value) => {
-        if (!value) {
-            resetState()
-        }
+    () => {
+        resetState()
     }
 )
+
+// Step 1: Activity created successfully
+function handleActivityCreated(activity: IActivity): void {
+    created_activity.value = activity
+    current_step.value = 'metadata'
+}
+
+// Step 2: Metadata handled (created or skipped)
+function handleMetadataCompleted(): void {
+    current_step.value = 'skill-levels'
+}
+
+function handleSkipMetadata(): void {
+    current_step.value = 'skill-levels'
+}
+
+// Step 3: Skill levels handled (created or skipped)
+function handleSkillLevelsCompleted(): void {
+    finishWizard()
+}
+
+function handleSkipSkillLevels(): void {
+    finishWizard()
+}
+
+// Finish Wizard
+function finishWizard(): void {
+    if (created_activity.value) {
+        emit('created', created_activity.value)
+    }
+    close()
+}
 </script>
 
 <template>
@@ -96,29 +132,24 @@ watch(
         @update:model-value="emit('update:modelValue', $event)"
     >
         <ActivityCreateForm
-            v-if="currentStep === 'activity'"
-            :loading="submitting"
-            @create="handleActivitySubmit"
+            v-if="current_step === 'info'"
+            mode="create"
+            @success="handleActivityCreated"
             @cancel="close"
         />
+
         <ActivityMetadataForm
-            v-else-if="currentStep === 'metadata'"
-            :activity-id-for-types="createdActivity?.public_id ?? null"
-            :loading="submitting"
-            @skip="advanceTo('skill-levels')"
-            @create="handleMetadataSubmit"
+            v-else-if="current_step === 'metadata'"
+            :activity-id-for-types="created_activity?.public_id ?? null"
+            @skip="handleSkipMetadata"
+            @success="handleMetadataCompleted"
         />
+
         <ActivitySkillLevelsForm
-            v-else
-            :submitting="submitting"
-            :activity-id="createdActivity?.public_id ?? null"
-            @skip="handleSkillLevelsSubmit([], close)"
-            @create="(levels) => handleSkillLevelsSubmit(levels, close)"
+            v-else-if="current_step === 'skill-levels'"
+            :activity-id="created_activity?.public_id ?? null"
+            @skip="handleSkipSkillLevels"
+            @success="handleSkillLevelsCompleted"
         />
-        <template #footer>
-            <div v-if="error" class="w-full text-sm text-red-500 px-4 border-none">
-                {{ error }}
-            </div>
-        </template>
     </MultiStepsDialog>
 </template>

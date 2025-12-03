@@ -11,12 +11,10 @@ import { useToast } from 'primevue/usetoast'
 
 const props = withDefaults(
     defineProps<{
-        submitting?: boolean
         initialDisplayOrder?: number
         activityId?: string | null
     }>(),
     {
-        submitting: false,
         initialDisplayOrder: 1,
         activityId: null
     }
@@ -24,17 +22,18 @@ const props = withDefaults(
 
 const emit = defineEmits<{
     (e: 'skip'): void
-    (e: 'create', levels: ICreateActivitySkillLevelRequest[]): void
+    (e: 'success'): void
 }>()
 
 const { t } = useI18n()
 const toast = useToast()
-const { listSkillLevels, deleteSkillLevel } = useActivitySkillLevelCRUD()
+const { listSkillLevels, deleteSkillLevel, createSkillLevel } = useActivitySkillLevelCRUD()
 const server_store = useServerStore()
 
 const levels = ref<ICreateActivitySkillLevelRequest[]>([])
 const existingLevels = ref<IActivitySkillLevel[]>([])
 const nextDisplayOrder = ref(props.initialDisplayOrder)
+const submitting = ref(false)
 
 const draft = ref({
     name: '',
@@ -137,8 +136,35 @@ async function removeExistingLevel(levelId: string): Promise<void> {
     }
 }
 
-function submitLevels(): void {
-    emit('create', levels.value)
+
+async function onSubmit(): Promise<void> {
+    if (levels.value.length === 0) {
+        emit('success')
+        return
+    }
+
+    submitting.value = true
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId || !props.activityId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+
+        for (const level of levels.value) {
+            const res = await createSkillLevel(serverId, props.activityId, level)
+            if (res.error) {
+                throw new Error(res.error)
+            }
+        }
+
+        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+        emit('success')
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.create')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
+    }
 }
 </script>
 
@@ -296,9 +322,9 @@ function submitLevels(): void {
             />
             <Button
                 :label="t('common.actions.create')"
-                :loading="props.submitting"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="submitLevels"
+                @click="onSubmit"
             />
         </div>
     </div>
