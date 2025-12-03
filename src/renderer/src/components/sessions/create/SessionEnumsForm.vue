@@ -11,6 +11,10 @@ import {
     TSessionEnumSelectionKey
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
+// Constants
+const SELECTION_VALUE_SEPARATOR = '##'
+const VALUE_KEYS = ['value1', 'value2', 'value3', 'value4', 'value5'] as const
+
 const props = defineProps<{
     sessionId: string
 }>()
@@ -27,14 +31,17 @@ const { listEnumDefinitions } = useEnumDefinitionCRUD()
 const { addSessionEnums } = useSessionCRUD()
 
 const definitions = shallowRef<IEnumDefinition[]>([])
-const selections = ref<Record<string, string>>({}) // enum_def_id -> "enumValueId_key"
+const selections = ref<Record<string, string>>({})
 const isLoadingDefinitions = ref(true)
 const submitting = ref(false)
-const SELECTION_VALUE_SEPARATOR = '##'
 
-onMounted(async () => {
-    // Assigner les definitions depuis le store si disponibles
-    if (server_store.getEnumsDefinition && server_store.getEnumsDefinition.length > 0) {
+// Computed
+const can_submit = computed(() => !submitting.value)
+const hasSelections = computed(() => Object.values(selections.value).some(Boolean))
+
+// Methods
+const loadDefinitions = async (): Promise<void> => {
+    if (server_store.getEnumsDefinition?.length) {
         definitions.value = server_store.getEnumsDefinition
         isLoadingDefinitions.value = false
         return
@@ -54,44 +61,65 @@ onMounted(async () => {
     } finally {
         isLoadingDefinitions.value = false
     }
-})
+}
 
-const can_submit = computed(() => {
-    return !submitting.value
-})
+const buildSelectionKey = (enumValueId: string, key: string): string =>
+    `${enumValueId}${SELECTION_VALUE_SEPARATOR}${key}`
 
-async function onSubmit(): Promise<void> {
-    // Parser les sélections en DTOs
-    const selectionDtos: IAddSessionEnumsSelection[] = Object.entries(selections.value)
-        .filter(([_, value]) => value)
-        .map(([_, value]) => {
-            const [enum_value_id , selected_key] = value.split(SELECTION_VALUE_SEPARATOR)
+const parseSelectionKey = (value: string): [string, string] => {
+    const [enum_value_id, selected_key] = value.split(SELECTION_VALUE_SEPARATOR)
+    return [enum_value_id, selected_key]
+}
+
+const buildSelectionDtos = (): IAddSessionEnumsSelection[] =>
+    Object.entries(selections.value)
+        .filter(([, value]) => value)
+        .map(([, value]) => {
+            const [enum_value_id, selected_key] = parseSelectionKey(value)
             return {
                 enum_value_id,
                 selected_key: selected_key as TSessionEnumSelectionKey
             }
         })
 
-    if (selectionDtos.length === 0) {
+const getOptions = (def: IEnumDefinition): Array<{ label: string; value: string; key: string }> => {
+    if (!def.values || def.values.length === 0) return []
+
+    const options: Array<{ label: string; value: string; key: string }> = []
+    for (const enumValue of def.values) {
+        for (const key of VALUE_KEYS) {
+            const value = enumValue[key]
+            if (value?.trim()) {
+                options.push({
+                    label: String(value),
+                    value: enumValue.public_id,
+                    key: key as string
+                })
+            }
+        }
+    }
+    return options
+}
+
+const submitSession = async (): Promise<void> => {
+    const serverId = server_store.getPublicId
+    if (!serverId) throw new Error(t('messages.error.noServerSelected'))
+
+    const res = await addSessionEnums(serverId, props.sessionId, {
+        selections: buildSelectionDtos()
+    })
+    if (res.error) throw new Error(res.error)
+}
+
+const handleSubmit = async (): Promise<void> => {
+    if (!hasSelections.value) {
         emit('skip')
         return
     }
 
     submitting.value = true
-
-    console.log('selectionDtos', selectionDtos)
-
     try {
-        const serverId = server_store.getPublicId
-        if (!serverId) {
-            throw new Error(t('messages.error.noServerSelected'))
-        }
-
-        const res = await addSessionEnums(serverId, props.sessionId, { selections: selectionDtos })
-        if (res.error) {
-            throw new Error(res.error)
-        }
-
+        await submitSession()
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
         emit('success')
     } catch (e) {
@@ -102,40 +130,7 @@ async function onSubmit(): Promise<void> {
     }
 }
 
-function getOptions(def: IEnumDefinition): { label: string; value: string; key: string }[] {
-    if (!def.values || def.values.length === 0) return []
-
-    const options: { label: string; value: string; key: string }[] = []
-
-    // Parcourir chaque enumValue dans le tableau
-    for (const enumValue of def.values) {
-        // Extraire toutes les valeurs possibles (value1, value2, value3, value4, value5)
-        const valueKeys = ['value1', 'value2', 'value3', 'value4', 'value5'] as const
-
-        for (const key of valueKeys) {
-            const value = enumValue[key]
-            if (value && value.trim() !== '') {
-                options.push({
-                    label: String(value),
-                    value: enumValue.public_id, // Le public_id de l'enumValue
-                    key: key // La clé (value1, value2, etc.)
-                })
-            }
-        }
-    }
-
-    return options
-}
-
-function handleSelection(defId: string, enumValueId: string, key: string): void {
-    console.log('handleSelection', defId, enumValueId, key)
-    selections.value[defId] = `${enumValueId}${SELECTION_VALUE_SEPARATOR}${key}`
-    console.log('selections', selections.value)
-}
-
-function getSelectedValue(defId: string): string | undefined {
-    return selections.value[defId]
-}
+onMounted(loadDefinitions)
 </script>
 
 <template>
@@ -171,10 +166,10 @@ function getSelectedValue(defId: string): string | undefined {
                         class="flex items-center"
                     >
                         <RadioButton
-                            :model-value="getSelectedValue(def.public_id)"
+                            :model-value="selections[def.public_id]"
                             :input-id="`${def.public_id}_${opt.value}_${opt.key}`"
-                            :value="`${opt.value}${SELECTION_VALUE_SEPARATOR}${opt.key}`"
-                            @update:model-value="handleSelection(def.public_id, opt.value, opt.key)"
+                            :value="buildSelectionKey(opt.value, opt.key)"
+                            @update:model-value="selections[def.public_id] = $event"
                         />
                         <label
                             :for="`${def.public_id}_${opt.value}_${opt.key}`"
@@ -200,7 +195,7 @@ function getSelectedValue(defId: string): string | undefined {
                 :disabled="!can_submit"
                 :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="onSubmit"
+                @click="handleSubmit"
             />
         </div>
     </div>
