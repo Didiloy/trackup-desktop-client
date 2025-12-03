@@ -28,7 +28,7 @@ import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
-import ActivityEditDialog from '@/components/activities/edit/ActivityEditDialog.vue'
+import ActivityEditDialog from '@/components/activities/create-edit/ActivityEditDialog.vue'
 
 const route = useRoute()
 const toast = useToast()

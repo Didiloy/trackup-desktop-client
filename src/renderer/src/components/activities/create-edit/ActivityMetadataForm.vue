@@ -9,18 +9,21 @@ import type {
 } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
+import { useToast } from 'primevue/usetoast'
 
 const emit = defineEmits<{
     (e: 'skip'): void
-    (e: 'create', defs: ICreateActivityMetadataDefinitionRequest[]): void
+    (e: 'success'): void
 }>()
 
 const { t, te } = useI18n()
+const toast = useToast()
 const {
     getMetadataTypes,
     listMetadataDefinitions,
     deleteMetadataDefinition,
-    updateMetadataDefinition
+    updateMetadataDefinition,
+    createMetadataDefinition
 } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
@@ -40,6 +43,7 @@ const props = withDefaults(
 const type_options = ref<{ label: string; value: string }[]>([])
 const loading_types = ref(false)
 const types_error = ref<string | null>(null)
+const submitting = ref(false)
 
 const existingMetadataList = ref<IActivityMetadataDefinition[]>([])
 const editingMetadataId = ref<string | null>(null)
@@ -231,8 +235,12 @@ function addChoice(): void {
     if (!raw) return
     const value = draft.value.type === 'NUMBER' ? Number(raw) : raw
     if (draft.value.type === 'NUMBER' && Number.isNaN(value)) return
-    draft.value.choices = draft.value.choices || []
-    draft.value.choices.push(value)
+
+    // Create a new array instead of mutating directly to avoid reactivity issues
+    if (!draft.value.choices) {
+        draft.value.choices = []
+    }
+    draft.value.choices = [...draft.value.choices, value]
     new_choice.value = ''
 }
 
@@ -250,6 +258,11 @@ function addDefinition(): void {
         return
     }
 
+    const choicesToSave =
+        draft.value.choices && draft.value.choices.length
+            ? draft.value.choices.map((c) => (typeof c === 'number' ? c : String(c)))
+            : undefined
+
     defs.value.push({
         key: normalizeKeyFromLabel(draft.value.label || draft.value.key).trim(),
         label: draft.value.label?.trim() || draft.value.key.trim(),
@@ -257,8 +270,7 @@ function addDefinition(): void {
         description: draft.value.description?.trim() || undefined,
         required: !!draft.value.required,
         allow_not_predefined_value: !!draft.value.allow_not_predefined_value,
-        choices:
-            draft.value.choices && draft.value.choices.length ? [...draft.value.choices] : undefined
+        choices: choicesToSave
     })
     resetDraft()
 }
@@ -267,8 +279,43 @@ function removeDefinition(index: number): void {
     defs.value.splice(index, 1)
 }
 
-function submitMetadata(): void {
-    emit('create', defs.value)
+async function onSubmit(): Promise<void> {
+    if (defs.value.length === 0) {
+        emit('success')
+        return
+    }
+
+    submitting.value = true
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId || !props.activityIdForTypes) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+
+        for (const def of defs.value) {
+            const payload: ICreateActivityMetadataDefinitionRequest = {
+                key: def.key,
+                label: def.label,
+                type: def.type,
+                description: def.description,
+                required: def.required,
+                allow_not_predefined_value: def.allow_not_predefined_value,
+                choices: def.choices ? [...def.choices] : undefined
+            }
+            const res = await createMetadataDefinition(serverId, props.activityIdForTypes, payload)
+            if (res.error) {
+                throw new Error(res.error)
+            }
+        }
+
+        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+        emit('success')
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.create')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
+    }
 }
 
 function handleCancelEdit(): void {
@@ -375,10 +422,9 @@ function formatTypeLabel(type?: string): string {
                     v-if="canUseChoices && draft.choices && draft.choices.length"
                     class="flex flex-wrap gap-2"
                 >
-                    <!-- using a timestamp to avoid key issues -->
                     <Chip
                         v-for="(c, idx) in draft.choices"
-                        :key="idx + Date.now().toString()"
+                        :key="`choice-${idx}`"
                         :label="c.toString()"
                         removable
                         :style="{
@@ -495,9 +541,9 @@ function formatTypeLabel(type?: string): string {
             />
             <Button
                 :label="t('common.actions.create')"
-                :loading="props.loading"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="submitMetadata"
+                @click="onSubmit"
             />
         </div>
     </div>

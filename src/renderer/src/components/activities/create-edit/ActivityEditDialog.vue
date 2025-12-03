@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
-import ActivityEditForm from './ActivityEditForm.vue'
-import ActivitySkillLevelsForm from '../create/ActivitySkillLevelsForm.vue'
-import ActivityMetadataForm from '../create/ActivityMetadataForm.vue'
+import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
+import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import {
-    useActivityCreateOrEdit,
-    type Step
-} from '@/composables/activities/useActivityCreateOrEdit'
-import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    IActivity
+}  from '@shared/contracts/interfaces/entities/activity.interfaces'
+import ActivityCreateEditForm from '@/components/activities/create-edit/ActivityCreateEditForm.vue'
 
 interface Props {
     modelValue: boolean
@@ -24,25 +22,13 @@ const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
 
-const {
-    currentStep,
-    currentIndex,
-    submitting,
-    error,
-    advanceTo,
-    resetState,
-    handleActivitySubmit,
-    handleMetadataSubmit,
-    handleSkillLevelsSubmit
-} = useActivityCreateOrEdit({
-    activityId: props.activity.public_id,
-    mode: 'edit',
-    onUpdate: () => emit('updated')
-})
+type Step = 'info' | 'metadata' | 'skill-levels'
+const current_step = ref<Step>('info')
+const submitting = ref(false)
 
 const steps = computed(() => [
     {
-        key: 'activity',
+        key: 'info',
         label: t('common.steps.activity'),
         icon: 'pi pi-pencil'
     },
@@ -58,13 +44,20 @@ const steps = computed(() => [
     }
 ])
 
+const currentIndex = computed(() => steps.value.findIndex((s) => s.key === current_step.value))
+
 const subtitle = computed(() =>
-    currentStep.value === 'activity'
+    current_step.value === 'info'
         ? t('views.activity.add_modal.description')
-        : currentStep.value === 'metadata'
+        : current_step.value === 'metadata'
           ? t('views.activity.add_modal.metadata_description')
           : t('views.activity.add_modal.skill_levels_description')
 )
+
+function resetState(): void {
+    current_step.value = 'info'
+    submitting.value = false
+}
 
 function close(): void {
     resetState()
@@ -79,6 +72,28 @@ watch(
         }
     }
 )
+
+async function handleActivityUpdate(): Promise<void> {
+    current_step.value = 'metadata'
+}
+
+function handleMetadataCompleted(): void {
+    current_step.value = 'skill-levels'
+}
+
+function handleSkipMetadata(): void {
+    current_step.value = 'skill-levels'
+}
+
+function handleSkillLevelsCompleted(): void {
+    emit('updated')
+    close()
+}
+
+function handleSkipSkillLevels(): void {
+    emit('updated')
+    close()
+}
 </script>
 
 <template>
@@ -92,34 +107,27 @@ watch(
         :steps="steps"
         :current="currentIndex"
         @update:model-value="emit('update:modelValue', $event)"
-        @step-click="(step) => advanceTo(step.key as Step)"
+        @step-click="(step) => (current_step = step.key as Step)"
     >
-        <ActivityEditForm
-            v-if="currentStep === 'activity'"
+        <ActivityCreateEditForm
+            v-if="current_step === 'info'"
             :activity="activity"
-            :loading="submitting"
-            @update="handleActivitySubmit"
-            @next="advanceTo('metadata')"
+            mode="edit"
+            @updated="handleActivityUpdate"
+            @cancel="close"
         />
         <ActivityMetadataForm
-            v-else-if="currentStep === 'metadata'"
+            v-else-if="current_step === 'metadata'"
             :activity-id-for-types="activity.public_id"
-            :loading="submitting"
             :modify="true"
-            @skip="advanceTo('skill-levels')"
-            @create="handleMetadataSubmit"
+            @skip="handleSkipMetadata"
+            @success="handleMetadataCompleted"
         />
         <ActivitySkillLevelsForm
             v-else
-            :submitting="submitting"
             :activity-id="activity.public_id"
-            @skip="close"
-            @create="(levels) => handleSkillLevelsSubmit(levels, close)"
+            @skip="handleSkipSkillLevels"
+            @success="handleSkillLevelsCompleted"
         />
-        <template #footer>
-            <div v-if="error" class="w-full text-sm text-red-500 px-4 border-none">
-                {{ error }}
-            </div>
-        </template>
     </MultiStepsDialog>
 </template>

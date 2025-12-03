@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import ActivityCreateDialog from '@/components/activities/create/ActivityCreateDialog.vue'
+import ActivityCreateDialog from '@/components/activities/create-edit/ActivityCreateDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
 import ActivityCardGrid from '@/components/activities/ActivityCardGrid.vue'
 import { onMounted, ref } from 'vue'
