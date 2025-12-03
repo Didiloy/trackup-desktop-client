@@ -116,6 +116,19 @@ const descriptionText = computed(() => {
                 :placeholder="labelText || undefined"
                 class="w-full p-inputtext-sm"
             />
+
+            <!-- Free text input -->
+            <InputText
+                v-else
+                :model-value="value?.toString() || ''"
+                :placeholder="labelText || ''"
+                class="w-full h-full p-inputtext-lg"
+                @change="handleEditableInput"
+                @keydown="filterNumeric"
+                @update:model-value="
+                    (val) => emit('update:modelValue', val ? parseFloat(val) : undefined)
+                "
+            />
         </div>
     </div>
 </template>
