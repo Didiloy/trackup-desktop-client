@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, shallowRef, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
@@ -7,10 +7,13 @@ import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import {
-    IAddSessionEnumsRequest,
     IAddSessionEnumsSelection,
     TSessionEnumSelectionKey
 } from '@shared/contracts/interfaces/entities/session.interfaces'
+
+// Constants
+const SELECTION_VALUE_SEPARATOR = '##'
+const VALUE_KEYS = ['value1', 'value2', 'value3', 'value4', 'value5'] as const
 
 const props = defineProps<{
     sessionId: string
@@ -27,13 +30,19 @@ const server_store = useServerStore()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()
 const { addSessionEnums } = useSessionCRUD()
 
-const definitions = ref<IEnumDefinition[]>(server_store.getEnumsDefinition || [])
-const selections = ref<Record<string, string>>({}) // enum_def_id -> selected_key
+const definitions = shallowRef<IEnumDefinition[]>([])
+const selections = ref<Record<string, string>>({})
 const isLoadingDefinitions = ref(true)
 const submitting = ref(false)
 
-onMounted(async () => {
-    if (definitions.value.length > 0) {
+// Computed
+const can_submit = computed(() => !submitting.value)
+const hasSelections = computed(() => Object.values(selections.value).some(Boolean))
+
+// Methods
+const loadDefinitions = async (): Promise<void> => {
+    if (server_store.getEnumsDefinition?.length) {
+        definitions.value = server_store.getEnumsDefinition
         isLoadingDefinitions.value = false
         return
     }
@@ -52,46 +61,65 @@ onMounted(async () => {
     } finally {
         isLoadingDefinitions.value = false
     }
-})
+}
 
-const can_submit = computed(() => {
-    return !submitting.value
-})
+const buildSelectionKey = (enumValueId: string, key: string): string =>
+    `${enumValueId}${SELECTION_VALUE_SEPARATOR}${key}`
 
-async function onSubmit(): Promise<void> {
-    const selectionDtos: IAddSessionEnumsSelection[] = []
+const parseSelectionKey = (value: string): [string, string] => {
+    const [enum_value_id, selected_key] = value.split(SELECTION_VALUE_SEPARATOR)
+    return [enum_value_id, selected_key]
+}
 
-    for (const def of definitions.value) {
-        const selectedKey = selections.value[def.public_id]
-        if (selectedKey) {
-            const valueObj = def.values?.[0]
-            if (valueObj) {
-                selectionDtos.push({
-                    enum_value_id: valueObj.public_id,
-                    selected_key: selectedKey as TSessionEnumSelectionKey
+const buildSelectionDtos = (): IAddSessionEnumsSelection[] =>
+    Object.entries(selections.value)
+        .filter(([, value]) => value)
+        .map(([, value]) => {
+            const [enum_value_id, selected_key] = parseSelectionKey(value)
+            return {
+                enum_value_id,
+                selected_key: selected_key as TSessionEnumSelectionKey
+            }
+        })
+
+const getOptions = (def: IEnumDefinition): Array<{ label: string; value: string; key: string }> => {
+    if (!def.values || def.values.length === 0) return []
+
+    const options: Array<{ label: string; value: string; key: string }> = []
+    for (const enumValue of def.values) {
+        for (const key of VALUE_KEYS) {
+            const value = enumValue[key]
+            if (value?.trim()) {
+                options.push({
+                    label: String(value),
+                    value: enumValue.public_id,
+                    key: key as string
                 })
             }
         }
     }
+    return options
+}
 
-    if (selectionDtos.length === 0) {
+const submitSession = async (): Promise<void> => {
+    const serverId = server_store.getPublicId
+    if (!serverId) throw new Error(t('messages.error.noServerSelected'))
+
+    const res = await addSessionEnums(serverId, props.sessionId, {
+        selections: buildSelectionDtos()
+    })
+    if (res.error) throw new Error(res.error)
+}
+
+const handleSubmit = async (): Promise<void> => {
+    if (!hasSelections.value) {
         emit('skip')
         return
     }
-    
+
     submitting.value = true
-    
     try {
-        const serverId = server_store.getPublicId
-        if (!serverId) {
-            throw new Error(t('messages.error.noServerSelected'))
-        }
-        
-        const res = await addSessionEnums(serverId, props.sessionId, { selections: selectionDtos })
-        if (res.error) {
-            throw new Error(res.error)
-        }
-        
+        await submitSession()
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
         emit('success')
     } catch (e) {
@@ -102,20 +130,7 @@ async function onSubmit(): Promise<void> {
     }
 }
 
-function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
-    // This logic depends heavily on how `values` are structured.
-    // Based on "selected_key" example "value3", and values having "value1": "easy".
-    // We need to iterate over keys of the first value object.
-    const valueObj = def.values?.[0]
-    if (!valueObj) return []
-
-    return Object.entries(valueObj)
-        .filter(([key]) => key.startsWith('value') && key !== 'public_id')
-        .map(([key, label]) => ({
-            label: String(label),
-            value: key
-        }))
-}
+onMounted(loadDefinitions)
 </script>
 
 <template>
@@ -145,14 +160,19 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
                 </p>
 
                 <div class="flex flex-wrap gap-2">
-                    <div v-for="opt in getOptions(def)" :key="opt.value" class="flex items-center">
+                    <div
+                        v-for="opt in getOptions(def)"
+                        :key="`${opt.value}_${opt.key}`"
+                        class="flex items-center"
+                    >
                         <RadioButton
-                            v-model="selections[def.public_id]"
-                            :input-id="`${def.public_id}_${opt.value}`"
-                            :value="opt.value"
+                            :model-value="selections[def.public_id]"
+                            :input-id="`${def.public_id}_${opt.value}_${opt.key}`"
+                            :value="buildSelectionKey(opt.value, opt.key)"
+                            @update:model-value="selections[def.public_id] = $event"
                         />
                         <label
-                            :for="`${def.public_id}_${opt.value}`"
+                            :for="`${def.public_id}_${opt.value}_${opt.key}`"
                             class="ml-2 cursor-pointer text-sm text-surface-700"
                         >
                             {{ opt.label }}
@@ -175,7 +195,7 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
                 :disabled="!can_submit"
                 :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="onSubmit"
+                @click="handleSubmit"
             />
         </div>
     </div>
