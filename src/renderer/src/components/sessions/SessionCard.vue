@@ -2,10 +2,12 @@
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-
+import { useServerStore } from '@/stores/server'
 interface Props {
     session: ISessionListItem
 }
+
+const server_store = useServerStore()
 
 interface Emits {
     (e: 'like', sessionId: string): void
@@ -75,7 +77,9 @@ function getParticipantTooltip(
 
                     <!-- Nom de l’activité (secondaire) -->
                     <h3 class="text-md font-medium text-surface-600 drop-shadow">
-                        {{ session.activity.name }}
+                        <router-link :to="`/servers/${server_store.getPublicId}/activities/${session.activity.public_id}`" class="text-surface-600 hover:text-primary-600">
+                            {{ session.activity.name }}
+                        </router-link>
                     </h3>
                 </div>
             </div>
