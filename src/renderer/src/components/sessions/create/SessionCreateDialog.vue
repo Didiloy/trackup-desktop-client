@@ -182,13 +182,6 @@ function finishWizard(): void {
     }
     close()
 }
-
-// Compute whether the dialog should be closable
-const isClosable = computed(() => {
-    if (current_step.value !== 'metadata') return false
-    // If there are metadata definitions and metadata is invalid, prevent closing
-    return !(has_metadata.value && !metadata_valid.value)
-})
 </script>
 
 <template>
@@ -201,8 +194,8 @@ const isClosable = computed(() => {
         icon-class="pi pi-plus-circle"
         :steps="steps"
         :current="currentIndex"
-        :closable="isClosable"
-        :dismissable-mask="isClosable"
+        :closable="false"
+        :dismissable-mask="false"
         @update:model-value="emit('update:modelValue', $event)"
     >
         <SessionCreateForm
