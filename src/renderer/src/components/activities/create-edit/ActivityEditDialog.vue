@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
-import ActivityEditForm from './ActivityEditForm.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
 import type {
-    IActivity,
-    IUpdateActivityRequest
-} from '@shared/contracts/interfaces/entities/activity.interfaces'
-import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
-import { useServerStore } from '@/stores/server'
+    IActivity
+}  from '@shared/contracts/interfaces/entities/activity.interfaces'
 import ActivityCreateEditForm from '@/components/activities/create-edit/ActivityCreateEditForm.vue'
 
 interface Props {
@@ -26,9 +21,6 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
-const toast = useToast()
-const server_store = useServerStore()
-const { updateActivity } = useActivityCRUD()
 
 type Step = 'info' | 'metadata' | 'skill-levels'
 const current_step = ref<Step>('info')
@@ -81,27 +73,8 @@ watch(
     }
 )
 
-async function handleActivityUpdate(payload: IUpdateActivityRequest): Promise<void> {
-    submitting.value = true
-    try {
-        const serverId = server_store.getPublicId
-        if (!serverId) {
-            throw new Error(t('messages.error.noServerSelected'))
-        }
-
-        const res = await updateActivity(serverId, props.activity.public_id, payload)
-        if (res.error || !res.data) {
-            throw new Error(res.error || t('messages.error.update'))
-        }
-
-        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
-        current_step.value = 'metadata'
-    } catch (e) {
-        const message = e instanceof Error ? e.message : t('messages.error.update')
-        toast.add({ severity: 'error', summary: message, life: 3000 })
-    } finally {
-        submitting.value = false
-    }
+async function handleActivityUpdate(): Promise<void> {
+    current_step.value = 'metadata'
 }
 
 function handleMetadataCompleted(): void {
