@@ -4,8 +4,15 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
-import type { ICreateEnumDefinitionRequest, IEnumDefinition, IUpdateEnumDefinitionRequest, IEnumValueUpdate } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import type {
+    ICreateEnumDefinitionRequest,
+    IEnumDefinition,
+    IUpdateEnumDefinitionRequest,
+    IEnumValueUpdate
+} from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+
+const MAX_VALUES_PER_CHUNK = 5
 
 const props = defineProps<{
     modelValue: boolean
@@ -30,37 +37,41 @@ const loading = ref(false)
 
 const isEditing = computed(() => !!props.definitionToEdit)
 
-// Initialize form when editing
-watch(
-    () => props.definitionToEdit,
-    (def) => {
-        if (def) {
-            name.value = def.name
-            description.value = def.description || ''
-            
-            const valueObj = def.values?.[0]
-            if (valueObj) {
-                choices.value = Object.entries(valueObj)
-                    .filter(([key, val]) => key !== 'public_id' && val)
-                    .sort((a, b) => a[0].localeCompare(b[0])) // Ensure value1, value2 order
-                    .map(([_, val]) => val as string)
-            } else {
-                choices.value = ['']
-            }
-        } else {
-            // Reset if no definition passed (create mode)
-            resetForm()
-        }
-    },
-    { immediate: true }
-)
-
 function resetForm() {
     name.value = ''
     description.value = ''
     choices.value = ['']
 }
 
+function flattenDefinitionValues(definition?: IEnumDefinition | null): string[] {
+    if (!definition?.values?.length) return []
+    const flattened: string[] = []
+    definition.values.forEach((valueObj) => {
+        for (let i = 1; i <= MAX_VALUES_PER_CHUNK; i++) {
+            const key = `value${i}` as keyof typeof valueObj
+            const val = valueObj[key]
+            if (typeof val === 'string' && val.trim()) {
+                flattened.push(val)
+            }
+        }
+    })
+    return flattened
+}
+
+watch(
+    () => props.definitionToEdit,
+    (def) => {
+        if (def) {
+            name.value = def.name
+            description.value = def.description ?? ''
+            const flattened = flattenDefinitionValues(def)
+            choices.value = flattened.length ? flattened : ['']
+        } else {
+            resetForm()
+        }
+    },
+    { immediate: true }
+)
 
 function addChoice() {
     choices.value.push('')
@@ -84,33 +95,41 @@ async function handleSubmit() {
         const valuesArray = choices.value.map((c) => c.trim()).filter((label) => label !== '')
 
         if (isEditing.value && props.definitionToEdit) {
-            // Edit Mode
-            const valueObj = props.definitionToEdit.values?.[0]
-            if (!valueObj) throw new Error('No values found to update')
+            const existingChunks = props.definitionToEdit.values ?? []
+            const totalSlots = existingChunks.length * MAX_VALUES_PER_CHUNK
+
+            if (valuesArray.length > totalSlots) {
+                toast.add({
+                    severity: 'warn',
+                    summary: t('messages.error.update'),
+                    detail: t('views.server_definitions.create_modal.max_chunk_warning'),
+                    life: 3000
+                })
+                return
+            }
 
             const valueUpdates: IEnumValueUpdate[] = []
-            
-            valuesArray.forEach((val, index) => {
-                if (index < 5) {
-                    const key = `value${index + 1}` as 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
-                    valueUpdates.push({
-                        enum_value_id: valueObj.public_id,
-                        key: key,
-                        value: val
-                    })
-                }
-            })
+            let valueIndex = 0
 
-            for (let i = valuesArray.length; i < 5; i++) {
-                 const key = `value${i + 1}` as 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
-                 // Check if it had a value previously
-                 if (valueObj[key]) {
-                     valueUpdates.push({
-                        enum_value_id: valueObj.public_id,
-                        key: key,
-                        value: ''
-                    })
-                 }
+            for (const chunk of existingChunks) {
+                for (let i = 1; i <= MAX_VALUES_PER_CHUNK; i++) {
+                    const key = `value${i}` as 'value1' | 'value2' | 'value3' | 'value4' | 'value5'
+                    const newValue = valuesArray[valueIndex]
+                    if (typeof newValue !== 'undefined') {
+                        valueUpdates.push({
+                            enum_value_id: chunk.public_id,
+                            key,
+                            value: newValue
+                        })
+                        valueIndex++
+                    } else if (chunk[key]) {
+                        valueUpdates.push({
+                            enum_value_id: chunk.public_id,
+                            key,
+                            value: ''
+                        })
+                    }
+                }
             }
 
             const payload: IUpdateEnumDefinitionRequest = {
@@ -126,7 +145,6 @@ async function handleSubmit() {
             emit('updated')
 
         } else {
-            // Create Mode
             const payload: ICreateEnumDefinitionRequest = {
                 name: name.value.trim(),
                 description: description.value.trim(),
@@ -204,26 +222,15 @@ function handleClose() {
             </div>
 
             <div class="flex flex-col gap-2">
-                <label
-                    class="text-sm font-semibold text-surface-700 dark:text-surface-300 flex justify-between items-center"
-                >
-                    <span>{{ t('common.fields.choices') }} ({{ choices.length }}/5)</span>
-                    <div
-                        v-tooltip.top="
-                            choices.length >= 5
-                                ? t('views.server_definitions.create_modal.max_choices_reached')
-                                : ''
-                        "
-                    >
-                        <Button
-                            icon="pi pi-plus"
-                            size="small"
-                            text
-                            rounded
-                            :disabled="choices.length >= 5"
-                            @click="addChoice"
-                        />
-                    </div>
+                <label class="text-sm font-semibold text-surface-700 dark:text-surface-300 flex justify-between items-center">
+                    <span>{{ t('common.fields.choices') }}</span>
+                    <Button
+                        icon="pi pi-plus"
+                        size="small"
+                        text
+                        rounded
+                        @click="addChoice"
+                    />
                 </label>
 
                 <div class="flex flex-col gap-2 max-h-[200px] overflow-y-auto pr-2">

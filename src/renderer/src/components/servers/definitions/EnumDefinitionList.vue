@@ -21,6 +21,9 @@ const showDeleteConfirm = ref(false)
 const deleteTargetId = ref<string | null>(null)
 const deleteTargetName = ref<string>('')
 
+const MAX_VALUES_PER_CHUNK = 5
+
+
 async function loadDefinitions() {
     if (!server_store.getPublicId) return
     loading.value = true
@@ -86,20 +89,27 @@ onMounted(() => {
     loadDefinitions()
 })
 
+function flattenDefinitionValues(def: IEnumDefinition): string[] {
+    if (!def.values?.length) return []
+    const flattened: string[] = []
+    def.values.forEach((valueObj) => {
+        for (let i = 1; i <= MAX_VALUES_PER_CHUNK; i++) {
+            const key = `value${i}` as keyof typeof valueObj
+            const val = valueObj[key]
+            if (typeof val === 'string' && val.trim()) {
+                flattened.push(val)
+            }
+        }
+    })
+    return flattened
+}
+
 function getChoicesPreview(def: IEnumDefinition): string[] {
-    const valueObj = def.values?.[0]
-    if (!valueObj) return []
-    return Object.entries(valueObj)
-        .filter(([key, val]) => key !== 'public_id' && val)
-        .map(([_, val]) => val as string)
+    return flattenDefinitionValues(def)
 }
 
 function countChoices(def: IEnumDefinition): number {
-    const valueObj = def.values?.[0]
-    if (!valueObj) return 0
-
-    // Count non-empty values excluding public_id
-    return Object.entries(valueObj).filter(([key, val]) => key !== 'public_id' && val).length
+    return flattenDefinitionValues(def).length
 }
 
 function getBadgeColor(index: number) {
@@ -218,12 +228,15 @@ function getBadgeColor(index: number) {
 
                     <div class="flex flex-wrap gap-2">
                         <span
-                            v-for="(choice, idx) in getChoicesPreview(def)"
+                            v-for="(choice, idx) in getChoicesPreview(def).slice(0, 5)"
                             :key="idx"
                             class="text-xs font-medium px-2.5 py-1 rounded-lg ring-1 ring-inset"
                             :class="getBadgeColor(idx)"
                         >
                             {{ choice }}
+                        </span>
+                        <span v-if="getChoicesPreview(def).length > 5" class="text-xs font-medium px-2.5 py-1 rounded-lg ring-1 ring-inset" :class="getBadgeColor(5)">
+                            +{{ getChoicesPreview(def).length - 5 }}
                         </span>
                     </div>
                 </div>

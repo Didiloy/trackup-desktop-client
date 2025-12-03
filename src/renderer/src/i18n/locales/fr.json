@@ -377,7 +377,7 @@
                 "description_placeholder": "Décris la définition en quelques mots",
                 "choices_placeholder": "Choix (optionnel)",
                 "choices_placeholder_detail": "Cela peut être des choix que vous souhaitez vous attribuer comme 'Cool', 'Neutre', 'Nul', etc.",
-                "max_choices_reached": "Vous ne pouvez pas ajouter plus de 5 choix"
+                "max_chunk_warning": "Impossible d'ajouter davantage de valeurs pour cette définition."
             }
         },
         "server_widgets": {
