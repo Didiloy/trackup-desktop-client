@@ -17,7 +17,6 @@ declare module 'vue' {
     ActivityCardGrid: typeof import('./src/components/activities/ActivityCardGrid.vue')['default']
     ActivityCreateDialog: typeof import('./src/components/activities/create-edit/ActivityCreateDialog.vue')['default']
     ActivityCreateEditForm: typeof import('./src/components/activities/create-edit/ActivityCreateEditForm.vue')['default']
-    ActivityCreateForm: typeof import('./src/components/activities/create-edit/ActivityCreateForm.vue')['default']
     ActivityDetailHeader: typeof import('./src/components/activities/detail/ActivityDetailHeader.vue')['default']
     ActivityEditDialog: typeof import('./src/components/activities/create-edit/ActivityEditDialog.vue')['default']
     ActivityEditForm: typeof import('./src/components/activities/edit/ActivityEditForm.vue')['default']
