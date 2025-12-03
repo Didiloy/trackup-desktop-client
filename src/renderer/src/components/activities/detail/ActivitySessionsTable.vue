@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { useI18n } from 'vue-i18n'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 defineProps<{
     sessions: IActivitySessionListItem[]
@@ -37,7 +38,7 @@ function onPage(event: { page: number; rows: number }): void {
                 {{ slotProps.data.title || t('common.fields.no_title') }}
             </template>
         </Column>
-        <Column field="date" :header="t('common.session_details.date')">
+        <Column field="date" :header="t('views.server_sessions.session_details.date')">
             <template #body="slotProps">
                 {{ new Date(slotProps.data.date).toLocaleString() }}
             </template>
@@ -45,14 +46,20 @@ function onPage(event: { page: number; rows: number }): void {
         <Column
             field="duration"
             :header="
-                t('common.session_details.duration') + ' (' + t('common.time.minutes_short') + ')'
+                t('views.server_sessions.session_details.duration') +
+                ' (' +
+                t('common.time.minutes_short') +
+                ')'
             "
         >
             <template #body="slotProps">
-                {{ slotProps.data.duration }}
+                {{ formatMinutesToLabel(slotProps.data.duration) }}
             </template>
         </Column>
-        <Column field="participants_count" :header="t('common.session_details.participants')" />
+        <Column
+            field="participants_count"
+            :header="t('views.server_sessions.session_details.participants')"
+        />
         <Column field="likes_count" :header="t('views.activity.card.likes')" />
     </DataTable>
 </template>
