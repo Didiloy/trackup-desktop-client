@@ -135,7 +135,7 @@ async function handleActivityChange(activityId: string | null): Promise<void> {
 // Step 1: Session created successfully
 function handleSessionCreated(session: ISession): void {
     created_session.value = session
-    
+
     // Check for enums
     has_enums.value = (server_store.getEnumsDefinition?.length ?? 0) > 0
 
@@ -185,7 +185,7 @@ function finishWizard(): void {
 
 // Compute whether the dialog should be closable
 const isClosable = computed(() => {
-    if (current_step.value !== 'metadata') return true
+    if (current_step.value !== 'metadata') return false
     // If there are metadata definitions and metadata is invalid, prevent closing
     return !(has_metadata.value && !metadata_valid.value)
 })
