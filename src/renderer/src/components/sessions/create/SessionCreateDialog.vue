@@ -5,17 +5,9 @@ import SessionCreateForm from './SessionCreateForm.vue'
 import SessionEnumsForm from './SessionEnumsForm.vue'
 import SessionMetadataForm from './SessionMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
-import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
-import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
-import type {
-    ISession,
-    IAddSessionEnumsRequest,
-    IAddSessionMetadataRequest
-} from '@shared/contracts/interfaces/entities/session.interfaces'
-import type { ICreateActivitySessionRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
@@ -31,15 +23,9 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
-const toast = useToast()
-const { createActivitySession } = useActivityCRUD()
-const { addSessionEnums, addSessionMetadata } = useSessionCRUD()
 const server_store = useServerStore()
-
 const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 
-const submitting = ref(false)
-const error = ref<string | null>(null)
 const created_session = ref<ISession | null>(null)
 
 type Step = 'info' | 'enums' | 'metadata'
@@ -98,8 +84,6 @@ const subtitle = computed(() => {
 function resetState(): void {
     current_step.value = 'info'
     created_session.value = null
-    error.value = null
-    submitting.value = false
     has_enums.value = false
     has_metadata.value = false
     enum_definitions.value = []
@@ -148,67 +132,29 @@ async function handleActivityChange(activityId: string | null): Promise<void> {
     }
 }
 
-// Step 1: Create Session
-async function handleCreateSession(payload: {
-    activityId: string
-    request: ICreateActivitySessionRequest
-}): Promise<void> {
-    if (submitting.value) return
-    submitting.value = true
-    error.value = null
+// Step 1: Session created successfully
+function handleSessionCreated(session: ISession): void {
+    created_session.value = session
+    
+    // Check for enums
+    has_enums.value = server_store.getEnumsDefinition !== null
 
-    try {
-        const serverId = server_store.getPublicId
-        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
-
-        const res = await createActivitySession(serverId, payload.activityId, payload.request)
-        if (res.error || !res.data) {
-            throw new Error(res.error || t('messages.error.createSessionFailed'))
-        }
-
-        created_session.value = res.data
-        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
-
-        // Advance to next step
-        if (has_enums.value) {
-            current_step.value = 'enums'
-        } else if (has_metadata.value) {
-            current_step.value = 'metadata'
-        } else {
-            finishWizard()
-        }
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : t('messages.error.createSessionFailed')
-        toast.add({ severity: 'error', summary: t('messages.error.create'), life: 2500 })
-    } finally {
-        submitting.value = false
+    // Advance to next step
+    if (has_enums.value) {
+        current_step.value = 'enums'
+    } else if (has_metadata.value) {
+        current_step.value = 'metadata'
+    } else {
+        finishWizard()
     }
 }
 
-// Step 2: Add Enums
-async function handleAddEnums(payload: IAddSessionEnumsRequest): Promise<void> {
-    if (!created_session.value) return
-    submitting.value = true
-    error.value = null
-
-    try {
-        const serverId = server_store.getPublicId
-        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
-
-        const res = await addSessionEnums(serverId, created_session.value.public_id, payload)
-        if (res.error) throw new Error(res.error)
-
-        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
-
-        if (has_metadata.value) {
-            current_step.value = 'metadata'
-        } else {
-            finishWizard()
-        }
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : t('messages.error.addEnumsFailed')
-    } finally {
-        submitting.value = false
+// Step 2: Enums added successfully
+function handleEnumsAdded(): void {
+    if (has_metadata.value) {
+        current_step.value = 'metadata'
+    } else {
+        finishWizard()
     }
 }
 
@@ -220,26 +166,9 @@ function handleSkipEnums(): void {
     }
 }
 
-// Step 3: Add Metadata
-async function handleAddMetadata(payload: IAddSessionMetadataRequest): Promise<void> {
-    if (!created_session.value) return
-    submitting.value = true
-    error.value = null
-
-    try {
-        const serverId = server_store.getPublicId
-        if (!serverId) throw new Error(t('messages.error.noServerSelected'))
-
-        const res = await addSessionMetadata(serverId, created_session.value.public_id, payload)
-        if (res.error) throw new Error(res.error)
-
-        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
-        finishWizard()
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : t('messages.error.addMetadataFailed')
-    } finally {
-        submitting.value = false
-    }
+// Step 3: Metadata added successfully
+function handleMetadataAdded(): void {
+    finishWizard()
 }
 
 function handleSkipMetadata(): void {
@@ -254,7 +183,7 @@ function finishWizard(): void {
     close()
 }
 
-// Compute whether the dialog should be closable. It's not closable when on the metadata step and metadata is invalid
+// Compute whether the dialog should be closable
 const isClosable = computed(() => {
     if (current_step.value !== 'metadata') return true
     // If there are metadata definitions and metadata is invalid, prevent closing
@@ -278,34 +207,29 @@ const isClosable = computed(() => {
     >
         <SessionCreateForm
             v-if="current_step === 'info'"
-            :loading="submitting"
             :pre-selected-activity-id="props.preSelectedActivityId"
-            @create="handleCreateSession"
+            @success="handleSessionCreated"
             @cancel="close"
             @update:activity-id="handleActivityChange"
         />
 
         <SessionEnumsForm
             v-else-if="current_step === 'enums'"
-            :loading="submitting"
-            @submit="handleAddEnums"
+            :session-id="created_session?.public_id || ''"
+            @success="handleEnumsAdded"
             @skip="handleSkipEnums"
         />
 
         <SessionMetadataForm
             v-else-if="current_step === 'metadata'"
-            :loading="submitting"
+            :session-id="created_session?.public_id || ''"
             :activity-id="created_session?.activity.public_id || ''"
             :definitions="metadata_definitions"
-            @submit="handleAddMetadata"
+            @success="handleMetadataAdded"
             @skip="handleSkipMetadata"
             @valid="setMetadataValid"
         />
 
-        <template #footer>
-            <div v-if="error" class="w-full text-sm text-red-500 px-4 border-none">
-                {{ error }}
-            </div>
-        </template>
+
     </MultiStepsDialog>
 </template>

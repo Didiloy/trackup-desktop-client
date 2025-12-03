@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import {
@@ -11,28 +13,28 @@ import {
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 const props = defineProps<{
-    loading?: boolean
+    sessionId: string
 }>()
 
 const emit = defineEmits<{
-    (e: 'submit', payload: IAddSessionEnumsRequest): void
+    (e: 'success'): void
     (e: 'skip'): void
-    (e: 'cancel'): void
-    (e: 'loaded', hasEnums: boolean): void
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
 const server_store = useServerStore()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()
+const { addSessionEnums } = useSessionCRUD()
 
 const definitions = ref<IEnumDefinition[]>(server_store.getEnumsDefinition || [])
 const selections = ref<Record<string, string>>({}) // enum_def_id -> selected_key
 const isLoadingDefinitions = ref(true)
+const submitting = ref(false)
 
 onMounted(async () => {
     if (definitions.value.length > 0) {
         isLoadingDefinitions.value = false
-        emit('loaded', true)
         return
     }
 
@@ -44,26 +46,19 @@ onMounted(async () => {
         const res = await listEnumDefinitions(serverId)
         if (!res.error && res.data) {
             definitions.value = res.data
-            emit('loaded', definitions.value.length > 0)
-        } else {
-            emit('loaded', false)
         }
     } catch (e) {
         console.error(t('messages.error.fetch'), e)
-        emit('loaded', false)
     } finally {
         isLoadingDefinitions.value = false
     }
 })
 
 const can_submit = computed(() => {
-    // If no definitions, we can't submit anything useful, but we should have skipped already.
-    // If we have definitions, check if at least one is selected? Or maybe all required?
-    // The API doesn't seem to enforce required enums, but let's assume we want to send what's selected.
-    return !props.loading
+    return !submitting.value
 })
 
-function onSubmit(): void {
+async function onSubmit(): Promise<void> {
     const selectionDtos: IAddSessionEnumsSelection[] = []
 
     for (const def of definitions.value) {
@@ -83,8 +78,28 @@ function onSubmit(): void {
         emit('skip')
         return
     }
-
-    emit('submit', { selections: selectionDtos })
+    
+    submitting.value = true
+    
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+        
+        const res = await addSessionEnums(serverId, props.sessionId, { selections: selectionDtos })
+        if (res.error) {
+            throw new Error(res.error)
+        }
+        
+        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
+        emit('success')
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.addEnumsFailed')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
+    }
 }
 
 function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
@@ -158,7 +173,7 @@ function getOptions(def: IEnumDefinition): { label: string; value: string }[] {
             <Button
                 :label="t('common.actions.next')"
                 :disabled="!can_submit"
-                :loading="props.loading"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onSubmit"
             />

@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useMetadataForm } from '@/composables/activities/metadata/useMetadataForm'
+import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
+import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IAddSessionMetadataRequest } from '@shared/contracts/interfaces/entities/session.interfaces'
 
@@ -11,20 +14,23 @@ import MetadataInputBoolean from '@/components/activities/metadata/MetadataInput
 import MetadataInputDate from '@/components/activities/metadata/MetadataInputDate.vue'
 
 const props = defineProps<{
-    loading?: boolean
+    sessionId: string
     activityId: string
     definitions?: IActivityMetadataDefinition[]
 }>()
 
 const emit = defineEmits<{
-    (e: 'submit', payload: IAddSessionMetadataRequest): void
+    (e: 'success'): void
     (e: 'skip'): void
-    (e: 'cancel'): void
-    (e: 'loaded', hasMetadata: boolean): void
     (e: 'valid', isValid: boolean): void
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
+const server_store = useServerStore()
+const { addSessionMetadata } = useSessionCRUD()
+
+const submitting = ref(false)
 
 const { definitions, values, isLoadingDefinitions, loadDefinitions, canSubmit, getSubmissionData } =
     useMetadataForm(props.activityId, props.definitions)
@@ -41,8 +47,7 @@ function getComponent(type: string): unknown {
 }
 
 onMounted(async () => {
-    const hasMetadata = await loadDefinitions()
-    emit('loaded', hasMetadata)
+    await loadDefinitions()
     // emit initial validity state
     emit('valid', canSubmit.value)
 })
@@ -55,15 +60,35 @@ watch([() => canSubmit.value, () => definitions.value], () => {
 // Don't show skip at all when there is any required definition
 const hasAnyRequired = computed(() => definitions.value.some((d) => d.required))
 
-function onSubmit(): void {
+async function onSubmit(): Promise<void> {
     const metadata = getSubmissionData()
 
     if (metadata.length === 0) {
         emit('skip')
         return
     }
-
-    emit('submit', { metadata })
+    
+    submitting.value = true
+    
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+        
+        const res = await addSessionMetadata(serverId, props.sessionId, { metadata })
+        if (res.error) {
+            throw new Error(res.error)
+        }
+        
+        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
+        emit('success')
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.addMetadataFailed')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
+    }
 }
 </script>
 
@@ -104,8 +129,8 @@ function onSubmit(): void {
             />
             <Button
                 :label="t('common.actions.finish')"
-                :disabled="!canSubmit || props.loading"
-                :loading="props.loading"
+                :disabled="!canSubmit || submitting"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onSubmit"
             />

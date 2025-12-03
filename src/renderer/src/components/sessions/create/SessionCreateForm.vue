@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
@@ -8,6 +9,7 @@ import type {
     ICreateActivitySessionRequest,
     IActivity
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
 import Select from 'primevue/select'
@@ -17,25 +19,24 @@ import { formatDuration, convertMsToMinutes } from '@/utils/time.utils'
 
 const props = withDefaults(
     defineProps<{
-        loading?: boolean
         preSelectedActivityId?: string | null
     }>(),
     {
-        loading: false,
         preSelectedActivityId: null
     }
 )
 
 const emit = defineEmits<{
-    (e: 'create', payload: { activityId: string; request: ICreateActivitySessionRequest }): void
+    (e: 'success', session: ISession): void
     (e: 'cancel'): void
     (e: 'update:activityId', id: string | null): void
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
 const server_store = useServerStore()
 const user_store = useUserStore()
-const { getActivityById } = useActivityCRUD()
+const { getActivityById, createActivitySession } = useActivityCRUD()
 const { chronos, removeChrono } = useChronos()
 
 // Form fields
@@ -48,6 +49,9 @@ const pre_selected_activity = ref<IActivity | null>(null)
 const selected_activity = ref<IActivity | null>(null)
 const activity_name = ref('')
 const selected_chrono = ref<IChrono | null>(null)
+
+// Loading state
+const submitting = ref(false)
 
 // Activity selection state
 const effectiveActivityId = computed(() => {
@@ -93,32 +97,52 @@ onMounted(async () => {
 })
 
 const canSubmit = computed(() => {
-    return !props.loading && !!effectiveActivityId.value && duration.value > 0 && !!date.value
+    return !submitting.value && !!effectiveActivityId.value && duration.value > 0 && !!date.value
 })
 
 const filteredMembers = computed(
     () => server_store.getMembers?.filter((m) => m.user_email !== user_store.getEmail) || []
 )
 
-// Participants
-function onCreate(): void {
+// Create session
+async function onCreate(): Promise<void> {
     if (!canSubmit.value || !effectiveActivityId.value) return
-
-    const payload: ICreateActivitySessionRequest = {
-        title: title.value.trim() || undefined, // Optional, backend generates if missing
-        duration: Number(duration.value),
-        date: date.value.toISOString(),
-        participants: selected_participants.value.map((m) => m.public_id),
-        comment: comment.value.trim() || undefined
-    }
-
-    emit('create', {
-        activityId: effectiveActivityId.value,
-        request: payload
-    })
-
-    if (selected_chrono.value) {
-        removeChrono(selected_chrono.value.id)
+    
+    submitting.value = true
+    
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+        
+        const payload: ICreateActivitySessionRequest = {
+            title: title.value.trim() || undefined,
+            duration: Number(duration.value),
+            date: date.value.toISOString(),
+            participants: selected_participants.value.map((m) => m.public_id),
+            comment: comment.value.trim() || undefined
+        }
+        
+        const res = await createActivitySession(serverId, effectiveActivityId.value, payload)
+        if (res.error || !res.data) {
+            throw new Error(res.error || t('messages.error.createSessionFailed'))
+        }
+        
+        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+        
+        // Remove chrono if selected
+        if (selected_chrono.value) {
+            removeChrono(selected_chrono.value.id)
+        }
+        
+        // Emit success with created session
+        emit('success', res.data)
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.createSessionFailed')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
     }
 }
 const isHexColor = (v?: string): boolean => {
@@ -314,7 +338,7 @@ const isHexColor = (v?: string): boolean => {
             <Button
                 :label="t('common.actions.next')"
                 :disabled="!canSubmit"
-                :loading="props.loading"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onCreate"
             />
