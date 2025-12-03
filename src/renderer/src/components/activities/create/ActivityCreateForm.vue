@@ -1,33 +1,33 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
+import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useServerStore } from '@/stores/server'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
-import type { ICreateActivityRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { IActivity, ICreateActivityRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
-const props = withDefaults(
-    defineProps<{
-        loading?: boolean
-    }>(),
-    {
-        loading: false
-    }
-)
+const props = defineProps<{}>()
 
 const emit = defineEmits<{
-    (e: 'create', payload: ICreateActivityRequest): void
+    (e: 'success', activity: IActivity): void
     (e: 'cancel'): void
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
+const server_store = useServerStore()
+const { createActivity } = useActivityCRUD()
 
 const name = ref('')
 const description = ref('')
 const logo = ref<string>('')
 const banner = ref<string>('')
+const submitting = ref(false)
 
 const can_submit = computed(() => {
-    return !props.loading && !!name.value.trim()
+    return !submitting.value && !!name.value.trim()
 })
 
 function updateLogo(newLogo: string): void {
@@ -37,15 +37,37 @@ function updateBanner(newBanner: string): void {
     banner.value = newBanner
 }
 
-function onCreate(): void {
+async function onCreate(): Promise<void> {
     if (!can_submit.value) return
-    const payload: ICreateActivityRequest = {
-        name: name.value.trim(),
-        description: description.value.trim(),
-        logo: logo.value,
-        banner: banner.value
+    
+    submitting.value = true
+    
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+        
+        const payload: ICreateActivityRequest = {
+            name: name.value.trim(),
+            description: description.value.trim(),
+            logo: logo.value,
+            banner: banner.value
+        }
+        
+        const res = await createActivity(serverId, payload)
+        if (res.error || !res.data) {
+            throw new Error(res.error || t('messages.error.create'))
+        }
+        
+        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+        emit('success', res.data)
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.create')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
     }
-    emit('create', payload)
 }
 </script>
 
@@ -116,7 +138,7 @@ function onCreate(): void {
             <Button
                 :label="t('common.actions.create')"
                 :disabled="!can_submit"
-                :loading="props.loading"
+                :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
                 @click="onCreate"
             />
