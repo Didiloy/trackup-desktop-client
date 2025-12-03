@@ -4,9 +4,7 @@ import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
-import type {
-    IActivity
-}  from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import ActivityCreateEditForm from '@/components/activities/create-edit/ActivityCreateEditForm.vue'
 
 interface Props {
