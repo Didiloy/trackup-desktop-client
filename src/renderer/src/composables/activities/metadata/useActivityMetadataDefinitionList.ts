@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import type {
@@ -7,7 +7,29 @@ import type {
     IUpdateActivityMetadataDefinitionRequest
 } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
-export function useActivityMetadataDefinitionList() {
+interface UseActivityMetadataDefinitionListReturn {
+    existingMetadataList: Ref<IActivityMetadataDefinition[]>
+    defs: Ref<ICreateActivityMetadataDefinitionRequest[]>
+    syncExistingMetadata: (serverId: string, activityId: string) => Promise<void>
+    removeExistingMetadata: (
+        serverId: string,
+        activityId: string,
+        id: string,
+        onRemove?: () => void
+    ) => Promise<void>
+    updateExistingMetadata: (
+        serverId: string,
+        activityId: string,
+        metadataId: string,
+        payload: IUpdateActivityMetadataDefinitionRequest,
+        onUpdate?: () => void
+    ) => Promise<void>
+    addDefinition: (def: ICreateActivityMetadataDefinitionRequest) => void
+    removeDefinition: (index: number) => void
+    clearPendingDefinitions: () => void
+}
+
+export function useActivityMetadataDefinitionList(): UseActivityMetadataDefinitionListReturn {
     const { t } = useI18n()
     const { listMetadataDefinitions, deleteMetadataDefinition, updateMetadataDefinition } =
         useActivityMetadataDefinitionCRUD()
@@ -15,10 +37,7 @@ export function useActivityMetadataDefinitionList() {
     const existingMetadataList = ref<IActivityMetadataDefinition[]>([])
     const defs = ref<ICreateActivityMetadataDefinitionRequest[]>([])
 
-    async function syncExistingMetadata(
-        serverId: string,
-        activityId: string
-    ): Promise<void> {
+    async function syncExistingMetadata(serverId: string, activityId: string): Promise<void> {
         if (!serverId || !activityId) return
 
         try {

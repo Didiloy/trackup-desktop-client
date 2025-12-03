@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 
@@ -7,7 +7,14 @@ interface TypeOption {
     value: string
 }
 
-export function useActivityMetadataDefinitionTypes() {
+interface UseActivityMetadataDefinitionTypesReturn {
+    type_options: Ref<TypeOption[]>
+    loading_types: Ref<boolean>
+    types_error: Ref<string | null>
+    loadTypes: (serverId: string, activityId: string) => Promise<void>
+}
+
+export function useActivityMetadataDefinitionTypes(): UseActivityMetadataDefinitionTypesReturn {
     const { t, te } = useI18n()
     const { getMetadataTypes } = useActivityMetadataDefinitionCRUD()
 

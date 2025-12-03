@@ -1,11 +1,25 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, type Ref, type ComputedRef } from 'vue'
 import type {
     ICreateActivityMetadataDefinitionRequest,
     IActivityMetadataDefinition,
     ActivityMetadataType
 } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
-export function useActivityMetadataDefinitionDraft() {
+interface UseActivityMetadataDefinitionDraftReturn {
+    draft: Ref<ICreateActivityMetadataDefinitionRequest>
+    new_choice: Ref<string>
+    editingMetadataId: Ref<string | null>
+    canAdd: ComputedRef<boolean>
+    canUseChoices: ComputedRef<boolean>
+    addChoice: () => void
+    removeChoice: (index: number) => void
+    resetDraft: () => void
+    loadDraftFromDefinition: (meta: IActivityMetadataDefinition) => void
+    normalizeKeyFromLabel: (label: string) => string
+    ensureValidType: (validTypes: string[]) => void
+}
+
+export function useActivityMetadataDefinitionDraft(): UseActivityMetadataDefinitionDraftReturn {
     const draft = ref<ICreateActivityMetadataDefinitionRequest>({
         key: '',
         label: '',

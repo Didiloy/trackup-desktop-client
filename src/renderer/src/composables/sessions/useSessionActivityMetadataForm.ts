@@ -1,21 +1,30 @@
-import { ref, computed } from 'vue'
+import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IAddSessionMetadataEntry } from '@shared/contracts/interfaces/entities/session.interfaces'
 
+interface useSessionActivityMetadataFormReturn {
+    definitions: Ref<IActivityMetadataDefinition[]>
+    values: Ref<Record<string, unknown>>
+    isLoadingDefinitions: Ref<boolean>
+    loadDefinitions: () => Promise<boolean>
+    canSubmit: ComputedRef<boolean>,
+    getSubmissionData: () => IAddSessionMetadataEntry[]
+}
+
 export function useSessionActivityMetadataForm(
     activityId: string,
     initialDefinitions?: IActivityMetadataDefinition[]
-) {
+) : useSessionActivityMetadataFormReturn {
     const server_store = useServerStore()
     const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 
     const definitions = ref<IActivityMetadataDefinition[]>([])
-    const values = ref<Record<string, any>>({})
+    const values = ref<Record<string, unknown>>({})
     const isLoadingDefinitions = ref(true)
 
-    const loadDefinitions = async () => {
+    const loadDefinitions = async (): Promise<boolean> => {
         if (initialDefinitions && initialDefinitions.length > 0) {
             definitions.value = initialDefinitions
             isLoadingDefinitions.value = false
