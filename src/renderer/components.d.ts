@@ -110,6 +110,7 @@ declare module 'vue' {
     ServerTimelineChart: typeof import('./src/components/servers/stats/ServerTimelineChart.vue')['default']
     ServerTopActivities: typeof import('./src/components/servers/stats/ServerTopActivities.vue')['default']
     ServerTopMembers: typeof import('./src/components/servers/stats/ServerTopMembers.vue')['default']
+    SessionActivityMetadataForm: typeof import('./src/components/sessions/create/SessionActivityMetadataForm.vue')['default']
     SessionCard: typeof import('./src/components/sessions/SessionCard.vue')['default']
     SessionCardGrid: typeof import('./src/components/sessions/SessionCardGrid.vue')['default']
     SessionCardList: typeof import('./src/components/sessions/SessionCardList.vue')['default']

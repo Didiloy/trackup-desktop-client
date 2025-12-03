@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import SessionCreateForm from './SessionCreateForm.vue'
 import SessionEnumsForm from './SessionEnumsForm.vue'
-import SessionMetadataForm from './SessionMetadataForm.vue'
+import SessionActivityMetadataForm from './SessionActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
@@ -220,7 +220,7 @@ const isClosable = computed(() => {
             @skip="handleSkipEnums"
         />
 
-        <SessionMetadataForm
+        <SessionActivityMetadataForm
             v-else-if="current_step === 'metadata'"
             :session-id="created_session?.public_id || ''"
             :activity-id="created_session?.activity.public_id || ''"
