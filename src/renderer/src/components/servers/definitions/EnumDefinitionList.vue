@@ -23,7 +23,6 @@ const deleteTargetName = ref<string>('')
 
 const MAX_VALUES_PER_CHUNK = 5
 
-
 async function loadDefinitions() {
     if (!server_store.getPublicId) return
     loading.value = true
@@ -128,7 +127,9 @@ function getBadgeColor(index: number) {
     <div class="flex flex-col gap-6 w-full">
         <div class="flex justify-between items-center w-full">
             <div class="flex items-center gap-2">
-                <div class="p-2 rounded-lg bg-primary-200 text-primary-600 w-9 h-9 flex items-center justify-center">
+                <div
+                    class="p-2 rounded-lg bg-primary-200 text-primary-600 w-9 h-9 flex items-center justify-center"
+                >
                     <i class="pi pi-list text-lg"></i>
                 </div>
                 <h2 class="text-lg font-bold text-surface-900">
@@ -235,7 +236,11 @@ function getBadgeColor(index: number) {
                         >
                             {{ choice }}
                         </span>
-                        <span v-if="getChoicesPreview(def).length > 5" class="text-xs font-medium px-2.5 py-1 rounded-lg ring-1 ring-inset" :class="getBadgeColor(5)">
+                        <span
+                            v-if="getChoicesPreview(def).length > 5"
+                            class="text-xs font-medium px-2.5 py-1 rounded-lg ring-1 ring-inset"
+                            :class="getBadgeColor(5)"
+                        >
                             +{{ getChoicesPreview(def).length - 5 }}
                         </span>
                     </div>
@@ -243,10 +248,10 @@ function getBadgeColor(index: number) {
             </div>
         </div>
 
-        <EnumDefinitionCreateDialog 
-            v-model="showCreateDialog" 
+        <EnumDefinitionCreateDialog
+            v-model="showCreateDialog"
             :definition-to-edit="definitionToEdit"
-            @created="loadDefinitions" 
+            @created="loadDefinitions"
             @updated="loadDefinitions"
         />
 

@@ -6,7 +6,10 @@ import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
-import type { IActivity, ICreateActivityRequest } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    IActivity,
+    ICreateActivityRequest
+} from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 const props = defineProps<{}>()
 
@@ -39,27 +42,27 @@ function updateBanner(newBanner: string): void {
 
 async function onCreate(): Promise<void> {
     if (!can_submit.value) return
-    
+
     submitting.value = true
-    
+
     try {
         const serverId = server_store.getPublicId
         if (!serverId) {
             throw new Error(t('messages.error.noServerSelected'))
         }
-        
+
         const payload: ICreateActivityRequest = {
             name: name.value.trim(),
             description: description.value.trim(),
             logo: logo.value,
             banner: banner.value
         }
-        
+
         const res = await createActivity(serverId, payload)
         if (res.error || !res.data) {
             throw new Error(res.error || t('messages.error.create'))
         }
-        
+
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
         emit('success', res.data)
     } catch (e) {

@@ -75,9 +75,18 @@ function getParticipantTooltip(
                         {{ session.title }}
                     </h2>
 
-                    <!-- Nom de l’activité (secondaire) -->
+                    <!-- Nom de l'activité (secondaire) -->
                     <h3 class="text-md font-medium text-surface-600 drop-shadow">
-                        <router-link :to="`/servers/${server_store.getPublicId}/activities/${session.activity.public_id}`" class="text-surface-600 hover:text-primary-600">
+                        <router-link
+                            :to="{
+                                name: 'ServerActivityProfile',
+                                params: {
+                                    id: server_store.getPublicId,
+                                    activityId: session.activity.public_id
+                                }
+                            }"
+                            class="text-surface-600 hover:text-primary-600"
+                        >
                             {{ session.activity.name }}
                         </router-link>
                     </h3>

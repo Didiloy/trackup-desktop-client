@@ -229,7 +229,5 @@ const isClosable = computed(() => {
             @skip="handleSkipMetadata"
             @valid="setMetadataValid"
         />
-
-
     </MultiStepsDialog>
 </template>

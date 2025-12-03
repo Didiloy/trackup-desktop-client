@@ -67,20 +67,20 @@ async function onSubmit(): Promise<void> {
         emit('skip')
         return
     }
-    
+
     submitting.value = true
-    
+
     try {
         const serverId = server_store.getPublicId
         if (!serverId) {
             throw new Error(t('messages.error.noServerSelected'))
         }
-        
+
         const res = await addSessionMetadata(serverId, props.sessionId, { metadata })
         if (res.error) {
             throw new Error(res.error)
         }
-        
+
         toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
         emit('success')
     } catch (e) {

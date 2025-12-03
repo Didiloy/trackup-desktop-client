@@ -107,15 +107,15 @@ const filteredMembers = computed(
 // Create session
 async function onCreate(): Promise<void> {
     if (!canSubmit.value || !effectiveActivityId.value) return
-    
+
     submitting.value = true
-    
+
     try {
         const serverId = server_store.getPublicId
         if (!serverId) {
             throw new Error(t('messages.error.noServerSelected'))
         }
-        
+
         const payload: ICreateActivitySessionRequest = {
             title: title.value.trim() || undefined,
             duration: Number(duration.value),
@@ -123,19 +123,19 @@ async function onCreate(): Promise<void> {
             participants: selected_participants.value.map((m) => m.public_id),
             comment: comment.value.trim() || undefined
         }
-        
+
         const res = await createActivitySession(serverId, effectiveActivityId.value, payload)
         if (res.error || !res.data) {
             throw new Error(res.error || t('messages.error.createSessionFailed'))
         }
-        
+
         toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
-        
+
         // Remove chrono if selected
         if (selected_chrono.value) {
             removeChrono(selected_chrono.value.id)
         }
-        
+
         // Emit success with created session
         emit('success', res.data)
     } catch (e) {

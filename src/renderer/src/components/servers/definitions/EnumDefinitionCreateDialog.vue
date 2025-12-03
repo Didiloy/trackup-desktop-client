@@ -138,12 +138,15 @@ async function handleSubmit() {
                 value_updates: valueUpdates
             }
 
-            const res = await updateEnumDefinition(server_store.getPublicId, props.definitionToEdit.public_id, payload)
+            const res = await updateEnumDefinition(
+                server_store.getPublicId,
+                props.definitionToEdit.public_id,
+                payload
+            )
             if (res.error) throw new Error(res.error)
 
             toast.add({ severity: 'success', summary: t('messages.success.update'), life: 3000 })
             emit('updated')
-
         } else {
             const payload: ICreateEnumDefinitionRequest = {
                 name: name.value.trim(),
@@ -157,7 +160,7 @@ async function handleSubmit() {
             toast.add({ severity: 'success', summary: t('messages.success.create'), life: 3000 })
             emit('created')
         }
-        
+
         handleClose()
     } catch (e) {
         toast.add({
@@ -175,7 +178,6 @@ function handleClose() {
     resetForm()
     emit('update:modelValue', false)
 }
-
 </script>
 
 <template>
@@ -185,9 +187,17 @@ function handleClose() {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-plus-circle text-primary-500"></i>
                     <span class="font-semibold text-surface-900">
-                        {{ isEditing ? t('common.actions.update', { entity: t('views.server_definitions.entity_name', 'Definition') }) : t('views.server_definitions.create_modal.title') }}
+                        {{
+                            isEditing
+                                ? t('common.actions.update', {
+                                      entity: t(
+                                          'views.server_definitions.entity_name',
+                                          'Definition'
+                                      )
+                                  })
+                                : t('views.server_definitions.create_modal.title')
+                        }}
                     </span>
-
                 </div>
                 <span class="text-xs text-surface-600">
                     {{ t('views.server_definitions.create_modal.subtitle') }}
@@ -222,15 +232,11 @@ function handleClose() {
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-semibold text-surface-700 dark:text-surface-300 flex justify-between items-center">
+                <label
+                    class="text-sm font-semibold text-surface-700 dark:text-surface-300 flex justify-between items-center"
+                >
                     <span>{{ t('common.fields.choices') }}</span>
-                    <Button
-                        icon="pi pi-plus"
-                        size="small"
-                        text
-                        rounded
-                        @click="addChoice"
-                    />
+                    <Button icon="pi pi-plus" size="small" text rounded @click="addChoice" />
                 </label>
 
                 <div class="flex flex-col gap-2 max-h-[200px] overflow-y-auto pr-2">
