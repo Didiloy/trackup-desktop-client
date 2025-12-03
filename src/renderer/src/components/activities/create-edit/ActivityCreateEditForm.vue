@@ -93,13 +93,13 @@ async function onSubmit(): Promise<void> {
             }
             const res = await createActivity(serverId, payload)
             if (res.error || !res.data) {
-                throw new Error(res.error || t('messages.error.create-edit'))
+                throw new Error(res.error || t('messages.error.create'))
             }
-            toast.add({ severity: 'success', summary: t('messages.success.create-edit'), life: 2500 })
+            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
             emit('success', res.data)
         }
     } catch (e) {
-        const message = e instanceof Error ? e.message : t('messages.error.create-edit')
+        const message = e instanceof Error ? e.message : t('messages.error.create')
         toast.add({ severity: 'error', summary: message, life: 3000 })
     } finally {
         submitting.value = false
@@ -173,7 +173,7 @@ async function onSubmit(): Promise<void> {
             />
             <Button
                 :label="
-                    props.mode === 'edit' ? t('common.actions.save') : t('common.actions.create-edit')
+                    props.mode === 'edit' ? t('common.actions.save') : t('common.actions.create')
                 "
                 :disabled="!can_submit"
                 :loading="submitting"

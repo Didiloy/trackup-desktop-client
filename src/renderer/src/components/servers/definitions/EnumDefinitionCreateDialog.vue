@@ -157,7 +157,7 @@ async function handleSubmit() {
             const res = await createEnumDefinition(server_store.getPublicId, payload)
             if (res.error) throw new Error(res.error)
 
-            toast.add({ severity: 'success', summary: t('messages.success.create-edit'), life: 3000 })
+            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 3000 })
             emit('created')
         }
 
@@ -165,7 +165,7 @@ async function handleSubmit() {
     } catch (e) {
         toast.add({
             severity: 'error',
-            summary: isEditing.value ? t('messages.error.update') : t('messages.error.create-edit'),
+            summary: isEditing.value ? t('messages.error.update') : t('messages.error.create'),
             detail: e instanceof Error ? e.message : 'Unknown error',
             life: 3000
         })
@@ -275,7 +275,7 @@ function handleClose() {
                     @click="handleClose"
                 />
                 <Button
-                    :label="isEditing ? t('common.actions.save') : t('common.actions.create-edit')"
+                    :label="isEditing ? t('common.actions.save') : t('common.actions.create')"
                     :loading="loading"
                     :disabled="!canSubmit"
                     @click="handleSubmit"
