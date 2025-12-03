@@ -30,7 +30,7 @@ const created_session = ref<ISession | null>(null)
 
 type Step = 'info' | 'enums' | 'metadata'
 const current_step = ref<Step>('info')
-const has_enums = ref(server_store.getEnumsDefinition !== null)
+const has_enums = ref((server_store.getEnumsDefinition?.length ?? 0) > 0)
 const has_metadata = ref(false)
 const enum_definitions = ref<IEnumDefinition[]>([])
 const metadata_definitions = ref<IActivityMetadataDefinition[]>([])
@@ -84,7 +84,7 @@ const subtitle = computed(() => {
 function resetState(): void {
     current_step.value = 'info'
     created_session.value = null
-    has_enums.value = false
+    has_enums.value = (server_store.getEnumsDefinition?.length ?? 0) > 0
     has_metadata.value = false
     enum_definitions.value = []
     metadata_definitions.value = []
@@ -137,7 +137,7 @@ function handleSessionCreated(session: ISession): void {
     created_session.value = session
     
     // Check for enums
-    has_enums.value = server_store.getEnumsDefinition !== null
+    has_enums.value = (server_store.getEnumsDefinition?.length ?? 0) > 0
 
     // Advance to next step
     if (has_enums.value) {
