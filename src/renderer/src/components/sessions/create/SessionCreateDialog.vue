@@ -182,6 +182,11 @@ function finishWizard(): void {
     }
     close()
 }
+
+// Compute whether the dialog should be closable
+const isClosable = computed(() => {
+    return current_step.value === 'info';
+})
 </script>
 
 <template>
@@ -194,8 +199,8 @@ function finishWizard(): void {
         icon-class="pi pi-plus-circle"
         :steps="steps"
         :current="currentIndex"
-        :closable="false"
-        :dismissable-mask="false"
+        :closable="isClosable"
+        :dismissable-mask="isClosable"
         @update:model-value="emit('update:modelValue', $event)"
     >
         <SessionCreateForm
