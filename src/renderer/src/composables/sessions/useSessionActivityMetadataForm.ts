@@ -4,7 +4,7 @@ import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IAddSessionMetadataEntry } from '@shared/contracts/interfaces/entities/session.interfaces'
 
-export function useMetadataForm(
+export function useSessionActivityMetadataForm(
     activityId: string,
     initialDefinitions?: IActivityMetadataDefinition[]
 ) {

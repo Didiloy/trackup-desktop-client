@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type {
-    ICreateActivityMetadataDefinitionRequest,
-    IUpdateActivityMetadataDefinitionRequest,
     IActivityMetadataDefinition,
-    ActivityMetadataType
+    ICreateActivityMetadataDefinitionRequest,
+    IUpdateActivityMetadataDefinitionRequest
 } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
+import { useActivityMetadataDefinitionTypes } from '@/composables/activities/metadata/useActivityMetadataDefinitionTypes'
+import { useActivityMetadataDefinitionDraft } from '@/composables/activities/metadata/useActivityMetadataDefinitionDraft'
+import { useActivityMetadataDefinitionList } from '@/composables/activities/metadata/useActivityMetadataDefinitionList'
 import { useServerStore } from '@/stores/server'
 import { useToast } from 'primevue/usetoast'
 
@@ -18,13 +20,7 @@ const emit = defineEmits<{
 
 const { t, te } = useI18n()
 const toast = useToast()
-const {
-    getMetadataTypes,
-    listMetadataDefinitions,
-    deleteMetadataDefinition,
-    updateMetadataDefinition,
-    createMetadataDefinition
-} = useActivityMetadataDefinitionCRUD()
+const { createMetadataDefinition } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
 const props = withDefaults(
@@ -40,70 +36,66 @@ const props = withDefaults(
     }
 )
 
-const type_options = ref<{ label: string; value: string }[]>([])
-const loading_types = ref(false)
-const types_error = ref<string | null>(null)
+// Use the composables
+const { type_options, loadTypes } = useActivityMetadataDefinitionTypes()
+
+const {
+    draft,
+    new_choice,
+    editingMetadataId,
+    canAdd,
+    canUseChoices,
+    addChoice,
+    removeChoice,
+    resetDraft,
+    loadDraftFromDefinition,
+    normalizeKeyFromLabel,
+    ensureValidType
+} = useActivityMetadataDefinitionDraft()
+
+const {
+    existingMetadataList,
+    defs,
+    syncExistingMetadata,
+    removeExistingMetadata,
+    updateExistingMetadata,
+    addDefinition,
+    removeDefinition
+} = useActivityMetadataDefinitionList()
+
 const submitting = ref(false)
 
-const existingMetadataList = ref<IActivityMetadataDefinition[]>([])
-const editingMetadataId = ref<string | null>(null)
+onMounted(async () => {
+    if (props.activityIdForTypes) {
+        const serverId = server_store.getPublicId
+        if (serverId) {
+            await loadTypes(serverId, props.activityIdForTypes)
+            // Ensure draft has a valid type after loading
+            ensureValidType(type_options.value.map((o) => o.value))
 
-async function syncExistingMetadata(): Promise<void> {
-    if (!props.activityIdForTypes) return
-    const serverId = server_store.getPublicId
-    if (!serverId) return
-    try {
-        const res = await listMetadataDefinitions(serverId, props.activityIdForTypes)
-        if (!res.error && res.data) {
-            existingMetadataList.value = res.data
+            if (props.modify) {
+                await syncExistingMetadata(serverId, props.activityIdForTypes)
+            }
         }
-    } catch (e) {
-        console.error(t('messages.error.fetch'), e)
     }
+})
+
+function editExistingMetadata(meta: IActivityMetadataDefinition): void {
+    loadDraftFromDefinition(meta)
 }
 
-async function removeExistingMetadata(id: string): Promise<void> {
-    if (!props.activityIdForTypes) return
+async function handleRemoveExisting(id: string): Promise<void> {
     const serverId = server_store.getPublicId
-    if (!serverId) return
-    try {
-        await deleteMetadataDefinition(serverId, props.activityIdForTypes, id)
-        await syncExistingMetadata()
+    if (!serverId || !props.activityIdForTypes) return
+
+    await removeExistingMetadata(serverId, props.activityIdForTypes, id, () => {
         if (editingMetadataId.value === id) {
             resetDraft()
         }
-    } catch (e) {
-        console.error(t('messages.error.delete'), e)
-    }
+    })
 }
 
-function editExistingMetadata(meta: IActivityMetadataDefinition): void {
-    editingMetadataId.value = meta.public_id
-    draft.value = {
-        key: meta.key,
-        label: meta.label || '',
-        type: meta.type,
-        description: meta.description || '',
-        required: meta.required,
-        allow_not_predefined_value: meta.allow_not_predefined_value,
-        choices: meta.choices?.map(String) || []
-    }
-}
-
-function resetDraft(): void {
-    editingMetadataId.value = null
-    draft.value = {
-        key: '',
-        label: '',
-        type: 'STRING' as ActivityMetadataType,
-        description: '',
-        required: false,
-        allow_not_predefined_value: true,
-        choices: []
-    }
-}
-
-async function updateExistingMetadata(): Promise<void> {
+async function handleUpdateExisting(): Promise<void> {
     if (!editingMetadataId.value || !props.activityIdForTypes) return
     const serverId = server_store.getPublicId
     if (!serverId) return
@@ -116,145 +108,21 @@ async function updateExistingMetadata(): Promise<void> {
         choices: draft.value.choices?.map((c) => c.toString())
     }
 
-    try {
-        await updateMetadataDefinition(
-            serverId,
-            props.activityIdForTypes,
-            editingMetadataId.value,
-            payload
-        )
-        await syncExistingMetadata()
-        resetDraft()
-    } catch (e) {
-        console.error(t('messages.error.update'), e)
-    }
+    await updateExistingMetadata(
+        serverId,
+        props.activityIdForTypes,
+        editingMetadataId.value,
+        payload,
+        resetDraft
+    )
 }
 
-async function loadTypes(): Promise<void> {
-    loading_types.value = true
-    types_error.value = null
-    try {
-        const serverId = server_store.getPublicId
-        if (serverId && props.activityIdForTypes) {
-            const res = await getMetadataTypes(serverId, props.activityIdForTypes)
-            if (res.error) {
-                types_error.value = res.error
-            } else if (res.data && Array.isArray(res.data)) {
-                // Map API-provided types to options. Prefer translated labels when available.
-                type_options.value = res.data.map((val) => {
-                    const upper = String(val).toUpperCase()
-                    const key = `views.activity.add_modal.metadata_type_${String(upper).toLowerCase()}`
-                    return {
-                        label: te(key) ? t(key) : String(val),
-                        value: upper
-                    }
-                })
-            }
-        }
-    } catch (e) {
-        types_error.value = e instanceof Error ? e.message : t('messages.error.fetch')
-    } finally {
-        // Fallback if nothing loaded
-        if (!type_options.value.length) {
-            // Use translated labels for types when available to avoid hardcoded strings
-            type_options.value = [
-                { label: t('views.activity.add_modal.metadata_type_string'), value: 'STRING' },
-                { label: t('views.activity.add_modal.metadata_type_number'), value: 'NUMBER' },
-                { label: t('views.activity.add_modal.metadata_type_boolean'), value: 'BOOLEAN' },
-                { label: t('views.activity.add_modal.metadata_type_date'), value: 'DATE' }
-            ]
-        }
-        // Ensure draft has a valid type
-        if (!type_options.value.find((o) => o.value === draft.value.type)) {
-            draft.value.type = type_options.value[0].value as ActivityMetadataType
-        }
-        loading_types.value = false
-    }
-}
-
-const defs = ref<ICreateActivityMetadataDefinitionRequest[]>([])
-
-const draft = ref<ICreateActivityMetadataDefinitionRequest>({
-    key: '',
-    label: '',
-    type: 'STRING' as ActivityMetadataType,
-    description: '',
-    required: false,
-    allow_not_predefined_value: true,
-    choices: []
-})
-
-onMounted(async () => {
-    await loadTypes()
-    if (props.modify) {
-        await syncExistingMetadata()
-    }
-})
-
-const new_choice = ref<string>('')
-
-const canAdd = computed(() => {
-    return !!draft.value.key.trim() && !!draft.value.type
-})
-
-const canUseChoices = computed(() => {
-    const type = draft.value.type
-    return type !== 'BOOLEAN' && type !== 'DATE'
-})
-
-watch(
-    () => [draft.value.type, draft.value.allow_not_predefined_value],
-    () => {
-        if (!canUseChoices.value) {
-            draft.value.choices = []
-            new_choice.value = ''
-        }
-    }
-)
-
-function normalizeKeyFromLabel(label: string): string {
-    if (!label) return ''
-    // remove accents
-    const noAccents = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    // replace spaces with underscores, to lowercase
-    return noAccents.trim().replace(/\s+/g, '_').toLowerCase()
-}
-
-watch(
-    () => draft.value.label,
-    (val) => {
-        // Only update key if not editing an existing metadata (where key is fixed)
-        if (!editingMetadataId.value) {
-            draft.value.key = normalizeKeyFromLabel(val || '')
-        }
-    }
-)
-
-function addChoice(): void {
-    const raw = new_choice.value.trim()
-    if (!raw) return
-    const value = draft.value.type === 'NUMBER' ? Number(raw) : raw
-    if (draft.value.type === 'NUMBER' && Number.isNaN(value)) return
-
-    // Create a new array instead of mutating directly to avoid reactivity issues
-    if (!draft.value.choices) {
-        draft.value.choices = []
-    }
-    draft.value.choices = [...draft.value.choices, value]
-    new_choice.value = ''
-}
-
-function removeChoice(index: number): void {
-    if (!draft.value.choices) return
-    draft.value.choices.splice(index, 1)
-}
-
-function addDefinition(): void {
+function handleAddDefinition(): void {
     if (!canAdd.value) return
 
-    // If editing, we handle update logic instead of adding to draft list
+    // If editing existing metadata, update instead of adding
     if (editingMetadataId.value) {
-        updateExistingMetadata()
+        handleUpdateExisting()
         return
     }
 
@@ -263,20 +131,21 @@ function addDefinition(): void {
             ? draft.value.choices.map((c) => (typeof c === 'number' ? c : String(c)))
             : undefined
 
-    defs.value.push({
-        key: normalizeKeyFromLabel(draft.value.label || draft.value.key).trim(),
-        label: draft.value.label?.trim() || draft.value.key.trim(),
+    addDefinition({
+        key: normalizeKeyFromLabel(draft.value.label || draft.value.key),
+        label: draft.value.label,
         type: draft.value.type,
-        description: draft.value.description?.trim() || undefined,
-        required: !!draft.value.required,
-        allow_not_predefined_value: !!draft.value.allow_not_predefined_value,
+        description: draft.value.description,
+        required: draft.value.required,
+        allow_not_predefined_value: draft.value.allow_not_predefined_value,
         choices: choicesToSave
     })
+
     resetDraft()
 }
 
-function removeDefinition(index: number): void {
-    defs.value.splice(index, 1)
+function handleCancelEdit(): void {
+    resetDraft()
 }
 
 async function onSubmit(): Promise<void> {
@@ -316,10 +185,6 @@ async function onSubmit(): Promise<void> {
     } finally {
         submitting.value = false
     }
-}
-
-function handleCancelEdit(): void {
-    resetDraft()
 }
 
 function formatTypeLabel(type?: string): string {
@@ -457,7 +322,7 @@ function formatTypeLabel(type?: string): string {
                     :class="editingMetadataId ? 'w-1/2' : ''"
                     :disabled="!canAdd"
                     :style="{ background: 'var(--gradient-secondary)' }"
-                    @click="addDefinition"
+                    @click="handleAddDefinition"
                 />
             </div>
         </div>
@@ -500,7 +365,7 @@ function formatTypeLabel(type?: string): string {
                             text
                             rounded
                             size="small"
-                            @click.stop="removeExistingMetadata(meta.public_id)"
+                            @click.stop="handleRemoveExisting(meta.public_id)"
                         />
                     </div>
                 </div>

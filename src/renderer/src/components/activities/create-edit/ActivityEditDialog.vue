@@ -112,6 +112,7 @@ function handleSkipSkillLevels(): void {
             :activity="activity"
             mode="edit"
             @updated="handleActivityUpdate"
+            @next="handleActivityUpdate"
             @cancel="close"
         />
         <ActivityMetadataForm

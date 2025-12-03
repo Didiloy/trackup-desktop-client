@@ -2,11 +2,10 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useMetadataForm } from '@/composables/activities/metadata/useMetadataForm'
+import { useSessionActivityMetadataForm } from '@/composables/sessions/useSessionActivityMetadataForm'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
-import type { IAddSessionMetadataRequest } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 import MetadataInputString from '@/components/activities/metadata/MetadataInputString.vue'
 import MetadataInputNumber from '@/components/activities/metadata/MetadataInputNumber.vue'
@@ -33,7 +32,7 @@ const { addSessionMetadata } = useSessionCRUD()
 const submitting = ref(false)
 
 const { definitions, values, isLoadingDefinitions, loadDefinitions, canSubmit, getSubmissionData } =
-    useMetadataForm(props.activityId, props.definitions)
+    useSessionActivityMetadataForm(props.activityId, props.definitions)
 
 const componentMap: Record<string, unknown> = {
     STRING: MetadataInputString,

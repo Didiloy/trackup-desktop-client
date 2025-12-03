@@ -172,6 +172,13 @@ async function onSubmit(): Promise<void> {
                 @click="emit('cancel')"
             />
             <Button
+                v-if="props.mode === 'edit'"
+                :label="t('common.actions.next')"
+                severity="secondary"
+                text
+                @click="emit('next')"
+            />
+            <Button
                 :label="
                     props.mode === 'edit' ? t('common.actions.save') : t('common.actions.create')
                 "
