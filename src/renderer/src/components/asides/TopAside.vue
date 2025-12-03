@@ -82,14 +82,14 @@ function handleToggleMembersAside(): void {
             <div
                 v-if="showMembersAsideToggle"
                 id="toggle-sidebar-button"
-                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 text-gray-600 hover:bg-surface-400 hover:cursor-pointer hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
                 :title="t('common.actions.toggle_sidebar')"
                 @click="handleToggleMembersAside"
             >
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <span
-                    class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                    :class="isMembersAsideVisible ? 'text-primary-600' : 'text-gray-600'"
+                    class="icon inline-flex items-center justify-center w-1/2 h-1/2"
+                    :class="isMembersAsideVisible ? 'text-primary-600' : ''"
                     aria-hidden="true"
                     v-html="toggle_sidebar_icon"
                 />
