@@ -43,16 +43,37 @@ const cards = computed(() => {
             icon: 'pi pi-bolt',
             color: 'text-amber-500',
             bg: 'bg-amber-500/10'
+        },
+        {
+            label: t('views.server_stats.engagement_score', 'Engagement Score'),
+            value: props.stats.engagement_score.toFixed(1),
+            icon: 'pi pi-chart-line',
+            color: 'text-red-500',
+            bg: 'bg-red-500/10'
+        },
+        {
+            label: t('views.server_stats.avg_likes_per_session', 'Avg Likes/Session'),
+            value: props.stats.avg_likes_per_session.toFixed(2),
+            icon: 'pi pi-thumbs-up',
+            color: 'text-pink-500',
+            bg: 'bg-pink-500/10'
+        },
+        {
+            label: t('views.server_stats.avg_participants_per_session', 'Avg Participants'),
+            value: props.stats.avg_participants_per_session.toFixed(2),
+            icon: 'pi pi-user-plus',
+            color: 'text-cyan-500',
+            bg: 'bg-cyan-500/10'
         }
     ]
 })
 </script>
 
 <template>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
         <template v-if="loading || !stats">
             <div
-                v-for="i in 4"
+                v-for="i in 7"
                 :key="i"
                 class="h-32 rounded-2xl bg-surface-100 animate-pulse"
             ></div>

@@ -9,7 +9,7 @@ import type {
     IServerStats,
     IServerStatsDetails,
     IStatsTimeline,
-    IServerGrowthTrends,
+    IServerGrowthResponse,
     IComparativeAnalysis,
     IStatsTimelineParams,
     IStatsGrowthParams,
@@ -60,7 +60,7 @@ export const serverStatsBridge = {
         serverId: string,
         params: IStatsGrowthParams | undefined,
         accessToken: string
-    ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
+    ): Promise<IServerStatsApiResponse<IServerGrowthResponse>> => {
         return ipcRenderer.invoke(
             ipc_channels.serverStats.getGrowthTrends,
             serverId,

@@ -3,7 +3,7 @@ import type {
     IServerStats,
     IServerStatsDetails,
     IStatsTimeline,
-    IServerGrowthTrends,
+    IServerGrowthResponse,
     IComparativeAnalysis,
     IStatsTimelineParams,
     IStatsGrowthParams,
@@ -22,7 +22,7 @@ interface UseServerStatsCRUDReturn {
     getServerStatsGrowthTrends: (
         serverId: string,
         params?: IStatsGrowthParams
-    ) => Promise<IServerStatsApiResponse<IServerGrowthTrends>>
+    ) => Promise<IServerStatsApiResponse<IServerGrowthResponse>>
     getServerStatsComparativeAnalysis: (
         serverId: string
     ) => Promise<IServerStatsApiResponse<IComparativeAnalysis[]>>
@@ -69,7 +69,7 @@ export function useServerStatsCRUD(): UseServerStatsCRUDReturn {
     const getServerStatsGrowthTrends = async (
         serverId: string,
         params?: IStatsGrowthParams
-    ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
+    ): Promise<IServerStatsApiResponse<IServerGrowthResponse>> => {
         return window.api.serverStats.getGrowthTrends(serverId, params, user_store.getAccessToken!)
     }
 

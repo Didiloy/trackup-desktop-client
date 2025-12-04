@@ -66,6 +66,7 @@ async function loadStats() {
         if (res.data) {
             details.value = res.data
         }
+        console.log(details.value)
 
         if (selectedPeriodType.value) {
             await fetchTimelineForPeriod(selectedPeriodType.value)

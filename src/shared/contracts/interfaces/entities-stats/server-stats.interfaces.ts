@@ -18,6 +18,9 @@ export interface IServerStats {
     active_members: number
     total_activities: number
     total_likes: number
+    avg_likes_per_session: number
+    avg_participants_per_session: number
+    engagement_score: number
 }
 
 // ============================================================================
@@ -29,7 +32,7 @@ export interface IStatsTimeline {
     sessions_count: number
     total_duration: number
     avg_duration: number
-    total_likes: number
+    total_likes?: number
     unique_members: number
 }
 
@@ -47,6 +50,13 @@ export interface IServerGrowthTrends {
     sessions: IGrowthMetric
     duration: IGrowthMetric
     members: IGrowthMetric
+}
+
+export interface IServerGrowthResponse {
+    current_period: IGrowthMetric
+    previous_period: IGrowthMetric
+    growth_rates: IGrowthMetric
+    period_info?: Record<string, unknown>
 }
 
 // ============================================================================
@@ -81,9 +91,9 @@ export interface IComparativeAnalysis {
 export interface ITopMember {
     rank: number
     member_id: string
-    user_email: string
-    total_sessions: number
-    total_duration: number
+    user_email?: string
+    total_sessions?: number
+    total_duration?: number
 }
 
 export interface ITopActivity {
@@ -97,7 +107,7 @@ export interface ITopActivity {
     unique_participants: number
     total_participants: number
     avg_participants_per_session: number
-    popularity_score: number
+    popularity_score?: number
 }
 
 export interface IServerStatsDetails {
@@ -105,6 +115,7 @@ export interface IServerStatsDetails {
     top_members: ITopMember[]
     top_activities: ITopActivity[]
     timeline: IStatsTimeline[]
+    growth_trends?: IServerGrowthResponse
 }
 
 // ============================================================================
