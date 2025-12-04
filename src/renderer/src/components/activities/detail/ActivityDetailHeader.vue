@@ -4,6 +4,7 @@ import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entitie
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import { useServerStore } from '@/stores/server'
 
 const props = defineProps<{
     activity: IActivity | null
@@ -17,6 +18,14 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const server_store = useServerStore()
+
+const canDelete = computed(() => {
+    if (!props.activity) {
+        return false
+    }
+    return server_store.isOwnership === true
+})
 
 const summaryMetrics = computed(() => {
     if (!props.stats) {
@@ -102,6 +111,7 @@ const summaryMetrics = computed(() => {
                     @click="emit('edit')"
                 />
                 <Button
+                    v-if="canDelete"
                     icon="pi pi-trash"
                     :label="t('common.actions.delete')"
                     severity="danger"
