@@ -6,7 +6,7 @@
 import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
-// Member Activity Stats
+// Member Activity Stats (List Item)
 // ============================================================================
 
 export interface IMemberActivityStats {
@@ -15,8 +15,8 @@ export interface IMemberActivityStats {
     total_sessions: number
     total_duration: number
     avg_session_duration: number
-    last_session_date: string
-    skill_level: string
+    last_session_date: string | null
+    skill_level: string | null
     proficiency_score: number
 }
 
@@ -31,8 +31,8 @@ export interface IMemberActivityDetails {
     total_sessions: number
     total_duration: number
     avg_session_duration: number
-    last_session_date: string
-    skill_level: string
+    last_session_date: string | null
+    skill_level: string | null
     proficiency_score: number
     sessions_created: number
     total_likes: number
@@ -49,7 +49,7 @@ export interface IMemberActivityProgression {
     total_sessions: number
     total_duration: number
     avg_session_duration: number
-    skill_level: string
+    skill_level: string | null
     proficiency_score: number
 }
 
