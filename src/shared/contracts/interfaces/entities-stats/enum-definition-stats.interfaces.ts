@@ -6,13 +6,32 @@
 import { EPeriod } from '../../enums/period.enum'
 
 // ============================================================================
-// Enum Definition Stats
+// All Values Type
+// ============================================================================
+
+export interface IEnumAllValues {
+    value1: string | null
+    value2: string | null
+    value3: string | null
+    value4: string | null
+    value5: string | null
+}
+
+// ============================================================================
+// Most Used Value
 // ============================================================================
 
 export interface IMostUsedValue {
     enum_value_id: string
+    selected_key: string
+    selected_value: string
+    all_values: IEnumAllValues
     usage_count: number
 }
+
+// ============================================================================
+// Enum Definition Summary (List Item)
+// ============================================================================
 
 export interface IEnumDefinitionStats {
     enum_definition_id: string
@@ -22,11 +41,11 @@ export interface IEnumDefinitionStats {
     total_sessions: number
     total_duration: number
     unique_users: number
-    most_used_value: IMostUsedValue
+    most_used_value: IMostUsedValue | null
 }
 
 // ============================================================================
-// Enum Value Stats (Detailed)
+// Enum Value Stats (Detailed - per period)
 // ============================================================================
 
 export interface IEnumValueStats {
@@ -36,9 +55,9 @@ export interface IEnumValueStats {
     enum_definition_id: string
     enum_definition_name: string
     enum_value_id: string
-    enum_value_display: string
-    enum_value_key: string
     selected_key: string
+    selected_value: string
+    all_values: IEnumAllValues
     usage_count: number
     total_sessions: number
     total_duration: number
@@ -54,9 +73,9 @@ export interface IEnumValueStats {
 
 export interface IEnumValueDistribution {
     enum_value_id: string
-    enum_value_display: string
-    enum_value_key: string
     selected_key: string
+    selected_value: string
+    all_values: IEnumAllValues
     usage_count: number
     percentage: number
     total_sessions: number
