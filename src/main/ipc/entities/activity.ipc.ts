@@ -16,7 +16,8 @@ import {
     validateRequired,
     validateAuth,
     combineValidations,
-    buildRequestOptions
+    buildRequestOptions,
+    validateMaxLength
 } from '../../../shared/helpers/index.helpers'
 import type {
     IListSessionsOptions,
@@ -177,6 +178,7 @@ export function registerActivityIpc(): void {
                 validateRequired(activityId, 'Activity ID'),
                 validateRequired(request.duration, 'Duration'),
                 validateRequired(request.date, 'Date'),
+                validateMaxLength(request.title, 100, 'Title'),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
