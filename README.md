@@ -33,7 +33,7 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 
-## TODO: Design de la page d'acceuil:
+## TODO: Design de la page d'accueil:
 
 ### Section 1 — Activité personnelle
 - Dernières sessions
