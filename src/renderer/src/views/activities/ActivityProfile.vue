@@ -109,11 +109,11 @@ async function loadSessions(page = sessions_page.value, rows = sessions_rows.val
 async function loadLastYearSessions(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
     const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
-        limit: 100,
+        limit: 100
     })
     if (res.error || !res.data) throw new Error(res.error)
     last_year_sessions.value = res.data.data as unknown as IActivitySessionListItem[]
-//TODO: implement a real load last year because now it's just a dummy data
+    //TODO: implement a real load last year because now it's just a dummy data
 }
 
 function handleSessionPage(event: { page: number; rows: number }): void {

@@ -2,6 +2,7 @@
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { computed } from 'vue'
 import SessionCard from '@/components/sessions/SessionCard.vue'
+import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -9,6 +10,7 @@ const { t } = useI18n()
 interface Props {
     sessions: ISessionListItem[]
     loading?: boolean
+    hasMore?: boolean
 }
 
 interface Emits {
@@ -18,7 +20,8 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    loading: false
+    loading: false,
+    hasMore: true
 })
 const emit = defineEmits<Emits>()
 
@@ -30,21 +33,16 @@ function toggleLike(session: ISessionListItem): void {
     }
 }
 
-function handleScroll(event: Event): void {
-    const target = event.target as HTMLElement | null
-    if (!target) return
-    const { scrollTop, clientHeight, scrollHeight } = target
-    const threshold = 200
-    if (scrollTop + clientHeight + threshold >= scrollHeight) {
-        emit('load-more')
-    }
-}
-
 const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
 </script>
 
 <template>
-    <div class="w-full h-full overflow-y-auto p-2" @scroll.passive="handleScroll">
+    <InfiniteScrollContainer
+        :loading="loading"
+        :has-more="hasMore"
+        container-class="p-2"
+        @load-more="emit('load-more')"
+    >
         <!-- Sessions Grid -->
         <TransitionGroup
             name="fade"
@@ -113,5 +111,5 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
             <p class="text-xl font-medium text-surface-600">{{ t('common.filters.no_results') }}</p>
             <p class="text-sm text-surface-500 mt-2">{{ t('common.filters.try_adjusting') }}</p>
         </div>
-    </div>
+    </InfiniteScrollContainer>
 </template>

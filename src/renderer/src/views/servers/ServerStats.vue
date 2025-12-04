@@ -152,9 +152,9 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
         </div>
 
         <ServerStatsHeader
-            :server-name="server_store.getName ?? ''"
             v-model:period="period"
             v-model:selected-period-type="selectedPeriodType"
+            :server-name="server_store.getName ?? ''"
             :loading="loading"
             @refresh="handleRefresh"
             @update:period-type="handlePeriodTypeUpdate"

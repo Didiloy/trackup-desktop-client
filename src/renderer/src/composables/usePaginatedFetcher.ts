@@ -32,6 +32,7 @@ interface UsePaginatedFetcherReturn<T> {
     page: Ref<number>
     loading: Ref<boolean>
     error: Ref<string | null>
+    hasMore: Ref<boolean>
     load: () => Promise<void>
     reset: () => Promise<void>
     loadMore: () => Promise<void>
@@ -52,6 +53,9 @@ export function usePaginatedFetcher<T>(
         page: page.value,
         limit
     }))
+
+    // Computed property to check if there are more items to load
+    const hasMore = computed(() => items.value.length < total.value)
 
     async function load(): Promise<void> {
         loading.value = true
@@ -92,6 +96,10 @@ export function usePaginatedFetcher<T>(
     }
 
     function loadMore(): Promise<void> {
+        // Don't load more if already loading or no more items
+        if (loading.value || !hasMore.value) {
+            return Promise.resolve()
+        }
         page.value++
         return load()
     }
@@ -107,6 +115,7 @@ export function usePaginatedFetcher<T>(
         page,
         loading,
         error,
+        hasMore,
         load,
         reset,
         loadMore

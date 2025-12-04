@@ -185,7 +185,7 @@ function finishWizard(): void {
 
 // Compute whether the dialog should be closable
 const isClosable = computed(() => {
-    return current_step.value === 'info';
+    return current_step.value === 'info'
 })
 </script>
 

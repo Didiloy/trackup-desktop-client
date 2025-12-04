@@ -66,6 +66,7 @@ declare module 'vue' {
     GenericFilterBar: typeof import('./src/components/filters/GenericFilterBar.vue')['default']
     GenericPopover: typeof import('./src/components/common/contexts/GenericPopover.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']
+    InfiniteScrollContainer: typeof import('./src/components/common/InfiniteScrollContainer.vue')['default']
     InputDialog: typeof import('./src/components/common/dialogs/InputDialog.vue')['default']
     InputIcon: typeof import('primevue/inputicon')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']

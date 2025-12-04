@@ -9,14 +9,14 @@ interface useSessionActivityMetadataFormReturn {
     values: Ref<Record<string, unknown>>
     isLoadingDefinitions: Ref<boolean>
     loadDefinitions: () => Promise<boolean>
-    canSubmit: ComputedRef<boolean>,
+    canSubmit: ComputedRef<boolean>
     getSubmissionData: () => IAddSessionMetadataEntry[]
 }
 
 export function useSessionActivityMetadataForm(
     activityId: string,
     initialDefinitions?: IActivityMetadataDefinition[]
-) : useSessionActivityMetadataFormReturn {
+): useSessionActivityMetadataFormReturn {
     const server_store = useServerStore()
     const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 
