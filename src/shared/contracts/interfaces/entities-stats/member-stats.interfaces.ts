@@ -18,14 +18,15 @@ export interface IFavoriteActivity {
 
 export interface IMemberStats {
     member_id: string
-    user_email: string
+    user_email?: string
     total_sessions: number
     total_duration: number
     sessions_created: number
     sessions_participated: number
     likes_given: number
     likes_received: number
-    favorite_activity: IFavoriteActivity
+    avg_session_duration: number
+    favorite_activity?: IFavoriteActivity
 }
 
 // ============================================================================
@@ -33,8 +34,8 @@ export interface IMemberStats {
 // ============================================================================
 
 export interface IMemberActivityPatterns {
-    most_active_day_of_week: number
-    most_active_hour: number
+    most_active_day_of_week?: number
+    most_active_hour?: number
     streak_current: number
     streak_longest: number
 }
@@ -64,9 +65,24 @@ export interface IMemberGrowthTrends {
     duration: IGrowthMetric
 }
 
+export interface IMemberGrowthResponse {
+    member_id: string
+    period: string
+    current_period_start: string
+    current_period_end: string
+    sessions: IGrowthMetric
+    duration: IGrowthMetric
+}
+
 // ============================================================================
 // Member Details (Combined)
 // ============================================================================
+
+export interface IMemberProfile extends IMemberStats {
+    patterns: IMemberActivityPatterns
+    ranking: IMemberRanking
+    timeline: IStatsTimeline[]
+}
 
 export interface IMemberStatsDetails extends IMemberStats {
     patterns: IMemberActivityPatterns

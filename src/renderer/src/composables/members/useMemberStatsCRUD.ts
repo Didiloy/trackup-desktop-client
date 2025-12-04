@@ -4,7 +4,7 @@ import type {
     IMemberStatsDetails,
     IMemberActivityPatterns,
     IMemberRanking,
-    IMemberGrowthTrends,
+    IMemberGrowthResponse,
     IMemberLeaderboard,
     IPaginatedMemberStats,
     ILeaderboardParams,
@@ -49,7 +49,7 @@ interface UseMemberStatsCRUDReturn {
         serverId: string,
         memberId: string,
         params?: IMemberGrowthParams
-    ) => Promise<IMemberStatsApiResponse<IMemberGrowthTrends>>
+    ) => Promise<IMemberStatsApiResponse<IMemberGrowthResponse>>
 }
 
 /**
@@ -142,7 +142,7 @@ export function useMemberStatsCRUD(): UseMemberStatsCRUDReturn {
         serverId: string,
         memberId: string,
         params?: IMemberGrowthParams
-    ): Promise<IMemberStatsApiResponse<IMemberGrowthTrends>> => {
+    ): Promise<IMemberStatsApiResponse<IMemberGrowthResponse>> => {
         return window.api.memberStats.getGrowthTrends(
             serverId,
             memberId,
