@@ -33,7 +33,7 @@ export interface IStatsTimeline {
     total_duration: number
     avg_duration: number
     total_likes?: number
-    unique_members: number
+    unique_members?: number
 }
 
 export interface IGrowthMetric {

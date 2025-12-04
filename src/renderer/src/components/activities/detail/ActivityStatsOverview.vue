@@ -23,7 +23,7 @@ const cards = computed(() => {
         },
         {
             label: t('views.activity.card.popularity'),
-            value: props.stats.popularity_score.toFixed(0),
+            value: (props.stats.popularity_score ?? 0).toFixed(0),
             icon: 'pi pi-bolt',
             gradient: 'bg-linear-to-br from-amber-500/40 via-amber-500/30 to-amber-500/20'
         },

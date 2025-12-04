@@ -41,6 +41,7 @@ const { chronos, removeChrono } = useChronos()
 
 // Form fields
 const title = ref('')
+const TITLE_MAX_LENGTH = 100
 const duration = ref<number>(60)
 const date = ref<Date>(new Date())
 const selected_participants = ref<IServerMember[]>([])
@@ -97,7 +98,13 @@ onMounted(async () => {
 })
 
 const canSubmit = computed(() => {
-    return !submitting.value && !!effectiveActivityId.value && duration.value > 0 && !!date.value
+    return (
+        !submitting.value &&
+        !!effectiveActivityId.value &&
+        duration.value > 0 &&
+        !!date.value &&
+        title.value.length <= TITLE_MAX_LENGTH
+    )
 })
 
 const filteredMembers = computed(
@@ -160,15 +167,20 @@ const isHexColor = (v?: string): boolean => {
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
                     <i class="pi pi-tag text-surface-500"></i>
-                    <span class="text-sm font-medium text-surface-700">{{
-                        t('common.fields.title')
-                    }}</span>
+                    <span class="text-sm font-medium text-surface-700">
+                        {{t('common.fields.title') }}
+                    </span>
+                    <span class="text-xs text-surface-500 text-right">
+                    {{ title.length }}/{{ TITLE_MAX_LENGTH }}
+                </span>
                 </div>
                 <InputText
                     v-model="title"
                     :placeholder="t('views.server_sessions.add_modal.title_placeholder')"
+                    :maxlength="TITLE_MAX_LENGTH"
                     class="w-full"
                 />
+
             </div>
 
             <!-- Activity -->

@@ -68,6 +68,7 @@ const {
     items: activities,
     loading,
     error,
+    hasMore,
     load,
     loadMore
 } = usePaginatedFetcher<IActivity>({
@@ -159,6 +160,7 @@ onMounted(() => {
                 :activities="activities"
                 :metrics="card_metrics"
                 :loading="loading"
+                :has-more="hasMore"
                 @view="onViewActivity"
                 @load-more="loadMore"
             />

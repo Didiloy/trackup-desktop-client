@@ -33,6 +33,7 @@ const {
     items: sessions,
     loading,
     error,
+    hasMore,
     load,
     loadMore
 } = usePaginatedFetcher<ISessionListItem>({
@@ -159,6 +160,7 @@ onMounted(() => {
             <SessionCardGrid
                 :sessions="sessions"
                 :loading="loading"
+                :has-more="hasMore"
                 @like="onLikeSession"
                 @unlike="onUnlikeSession"
                 @load-more="loadMore"

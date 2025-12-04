@@ -23,7 +23,7 @@ export interface IMetadataDefinitionSummaryDto {
     metadata_type: MetadataDefinitionType
     total_usage: number
     unique_values?: number
-    most_common_value?: string
+    most_common_value?: string | number | boolean
     numeric_summary?: INumericSummary
 }
 

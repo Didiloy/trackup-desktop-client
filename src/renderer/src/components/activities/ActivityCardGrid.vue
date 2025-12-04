@@ -5,15 +5,18 @@ import ActivityCard from './ActivityCard.vue'
 import type { ActivityCardMetrics } from '@/components/activities/types/activity-card.types'
 import { useI18n } from 'vue-i18n'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
+import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
 
 interface Props {
     activities: IActivity[]
     metrics: Record<string, ActivityCardMetrics | undefined>
     loading?: boolean
+    hasMore?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    loading: false
+    loading: false,
+    hasMore: true
 })
 
 const emit = defineEmits<{
@@ -24,21 +27,16 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const isEmpty = computed(() => !props.loading && !props.activities.length)
-
-function handleScroll(event: Event): void {
-    const target = event.target as HTMLElement | null
-    if (!target) return
-    const { scrollTop, clientHeight, scrollHeight } = target
-    const threshold = 200
-    if (scrollTop + clientHeight + threshold >= scrollHeight) {
-        emit('load-more')
-    }
-}
 </script>
 
 <template>
     <div class="w-full h-full flex flex-col">
-        <div class="flex-1 overflow-auto p-5" @scroll.passive="handleScroll">
+        <InfiniteScrollContainer
+            :loading="loading"
+            :has-more="hasMore"
+            container-class="flex-1 p-5"
+            @load-more="emit('load-more')"
+        >
             <!-- Activities Grid -->
             <TransitionGroupWrapper
                 name="fade"
@@ -100,6 +98,6 @@ function handleScroll(event: Event): void {
                 </p>
                 <p class="text-sm text-surface-500 mt-2">{{ t('common.filters.try_adjusting') }}</p>
             </div>
-        </div>
+        </InfiniteScrollContainer>
     </div>
 </template>

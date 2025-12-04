@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsCRUD } from '@/composables/servers/useServerStatsCRUD'
 import type {
@@ -24,7 +24,7 @@ const { t } = useI18n()
 const loading = ref(true)
 const details = ref<IServerStatsDetails | null>(null)
 const error = ref<string | null>(null)
-const selectedPeriodType = ref<EPeriod | null>(null)
+const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
 
 // Default to last 30 days
 const period = ref<Date[] | null>([
@@ -152,9 +152,9 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
         </div>
 
         <ServerStatsHeader
-            :server-name="server_store.getName ?? ''"
             v-model:period="period"
             v-model:selected-period-type="selectedPeriodType"
+            :server-name="server_store.getName ?? ''"
             :loading="loading"
             @refresh="handleRefresh"
             @update:period-type="handlePeriodTypeUpdate"

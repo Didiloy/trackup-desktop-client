@@ -10,7 +10,7 @@ import type {
     IMemberStatsDetails,
     IMemberActivityPatterns,
     IMemberRanking,
-    IMemberGrowthTrends,
+    IMemberGrowthResponse,
     IMemberLeaderboard,
     IPaginatedMemberStats,
     ILeaderboardParams,
@@ -223,7 +223,7 @@ export function registerMemberStatsIpc(): void {
             memberId: string,
             params: IMemberGrowthParams | undefined,
             accessToken: string
-        ): Promise<IMemberStatsApiResponse<IMemberGrowthTrends>> => {
+        ): Promise<IMemberStatsApiResponse<IMemberGrowthResponse>> => {
             logger.info('Getting member growth trends:', serverId, memberId, params)
 
             const validationError = combineValidations(
@@ -235,7 +235,7 @@ export function registerMemberStatsIpc(): void {
 
             const queryString = buildQueryParams(params)
 
-            return apiService.get<IMemberGrowthTrends>(
+            return apiService.get<IMemberGrowthResponse>(
                 `/api/v1/stats/servers/${serverId}/members/${memberId}/growth-trends${queryString}`,
                 accessToken
             )
