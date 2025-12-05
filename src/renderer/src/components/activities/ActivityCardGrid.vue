@@ -41,7 +41,7 @@ const isEmpty = computed(() => !props.loading && !props.activities.length)
             <TransitionGroupWrapper
                 name="fade"
                 tag="div"
-                class="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                class="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
             >
                 <ActivityCard
                     v-for="activity in activities"

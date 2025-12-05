@@ -2,6 +2,7 @@
  * Activity related interfaces
  */
 import { ISessionCreator } from './session.interfaces'
+import { ESearchMode } from '../../enums/search-mode.enum'
 
 export interface IActivity {
     public_id: string
@@ -38,7 +39,7 @@ export interface IListActivitiesOptions {
     page?: number
     limit?: number
     search?: string
-    searchMode?: 'startsWith' | 'endsWith' | 'contains' | 'exact'
+    searchMode?: ESearchMode
 }
 
 export interface IPaginatedActivities {

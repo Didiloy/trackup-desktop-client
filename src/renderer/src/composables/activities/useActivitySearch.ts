@@ -2,6 +2,7 @@ import { ref, watch } from 'vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import { ESearchMode } from '@shared/contracts/enums/search-mode.enum'
 
 interface UseActivitySearchReturn {
     activityQuery: ReturnType<typeof ref<string>>
@@ -56,7 +57,7 @@ export function useActivitySearch(): UseActivitySearchReturn {
 
         const res = await listActivities(server_store.getPublicId, {
             search: query,
-            searchMode: 'contains',
+            searchMode: ESearchMode.CONTAINS,
             limit: 10
         })
 

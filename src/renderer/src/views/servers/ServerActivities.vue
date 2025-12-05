@@ -13,6 +13,7 @@ import { asyncPool } from '@/utils'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useRouter } from 'vue-router'
+import { ESearchMode } from '@shared/contracts/enums/search-mode.enum'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -24,7 +25,7 @@ const show_add_activity_dialog = ref(false)
 const card_metrics = ref<Record<string, ActivityCardMetrics>>({})
 
 const filter_query = ref('')
-const filter_SearchMode = ref<'startsWith' | 'endsWith' | 'contains' | 'exact'>('contains')
+const filter_SearchMode = ref<ESearchMode>(ESearchMode.CONTAINS)
 
 /**
  * Fonction pour transformer les stats en metrics
@@ -145,6 +146,7 @@ onMounted(() => {
                 :count="activities.length"
                 @update:query="(v) => (filter_query = v)"
                 @update:search-mode="(v) => (filter_SearchMode = v)"
+                @clear="load"
             />
         </div>
 
