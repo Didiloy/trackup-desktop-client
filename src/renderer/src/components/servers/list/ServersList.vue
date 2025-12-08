@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useServerList } from '@/composables/servers/useServerList'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
 import ServersListItems from './ServersListItems.vue'
 import ServerCreateJoinDialog from '../create-join/ServerCreateJoinDialog.vue'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
-
-const i18n = useI18n()
 
 // Server list management
 const { fetchServers, handleServerCreated } = useServerList()
