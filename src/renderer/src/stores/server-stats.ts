@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import { reactive, computed } from 'vue'
+import { reactive, computed, watch } from 'vue'
 import { useServerStatsCRUD } from '@/composables/servers/useServerStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
+import { useServerStore } from '@/stores/server'
 import type {
     IServerStats,
     IServerStatsDetails,
@@ -20,6 +21,8 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         getServerStatsGrowthTrends,
         getServerStatsComparativeAnalysis
     } = useServerStatsCRUD()
+
+    const server_store = useServerStore()
 
     const state = reactive({
         details: null as IServerStatsDetails | null,
@@ -163,8 +166,18 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     }
 
     const fetchAll = async (serverId: string) => {
-        // By default, fetchDetails is the most comprehensive
-        return fetchDetails(serverId)
+        // Fetch base details first
+        const res = await fetchDetails(serverId)
+
+        // If we have a selected period type, fetch the specific timeline for it
+        if (state.selectedPeriodType) {
+            await fetchTimeline(serverId, {
+                period: state.selectedPeriodType,
+                limit: 365
+            })
+        }
+
+        return res
     }
 
     const setPeriod = (p: Date[] | null) => {
@@ -192,6 +205,25 @@ export const useServerStatsStore = defineStore('server-stats', () => {
             new Date()
         ]
     }
+
+    // Orchestration logic moved from component to store
+    watch(() => state.selectedPeriodType, async (newType) => {
+        const serverId = server_store.getPublicId
+        if (!serverId) return
+
+        if (newType) {
+            await fetchTimeline(serverId, {
+                period: newType,
+                limit: 365
+            })
+        } else {
+            // If custom period (selectedPeriodType is null), fetch DAILY as fallback to have enough data points
+            await fetchTimeline(serverId, {
+                period: EPeriod.DAILY,
+                limit: 365
+            })
+        }
+    })
 
     return {
         // State/Getters

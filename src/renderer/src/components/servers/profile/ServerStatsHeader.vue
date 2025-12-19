@@ -2,21 +2,12 @@
 import { useI18n } from 'vue-i18n'
 import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
-
-const props = defineProps<{
-    serverName: string
-    period: Date[] | null
-    selectedPeriodType: EPeriod | null
-    loading?: boolean
-}>()
-
-const emit = defineEmits<{
-    (e: 'update:period', value: Date[] | null): void
-    (e: 'update:periodType', value: EPeriod | null): void
-    (e: 'refresh'): void
-}>()
+import { useServerStore } from '@/stores/server'
+import { useServerStatsStore } from '@/stores/server-stats'
 
 const { t } = useI18n()
+const server_store = useServerStore()
+const server_stats_store = useServerStatsStore()
 
 const periodTypes = [
     { label: t('common.periods.all_time'), value: EPeriod.ALL_TIME },
@@ -27,9 +18,14 @@ const periodTypes = [
 ]
 
 function selectPeriodType(type: EPeriod) {
-    emit('update:periodType', type)
-    // Optional: Clear custom date range because we want mutually exclusive behavior
-    emit('update:period', null)
+    server_stats_store.setSelectedPeriodType(type)
+    server_stats_store.setPeriod(null)
+}
+
+function handleRefresh() {
+    if (server_store.getPublicId) {
+        server_stats_store.fetchAll(server_store.getPublicId)
+    }
 }
 </script>
 
@@ -37,7 +33,7 @@ function selectPeriodType(type: EPeriod) {
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl font-bold text-surface-900">
-                {{ props.serverName }}
+                {{ server_store.getName }}
             </h1>
             <p class="text-surface-500 text-sm">
                 {{ t('views.server_stats.subtitle') }}
@@ -51,24 +47,24 @@ function selectPeriodType(type: EPeriod) {
                     :key="type.value"
                     :label="type.label"
                     size="small"
-                    :severity="props.selectedPeriodType === type.value ? 'primary' : 'secondary'"
+                    :severity="server_stats_store.getSelectedPeriodType === type.value ? 'primary' : 'secondary'"
                     text
                     @click="selectPeriodType(type.value)"
                 />
             </div>
             <div class="w-64">
                 <DateRangeFilter
-                    :model-value="props.period"
-                    @update:model-value="emit('update:period', $event)"
+                    :model-value="server_stats_store.getPeriod"
+                    @update:model-value="server_stats_store.setPeriod($event)"
                 />
             </div>
             <Button
                 icon="pi pi-refresh"
-                :loading="props.loading"
+                :loading="server_stats_store.isLoading"
                 rounded
                 text
                 severity="secondary"
-                @click="emit('refresh')"
+                @click="handleRefresh"
             />
         </div>
     </div>

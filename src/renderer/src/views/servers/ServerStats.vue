@@ -1,46 +1,19 @@
 <script setup lang="ts">
-const server_store = useServerStore()
+import ServerStatsHeader from '@/components/servers/profile/ServerStatsHeader.vue'
+import ServerTotalSessions from '@/components/widgets/server/ServerTotalSessions.vue'
+import ServerActiveMembers from '@/components/widgets/server/ServerActiveMembers.vue'
+import ServerTotalDuration from '@/components/widgets/server/ServerTotalDuration.vue'
+import ServerTotalActivities from '@/components/widgets/server/ServerTotalActivities.vue'
+import ServerEngagementScore from '@/components/widgets/server/ServerEngagementScore.vue'
+import ServerAvgLikes from '@/components/widgets/server/ServerAvgLikes.vue'
+import ServerAvgParticipants from '@/components/widgets/server/ServerAvgParticipants.vue'
+import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart.vue'
+import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
+import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
+import ServerActivitiesDistribution from '@/components/widgets/server/ServerActivitiesDistribution.vue'
+import { useServerStatsStore } from '@/stores/server-stats'
+
 const server_stats_store = useServerStatsStore()
-
-async function fetchTimelineForPeriod(periodType: EPeriod) {
-    if (!server_store.getPublicId) return
-    const res = await server_stats_store.fetchTimeline(server_store.getPublicId, {
-        period: periodType,
-        limit: 365
-    })
-}
-
-watch(() => server_stats_store.getSelectedPeriodType, async (newType) => {
-    if (newType) {
-        await fetchTimelineForPeriod(newType)
-    } else {
-        if (server_store.getPublicId) {
-            await server_stats_store.fetchDetails(server_store.getPublicId)
-        }
-    }
-})
-
-// Initial load if store is empty but server is selected
-onMounted(async () => {
-    if (server_store.getPublicId && !server_stats_store.getDetails) {
-        await server_stats_store.fetchAll(server_store.getPublicId)
-    }
-})
-
-// Refresh handler
-function handleRefresh() {
-    if (server_store.getPublicId) {
-        server_stats_store.fetchAll(server_store.getPublicId)
-    }
-}
-
-function handlePeriodTypeUpdate(newType: EPeriod | null) {
-    server_stats_store.setSelectedPeriodType(newType)
-}
-
-function handlePeriodUpdate(newPeriod: Date[] | null) {
-    server_stats_store.setPeriod(newPeriod)
-}
 </script>
 
 <template>
@@ -49,15 +22,7 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
             {{ server_stats_store.getError }}
         </div>
 
-        <ServerStatsHeader
-            v-model:period="period"
-            v-model:selected-period-type="selectedPeriodType"
-            :server-name="server_store.getName ?? ''"
-            :loading="server_stats_store.isLoading"
-            @refresh="handleRefresh"
-            @update:period-type="handlePeriodTypeUpdate"
-            @update:period="handlePeriodUpdate"
-        />
+        <ServerStatsHeader />
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
             <ServerTotalSessions />

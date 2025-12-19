@@ -19,7 +19,7 @@ const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
 
 const sortedData = computed(() => {
-    const data = server_stats_store.getTimeline ?? []
+    const data = server_stats_store.getFilteredTimeline ?? []
     return [...data].sort((a, b) => {
         const dateA = new Date(a.period).getTime()
         const dateB = new Date(b.period).getTime()

@@ -125,7 +125,3 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
         </div>
     </div>
 </template>
-<style scoped>
-.vue-data-ui-custom-tooltip {
-}
-</style>
