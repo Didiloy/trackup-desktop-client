@@ -185,12 +185,17 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     const setPeriod = (p: Date[] | null) => {
         state.period = p
         if (p) {
-            state.selectedPeriodType = null
+            // Internally we use ALL_TIME (or null) when a custom range is set
+            // The selector will visually show "Custom" because period is not null
+            state.selectedPeriodType = EPeriod.ALL_TIME
         }
     }
 
     const setSelectedPeriodType = (type: EPeriod | null) => {
         state.selectedPeriodType = type
+        if (type) {
+            state.period = null
+        }
     }
 
     const resetState = () => {
@@ -203,10 +208,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         state.isTimelineLoading = false
         state.error = null
         state.selectedPeriodType = EPeriod.ALL_TIME
-        state.period = [
-            new Date(new Date().setDate(new Date().getDate() - 30)),
-            new Date()
-        ]
+        state.period = null
     }
 
     // Orchestration logic moved from component to store
@@ -219,8 +221,16 @@ export const useServerStatsStore = defineStore('server-stats', () => {
                 period: newType,
                 limit: 365
             })
-        } else {
-            // If custom period (selectedPeriodType is null), fetch DAILY as fallback to have enough data points
+        }
+    })
+
+    // Watch for custom period changes to fetch enough data (Daily)
+    watch(() => state.period, async (newPeriod) => {
+        if (newPeriod && newPeriod.length === 2 && newPeriod[0] && newPeriod[1]) {
+            const serverId = server_store.getPublicId
+            if (!serverId) return
+
+            // Fetch daily timeline to allow precise filtering on the frontend
             await fetchTimeline(serverId, {
                 period: EPeriod.DAILY,
                 limit: 365
