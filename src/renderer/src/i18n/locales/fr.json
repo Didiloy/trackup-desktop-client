@@ -74,7 +74,15 @@
             "start": "Démarrer",
             "add_manual": "Ajout manuel",
             "pause": "Pause",
-            "resume": "Reprendre"
+            "resume": "Reprendre",
+            "customize": "Personnaliser",
+            "done": "Terminé",
+            "add_widget": "Ajouter un widget"
+        },
+        "widgets": {
+            "dashboard": "Tableau de bord",
+            "add_widget": "Ajouter un widget",
+            "all_added": "Tous les widgets ont été ajoutés"
         },
         "misc": {
             "or": "ou",
