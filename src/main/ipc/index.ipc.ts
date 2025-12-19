@@ -5,6 +5,7 @@ import { registerServerIpc } from './entities/server.ipc'
 import { registerEnumDefinitionIpc } from './entities/enum-definition.ipc'
 import { registerActivityIpc } from './entities/activity.ipc'
 import { registerActivitySkillLevelIpc } from './entities/activity-skill-level.ipc'
+import { registerActivityMetadataDefinitionIpc } from './entities/activity-metadata-definition.ipc'
 import { registerSessionIpc } from './entities/session.ipc'
 import { registerMemberIpc } from './entities/member.ipc'
 import { registerUserIpc } from './entities/user.ipc'
@@ -16,6 +17,7 @@ import { registerMemberActivityStatsIpc } from './entities-stats/member-activity
 import { registerEnumDefinitionStatsIpc } from './entities-stats/enum-definition-stats.ipc'
 import { registerSnapshotStatsIpc } from './entities-stats/snapshot-stats.ipc'
 import { registerBillingIpc } from './billing.ipc'
+import { registerActivityMetadataDefinitionStatsIpc } from './entities-stats/activity-metadata-definition-stats.ipc'
 
 /**
  * Register all IPC handlers
@@ -32,6 +34,7 @@ export function registerAllIpc(): void {
     registerEnumDefinitionIpc()
     registerActivityIpc()
     registerActivitySkillLevelIpc()
+    registerActivityMetadataDefinitionIpc()
     registerSessionIpc()
     registerMemberIpc()
     registerUserIpc()
@@ -44,6 +47,7 @@ export function registerAllIpc(): void {
     registerMemberActivityStatsIpc()
     registerEnumDefinitionStatsIpc()
     registerSnapshotStatsIpc()
+    registerActivityMetadataDefinitionStatsIpc()
 
     // Register billing IPC handlers
     registerBillingIpc()

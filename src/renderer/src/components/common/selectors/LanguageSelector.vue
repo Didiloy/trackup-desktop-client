@@ -9,12 +9,10 @@ import Select from 'primevue/select'
 const i18n = useI18n()
 const toast = useToast()
 
-// Get dynamically available languages from i18n
 const languages = ref<Language[]>(getAvailableLanguages())
 const current_language = ref(i18n.locale.value)
 
 onMounted(() => {
-    // Ensure currentLanguage is synced with i18n
     current_language.value = i18n.locale.value
 })
 
@@ -22,38 +20,29 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
     const locale = event.value
 
     try {
-        // Save the preference to localStorage
         localStorage.setItem('locale', locale)
 
-        // Switch the language
         const result = await setI18nLanguage(locale)
         if (result) {
             toast.add({
                 severity: 'success',
-                summary: i18n.t(
-                    'userInterface.userProfileMenu.preferences.language.switch.success'
-                ),
+                summary: i18n.t('views.user_profile.preferences.language.switch.success'),
                 life: 3000
             })
         } else {
-            // console.error('Failed to load language')
             toast.add({
                 severity: 'error',
-                summary: i18n.t('userInterface.userProfileMenu.preferences.language.switch.error'),
-                detail: i18n.t(
-                    'userInterface.userProfileMenu.preferences.language.switch.error_detail'
-                ),
+                summary: i18n.t('views.user_profile.preferences.language.switch.error'),
+                detail: i18n.t('views.user_profile.preferences.language.switch.error_detail'),
                 life: 3000
             })
         }
     } catch (error) {
-        // console.error('Error switching language:', error)
+        console.error('Error switching language:', error)
         toast.add({
             severity: 'error',
-            summary: i18n.t('userInterface.userProfileMenu.preferences.language.switch.error'),
-            detail: i18n.t(
-                'userInterface.userProfileMenu.preferences.language.switch.error_detail'
-            ),
+            summary: i18n.t('views.user_profile.preferences.language.switch.error'),
+            detail: i18n.t('views.user_profile.preferences.language.switch.error_detail'),
             life: 3000
         })
     }
@@ -62,18 +51,13 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
 
 <template>
     <div class="language-switcher">
-        <h3>{{ i18n.t('userInterface.userProfileMenu.preferences.language.title') }}</h3>
+        <h3>{{ i18n.t('views.user_profile.preferences.language.title') }}</h3>
         <Select
             v-model="current_language"
             :options="languages"
             option-label="name"
             option-value="code"
             class="language-select"
-            :pt="{
-                root: { class: 'bg-surface-100' },
-                overlay: { class: 'bg-surface-100' },
-                listContainer: { class: 'bg-surface-100' }
-            }"
             @change="switchLanguage"
         >
             <template #value="slotProps">
@@ -85,9 +69,7 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
                         languages.find((lang) => lang.code === slotProps.value)?.name || ''
                     }}</span>
                 </div>
-                <span v-else>{{
-                    i18n.t('userInterface.userProfileMenu.preferences.language.title')
-                }}</span>
+                <span v-else>{{ i18n.t('views.user_profile.preferences.language.title') }}</span>
             </template>
             <template #option="slotProps">
                 <div class="language-option">

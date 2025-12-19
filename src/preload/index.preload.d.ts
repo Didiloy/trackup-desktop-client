@@ -6,6 +6,7 @@ import type { ServerBridge } from './bridges/entities/server.bridge'
 import type { EnumDefinitionBridge } from './bridges/entities/enum-definition.bridge'
 import type { ActivityBridge } from './bridges/entities/activity.bridge'
 import type { ActivitySkillLevelBridge } from './bridges/entities/activity-skill-level.bridge'
+import type { ActivityMetadataDefinitionBridge } from './bridges/entities/activity-metadata-definition.bridge'
 import type { SessionBridge } from './bridges/entities/session.bridge'
 import type { MemberBridge } from './bridges/entities/member.bridge'
 import type { UserBridge } from './bridges/entities/user.bridge'
@@ -17,6 +18,7 @@ import type { MemberActivityStatsBridge } from './bridges/entities-stats/member-
 import type { EnumDefinitionStatsBridge } from './bridges/entities-stats/enum-definition-stats.bridge'
 import type { SnapshotStatsBridge } from './bridges/entities-stats/snapshot-stats.bridge'
 import type { BillingBridge } from './bridges/billing.bridge'
+import type { ActivityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
 
 /**
  * Global type definitions for window.api
@@ -29,6 +31,7 @@ export interface API {
     enumDefinition: EnumDefinitionBridge
     activity: ActivityBridge
     activitySkillLevel: ActivitySkillLevelBridge
+    activityMetadataDefinition: ActivityMetadataDefinitionBridge
     session: SessionBridge
     member: MemberBridge
     user: UserBridge
@@ -40,6 +43,7 @@ export interface API {
     enumDefinitionStats: EnumDefinitionStatsBridge
     snapshotStats: SnapshotStatsBridge
     billing: BillingBridge
+    activityMetadataDefinitionStats: ActivityMetadataDefinitionStatsBridge
 }
 
 declare global {

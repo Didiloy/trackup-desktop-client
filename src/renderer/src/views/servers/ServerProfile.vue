@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
-import { useServerStore } from '@/stores/server'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import ServerGeneralProfile from '@renderer/components/servers/profile/ServerGeneralProfile.vue'
+import { useI18n } from 'vue-i18n'
 
-const route = useRoute()
-const server_id = ref<string>(route.params.id as string)
-const server_store = useServerStore()
+const { t } = useI18n()
 </script>
 
 <template>
-    <div class="p-4">
-        <TransitionWrapper name="slide-fade">
-            <div v-if="server_store.isLoading" key="loading" class="flex flex-col gap-4">
-                <Skeleton shape="circle" width="6rem" height="6rem" />
-                <Skeleton width="100%" height="2rem" />
-                <Skeleton width="80%" height="1.5rem" />
-            </div>
-            <div v-else-if="server_store.hasServer" :key="server_id">
-                <h1>Server {{ server_store.getPublicId }}</h1>
-                <p>
-                    {{ server_store.getName }}
-                    {{ server_store.getInvitationCode }}
-                    {{ server_store.getMembers?.length }} members
-                    {{ server_store.getDescription }}
-                    {{ server_store.getInvitationCodeExpDate }}
-                    {{ server_store.getServerTypePublicId }}
-                </p>
-            </div>
-        </TransitionWrapper>
+    <div class="w-full h-full overflow-y-auto bg-surface-50">
+        <div class="max-w-5xl mx-auto px-6 py-8">
+            <TransitionWrapper name="slide-fade">
+                <div class="flex flex-col gap-8">
+                    <!-- Header -->
+                    <div class="flex flex-col gap-2">
+                        <h1 class="text-3xl font-bold text-surface-900 tracking-tight">
+                            {{ t('views.server_profile.title') }}
+                        </h1>
+                        <p class="text-surface-500 text-lg max-w-2xl">
+                            {{ t('views.server_profile.subtitle') }}
+                        </p>
+                    </div>
+
+                    <!-- Content -->
+                    <ServerGeneralProfile />
+                </div>
+            </TransitionWrapper>
+        </div>
     </div>
 </template>

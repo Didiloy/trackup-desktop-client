@@ -14,13 +14,13 @@ const emit = defineEmits<{
     (e: 'cancel'): void
 }>()
 
-const invitationCode = ref('')
+const invitation_code = ref('')
 const submitting = ref(false)
 const error = ref<string | null>(null)
 const { joinServer } = useServerCRUD()
 
 const can_submit = computed(() => {
-    return !submitting.value && !!invitationCode.value.trim()
+    return !submitting.value && !!invitation_code.value.trim()
 })
 
 async function submit(): Promise<void> {
@@ -28,49 +28,47 @@ async function submit(): Promise<void> {
     submitting.value = true
 
     const payload: IJoinServerRequest = {
-        code: invitationCode.value.trim()
+        code: invitation_code.value.trim()
     }
 
     const res = await joinServer(payload)
     if (res.error) {
-        error.value = t('userInterface.joinServerView.errors')
+        error.value = t('messages.error.joinServerFailed')
         submitting.value = false
         return
     } else {
         emit('joined', res.data!)
     }
 }
-
-const background_style = 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
 </script>
 
 <template>
     <div class="flex flex-col gap-4 select-none">
         <div class="flex flex-col gap-2">
             <label class="text-sm text-surface-500">
-                {{ t('userInterface.joinServerView.invitationCodeLabel') }}
+                {{ t('views.join_server.invitation_code_label') }}
             </label>
             <InputText
-                v-model="invitationCode"
-                :placeholder="t('userInterface.joinServerView.placeholder.invitationCode')"
+                v-model="invitation_code"
+                :placeholder="t('views.join_server.placeholder.invitation_code')"
                 class="w-full"
-                :pt="{
-                    root: {
-                        style: background_style
-                    }
-                }"
             />
             <small class="text-xs text-surface-500">
-                {{ t('userInterface.joinServerView.invitationCodeHint') }}
+                {{ t('views.join_server.invitation_code_hint') }}
             </small>
         </div>
 
         <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
 
         <div class="flex justify-end gap-2 pt-2">
-            <Button :label="t('common.cancel')" severity="secondary" text @click="emit('cancel')" />
             <Button
-                :label="t('userInterface.joinServerView.joinButton')"
+                :label="t('common.actions.cancel')"
+                severity="secondary"
+                text
+                @click="emit('cancel')"
+            />
+            <Button
+                :label="t('views.join_server.join_button')"
                 :loading="submitting"
                 :disabled="!can_submit"
                 :style="{ background: 'var(--gradient-primary)' }"

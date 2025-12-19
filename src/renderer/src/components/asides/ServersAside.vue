@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActionsList from '@/components/servers/ServersActionsList.vue'
-import ProfileButton from '@/components/ProfileButton.vue'
+import ProfileButton from '@/components/user/ProfileButton.vue'
 import { useRoute } from 'vue-router'
 import { computed, ref, watch } from 'vue'
-import TransitionWrapper from '@/components/common/TransitionWrapper.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerTypeCRUD } from '@/composables/servers/useServerTypeCRUD'
 import { useToast } from 'primevue/usetoast'
@@ -12,36 +12,39 @@ import { useI18n } from 'vue-i18n'
 import { copyKeyToClipBoard } from '@/utils'
 
 const route = useRoute()
+const toast = useToast()
+const i18n = useI18n()
+const server_store = useServerStore()
+const { t } = useI18n()
+const server_type_name = ref<string>('')
+
 const hasServerActions = computed(
     () => typeof route.name === 'string' && route.name.startsWith('Server')
 )
-
-const server_store = useServerStore()
-
 const { getServerTypeById } = useServerTypeCRUD()
-const serverTypeName = ref<string>('')
-const serverTypeId = computed<string>(() => server_store.getServerTypePublicId || '')
 
 async function refreshServerTypeName(): Promise<void> {
-    const id = serverTypeId.value
+    const id = server_store.getServerTypePublicId
     if (!id) {
-        serverTypeName.value = ''
+        server_type_name.value = ''
         return
     }
     const res = await getServerTypeById(id)
-    serverTypeName.value = res.data?.name || ''
+    if (res.error) {
+        server_type_name.value = ''
+        return
+    }
+    server_type_name.value = t(`views.create_server.types.${res.data?.name}`)
 }
 
 watch(
-    serverTypeId,
+    () => server_store.getServerTypePublicId,
     () => {
         void refreshServerTypeName()
     },
     { immediate: true }
 )
 
-const toast = useToast()
-const i18n = useI18n()
 async function copyInvite(): Promise<void> {
     if (!server_store.getInvitationCode) return
     await copyKeyToClipBoard(server_store.getInvitationCode, toast, i18n)
@@ -52,7 +55,7 @@ async function copyInvite(): Promise<void> {
     <aside
         id="ServersAside"
         class="flex flex-row items-center justify-start h-full bg-surface-200 transition-all duration-300 ease-in-out overflow-hidden select-none"
-        :class="[hasServerActions ? 'w-64 min-w-64' : 'w-16 min-w-16']"
+        :class="[hasServerActions ? 'w-100 min-w-64' : 'w-16 min-w-16']"
     >
         <div class="flex flex-col items-center w-16 min-w-16 h-full my-2 bg-surface-200 rounded-lg">
             <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
@@ -68,18 +71,21 @@ async function copyInvite(): Promise<void> {
                 >
                     <!-- Header with banner and server meta -->
                     <div class="relative w-full" style="height: 120px; min-height: 120px">
-                        <div v-if="server_store.getBanner" class="absolute inset-0">
-                            <img
-                                :src="server_store.getBanner"
-                                alt="Server banner"
-                                class="w-full h-full object-cover not-draggable"
-                            />
-                        </div>
-                        <div
-                            v-else
-                            class="absolute inset-0"
-                            style="background: var(--gradient-primary)"
-                        ></div>
+                        <TransitionWrapper name="slide-fade">
+                            <div v-if="server_store.getBanner" class="absolute inset-0">
+                                <img
+                                    :src="server_store.getBanner"
+                                    :alt="t('views.servers_aside.banner_alt')"
+                                    class="w-full h-full object-cover not-draggable"
+                                />
+                            </div>
+                            <div
+                                v-else
+                                class="absolute inset-0"
+                                style="background: var(--gradient-primary)"
+                            ></div>
+                        </TransitionWrapper>
+
                         <!-- Contrast overlays -->
                         <div class="absolute inset-0 backdrop-blur-[2px] bg-black/0"></div>
                         <div
@@ -87,10 +93,10 @@ async function copyInvite(): Promise<void> {
                         ></div>
                         <div class="absolute bottom-0 left-0 right-0 p-3">
                             <div class="text-white font-semibold text-sm truncate text-elevated">
-                                {{ server_store.getName || 'Server' }}
+                                {{ server_store.getName || t('views.servers_aside.fallback_name') }}
                             </div>
                             <div class="text-white/90 text-xs text-elevated">
-                                {{ serverTypeName }}
+                                {{ server_type_name }}
                             </div>
                             <div class="mt-2 flex items-center gap-2 absolute bottom-0 right-0 p-3">
                                 <button

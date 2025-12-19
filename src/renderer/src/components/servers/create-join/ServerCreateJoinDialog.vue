@@ -20,10 +20,10 @@ const emit = defineEmits<Emits>()
 const { t } = useI18n()
 
 type ActionType = 'choice' | 'create' | 'join'
-const currentAction = ref<ActionType>('choice')
+const current_action = ref<ActionType>('choice')
 
 function selectAction(action: 'create' | 'join'): void {
-    currentAction.value = action
+    current_action.value = action
 }
 
 function handleServerAction(server: IServer | undefined): void {
@@ -33,15 +33,20 @@ function handleServerAction(server: IServer | undefined): void {
 }
 
 function handleCancel(): void {
-    if (currentAction.value !== 'choice') {
-        currentAction.value = 'choice'
+    if (current_action.value !== 'choice') {
+        current_action.value = 'choice'
     } else {
         closeDialog()
     }
 }
 
+function handleDialogClose(value: boolean): void {
+    current_action.value = 'choice'
+    emit('update:modelValue', value)
+}
+
 function closeDialog(): void {
-    currentAction.value = 'choice'
+    current_action.value = 'choice'
     emit('update:modelValue', false)
 }
 </script>
@@ -51,18 +56,18 @@ function closeDialog(): void {
         :model-value="modelValue"
         :style-class="'w-[560px] max-w-[92vw] rounded-xl select-none'"
         :content-class="'p-0 bg-surface-50'"
-        @update:model-value="emit('update:modelValue', $event)"
+        @update:model-value="handleDialogClose"
     >
         <template #header>
             <div class="flex items-center gap-2 p-3">
                 <i class="pi pi-plus-circle text-primary-500"></i>
                 <span class="font-semibold text-surface-900">
                     {{
-                        currentAction === 'create'
-                            ? t('userInterface.createServerView.title')
-                            : currentAction === 'join'
-                              ? t('userInterface.joinServerView.title')
-                              : t('userInterface.serverActionView.title')
+                        current_action === 'create'
+                            ? t('views.create_server.title')
+                            : current_action === 'join'
+                              ? t('views.join_server.title')
+                              : t('views.create_server.action.title')
                     }}
                 </span>
             </div>
@@ -70,13 +75,13 @@ function closeDialog(): void {
 
         <div class="p-4">
             <!-- Choice view -->
-            <div v-if="currentAction === 'choice'" class="flex flex-col gap-3">
+            <div v-if="current_action === 'choice'" class="flex flex-col gap-3">
                 <p class="text-sm text-surface-600 mb-2">
-                    {{ t('userInterface.serverActionView.description') }}
+                    {{ t('views.create_server.action.description') }}
                 </p>
 
                 <Button
-                    :label="t('userInterface.createServerView.title')"
+                    :label="t('views.create_server.title')"
                     icon="pi pi-plus"
                     class="w-full justify-start"
                     :pt="{
@@ -91,17 +96,15 @@ function closeDialog(): void {
                         <i class="pi pi-plus mr-2"></i>
                     </template>
                     <div class="flex flex-col">
-                        <span class="font-semibold">{{
-                            t('userInterface.createServerView.title')
-                        }}</span>
+                        <span class="font-semibold">{{ t('views.create_server.title') }}</span>
                         <span class="text-xs text-surface-500">{{
-                            t('userInterface.createServerView.subtitle')
+                            t('views.create_server.subtitle')
                         }}</span>
                     </div>
                 </Button>
 
                 <Button
-                    :label="t('userInterface.joinServerView.title')"
+                    :label="t('views.join_server.title')"
                     icon="pi pi-sign-in"
                     class="w-full justify-start"
                     :pt="{
@@ -116,11 +119,9 @@ function closeDialog(): void {
                         <i class="pi pi-sign-in mr-2"></i>
                     </template>
                     <div class="flex flex-col">
-                        <span class="font-semibold">{{
-                            t('userInterface.joinServerView.title')
-                        }}</span>
+                        <span class="font-semibold">{{ t('views.join_server.title') }}</span>
                         <span class="text-xs text-surface-500">{{
-                            t('userInterface.joinServerView.subtitle')
+                            t('views.join_server.subtitle')
                         }}</span>
                     </div>
                 </Button>
@@ -128,14 +129,14 @@ function closeDialog(): void {
 
             <!-- Create server form -->
             <CreateServerForm
-                v-else-if="currentAction === 'create'"
+                v-else-if="current_action === 'create'"
                 @created="handleServerAction"
                 @cancel="handleCancel"
             />
 
             <!-- Join server form -->
             <JoinServerForm
-                v-else-if="currentAction === 'join'"
+                v-else-if="current_action === 'join'"
                 @joined="handleServerAction"
                 @cancel="handleCancel"
             />

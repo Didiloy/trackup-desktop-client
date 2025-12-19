@@ -109,3 +109,40 @@ export const applyTheme = (
 
     return isDark
 }
+
+export async function asyncPool<T, R>(
+    concurrency: number,
+    items: readonly T[],
+    task: (item: T) => Promise<R>
+): Promise<PromiseSettledResult<R>[]> {
+    const results: Promise<R>[] = []
+    const executing: Promise<void>[] = []
+
+    for (const item of items) {
+        const p = task(item)
+        results.push(p)
+
+        if (concurrency <= items.length) {
+            const exec: Promise<void> = p.then(() => {
+                const index = executing.indexOf(exec)
+                if (index !== -1) executing.splice(index, 1)
+            })
+
+            executing.push(exec)
+
+            if (executing.length >= concurrency) {
+                await Promise.race(executing)
+            }
+        }
+    }
+
+    return Promise.allSettled(results)
+}
+
+export function formatNumber(value?: number | null, fractionDigits = 0): string {
+    if (value === undefined || value === null || Number.isNaN(value)) return '—'
+    return value.toLocaleString(undefined, {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+    })
+}

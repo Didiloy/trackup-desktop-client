@@ -10,7 +10,7 @@ import type {
     IMemberStatsDetails,
     IMemberActivityPatterns,
     IMemberRanking,
-    IMemberGrowthTrends,
+    IMemberGrowthResponse,
     IMemberLeaderboard,
     IPaginatedMemberStats,
     ILeaderboardParams,
@@ -144,7 +144,7 @@ export const memberStatsBridge = {
         memberId: string,
         params: IMemberGrowthParams | undefined,
         accessToken: string
-    ): Promise<IMemberStatsApiResponse<IMemberGrowthTrends>> => {
+    ): Promise<IMemberStatsApiResponse<IMemberGrowthResponse>> => {
         return ipcRenderer.invoke(
             ipc_channels.memberStats.getGrowthTrends,
             serverId,

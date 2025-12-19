@@ -95,6 +95,24 @@ export function validateNotEmpty<T>(array: T[] | undefined, fieldName: string): 
 }
 
 /**
+ * Validate that a string does not exceed a maximum length
+ * @param value - The value to validate
+ * @param maxLength - The maximum allowed length
+ * @param fieldName - The name of the field for error messages
+ * @returns ValidationError if invalid, undefined if valid
+ */
+export function validateMaxLength(
+    value: string | undefined,
+    maxLength: number,
+    fieldName: string
+): ValidationResult {
+    if (value !== undefined && value.length > maxLength) {
+        return { error: `${fieldName} must not exceed ${maxLength} characters` }
+    }
+    return undefined
+}
+
+/**
  * Validate URL scheme (security check)
  * @param url - The URL to validate
  * @returns ValidationError if invalid, undefined if valid

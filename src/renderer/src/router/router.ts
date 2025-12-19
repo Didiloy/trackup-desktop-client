@@ -1,6 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 import type { RouteRecordRaw, Router } from 'vue-router'
-import Home from '@/views/Home.vue'
+import Home from '@/views/app/Home.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes: RouteRecordRaw[] = [
@@ -12,12 +12,12 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import('@/views/LoginOrSignup.vue')
+        component: () => import('@/views/auth/LoginOrSignup.vue')
     },
     {
-        path: '/servers/:id/overview',
-        name: 'ServerOverview',
-        component: () => import('@/views/servers/ServerOverview.vue'),
+        path: '/servers/:id/stats',
+        name: 'ServerStats',
+        component: () => import('@/views/servers/ServerStats.vue'),
         meta: { requiresAuth: true }
     },
     {
@@ -43,6 +43,30 @@ const routes: RouteRecordRaw[] = [
         name: 'ServerActivities',
         component: () => import('@/views/servers/ServerActivities.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/servers/:id/activities/:activityId',
+        name: 'ServerActivityProfile',
+        component: () => import('@/views/activities/ActivityProfile.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/servers/:id/members',
+        name: 'ServerMembers',
+        component: () => import('@/views/servers/ServerMembers.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/servers/:id/sessions',
+        name: 'ServerSessions',
+        component: () => import('@/views/servers/ServerSessions.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/servers/:id/definitions',
+        name: 'ServerDefinitions',
+        component: () => import('@/views/servers/ServerDefinitions.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 
@@ -58,7 +82,7 @@ router.beforeEach(async (to, _, next) => {
     if (to.meta.requiresAuth && !user_store.hasUser) {
         // For other protected routes
         next({
-            name: 'login',
+            name: 'Login',
             query: { redirect: to.fullPath }
         })
     } else {

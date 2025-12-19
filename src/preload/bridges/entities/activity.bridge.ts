@@ -5,8 +5,15 @@ import type {
     ICreateActivityRequest,
     IUpdateActivityRequest,
     IListActivitiesOptions,
-    IActivityApiResponse
+    IActivityApiResponse,
+    IPaginatedActivities,
+    ICreateActivitySessionRequest,
+    IPaginatedActivitySessions
 } from '../../../shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    IListSessionsOptions,
+    ISession
+} from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
  * Activity API Bridge
@@ -31,7 +38,7 @@ export const activityBridge = {
         serverId: string,
         options: IListActivitiesOptions | undefined,
         accessToken: string
-    ): Promise<IActivityApiResponse<IActivity[]>> => {
+    ): Promise<IActivityApiResponse<IPaginatedActivities>> => {
         return ipcRenderer.invoke(ipc_channels.activity.list, serverId, options, accessToken)
     },
 
@@ -73,6 +80,42 @@ export const activityBridge = {
         accessToken: string
     ): Promise<IActivityApiResponse<void>> => {
         return ipcRenderer.invoke(ipc_channels.activity.delete, serverId, activityId, accessToken)
+    },
+
+    /**
+     * Create a new session for an activity (RESTful route)
+     */
+    createSession: (
+        serverId: string,
+        activityId: string,
+        request: ICreateActivitySessionRequest,
+        accessToken: string
+    ): Promise<IActivityApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.activity.createSession,
+            serverId,
+            activityId,
+            request,
+            accessToken
+        )
+    },
+
+    /**
+     * List paginated sessions for a specific activity
+     */
+    listSessions: (
+        serverId: string,
+        activityId: string,
+        options: IListSessionsOptions | undefined,
+        accessToken: string
+    ): Promise<IActivityApiResponse<IPaginatedActivitySessions>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.activity.listSessions,
+            serverId,
+            activityId,
+            options,
+            accessToken
+        )
     }
 }
 

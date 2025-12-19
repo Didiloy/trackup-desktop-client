@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 interface Props {
@@ -20,7 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
-const { t } = useI18n()
 const file_input = ref<HTMLInputElement>()
 const banner_url = ref('')
 
@@ -86,7 +87,7 @@ function removeBanner(): void {
             <img
                 v-if="banner"
                 :src="banner"
-                :alt="entityName"
+                :alt="entityName || t('views.servers_aside.banner_alt')"
                 class="w-full h-full object-cover not-draggable"
             />
             <div
@@ -94,7 +95,7 @@ function removeBanner(): void {
                 class="w-full h-full flex items-center justify-center text-surface-500"
                 style="background: var(--p-surface-100)"
             >
-                <span class="text-sm">{{ entityName || 'Banner' }}</span>
+                <span class="text-sm">{{ entityName || t('common.fields.banner') }}</span>
             </div>
 
             <!-- Overlay action buttons -->
@@ -131,12 +132,12 @@ function removeBanner(): void {
                 @click="triggerFileInput"
             >
                 <FontAwesomeIcon icon="fa-solid fa-upload" class="mr-1" />
-                {{ t('common.choose') }}
+                {{ t('common.actions.choose') }}
             </Button>
-            <span class="text-sm text-surface-500">{{ t('common.or') }}</span>
+            <span class="text-sm text-surface-500">{{ t('common.misc.or') }}</span>
             <InputText
                 v-model="banner_url"
-                placeholder="https://example.com/banner.png"
+                :placeholder="t('placeholder.banner_url')"
                 class="flex-1"
                 :pt="{
                     root: {

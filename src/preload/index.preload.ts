@@ -7,6 +7,7 @@ import { serverBridge } from './bridges/entities/server.bridge'
 import { enumDefinitionBridge } from './bridges/entities/enum-definition.bridge'
 import { activityBridge } from './bridges/entities/activity.bridge'
 import { activitySkillLevelBridge } from './bridges/entities/activity-skill-level.bridge'
+import { activityMetadataDefinitionBridge } from './bridges/entities/activity-metadata-definition.bridge'
 import { sessionBridge } from './bridges/entities/session.bridge'
 import { memberBridge } from './bridges/entities/member.bridge'
 import { userBridge } from './bridges/entities/user.bridge'
@@ -19,6 +20,7 @@ import { enumDefinitionStatsBridge } from './bridges/entities-stats/enum-definit
 import { snapshotStatsBridge } from './bridges/entities-stats/snapshot-stats.bridge'
 import { billingBridge } from './bridges/billing.bridge'
 import { Logger } from '../shared/logger'
+import { activityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
 
 const logger = new Logger('Preload')
 
@@ -36,6 +38,7 @@ const api = {
     enumDefinition: enumDefinitionBridge,
     activity: activityBridge,
     activitySkillLevel: activitySkillLevelBridge,
+    activityMetadataDefinition: activityMetadataDefinitionBridge,
     session: sessionBridge,
     member: memberBridge,
     user: userBridge,
@@ -46,6 +49,7 @@ const api = {
     memberActivityStats: memberActivityStatsBridge,
     enumDefinitionStats: enumDefinitionStatsBridge,
     snapshotStats: snapshotStatsBridge,
+    activityMetadataDefinitionStats: activityMetadataDefinitionStatsBridge,
     billing: billingBridge
 }
 

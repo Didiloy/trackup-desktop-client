@@ -1,0 +1,138 @@
+<script setup lang="ts">
+import { ref, onMounted, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
+import { useSessionActivityMetadataForm } from '@/composables/sessions/useSessionActivityMetadataForm'
+import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
+import { useServerStore } from '@/stores/server'
+import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+
+import MetadataInputString from '@/components/activities/metadata/MetadataInputString.vue'
+import MetadataInputNumber from '@/components/activities/metadata/MetadataInputNumber.vue'
+import MetadataInputBoolean from '@/components/activities/metadata/MetadataInputBoolean.vue'
+import MetadataInputDate from '@/components/activities/metadata/MetadataInputDate.vue'
+
+const props = defineProps<{
+    sessionId: string
+    activityId: string
+    definitions?: IActivityMetadataDefinition[]
+}>()
+
+const emit = defineEmits<{
+    (e: 'success'): void
+    (e: 'skip'): void
+    (e: 'valid', isValid: boolean): void
+}>()
+
+const { t } = useI18n()
+const toast = useToast()
+const server_store = useServerStore()
+const { addSessionMetadata } = useSessionCRUD()
+
+const submitting = ref(false)
+
+const { definitions, values, isLoadingDefinitions, loadDefinitions, canSubmit, getSubmissionData } =
+    useSessionActivityMetadataForm(props.activityId, props.definitions)
+
+const componentMap: Record<string, unknown> = {
+    STRING: MetadataInputString,
+    NUMBER: MetadataInputNumber,
+    BOOLEAN: MetadataInputBoolean,
+    DATE: MetadataInputDate
+}
+
+function getComponent(type: string): unknown {
+    return (componentMap as Record<string, unknown>)[type] || MetadataInputString
+}
+
+onMounted(async () => {
+    await loadDefinitions()
+    // emit initial validity state
+    emit('valid', canSubmit.value)
+})
+
+// Emit validity whenever definitions or values change
+watch([() => canSubmit.value, () => definitions.value], () => {
+    emit('valid', canSubmit.value)
+})
+
+// Don't show skip at all when there is any required definition
+const hasAnyRequired = computed(() => definitions.value.some((d) => d.required))
+
+async function onSubmit(): Promise<void> {
+    const metadata = getSubmissionData()
+
+    if (metadata.length === 0) {
+        emit('skip')
+        return
+    }
+
+    submitting.value = true
+
+    try {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            throw new Error(t('messages.error.noServerSelected'))
+        }
+
+        const res = await addSessionMetadata(serverId, props.sessionId, { metadata })
+        if (res.error) {
+            throw new Error(res.error)
+        }
+
+        toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
+        emit('success')
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.addMetadataFailed')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    } finally {
+        submitting.value = false
+    }
+}
+</script>
+
+<template>
+    <div class="flex flex-col gap-6 h-full">
+        <div v-if="isLoadingDefinitions" class="flex justify-center items-center h-40">
+            <i class="pi pi-spin pi-spinner text-2xl text-primary"></i>
+        </div>
+
+        <div
+            v-else-if="definitions.length === 0"
+            class="flex flex-col items-center justify-center h-40 text-surface-500"
+        >
+            <i class="pi pi-info-circle text-2xl mb-2"></i>
+            <p>
+                {{ t('views.server_sessions.add_modal.no_metadata') }}
+            </p>
+        </div>
+
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[60vh] px-1">
+            <div v-for="def in definitions" :key="def.public_id">
+                <component
+                    :is="getComponent(def.type)"
+                    v-model="values[def.public_id]"
+                    :def="def"
+                />
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-2 mt-auto pt-4">
+            <Button
+                v-if="!hasAnyRequired"
+                :label="t('common.actions.skip')"
+                severity="secondary"
+                text
+                @click="emit('skip')"
+            />
+            <Button
+                :label="t('common.actions.finish')"
+                :disabled="!canSubmit || submitting"
+                :loading="submitting"
+                :style="{ background: 'var(--gradient-primary)' }"
+                @click="onSubmit"
+            />
+        </div>
+    </div>
+</template>

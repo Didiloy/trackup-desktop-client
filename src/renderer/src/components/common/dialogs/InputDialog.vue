@@ -49,8 +49,9 @@ const props = defineProps({
     }
 })
 
-const cancelLabel = computed(() => props.cancelLabel || t('actions.cancel'))
-const confirmLabel = computed(() => props.confirmLabel || t('actions.confirm'))
+const cancelLabel = computed(() => props.cancelLabel || t('common.actions.cancel'))
+const confirmLabel = computed(() => props.confirmLabel || t('common.actions.confirm'))
+const inputPlaceholderComputed = computed(() => props.inputPlaceholder || t('placeholder.enter'))
 const dialogWidth = '400px'
 
 const emit = defineEmits(['update:modelValue', 'update:inputValue', 'confirm'])
@@ -124,7 +125,7 @@ const confirmAction = (): void => {
             <InputText
                 id="dialog-input"
                 :model-value="inputText"
-                :placeholder="props.inputPlaceholder"
+                :placeholder="inputPlaceholderComputed"
                 :disabled="props.loading"
                 class="w-full"
                 @update:model-value="updateInputValue"

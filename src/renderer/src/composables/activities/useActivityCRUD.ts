@@ -4,18 +4,34 @@ import type {
     ICreateActivityRequest,
     IUpdateActivityRequest,
     IListActivitiesOptions,
-    IActivityApiResponse
+    IActivityApiResponse,
+    IPaginatedActivities,
+    ICreateActivitySessionRequest
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type {
+    ISession,
+    ISessionApiResponse
+} from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseActivityCRUDReturn {
     createActivity: (
         serverId: string,
         request: ICreateActivityRequest
     ) => Promise<IActivityApiResponse<IActivity>>
+    createActivitySession: (
+        serverId: string,
+        activityId: string,
+        request: ICreateActivitySessionRequest
+    ) => Promise<ISessionApiResponse<ISession>>
     listActivities: (
         serverId: string,
         options?: IListActivitiesOptions
-    ) => Promise<IActivityApiResponse<IActivity[]>>
+    ) => Promise<IActivityApiResponse<IPaginatedActivities>>
+    listActivitySessions: (
+        serverId: string,
+        activityId: string,
+        options?: IListActivitiesOptions
+    ) => Promise<ISessionApiResponse<IPaginatedActivities>>
     getActivityById: (
         serverId: string,
         activityId: string
@@ -42,7 +58,23 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
         serverId: string,
         request: ICreateActivityRequest
     ): Promise<IActivityApiResponse<IActivity>> => {
-        return window.api.activity.create(serverId, request, user_store.getAccessToken!)
+        return window.api.activity.create(serverId, request, user_store.getAccessToken!) //The JSON methods are used to ensure the request is a valid object because otherwise it does not pass
+    }
+
+    /**
+     * Create a new session for a specific activity
+     */
+    const createActivitySession = async (
+        serverId: string,
+        activityId: string,
+        request: ICreateActivitySessionRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.activity.createSession(
+            serverId,
+            activityId,
+            request,
+            user_store.getAccessToken!
+        )
     }
 
     /**
@@ -51,8 +83,54 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
     const listActivities = async (
         serverId: string,
         options?: IListActivitiesOptions
-    ): Promise<IActivityApiResponse<IActivity[]>> => {
-        return window.api.activity.list(serverId, options, user_store.getAccessToken!)
+    ): Promise<IActivityApiResponse<IPaginatedActivities>> => {
+        const response = (await window.api.activity.list(
+            serverId,
+            options,
+            user_store.getAccessToken!
+        )) as IActivityApiResponse<IPaginatedActivities | IActivity[]>
+        if (Array.isArray(response.data)) {
+            const arr = response.data
+            return {
+                data: {
+                    total: arr.length,
+                    page: 1,
+                    limit: arr.length,
+                    pageCount: 1,
+                    data: arr
+                }
+            }
+        }
+        return response as IActivityApiResponse<IPaginatedActivities>
+    }
+
+    /**
+     * List all sessions for a specific activity with optional search
+     */
+    const listActivitySessions = async (
+        serverId: string,
+        activityId: string,
+        options?: IListActivitiesOptions
+    ): Promise<ISessionApiResponse<IPaginatedActivities>> => {
+        const response = (await window.api.activity.listSessions(
+            serverId,
+            activityId,
+            options,
+            user_store.getAccessToken!
+        )) as ISessionApiResponse<IPaginatedActivities | IActivity[]>
+        if (Array.isArray(response.data)) {
+            const arr = response.data
+            return {
+                data: {
+                    total: arr.length,
+                    page: 1,
+                    limit: arr.length,
+                    pageCount: 1,
+                    data: arr
+                }
+            }
+        }
+        return response as ISessionApiResponse<IPaginatedActivities>
     }
 
     /**
@@ -88,7 +166,9 @@ export function useActivityCRUD(): UseActivityCRUDReturn {
 
     return {
         createActivity,
+        createActivitySession,
         listActivities,
+        listActivitySessions,
         getActivityById,
         updateActivity,
         deleteActivity

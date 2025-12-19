@@ -138,14 +138,14 @@ function removeLogo(): void {
                 @click="triggerFileInput"
             >
                 <FontAwesomeIcon icon="fa-solid fa-upload" class="mr-1" />
-                {{ t('common.choose') }}
+                {{ t('common.actions.choose') }}
             </Button>
 
-            <span class="text-sm text-surface-500 shrink-0">{{ t('common.or') }}</span>
+            <span class="text-sm text-surface-500 shrink-0">{{ t('common.misc.or') }}</span>
 
             <InputText
                 v-model="logo_url"
-                placeholder="https://example.com/logo.png"
+                :placeholder="t('placeholder.logo_url')"
                 class="flex-1"
                 :pt="{
                     root: {

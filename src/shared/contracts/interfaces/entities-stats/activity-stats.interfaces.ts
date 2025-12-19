@@ -21,7 +21,7 @@ export interface IActivityStats {
     unique_participants: number
     total_participants: number
     avg_participants_per_session: number
-    popularity_score: number
+    popularity_score?: number
 }
 
 // ============================================================================
@@ -29,13 +29,13 @@ export interface IActivityStats {
 // ============================================================================
 
 export interface IActivityTimePatterns {
-    peak_day_of_week: number
-    peak_hour: number
-    avg_session_hours: number
-    likes_per_session: number
-    unique_participants: number
-    streak_current: number
-    streak_longest: number
+    peak_day_of_week: number | null
+    peak_hour: number | null
+    avg_session_hours?: number
+    likes_per_session?: number
+    unique_participants?: number
+    streak_current?: number
+    streak_longest?: number
 }
 
 // ============================================================================
@@ -68,7 +68,7 @@ export interface IActivityGrowthTrends {
 export interface ITopContributor {
     rank: number
     member_id: string
-    user_email: string
+    user_email: string | null
     sessions_count: number
     total_duration: number
 }
@@ -81,7 +81,7 @@ export interface IActivityStatsDetails extends IActivityStats {
     time_patterns: IActivityTimePatterns
     growth_trend: IActivityGrowthTrend
     timeline: IStatsTimeline[]
-    top_contributors: ITopContributor[]
+    top_contributors?: ITopContributor[]
 }
 
 // ============================================================================

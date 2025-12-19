@@ -3,7 +3,7 @@ import type {
     IServerStats,
     IServerStatsDetails,
     IStatsTimeline,
-    IServerGrowthTrends,
+    IServerGrowthResponse,
     IComparativeAnalysis,
     IStatsTimelineParams,
     IStatsGrowthParams,
@@ -15,15 +15,15 @@ interface UseServerStatsCRUDReturn {
     getServerStatsDetails: (
         serverId: string
     ) => Promise<IServerStatsApiResponse<IServerStatsDetails>>
-    getServerTimeline: (
+    getServerStatsTimeline: (
         serverId: string,
         params?: IStatsTimelineParams
     ) => Promise<IServerStatsApiResponse<IStatsTimeline[]>>
-    getServerGrowthTrends: (
+    getServerStatsGrowthTrends: (
         serverId: string,
         params?: IStatsGrowthParams
-    ) => Promise<IServerStatsApiResponse<IServerGrowthTrends>>
-    getComparativeAnalysis: (
+    ) => Promise<IServerStatsApiResponse<IServerGrowthResponse>>
+    getServerStatsComparativeAnalysis: (
         serverId: string
     ) => Promise<IServerStatsApiResponse<IComparativeAnalysis[]>>
 }
@@ -56,7 +56,7 @@ export function useServerStatsCRUD(): UseServerStatsCRUDReturn {
     /**
      * Get servers timeline
      */
-    const getServerTimeline = async (
+    const getServerStatsTimeline = async (
         serverId: string,
         params?: IStatsTimelineParams
     ): Promise<IServerStatsApiResponse<IStatsTimeline[]>> => {
@@ -66,17 +66,17 @@ export function useServerStatsCRUD(): UseServerStatsCRUDReturn {
     /**
      * Get servers growth trends
      */
-    const getServerGrowthTrends = async (
+    const getServerStatsGrowthTrends = async (
         serverId: string,
         params?: IStatsGrowthParams
-    ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
+    ): Promise<IServerStatsApiResponse<IServerGrowthResponse>> => {
         return window.api.serverStats.getGrowthTrends(serverId, params, user_store.getAccessToken!)
     }
 
     /**
      * Get comparative analysis
      */
-    const getComparativeAnalysis = async (
+    const getServerStatsComparativeAnalysis = async (
         serverId: string
     ): Promise<IServerStatsApiResponse<IComparativeAnalysis[]>> => {
         return window.api.serverStats.getComparativeAnalysis(serverId, user_store.getAccessToken!)
@@ -85,8 +85,8 @@ export function useServerStatsCRUD(): UseServerStatsCRUDReturn {
     return {
         getServerStats,
         getServerStatsDetails,
-        getServerTimeline,
-        getServerGrowthTrends,
-        getComparativeAnalysis
+        getServerStatsTimeline,
+        getServerStatsGrowthTrends,
+        getServerStatsComparativeAnalysis
     }
 }

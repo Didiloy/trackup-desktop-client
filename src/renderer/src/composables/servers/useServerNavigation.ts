@@ -1,87 +1,109 @@
-import { computed, type Ref, type ComputedRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { IUserServer } from '@shared/contracts/interfaces/entities/user.interfaces'
 import { useServerStore } from '@/stores/server'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import type {
+    IServer,
+    IServerApiResponse
+} from '@shared/contracts/interfaces/entities/server.interfaces'
+import type {
+    IMemberApiResponse,
+    IPaginatedMembers
+} from '@shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IEnumDefinition,
+    IEnumDefinitionApiResponse
+} from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
 
 interface UseServerNavigationResult {
-    currentServerId: ComputedRef<string | undefined>
     navigateToServer: (serverId: string) => Promise<void>
 }
 
-export function useServerNavigation(servers: Ref<IUserServer[]>): UseServerNavigationResult {
+export function useServerNavigation(): UseServerNavigationResult {
     const route = useRoute()
     const router = useRouter()
     const server_store = useServerStore()
+    const toast = useToast()
+    const { t } = useI18n()
+
     const { getServerDetails } = useServerCRUD()
     const { listMembers } = useMemberCRUD()
+    const { listEnumDefinitions } = useEnumDefinitionCRUD()
 
-    function isServerActive(serverId: string): boolean {
-        return route.params.id === serverId
-    }
-
-    async function getServerInfos(server_id: string, forceRefresh = false): Promise<void> {
-        // Try to load from cache first if not forcing refresh
-        if (!forceRefresh && server_store.loadFromCache(server_id)) {
-            return
-        }
+    async function getServerInfos(serverId: string, force = false): Promise<void> {
+        if (!force && server_store.loadFromCache(serverId)) return
 
         server_store.setLoading(true)
-
         try {
-            // Fetch both in parallel for better performance
-            const [resServerDetails, resServerMembers] = await Promise.all([
-                getServerDetails(server_id),
-                listMembers(server_id)
+            const responses = await Promise.allSettled([
+                getServerDetails(serverId),
+                listMembers(serverId),
+                listEnumDefinitions(serverId)
             ])
 
-            if (!resServerDetails.error && resServerDetails.data) {
-                server_store.setServer(resServerDetails.data)
-
-                if (!resServerMembers.error && resServerMembers.data?.data) {
-                    server_store.setMembers(resServerMembers.data.data)
-                    // Cache the successful result
-                    server_store.setCachedServer(
-                        server_id,
-                        resServerDetails.data,
-                        resServerMembers.data.data
-                    )
-                }
+            // Stop si une seule est rejetée
+            if (responses.some((r) => r.status === 'rejected')) {
+                throw new Error('At least one request failed')
             }
+
+            // Tous les résultats sont fulfilled à ce stade
+            const [details, members, enums] = responses as [
+                PromiseFulfilledResult<IServerApiResponse<IServer>>,
+                PromiseFulfilledResult<IMemberApiResponse<IPaginatedMembers>>,
+                PromiseFulfilledResult<IEnumDefinitionApiResponse<IEnumDefinition[]>>
+            ]
+
+            // Vérification globale : s'il manque data ou erreur => stop
+            if ([details, members, enums].some((r) => r.value.error || !r.value.data)) {
+                throw new Error('At least one request failed')
+            }
+
+            // Mise à jour du store
+            server_store.setServer(details.value.data ?? null)
+            server_store.setMembers(members.value.data?.data ?? null)
+            server_store.setEnumsDefinition(enums.value.data ?? null)
+
+            // Cache
+            // store.setCachedServer(
+            //     serverId,
+            //     details.value.data,
+            //     members.value.data?.data,
+            //     enums.value.data
+            // )
+        } catch {
+            server_store.resetState()
+            await router.push({
+                name: 'Home'
+            })
+            // add toast here to indicate error
+            toast.add({
+                severity: 'error',
+                summary: t('servers.navigation.error_loading_server_title'),
+                detail: t('servers.navigation.error_loading_server'),
+                life: 5000
+            })
         } finally {
             server_store.setLoading(false)
         }
     }
 
-    async function navigateToServer(server_id: string): Promise<void> {
-        if (!isServerActive(server_id)) {
-            // Check if we have cached data
-            const hasCachedData = server_store.loadFromCache(server_id)
+    async function navigateToServer(serverId: string): Promise<void> {
+        if (server_store.getPublicId === serverId) return
 
-            if (!hasCachedData) {
-                // No cache: reset state for clean transition
-                server_store.resetState()
-            }
+        const hasCache = server_store.loadFromCache(serverId)
+        if (!hasCache) server_store.resetState()
 
-            // Navigate first (instant UI update)
-            await router.push({
-                name: `ServerOverview`,
-                params: { id: server_id },
-                query: { ...route.query }
-            })
+        await router.push({
+            name: 'ServerStats',
+            params: { id: serverId },
+            query: { ...route.query }
+        })
 
-            // Load data (will skip if already cached)
-            await getServerInfos(server_id)
-        }
+        await getServerInfos(serverId)
     }
 
-    const currentServerId = computed<string | undefined>(() => {
-        return servers.value.find((s) => isServerActive(s.public_id))?.public_id
-    })
-
-    return {
-        currentServerId,
-        navigateToServer
-    }
+    return { navigateToServer }
 }

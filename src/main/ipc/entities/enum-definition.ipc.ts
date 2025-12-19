@@ -11,7 +11,8 @@ import { apiService } from '../../services/ApiService'
 import {
     validateRequired,
     validateAuth,
-    combineValidations
+    combineValidations,
+    validateNotEmpty
 } from '../../../shared/helpers/index.helpers'
 
 const logger = new Logger('IPC:EnumDefinition')
@@ -35,6 +36,7 @@ export function registerEnumDefinitionIpc(): void {
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(request.name, 'Name'),
+                validateNotEmpty(request.values, 'Values'),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
@@ -85,6 +87,8 @@ export function registerEnumDefinitionIpc(): void {
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(enumDefinitionId, 'Enum definition ID'),
+                // If value_updates provided, ensure not empty
+                validateNotEmpty(request.value_updates, 'Value updates'),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError

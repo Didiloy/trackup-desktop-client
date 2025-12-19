@@ -4,22 +4,149 @@
     },
     "common": {
         "loading": "Chargement en cours...",
+        "success": "Succès",
         "error": {
             "refresh": "Échec du rafraîchissement"
         },
-        "success": "Succès",
-        "name": "Nom",
-        "description": "Description",
-        "type": "Type",
-        "logo": "Logo",
-        "banner": "Bannière",
-        "choose": "Choisir",
-        "change": "Changer",
-        "clear": "Effacer",
-        "or": "ou",
-        "settings": "Paramètres",
-        "required": "Requis",
-        "cancel": "Annuler"
+        "fields": {
+            "total": "Total",
+            "title": "Titre",
+            "no_title": "Sans titre",
+            "name": "Nom",
+            "description": "Description",
+            "type": "Type",
+            "logo": "Logo",
+            "banner": "Bannière",
+            "creator": "Créateur",
+            "items": "éléments",
+            "choices": "Choix",
+            "required": "Requis",
+            "optional": "Optionnel",
+            "none": "Aucun",
+            "date": "Date",
+            "new_chrono": "Nouveau chrono",
+            "saved_chronos": "Chronos enregistrés",
+            "chronos": "Chronos",
+            "select_chrono": "Sélectionner un chrono",
+            "duration": "Durée",
+            "no_description": "Aucune description"
+        },
+        "actions": {
+            "choose": "Choisir",
+            "change": "Changer",
+            "clear": "Effacer",
+            "cancel": "Annuler",
+            "next": "Suivant",
+            "back": "Retour",
+            "skip": "Passer",
+            "create": "Créer",
+            "finish": "Terminer",
+            "min": "Min",
+            "max": "Max",
+            "save": "Enregistrer",
+            "confirm": "Confirmer",
+            "select": "Sélectionner",
+            "select_short": "Sélec.",
+            "add": "Ajouter {entity}",
+            "remove": "Retirer {entity}",
+            "view": "Voir {entity}",
+            "update": "Mettre à jour {entity}",
+            "import": "Importer {entity}",
+            "refresh": "Rafraîchir {entity}",
+            "restore": "Restaurer {entity}",
+            "previous": "Précédent",
+            "enter": "Entrer",
+            "search": "Rechercher {entity}",
+            "submit": "Soumettre",
+            "upload": "Télécharger {entity}",
+            "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
+            "close": "Fermer",
+            "edit": "Modifier",
+            "delete": "Supprimer",
+            "leave": "Quitter {entity}",
+            "rename": "Renommer",
+            "minimize": "Minimiser",
+            "maximize": "Maximiser",
+            "close_window": "Fermer",
+            "toggle_sidebar": "Voir les membres du serveur",
+            "devtools": "Devtools",
+            "clear_all": "Tout effacer",
+            "start": "Démarrer",
+            "add_manual": "Ajout manuel",
+            "pause": "Pause",
+            "resume": "Reprendre"
+        },
+        "misc": {
+            "or": "ou",
+            "settings": "Paramètres",
+            "yes": "Oui",
+            "no": "Non",
+            "no_chronos": "Aucun chrono enregistré"
+        },
+        "time": {
+            "hours": "heures",
+            "hour": "heure",
+            "hours_short": "h",
+            "minutes": "minutes",
+            "minute": "minute",
+            "minutes_short": "min",
+            "seconds": "secondes",
+            "second": "seconde",
+            "seconds_short": "s",
+            "ago": "il y a {time}",
+            "in_future": "dans {time}",
+            "just_now": "à l'instant",
+            "today": "Aujourd'hui",
+            "yesterday": "Hier",
+            "tomorrow": "Demain"
+        },
+        "periods": {
+            "all_time": "Depuis le début",
+            "daily": "Journalier",
+            "weekly": "Hebdomadaire",
+            "monthly": "Mensuel",
+            "yearly": "Annuel"
+        },
+        "weekdays": {
+            "short": {
+                "sunday": "Dim",
+                "monday": "Lun",
+                "tuesday": "Mar",
+                "wednesday": "Mer",
+                "thursday": "Jeu",
+                "friday": "Ven",
+                "saturday": "Sam"
+            }
+        },
+        "steps": {
+            "generic": "Étape {index}",
+            "info": "Infos Session",
+            "enums": "Sélections",
+            "metadata": "Attributs de l'activité",
+            "activity": "Activité",
+            "skill_levels": "Niveaux de compétence"
+        },
+        "filters": {
+            "title": "Filtres",
+            "participants": "Participants",
+            "date_range": "Plage de dates",
+            "joined_date": "Date d'inscription",
+            "search_field": "Champ de recherche",
+            "duration": {
+                "title": "Durée (minutes)"
+            },
+            "no_results": "Aucun résultat trouvé",
+            "try_adjusting": "Essayez d'ajuster vos filtres",
+            "liked_by_me": "Aimé par moi",
+            "search_modes": {
+                "contains": "Contient",
+                "starts_with": "Commence par",
+                "ends_with": "Se termine par",
+                "exact_match": "Correspondance exacte",
+                "by_nickname": "Par surnom",
+                "by_email": "Par email"
+            }
+        }
     },
     "navigation": {
         "home": "Accueil",
@@ -27,51 +154,21 @@
         "redirecting": "Redirection...",
         "server": "Serveur"
     },
-    "actions": {
-        "title": "Actions",
-        "create": "Créer {entity}",
-        "edit": "Modifier {entity}",
-        "delete": "Supprimer {entity}",
-        "confirm": "Confirmer",
-        "save": "Enregistrer",
-        "cancel": "Annuler",
-        "select": "Sélectionner",
-        "choose": "Choisir",
-        "add": "Ajouter {entity}",
-        "remove": "Retirer {entity}",
-        "view": "Voir {entity}",
-        "update": "Mettre à jour {entity}",
-        "import": "Importer {entity}",
-        "refresh": "Rafraîchir {entity}",
-        "restore": "Restaurer {entity}",
-        "next": "Suivant",
-        "previous": "Précédent",
-        "enter": "Entrer",
-        "search": "Rechercher {entity}",
-        "submit": "Soumettre",
-        "upload": "Télécharger {entity}",
-        "change": "Changer {entity}",
-        "write_to_confirm": "Écrivez <strong><u>{entity}</u></strong> pour confirmer",
-        "close": "Fermer",
-        "leave": "Quitter {entity}",
-        "select_short": "Sélec.",
-        "rename": "Renommer",
-        "minimize": "Minimiser",
-        "maximize": "Maximiser",
-        "close_window": "Fermer",
-        "toggle_sidebar": "Voir les membres du serveur"
-    },
     "placeholder": {
         "search": "Rechercher...",
+        "search_nickname": "Rechercher par surnom...",
+        "search_email": "Rechercher par email...",
         "select": "Sélectionner une option",
         "choose": "Choisir une option",
         "enter": "Entrer une valeur",
         "upload": "Télécharger un fichier",
         "import": "Importer un fichier",
         "choose_file": "Choisir un fichier",
-        "select_short": "Sélec.",
         "search_by_name": "Rechercher par Nom",
-        "filter_by_type": "Rechercher par Type"
+        "filter_by_type": "Rechercher par Type",
+        "select_participants": "Sélectionner des participants",
+        "banner_url": "URL de la bannière",
+        "logo_url": "URL du logo"
     },
     "messages": {
         "info": {
@@ -118,7 +215,14 @@
             "refresh": "Échec du rafraîchissement",
             "save": "Échec de l'enregistrement",
             "emptyFields": "Champs vides",
-            "copyClipBoard": "Échec de la copie dans le presse-papiers"
+            "copyClipBoard": "Échec de la copie dans le presse-papiers",
+            "noServerSelected": "Aucun serveur sélectionné",
+            "createSessionFailed": "Échec de la création de session",
+            "addEnumsFailed": "Échec de l'ajout des sélections",
+            "addMetadataFailed": "Échec de l'ajout des métadonnées",
+            "addSkillLevelsFailed": "Échec de l'ajout des niveaux de compétence",
+            "joinServerFailed": "Échec de la connexion au serveur",
+            "pause_to_delete": "Mettez en pause pour supprimer"
         },
         "warning": {
             "title": "Avertissement",
@@ -136,20 +240,18 @@
             "copyClipBoard": "Copie dans le presse-papiers en cours"
         }
     },
-    "entities": {},
-    "userInterface": {
-        "loginView": {
+    "views": {
+        "login": {
             "welcome": "Bienvenue !",
             "welcome_back": "Content de vous revoir !",
-            "login": "Se connecter",
+            "login_button": "Se connecter",
             "description": "Connectez-vous pour continuer",
-            "google": "Continuer avec Google",
-            "github": "Continuer avec GitHub",
-            "gitlab": "Continuer avec GitLab",
+            "continue_with_google": "Continuer avec Google",
+            "continue_with_github": "Continuer avec GitHub",
+            "continue_with_gitlab": "Continuer avec GitLab",
             "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité",
-            "logout": "se déconnecter",
-            "signup": "S'inscrire",
-            "or": "ou",
+            "logout_button": "se déconnecter",
+            "signup_button": "S'inscrire",
             "no_account": "Vous n'avez pas de compte ?",
             "already_have_account": "Vous avez déjà un compte ?",
             "error": {
@@ -157,20 +259,32 @@
                 "invalid_email": "Veuillez entrer une adresse email valide"
             }
         },
-        "createServerView": {
+        "create_server": {
             "title": "Créer un serveur",
             "subtitle": "Créez votre propre espace communautaire",
+            "action": {
+                "title": "Ajouter un serveur",
+                "description": "Choisissez comment vous voulez ajouter un serveur"
+            },
             "description": "Créez un nouveau serveur",
             "placeholder": {
                 "name": "Nom du serveur ex: Ma communauté",
                 "type": "Type de serveur",
                 "description": "Description du serveur ex: Une communauté pour partager vos idées"
             },
-            "create": "Créer",
-            "cancel": "Annuler"
+            "types": {
+                "general": "Général",
+                "games": "Jeux",
+                "work": "Travail",
+                "study": "Étude",
+                "sport": "Sport",
+                "music": "Musique",
+                "movies": "Films/Séries"
+            }
         },
-        "membersAside": {
+        "members_aside": {
             "title": "Membres du serveur",
+            "title_with_count": "{title} — {count}",
             "description": "Liste des membres du serveur",
             "no_members": "Aucun membre",
             "loading": "Chargement des membres...",
@@ -180,48 +294,34 @@
             "new_nickname": "Nouveau surnom",
             "enter_nickname": "Entrez le surnom"
         },
-        "joinServerView": {
+        "servers_aside": {
+            "fallback_name": "Serveur",
+            "banner_alt": "Bannière du serveur"
+        },
+        "join_server": {
             "title": "Rejoindre un serveur",
             "subtitle": "Entrez un code d'invitation",
-            "invitationCodeLabel": "Code d'invitation",
-            "invitationCodeHint": "Exemple : ABC123XYZ",
-            "joinButton": "Rejoindre",
+            "invitation_code_label": "Code d'invitation",
+            "invitation_code_hint": "Exemple : ABC123XYZ",
+            "join_button": "Rejoindre",
             "placeholder": {
-                "invitationCode": "Entrez le code d'invitation"
+                "invitation_code": "Entrez le code d'invitation"
             }
         },
-        "serverActionView": {
-            "title": "Ajouter un serveur",
-            "description": "Choisissez comment vous voulez ajouter un serveur"
-        },
-        "updateModal": {
+        "app_update_modal": {
             "title": "Mise à jour disponible",
             "version": "Version",
-            "type": "Type",
             "major": "Majeure",
             "minor": "Mineure",
-            "releaseNotes": "Notes de version",
-            "releaseDate": "Date de sortie",
+            "release_notes": "Notes de version",
+            "release_date": "Date de sortie",
             "downloading": "Téléchargement en cours...",
-            "error": "Erreur",
-            "skip": "Ignorer",
-            "updateNow": "Mettre à jour maintenant",
-            "installAndRestart": "Installer et redémarrer",
-            "downloadError": "Erreur lors du téléchargement"
+            "update_now": "Mettre à jour maintenant",
+            "install_and_restart": "Installer et redémarrer",
+            "download_error": "Erreur lors du téléchargement"
         },
-        "serverActivitiesView": {
-            "title": "Activités",
-            "addActivity": "Ajouter une activité",
-            "addActivityModal": {
-                "title": "Ajouter une activité",
-                "description": "Ajoutez une nouvelle activité pour votre serveur",
-                "name": "Nom de l'activité",
-                "description_input": "Décris l'activité en quelques mots",
-                "createButton": "Créer l'activité"
-            }
-        },
-        "userProfileMenu": {
-            "title": "Profil Utilisateur",
+        "user_profile": {
+            "title": "Profil",
             "preferences": {
                 "title": "Préférences",
                 "language": {
@@ -237,6 +337,212 @@
                     "light": "Clair",
                     "dark": "Sombre",
                     "system": "Système"
+                }
+            }
+        },
+        "server_profile": {
+            "title": "Profil du serveur",
+            "subtitle": "Voir et modifier les informations de votre serveur",
+            "general_info": "Informations générales",
+            "manage_server": "Gérer le serveur",
+            "server_details": "Détails du serveur",
+            "name": "Nom du serveur",
+            "description": "Description du serveur",
+            "type": "Type de serveur",
+            "created_by": "Créé par",
+            "created_at": "Créé le",
+            "members_count": "Nombre de membres",
+            "activities_count": "Nombre d'activités",
+            "sessions_count": "Nombre de sessions",
+            "update_banner": "Mettre à jour la bannière du serveur",
+            "update_logo": "Mettre à jour le logo du serveur",
+            "update_floating_bar": {
+                "title": "Vous avez des modifications non enregistrées",
+                "description": "Vous avez des modifications non enregistrées. Voulez-vous les enregistrer ?",
+                "save": "Enregistrer"
+            }
+        },
+        "server_definitions": {
+            "title": "Définitions du serveur",
+            "description": "Définissez les définitions pour votre serveur",
+            "add_definition": "Ajouter une définition",
+            "edit_definition": "Modifier une définition",
+            "delete_definition": "Supprimer une définition",
+            "enums_list_title": "Liste des définitions",
+            "no_definitions": "Aucune définition trouvée. Créez une pour commencer.",
+            "create_modal": {
+                "title": "Créer une définition",
+                "subtitle": "Définissez une nouvelle définition pour votre serveur",
+                "name_placeholder": "Ex: Amusement, Difficulté, Météo...",
+                "description_placeholder": "Décris la définition en quelques mots",
+                "choices_placeholder": "Choix (optionnel)",
+                "choices_placeholder_detail": "Cela peut être des choix que vous souhaitez vous attribuer comme 'Cool', 'Neutre', 'Nul', etc.",
+                "max_chunk_warning": "Impossible d'ajouter davantage de valeurs pour cette définition."
+            }
+        },
+        "server_widgets": {
+            "title": "Widgets",
+            "description": "Intégrez des widgets pour afficher les informations de votre serveur sur des sites web externes.",
+            "enable_widgets": "Activer les widgets",
+            "widget_code": "Code du widget",
+            "preview": "Aperçu du widget"
+        },
+        "server_members": {
+            "title": "Membres du serveur",
+            "title_base": "Membres",
+            "members_count": "Membres ({count})",
+            "no_members": "Aucun membre dans ce serveur.",
+            "invite_members": "Inviter des membres",
+            "kick_member": "Expulser un membre",
+            "member_kicked": "Membre expulsé",
+            "member_kicked_detail": "Le membre a été expulsé avec succès",
+            "member_kicked_error": "Échec de l'expulsion du membre",
+            "member_kicked_error_detail": "Veuillez réessayer."
+        },
+        "server_stats": {
+            "title": "Statistiques Générales",
+            "subtitle": "Statistiques générales du serveur",
+            "sessions_over_time": "Sessions au fil du temps",
+            "top_activities": "Activités principales",
+            "top_participants": "Participants principaux",
+            "activity_distribution": "Répartition des activités",
+            "session_durations": "Durées des sessions",
+            "likes_received": "Mentions j'aime reçues",
+            "total_sessions": "Total des sessions",
+            "active_members": "Membres actifs",
+            "total_duration": "Durée totale",
+            "total_activities": "Total des activités",
+            "total_members": "Total des membres",
+            "unique_members": "Membres uniques",
+            "sessions": "Sessions",
+            "activity_evolution": "Évolution de l'activité du serveur",
+            "distribution": "Répartition des activités",
+            "top_members": "Membres les plus actifs"
+        },
+        "activity": {
+            "title": "Activités du serveur",
+            "title_base": "Activités",
+            "create_session": "Créer une session",
+            "recent_sessions": "Sessions récentes",
+            "evolution_30_days": "Évolution 30 jours",
+            "no_metadata": "Aucun attribut disponible",
+            "no_metadata_description": "Cette activité n'a pas de champs personnalisés configurés.",
+            "performance_section": {
+                "sessions": "sessions",
+                "sessions_timeline": "Évolution des sessions sur les dernières semaines",
+                "growth": "Croissance",
+                "popularity": "Performance",
+                "skill_levels_title": "Répartition des niveaux",
+                "weekly_sessions": "Sessions cette semaine",
+                "weekly_sessions_last_week": "vs semaine dernière",
+                "heatmap": "Heatmap",
+                "patterns": "Patrons d'activité",
+                "peak_day": "Jour de pic",
+                "peak_hour": "Heure de pic",
+                "current_streak": "Série en cours",
+                "longest_streak": "Plus longue série",
+                "likes_per_session": "Mentions j'aime / session",
+                "unique_participants": "Participants uniques",
+                "trend_up": "En hausse",
+                "trend_down": "En baisse",
+                "trend_steady": "Stable",
+                "trend_unknown": "Inconnu",
+                "days": "jours",
+                "last_year": "52 dernières semaines"
+            },
+            "add_modal": {
+                "title": "Ajouter une activité",
+                "description": "Ajoutez une nouvelle activité pour votre serveur",
+                "name": "Nom de l'activité",
+                "description_input": "Décris l'activité en quelques mots",
+                "metadata_title": "Attributs de l'activité",
+                "metadata_description": "Ajoutez des attributs pour votre activité.",
+                "metadata_description_detail": "Cela peut être des informations que vous voulez traquer sur les activités comme le nombre de buts marqués, le nombre de passes décisives, etc pour du football.",
+                "metadata_key": "Clé",
+                "metadata_label": "Label",
+                "metadata_required": "Requis",
+                "metadata_add_choice": "Ajouter un choix prédéfini",
+                "metadata_validate": "Valider l'attribut",
+                "metadata_allow_not_predefined": "Autoriser les valeurs non prédéfinies",
+                "metadata_choices": "Choix (optionnel)",
+                "metadata_list": "Liste des attributs",
+                "metadata_type_string": "Texte",
+                "metadata_type_number": "Nombre",
+                "metadata_type_boolean": "Booléen",
+                "metadata_type_date": "Date",
+                "skill_levels_title": "Niveaux de compétence",
+                "skill_levels_description": "Ajoutez les niveaux de compétence pour votre activité.",
+                "skill_levels_description_detail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",
+                "display_order": "Ordre d'affichage",
+                "color": "Couleur",
+                "min_sessions": "Nombre minimum de sessions",
+                "max_sessions": "Nombre maximum de sessions",
+                "min_duration": "Durée minimum (min)",
+                "max_duration": "Durée maximum (min)",
+                "levels": "Niveaux",
+                "add_level": "Ajouter un niveau",
+                "minutes": "min",
+                "not_possible_with_type": "Impossible avec le type booléen ou date"
+            },
+            "card": {
+                "sessions": "sessions",
+                "duration": "durée",
+                "growth": "ce mois",
+                "top_contributor": "Top participant",
+                "avg_duration": "Durée moy. {value}",
+                "likes": "Total des mentions j'aime",
+                "avg_likes": "Moy. mentions j'aime / session {value}",
+                "unique_participants": "Participants uniques",
+                "total_participants": "Participants totaux",
+                "avg_participants": "Moyenne des participants / session",
+                "popularity": "Popularité"
+            }
+        },
+        "server_sessions": {
+            "title": "Sessions du serveur",
+            "title_base": "Sessions",
+            "add_modal": {
+                "title": "Créer une session",
+                "info_description": "Entrez les détails de la session",
+                "enums_description": "Sélectionnez les options",
+                "metadata_description": "Remplissez les attributs liés à l'activité",
+                "title_placeholder": "Titre optionnel",
+                "select_participants": "Sélectionner des participants supplémentaires",
+                "comment_placeholder": "Commentaire...",
+                "no_enums": "Aucune sélection disponible",
+                "no_metadata": "Aucun attribut disponible",
+                "search_activity_placeholder": "Rechercher une activité..."
+            },
+            "session_details": {
+                "title": "Détails de la session",
+                "activity": "Activité",
+                "participants": "Participants",
+                "participant": "Participant",
+                "extra_participants": "Participants supplémentaires",
+                "select_participants": "Sélectionner les participants",
+                "comment": "Commentaire",
+                "date": "Date",
+                "duration": "Durée"
+            }
+        },
+        "server_settings": {
+            "title": "Paramètres",
+            "subtitle": "Gérez les paramètres de votre serveur",
+            "general": {
+                "title": "Général",
+                "server_name": "Nom du serveur",
+                "server_description": "Description du serveur",
+                "server_type": "Type de serveur",
+                "update_banner": "Mettre à jour la bannière du serveur",
+                "update_logo": "Mettre à jour le logo du serveur"
+            },
+            "danger_zone": {
+                "title": "Zone dangereuse",
+                "delete_server": {
+                    "title": "Supprimer le serveur",
+                    "description": "Cette action est irréversible. Toutes les données associées au serveur seront définitivement supprimées.",
+                    "confirm_placeholder": "Tapez <strong><u>{serverName}</u></strong> pour confirmer",
+                    "delete_button": "Supprimer le serveur"
                 }
             }
         }

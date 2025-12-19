@@ -1,0 +1,55 @@
+<script setup lang="ts">
+import type { IActivityGrowthTrend } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const props = defineProps<{
+    growth?: IActivityGrowthTrend | null
+}>()
+
+const { t } = useI18n()
+
+const statusText = computed(() => {
+    const value = props.growth?.growth_percent ?? 0
+    return value >= 0
+        ? t('views.activity.performance_section.trend_up')
+        : t('views.activity.performance_section.trend_down')
+})
+
+const trendText = computed(() => {
+    const raw = (props.growth?.trend || '').toString().toLowerCase()
+    if (!raw) return t('views.activity.performance_section.trend_unknown')
+    if (raw === 'up' || raw === 'increasing') {
+        return t('views.activity.performance_section.trend_up')
+    }
+    if (raw === 'down' || raw === 'decreasing') {
+        return t('views.activity.performance_section.trend_down')
+    }
+    if (raw === 'steady' || raw === 'stable') {
+        return t('views.activity.performance_section.trend_steady')
+    }
+    // fallback to raw if not matched
+    return raw
+})
+</script>
+
+<template>
+    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase text-surface-500 font-semibold">
+                    {{ t('views.activity.evolution_30_days') }}
+                </p>
+                <p class="text-4xl font-bold text-surface-900">
+                    {{ props.growth?.growth_percent?.toFixed(1) ?? '0' }}%
+                </p>
+                <p class="text-sm text-surface-500">
+                    {{ statusText }}
+                </p>
+            </div>
+            <div class="text-xs px-3 py-1 rounded-full bg-primary-100 text-primary-600">
+                {{ trendText }}
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const route = useRoute()
 const server_store = useServerStore()
+const { t } = useI18n()
 
 interface ServerAction {
     id: string
@@ -15,22 +17,60 @@ interface ServerAction {
 }
 
 const actions: ServerAction[] = [
-    { id: 'overview', label: 'Aperçu', icon: 'pi pi-home', routeName: 'ServerOverview' },
-    { id: 'activities', label: 'Activités', icon: 'pi pi-clock', routeName: 'ServerActivities' },
+    {
+        id: 'stats',
+        label: t('views.server_stats.title'),
+        icon: 'pi pi-chart-bar',
+        routeName: 'ServerStats'
+    },
     {
         id: 'server-profile',
-        label: 'Profil du serveur',
-        icon: 'pi pi-user',
+        label: t('views.server_profile.title'),
+        icon: 'pi pi-home',
         routeName: 'ServerProfile'
     },
-    { id: 'widgets', label: 'Widgets', icon: 'pi pi-th-large', routeName: 'ServerWidgets' },
-    { id: 'settings', label: 'Paramètres', icon: 'pi pi-cog', routeName: 'ServerSettings' }
+    {
+        id: 'activities',
+        label: t('views.activity.title_base'),
+        icon: 'pi pi-trophy',
+        routeName: 'ServerActivities'
+    },
+    {
+        id: 'members',
+        label: t('views.server_members.title_base'),
+        icon: 'pi pi-users',
+        routeName: 'ServerMembers'
+    },
+    {
+        id: 'sessions',
+        label: t('views.server_sessions.title_base'),
+        icon: 'pi pi-calendar',
+        routeName: 'ServerSessions'
+    },
+    {
+        id: 'definitions',
+        label: t('views.server_definitions.title'),
+        icon: 'pi pi-list',
+        routeName: 'ServerDefinitions'
+    },
+    {
+        id: 'widgets',
+        label: t('views.server_widgets.title'),
+        icon: 'pi pi-th-large',
+        routeName: 'ServerWidgets'
+    },
+    {
+        id: 'settings',
+        label: t('views.server_settings.title'),
+        icon: 'pi pi-cog',
+        routeName: 'ServerSettings'
+    }
 ]
 
-function onActionClick(action: ServerAction): void {
+async function onActionClick(action: ServerAction): Promise<void> {
     // Navigate to the route if routeName is defined
     if (action.routeName) {
-        router.push({
+        await router.push({
             name: action.routeName,
             params: { id: server_store.getPublicId },
             query: { ...route.query }

@@ -2,20 +2,20 @@ import { useUserStore } from '@/stores/user'
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
-    IListSessionsOptions,
-    ISessionApiResponse
+    IUpdateSessionParticipantsRequest,
+    ISessionApiResponse,
+    IAddSessionEnumsRequest,
+    IAddSessionMetadataRequest,
+    ILiteListSessionsOptions
+    // IUpdateSessionEnumSelectionRequest,
+    // ISessionEnumSelectionDetail
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface UseSessionCRUDReturn {
-    createSession: (
-        serverId: string,
-        request: ICreateSessionRequest
-    ) => Promise<ISessionApiResponse<ISession>>
     listSessions: (
         serverId: string,
-        options?: IListSessionsOptions
+        options?: ILiteListSessionsOptions
     ) => Promise<ISessionApiResponse<IPaginatedSessions>>
     getSessionById: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<ISession>>
     updateSession: (
@@ -23,9 +23,35 @@ interface UseSessionCRUDReturn {
         sessionId: string,
         request: IUpdateSessionRequest
     ) => Promise<ISessionApiResponse<ISession>>
+    updateSessionParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
+    ) => Promise<ISessionApiResponse<ISession>>
     deleteSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
     likeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
     unlikeSession: (serverId: string, sessionId: string) => Promise<ISessionApiResponse<void>>
+    addSessionEnums: (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionEnumsRequest
+    ) => Promise<ISessionApiResponse<ISession>>
+    addSessionMetadata: (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionMetadataRequest
+    ) => Promise<ISessionApiResponse<ISession>>
+    // updateSessionEnumSelection: (
+    //     serverId: string,
+    //     sessionId: string,
+    //     enumSelectionId: string,
+    //     request: IUpdateSessionEnumSelectionRequest
+    // ) => Promise<ISessionApiResponse<void>>
+    // getSessionEnumSelection: (
+    //     serverId: string,
+    //     sessionId: string,
+    //     enumSelectionId: string
+    // ) => Promise<ISessionApiResponse<ISessionEnumSelectionDetail>>
 }
 
 /**
@@ -36,21 +62,11 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
     const user_store = useUserStore()
 
     /**
-     * Create a new session
-     */
-    const createSession = async (
-        serverId: string,
-        request: ICreateSessionRequest
-    ): Promise<ISessionApiResponse<ISession>> => {
-        return window.api.session.create(serverId, request, user_store.getAccessToken!)
-    }
-
-    /**
      * List paginated sessions
      */
     const listSessions = async (
         serverId: string,
-        options?: IListSessionsOptions
+        options?: ILiteListSessionsOptions
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
         return window.api.session.list(serverId, options, user_store.getAccessToken!)
     }
@@ -74,6 +90,22 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         request: IUpdateSessionRequest
     ): Promise<ISessionApiResponse<ISession>> => {
         return window.api.session.update(serverId, sessionId, request, user_store.getAccessToken!)
+    }
+
+    /**
+     * Update session participants (creator only)
+     */
+    const updateSessionParticipants = async (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.updateParticipants(
+            serverId,
+            sessionId,
+            request,
+            user_store.getAccessToken!
+        )
     }
 
     /**
@@ -106,13 +138,42 @@ export function useSessionCRUD(): UseSessionCRUDReturn {
         return window.api.session.unlike(serverId, sessionId, user_store.getAccessToken!)
     }
 
+    /**
+     * Add enum selections to a session
+     */
+    const addSessionEnums = async (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionEnumsRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.addEnums(serverId, sessionId, request, user_store.getAccessToken!)
+    }
+
+    /**
+     * Add metadata to a session
+     */
+    const addSessionMetadata = async (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionMetadataRequest
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return window.api.session.addMetadata(
+            serverId,
+            sessionId,
+            request,
+            user_store.getAccessToken!
+        )
+    }
+
     return {
-        createSession,
         listSessions,
         getSessionById,
         updateSession,
+        updateSessionParticipants,
         deleteSession,
         likeSession,
-        unlikeSession
+        unlikeSession,
+        addSessionEnums,
+        addSessionMetadata
     }
 }

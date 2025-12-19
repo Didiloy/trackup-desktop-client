@@ -5,6 +5,7 @@ import type {
     IPaginatedEnumValueStats,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
+    IEnumValueDetailsParams,
     IEnumDefinitionStatsApiResponse
 } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 
@@ -18,10 +19,16 @@ interface UseEnumDefinitionStatsCRUDReturn {
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
     ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
-    getEnumValueDistribution: (
+    getEnumValueStatsDistribution: (
         serverId: string,
         enumDefinitionId: string
     ) => Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>>
+    getEnumValueStats: (
+        serverId: string,
+        enumDefinitionId: string,
+        enumValueId: string,
+        params: IEnumValueDetailsParams
+    ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
 }
 
 /**
@@ -64,7 +71,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     /**
      * Get enum value distribution
      */
-    const getEnumValueDistribution = async (
+    const getEnumValueStatsDistribution = async (
         serverId: string,
         enumDefinitionId: string
     ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
@@ -75,9 +82,28 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
         )
     }
 
+    /**
+     * Get enum value statistics (paginated)
+     */
+    const getEnumValueStats = async (
+        serverId: string,
+        enumDefinitionId: string,
+        enumValueId: string,
+        params: IEnumValueDetailsParams
+    ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+        return window.api.enumDefinitionStats.getValueStats(
+            serverId,
+            enumDefinitionId,
+            enumValueId,
+            params,
+            user_store.getAccessToken!
+        )
+    }
+
     return {
         getAllEnumDefinitionStats,
         getEnumDefinitionStats,
-        getEnumValueDistribution
+        getEnumValueStatsDistribution,
+        getEnumValueStats
     }
 }

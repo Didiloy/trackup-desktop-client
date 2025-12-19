@@ -10,26 +10,26 @@
 export type SnapshotType = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'milestone' | 'custom'
 
 // ============================================================================
-// Period Stats
+// Period Stats (Server Stats)
 // ============================================================================
 
 export interface IPeriodStats {
-    period_type: string
-    period_start: string
-    period_end: string
-    total_sessions: number
-    total_duration: number
-    total_members: number
-    active_members: number
-    new_members: number
-    total_activities: number
-    active_activities: number
-    total_likes: number
-    avg_likes_per_session: number
-    avg_participants_per_session: number
-    sessions_growth_rate: number
-    members_growth_rate: number
-    engagement_score: number
+    period_type?: string
+    period_start?: string
+    period_end?: string
+    total_sessions?: number
+    total_duration?: number
+    total_members?: number
+    active_members?: number
+    new_members?: number
+    total_activities?: number
+    active_activities?: number
+    total_likes?: number
+    avg_likes_per_session?: number
+    avg_participants_per_session?: number
+    sessions_growth_rate?: number
+    members_growth_rate?: number
+    engagement_score?: number
 }
 
 // ============================================================================
@@ -42,7 +42,7 @@ export interface ISnapshotTopMember {
     email: string
     total_duration: number
     total_sessions: number
-    rank: number
+    rank?: number | null
 }
 
 export interface ISnapshotTopActivity {
@@ -51,21 +51,21 @@ export interface ISnapshotTopActivity {
     name: string
     total_sessions: number
     total_duration: number
-    popularity_score: number
-    rank: number
-    peak_hour: number
-    peak_day_of_week: number
+    popularity_score?: number
+    rank?: number | null
+    peak_hour?: number | null
+    peak_day_of_week?: number | null
 }
 
 export interface ISnapshotTopEnum {
-    enum_definition: string
-    enum_definition_public_id: string
-    enum_value_public_id: string
-    selected_key: string
-    label: string
-    usage_count: number
-    total_sessions: number
-    percentage_of_total: number
+    enum_definition?: string
+    enum_definition_public_id?: string
+    enum_value_public_id?: string
+    selected_key?: string
+    label?: string
+    usage_count?: number
+    total_sessions?: number
+    percentage_of_total?: number
 }
 
 // ============================================================================
@@ -73,17 +73,17 @@ export interface ISnapshotTopEnum {
 // ============================================================================
 
 export interface ISnapshotTrends {
-    sessions_change: number
-    members_change: number
-    duration_change: number
-    engagement_change: number
+    sessions_change?: number
+    members_change?: number
+    duration_change?: number
+    engagement_change?: number
 }
 
 export interface ISnapshotMetadata {
     generated_at: string
     period_covered: string
-    period_start: string
-    period_end: string
+    period_start?: string
+    period_end?: string
 }
 
 // ============================================================================
@@ -91,15 +91,15 @@ export interface ISnapshotMetadata {
 // ============================================================================
 
 export interface ISnapshotData {
-    server_stats: IPeriodStats
-    period_stats: IPeriodStats
+    server_stats?: IPeriodStats
+    period_stats?: IPeriodStats
     top_members: ISnapshotTopMember[]
     top_activities: ISnapshotTopActivity[]
-    top_enums: ISnapshotTopEnum[]
-    top_members_period: ISnapshotTopMember[]
-    top_activities_period: ISnapshotTopActivity[]
-    trends: ISnapshotTrends
-    metadata: ISnapshotMetadata
+    top_enums?: ISnapshotTopEnum[]
+    top_members_period?: ISnapshotTopMember[]
+    top_activities_period?: ISnapshotTopActivity[]
+    trends?: ISnapshotTrends
+    metadata?: ISnapshotMetadata
 }
 
 // ============================================================================
@@ -111,7 +111,7 @@ export interface ISnapshot {
     server_id: string
     snapshot_date: string
     type: SnapshotType
-    description: string
+    description?: string
     created_at: string
     data: ISnapshotData
 }
@@ -121,14 +121,14 @@ export interface ISnapshot {
 // ============================================================================
 
 export interface ISnapshotHighlights {
-    total_sessions: number
-    total_duration: number
-    total_members: number
-    engagement_score: number
-    sessions_change: number
-    members_change: number
-    duration_change: number
-    engagement_change: number
+    total_sessions?: number
+    total_duration?: number
+    total_members?: number
+    engagement_score?: number
+    sessions_change?: number
+    members_change?: number
+    duration_change?: number
+    engagement_change?: number
 }
 
 export interface ISnapshotLight {
@@ -136,9 +136,9 @@ export interface ISnapshotLight {
     server_id: string
     snapshot_date: string
     type: SnapshotType
-    description: string
+    description?: string
     created_at: string
-    highlights: ISnapshotHighlights
+    highlights?: ISnapshotHighlights
 }
 
 // ============================================================================
@@ -159,8 +159,8 @@ export interface ISnapshotComparison {
 }
 
 export interface ITopItemsChanges {
-    new_entries: any[]
-    dropped_entries: any[]
+    new_entries: unknown[]
+    dropped_entries: unknown[]
     maintained: number
 }
 

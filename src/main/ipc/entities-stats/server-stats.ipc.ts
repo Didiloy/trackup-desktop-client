@@ -9,7 +9,7 @@ import type {
     IServerStats,
     IServerStatsDetails,
     IStatsTimeline,
-    IServerGrowthTrends,
+    IServerGrowthResponse,
     IComparativeAnalysis,
     IStatsTimelineParams,
     IStatsGrowthParams,
@@ -104,7 +104,7 @@ export function registerServerStatsIpc(): void {
             serverId: string,
             params: IStatsGrowthParams | undefined,
             accessToken: string
-        ): Promise<IServerStatsApiResponse<IServerGrowthTrends>> => {
+        ): Promise<IServerStatsApiResponse<IServerGrowthResponse>> => {
             logger.info('Getting servers growth trends:', serverId, params)
 
             const validationError = combineValidations(
@@ -115,7 +115,7 @@ export function registerServerStatsIpc(): void {
 
             const queryString = buildQueryParams(params)
 
-            return apiService.get<IServerGrowthTrends>(
+            return apiService.get<IServerGrowthResponse>(
                 `/api/v1/stats/servers/${serverId}/growth-trends${queryString}`,
                 accessToken
             )

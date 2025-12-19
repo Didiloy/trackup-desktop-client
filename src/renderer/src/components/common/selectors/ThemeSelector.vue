@@ -37,17 +37,17 @@ const saveThemeToStorage = (theme: ThemeMode): void => {
 const themeOptions = [
     {
         value: 'system' as ThemeMode,
-        name: i18n.t('userInterface.userProfileMenu.preferences.theme.system') || 'System',
+        name: i18n.t('views.user_profile.preferences.theme.system'),
         icon: 'desktop'
     },
     {
         value: false as ThemeMode,
-        name: i18n.t('userInterface.userProfileMenu.preferences.theme.light') || 'Light',
+        name: i18n.t('views.user_profile.preferences.theme.light'),
         icon: 'sun'
     },
     {
         value: true as ThemeMode,
-        name: i18n.t('userInterface.userProfileMenu.preferences.theme.dark') || 'Dark',
+        name: i18n.t('views.user_profile.preferences.theme.dark'),
         icon: 'moon'
     }
 ]
@@ -107,7 +107,7 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
 <template>
     <div class="flex items-center justify-between gap-12">
         <h3>
-            {{ i18n.t('userInterface.userProfileMenu.preferences.theme.title') }}
+            {{ i18n.t('views.user_profile.preferences.theme.title') }}
         </h3>
         <Select
             v-model="is_dark_mode"
@@ -115,11 +115,6 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
             option-label="name"
             option-value="value"
             class="w-full max-w-[135px]"
-            :pt="{
-                root: { class: 'bg-surface-100' },
-                overlay: { class: 'bg-surface-100' },
-                listContainer: { class: 'bg-surface-100' }
-            }"
             @change="handleThemeChange"
         >
             <template #value="slotProps">
@@ -138,12 +133,10 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
                     <span class="text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                         {{
                             slotProps.value === 'system'
-                                ? i18n.t(
-                                      'userInterface.userProfileMenu.preferences.theme.system'
-                                  ) || 'System'
+                                ? i18n.t('views.user_profile.preferences.theme.system')
                                 : slotProps.value
-                                  ? i18n.t('userInterface.userProfileMenu.preferences.theme.dark')
-                                  : i18n.t('userInterface.userProfileMenu.preferences.theme.light')
+                                  ? i18n.t('views.user_profile.preferences.theme.dark')
+                                  : i18n.t('views.user_profile.preferences.theme.light')
                         }}
                     </span>
                 </div>
@@ -162,3 +155,5 @@ const handleThemeChange = (event: { value: ThemeMode }): void => {
         </Select>
     </div>
 </template>
+
+<style scoped></style>

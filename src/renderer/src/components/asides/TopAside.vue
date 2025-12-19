@@ -4,8 +4,9 @@ import { useI18n } from 'vue-i18n'
 import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import ChronosButton from '@/components/chronos/ChronosButton.vue'
 
-const i18n = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const showMembersAsideToggle = computed(
@@ -16,9 +17,9 @@ const server_store = useServerStore()
 const pageTitle = computed(() => {
     if (showMembersAsideToggle.value) {
         const serverName = server_store.getName || ''
-        return `${i18n.t('navigation.server')} - ${serverName}`
+        return `${t('navigation.server')} - ${serverName}`
     }
-    return i18n.t('navigation.home')
+    return t('navigation.home')
 })
 
 onMounted(() => {
@@ -66,7 +67,7 @@ function handleToggleMembersAside(): void {
         class="flex items-center justify-between w-full h-8 min-h-8 pl-2 rounded-lg bg-surface-200"
     >
         <div>
-            <span class="">{{ i18n.t('app.title') }}</span>
+            <span class="">{{ t('app.title') }}</span>
         </div>
         <div>
             <span class="">{{ pageTitle }}</span>
@@ -75,16 +76,20 @@ function handleToggleMembersAside(): void {
             id="window-controls"
             class="flex items-center justify-center h-full w-fit bg-surface-200"
         >
+            <div class="h-full flex items-center justify-center px-1">
+                <ChronosButton />
+            </div>
             <div
                 v-if="showMembersAsideToggle"
                 id="toggle-sidebar-button"
-                class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                :title="i18n.t('actions.toggle_sidebar')"
+                class="h-full w-11 flex justify-center items-center bg-surface-200 text-gray-600 hover:bg-surface-400 hover:cursor-pointer hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
+                :title="t('common.actions.toggle_sidebar')"
                 @click="handleToggleMembersAside"
             >
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <span
-                    class="icon inline-flex items-center justify-center w-1/2 h-1/2 text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                    :class="isMembersAsideVisible ? 'text-primary-600' : 'text-gray-600'"
+                    class="icon inline-flex items-center justify-center w-1/2 h-1/2"
+                    :class="isMembersAsideVisible ? 'text-primary-600' : ''"
                     aria-hidden="true"
                     v-html="toggle_sidebar_icon"
                 />
@@ -92,28 +97,28 @@ function handleToggleMembersAside(): void {
             <div
                 id="devtools-button"
                 class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                :title="i18n.t('actions.devtools')"
+                :title="t('common.actions.devtools')"
             >
                 <i class="pi pi-cog"></i>
             </div>
             <div
                 id="min-button"
                 class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                :title="i18n.t('actions.minimize')"
+                :title="t('common.actions.minimize')"
             >
                 <i class="pi pi-minus"></i>
             </div>
             <div
                 id="max-button"
                 class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                :title="i18n.t('actions.maximize')"
+                :title="t('common.actions.maximize')"
             >
                 <i class="pi pi-sort"></i>
             </div>
             <div
                 id="close-button"
                 class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-red-500 hover:cursor-pointer text-gray-600 hover:text-white dark:text-gray-400"
-                :title="i18n.t('actions.close')"
+                :title="t('common.actions.close')"
             >
                 <i class="pi pi-times"></i>
             </div>

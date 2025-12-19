@@ -3,10 +3,12 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     ISession,
     IPaginatedSessions,
-    ICreateSessionRequest,
     IUpdateSessionRequest,
-    IListSessionsOptions,
-    ISessionApiResponse
+    IUpdateSessionParticipantsRequest,
+    ISessionApiResponse,
+    IAddSessionEnumsRequest,
+    IAddSessionMetadataRequest,
+    ILiteListSessionsOptions
 } from '../../../shared/contracts/interfaces/entities/session.interfaces'
 
 /**
@@ -15,22 +17,11 @@ import type {
  */
 export const sessionBridge = {
     /**
-     * Create a new session
-     */
-    create: (
-        serverId: string,
-        request: ICreateSessionRequest,
-        accessToken: string
-    ): Promise<ISessionApiResponse<ISession>> => {
-        return ipcRenderer.invoke(ipc_channels.session.create, serverId, request, accessToken)
-    },
-
-    /**
      * List sessions with pagination
      */
     list: (
         serverId: string,
-        options: IListSessionsOptions | undefined,
+        options: ILiteListSessionsOptions | undefined,
         accessToken: string
     ): Promise<ISessionApiResponse<IPaginatedSessions>> => {
         return ipcRenderer.invoke(ipc_channels.session.list, serverId, options, accessToken)
@@ -58,6 +49,24 @@ export const sessionBridge = {
     ): Promise<ISessionApiResponse<ISession>> => {
         return ipcRenderer.invoke(
             ipc_channels.session.update,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
+    },
+
+    /**
+     * Update session participants (creator only)
+     */
+    updateParticipants: (
+        serverId: string,
+        sessionId: string,
+        request: IUpdateSessionParticipantsRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.updateParticipants,
             serverId,
             sessionId,
             request,
@@ -96,6 +105,42 @@ export const sessionBridge = {
         accessToken: string
     ): Promise<ISessionApiResponse<void>> => {
         return ipcRenderer.invoke(ipc_channels.session.unlike, serverId, sessionId, accessToken)
+    },
+
+    /**
+     * Add enum selections to a session
+     */
+    addEnums: (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionEnumsRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.addEnums,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
+    },
+
+    /**
+     * Add metadata to a session
+     */
+    addMetadata: (
+        serverId: string,
+        sessionId: string,
+        request: IAddSessionMetadataRequest,
+        accessToken: string
+    ): Promise<ISessionApiResponse<ISession>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.session.addMetadata,
+            serverId,
+            sessionId,
+            request,
+            accessToken
+        )
     }
 }
 

@@ -2,7 +2,6 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useDeviceStore } from '@/stores/deviceSize'
 
 const { t } = useI18n()
 
@@ -39,11 +38,9 @@ const props = defineProps({
     }
 })
 
-const device_store = useDeviceStore()
-
-const cancelLabel = computed(() => props.cancelLabel || t('actions.cancel'))
-const confirmLabel = computed(() => props.confirmLabel || t('actions.confirm'))
-const dialogWidth = computed(() => (device_store.isMobile ? '90vw' : '400px'))
+// Use new translation key paths under `common.actions` to match provided fr.json
+const cancelLabel = computed(() => props.cancelLabel || t('common.actions.cancel'))
+const confirmLabel = computed(() => props.confirmLabel || t('common.actions.confirm'))
 
 const emit = defineEmits(['update:modelValue', 'confirm'])
 
@@ -82,18 +79,30 @@ const confirmAction = (): void => {
         modal
         :header="props.title"
         :style="{
-            width: dialogWidth,
+            width: '400px',
             height: 'fit-content',
-            userSelect: 'none'
+            userSelect: 'none',
+            backgroundColor: 'var(--p-surface-50)',
+            color: 'var(--p-surface-900)'
         }"
         :draggable="false"
+        :pt="{
+            root: {
+                style: 'background-color: var(--p-surface-50); color: var(--p-surface-900)'
+            }
+        }"
     >
         <p>{{ props.message }}</p>
 
         <div v-if="props.confirmationName" class="confirmation-input">
             <div class="icon-text-container">
                 <font-awesome-icon :icon="['fas', 'circle-exclamation']" />
-                <p v-html="t('actions.write_to_confirm', { entity: props.confirmationName })" />
+                <!-- use new key path under common.actions.write_to_confirm -->
+                <p
+                    v-html="
+                        t('common.actions.write_to_confirm', { entity: props.confirmationName })
+                    "
+                />
             </div>
             <InputText v-model="userInput" class="w-full" @keyup.enter="confirmAction" />
         </div>
@@ -101,10 +110,10 @@ const confirmAction = (): void => {
         <div class="o-delete-buttons">
             <Button :label="cancelLabel" :severity="props.cancelSeverity" @click="closeDialog" />
             <Button
-                v-if="confirmationName"
+                v-if="props.confirmationName"
                 :label="confirmLabel"
                 :severity="props.confirmSeverity"
-                :disabled="props.confirmationName && !isInputValid"
+                :disabled="props.confirmationName ? !isInputValid : false"
                 @click="confirmAction"
             />
             <Button
