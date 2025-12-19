@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import BaseServerStatWidget from './BaseServerStatWidget.vue'
-
-defineProps<{
-    totalActivities: number | undefined
-    loading?: boolean
-}>()
+import { useServerStatsStore } from '@/stores/server-stats'
 
 const { t } = useI18n()
+const server_stats_store = useServerStatsStore()
 </script>
 
 <template>
     <BaseServerStatWidget
         :label="t('views.server_stats.total_activities', 'Activities')"
-        :value="totalActivities?.toLocaleString() ?? 0"
+        :value="server_stats_store.getDetails?.server_stats.total_activities.toLocaleString() ?? 0"
         icon="pi pi-bolt"
         color="text-amber-500"
         bg="bg-amber-500/10"
-        :loading="loading"
+        :loading="server_stats_store.isLoading"
     />
 </template>

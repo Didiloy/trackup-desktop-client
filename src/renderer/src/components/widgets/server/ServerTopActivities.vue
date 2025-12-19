@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import type { ITopActivity } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { computed } from 'vue'
+import { useServerStatsStore } from '@/stores/server-stats'
 
-const props = defineProps<{
-    activities: ITopActivity[] | undefined
-    loading?: boolean
-}>()
-
+const server_stats_store = useServerStatsStore()
 const { t } = useI18n()
 
 const maxSessions = computed(() => {
-    if (!props.activities?.length) return 1
-    return Math.max(...props.activities.map((a) => a.total_sessions))
+    const activities = server_stats_store.getDetails?.top_activities
+    if (!activities?.length) return 1
+    return Math.max(...activities.map((a) => a.total_sessions))
 })
 </script>
 
@@ -25,7 +22,7 @@ const maxSessions = computed(() => {
             </h3>
         </div>
 
-        <div v-if="loading" class="space-y-4">
+        <div v-if="server_stats_store.isLoading" class="space-y-4">
             <div v-for="i in 5" :key="i" class="flex flex-col gap-2">
                 <div class="flex justify-between">
                     <Skeleton width="40%" />
@@ -35,12 +32,12 @@ const maxSessions = computed(() => {
             </div>
         </div>
 
-        <div v-else-if="!activities?.length" class="text-center py-8 text-surface-400">
+        <div v-else-if="!server_stats_store.getDetails?.top_activities?.length" class="text-center py-8 text-surface-400">
             {{ t('common.fields.none') }}
         </div>
 
         <div v-else class="space-y-5 max-h-[300px] overflow-y-auto pr-1">
-            <div v-for="activity in activities" :key="activity.activity_id" class="group">
+            <div v-for="activity in server_stats_store.getDetails.top_activities" :key="activity.activity_id" class="group">
                 <div class="flex justify-between items-center mb-1.5">
                     <span class="text-sm font-medium text-surface-900 truncate pr-4">
                         {{ activity.activity_name }}

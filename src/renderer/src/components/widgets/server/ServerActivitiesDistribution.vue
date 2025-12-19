@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ITopActivity } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { VueUiDonut } from 'vue-data-ui'
 import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-
-const props = defineProps<{
-    activities: ITopActivity[] | undefined
-    loading?: boolean
-}>()
+import { useServerStatsStore } from '@/stores/server-stats'
 
 const { t } = useI18n()
+const server_stats_store = useServerStatsStore()
 
 const dataset = computed<VueUiDonutDatasetItem[]>(() => {
-    if (!props.activities) return []
+    const activities = server_stats_store.getDetails?.top_activities
+    if (!activities) return []
 
-    return props.activities.map((activity, index) => {
+    return activities.map((activity, index) => {
         const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4']
         return {
             name: activity.activity_name,
@@ -115,7 +112,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
             </h3>
         </div>
 
-        <div v-if="loading" class="h-[300px] flex items-center justify-center">
+        <div v-if="server_stats_store.isLoading" class="h-[300px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
         </div>
 

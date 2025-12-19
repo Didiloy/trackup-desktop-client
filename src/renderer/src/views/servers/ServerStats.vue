@@ -1,219 +1,86 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useServerStore } from '@/stores/server'
-import { useServerStatsCRUD } from '@/composables/servers/useServerStatsCRUD'
-import type {
-    IServerStatsDetails,
-    IStatsTimeline
-} from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
-import { EPeriod } from '@shared/contracts/enums/period.enum'
-import ServerStatsHeader from '@/components/servers/profile/ServerStatsHeader.vue'
-import ServerTotalSessions from '@/components/widgets/server/ServerTotalSessions.vue'
-import ServerActiveMembers from '@/components/widgets/server/ServerActiveMembers.vue'
-import ServerTotalDuration from '@/components/widgets/server/ServerTotalDuration.vue'
-import ServerTotalActivities from '@/components/widgets/server/ServerTotalActivities.vue'
-import ServerEngagementScore from '@/components/widgets/server/ServerEngagementScore.vue'
-import ServerAvgLikes from '@/components/widgets/server/ServerAvgLikes.vue'
-import ServerAvgParticipants from '@/components/widgets/server/ServerAvgParticipants.vue'
-import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart.vue'
-import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
-import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
-import ServerActivitiesDistribution from '@/components/widgets/server/ServerActivitiesDistribution.vue'
-import { useToast } from 'primevue/usetoast'
-import { useI18n } from 'vue-i18n'
-
 const server_store = useServerStore()
-const { getServerStatsDetails, getServerStatsTimeline } = useServerStatsCRUD()
-const toast = useToast()
-const { t } = useI18n()
-
-const loading = ref(true)
-const details = ref<IServerStatsDetails | null>(null)
-const error = ref<string | null>(null)
-const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
-
-// Default to last 30 days
-const period = ref<Date[] | null>([
-    new Date(new Date().setDate(new Date().getDate() - 30)),
-    new Date()
-])
-
-const filteredTimeline = computed<IStatsTimeline[]>(() => {
-    if (!details.value?.timeline) return []
-
-    // If a period type is selected (API filtered), return the whole timeline
-    if (selectedPeriodType.value) return details.value.timeline
-
-    if (!period.value || period.value.length !== 2 || !period.value[0] || !period.value[1]) {
-        return details.value.timeline
-    }
-
-    const [start, end] = period.value
-    // Reset hours to compare dates only
-    const startDate = new Date(start)
-    startDate.setHours(0, 0, 0, 0)
-    const endDate = new Date(end)
-    endDate.setHours(23, 59, 59, 999)
-
-    return details.value.timeline.filter((item) => {
-        const itemDate = new Date(item.period)
-        return itemDate >= startDate && itemDate <= endDate
-    })
-})
-
-async function loadStats() {
-    if (!server_store.getPublicId) return
-    loading.value = true
-    error.value = null
-
-    try {
-        const res = await getServerStatsDetails(server_store.getPublicId)
-        if (res.error) throw new Error(res.error)
-        if (res.data) {
-            details.value = res.data
-        }
-        console.log(details.value)
-
-        if (selectedPeriodType.value) {
-            await fetchTimelineForPeriod(selectedPeriodType.value)
-        }
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : t('messages.error.fetch')
-        toast.add({
-            severity: 'error',
-            summary: t('messages.error.fetch'),
-            detail: error.value,
-            life: 3000
-        })
-    } finally {
-        loading.value = false
-    }
-}
+const server_stats_store = useServerStatsStore()
 
 async function fetchTimelineForPeriod(periodType: EPeriod) {
-    if (!server_store.getPublicId || !details.value) return
-    loading.value = true
-    try {
-        const res = await getServerStatsTimeline(server_store.getPublicId, {
-            period: periodType,
-            limit: 365
-        })
-        if (res.error) throw new Error(res.error)
-        if (res.data) {
-            details.value.timeline = res.data
-        }
-    } catch (e) {
-        console.error(e)
-        toast.add({ severity: 'error', summary: t('messages.error.fetch'), life: 3000 })
-    } finally {
-        loading.value = false
-    }
+    if (!server_store.getPublicId) return
+    const res = await server_stats_store.fetchTimeline(server_store.getPublicId, {
+        period: periodType,
+        limit: 365
+    })
 }
 
-watch(selectedPeriodType, async (newType) => {
+watch(() => server_stats_store.getSelectedPeriodType, async (newType) => {
     if (newType) {
         await fetchTimelineForPeriod(newType)
     } else {
-        // Reload full stats to reset timeline or if we want to switch back to default view
-        // Or we could just keep current data if it was already fetched.
-        // For now let's reload basic stats to be safe and consistent
-        await loadStats()
-    }
-})
-
-watch(period, async (newPeriod) => {
-    if (newPeriod) {
-        selectedPeriodType.value = null
-    }
-})
-
-watch(
-    () => server_store.getPublicId,
-    (newId) => {
-        if (newId) {
-            loadStats()
+        if (server_store.getPublicId) {
+            await server_stats_store.fetchDetails(server_store.getPublicId)
         }
-    },
-    { immediate: true }
-)
+    }
+})
+
+// Initial load if store is empty but server is selected
+onMounted(async () => {
+    if (server_store.getPublicId && !server_stats_store.getDetails) {
+        await server_stats_store.fetchAll(server_store.getPublicId)
+    }
+})
 
 // Refresh handler
 function handleRefresh() {
-    loadStats()
+    if (server_store.getPublicId) {
+        server_stats_store.fetchAll(server_store.getPublicId)
+    }
 }
 
 function handlePeriodTypeUpdate(newType: EPeriod | null) {
-    selectedPeriodType.value = newType
+    server_stats_store.setSelectedPeriodType(newType)
 }
 
 function handlePeriodUpdate(newPeriod: Date[] | null) {
-    period.value = newPeriod
+    server_stats_store.setPeriod(newPeriod)
 }
 </script>
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
-        <div v-if="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700">
-            {{ error }}
+        <div v-if="server_stats_store.getError" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700">
+            {{ server_stats_store.getError }}
         </div>
 
         <ServerStatsHeader
             v-model:period="period"
             v-model:selected-period-type="selectedPeriodType"
             :server-name="server_store.getName ?? ''"
-            :loading="loading"
+            :loading="server_stats_store.isLoading"
             @refresh="handleRefresh"
             @update:period-type="handlePeriodTypeUpdate"
             @update:period="handlePeriodUpdate"
         />
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
-            <ServerTotalSessions
-                :total-sessions="details?.server_stats.total_sessions"
-                :loading="loading"
-            />
-            <ServerActiveMembers
-                :active-members="details?.server_stats.active_members"
-                :total-members="details?.server_stats.total_members"
-                :loading="loading"
-            />
-            <ServerTotalDuration
-                :total-duration="details?.server_stats.total_duration"
-                :loading="loading"
-            />
-            <ServerTotalActivities
-                :total-activities="details?.server_stats.total_activities"
-                :loading="loading"
-            />
-            <ServerEngagementScore
-                :engagement-score="details?.server_stats.engagement_score"
-                :loading="loading"
-            />
-            <ServerAvgLikes
-                :avg-likes="details?.server_stats.avg_likes_per_session"
-                :loading="loading"
-            />
-            <ServerAvgParticipants
-                :avg-participants="details?.server_stats.avg_participants_per_session"
-                :loading="loading"
-            />
+            <ServerTotalSessions />
+            <ServerActiveMembers />
+            <ServerTotalDuration />
+            <ServerTotalActivities />
+            <ServerEngagementScore />
+            <ServerAvgLikes />
+            <ServerAvgParticipants />
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
             <div class="xl:col-span-2">
-                <ServerTimelineChart :data="filteredTimeline" :loading="loading" :height="340" />
+                <ServerTimelineChart :height="340" />
             </div>
             <div>
-                <ServerActivitiesDistribution
-                    :activities="details?.top_activities"
-                    :loading="loading"
-                />
+                <ServerActivitiesDistribution />
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ServerTopMembers :members="details?.top_members" :loading="loading" />
-            <ServerTopActivities :activities="details?.top_activities" :loading="loading" />
+            <ServerTopMembers />
+            <ServerTopActivities />
         </div>
     </div>
 </template>

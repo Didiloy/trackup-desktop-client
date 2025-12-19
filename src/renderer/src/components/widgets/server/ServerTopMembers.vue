@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { ITopMember } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
+import { useServerStatsStore } from '@/stores/server-stats'
+
 const server_store = useServerStore()
-defineProps<{
-    members: ITopMember[] | undefined
-    loading?: boolean
-}>()
+const server_stats_store = useServerStatsStore()
 const { t } = useI18n()
 </script>
 
@@ -20,7 +18,7 @@ const { t } = useI18n()
             </h3>
         </div>
 
-        <div v-if="loading" class="space-y-4">
+        <div v-if="server_stats_store.isLoading" class="space-y-4">
             <div v-for="i in 5" :key="i" class="flex items-center gap-4">
                 <Skeleton shape="circle" size="2.5rem" />
                 <div class="flex-1">
@@ -30,13 +28,13 @@ const { t } = useI18n()
             </div>
         </div>
 
-        <div v-else-if="!members?.length" class="text-center py-8 text-surface-400">
+        <div v-else-if="!server_stats_store.getDetails?.top_members?.length" class="text-center py-8 text-surface-400">
             {{ t('common.fields.none') }}
         </div>
 
         <div v-else class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
             <div
-                v-for="(member, index) in members"
+                v-for="(member, index) in server_stats_store.getDetails.top_members"
                 :key="member.member_id"
                 class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-50 transition-colors"
             >
@@ -64,7 +62,7 @@ const { t } = useI18n()
                     <span
                         class="text-sm font-medium text-primary-600 bg-primary-200 px-2 py-1 rounded-md select-none"
                     >
-                        {{ formatMinutesToLabel(member.total_duration) }}
+                        {{ formatMinutesToLabel(member.total_duration ?? 0) }}
                     </span>
                 </div>
             </div>

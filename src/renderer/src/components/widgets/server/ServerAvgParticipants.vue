@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import BaseServerStatWidget from './BaseServerStatWidget.vue'
-
-defineProps<{
-    avgParticipants: number | undefined
-    loading?: boolean
-}>()
+import { useServerStatsStore } from '@/stores/server-stats'
 
 const { t } = useI18n()
+const server_stats_store = useServerStatsStore()
 </script>
 
 <template>
     <BaseServerStatWidget
         :label="t('views.server_stats.avg_participants_per_session', 'Avg Participants')"
-        :value="avgParticipants?.toFixed(2) ?? '0.00'"
+        :value="server_stats_store.getDetails?.server_stats.avg_participants_per_session.toFixed(2) ?? '0.00'"
         icon="pi pi-user-plus"
         color="text-cyan-500"
         bg="bg-cyan-500/10"
-        :loading="loading"
+        :loading="server_stats_store.isLoading"
     />
 </template>

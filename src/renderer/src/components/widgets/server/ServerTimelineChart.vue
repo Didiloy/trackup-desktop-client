@@ -1,28 +1,25 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { VueUiXy } from 'vue-data-ui'
 import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
+import { useServerStatsStore } from '@/stores/server-stats'
 
 const props = withDefaults(
     defineProps<{
-        data?: IStatsTimeline[]
-        loading?: boolean
         height?: number
     }>(),
     {
-        data: () => [],
-        loading: false,
         height: 300
     }
 )
 
 const { t } = useI18n()
+const server_stats_store = useServerStatsStore()
 
-const sortedData = computed<IStatsTimeline[]>(() => {
-    const data = props.data ?? []
+const sortedData = computed(() => {
+    const data = server_stats_store.getTimeline ?? []
     return [...data].sort((a, b) => {
         const dateA = new Date(a.period).getTime()
         const dateB = new Date(b.period).getTime()
@@ -118,7 +115,7 @@ const hasData = computed(() => !!sortedData.value.length)
             </h3>
         </div>
 
-        <div v-if="loading" class="h-[300px] flex items-center justify-center">
+        <div v-if="server_stats_store.isLoading" class="h-[300px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
         </div>
 

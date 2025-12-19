@@ -4,6 +4,7 @@ import { IServer } from '@shared/contracts/interfaces/entities/server.interfaces
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import { useServerStatsStore } from './server-stats'
 
 interface ServerCache {
     server: IServer
@@ -13,6 +14,7 @@ interface ServerCache {
 }
 
 export const useServerStore = defineStore('server', () => {
+    const serverStatsStore = useServerStatsStore()
     // Cache to store previously loaded servers (TTL: 5 minutes)
     const cache = reactive<Map<string, ServerCache>>(new Map())
     const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
@@ -66,6 +68,9 @@ export const useServerStore = defineStore('server', () => {
     // Setter functions
     const setServer = (srv: IServer | null): void => {
         state.server = srv
+        if (srv?.public_id) {
+            serverStatsStore.fetchAll(srv.public_id)
+        }
     }
 
     const setMembers = (members: IServerMember[] | null): void => {
@@ -87,6 +92,7 @@ export const useServerStore = defineStore('server', () => {
         state.serverEnumsDefinition = null
         state.ownership = false
         state.isLoading = false
+        serverStatsStore.resetState()
     }
 
     const setLoading = (loading: boolean): void => {
@@ -136,11 +142,14 @@ export const useServerStore = defineStore('server', () => {
         state.server = cached.server
         state.serverMembers = cached.members
         state.serverEnumsDefinition = cached.enumDefinition
+
+        serverStatsStore.fetchAll(serverId)
         return true
     }
 
     const clearCache = (): void => {
         cache.clear()
+        serverStatsStore.resetState()
     }
 
     return {
