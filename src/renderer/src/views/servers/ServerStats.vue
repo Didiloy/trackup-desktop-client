@@ -8,7 +8,13 @@ import type {
 } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import ServerStatsHeader from '@/components/servers/profile/ServerStatsHeader.vue'
-import ServerStatsOverview from '@/components/servers/profile/ServerStatsOverview.vue'
+import ServerTotalSessions from '@/components/widgets/server/ServerTotalSessions.vue'
+import ServerActiveMembers from '@/components/widgets/server/ServerActiveMembers.vue'
+import ServerTotalDuration from '@/components/widgets/server/ServerTotalDuration.vue'
+import ServerTotalActivities from '@/components/widgets/server/ServerTotalActivities.vue'
+import ServerEngagementScore from '@/components/widgets/server/ServerEngagementScore.vue'
+import ServerAvgLikes from '@/components/widgets/server/ServerAvgLikes.vue'
+import ServerAvgParticipants from '@/components/widgets/server/ServerAvgParticipants.vue'
 import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart.vue'
 import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
 import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
@@ -161,7 +167,37 @@ function handlePeriodUpdate(newPeriod: Date[] | null) {
             @update:period="handlePeriodUpdate"
         />
 
-        <ServerStatsOverview :stats="details?.server_stats" :loading="loading" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
+            <ServerTotalSessions
+                :total-sessions="details?.server_stats.total_sessions"
+                :loading="loading"
+            />
+            <ServerActiveMembers
+                :active-members="details?.server_stats.active_members"
+                :total-members="details?.server_stats.total_members"
+                :loading="loading"
+            />
+            <ServerTotalDuration
+                :total-duration="details?.server_stats.total_duration"
+                :loading="loading"
+            />
+            <ServerTotalActivities
+                :total-activities="details?.server_stats.total_activities"
+                :loading="loading"
+            />
+            <ServerEngagementScore
+                :engagement-score="details?.server_stats.engagement_score"
+                :loading="loading"
+            />
+            <ServerAvgLikes
+                :avg-likes="details?.server_stats.avg_likes_per_session"
+                :loading="loading"
+            />
+            <ServerAvgParticipants
+                :avg-participants="details?.server_stats.avg_participants_per_session"
+                :loading="loading"
+            />
+        </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
             <div class="xl:col-span-2">
