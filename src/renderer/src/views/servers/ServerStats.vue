@@ -7,12 +7,12 @@ import type {
     IStatsTimeline
 } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
-import ServerStatsHeader from '@/components/servers/stats/ServerStatsHeader.vue'
-import ServerStatsOverview from '@/components/servers/stats/ServerStatsOverview.vue'
-import ServerTimelineChart from '@/components/servers/stats/ServerTimelineChart.vue'
-import ServerTopMembers from '@/components/servers/stats/ServerTopMembers.vue'
-import ServerTopActivities from '@/components/servers/stats/ServerTopActivities.vue'
-import ServerActivitiesDistribution from '@/components/servers/stats/ServerActivitiesDistribution.vue'
+import ServerStatsHeader from '@/components/servers/profile/ServerStatsHeader.vue'
+import ServerStatsOverview from '@/components/servers/profile/ServerStatsOverview.vue'
+import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart.vue'
+import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
+import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
+import ServerActivitiesDistribution from '@/components/widgets/server/ServerActivitiesDistribution.vue'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 

@@ -4,7 +4,7 @@ import type { ITopActivity } from '@shared/contracts/interfaces/entities-stats/s
 import { VueUiDonut } from 'vue-data-ui'
 import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import { useI18n } from 'vue-i18n'
-import { formatMinutesToLabel } from '@renderer/utils/time.utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 const props = defineProps<{
     activities: ITopActivity[] | undefined

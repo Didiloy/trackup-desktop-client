@@ -5,7 +5,7 @@ import type {
     IActivityTimePatterns
 } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
-import ActivitySparkline from '@/components/activities/detail/ActivitySparkline.vue'
+import ActivitySparkline from '@/components/widgets/activity/ActivitySparkline.vue'
 import ActivityPatternsSummary from './ActivityPatternsSummary.vue'
 import { useI18n } from 'vue-i18n'
 
