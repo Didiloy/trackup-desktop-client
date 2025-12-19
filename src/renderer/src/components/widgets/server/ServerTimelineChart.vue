@@ -5,6 +5,7 @@ import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
 import { useServerStatsStore } from '@/stores/server-stats'
+import PeriodSelector from '@/components/common/filters/PeriodSelector.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -109,13 +110,20 @@ const hasData = computed(() => !!sortedData.value.length)
 
 <template>
     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6 h-full">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <h3 class="text-lg font-bold text-surface-900">
                 {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
             </h3>
+            
+            <PeriodSelector
+                :period="server_stats_store.getPeriod"
+                :selected-period-type="server_stats_store.getSelectedPeriodType"
+                @update:period="server_stats_store.setPeriod($event)"
+                @update:selected-period-type="server_stats_store.setSelectedPeriodType($event)"
+            />
         </div>
 
-        <div v-if="server_stats_store.isLoading" class="h-[300px] flex items-center justify-center">
+        <div v-if="server_stats_store.isTimelineLoading || server_stats_store.isLoading" class="h-[300px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
         </div>
 

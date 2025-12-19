@@ -91,6 +91,7 @@ declare module 'vue' {
     MultistepsDialog: typeof import('./src/components/common/dialogs/MultistepsDialog.vue')['default']
     MultiStepsDialog: typeof import('./src/components/common/dialogs/MultiStepsDialog.vue')['default']
     NumberRangeFilter: typeof import('./src/components/filters/NumberRangeFilter.vue')['default']
+    PeriodSelector: typeof import('./src/components/common/filters/PeriodSelector.vue')['default']
     Popover: typeof import('primevue/popover')['default']
     ProfileButton: typeof import('./src/components/user/ProfileButton.vue')['default']
     ProviderButton: typeof import('./src/components/auth/ProviderButton.vue')['default']

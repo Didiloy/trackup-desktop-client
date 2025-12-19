@@ -31,6 +31,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         growthTrends: null as IServerGrowthResponse | null,
         comparativeAnalysis: [] as IComparativeAnalysis[],
         isLoading: false,
+        isTimelineLoading: false,
         error: null as string | null,
 
         // Filters
@@ -48,6 +49,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     const getGrowthTrends = computed(() => state.growthTrends)
     const getComparativeAnalysis = computed(() => state.comparativeAnalysis)
     const isLoading = computed(() => state.isLoading)
+    const isTimelineLoading = computed(() => state.isTimelineLoading)
     const getError = computed(() => state.error)
 
     const getSelectedPeriodType = computed(() => state.selectedPeriodType)
@@ -115,7 +117,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     }
 
     const fetchTimeline = async (serverId: string, params?: IStatsTimelineParams) => {
-        state.isLoading = true
+        state.isTimelineLoading = true
         state.error = null
         try {
             const res = await getServerStatsTimeline(serverId, params)
@@ -129,7 +131,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
             state.error = e.message
             return { error: e.message }
         } finally {
-            state.isLoading = false
+            state.isTimelineLoading = false
         }
     }
 
@@ -198,6 +200,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         state.growthTrends = null
         state.comparativeAnalysis = []
         state.isLoading = false
+        state.isTimelineLoading = false
         state.error = null
         state.selectedPeriodType = EPeriod.ALL_TIME
         state.period = [
@@ -233,6 +236,7 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         getGrowthTrends,
         getComparativeAnalysis,
         isLoading,
+        isTimelineLoading,
         getError,
         serverStats,
         getSelectedPeriodType,
