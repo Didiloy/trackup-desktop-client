@@ -5,6 +5,16 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 
 const { t } = useI18n()
 const route = useRoute()
@@ -43,10 +53,13 @@ const rankPercent = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
-        <p class="text-sm font-semibold text-surface-600 mb-4">
-            {{ t('views.activity.performance_section.ranking') }}
-        </p>
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+            <p class="text-sm font-semibold text-surface-600">
+                {{ t('views.activity.performance_section.ranking') }}
+            </p>
+            <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+        </div>
 
         <div v-if="isLoading" class="flex items-center justify-center py-10">
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
@@ -59,7 +72,12 @@ const rankPercent = computed(() => {
                         {{ t('views.activity.ranking_title', { rank: rankingData.rank }) }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ t('views.activity.ranking_out_of', { rank: rankingData.rank, total: rankingData.total_activities }) }}
+                        {{
+                            t('views.activity.ranking_out_of', {
+                                rank: rankingData.rank,
+                                total: rankingData.total_activities
+                            })
+                        }}
                     </p>
                 </div>
                 <div class="text-right">
@@ -73,7 +91,9 @@ const rankPercent = computed(() => {
             </div>
 
             <div class="space-y-2">
-                <div class="h-3 bg-surface-200 rounded-full overflow-hidden ring-1 ring-surface-200/60">
+                <div
+                    class="h-3 bg-surface-200 rounded-full overflow-hidden ring-1 ring-surface-200/60"
+                >
                     <div
                         class="h-full bg-linear-to-r from-primary-500 to-primary-400 transition-all duration-1000"
                         :style="{ width: `${rankPercent}%` }"
@@ -88,15 +108,21 @@ const rankPercent = computed(() => {
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
                     <p class="text-xs text-surface-500">{{ t('views.activity.total_sessions') }}</p>
-                    <p class="text-lg font-semibold text-surface-900">{{ rankingData.total_sessions }}</p>
+                    <p class="text-lg font-semibold text-surface-900">
+                        {{ rankingData.total_sessions }}
+                    </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
                     <p class="text-xs text-surface-500">{{ t('views.activity.card.duration') }}</p>
-                    <p class="text-lg font-semibold text-surface-900">{{ formatMinutesToLabel(rankingData.total_duration) }}</p>
+                    <p class="text-lg font-semibold text-surface-900">
+                        {{ formatMinutesToLabel(rankingData.total_duration) }}
+                    </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60 col-span-2">
                     <p class="text-xs text-surface-500">{{ t('views.activity.popularity') }}</p>
-                    <p class="text-lg font-semibold text-surface-900">{{ rankingData.popularity_score.toFixed(1) }}</p>
+                    <p class="text-lg font-semibold text-surface-900">
+                        {{ rankingData.popularity_score.toFixed(1) }}
+                    </p>
                 </div>
             </div>
         </div>

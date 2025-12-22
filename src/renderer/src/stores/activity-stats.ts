@@ -285,6 +285,7 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         }
     }
 
+
     const resetState = (): void => {
         state.details = null
         state.leaderboard = null

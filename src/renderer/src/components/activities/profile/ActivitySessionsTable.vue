@@ -30,7 +30,6 @@ function onPage(event: { page: number; rows: number }): void {
         :total-records="total"
         :first="((page ?? 1) - 1) * (rows ?? 10)"
         :loading="loading"
-        class="rounded-2xl overflow-hidden bg-surface-100 ring-1 ring-surface-200 p-5"
         @page="onPage"
     >
         <Column field="title" :header="t('common.fields.title')">

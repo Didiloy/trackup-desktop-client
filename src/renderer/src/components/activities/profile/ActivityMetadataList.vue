@@ -16,7 +16,7 @@ function formatTypeLabel(type?: string): string {
 }
 
 const hasMetadata = computed(() => {
-    return (props.metadataDefinitions && props.metadataDefinitions.length > 0)
+    return props.metadataDefinitions && props.metadataDefinitions.length > 0
 })
 
 function getIconForType(type: string): string {

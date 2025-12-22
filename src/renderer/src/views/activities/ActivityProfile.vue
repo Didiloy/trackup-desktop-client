@@ -33,6 +33,7 @@ import ActivityTimelineChart from '@/components/widgets/activity/ActivityTimelin
 import ActivityRankingWidget from '@/components/widgets/activity/ActivityRankingWidget.vue'
 import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipantsWidget.vue'
 import ActivityPatternsSummary from '@/components/widgets/activity/ActivityPatternsSummary.vue'
+import ActivitySparkline from '@/components/widgets/activity/ActivitySparkline.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -116,7 +117,6 @@ async function loadSessions(page = sessions_page.value, rows = sessions_rows.val
     }
 }
 
-
 function handleSessionPage(event: { page: number; rows: number }): void {
     void loadSessions(event.page, event.rows)
 }
@@ -134,7 +134,12 @@ async function confirmDelete(): Promise<void> {
     try {
         const res = await deleteActivity(server_store.getPublicId, activityId.value)
         if (res.error) {
-            toast.add({ severity: 'error', summary: t('messages.error.delete'), detail: res.error, life: 2500 })
+            toast.add({
+                severity: 'error',
+                summary: t('messages.error.delete'),
+                detail: res.error,
+                life: 2500
+            })
             return
         }
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
@@ -188,19 +193,21 @@ onMounted(async () => {
         />
 
         <Tabs value="stats" class="mt-4">
-            <TabList class="mb-4">
-                <Tab value="stats">
-                    <div class="flex items-center gap-2 px-2">
-                        <i class="pi pi-chart-bar"></i>
-                        <span>{{ t('views.activity.tabs.stats') }}</span>
-                    </div>
-                </Tab>
-                <Tab value="details">
-                    <div class="flex items-center gap-2 px-2">
-                        <i class="pi pi-info-circle"></i>
-                        <span>{{ t('views.activity.tabs.details') }}</span>
-                    </div>
-                </Tab>
+            <TabList class="mb-4 flex items-center justify-between w-full pr-4">
+                <div class="flex items-center">
+                    <Tab value="stats">
+                        <div class="flex items-center gap-2 px-2">
+                            <i class="pi pi-chart-bar"></i>
+                            <span>{{ t('views.activity.tabs.stats') }}</span>
+                        </div>
+                    </Tab>
+                    <Tab value="details">
+                        <div class="flex items-center gap-2 px-2">
+                            <i class="pi pi-info-circle"></i>
+                            <span>{{ t('views.activity.tabs.details') }}</span>
+                        </div>
+                    </Tab>
+                </div>
             </TabList>
 
             <TabPanels class="bg-transparent! p-0!">
@@ -227,6 +234,8 @@ onMounted(async () => {
 
                     <!-- Heatmap in its own full-width card -->
                     <ActivitySessionsHeatmap class="mb-6 w-full" />
+
+                    <ActivitySparkline class="mb-6 w-full" />
 
                     <!-- Recent sessions table in a separate card -->
                     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">

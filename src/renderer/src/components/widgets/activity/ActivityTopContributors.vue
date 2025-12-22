@@ -4,6 +4,16 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { computed } from 'vue'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 
 const { t } = useI18n()
 const server_store = useServerStore()
@@ -13,7 +23,8 @@ const contributorsData = computed(() => activity_stats_store.getDetails?.top_con
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+        <ActivityIdentityCorner :show="props.showIdentity" />
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.card.top_contributor') }}

@@ -6,6 +6,16 @@ import { useServerStore } from '@/stores/server'
 import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 
 const { t } = useI18n()
 const route = useRoute()
@@ -81,11 +91,14 @@ function formatValue(val: number, isDuration?: boolean): string {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col">
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col">
         <div class="flex items-center justify-between mb-6">
-            <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.activity.evolution_comparison') }}
-            </p>
+            <div class="flex items-center gap-3">
+                <p class="text-sm font-semibold text-surface-600">
+                    {{ t('views.activity.evolution_comparison') }}
+                </p>
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+            </div>
             <PeriodSelector
                 :period="null"
                 v-model:selected-period-type="selectedPeriod"
@@ -109,7 +122,11 @@ function formatValue(val: number, isDuration?: boolean): string {
                     </p>
                     <span
                         class="text-xs font-bold px-2 py-0.5 rounded-full"
-                        :class="metric.percent >= 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'"
+                        :class="
+                            metric.percent >= 0
+                                ? 'bg-emerald-100 text-emerald-600'
+                                : 'bg-red-100 text-red-600'
+                        "
                     >
                         {{ metric.percent >= 0 ? '+' : '' }}{{ metric.percent.toFixed(1) }}%
                     </span>
@@ -121,14 +138,17 @@ function formatValue(val: number, isDuration?: boolean): string {
                             {{ formatValue(metric.current, metric.isDuration) }}
                         </p>
                         <p class="text-[10px] text-surface-400 mt-1">
-                            {{ t('views.activity.previous_period') }}: {{ formatValue(metric.previous, metric.isDuration) }}
+                            {{ t('views.activity.previous_period') }}:
+                            {{ formatValue(metric.previous, metric.isDuration) }}
                         </p>
                     </div>
                     <div class="text-right">
                         <i
                             class="pi text-xl"
                             :class="[
-                                metric.change >= 0 ? 'pi-arrow-up-right text-emerald-500' : 'pi-arrow-down-right text-red-500'
+                                metric.change >= 0
+                                    ? 'pi-arrow-up-right text-emerald-500'
+                                    : 'pi-arrow-down-right text-red-500'
                             ]"
                         ></i>
                     </div>

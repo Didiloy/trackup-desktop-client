@@ -10,13 +10,16 @@ import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
 
 const props = withDefaults(
     defineProps<{
         height?: number
+        showIdentity?: boolean
     }>(),
     {
-        height: 340
+        height: 340,
+        showIdentity: true
     }
 )
 
@@ -230,13 +233,16 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6">
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6">
         <div
             class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6"
         >
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.activity.performance_section.sessions_timeline') }}
-            </h3>
+            <div class="flex items-center gap-3">
+                <h3 class="text-lg font-bold text-surface-900">
+                    {{ t('views.activity.performance_section.sessions_timeline') }}
+                </h3>
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+            </div>
 
             <PeriodSelector
                 v-model:period="period"

@@ -5,6 +5,16 @@ import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 
 const { t } = useI18n()
 const route = useRoute()
@@ -79,23 +89,33 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm w-full">
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm w-full">
         <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.activity.performance_section.heatmap') }}
-            </p>
+            <div class="flex items-center gap-3">
+                <p class="text-sm font-semibold text-surface-600">
+                    {{ t('views.activity.performance_section.heatmap') }}
+                </p>
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+            </div>
             <p class="text-xs text-surface-500">
                 {{ t('views.activity.performance_section.last_year') }}
             </p>
         </div>
 
-        <div v-if="activity_stats_store.isHeatmapLoading" class="h-[120px] flex items-center justify-center">
+        <div
+            v-if="activity_stats_store.isHeatmapLoading"
+            class="h-[120px] flex items-center justify-center"
+        >
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
         </div>
 
         <div v-else class="w-full overflow-x-auto">
             <div class="grid grid-cols-52 gap-1 min-w-full">
-                <div v-for="(week, weekIndex) in heatmapData" :key="weekIndex" class="grid grid-rows-7 gap-1">
+                <div
+                    v-for="(week, weekIndex) in heatmapData"
+                    :key="weekIndex"
+                    class="grid grid-rows-7 gap-1"
+                >
                     <div
                         v-for="day in week"
                         :key="day.date.toISOString()"

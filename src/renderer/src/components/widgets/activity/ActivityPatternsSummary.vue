@@ -3,6 +3,17 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
+
 const { t } = useI18n()
 const activity_stats_store = useActivityStatsStore()
 
@@ -22,7 +33,6 @@ function formatDay(value: number | null | undefined): string {
     if (value === null || value === undefined) return t('common.fields.none')
     return dayNames.value[value] ?? t('common.fields.none')
 }
-
 
 const cards = computed(() => {
     const p = patternsData.value
@@ -72,7 +82,8 @@ const cards = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+        <ActivityIdentityCorner :show="props.showIdentity" />
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.activity.performance_section.patterns') }}
         </p>

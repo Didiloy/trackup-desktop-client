@@ -477,7 +477,9 @@
                 "trend_steady": "Stable",
                 "trend_unknown": "Inconnu",
                 "days": "jours",
-                "last_year": "52 dernières semaines"
+                "last_year": "52 dernières semaines",
+                "identity_tooltip": "Activité : {name}",
+                "show_identity": "Afficher l'identité"
             },
             "add_modal": {
                 "title": "Ajouter une activité",

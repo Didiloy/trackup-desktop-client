@@ -1,21 +1,30 @@
 <script setup lang="ts">
-defineProps<{
-    label: string
-    value: string | number
-    subValue?: string
-    icon: string
-    color: string
-    bg: string
-    loading?: boolean
-}>()
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+
+const props = withDefaults(
+    defineProps<{
+        label: string
+        value: string | number
+        subValue?: string
+        icon: string
+        color: string
+        bg: string
+        loading?: boolean
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 </script>
 
 <template>
     <div v-if="loading" class="h-32 rounded-2xl bg-surface-100 animate-pulse w-full"></div>
     <div
         v-else
-        class="p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm hover:shadow-md transition-shadow w-full h-full"
+        class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm hover:shadow-md transition-shadow w-full h-full text-left"
     >
+        <ActivityIdentityCorner :show="props.showIdentity" />
         <div class="flex items-start justify-between mb-4">
             <div :class="`p-3 rounded-xl ${bg} ${color}`">
                 <i :class="icon" class="text-xl"></i>
