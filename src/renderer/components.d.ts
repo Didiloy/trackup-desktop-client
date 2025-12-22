@@ -33,7 +33,7 @@ declare module 'vue' {
     ActivityPopularityWidget: typeof import('./src/components/widgets/activity/ActivityPopularityWidget.vue')['default']
     ActivityRankingWidget: typeof import('./src/components/widgets/activity/ActivityRankingWidget.vue')['default']
     ActivitySessionsHeatmap: typeof import('./src/components/widgets/activity/ActivitySessionsHeatmap.vue')['default']
-    ActivitySessionsTable: typeof import('./src/components/widgets/activity/ActivitySessionsTable.vue')['default']
+    ActivitySessionsTable: typeof import('./src/components/activities/profile/ActivitySessionsTable.vue')['default']
     ActivitySkillDistribution: typeof import('./src/components/activities/profile/ActivitySkillDistribution.vue')['default']
     ActivitySkillLevelsForm: typeof import('./src/components/activities/create-edit/ActivitySkillLevelsForm.vue')['default']
     ActivitySparkline: typeof import('./src/components/widgets/activity/ActivitySparkline.vue')['default']

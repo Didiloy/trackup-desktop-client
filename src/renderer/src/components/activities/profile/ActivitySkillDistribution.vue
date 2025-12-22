@@ -27,7 +27,7 @@ const skillDistribution = computed(() => {
         </p>
         <div class="space-y-2">
             <div v-for="lvl in skillDistribution" :key="lvl.name" class="flex items-center gap-3">
-                <span v-tooltip.top="lvl.name" class="text-xs text-surface-500 w-20 truncate">{{
+                <span :title="lvl.name" class="text-xs text-surface-500 w-20 truncate">{{
                     lvl.name
                 }}</span>
                 <div class="flex-1 h-2 rounded-full bg-surface-200 overflow-hidden">

@@ -69,7 +69,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5">
+    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5 w-full">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.performance_section.heatmap') }}
@@ -78,18 +78,14 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                 {{ t('views.activity.performance_section.last_year') }}
             </p>
         </div>
-        <div class="overflow-x-auto">
-            <div class="flex gap-1">
-                <div
-                    v-for="(week, weekIndex) in heatmapData"
-                    :key="weekIndex"
-                    class="flex flex-col gap-1"
-                >
+        <div class="w-full overflow-x-auto">
+            <div class="grid [grid-template-columns:repeat(52,minmax(0,1fr))] gap-1 min-w-full">
+                <div v-for="(week, weekIndex) in heatmapData" :key="weekIndex" class="grid grid-rows-7 gap-1">
                     <div
                         v-for="day in week"
                         :key="day.date.toISOString()"
+                        class="w-full aspect-square rounded-sm transition-colors duration-200"
                         v-tooltip.bottom="tooltipFor(day)"
-                        class="w-3 h-3 rounded-sm transition-colors duration-200"
                         :class="intensity(day.count)"
                     ></div>
                 </div>

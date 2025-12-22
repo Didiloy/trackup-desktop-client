@@ -6,7 +6,7 @@ import ActivityDurationWidget from '@/components/widgets/activity/ActivityDurati
 import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularityWidget.vue'
 import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikesWidget.vue'
 import ActivityTopContributors from '@/components/widgets/activity/ActivityTopContributors.vue'
-import ActivitySessionsTable from '@/components/widgets/activity/ActivitySessionsTable.vue'
+import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/widgets/activity/ActivityGrowthComparison.vue'
 import ActivitySkillDistribution from '@/components/activities/profile/ActivitySkillDistribution.vue'
 import ActivityMetadataList from '@/components/activities/profile/ActivityMetadataList.vue'
@@ -74,8 +74,14 @@ async function loadActivity(): Promise<void> {
             listMetadataDefinitions(serverId, activityId.value)
         ])
 
-        if (activityRes.error || !activityRes.data) throw new Error(activityRes.error)
-        if (detailsRes.error || !detailsRes.data) throw new Error(detailsRes.error)
+        if (activityRes.error || !activityRes.data) {
+            error.value = activityRes.error ?? t('messages.error.fetch')
+            return
+        }
+        if (detailsRes.error || !detailsRes.data) {
+            error.value = detailsRes.error ?? t('messages.error.fetch')
+            return
+        }
 
         activity.value = activityRes.data
         skillLevels.value = skillRes.data ?? []
@@ -96,7 +102,10 @@ async function loadSessions(page = sessions_page.value, rows = sessions_rows.val
             page,
             limit: rows
         })
-        if (res.error || !res.data) throw new Error(res.error)
+        if (res.error || !res.data) {
+            error.value = res.error ?? t('messages.error.fetch')
+            return
+        }
         sessions.value = res.data.data as unknown as IActivitySessionListItem[]
         sessions_total.value = res.data.total
         sessions_page.value = res.data.page
@@ -113,7 +122,10 @@ async function loadLastYearSessions(): Promise<void> {
     const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
         limit: 100
     })
-    if (res.error || !res.data) throw new Error(res.error)
+    if (res.error || !res.data) {
+        error.value = res.error ?? t('messages.error.fetch')
+        return
+    }
     last_year_sessions.value = res.data.data as unknown as IActivitySessionListItem[]
     //TODO: implement a real load last year because now it's just a dummy data
 }
@@ -134,7 +146,10 @@ async function confirmDelete(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
     try {
         const res = await deleteActivity(server_store.getPublicId, activityId.value)
-        if (res.error) throw new Error(res.error)
+        if (res.error) {
+            toast.add({ severity: 'error', summary: t('messages.error.delete'), detail: res.error, life: 2500 })
+            return
+        }
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
         await router.push({ name: 'ServerActivities', params: { id: server_store.getPublicId } })
     } catch (e) {
@@ -225,13 +240,16 @@ onMounted(async () => {
                         </div>
                     </div>
 
+                    <!-- Heatmap in its own full-width card -->
+                    <ActivitySessionsHeatmap :sessions="last_year_sessions" class="mb-6 w-full" />
+
+                    <!-- Recent sessions table in a separate card -->
                     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
                         <div class="flex items-center justify-between mb-4">
                             <p class="text-sm font-semibold text-surface-600">
                                 {{ t('views.activity.recent_sessions') }}
                             </p>
                         </div>
-                        <ActivitySessionsHeatmap :sessions="last_year_sessions" class="mb-6" />
                         <ActivitySessionsTable
                             :sessions="sessions"
                             :loading="sessions_loading"
