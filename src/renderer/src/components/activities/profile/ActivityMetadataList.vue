@@ -16,7 +16,7 @@ function formatTypeLabel(type?: string): string {
 }
 
 const hasMetadata = computed(() => {
-    return !!(props.metadataDefinitions && props.metadataDefinitions.length > 0)
+    return (props.metadataDefinitions && props.metadataDefinitions.length > 0)
 })
 
 function getIconForType(type: string): string {
@@ -34,7 +34,7 @@ function getIconForType(type: string): string {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.activity.add_modal.metadata_list') }}
         </p>

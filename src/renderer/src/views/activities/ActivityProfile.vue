@@ -8,7 +8,7 @@ import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikesWidg
 import ActivityTopContributors from '@/components/widgets/activity/ActivityTopContributors.vue'
 import ActivitySessionsTable from '@/components/widgets/activity/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/widgets/activity/ActivityGrowthComparison.vue'
-import ActivitySkillDistribution from '@/components/widgets/activity/ActivitySkillDistribution.vue'
+import ActivitySkillDistribution from '@/components/activities/profile/ActivitySkillDistribution.vue'
 import ActivityMetadataList from '@/components/activities/profile/ActivityMetadataList.vue'
 import ActivitySessionsHeatmap from '@/components/widgets/activity/ActivitySessionsHeatmap.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
@@ -187,44 +187,74 @@ onMounted(async () => {
             @delete="handleDelete"
         />
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <ActivityDurationWidget />
-            <ActivityPopularityWidget />
-            <ActivityLikesWidget />
-        </div>
+        <Tabs value="stats" class="mt-4">
+            <TabList class="mb-4">
+                <Tab value="stats">
+                    <div class="flex items-center gap-2 px-2">
+                        <i class="pi pi-chart-bar"></i>
+                        <span>{{ t('views.activity.tabs.stats') }}</span>
+                    </div>
+                </Tab>
+                <Tab value="details">
+                    <div class="flex items-center gap-2 px-2">
+                        <i class="pi pi-info-circle"></i>
+                        <span>{{ t('views.activity.tabs.details') }}</span>
+                    </div>
+                </Tab>
+            </TabList>
 
-        <ActivityTimelineChart class="mb-6" />
+            <TabPanels class="bg-transparent! p-0!">
+                <TabPanel value="stats">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <ActivityDurationWidget />
+                        <ActivityPopularityWidget />
+                        <ActivityLikesWidget />
+                    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-            <div class="space-y-5 min-w-0">
-                <ActivityRankingWidget />
-                <ActivityGrowthComparison />
-                <ActivityTopContributors />
-            </div>
-            <div class="space-y-5 min-w-0">
-                <ActivityParticipantsWidget />
-                <ActivityPatternsSummary />
-                <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
-                <ActivitySkillDistribution :skill-levels="skillLevels" />
-            </div>
-        </div>
+                    <ActivityTimelineChart class="mb-6" />
 
-        <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-                <p class="text-sm font-semibold text-surface-600">
-                    {{ t('views.activity.recent_sessions') }}
-                </p>
-            </div>
-            <ActivitySessionsHeatmap :sessions="last_year_sessions" class="mb-6" />
-            <ActivitySessionsTable
-                :sessions="sessions"
-                :loading="sessions_loading"
-                :total="sessions_total"
-                :page="sessions_page"
-                :rows="sessions_rows"
-                @page="handleSessionPage"
-            />
-        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                        <div class="space-y-5 min-w-0">
+                            <ActivityRankingWidget />
+                            <ActivityGrowthComparison />
+                            <ActivityTopContributors />
+                        </div>
+                        <div class="space-y-5 min-w-0">
+                            <ActivityParticipantsWidget />
+                            <ActivityPatternsSummary />
+                        </div>
+                    </div>
+
+                    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <p class="text-sm font-semibold text-surface-600">
+                                {{ t('views.activity.recent_sessions') }}
+                            </p>
+                        </div>
+                        <ActivitySessionsHeatmap :sessions="last_year_sessions" class="mb-6" />
+                        <ActivitySessionsTable
+                            :sessions="sessions"
+                            :loading="sessions_loading"
+                            :total="sessions_total"
+                            :page="sessions_page"
+                            :rows="sessions_rows"
+                            @page="handleSessionPage"
+                        />
+                    </div>
+                </TabPanel>
+
+                <TabPanel value="details">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                        <div class="space-y-5 min-w-0">
+                            <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
+                        </div>
+                        <div class="space-y-5 min-w-0">
+                            <ActivitySkillDistribution :skill-levels="skillLevels" />
+                        </div>
+                    </div>
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
 
         <ConfirmationDialog
             :model-value="show_delete_confirm"

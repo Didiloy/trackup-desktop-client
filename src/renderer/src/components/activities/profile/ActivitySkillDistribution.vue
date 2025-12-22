@@ -21,7 +21,7 @@ const skillDistribution = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.activity.performance_section.skill_levels_title') }}
         </p>

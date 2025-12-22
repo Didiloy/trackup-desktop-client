@@ -56,10 +56,10 @@ const rankPercent = computed(() => {
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-3xl font-bold text-surface-900">
-                        #{{ rankingData.rank }}
+                        {{ t('views.activity.ranking_title', { rank: rankingData.rank }) }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ t('views.activity.ranking_out_of', { total: rankingData.total_activities }) }}
+                        {{ t('views.activity.ranking_out_of', { rank: rankingData.rank, total: rankingData.total_activities }) }}
                     </p>
                 </div>
                 <div class="text-right">
