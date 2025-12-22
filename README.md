@@ -36,17 +36,21 @@ $ npm run build:linux
 ## TODO: Design de la page d'accueil:
 
 ### Section 1 — Activité personnelle
+
 - Dernières sessions
 - Carte “Activité favorite” avec mini sparkline ou top 3 activités favorite
 - Serveur favoris
 - Autres statistiques ?
 
 ### Section 2 — Mes serveurs
+
 Grille de cartes, sur chaque carte :
+
 - Nom
 - Membres actifs
 - Activité la plus utilisée
 
 ### Section 3 — Communauté
+
 - Activité récente de mes amis
 - Mes amis les plus actifs (si système d’amis plus tard)

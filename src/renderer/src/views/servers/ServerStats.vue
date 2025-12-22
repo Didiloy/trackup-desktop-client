@@ -18,7 +18,10 @@ const server_stats_store = useServerStatsStore()
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
-        <div v-if="server_stats_store.getError" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700">
+        <div
+            v-if="server_stats_store.getError"
+            class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700"
+        >
             {{ server_stats_store.getError }}
         </div>
 

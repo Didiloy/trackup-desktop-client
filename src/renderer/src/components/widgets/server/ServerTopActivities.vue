@@ -32,12 +32,19 @@ const maxSessions = computed(() => {
             </div>
         </div>
 
-        <div v-else-if="!server_stats_store.getDetails?.top_activities?.length" class="text-center py-8 text-surface-400">
+        <div
+            v-else-if="!server_stats_store.getDetails?.top_activities?.length"
+            class="text-center py-8 text-surface-400"
+        >
             {{ t('common.fields.none') }}
         </div>
 
         <div v-else class="space-y-5 max-h-[300px] overflow-y-auto pr-1">
-            <div v-for="activity in server_stats_store.getDetails.top_activities" :key="activity.activity_id" class="group">
+            <div
+                v-for="activity in server_stats_store.getDetails.top_activities"
+                :key="activity.activity_id"
+                class="group"
+            >
                 <div class="flex justify-between items-center mb-1.5">
                     <span class="text-sm font-medium text-surface-900 truncate pr-4">
                         {{ activity.activity_name }}

@@ -10,7 +10,10 @@ const server_stats_store = useServerStatsStore()
 <template>
     <BaseServerStatWidget
         :label="t('views.server_stats.avg_participants_per_session', 'Avg Participants')"
-        :value="server_stats_store.getDetails?.server_stats.avg_participants_per_session.toFixed(2) ?? '0.00'"
+        :value="
+            server_stats_store.getDetails?.server_stats.avg_participants_per_session.toFixed(2) ??
+            '0.00'
+        "
         icon="pi pi-user-plus"
         color="text-cyan-500"
         bg="bg-cyan-500/10"

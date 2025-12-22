@@ -36,10 +36,9 @@ export const useServerStatsStore = defineStore('server-stats', () => {
 
         // Filters
         selectedPeriodType: EPeriod.ALL_TIME as EPeriod | null,
-        period: [
-            new Date(new Date().setDate(new Date().getDate() - 30)),
-            new Date()
-        ] as Date[] | null
+        period: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date()] as
+            | Date[]
+            | null
     })
 
     // Getters
@@ -212,31 +211,37 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     }
 
     // Orchestration logic moved from component to store
-    watch(() => state.selectedPeriodType, async (newType) => {
-        const serverId = server_store.getPublicId
-        if (!serverId) return
-
-        if (newType) {
-            await fetchTimeline(serverId, {
-                period: newType,
-                limit: 365
-            })
-        }
-    })
-
-    // Watch for custom period changes to fetch enough data (Daily)
-    watch(() => state.period, async (newPeriod) => {
-        if (newPeriod && newPeriod.length === 2 && newPeriod[0] && newPeriod[1]) {
+    watch(
+        () => state.selectedPeriodType,
+        async (newType) => {
             const serverId = server_store.getPublicId
             if (!serverId) return
 
-            // Fetch daily timeline to allow precise filtering on the frontend
-            await fetchTimeline(serverId, {
-                period: EPeriod.DAILY,
-                limit: 365
-            })
+            if (newType) {
+                await fetchTimeline(serverId, {
+                    period: newType,
+                    limit: 365
+                })
+            }
         }
-    })
+    )
+
+    // Watch for custom period changes to fetch enough data (Daily)
+    watch(
+        () => state.period,
+        async (newPeriod) => {
+            if (newPeriod && newPeriod.length === 2 && newPeriod[0] && newPeriod[1]) {
+                const serverId = server_store.getPublicId
+                if (!serverId) return
+
+                // Fetch daily timeline to allow precise filtering on the frontend
+                await fetchTimeline(serverId, {
+                    period: EPeriod.DAILY,
+                    limit: 365
+                })
+            }
+        }
+    )
 
     return {
         // State/Getters

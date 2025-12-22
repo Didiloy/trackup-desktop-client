@@ -168,11 +168,11 @@ const isHexColor = (v?: string): boolean => {
                 <div class="flex items-center gap-2">
                     <i class="pi pi-tag text-surface-500"></i>
                     <span class="text-sm font-medium text-surface-700">
-                        {{t('common.fields.title') }}
+                        {{ t('common.fields.title') }}
                     </span>
                     <span class="text-xs text-surface-500 text-right">
-                    {{ title.length }}/{{ TITLE_MAX_LENGTH }}
-                </span>
+                        {{ title.length }}/{{ TITLE_MAX_LENGTH }}
+                    </span>
                 </div>
                 <InputText
                     v-model="title"
@@ -180,7 +180,6 @@ const isHexColor = (v?: string): boolean => {
                     :maxlength="TITLE_MAX_LENGTH"
                     class="w-full"
                 />
-
             </div>
 
             <!-- Activity -->

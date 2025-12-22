@@ -11,7 +11,9 @@ const server_stats_store = useServerStatsStore()
 <template>
     <BaseServerStatWidget
         :label="t('views.server_stats.total_duration', 'Total Duration')"
-        :value="formatMinutesToLabel(server_stats_store.getDetails?.server_stats.total_duration ?? 0)"
+        :value="
+            formatMinutesToLabel(server_stats_store.getDetails?.server_stats.total_duration ?? 0)
+        "
         icon="pi pi-clock"
         color="text-purple-500"
         bg="bg-purple-500/10"

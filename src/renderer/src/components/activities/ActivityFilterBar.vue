@@ -16,10 +16,7 @@ interface Props {
 interface Emits {
     (e: 'update:query', value: string): void
     (e: 'update:searchMode', value: ESearchMode): void
-    (
-        e: 'change',
-        payload: { query: string; searchMode: ESearchMode }
-    ): void
+    (e: 'change', payload: { query: string; searchMode: ESearchMode }): void
     (e: 'clear'): void
 }
 

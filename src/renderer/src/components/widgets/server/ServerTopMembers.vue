@@ -28,7 +28,10 @@ const { t } = useI18n()
             </div>
         </div>
 
-        <div v-else-if="!server_stats_store.getDetails?.top_members?.length" class="text-center py-8 text-surface-400">
+        <div
+            v-else-if="!server_stats_store.getDetails?.top_members?.length"
+            class="text-center py-8 text-surface-400"
+        >
             {{ t('common.fields.none') }}
         </div>
 

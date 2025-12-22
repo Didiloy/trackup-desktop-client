@@ -11,10 +11,7 @@ defineProps<{
 </script>
 
 <template>
-    <div
-        v-if="loading"
-        class="h-32 rounded-2xl bg-surface-100 animate-pulse w-full"
-    ></div>
+    <div v-if="loading" class="h-32 rounded-2xl bg-surface-100 animate-pulse w-full"></div>
     <div
         v-else
         class="p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm hover:shadow-md transition-shadow w-full h-full"

@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
     period: Date[] | null
@@ -29,18 +29,19 @@ const periodTypes = [
     { label: t('common.periods.custom'), value: VISUAL_CUSTOM }
 ]
 
+const isCustomSelected = ref(false)
+
 const selectedValue = computed({
     get: () => {
-        if (props.period) return VISUAL_CUSTOM
+        if (isCustomSelected.value || props.period) return VISUAL_CUSTOM
         return props.selectedPeriodType
     },
     set: (val: any) => {
         if (val === VISUAL_CUSTOM) {
-            // Selecting custom doesn't change the base period until a date is picked
-            // but we can set it to ALL_TIME as a base for filtering if needed
+            isCustomSelected.value = true
             emit('update:selectedPeriodType', EPeriod.ALL_TIME)
-            // We keep the period null until they pick one, or we can set a default
         } else {
+            isCustomSelected.value = false
             emit('update:selectedPeriodType', val as EPeriod)
             emit('update:period', null)
         }
@@ -64,8 +65,11 @@ function handleDateRangeChange(newRange: Date[] | null) {
             size="small"
             :placeholder="t('common.periods.select')"
         />
-        
-        <div v-if="selectedValue === VISUAL_CUSTOM" class="w-64 animate-in fade-in slide-in-from-left-2 duration-300">
+
+        <div
+            v-if="selectedValue === VISUAL_CUSTOM"
+            class="w-64 animate-in fade-in slide-in-from-left-2 duration-300"
+        >
             <DateRangeFilter
                 :model-value="props.period"
                 @update:model-value="handleDateRangeChange"

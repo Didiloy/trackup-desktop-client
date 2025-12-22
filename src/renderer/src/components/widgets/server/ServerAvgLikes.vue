@@ -10,7 +10,9 @@ const server_stats_store = useServerStatsStore()
 <template>
     <BaseServerStatWidget
         :label="t('views.server_stats.avg_likes_per_session', 'Avg Likes/Session')"
-        :value="server_stats_store.getDetails?.server_stats.avg_likes_per_session.toFixed(2) ?? '0.00'"
+        :value="
+            server_stats_store.getDetails?.server_stats.avg_likes_per_session.toFixed(2) ?? '0.00'
+        "
         icon="pi pi-thumbs-up"
         color="text-pink-500"
         bg="bg-pink-500/10"

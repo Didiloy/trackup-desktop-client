@@ -4,4 +4,3 @@ export enum ESearchMode {
     ENDS_WITH = 'endsWith',
     EXACT = 'exact'
 }
-
