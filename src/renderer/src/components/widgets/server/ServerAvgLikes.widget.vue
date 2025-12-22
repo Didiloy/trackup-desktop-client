@@ -3,6 +3,17 @@ import { useI18n } from 'vue-i18n'
 import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-avg-likes',
+        title: 'Likes Moyens',
+        icon: 'pi pi-thumbs-up',
+        description: 'Affiche le nombre moyen de likes par session',
+        category: 'server',
+        defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
+    }
+})
+
 const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
 </script>

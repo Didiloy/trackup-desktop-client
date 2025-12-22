@@ -80,8 +80,18 @@
             "add_widget": "Ajouter un widget"
         },
         "widgets": {
+            "title": "Widgets",
             "dashboard": "Tableau de bord",
-            "add_widget": "Ajouter un widget",
+            "add_widget": "Ajouter un Widget",
+            "remove_widget": "Retirer",
+            "reset_layout": "Réinitialiser",
+            "no_widgets": "Aucun widget ajouté. Cliquez sur 'Ajouter un Widget' pour commencer.",
+            "select_widget": "Sélectionner un Widget",
+            "widget_added": "Widget ajouté",
+            "widget_removed": "Widget supprimé",
+            "layout_reset": "Disposition réinitialisée",
+            "available_widgets": "Widgets Disponibles",
+            "no_available": "Tous les widgets sont déjà ajoutés",
             "all_added": "Tous les widgets ont été ajoutés"
         },
         "misc": {

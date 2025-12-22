@@ -5,6 +5,17 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-patterns-summary',
+        title: 'Résumé des Tendances',
+        icon: 'pi pi-calendar',
+        description: 'Affiche les tendances temporelles de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

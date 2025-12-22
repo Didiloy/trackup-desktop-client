@@ -6,6 +6,17 @@ import { useServerStatsStore } from '@/stores/server-stats'
 import { useServerStore } from '@/stores/server'
 import type { IServerGrowthResponse } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-growth-trends',
+        title: 'Tendances de Croissance',
+        icon: 'pi pi-arrow-up-right',
+        description: 'Affiche les tendances de croissance du serveur',
+        category: 'server',
+        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
+    }
+})
+
 const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
 const server_store = useServerStore()

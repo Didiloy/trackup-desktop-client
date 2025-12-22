@@ -6,6 +6,17 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-activities-distribution',
+        title: 'Distribution Activités',
+        icon: 'pi pi-chart-pie',
+        description: 'Affiche la distribution des activités par durée',
+        category: 'server',
+        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
+    }
+})
+
 const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
 

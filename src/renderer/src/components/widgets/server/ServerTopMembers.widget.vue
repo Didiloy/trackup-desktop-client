@@ -5,6 +5,17 @@ import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-top-members',
+        title: 'Top Membres',
+        icon: 'pi pi-star',
+        description: 'Affiche les membres les plus actifs du serveur',
+        category: 'server',
+        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
+    }
+})
+
 const server_store = useServerStore()
 const server_stats_store = useServerStatsStore()
 const { t } = useI18n()

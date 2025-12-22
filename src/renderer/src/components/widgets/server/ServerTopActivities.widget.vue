@@ -4,6 +4,17 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { computed } from 'vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-top-activities',
+        title: 'Top Activités',
+        icon: 'pi pi-trophy',
+        description: 'Affiche les activités les plus populaires',
+        category: 'server',
+        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
+    }
+})
+
 const server_stats_store = useServerStatsStore()
 const { t } = useI18n()
 

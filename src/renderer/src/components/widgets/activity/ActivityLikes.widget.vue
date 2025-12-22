@@ -4,6 +4,18 @@ import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-likes',
+        title: 'Likes',
+        icon: 'pi pi-heart',
+        description: 'Affiche le nombre total de likes',
+        category: 'activity',
+        defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

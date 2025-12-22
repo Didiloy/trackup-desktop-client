@@ -7,6 +7,17 @@ import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-ranking',
+        title: 'Classement',
+        icon: 'pi pi-chart-bar',
+        description: 'Affiche le classement de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

@@ -6,6 +6,17 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-duration',
+        title: 'Durée Moyenne',
+        icon: 'pi pi-clock',
+        description: 'Affiche la durée moyenne de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

@@ -7,6 +7,17 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-sessions-heatmap',
+        title: 'Carte de Chaleur',
+        icon: 'pi pi-table',
+        description: 'Affiche la carte de chaleur des sessions',
+        category: 'activity',
+        defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

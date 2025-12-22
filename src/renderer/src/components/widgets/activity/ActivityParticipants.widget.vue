@@ -4,6 +4,17 @@ import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-participants',
+        title: 'Participants',
+        icon: 'pi pi-users',
+        description: 'Affiche les statistiques de participants',
+        category: 'activity',
+        defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

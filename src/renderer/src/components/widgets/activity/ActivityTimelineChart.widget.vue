@@ -12,6 +12,17 @@ import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-timeline-chart',
+        title: 'Graphique Timeline',
+        icon: 'pi pi-chart-line',
+        description: 'Affiche l\'évolution des statistiques de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         height?: number

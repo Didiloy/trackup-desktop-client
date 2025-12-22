@@ -8,6 +8,17 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-growth-comparison',
+        title: 'Comparaison de Croissance',
+        icon: 'pi pi-chart-bar',
+        description: 'Compare la croissance de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean

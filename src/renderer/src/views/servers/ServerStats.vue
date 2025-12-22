@@ -1,22 +1,24 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import ServerHeader from '@/components/servers/profile/ServerHeader.vue'
-import ServerTotalSessionsWidget from '@/components/widgets/server/ServerTotalSessions.widget.vue'
-import ServerActiveMembersWidget from '@/components/widgets/server/ServerActiveMembers.widget.vue'
-import ServerTotalDurationWidget from '@/components/widgets/server/ServerTotalDuration.widget.vue'
-import ServerTotalActivitiesWidget from '@/components/widgets/server/ServerTotalActivities.widget.vue'
-import ServerEngagementScoreWidget from '@/components/widgets/server/ServerEngagementScore.widget.vue'
-import ServerAvgLikesWidget from '@/components/widgets/server/ServerAvgLikes.widget.vue'
-import ServerAvgParticipantsWidget from '@/components/widgets/server/ServerAvgParticipants.widget.vue'
-import ServerTimelineChartWidget from '@/components/widgets/server/ServerTimelineChart.widget.vue'
-import ServerTopMembersWidget from '@/components/widgets/server/ServerTopMembers.widget.vue'
-import ServerTopActivitiesWidget from '@/components/widgets/server/ServerTopActivities.widget.vue'
-import ServerActivitiesDistributionWidget from '@/components/widgets/server/ServerActivitiesDistribution.widget.vue'
-import ServerGrowthTrendsWidget from '@/components/widgets/server/ServerGrowthTrends.widget.vue'
-import { useServerStatsStore } from '@/stores/server-stats'
+import WidgetDashboard from '@/components/widgets/WidgetDashboard.vue'
 
-
+const route = useRoute()
+const serverId = computed(() => route.params.id as string)
 </script>
 
 <template>
 
+            <WidgetDashboard context="server" :entity-id="serverId" />
+
 </template>
+
+<style scoped>
+.server-stats-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+</style>
+

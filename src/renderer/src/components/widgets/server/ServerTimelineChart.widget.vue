@@ -10,6 +10,17 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-timeline-chart',
+        title: 'Graphique Timeline',
+        icon: 'pi pi-chart-line',
+        description: 'Affiche l\'évolution des statistiques du serveur',
+        category: 'server',
+        defaultSize: { w: 12, h: 8, minW: 6, minH: 8 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         height?: number

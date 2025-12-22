@@ -4,6 +4,17 @@ import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'server-total-duration',
+        title: 'Durée Totale',
+        icon: 'pi pi-clock',
+        description: 'Affiche la durée totale des sessions',
+        category: 'server',
+        defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
+    }
+})
+
 const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
 </script>

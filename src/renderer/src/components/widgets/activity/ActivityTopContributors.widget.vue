@@ -6,6 +6,17 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 import { computed } from 'vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
+defineOptions({
+    widgetMetadata: {
+        id: 'activity-top-contributors',
+        title: 'Top Contributeurs',
+        icon: 'pi pi-star',
+        description: 'Affiche les meilleurs contributeurs de l\'activité',
+        category: 'activity',
+        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
+    }
+})
+
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
