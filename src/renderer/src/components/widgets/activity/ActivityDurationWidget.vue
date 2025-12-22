@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -31,7 +32,10 @@ const value = computed(() =>
         icon="pi pi-clock"
         color="text-primary-500"
         bg="bg-primary-50"
-        :show-identity="props.showIdentity"
         :loading="loading"
-    />
+    >
+        <template #corner>
+            <ActivityIdentityCorner :show="props.showIdentity" />
+        </template>
+    </BaseOverviewStatWidget>
 </template>

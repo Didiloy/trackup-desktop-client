@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
+import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
@@ -29,5 +30,9 @@ const value = computed(() => (statsData.value?.popularity_score ?? 0).toFixed(0)
         bg="bg-amber-50"
         :show-identity="props.showIdentity"
         :loading="loading"
-    />
+    >
+        <template #corner>
+            <ActivityIdentityCorner :show="props.showIdentity" />
+        </template>
+    </BaseOverviewStatWidget>
 </template>
