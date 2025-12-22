@@ -5,6 +5,14 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 const { t } = useI18n()
 const activity_stats_store = useActivityStatsStore()
 
@@ -23,6 +31,7 @@ const value = computed(() =>
         icon="pi pi-clock"
         color="text-primary-500"
         bg="bg-primary-50"
+        :show-identity="props.showIdentity"
         :loading="loading"
     />
 </template>

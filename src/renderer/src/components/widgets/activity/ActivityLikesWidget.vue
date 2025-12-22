@@ -3,7 +3,14 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+    }>(),
+    {
+        showIdentity: true
+    }
+)
 const { t } = useI18n()
 const activity_stats_store = useActivityStatsStore()
 
@@ -27,6 +34,7 @@ const subValue = computed(() => {
         icon="pi pi-heart-fill"
         color="text-red-500"
         bg="bg-red-50"
+        :show-identity="props.showIdentity"
         :loading="loading"
     />
 </template>

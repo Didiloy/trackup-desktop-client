@@ -33,7 +33,6 @@ import ActivityTimelineChart from '@/components/widgets/activity/ActivityTimelin
 import ActivityRankingWidget from '@/components/widgets/activity/ActivityRankingWidget.vue'
 import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipantsWidget.vue'
 import ActivityPatternsSummary from '@/components/widgets/activity/ActivityPatternsSummary.vue'
-import ActivitySparkline from '@/components/widgets/activity/ActivitySparkline.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -213,29 +212,27 @@ onMounted(async () => {
             <TabPanels class="bg-transparent! p-0!">
                 <TabPanel value="stats">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <ActivityDurationWidget />
-                        <ActivityPopularityWidget />
-                        <ActivityLikesWidget />
+                        <ActivityDurationWidget :show-identity="false" />
+                        <ActivityPopularityWidget :show-identity="false" />
+                        <ActivityLikesWidget :show-identity="false" />
                     </div>
 
-                    <ActivityTimelineChart class="mb-6" />
+                    <ActivityTimelineChart :show-identity="false" class="mb-6" />
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                         <div class="space-y-5 min-w-0">
-                            <ActivityRankingWidget />
-                            <ActivityGrowthComparison />
-                            <ActivityTopContributors />
+                            <ActivityRankingWidget :show-identity="false" />
+                            <ActivityGrowthComparison :show-identity="false" />
+                            <ActivityTopContributors :show-identity="false" />
                         </div>
                         <div class="space-y-5 min-w-0">
-                            <ActivityParticipantsWidget />
-                            <ActivityPatternsSummary />
+                            <ActivityParticipantsWidget :show-identity="false" />
+                            <ActivityPatternsSummary :show-identity="false" />
                         </div>
                     </div>
 
                     <!-- Heatmap in its own full-width card -->
-                    <ActivitySessionsHeatmap class="mb-6 w-full" />
-
-                    <ActivitySparkline class="mb-6 w-full" />
+                    <ActivitySessionsHeatmap :show-identity="false" class="mb-6 w-full" />
 
                     <!-- Recent sessions table in a separate card -->
                     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
