@@ -452,6 +452,7 @@
                 "patterns": "Patrons d'activité",
                 "peak_day": "Jour de pic",
                 "peak_hour": "Heure de pic",
+                "avg_session_hours": "Durée moy. session (h)",
                 "current_streak": "Série en cours",
                 "longest_streak": "Plus longue série",
                 "likes_per_session": "Mentions j'aime / session",

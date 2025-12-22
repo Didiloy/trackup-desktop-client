@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
-import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsStore } from '@/stores/activity-stats'
 
 const props = defineProps<{
     activity: IActivity | null
-    stats: IActivityStatsDetails | null
 }>()
 
 const emit = defineEmits<{
@@ -19,6 +18,9 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const server_store = useServerStore()
+const activity_stats_store = useActivityStatsStore()
+
+const stats = computed(() => activity_stats_store.getDetails)
 
 const canDelete = computed(() => {
     if (!props.activity) {
@@ -28,21 +30,21 @@ const canDelete = computed(() => {
 })
 
 const summaryMetrics = computed(() => {
-    if (!props.stats) {
+    if (!stats.value) {
         return []
     }
     return [
         {
             label: t('views.activity.card.sessions'),
-            value: props.stats.total_sessions.toLocaleString()
+            value: stats.value.total_sessions.toLocaleString()
         },
         {
             label: t('views.activity.card.duration'),
-            value: `${formatMinutesToLabel(props.stats.total_duration)}`
+            value: `${formatMinutesToLabel(stats.value.total_duration)}`
         },
         {
             label: t('views.activity.card.unique_participants'),
-            value: props.stats.unique_participants.toLocaleString()
+            value: stats.value.unique_participants.toLocaleString()
         }
     ]
 })

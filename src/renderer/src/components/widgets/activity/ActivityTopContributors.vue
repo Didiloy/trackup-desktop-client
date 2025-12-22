@@ -1,35 +1,29 @@
 <script setup lang="ts">
-import type { ITopContributor } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
-import { onMounted } from 'vue'
-
-const props = defineProps<{
-    contributors: ITopContributor[] | undefined
-}>()
+import { useActivityStatsStore } from '@/stores/activity-stats'
+import { computed } from 'vue'
 
 const { t } = useI18n()
 const server_store = useServerStore()
+const activity_stats_store = useActivityStatsStore()
 
-onMounted(async () => {
-    console.log(server_store.getMembers)
-    console.log(props.contributors)
-})
+const contributorsData = computed(() => activity_stats_store.getDetails?.top_contributors || [])
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.card.top_contributor') }}
             </p>
-            <span class="text-xs text-surface-400">{{ props.contributors?.length || 0 }} </span>
+            <span class="text-xs text-surface-400">{{ contributorsData.length }} </span>
         </div>
 
         <div class="space-y-3">
             <div
-                v-for="member in props.contributors || []"
+                v-for="member in contributorsData"
                 :key="member.member_id"
                 class="flex items-center gap-3 p-3 rounded-2xl bg-surface-100 ring-1 ring-surface-200/60"
             >
@@ -54,7 +48,7 @@ onMounted(async () => {
             </div>
         </div>
 
-        <div v-if="!props.contributors?.length" class="text-sm text-surface-400 text-center py-4">
+        <div v-if="!contributorsData.length" class="text-sm text-surface-400 text-center py-4">
             {{ t('common.fields.none') }}
         </div>
     </div>

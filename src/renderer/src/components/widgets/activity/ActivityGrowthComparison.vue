@@ -1,55 +1,143 @@
 <script setup lang="ts">
-import type { IActivityGrowthTrend } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-const props = defineProps<{
-    growth?: IActivityGrowthTrend | null
-}>()
+import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useServerStore } from '@/stores/server'
+import { useRoute } from 'vue-router'
+import { EPeriod } from '@shared/contracts/enums/period.enum'
+import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 
 const { t } = useI18n()
+const route = useRoute()
+const activity_stats_store = useActivityStatsStore()
+const server_store = useServerStore()
+const activityId = computed(() => route.params.activityId as string)
 
-const statusText = computed(() => {
-    const value = props.growth?.growth_percent ?? 0
-    return value >= 0
-        ? t('views.activity.performance_section.trend_up')
-        : t('views.activity.performance_section.trend_down')
+const selectedPeriod = ref<EPeriod>(EPeriod.MONTHLY)
+
+async function fetchGrowth(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId || !activityId.value) return
+    await activity_stats_store.fetchGrowthTrends(serverId, activityId.value, {
+        period: selectedPeriod.value
+    })
+}
+
+onMounted(() => {
+    void fetchGrowth()
 })
 
-const trendText = computed(() => {
-    const raw = (props.growth?.trend || '').toString().toLowerCase()
-    if (!raw) return t('views.activity.performance_section.trend_unknown')
-    if (raw === 'up' || raw === 'increasing') {
-        return t('views.activity.performance_section.trend_up')
-    }
-    if (raw === 'down' || raw === 'decreasing') {
-        return t('views.activity.performance_section.trend_down')
-    }
-    if (raw === 'steady' || raw === 'stable') {
-        return t('views.activity.performance_section.trend_steady')
-    }
-    // fallback to raw if not matched
-    return raw
+watch(selectedPeriod, () => {
+    void fetchGrowth()
 })
+
+watch(
+    () => [server_store.getPublicId, activityId.value],
+    () => {
+        void fetchGrowth()
+    }
+)
+
+const growthTrends = computed(() => activity_stats_store.getGrowthTrends)
+const isLoading = computed(() => activity_stats_store.isGrowthLoading)
+
+const metrics = computed(() => {
+    if (!growthTrends.value) return []
+    const g = growthTrends.value
+    return [
+        {
+            label: t('views.server_stats.sessions'),
+            current: g.sessions?.current_value ?? 0,
+            previous: g.sessions?.previous_value ?? 0,
+            percent: g.sessions?.change_percent ?? 0,
+            change: g.sessions?.change ?? 0
+        },
+        {
+            label: t('views.server_stats.duration'),
+            current: g.duration?.current_value ?? 0,
+            previous: g.duration?.previous_value ?? 0,
+            percent: g.duration?.change_percent ?? 0,
+            change: g.duration?.change ?? 0,
+            isDuration: true
+        },
+        {
+            label: t('views.server_stats.unique_members'),
+            current: g.unique_members?.current_value ?? 0,
+            previous: g.unique_members?.previous_value ?? 0,
+            percent: g.unique_members?.change_percent ?? 0,
+            change: g.unique_members?.change ?? 0
+        }
+    ]
+})
+
+function formatValue(val: number, isDuration?: boolean): string {
+    if (isDuration) {
+        const h = Math.floor(val / 60)
+        const m = Math.floor(val % 60)
+        return h > 0 ? `${h}h ${m}m` : `${m}m`
+    }
+    return val.toLocaleString()
+}
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs uppercase text-surface-500 font-semibold">
-                    {{ t('views.activity.evolution_30_days') }}
-                </p>
-                <p class="text-4xl font-bold text-surface-900">
-                    {{ props.growth?.growth_percent?.toFixed(1) ?? '0' }}%
-                </p>
-                <p class="text-sm text-surface-500">
-                    {{ statusText }}
-                </p>
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+            <p class="text-sm font-semibold text-surface-600">
+                {{ t('views.activity.evolution_comparison') }}
+            </p>
+            <PeriodSelector
+                :period="null"
+                v-model:selected-period-type="selectedPeriod"
+                :show-custom="false"
+            />
+        </div>
+
+        <div v-if="isLoading" class="flex-1 flex items-center justify-center py-10">
+            <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
+        </div>
+
+        <div v-else-if="growthTrends" class="space-y-4 flex-1">
+            <div
+                v-for="metric in metrics"
+                :key="metric.label"
+                class="bg-surface-0 rounded-2xl p-4 ring-1 ring-surface-200/60 transition-all hover:bg-surface-50"
+            >
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider">
+                        {{ metric.label }}
+                    </p>
+                    <span
+                        class="text-xs font-bold px-2 py-0.5 rounded-full"
+                        :class="metric.percent >= 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'"
+                    >
+                        {{ metric.percent >= 0 ? '+' : '' }}{{ metric.percent.toFixed(1) }}%
+                    </span>
+                </div>
+
+                <div class="flex items-end justify-between">
+                    <div>
+                        <p class="text-2xl font-bold text-surface-900">
+                            {{ formatValue(metric.current, metric.isDuration) }}
+                        </p>
+                        <p class="text-[10px] text-surface-400 mt-1">
+                            {{ t('views.activity.previous_period') }}: {{ formatValue(metric.previous, metric.isDuration) }}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <i
+                            class="pi text-xl"
+                            :class="[
+                                metric.change >= 0 ? 'pi-arrow-up-right text-emerald-500' : 'pi-arrow-down-right text-red-500'
+                            ]"
+                        ></i>
+                    </div>
+                </div>
             </div>
-            <div class="text-xs px-3 py-1 rounded-full bg-primary-100 text-primary-600">
-                {{ trendText }}
-            </div>
+        </div>
+
+        <div v-else class="flex-1 flex items-center justify-center py-10 text-surface-400 text-sm">
+            {{ t('common.fields.none') }}
         </div>
     </div>
 </template>

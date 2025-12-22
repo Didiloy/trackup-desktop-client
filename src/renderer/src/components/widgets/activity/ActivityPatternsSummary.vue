@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type { IActivityTimePatterns } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-const props = defineProps<{
-    patterns?: IActivityTimePatterns | null
-}>()
+import { useActivityStatsStore } from '@/stores/activity-stats'
 
 const { t } = useI18n()
+const activity_stats_store = useActivityStatsStore()
+
+const patternsData = computed(() => activity_stats_store.getDetails?.time_patterns)
 
 const dayNames = computed(() => [
     t('common.weekdays.short.sunday'),
@@ -24,22 +23,33 @@ function formatDay(value: number | null | undefined): string {
     return dayNames.value[value] ?? t('common.fields.none')
 }
 
-function formatHour(value: number | null | undefined): string {
-    if (value === null || value === undefined) return t('common.fields.none')
-    const hours = Math.floor(value)
-    return `${hours}h`
-}
 
 const cards = computed(() => {
-    const p = props.patterns
+    const p = patternsData.value
     return [
         {
             label: t('views.activity.performance_section.peak_day'),
             value: formatDay(p?.peak_day_of_week)
         },
         {
+            icon: 'pi pi-clock',
             label: t('views.activity.performance_section.peak_hour'),
-            value: formatHour(p?.peak_hour)
+            value:
+                p?.peak_hour !== null && p?.peak_hour !== undefined
+                    ? `${p.peak_hour}h`
+                    : t('common.fields.none'),
+            color: 'text-violet-500',
+            bg: 'bg-violet-100'
+        },
+        {
+            icon: 'pi pi-hourglass',
+            label: t('views.activity.performance_section.avg_session_hours'),
+            value:
+                p?.avg_session_hours !== undefined
+                    ? `${p.avg_session_hours.toFixed(1)}h`
+                    : t('common.fields.none'),
+            color: 'text-pink-500',
+            bg: 'bg-pink-100'
         },
         {
             label: t('views.activity.performance_section.current_streak'),
@@ -62,7 +72,7 @@ const cards = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.activity.performance_section.patterns') }}
         </p>

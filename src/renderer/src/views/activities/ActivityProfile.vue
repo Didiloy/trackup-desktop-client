@@ -2,8 +2,9 @@
 import { useRoute } from 'vue-router'
 import { computed, onMounted, ref, watch } from 'vue'
 import ActivityDetailHeader from '@/components/activities/profile/ActivityDetailHeader.vue'
-import ActivityStatsOverview from '@/components/activities/profile/ActivityStatsOverview.vue'
-import ActivityPerformanceSection from '@/components/widgets/activity/ActivityPerformanceSection.vue'
+import ActivityDurationWidget from '@/components/widgets/activity/ActivityDurationWidget.vue'
+import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularityWidget.vue'
+import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikesWidget.vue'
 import ActivityTopContributors from '@/components/widgets/activity/ActivityTopContributors.vue'
 import ActivitySessionsTable from '@/components/widgets/activity/ActivitySessionsTable.vue'
 import ActivityGrowthComparison from '@/components/widgets/activity/ActivityGrowthComparison.vue'
@@ -13,15 +14,14 @@ import ActivitySessionsHeatmap from '@/components/widgets/activity/ActivitySessi
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
-import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsStore } from '@/stores/activity-stats'
 import type {
     IActivity,
     IActivitySessionListItem
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
-import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { useToast } from 'primevue/usetoast'
@@ -29,6 +29,10 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import ActivityEditDialog from '@/components/activities/create-edit/ActivityEditDialog.vue'
+import ActivityTimelineChart from '@/components/widgets/activity/ActivityTimelineChart.vue'
+import ActivityRankingWidget from '@/components/widgets/activity/ActivityRankingWidget.vue'
+import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipantsWidget.vue'
+import ActivityPatternsSummary from '@/components/widgets/activity/ActivityPatternsSummary.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -37,13 +41,12 @@ const router = useRouter()
 const activityId = computed(() => route.params.activityId as string)
 
 const { getActivityById, listActivitySessions, deleteActivity } = useActivityCRUD()
-const { getActivityStatsDetails } = useActivityStatsCRUD()
+const activity_stats_store = useActivityStatsStore()
 const { listSkillLevels } = useActivitySkillLevelCRUD()
 const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
 const activity = ref<IActivity | null>(null)
-const details = ref<IActivityStatsDetails | null>(null)
 const skillLevels = ref<IActivitySkillLevel[]>([])
 const metadataDefinitions = ref<IActivityMetadataDefinition[]>([])
 const sessions = ref<IActivitySessionListItem[]>([])
@@ -66,7 +69,7 @@ async function loadActivity(): Promise<void> {
         const serverId = server_store.getPublicId
         const [activityRes, detailsRes, skillRes, metadataRes] = await Promise.all([
             getActivityById(serverId, activityId.value),
-            getActivityStatsDetails(serverId, activityId.value),
+            activity_stats_store.fetchDetails(serverId, activityId.value),
             listSkillLevels(serverId, activityId.value),
             listMetadataDefinitions(serverId, activityId.value)
         ])
@@ -75,7 +78,6 @@ async function loadActivity(): Promise<void> {
         if (detailsRes.error || !detailsRes.data) throw new Error(detailsRes.error)
 
         activity.value = activityRes.data
-        details.value = detailsRes.data
         skillLevels.value = skillRes.data ?? []
         metadataDefinitions.value = metadataRes.data ?? []
         await loadSessions()
@@ -149,10 +151,7 @@ async function handleSessionCreated(): Promise<void> {
     await loadSessions()
     // Also reload stats as they might have changed
     if (server_store.getPublicId && activityId.value) {
-        const detailsRes = await getActivityStatsDetails(server_store.getPublicId, activityId.value)
-        if (!detailsRes.error && detailsRes.data) {
-            details.value = detailsRes.data
-        }
+        await activity_stats_store.fetchDetails(server_store.getPublicId, activityId.value)
     }
 }
 
@@ -183,26 +182,31 @@ onMounted(async () => {
 
         <ActivityDetailHeader
             :activity="activity"
-            :stats="details"
             @create-session="show_create_session_dialog = true"
             @edit="handleEdit"
             @delete="handleDelete"
         />
 
-        <ActivityStatsOverview v-if="details" :stats="details" class="mb-6" />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <ActivityDurationWidget />
+            <ActivityPopularityWidget />
+            <ActivityLikesWidget />
+        </div>
 
-        <ActivityPerformanceSection
-            class="mb-6"
-            :timeline="details?.timeline"
-            :growth="details?.growth_trend"
-            :patterns="details?.time_patterns"
-        />
+        <ActivityTimelineChart class="mb-6" />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-            <ActivityTopContributors :contributors="details?.top_contributors" />
-            <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
-            <ActivitySkillDistribution :skill-levels="skillLevels" />
-            <ActivityGrowthComparison :growth="details?.growth_trend" />
+            <div class="space-y-5 min-w-0">
+                <ActivityRankingWidget />
+                <ActivityGrowthComparison />
+                <ActivityTopContributors />
+            </div>
+            <div class="space-y-5 min-w-0">
+                <ActivityParticipantsWidget />
+                <ActivityPatternsSummary />
+                <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
+                <ActivitySkillDistribution :skill-levels="skillLevels" />
+            </div>
         </div>
 
         <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200/60 p-5 shadow-sm">
