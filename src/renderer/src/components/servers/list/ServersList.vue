@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useServerList } from '@/composables/servers/useServerList'
 import { useServerNavigation } from '@/composables/servers/useServerNavigation'
 import ServersListItems from './ServersListItems.vue'
-import ServerCreateJoinDialog from '../create-join/ServerCreateJoinDialog.vue'
+import ServerCreateEditJoinDialog from '../create-join/ServerCreateEditJoinDialog.vue'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 
 // Server list management
@@ -36,5 +36,5 @@ async function handleServerAction(server: IServer): Promise<void> {
         @server-action-click="handleOpenActionDialog"
     />
 
-    <ServerCreateJoinDialog v-model="show_action_dialog" @server-action="handleServerAction" />
+    <ServerCreateEditJoinDialog v-model="show_action_dialog" @server-action="handleServerAction" />
 </template>

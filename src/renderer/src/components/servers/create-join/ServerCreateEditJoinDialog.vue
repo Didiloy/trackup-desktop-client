@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
-import CreateServerForm from '@/components/servers/create-join/CreateServerForm.vue'
+import CreateEditServerForm from '@/components/servers/create-join/CreateEditServerForm.vue'
 import JoinServerForm from '@/components/servers/create-join/JoinServerForm.vue'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 import { useI18n } from 'vue-i18n'
@@ -144,7 +144,7 @@ function closeDialog(): void {
             </div>
 
             <!-- Create/Edit server form -->
-            <CreateServerForm
+            <CreateEditServerForm
                 v-else-if="current_action === 'create'"
                 :mode="props.mode"
                 @saved="handleServerAction"

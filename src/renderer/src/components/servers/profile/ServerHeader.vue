@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
-import ServerCreateJoinDialog from '@/components/servers/create-join/ServerCreateJoinDialog.vue'
+import ServerCreateEditJoinDialog from '@/components/servers/create-join/ServerCreateEditJoinDialog.vue'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 
 const { t } = useI18n()
@@ -123,7 +123,7 @@ function handleServerUpdated(updated: IServer): void {
         </div>
 
         <!-- Edit Dialog -->
-        <ServerCreateJoinDialog
+        <ServerCreateEditJoinDialog
             v-model="showEditDialog"
             mode="edit"
             @server-action="handleServerUpdated"
