@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import BaseServerStatWidget from './BaseServerStatWidget.vue'
+import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
 const { t } = useI18n()
@@ -8,7 +8,7 @@ const server_stats_store = useServerStatsStore()
 </script>
 
 <template>
-    <BaseServerStatWidget
+    <BaseOverviewStatWidget
         :label="t('views.server_stats.avg_likes_per_session', 'Avg Likes/Session')"
         :value="
             server_stats_store.getDetails?.server_stats.avg_likes_per_session.toFixed(2) ?? '0.00'
