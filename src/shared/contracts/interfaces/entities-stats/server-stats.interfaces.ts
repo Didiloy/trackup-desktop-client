@@ -52,11 +52,31 @@ export interface IServerGrowthTrends {
     members: IGrowthMetric
 }
 
+export interface IGrowthPeriodData {
+    total_sessions: number
+    total_duration: number
+    total_members: number
+    active_members: number
+}
+
+export interface IGrowthRates {
+    sessions_growth_rate: number
+    duration_growth_rate: number
+    members_growth_rate: number
+    active_members_growth_rate: number
+}
+
 export interface IServerGrowthResponse {
-    current_period: IGrowthMetric
-    previous_period: IGrowthMetric
-    growth_rates: IGrowthMetric
-    period_info?: Record<string, unknown>
+    current_period: IGrowthPeriodData
+    previous_period: IGrowthPeriodData
+    growth_rates: IGrowthRates
+    period_info: {
+        period_type: EPeriod
+        current_start: string
+        current_end: string
+        previous_start: string
+        previous_end: string
+    }
 }
 
 // ============================================================================

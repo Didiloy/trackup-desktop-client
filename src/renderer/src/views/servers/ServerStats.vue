@@ -11,6 +11,7 @@ import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart
 import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
 import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
 import ServerActivitiesDistribution from '@/components/widgets/server/ServerActivitiesDistribution.vue'
+import ServerGrowthTrends from '@/components/widgets/server/ServerGrowthTrends.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
 const server_stats_store = useServerStatsStore()
@@ -46,9 +47,10 @@ const server_stats_store = useServerStatsStore()
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <ServerTopMembers />
             <ServerTopActivities />
+            <ServerGrowthTrends />
         </div>
     </div>
 </template>

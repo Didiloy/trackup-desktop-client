@@ -109,6 +109,7 @@ declare module 'vue' {
     ServerEngagementScore: typeof import('./src/components/widgets/server/ServerEngagementScore.vue')['default']
     ServerGeneralProfile: typeof import('./src/components/servers/profile/ServerGeneralProfile.vue')['default']
     ServerGeneralSettings: typeof import('./src/components/servers/profile/ServerGeneralSettings.vue')['default']
+    ServerGrowthTrends: typeof import('./src/components/widgets/server/ServerGrowthTrends.vue')['default']
     ServersActionsList: typeof import('./src/components/servers/ServersActionsList.vue')['default']
     ServersAside: typeof import('./src/components/asides/ServersAside.vue')['default']
     ServersList: typeof import('./src/components/servers/list/ServersList.vue')['default']

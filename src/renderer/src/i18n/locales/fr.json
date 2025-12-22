@@ -106,7 +106,8 @@
             "just_now": "à l'instant",
             "today": "Aujourd'hui",
             "yesterday": "Hier",
-            "tomorrow": "Demain"
+            "tomorrow": "Demain",
+            "previous": "Précédent"
         },
         "periods": {
             "all_time": "Depuis le début",
@@ -423,10 +424,13 @@
             "total_activities": "Total des activités",
             "total_members": "Total des membres",
             "unique_members": "Membres uniques",
-            "sessions": "Sessions",
             "activity_evolution": "Évolution de l'activité du serveur",
             "distribution": "Répartition des activités",
-            "top_members": "Membres les plus actifs"
+            "top_members": "Membres les plus actifs",
+            "sessions": "Sessions",
+            "duration": "Durée",
+            "members": "Membres",
+            "growth_trends": "Tendances de croissance"
         },
         "activity": {
             "title": "Activités du serveur",
