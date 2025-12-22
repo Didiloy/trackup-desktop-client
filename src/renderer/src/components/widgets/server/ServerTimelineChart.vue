@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { VueUiXy } from 'vue-data-ui'
 import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { useServerStore } from '@/stores/server'
+import { EPeriod } from '@shared/contracts/enums/period.enum'
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 
 const props = withDefaults(
@@ -18,14 +21,127 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const server_stats_store = useServerStatsStore()
+const server_store = useServerStore()
+
+const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
+const period = ref<Date[] | null>([
+    new Date(new Date().setDate(new Date().getDate() - 30)),
+    new Date()
+])
+const timelineData = ref<IStatsTimeline[]>([])
+const isLoading = ref(false)
+
+const getFilteredTimeline = computed<IStatsTimeline[]>(() => {
+    if (!timelineData.value) return []
+
+    // If no custom period is set, return the full timeline
+    if (!period.value || period.value.length !== 2 || !period.value[0] || !period.value[1]) {
+        return timelineData.value
+    }
+
+    const [start, end] = period.value
+    const startDate = new Date(start)
+    startDate.setHours(0, 0, 0, 0)
+    const endDate = new Date(end)
+    endDate.setHours(23, 59, 59, 999)
+
+    return timelineData.value.filter((item) => {
+        const itemDate = new Date(item.period)
+        return itemDate >= startDate && itemDate <= endDate
+    })
+})
 
 const sortedData = computed(() => {
-    const data = server_stats_store.getFilteredTimeline ?? []
+    const data = getFilteredTimeline.value ?? []
     return [...data].sort((a, b) => {
         const dateA = new Date(a.period).getTime()
         const dateB = new Date(b.period).getTime()
         return dateA - dateB
     })
+})
+
+async function fetchTimeline(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId) return
+
+    isLoading.value = true
+    try {
+        if (selectedPeriodType.value) {
+            // Presets logic
+            let limit = 365
+            if (selectedPeriodType.value === EPeriod.DAILY) limit = 90
+
+            const res = await server_stats_store.fetchTimeline(serverId, {
+                period: selectedPeriodType.value,
+                limit: limit
+            })
+            if ('data' in res && res.data) {
+                timelineData.value = res.data
+            }
+        } else if (
+            period.value &&
+            period.value.length === 2 &&
+            period.value[0] &&
+            period.value[1]
+        ) {
+            // Custom range logic
+            const now = new Date()
+            const start = new Date(period.value[0])
+            const diffMs = now.getTime() - start.getTime()
+            const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+
+            let resolution = EPeriod.ALL_TIME
+            let limit = diffDays + 1
+
+            if (diffDays > 365) {
+                resolution = EPeriod.WEEKLY
+                limit = Math.ceil(diffDays / 7) + 1
+            }
+
+            if (resolution === EPeriod.WEEKLY && limit > 365) {
+                resolution = EPeriod.MONTHLY
+                limit = Math.ceil(diffDays / 30.44) + 1
+            }
+
+            limit = Math.min(limit, 365)
+
+            const res = await server_stats_store.fetchTimeline(serverId, {
+                period: resolution,
+                limit: limit
+            })
+            if ('data' in res && res.data) {
+                timelineData.value = res.data
+            }
+        }
+    } finally {
+        isLoading.value = false
+    }
+}
+
+watch(selectedPeriodType, (newType) => {
+    if (newType) {
+        period.value = null
+        fetchTimeline()
+    }
+})
+
+watch(period, (newPeriod) => {
+    if (newPeriod && newPeriod.length === 2 && newPeriod[0] && newPeriod[1]) {
+        fetchTimeline()
+    }
+})
+
+watch(
+    () => server_store.getPublicId,
+    (id) => {
+        if (id) fetchTimeline()
+    }
+)
+
+onMounted(() => {
+    if (server_store.getPublicId) {
+        fetchTimeline()
+    }
 })
 
 const periods = computed(() =>
@@ -118,17 +234,12 @@ const hasData = computed(() => !!sortedData.value.length)
             </h3>
 
             <PeriodSelector
-                :period="server_stats_store.getPeriod"
-                :selected-period-type="server_stats_store.getSelectedPeriodType"
-                @update:period="server_stats_store.setPeriod($event)"
-                @update:selected-period-type="server_stats_store.setSelectedPeriodType($event)"
+                v-model:period="period"
+                v-model:selected-period-type="selectedPeriodType"
             />
         </div>
 
-        <div
-            v-if="server_stats_store.isTimelineLoading || server_stats_store.isLoading"
-            class="h-[300px] flex items-center justify-center"
-        >
+        <div v-if="isLoading" class="h-[300px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
         </div>
 
