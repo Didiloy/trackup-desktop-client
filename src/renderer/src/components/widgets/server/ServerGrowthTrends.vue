@@ -14,7 +14,7 @@ const selectedPeriod = ref<EPeriod>(EPeriod.MONTHLY)
 const growthData = ref<IServerGrowthResponse | null>(null)
 const isLoading = ref(false)
 
-async function fetchGrowth() {
+async function fetchGrowth(): Promise<void> {
     const serverId = server_store.getPublicId
     if (!serverId) return
 
@@ -86,19 +86,19 @@ const metrics = computed(() => {
     ]
 })
 
-function formatChange(value: number) {
+function formatChange(value: number): string {
     if (value === undefined || value === null) return '0.0%'
     const prefix = value > 0 ? '+' : ''
     return `${prefix}${value.toFixed(1)}%`
 }
 
-function getGrowthColor(value: number) {
+function getGrowthColor(value: number): string {
     if (value > 0) return 'text-emerald-500'
     if (value < 0) return 'text-rose-500'
     return 'text-surface-400'
 }
 
-function getGrowthIcon(value: number) {
+function getGrowthIcon(value: number): string {
     if (value > 0) return 'pi pi-arrow-up-right'
     if (value < 0) return 'pi pi-arrow-down-right'
     return 'pi pi-minus'
