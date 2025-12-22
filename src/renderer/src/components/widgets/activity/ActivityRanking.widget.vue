@@ -5,7 +5,7 @@ import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 const props = withDefaults(
     defineProps<{

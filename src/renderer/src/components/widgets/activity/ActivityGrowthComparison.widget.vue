@@ -6,7 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
-import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 const props = withDefaults(
     defineProps<{

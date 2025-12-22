@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
@@ -18,16 +18,23 @@ const activity_stats_store = useActivityStatsStore()
 const statsData = computed(() => activity_stats_store.getDetails)
 const loading = computed(() => activity_stats_store.isLoading)
 
-const value = computed(() => (statsData.value?.popularity_score ?? 0).toFixed(0))
+const value = computed(() => statsData.value?.total_likes.toLocaleString() ?? '0')
+const subValue = computed(() => {
+    if (!statsData.value) return ''
+    return t('views.activity.card.avg_likes', {
+        value: statsData.value.avg_likes_per_session.toFixed(1)
+    })
+})
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.activity.card.popularity')"
+        :label="t('views.activity.card.likes')"
         :value="value"
-        icon="pi pi-bolt"
-        color="text-amber-500"
-        bg="bg-amber-50"
+        :sub-value="subValue"
+        icon="pi pi-heart-fill"
+        color="text-red-500"
+        bg="bg-red-50"
         :show-identity="props.showIdentity"
         :loading="loading"
     >

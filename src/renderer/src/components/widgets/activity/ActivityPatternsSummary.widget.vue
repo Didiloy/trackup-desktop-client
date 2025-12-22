@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 
-import ActivityIdentityCorner from '@/components/widgets/activity/ActivityIdentityCorner.vue'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 const props = withDefaults(
     defineProps<{

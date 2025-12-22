@@ -2,15 +2,15 @@
 import { useRoute } from 'vue-router'
 import { computed, onMounted, ref, watch } from 'vue'
 import ActivityDetailHeader from '@/components/activities/profile/ActivityDetailHeader.vue'
-import ActivityDurationWidget from '@/components/widgets/activity/ActivityDurationWidget.vue'
-import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularityWidget.vue'
-import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikesWidget.vue'
-import ActivityTopContributors from '@/components/widgets/activity/ActivityTopContributors.vue'
+import ActivityDurationWidget from '@/components/widgets/activity/ActivityDuration.widget.vue'
+import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularity.widget.vue'
+import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikes.widget.vue'
+import ActivityTopContributorsWidget from '@/components/widgets/activity/ActivityTopContributors.widget.vue'
 import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
-import ActivityGrowthComparison from '@/components/widgets/activity/ActivityGrowthComparison.vue'
+import ActivityGrowthComparisonWidget from '@/components/widgets/activity/ActivityGrowthComparison.widget.vue'
 import ActivitySkillDistribution from '@/components/activities/profile/ActivitySkillDistribution.vue'
 import ActivityMetadataList from '@/components/activities/profile/ActivityMetadataList.vue'
-import ActivitySessionsHeatmap from '@/components/widgets/activity/ActivitySessionsHeatmap.vue'
+import ActivitySessionsHeatmapWidget from '@/components/widgets/activity/ActivitySessionsHeatmap.widget.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
@@ -29,10 +29,10 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import ActivityEditDialog from '@/components/activities/create-edit/ActivityEditDialog.vue'
-import ActivityTimelineChart from '@/components/widgets/activity/ActivityTimelineChart.vue'
-import ActivityRankingWidget from '@/components/widgets/activity/ActivityRankingWidget.vue'
-import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipantsWidget.vue'
-import ActivityPatternsSummary from '@/components/widgets/activity/ActivityPatternsSummary.vue'
+import ActivityTimelineChartWidget from '@/components/widgets/activity/ActivityTimelineChart.widget.vue'
+import ActivityRankingWidget from '@/components/widgets/activity/ActivityRanking.widget.vue'
+import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipants.widget.vue'
+import ActivityPatternsSummaryWidget from '@/components/widgets/activity/ActivityPatternsSummary.widget.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -217,22 +217,22 @@ onMounted(async () => {
                         <ActivityLikesWidget :show-identity="false" />
                     </div>
 
-                    <ActivityTimelineChart :show-identity="false" class="mb-6" />
+                    <ActivityTimelineChartWidget :show-identity="false" class="mb-6" />
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                         <div class="space-y-5 min-w-0">
                             <ActivityRankingWidget :show-identity="false" />
-                            <ActivityGrowthComparison :show-identity="false" />
-                            <ActivityTopContributors :show-identity="false" />
+                            <ActivityGrowthComparisonWidget :show-identity="false" />
+                            <ActivityTopContributorsWidget :show-identity="false" />
                         </div>
                         <div class="space-y-5 min-w-0">
                             <ActivityParticipantsWidget :show-identity="false" />
-                            <ActivityPatternsSummary :show-identity="false" />
+                            <ActivityPatternsSummaryWidget :show-identity="false" />
                         </div>
                     </div>
 
                     <!-- Heatmap in its own full-width card -->
-                    <ActivitySessionsHeatmap :show-identity="false" class="mb-6 w-full" />
+                    <ActivitySessionsHeatmapWidget :show-identity="false" class="mb-6 w-full" />
 
                     <!-- Recent sessions table in a separate card -->
                     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
