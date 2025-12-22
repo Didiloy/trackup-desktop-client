@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import ServerAvgLikes from '@/components/widgets/server/ServerAvgLikes.vue'
-import ServerTopActivities from '@/components/widgets/server/ServerTopActivities.vue'
-import ServerTimelineChart from '@/components/widgets/server/ServerTimelineChart.vue'
-import ServerAvgParticipants from '@/components/widgets/server/ServerAvgParticipants.vue'
-import ServerTotalDuration from '@/components/widgets/server/ServerTotalDuration.vue'
-import ServerEngagementScore from '@/components/widgets/server/ServerEngagementScore.vue'
-import ServerTotalActivities from '@/components/widgets/server/ServerTotalActivities.vue'
+import ServerAvgLikesWidget from '@/components/widgets/server/ServerAvgLikes.widget.vue'
+import ServerTopActivitiesWidget from '@/components/widgets/server/ServerTopActivities.widget.vue'
+import ServerTimelineChartWidget from '@/components/widgets/server/ServerTimelineChart.widget.vue'
+import ServerAvgParticipantsWidget from '@/components/widgets/server/ServerAvgParticipants.widget.vue'
+import ServerTotalDurationWidget from '@/components/widgets/server/ServerTotalDuration.widget.vue'
+import ServerEngagementScoreWidget from '@/components/widgets/server/ServerEngagementScore.widget.vue'
+import ServerTotalActivitiesWidget from '@/components/widgets/server/ServerTotalActivities.widget.vue'
 import ServerHeader from '@/components/servers/profile/ServerHeader.vue'
-import ServerActiveMembers from '@/components/widgets/server/ServerActiveMembers.vue'
-import ServerTopMembers from '@/components/widgets/server/ServerTopMembers.vue'
-import ServerGrowthTrends from '@/components/widgets/server/ServerGrowthTrends.vue'
-import ServerActivitiesDistribution from '@/components/widgets/server/ServerActivitiesDistribution.vue'
-import ServerTotalSessions from '@/components/widgets/server/ServerTotalSessions.vue'
+import ServerActiveMembersWidget from '@/components/widgets/server/ServerActiveMembers.widget.vue'
+import ServerTopMembersWidget from '@/components/widgets/server/ServerTopMembers.widget.vue'
+import ServerGrowthTrendsWidget from '@/components/widgets/server/ServerGrowthTrends.widget.vue'
+import ServerActivitiesDistributionWidget from '@/components/widgets/server/ServerActivitiesDistribution.widget.vue'
+import ServerTotalSessionsWidget from '@/components/widgets/server/ServerTotalSessions.widget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
 const server_stats_store = useServerStatsStore()
@@ -29,28 +29,28 @@ const server_stats_store = useServerStatsStore()
         <ServerHeader />
 
         <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
-            <ServerTotalSessions />
-            <ServerActiveMembers />
-            <ServerTotalDuration />
-            <ServerTotalActivities />
-            <ServerEngagementScore />
-            <ServerAvgLikes />
-            <ServerAvgParticipants />
+            <ServerTotalSessionsWidget />
+            <ServerActiveMembersWidget />
+            <ServerTotalDurationWidget />
+            <ServerTotalActivitiesWidget />
+            <ServerEngagementScoreWidget />
+            <ServerAvgLikesWidget />
+            <ServerAvgParticipantsWidget />
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
             <div class="xl:col-span-2">
-                <ServerTimelineChart :height="340" />
+                <ServerTimelineChartWidget :height="340" />
             </div>
             <div>
-                <ServerActivitiesDistribution />
+                <ServerActivitiesDistributionWidget />
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <ServerTopMembers />
-            <ServerTopActivities />
-            <ServerGrowthTrends />
+            <ServerTopMembersWidget />
+            <ServerTopActivitiesWidget />
+            <ServerGrowthTrendsWidget />
         </div>
     </div>
 </template>
