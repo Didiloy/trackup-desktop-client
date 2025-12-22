@@ -59,15 +59,12 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     const getFilteredTimeline = computed<IStatsTimeline[]>(() => {
         if (!state.timeline) return []
 
-        // If a period type is selected (API filtered), return the whole timeline
-        if (state.selectedPeriodType) return state.timeline
-
+        // If no custom period is set, return the full timeline (which is already API-filtered if selectedPeriodType exists)
         if (!state.period || state.period.length !== 2 || !state.period[0] || !state.period[1]) {
             return state.timeline
         }
 
         const [start, end] = state.period
-        // Reset hours to compare dates only
         const startDate = new Date(start)
         startDate.setHours(0, 0, 0, 0)
         const endDate = new Date(end)
@@ -183,11 +180,6 @@ export const useServerStatsStore = defineStore('server-stats', () => {
 
     const setPeriod = (p: Date[] | null) => {
         state.period = p
-        if (p) {
-            // Internally we use ALL_TIME (or null) when a custom range is set
-            // The selector will visually show "Custom" because period is not null
-            state.selectedPeriodType = EPeriod.ALL_TIME
-        }
     }
 
     const setSelectedPeriodType = (type: EPeriod | null) => {
@@ -218,15 +210,20 @@ export const useServerStatsStore = defineStore('server-stats', () => {
             if (!serverId) return
 
             if (newType) {
+                // Presets: Use 365 to show full available history (backend maximum)
+                // except for Daily where 30 or 90 is usually enough for a quick view
+                let limit = 365
+                if (newType === EPeriod.DAILY) limit = 90
+
                 await fetchTimeline(serverId, {
                     period: newType,
-                    limit: 365
+                    limit: limit
                 })
             }
         }
     )
 
-    // Watch for custom period changes to fetch enough data (Daily)
+    // Watch for custom period changes to fetch enough data with appropriate resolution & precise limit
     watch(
         () => state.period,
         async (newPeriod) => {
@@ -234,10 +231,30 @@ export const useServerStatsStore = defineStore('server-stats', () => {
                 const serverId = server_store.getPublicId
                 if (!serverId) return
 
-                // Fetch daily timeline to allow precise filtering on the frontend
+                const now = new Date()
+                const start = new Date(newPeriod[0])
+                const diffMs = now.getTime() - start.getTime()
+                const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+
+                let resolution = EPeriod.ALL_TIME
+                let limit = diffDays + 1 // +1 to be safe and include the start day
+
+                if (diffDays > 365) {
+                    resolution = EPeriod.WEEKLY
+                    limit = Math.ceil(diffDays / 7) + 1
+                }
+
+                if (resolution === EPeriod.WEEKLY && limit > 365) {
+                    resolution = EPeriod.MONTHLY
+                    limit = Math.ceil(diffDays / 30.44) + 1 // average month length
+                }
+
+                // Cap at 365 (API limit)
+                limit = Math.min(limit, 365)
+
                 await fetchTimeline(serverId, {
-                    period: EPeriod.DAILY,
-                    limit: 365
+                    period: resolution,
+                    limit: limit
                 })
             }
         }

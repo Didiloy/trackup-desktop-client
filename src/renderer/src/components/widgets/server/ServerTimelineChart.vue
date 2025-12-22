@@ -5,7 +5,7 @@ import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
 import { useServerStatsStore } from '@/stores/server-stats'
-import PeriodSelector from '@/components/common/filters/PeriodSelector.vue'
+import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 
 const props = withDefaults(
     defineProps<{

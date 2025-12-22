@@ -113,7 +113,8 @@
             "daily": "Journalier",
             "weekly": "Hebdomadaire",
             "monthly": "Mensuel",
-            "yearly": "Annuel"
+            "yearly": "Annuel",
+            "custom": "Personnalisé"
         },
         "weekdays": {
             "short": {
