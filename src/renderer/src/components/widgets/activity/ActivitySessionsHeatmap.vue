@@ -79,7 +79,6 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5 w-full">
     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm w-full">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
