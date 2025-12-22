@@ -59,7 +59,6 @@ const show_edit_dialog = ref(false)
 const loading = ref(true)
 const sessions_loading = ref(false)
 const error = ref<string | null>(null)
-const last_year_sessions = ref<IActivitySessionListItem[]>([])
 
 async function loadActivity(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
@@ -117,18 +116,6 @@ async function loadSessions(page = sessions_page.value, rows = sessions_rows.val
     }
 }
 
-async function loadLastYearSessions(): Promise<void> {
-    if (!server_store.getPublicId || !activityId.value) return
-    const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
-        limit: 100
-    })
-    if (res.error || !res.data) {
-        error.value = res.error ?? t('messages.error.fetch')
-        return
-    }
-    last_year_sessions.value = res.data.data as unknown as IActivitySessionListItem[]
-    //TODO: implement a real load last year because now it's just a dummy data
-}
 
 function handleSessionPage(event: { page: number; rows: number }): void {
     void loadSessions(event.page, event.rows)
@@ -175,7 +162,6 @@ watch(
     () => {
         if (server_store.getPublicId && activityId.value) {
             void loadActivity()
-            void loadLastYearSessions()
         }
     },
     { immediate: true }
@@ -184,7 +170,6 @@ watch(
 onMounted(async () => {
     if (server_store.getPublicId && activityId.value) {
         await loadActivity()
-        await loadLastYearSessions()
     }
 })
 </script>
@@ -241,7 +226,7 @@ onMounted(async () => {
                     </div>
 
                     <!-- Heatmap in its own full-width card -->
-                    <ActivitySessionsHeatmap :sessions="last_year_sessions" class="mb-6 w-full" />
+                    <ActivitySessionsHeatmap class="mb-6 w-full" />
 
                     <!-- Recent sessions table in a separate card -->
                     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">

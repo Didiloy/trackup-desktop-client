@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, computed } from 'vue'
+import { EPeriod } from '@shared/contracts/enums/period.enum'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import type {
     IActivityStats,
@@ -39,11 +40,13 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         timeline: [] as IStatsTimeline[],
         growthTrends: null as IActivityGrowthTrends | null,
         stats: null as IActivityStats | null,
+        heatmapTimeline: [] as IStatsTimeline[],
         isLoading: false,
         isTimelineLoading: false,
         isGrowthLoading: false,
         isRankingLoading: false,
         isLeaderboardLoading: false,
+        isHeatmapLoading: false,
         error: null as string | null
     })
 
@@ -56,11 +59,13 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
     const getTimeline = computed(() => state.timeline)
     const getGrowthTrends = computed(() => state.growthTrends)
     const getStats = computed(() => state.stats)
+    const getHeatmapTimeline = computed(() => state.heatmapTimeline)
     const isLoading = computed(() => state.isLoading)
     const isTimelineLoading = computed(() => state.isTimelineLoading)
     const isGrowthLoading = computed(() => state.isGrowthLoading)
     const isRankingLoading = computed(() => state.isRankingLoading)
     const isLeaderboardLoading = computed(() => state.isLeaderboardLoading)
+    const isHeatmapLoading = computed(() => state.isHeatmapLoading)
     const getError = computed(() => state.error)
 
     // Actions
@@ -254,6 +259,32 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         }
     }
 
+    const fetchHeatmapTimeline = async (
+        serverId: string,
+        activityId: string
+    ): Promise<IActivityStatsApiResponse<IStatsTimeline[]>> => {
+        state.isHeatmapLoading = true
+        state.error = null
+        try {
+            const res = await getActivityStatsTimeline(serverId, activityId, {
+                period: EPeriod.DAILY,
+                limit: 365
+            })
+            if (res.error) {
+                state.error = res.error
+                return { error: res.error }
+            }
+            state.heatmapTimeline = res.data ?? []
+            return res
+        } catch (e: unknown) {
+            const message = e instanceof Error ? e.message : String(e)
+            state.error = message
+            return { error: message }
+        } finally {
+            state.isHeatmapLoading = false
+        }
+    }
+
     const resetState = (): void => {
         state.details = null
         state.leaderboard = null
@@ -263,11 +294,13 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         state.timeline = []
         state.growthTrends = null
         state.stats = null
+        state.heatmapTimeline = []
         state.isLoading = false
         state.isTimelineLoading = false
         state.isGrowthLoading = false
         state.isRankingLoading = false
         state.isLeaderboardLoading = false
+        state.isHeatmapLoading = false
         state.error = null
     }
 
@@ -281,11 +314,13 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         getTimeline,
         getGrowthTrends,
         getStats,
+        getHeatmapTimeline,
         isLoading,
         isTimelineLoading,
         isGrowthLoading,
         isRankingLoading,
         isLeaderboardLoading,
+        isHeatmapLoading,
         getError,
 
         // Actions
@@ -297,6 +332,7 @@ export const useActivityStatsStore = defineStore('activity-stats', () => {
         fetchRanking,
         fetchTimeline,
         fetchGrowthTrends,
+        fetchHeatmapTimeline,
         resetState
     }
 })

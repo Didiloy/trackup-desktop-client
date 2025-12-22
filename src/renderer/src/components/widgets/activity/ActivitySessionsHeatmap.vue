@@ -1,20 +1,32 @@
 <script setup lang="ts">
-import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
-import { computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-
-const props = defineProps<{
-    sessions: IActivitySessionListItem[]
-}>()
+import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useServerStore } from '@/stores/server'
 
 const { t } = useI18n()
+const route = useRoute()
+const activity_stats_store = useActivityStatsStore()
+const server_store = useServerStore()
 
-function normalizeDate(dateString: string): string {
-    const date = new Date(dateString)
-    date.setHours(0, 0, 0, 0)
-    return date.toISOString().slice(0, 10)
+const activityId = computed(() => route.params.activityId as string)
+const serverId = computed(() => server_store.getPublicId)
+
+async function fetchHeatmapData(): Promise<void> {
+    if (serverId.value && activityId.value) {
+        await activity_stats_store.fetchHeatmapTimeline(serverId.value, activityId.value)
+    }
 }
+
+onMounted(() => {
+    fetchHeatmapData()
+})
+
+watch([serverId, activityId], () => {
+    fetchHeatmapData()
+})
 
 const heatmapData = computed(() => {
     const today = new Date()
@@ -24,13 +36,11 @@ const heatmapData = computed(() => {
     start.setDate(start.getDate() - (days - 1))
 
     const stats = new Map<string, { count: number; duration: number }>()
-    for (const session of props.sessions) {
-        const key = normalizeDate(session.date)
-        const durationMinutes = parseInt(session.duration)
-        const current = stats.get(key) ?? { count: 0, duration: 0 }
+    for (const entry of activity_stats_store.getHeatmapTimeline) {
+        const key = new Date(entry.period).toISOString().slice(0, 10)
         stats.set(key, {
-            count: current.count + 1,
-            duration: current.duration + durationMinutes
+            count: entry.sessions_count,
+            duration: entry.total_duration
         })
     }
 
@@ -70,6 +80,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
 
 <template>
     <div class="rounded-3xl bg-surface-100 ring-1 ring-surface-200 p-5 w-full">
+    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm w-full">
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.performance_section.heatmap') }}
@@ -78,8 +89,13 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                 {{ t('views.activity.performance_section.last_year') }}
             </p>
         </div>
-        <div class="w-full overflow-x-auto">
-            <div class="grid [grid-template-columns:repeat(52,minmax(0,1fr))] gap-1 min-w-full">
+
+        <div v-if="activity_stats_store.isHeatmapLoading" class="h-[120px] flex items-center justify-center">
+            <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
+        </div>
+
+        <div v-else class="w-full overflow-x-auto">
+            <div class="grid grid-cols-52 gap-1 min-w-full">
                 <div v-for="(week, weekIndex) in heatmapData" :key="weekIndex" class="grid grid-rows-7 gap-1">
                     <div
                         v-for="day in week"
