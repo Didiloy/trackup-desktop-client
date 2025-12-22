@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n'
 
 interface Props {
     modelValue: boolean
+    mode?: 'create' | 'edit'
 }
 
 interface Emits {
@@ -15,12 +16,14 @@ interface Emits {
     (e: 'server-action', server: IServer): void
 }
 
-defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    mode: 'create'
+})
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
 
 type ActionType = 'choice' | 'create' | 'join'
-const current_action = ref<ActionType>('choice')
+const current_action = ref<ActionType>(props.mode === 'edit' ? 'create' : 'choice')
 
 function selectAction(action: 'create' | 'join'): void {
     current_action.value = action
@@ -33,7 +36,7 @@ function handleServerAction(server: IServer | undefined): void {
 }
 
 function handleCancel(): void {
-    if (current_action.value !== 'choice') {
+    if (current_action.value !== 'choice' && props.mode !== 'edit') {
         current_action.value = 'choice'
     } else {
         closeDialog()
@@ -41,12 +44,12 @@ function handleCancel(): void {
 }
 
 function handleDialogClose(value: boolean): void {
-    current_action.value = 'choice'
+    current_action.value = props.mode === 'edit' ? 'create' : 'choice'
     emit('update:modelValue', value)
 }
 
 function closeDialog(): void {
-    current_action.value = 'choice'
+    current_action.value = props.mode === 'edit' ? 'create' : 'choice'
     emit('update:modelValue', false)
 }
 </script>
@@ -64,11 +67,24 @@ function closeDialog(): void {
                 <span class="font-semibold text-surface-900">
                     {{
                         current_action === 'create'
-                            ? t('views.create_server.title')
+                            ? props.mode === 'edit'
+                                ? t('views.edit_server.title')
+                                : t('views.create_server.title')
                             : current_action === 'join'
                               ? t('views.join_server.title')
                               : t('views.create_server.action.title')
                     }}
+                    <br />
+                    <!--           add edit subtitile     <-->
+                    <span class="text-sm text-surface-500">
+                        {{
+                            current_action === 'create'
+                                ? props.mode === 'edit'
+                                    ? t('views.edit_server.subtitle')
+                                    : t('views.create_server.subtitle')
+                                : ''
+                        }}
+                    </span>
                 </span>
             </div>
         </template>
@@ -127,10 +143,11 @@ function closeDialog(): void {
                 </Button>
             </div>
 
-            <!-- Create server form -->
+            <!-- Create/Edit server form -->
             <CreateServerForm
                 v-else-if="current_action === 'create'"
-                @created="handleServerAction"
+                :mode="props.mode"
+                @saved="handleServerAction"
                 @cancel="handleCancel"
             />
 

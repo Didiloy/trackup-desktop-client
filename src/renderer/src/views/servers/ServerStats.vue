@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ServerStatsHeader from '@/components/servers/profile/ServerStatsHeader.vue'
+import ServerHeader from '@/components/servers/profile/ServerHeader.vue'
 import ServerTotalSessions from '@/components/widgets/server/ServerTotalSessions.vue'
 import ServerActiveMembers from '@/components/widgets/server/ServerActiveMembers.vue'
 import ServerTotalDuration from '@/components/widgets/server/ServerTotalDuration.vue'
@@ -14,43 +14,9 @@ import ServerActivitiesDistribution from '@/components/widgets/server/ServerActi
 import ServerGrowthTrends from '@/components/widgets/server/ServerGrowthTrends.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
-const server_stats_store = useServerStatsStore()
+
 </script>
 
 <template>
-    <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
-        <div
-            v-if="server_stats_store.getError"
-            class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700"
-        >
-            {{ server_stats_store.getError }}
-        </div>
 
-        <ServerStatsHeader />
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
-            <ServerTotalSessions />
-            <ServerActiveMembers />
-            <ServerTotalDuration />
-            <ServerTotalActivities />
-            <ServerEngagementScore />
-            <ServerAvgLikes />
-            <ServerAvgParticipants />
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-            <div class="xl:col-span-2">
-                <ServerTimelineChart :height="340" />
-            </div>
-            <div>
-                <ServerActivitiesDistribution />
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <ServerTopMembers />
-            <ServerTopActivities />
-            <ServerGrowthTrends />
-        </div>
-    </div>
 </template>

@@ -292,6 +292,10 @@
                 "movies": "Films/Séries"
             }
         },
+        "edit_server": {
+            "title": "Modifier un serveur",
+            "subtitle": "Modifier les informations de votre serveur"
+        },
         "members_aside": {
             "title": "Membres du serveur",
             "title_with_count": "{title} — {count}",

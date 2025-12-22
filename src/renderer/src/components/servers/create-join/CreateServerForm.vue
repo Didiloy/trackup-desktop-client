@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import type {
     IServer,
-    ICreateServerRequest
+    IServerApiResponse
 } from '@shared/contracts/interfaces/entities/server.interfaces'
 import type { IServerType } from '@shared/contracts/interfaces/entities/server-type.interfaces'
 import { useI18n } from 'vue-i18n'
@@ -10,13 +10,26 @@ import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
 import EntityBannerHandling from '@/components/common/EntityBannerHandling.vue'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useServerTypeCRUD } from '@/composables/servers/useServerTypeCRUD'
+import { useServerStore } from '@/stores/server'
 
 const { t } = useI18n()
 
+const props = withDefaults(
+    defineProps<{
+        mode?: 'create' | 'edit'
+    }>(),
+    {
+        mode: 'create'
+    }
+)
+
 const emit = defineEmits<{
-    (e: 'created', server: IServer | undefined): void
+    (e: 'saved', server: IServer | undefined): void
     (e: 'cancel'): void
 }>()
+
+const server_store = useServerStore()
+const isEditMode = computed(() => props.mode === 'edit')
 
 const name = ref('')
 const description = ref('')
@@ -28,7 +41,7 @@ const banner = ref<string>('')
 const submitting = ref(false)
 const loading_types = ref(false)
 const error = ref<string | null>(null)
-const { createServer } = useServerCRUD()
+const { createServer, updateServer } = useServerCRUD()
 const { getAllServerTypes } = useServerTypeCRUD()
 
 const can_submit = computed(() => {
@@ -51,6 +64,22 @@ async function loadServerTypes(): Promise<void> {
     loading_types.value = false
 }
 
+function initializeFormForEdit(): void {
+    if (!isEditMode.value) return
+
+    name.value = server_store.getName ?? ''
+    description.value = server_store.getDescription ?? ''
+    logo.value = server_store.getLogo ?? ''
+    banner.value = server_store.getBanner ?? ''
+
+    // Find and set the server type
+    const typeId = server_store.getServerTypePublicId
+    if (typeId && server_types.value.length > 0) {
+        selected_type.value =
+            server_types.value.find((st) => st.public_id === typeId) ?? null
+    }
+}
+
 function updateLogo(newLogo: string): void {
     logo.value = newLogo
 }
@@ -59,30 +88,48 @@ function updateBanner(newBanner: string): void {
     banner.value = newBanner
 }
 
-async function createNewServer(): Promise<void> {
+async function submitForm(): Promise<void> {
     if (!can_submit.value) return
     submitting.value = true
     error.value = null
-    const payload: ICreateServerRequest = {
+
+    const payload = {
         name: name.value.trim(),
         type_public_id: selected_type.value!.public_id,
         description: description.value.trim(),
         logo: logo.value,
         banner: banner.value
     }
-    const res = await createServer(payload)
+
+    let res: IServerApiResponse<IServer>
+
+    if (isEditMode.value) {
+        const serverId = server_store.getPublicId
+        if (!serverId) {
+            error.value = t('messages.error.general')
+            submitting.value = false
+            return
+        }
+        res = await updateServer(serverId, payload)
+    } else {
+        res = await createServer(payload)
+    }
+
     if (res.error) {
         error.value = res.error
         submitting.value = false
         return
     }
-    const created: IServer | undefined = res.data
-    emit('created', created)
+
+    emit('saved', res.data)
     submitting.value = false
 }
 
 onMounted(async () => {
     await loadServerTypes()
+    if (isEditMode.value) {
+        initializeFormForEdit()
+    }
 })
 </script>
 
@@ -114,6 +161,7 @@ onMounted(async () => {
                 :options="server_types"
                 option-label="label"
                 :loading="loading_types"
+                :disabled="isEditMode"
                 :placeholder="t('views.create_server.placeholder.type')"
                 class="w-full"
                 append-to="self"
@@ -175,11 +223,11 @@ onMounted(async () => {
                 @click="emit('cancel')"
             />
             <Button
-                :label="t('common.actions.create')"
+                :label="isEditMode ? t('common.actions.save') : t('common.actions.create')"
                 :loading="submitting"
                 :disabled="!can_submit"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="createNewServer"
+                @click="submitForm"
             />
         </div>
     </div>
