@@ -13,7 +13,7 @@ defineOptions({
         id: 'activity-growth-comparison',
         title: 'Comparaison de Croissance',
         icon: 'pi pi-chart-bar',
-        description: 'Compare la croissance de l\'activité',
+        description: "Compare la croissance de l'activité",
         category: 'activity',
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
     }
@@ -102,7 +102,9 @@ function formatValue(val: number, isDuration?: boolean): string {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col">
+    <div
+        class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col"
+    >
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <p class="text-sm font-semibold text-surface-600">

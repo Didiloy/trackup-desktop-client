@@ -127,7 +127,6 @@ function handleServerUpdated(updated: IServer): void {
             v-model="showEditDialog"
             mode="edit"
             @server-action="handleServerUpdated"
-
         />
     </div>
 </template>

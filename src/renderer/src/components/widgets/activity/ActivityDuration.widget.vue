@@ -11,7 +11,7 @@ defineOptions({
         id: 'activity-duration',
         title: 'Durée Moyenne',
         icon: 'pi pi-clock',
-        description: 'Affiche la durée moyenne de l\'activité',
+        description: "Affiche la durée moyenne de l'activité",
         category: 'activity',
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }

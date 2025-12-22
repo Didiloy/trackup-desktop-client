@@ -8,7 +8,7 @@ defineOptions({
         id: 'server-total-activities',
         title: 'Total Activités',
         icon: 'pi pi-bolt',
-        description: 'Affiche le nombre total d\'activités',
+        description: "Affiche le nombre total d'activités",
         category: 'server',
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }

@@ -10,7 +10,7 @@ defineOptions({
         id: 'activity-popularity',
         title: 'Popularité',
         icon: 'pi pi-bolt',
-        description: 'Affiche le score de popularité de l\'activité',
+        description: "Affiche le score de popularité de l'activité",
         category: 'activity',
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }

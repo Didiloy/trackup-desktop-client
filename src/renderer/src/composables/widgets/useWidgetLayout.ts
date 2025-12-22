@@ -1,5 +1,8 @@
 import { ref, computed, watch } from 'vue'
-import type { IWidgetLayoutItem, IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import type {
+    IWidgetLayoutItem,
+    IWidgetMetadata
+} from '@shared/contracts/interfaces/widget.interfaces'
 
 /**
  * Default widget layouts per context
@@ -90,7 +93,7 @@ export function useWidgetLayout(context: string, entityId: string) {
      */
     function addWidget(widgetId: string, metadata: IWidgetMetadata) {
         // Check if widget already exists
-        if (layout.value.some(item => item.i === widgetId)) {
+        if (layout.value.some((item) => item.i === widgetId)) {
             console.warn(`Widget ${widgetId} already exists in layout`)
             return
         }
@@ -99,7 +102,7 @@ export function useWidgetLayout(context: string, entityId: string) {
         let maxY = 0
         let maxYHeight = 0
 
-        layout.value.forEach(item => {
+        layout.value.forEach((item) => {
             const bottom = item.y + item.h
             if (bottom > maxY) {
                 maxY = item.y
@@ -128,7 +131,7 @@ export function useWidgetLayout(context: string, entityId: string) {
      * Remove a widget from the layout
      */
     function removeWidget(widgetId: string) {
-        const index = layout.value.findIndex(item => item.i === widgetId)
+        const index = layout.value.findIndex((item) => item.i === widgetId)
         if (index !== -1) {
             layout.value.splice(index, 1)
             isDirty.value = true
@@ -149,23 +152,27 @@ export function useWidgetLayout(context: string, entityId: string) {
      * Check if a widget is in the layout
      */
     function hasWidget(widgetId: string): boolean {
-        return layout.value.some(item => item.i === widgetId)
+        return layout.value.some((item) => item.i === widgetId)
     }
 
     /**
      * Get widget IDs currently in the layout
      */
-    const widgetIds = computed(() => layout.value.map(item => item.i))
+    const widgetIds = computed(() => layout.value.map((item) => item.i))
 
     // Initialize layout
     layout.value = loadLayout()
 
     // Auto-save on layout changes
-    watch(layout, () => {
-        if (isDirty.value) {
-            saveLayout()
-        }
-    }, { deep: true })
+    watch(
+        layout,
+        () => {
+            if (isDirty.value) {
+                saveLayout()
+            }
+        },
+        { deep: true }
+    )
 
     return {
         layout: computed(() => layout.value),
@@ -180,4 +187,3 @@ export function useWidgetLayout(context: string, entityId: string) {
         hasWidget
     }
 }
-

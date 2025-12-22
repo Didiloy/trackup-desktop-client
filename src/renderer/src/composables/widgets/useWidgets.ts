@@ -1,65 +1,63 @@
-import { ref, computed, type Component } from 'vue'
-import type { IWidgetComponent, IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { ref, computed, markRaw } from 'vue'
+import type {
+    IWidgetComponent,
+    IWidgetMetadata
+} from '@shared/contracts/interfaces/widget.interfaces'
+import type { ComputedRef } from 'vue'
 
 /**
- * Composable to discover and load widgets dynamically based on context
- * @param context - The widget category/context ('server' | 'activity' | etc.)
+ * Composable to discover and load all widgets dynamically.
+ * No context filtering: returns every widget found under components/widgets.
  */
-export function useWidgets(context: 'server' | 'activity' | string) {
+export function useWidgets(): {
+    widgets: ComputedRef<IWidgetComponent[]>
+    sortedWidgets: ComputedRef<IWidgetComponent[]>
+    isLoading: ComputedRef<boolean>
+    error: ComputedRef<Error | null>
+    getWidgetById: (id: string) => IWidgetComponent | undefined
+    refresh: () => Promise<void>
+} {
     const widgets = ref<IWidgetComponent[]>([])
     const isLoading = ref(false)
     const error = ref<Error | null>(null)
 
-    /**
-     * Dynamically import all widget files from the specified context directory
-     */
-    async function discoverWidgets() {
+    async function discoverWidgets(): Promise<void> {
         isLoading.value = true
         error.value = null
 
         try {
-            // Import all .widget.vue files from the context directory
-            const widgetModules = import.meta.glob(
-                '@/components/widgets/**/*.widget.vue',
-                { eager: true }
-            ) as Record<string, any>
+            const widgetModules = import.meta.glob('@/components/widgets/**/*.widget.vue', {
+                eager: true
+            }) as Record<string, unknown>
 
             const discoveredWidgets: IWidgetComponent[] = []
 
-            // Filter and process widgets for the current context
             for (const [path, module] of Object.entries(widgetModules)) {
-                // Check if the path matches our context
-                if (!path.includes(`/widgets/${context}/`)) {
-                    continue
+                const sfc = (module as { default: unknown }).default as unknown as {
+                    widgetMetadata?: IWidgetMetadata
                 }
 
-                // Extract metadata from the component
-                const component = module.default
-                const metadata = component?.widgetMetadata as IWidgetMetadata | undefined
-
+                const metadata = sfc?.widgetMetadata
                 if (!metadata) {
                     console.warn(`Widget at ${path} is missing widgetMetadata`)
                     continue
                 }
 
-                // Verify the category matches
-                if (metadata.category !== context) {
-                    console.warn(
-                        `Widget ${metadata.id} has category '${metadata.category}' but was found in '${context}' directory`
-                    )
+                // Skip widgets that opt out of discovery
+                if (metadata.discoverable === false) {
                     continue
                 }
 
                 discoveredWidgets.push({
                     id: metadata.id,
                     metadata,
-                    component
+                    component: markRaw(sfc) as unknown as never
                 })
             }
 
             widgets.value = discoveredWidgets
 
-            console.log(`Discovered ${discoveredWidgets.length} widgets for context '${context}'`)
+            console.log(`Discovered ${discoveredWidgets.length} widgets (no context filtering)`)
         } catch (err) {
             error.value = err instanceof Error ? err : new Error('Failed to discover widgets')
             console.error('Error discovering widgets:', err)
@@ -68,29 +66,17 @@ export function useWidgets(context: 'server' | 'activity' | string) {
         }
     }
 
-    /**
-     * Get a widget by its ID
-     */
     function getWidgetById(id: string): IWidgetComponent | undefined {
-        return widgets.value.find(w => w.id === id)
+        return widgets.value.find((w) => w.id === id)
     }
 
-    /**
-     * Get widgets sorted by title
-     */
-    const sortedWidgets = computed(() => {
-        return [...widgets.value].sort((a, b) =>
-            a.metadata.title.localeCompare(b.metadata.title)
-        )
+    const sortedWidgets = computed<IWidgetComponent[]>(() => {
+        return [...widgets.value].sort((a, b) => a.metadata.title.localeCompare(b.metadata.title))
     })
 
-    /**
-     * Get available widgets (those that are discovered)
-     */
-    const availableWidgets = computed(() => widgets.value)
+    const availableWidgets = computed<IWidgetComponent[]>(() => widgets.value)
 
-    // Auto-discover widgets on initialization
-    discoverWidgets()
+    void discoverWidgets()
 
     return {
         widgets: availableWidgets,
@@ -101,4 +87,3 @@ export function useWidgets(context: 'server' | 'activity' | string) {
         refresh: discoverWidgets
     }
 }
-

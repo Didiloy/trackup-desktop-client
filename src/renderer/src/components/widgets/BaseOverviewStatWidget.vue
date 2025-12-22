@@ -16,7 +16,7 @@ defineProps<{
         v-else
         class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm hover:shadow-md transition-shadow w-full h-full text-left"
     >
-        <slot name="corner"/>
+        <slot name="corner" />
         <div class="flex items-start justify-between mb-4">
             <div :class="`p-3 rounded-xl ${bg} ${color}`">
                 <i :class="icon" class="text-xl"></i>

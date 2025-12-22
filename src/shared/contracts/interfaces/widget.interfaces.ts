@@ -1,9 +1,16 @@
+import type { Component } from 'vue'
+
 export interface IWidgetMetadata {
     id: string
     title: string
     icon?: string
     description?: string
     category: 'server' | 'activity' | string
+    /**
+     * When set to false, this widget will be skipped by the discovery mechanism.
+     * Default behavior (undefined or true) is to include the widget.
+     */
+    discoverable?: boolean
     defaultSize: {
         w: number
         h: number
@@ -29,6 +36,5 @@ export interface IWidgetLayoutItem {
 export interface IWidgetComponent {
     id: string
     metadata: IWidgetMetadata
-    component: any
+    component: Component
 }
-

@@ -9,9 +9,7 @@ const serverId = computed(() => route.params.id as string)
 </script>
 
 <template>
-
-            <WidgetDashboard context="server" :entity-id="serverId" />
-
+    <WidgetDashboard context="server" :entity-id="serverId" />
 </template>
 
 <style scoped>
@@ -21,4 +19,3 @@ const serverId = computed(() => route.params.id as string)
     flex-direction: column;
 }
 </style>
-

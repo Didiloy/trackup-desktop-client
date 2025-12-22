@@ -5,6 +5,7 @@ Ce guide explique comment ajouter de nouveaux widgets au système de widgets per
 ## Vue d'ensemble
 
 Le système de widgets personnalisables permet aux utilisateurs de :
+
 - Glisser-déposer des widgets pour les réorganiser
 - Redimensionner les widgets
 - Ajouter/supprimer des widgets
@@ -27,10 +28,12 @@ Le système de widgets personnalisables permet aux utilisateurs de :
 ### Étape 1 : Créer le Fichier Widget
 
 Créez un fichier avec l'extension `.widget.vue` dans le bon répertoire :
+
 - Pour les widgets serveur : `src/renderer/src/components/widgets/server/`
 - Pour les widgets activité : `src/renderer/src/components/widgets/activity/`
 
 **Exemple de nom de fichier :**
+
 ```
 ServerNewWidget.widget.vue
 ActivityNewWidget.widget.vue
@@ -47,18 +50,18 @@ import { useI18n } from 'vue-i18n'
 
 defineOptions({
     widgetMetadata: {
-        id: 'unique-widget-id',              // ID unique (kebab-case)
-        title: 'Titre du Widget',            // Titre affiché
-        icon: 'pi pi-icon-name',             // Icône PrimeIcons
-        description: 'Description courte',    // Description (optionnel)
-        category: 'server',                   // 'server' ou 'activity'
+        id: 'unique-widget-id', // ID unique (kebab-case)
+        title: 'Titre du Widget', // Titre affiché
+        icon: 'pi pi-icon-name', // Icône PrimeIcons
+        description: 'Description courte', // Description (optionnel)
+        category: 'server', // 'server' ou 'activity'
         defaultSize: {
-            w: 3,                             // Largeur par défaut (colonnes sur 12)
-            h: 2,                             // Hauteur par défaut (unités)
-            minW: 2,                          // Largeur minimale (optionnel)
-            minH: 2,                          // Hauteur minimale (optionnel)
-            maxW: 12,                         // Largeur maximale (optionnel)
-            maxH: 10                          // Hauteur maximale (optionnel)
+            w: 3, // Largeur par défaut (colonnes sur 12)
+            h: 2, // Hauteur par défaut (unités)
+            minW: 2, // Largeur minimale (optionnel)
+            minH: 2, // Hauteur minimale (optionnel)
+            maxW: 12, // Largeur maximale (optionnel)
+            maxH: 10 // Hauteur maximale (optionnel)
         }
     }
 })
@@ -117,6 +120,7 @@ const value = computed(() => {
 ### Étape 4 : Le Widget est Automatiquement Disponible !
 
 **C'est tout !** Le widget sera automatiquement :
+
 - Découvert par le système
 - Disponible dans le dialogue "Ajouter un Widget"
 - Prêt à être utilisé dans le dashboard
@@ -124,38 +128,50 @@ const value = computed(() => {
 ## Tailles de Widget Recommandées
 
 ### Widgets Stat Simple
+
 ```typescript
 defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
 ```
+
 Parfait pour afficher une seule métrique (nombre, pourcentage, etc.)
 
 ### Widgets Liste/Tableau
+
 ```typescript
 defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
 ```
+
 Pour afficher des listes de top membres, top activités, etc.
 
 ### Widgets Graphique
+
 ```typescript
 defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
 ```
+
 Pour les graphiques et visualisations complexes
 
 ### Widgets Distribution/Donut
+
 ```typescript
 defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
 ```
+
 Pour les graphiques en donut, camembert, etc.
 
 ## Contextes Disponibles
 
 ### Context 'server'
+
 Widgets affichés dans la page `/servers/:id/stats`
+
 - Accès aux données via `useServerStatsStore()`
 - ID du serveur : `useServerStore().getPublicId`
 
 ### Context 'activity'
+
 Widgets affichés dans la page d'activité
+
 - Accès aux données via `useActivityStatsStore()`
 - ID de l'activité : `route.params.activityId`
 
@@ -210,7 +226,7 @@ defineOptions({
         id: 'server-timeline-chart',
         title: 'Graphique Timeline',
         icon: 'pi pi-chart-line',
-        description: 'Affiche l\'évolution des statistiques',
+        description: "Affiche l'évolution des statistiques",
         category: 'server',
         defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
     }
@@ -269,22 +285,26 @@ const DEFAULT_LAYOUTS: Record<string, Record<string, IWidgetLayoutItem[]>> = {
 ## Dépannage
 
 ### Le widget n'apparaît pas dans le dialogue
+
 - Vérifiez que le fichier a l'extension `.widget.vue`
 - Vérifiez que `defineOptions` est bien déclaré
 - Vérifiez que le `category` correspond au contexte
 - Vérifiez la console pour les erreurs
 
 ### Le widget ne se charge pas correctement
+
 - Vérifiez les imports
 - Vérifiez que les stores sont bien initialisés
 - Vérifiez la console pour les erreurs
 
 ### Le layout ne se sauvegarde pas
+
 - Vérifiez que le composable `useWidgetLayout` est bien utilisé
 - Vérifiez le localStorage dans les DevTools
 - La clé est : `widgets-layout-{context}-{entityId}`
 
 ### Erreur "Missing CSS file" pour grid-layout-plus
+
 - **Pas besoin d'importer de CSS!** Les styles de `grid-layout-plus` sont automatiquement injectés via `vite-plugin-css-injected-by-js`
 - N'ajoutez PAS `import 'grid-layout-plus/dist/style.css'` - cela causera une erreur
 - Importez seulement les composants : `import { GridLayout, GridItem } from 'grid-layout-plus'`
@@ -294,4 +314,3 @@ const DEFAULT_LAYOUTS: Record<string, Record<string, IWidgetLayoutItem[]>> = {
 - PrimeVue Icons: https://primevue.org/icons/
 - Vue Data UI: https://github.com/graphieros/vue-data-ui
 - Grid Layout Plus: https://github.com/Muousic/grid-layout-plus
-

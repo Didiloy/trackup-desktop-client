@@ -75,8 +75,7 @@ function initializeFormForEdit(): void {
     // Find and set the server type
     const typeId = server_store.getServerTypePublicId
     if (typeId && server_types.value.length > 0) {
-        selected_type.value =
-            server_types.value.find((st) => st.public_id === typeId) ?? null
+        selected_type.value = server_types.value.find((st) => st.public_id === typeId) ?? null
     }
 }
 

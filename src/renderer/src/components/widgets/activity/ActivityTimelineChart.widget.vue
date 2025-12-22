@@ -17,7 +17,7 @@ defineOptions({
         id: 'activity-timeline-chart',
         title: 'Graphique Timeline',
         icon: 'pi pi-chart-line',
-        description: 'Affiche l\'évolution des statistiques de l\'activité',
+        description: "Affiche l'évolution des statistiques de l'activité",
         category: 'activity',
         defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
     }

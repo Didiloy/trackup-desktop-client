@@ -15,9 +15,9 @@ defineOptions({
         id: 'server-timeline-chart',
         title: 'Graphique Timeline',
         icon: 'pi pi-chart-line',
-        description: 'Affiche l\'évolution des statistiques du serveur',
+        description: "Affiche l'évolution des statistiques du serveur",
         category: 'server',
-        defaultSize: { w: 12, h: 8, minW: 6, minH: 8 }
+        defaultSize: { w: 12, h: 10, minW: 6, minH: 8 }
     }
 })
 

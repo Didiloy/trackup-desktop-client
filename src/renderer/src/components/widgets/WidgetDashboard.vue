@@ -16,15 +16,8 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const { widgets, sortedWidgets, getWidgetById } = useWidgets(props.context)
-const {
-    layout,
-    widgetIds,
-    addWidget,
-    removeWidget,
-    updateLayout,
-    resetLayout,
-    hasWidget
-} = useWidgetLayout(props.context, props.entityId)
+const { layout, widgetIds, addWidget, removeWidget, updateLayout, resetLayout, hasWidget } =
+    useWidgetLayout(props.context, props.entityId)
 
 const showAddDialog = ref(false)
 const isDraggable = ref(true)
@@ -36,7 +29,7 @@ const rowHeight = ref(60)
  * Available widgets that are not currently in the layout
  */
 const availableWidgetsToAdd = computed(() => {
-    return sortedWidgets.value.filter(widget => !hasWidget(widget.id))
+    return sortedWidgets.value.filter((widget) => !hasWidget(widget.id))
 })
 
 /**
@@ -140,10 +133,16 @@ function getWidgetComponent(widgetId: string) {
                     :max-h="item.maxH"
                     class="widget-grid-item"
                 >
-                    <div class="widget-wrapper h-full flex flex-col bg-white rounded-lg shadow-sm border border-surface-200 overflow-hidden">
+                    <div
+                        class="widget-wrapper h-full flex flex-col bg-white rounded-lg shadow-sm border border-surface-200 overflow-hidden"
+                    >
                         <!-- Widget header with remove button -->
-                        <div class="widget-header flex items-center justify-between px-3 py-2 bg-surface-50 border-b border-surface-200">
-                            <div class="widget-drag-handle flex-1 cursor-move flex items-center gap-2">
+                        <div
+                            class="widget-header flex items-center justify-between px-3 py-2 bg-surface-50 border-b border-surface-200"
+                        >
+                            <div
+                                class="widget-drag-handle flex-1 cursor-move flex items-center gap-2"
+                            >
                                 <i class="pi pi-bars text-surface-400 text-xs"></i>
                                 <span class="text-sm font-medium text-surface-700">
                                     {{ getWidgetById(item.i)?.metadata.title }}
@@ -162,8 +161,14 @@ function getWidgetComponent(widgetId: string) {
 
                         <!-- Widget content -->
                         <div class="widget-content flex-1 overflow-auto p-3">
-                            <component :is="getWidgetComponent(item.i)" v-if="getWidgetComponent(item.i)" />
-                            <div v-else class="flex items-center justify-center h-full text-surface-400">
+                            <component
+                                :is="getWidgetComponent(item.i)"
+                                v-if="getWidgetComponent(item.i)"
+                            />
+                            <div
+                                v-else
+                                class="flex items-center justify-center h-full text-surface-400"
+                            >
                                 Widget not found
                             </div>
                         </div>
@@ -210,7 +215,10 @@ function getWidgetComponent(widgetId: string) {
                             ></i>
                             <div class="flex-1">
                                 <h3 class="text-lg font-semibold">{{ widget.metadata.title }}</h3>
-                                <p v-if="widget.metadata.description" class="text-sm text-surface-500 mt-1">
+                                <p
+                                    v-if="widget.metadata.description"
+                                    class="text-sm text-surface-500 mt-1"
+                                >
                                     {{ widget.metadata.description }}
                                 </p>
                             </div>
@@ -328,4 +336,3 @@ function getWidgetComponent(widgetId: string) {
     cursor: pointer;
 }
 </style>
-

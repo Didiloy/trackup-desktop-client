@@ -10,7 +10,7 @@ defineOptions({
         id: 'activity-patterns-summary',
         title: 'Résumé des Tendances',
         icon: 'pi pi-calendar',
-        description: 'Affiche les tendances temporelles de l\'activité',
+        description: "Affiche les tendances temporelles de l'activité",
         category: 'activity',
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
     }
