@@ -9,6 +9,7 @@ import { useServerStore } from '@/stores/server'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -16,7 +17,7 @@ defineOptions({
         title: 'Graphique Timeline',
         icon: 'pi pi-chart-line',
         description: "Affiche l'évolution des statistiques du serveur",
-        category: 'server',
+        category: EWidgetCategory.Server,
         defaultSize: { w: 12, h: 10, minW: 6, minH: 8 }
     }
 })

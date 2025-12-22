@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -14,7 +15,7 @@ defineOptions({
         title: 'Comparaison de Croissance',
         icon: 'pi pi-chart-bar',
         description: "Compare la croissance de l'activité",
-        category: 'activity',
+        category: EWidgetCategory.Activity,
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
     }
 })

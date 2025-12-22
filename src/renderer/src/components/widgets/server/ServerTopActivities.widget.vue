@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { computed } from 'vue'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -10,7 +11,7 @@ defineOptions({
         title: 'Top Activités',
         icon: 'pi pi-trophy',
         description: 'Affiche les activités les plus populaires',
-        category: 'server',
+        category: EWidgetCategory.Server,
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
     }
 })

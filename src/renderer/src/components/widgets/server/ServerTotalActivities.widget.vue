@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -9,7 +10,7 @@ defineOptions({
         title: 'Total Activités',
         icon: 'pi pi-bolt',
         description: "Affiche le nombre total d'activités",
-        category: 'server',
+        category: EWidgetCategory.Server,
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }
 })

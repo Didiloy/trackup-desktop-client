@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { GridLayout, GridItem } from 'grid-layout-plus'
 import { useI18n } from 'vue-i18n'
 import { useWidgets } from '@/composables/widgets/useWidgets'
 import { useWidgetLayout } from '@/composables/widgets/useWidgetLayout'
-import type { IWidgetLayoutItem } from '@shared/contracts/interfaces/widget.interfaces'
+import type {
+    IWidgetLayoutItem,
+    IWidgetComponent
+} from '@shared/contracts/interfaces/widget.interfaces'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Card from 'primevue/card'
+import Select from 'primevue/select'
 
 const props = defineProps<{
     context: 'server' | 'activity' | string
@@ -15,7 +19,9 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const { widgets, sortedWidgets, getWidgetById } = useWidgets(props.context)
+// Discover all widgets globally (no context filtering)
+const { sortedWidgets, getWidgetById, categoryOptions } = useWidgets()
+// Layout remains contextual to props.context and entityId
 const { layout, widgetIds, addWidget, removeWidget, updateLayout, resetLayout, hasWidget } =
     useWidgetLayout(props.context, props.entityId)
 
@@ -25,24 +31,37 @@ const isResizable = ref(true)
 const colNum = ref(12)
 const rowHeight = ref(60)
 
+// Category selection state for the add-widget modal
+const selectedCategory = ref<string | null>(null)
+
+// Initialize default category when dialog opens
+watch(showAddDialog, (visible) => {
+    if (visible) {
+        // Choose first category by default if none selected
+        selectedCategory.value = selectedCategory.value ?? categoryOptions.value[0]?.value ?? null
+    }
+})
+
 /**
  * Available widgets that are not currently in the layout
  */
-const availableWidgetsToAdd = computed(() => {
-    return sortedWidgets.value.filter((widget) => !hasWidget(widget.id))
+const availableWidgetsToAdd = computed<IWidgetComponent[]>(() => {
+    const base = sortedWidgets.value.filter((widget) => !hasWidget(widget.id))
+    if (!selectedCategory.value) return base
+    return base.filter((w) => String(w.metadata.category).toLowerCase() === selectedCategory.value)
 })
 
 /**
  * Handle layout update from grid-layout-plus
  */
-function handleLayoutUpdate(newLayout: IWidgetLayoutItem[]) {
+function handleLayoutUpdate(newLayout: IWidgetLayoutItem[]): void {
     updateLayout(newLayout)
 }
 
 /**
  * Handle add widget
  */
-function handleAddWidget(widgetId: string) {
+function handleAddWidget(widgetId: string): void {
     const widget = getWidgetById(widgetId)
     if (widget) {
         addWidget(widgetId, widget.metadata)
@@ -53,28 +72,28 @@ function handleAddWidget(widgetId: string) {
 /**
  * Handle remove widget
  */
-function handleRemoveWidget(widgetId: string) {
+function handleRemoveWidget(widgetId: string): void {
     removeWidget(widgetId)
 }
 
 /**
  * Handle reset layout
  */
-function handleResetLayout() {
+function handleResetLayout(): void {
     resetLayout()
 }
 
 /**
  * Open add widget dialog
  */
-function openAddDialog() {
+function openAddDialog(): void {
     showAddDialog.value = true
 }
 
 /**
  * Get widget component by ID
  */
-function getWidgetComponent(widgetId: string) {
+function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | undefined {
     const widget = getWidgetById(widgetId)
     return widget?.component
 }
@@ -88,17 +107,17 @@ function getWidgetComponent(widgetId: string) {
                 <Button
                     :label="t('common.widgets.add_widget')"
                     icon="pi pi-plus"
-                    @click="openAddDialog"
                     severity="success"
                     size="small"
+                    @click="openAddDialog"
                 />
                 <Button
                     :label="t('common.widgets.reset_layout')"
                     icon="pi pi-refresh"
-                    @click="handleResetLayout"
                     severity="secondary"
                     outlined
                     size="small"
+                    @click="handleResetLayout"
                 />
             </div>
             <div class="text-sm text-surface-500">
@@ -154,8 +173,8 @@ function getWidgetComponent(widgetId: string) {
                                 rounded
                                 severity="danger"
                                 size="small"
-                                @click="handleRemoveWidget(item.i)"
                                 class="widget-remove-btn"
+                                @click="handleRemoveWidget(item.i)"
                             />
                         </div>
 
@@ -186,8 +205,8 @@ function getWidgetComponent(widgetId: string) {
             <Button
                 :label="t('common.widgets.add_widget')"
                 icon="pi pi-plus"
-                @click="openAddDialog"
                 severity="success"
+                @click="openAddDialog"
             />
         </div>
 
@@ -199,43 +218,73 @@ function getWidgetComponent(widgetId: string) {
             :style="{ width: '50rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
         >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-                <Card
-                    v-for="widget in availableWidgetsToAdd"
-                    :key="widget.id"
-                    class="cursor-pointer hover:shadow-lg transition-shadow"
-                    @click="handleAddWidget(widget.id)"
-                >
-                    <template #header>
-                        <div class="flex items-center gap-3 p-4">
-                            <i
-                                v-if="widget.metadata.icon"
-                                :class="widget.metadata.icon"
-                                class="text-2xl text-primary-500"
-                            ></i>
-                            <div class="flex-1">
-                                <h3 class="text-lg font-semibold">{{ widget.metadata.title }}</h3>
-                                <p
-                                    v-if="widget.metadata.description"
-                                    class="text-sm text-surface-500 mt-1"
-                                >
-                                    {{ widget.metadata.description }}
-                                </p>
-                            </div>
-                        </div>
-                    </template>
-                    <template #content>
-                        <div class="text-xs text-surface-400">
-                            {{ widget.metadata.defaultSize.w }}x{{ widget.metadata.defaultSize.h }}
-                        </div>
-                    </template>
-                </Card>
+            <div class="p-4 space-y-4">
+                <!-- Category selector -->
+                <div class="flex items-center gap-3">
+                    <Select
+                        v-model="selectedCategory"
+                        :options="categoryOptions"
+                        option-label="label"
+                        option-value="value"
+                        :placeholder="t('common.widgets.select_category')"
+                        class="min-w-[200px]"
+                        size="small"
+                    />
+                    <span class="text-xs text-surface-500">
+                        {{ availableWidgetsToAdd.length }} {{ t('common.widgets.available') }}
+                    </span>
+                </div>
 
-                <div
-                    v-if="availableWidgetsToAdd.length === 0"
-                    class="col-span-full text-center py-8 text-surface-500"
-                >
-                    {{ t('common.widgets.no_available') }}
+                <!-- Widgets list grouped by category filter -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-1">
+                    <Card
+                        v-for="widget in availableWidgetsToAdd"
+                        :key="widget.id"
+                        class="cursor-pointer hover:shadow-lg transition-shadow"
+                        @click="handleAddWidget(widget.id)"
+                    >
+                        <template #header>
+                            <div class="flex items-center gap-3 p-4">
+                                <i
+                                    v-if="widget.metadata.icon"
+                                    :class="widget.metadata.icon"
+                                    class="text-2xl text-primary-500"
+                                ></i>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold">
+                                        {{ widget.metadata.title }}
+                                    </h3>
+                                    <p
+                                        v-if="widget.metadata.description"
+                                        class="text-sm text-surface-500 mt-1"
+                                    >
+                                        {{ widget.metadata.description }}
+                                    </p>
+                                </div>
+                            </div>
+                        </template>
+                        <template #content>
+                            <div
+                                class="flex items-center justify-between px-4 pb-3 text-xs text-surface-400"
+                            >
+                                <span class="font-medium capitalize">
+                                    {{ String(widget.metadata.category) }}
+                                </span>
+                                <span>
+                                    {{ widget.metadata.defaultSize.w }}x{{
+                                        widget.metadata.defaultSize.h
+                                    }}
+                                </span>
+                            </div>
+                        </template>
+                    </Card>
+
+                    <div
+                        v-if="availableWidgetsToAdd.length === 0"
+                        class="col-span-full text-center py-8 text-surface-500"
+                    >
+                        {{ t('common.widgets.no_available') }}
+                    </div>
                 </div>
             </div>
         </Dialog>
@@ -266,73 +315,5 @@ function getWidgetComponent(widgetId: string) {
 
 .widget-content {
     position: relative;
-}
-
-/* Grid layout styles */
-:deep(.vue-grid-layout) {
-    background-color: transparent;
-}
-
-:deep(.vue-grid-item) {
-    transition: all 200ms ease;
-    touch-action: none;
-}
-
-:deep(.vue-grid-item.resizing) {
-    opacity: 0.9;
-}
-
-:deep(.vue-grid-item.static) {
-    background-color: #cce;
-}
-
-:deep(.vue-grid-item .resizing) {
-    opacity: 0.9;
-}
-
-:deep(.vue-grid-item .static) {
-    background: #cce;
-}
-
-:deep(.vue-grid-item .text) {
-    font-size: 24px;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    height: 100%;
-    width: 100%;
-}
-
-:deep(.vue-grid-item .no-drag) {
-    height: 100%;
-    width: 100%;
-}
-
-:deep(.vue-grid-item .minMax) {
-    font-size: 12px;
-}
-
-:deep(.vue-grid-item .add) {
-    cursor: pointer;
-}
-
-:deep(.vue-draggable-handle) {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 0;
-    left: 0;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='5' fill='#999'/></svg>")
-        no-repeat;
-    background-position: bottom right;
-    padding: 0 8px 8px 0;
-    background-repeat: no-repeat;
-    background-origin: content-box;
-    box-sizing: border-box;
-    cursor: pointer;
 }
 </style>

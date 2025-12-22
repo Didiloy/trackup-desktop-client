@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -11,7 +12,7 @@ defineOptions({
         title: 'Likes',
         icon: 'pi pi-heart',
         description: 'Affiche le nombre total de likes',
-        category: 'activity',
+        category: EWidgetCategory.Activity,
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }
 })

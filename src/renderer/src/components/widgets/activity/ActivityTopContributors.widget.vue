@@ -5,6 +5,7 @@ import { useServerStore } from '@/stores/server'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { computed } from 'vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -12,7 +13,7 @@ defineOptions({
         title: 'Top Contributeurs',
         icon: 'pi pi-star',
         description: "Affiche les meilleurs contributeurs de l'activité",
-        category: 'activity',
+        category: EWidgetCategory.Activity,
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
     }
 })

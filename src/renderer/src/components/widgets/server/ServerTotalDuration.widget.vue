@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -10,7 +11,7 @@ defineOptions({
         title: 'Durée Totale',
         icon: 'pi pi-clock',
         description: 'Affiche la durée totale des sessions',
-        category: 'server',
+        category: EWidgetCategory.Server,
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
     }
 })

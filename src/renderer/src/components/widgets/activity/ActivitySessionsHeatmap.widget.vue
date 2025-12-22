@@ -6,6 +6,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 defineOptions({
     widgetMetadata: {
@@ -13,7 +14,7 @@ defineOptions({
         title: 'Carte de Chaleur',
         icon: 'pi pi-table',
         description: 'Affiche la carte de chaleur des sessions',
-        category: 'activity',
+        category: EWidgetCategory.Activity,
         defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
     }
 })

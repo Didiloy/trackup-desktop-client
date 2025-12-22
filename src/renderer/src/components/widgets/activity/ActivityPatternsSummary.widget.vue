@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
+import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
 
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
@@ -11,7 +12,7 @@ defineOptions({
         title: 'Résumé des Tendances',
         icon: 'pi pi-calendar',
         description: "Affiche les tendances temporelles de l'activité",
-        category: 'activity',
+        category: EWidgetCategory.Activity,
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
     }
 })
