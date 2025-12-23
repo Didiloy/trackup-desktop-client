@@ -6,8 +6,8 @@ import ActivityDurationWidget from '@/components/widgets/activity/ActivityDurati
 import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularity.widget.vue'
 import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikes.widget.vue'
 import ActivityTopContributorsWidget from '@/components/widgets/activity/ActivityTopContributors.widget.vue'
-import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
 import ActivityGrowthComparisonWidget from '@/components/widgets/activity/ActivityGrowthComparison.widget.vue'
+import ActivitySessionsTableWidget from '@/components/widgets/activity/ActivitySessionsTable.widget.vue'
 import ActivitySkillDistribution from '@/components/activities/profile/ActivitySkillDistribution.vue'
 import ActivityMetadataList from '@/components/activities/profile/ActivityMetadataList.vue'
 import ActivitySessionsHeatmapWidget from '@/components/widgets/activity/ActivitySessionsHeatmap.widget.vue'
@@ -19,8 +19,7 @@ import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/meta
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useServerStore } from '@/stores/server'
 import type {
-    IActivity,
-    IActivitySessionListItem
+    IActivity
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
@@ -41,7 +40,7 @@ const { t } = useI18n()
 const router = useRouter()
 const activityId = computed(() => route.params.activityId as string)
 
-const { getActivityById, listActivitySessions, deleteActivity } = useActivityCRUD()
+const { getActivityById, deleteActivity } = useActivityCRUD()
 const { getActivityStatsDetails } = useActivityStatsCRUD()
 const { listSkillLevels } = useActivitySkillLevelCRUD()
 const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
@@ -51,15 +50,10 @@ const activity = ref<IActivity | null>(null)
 const activityDetails = ref<IActivityStatsDetails | null>(null)
 const skillLevels = ref<IActivitySkillLevel[]>([])
 const metadataDefinitions = ref<IActivityMetadataDefinition[]>([])
-const sessions = ref<IActivitySessionListItem[]>([])
-const sessions_total = ref(0)
-const sessions_page = ref(1)
-const sessions_rows = ref(10)
 const show_delete_confirm = ref(false)
 const show_create_session_dialog = ref(false)
 const show_edit_dialog = ref(false)
 const loading = ref(true)
-const sessions_loading = ref(false)
 const error = ref<string | null>(null)
 
 async function loadActivity(): Promise<void> {
@@ -88,7 +82,6 @@ async function loadActivity(): Promise<void> {
         activityDetails.value = detailsRes.data ?? null
         skillLevels.value = skillRes.data ?? []
         metadataDefinitions.value = metadataRes.data ?? []
-        await loadSessions()
     } catch (e) {
         error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {
@@ -96,32 +89,7 @@ async function loadActivity(): Promise<void> {
     }
 }
 
-async function loadSessions(page = sessions_page.value, rows = sessions_rows.value): Promise<void> {
-    if (!server_store.getPublicId || !activityId.value) return
-    sessions_loading.value = true
-    try {
-        const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
-            page,
-            limit: rows
-        })
-        if (res.error || !res.data) {
-            error.value = res.error ?? t('messages.error.fetch')
-            return
-        }
-        sessions.value = res.data.data as unknown as IActivitySessionListItem[]
-        sessions_total.value = res.data.total
-        sessions_page.value = res.data.page
-        sessions_rows.value = res.data.limit
-    } catch (e) {
-        error.value = e instanceof Error ? e.message : t('messages.error.fetch')
-    } finally {
-        sessions_loading.value = false
-    }
-}
 
-function handleSessionPage(event: { page: number; rows: number }): void {
-    void loadSessions(event.page, event.rows)
-}
 
 function handleEdit(): void {
     show_edit_dialog.value = true
@@ -157,8 +125,7 @@ async function confirmDelete(): Promise<void> {
 }
 
 async function handleSessionCreated(): Promise<void> {
-    await loadSessions()
-    // Also reload stats as they might have changed
+    // Reload stats as they might have changed
     if (server_store.getPublicId && activityId.value) {
         const res = await getActivityStatsDetails(server_store.getPublicId, activityId.value)
         if (res.data) {
@@ -241,22 +208,8 @@ onMounted(async () => {
                     <!-- Heatmap in its own full-width card -->
                     <ActivitySessionsHeatmapWidget :show-identity="false" class="mb-6 w-full" />
 
-                    <!-- Recent sessions table in a separate card -->
-                    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-semibold text-surface-600">
-                                {{ t('views.activity.recent_sessions') }}
-                            </p>
-                        </div>
-                        <ActivitySessionsTable
-                            :sessions="sessions"
-                            :loading="sessions_loading"
-                            :total="sessions_total"
-                            :page="sessions_page"
-                            :rows="sessions_rows"
-                            @page="handleSessionPage"
-                        />
-                    </div>
+                    <!-- Recent sessions widget -->
+                    <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
                 </TabPanel>
 
                 <TabPanel value="details">
