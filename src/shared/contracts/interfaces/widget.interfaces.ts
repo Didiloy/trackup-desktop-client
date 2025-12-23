@@ -1,17 +1,13 @@
 import type { Component } from 'vue'
+import { EWidgetCategory } from "../enums/widget-category.enum";
 
-export enum EWidgetCategory {
-    Server = 'server',
-    Activity = 'activity',
-    Custom = 'custom'
-}
 
 export interface IWidgetMetadata {
     id: string
     title: string
     icon?: string
     description?: string
-    category: EWidgetCategory
+    category: IWidgetCategory
     /**
      * When set to false, this widget will be skipped by the discovery mechanism.
      * Default behavior (undefined or true) is to include the widget.
@@ -25,15 +21,17 @@ export interface IWidgetMetadata {
         maxW?: number
         maxH?: number
     }
+    /**
+     * If true, this widget requires configuration before being added.
+     */
+    requiresConfig?: boolean
 }
 
 export interface IWidgetCategory {
     /** Category machine name from metadata.category (lowercase) */
-    key: string
+    key: EWidgetCategory
     /** Human-friendly label to show in UI (can map known categories) */
     label: string
-    /** Number of widgets in this category */
-    count: number
 }
 
 export interface ISelectOption {
@@ -52,6 +50,10 @@ export interface IWidgetLayoutItem {
     minH?: number
     maxW?: number
     maxH?: number
+    /**
+     * Optional configuration for the widget (e.g. specific activity ID).
+     */
+    config?: Record<string, any>
 }
 
 export interface IWidgetComponent {

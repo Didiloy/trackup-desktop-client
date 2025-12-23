@@ -12,6 +12,8 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Card from 'primevue/card'
 import Select from 'primevue/select'
+import WidgetConfigDialog from './WidgetConfigDialog.vue'
+import ToggleButton from 'primevue/togglebutton'
 
 const props = defineProps<{
     context: 'server' | 'activity' | string
@@ -20,19 +22,25 @@ const props = defineProps<{
 
 const { t } = useI18n()
 // Discover all widgets globally (no context filtering)
-const { sortedWidgets, getWidgetById, categoryOptions } = useWidgets()
+const { widgets, getWidgetById, categoryOptions } = useWidgets()
 // Layout remains contextual to props.context and entityId
-const { layout, widgetIds, addWidget, removeWidget, updateLayout, resetLayout, hasWidget } =
+const { layout, addWidget, removeWidget, updateLayout, resetLayout, hasWidget } =
     useWidgetLayout(props.context, props.entityId)
 
 const showAddDialog = ref(false)
-const isDraggable = ref(true)
-const isResizable = ref(true)
+const showConfigDialog = ref(false)
+const isEditing = ref(false)
+// Grid layout props
 const colNum = ref(12)
 const rowHeight = ref(60)
 
+// Computed for drag/resize based on isEditing
+const isDraggable = computed(() => isEditing.value)
+const isResizable = computed(() => isEditing.value)
+
 // Category selection state for the add-widget modal
 const selectedCategory = ref<string | null>(null)
+const selectedWidgetForConfig = ref<IWidgetComponent | null>(null)
 
 // Initialize default category when dialog opens
 watch(showAddDialog, (visible) => {
@@ -46,7 +54,7 @@ watch(showAddDialog, (visible) => {
  * Available widgets that are not currently in the layout
  */
 const availableWidgetsToAdd = computed<IWidgetComponent[]>(() => {
-    const base = sortedWidgets.value.filter((widget) => !hasWidget(widget.id))
+    const base = widgets.value.filter((widget) => !hasWidget(widget.id))
     if (!selectedCategory.value) return base
     return base.filter((w) => String(w.metadata.category).toLowerCase() === selectedCategory.value)
 })
@@ -63,9 +71,22 @@ function handleLayoutUpdate(newLayout: IWidgetLayoutItem[]): void {
  */
 function handleAddWidget(widgetId: string): void {
     const widget = getWidgetById(widgetId)
-    if (widget) {
+    if (!widget) return
+
+    showAddDialog.value = false
+
+    if (widget.metadata.requiresConfig) {
+        selectedWidgetForConfig.value = widget
+        showConfigDialog.value = true
+    } else {
         addWidget(widgetId, widget.metadata)
-        showAddDialog.value = false
+    }
+}
+
+function handleConfigSave(config: Record<string, any>) {
+    if (selectedWidgetForConfig.value) {
+        addWidget(selectedWidgetForConfig.value.id, selectedWidgetForConfig.value.metadata, config)
+        selectedWidgetForConfig.value = null
     }
 }
 
@@ -104,24 +125,36 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
         <!-- Header with actions -->
         <div class="dashboard-header flex items-center justify-between mb-4 gap-3">
             <div class="flex items-center gap-3">
-                <Button
-                    :label="t('common.widgets.add_widget')"
-                    icon="pi pi-plus"
-                    severity="success"
+                <ToggleButton
+                    v-model="isEditing"
+                    :onLabel="t('common.widgets.done_editing')"
+                    :offLabel="t('common.widgets.edit_layout')"
+                    onIcon="pi pi-check"
+                    offIcon="pi pi-pencil"
+                    class="w-36"
                     size="small"
-                    @click="openAddDialog"
                 />
-                <Button
-                    :label="t('common.widgets.reset_layout')"
-                    icon="pi pi-refresh"
-                    severity="secondary"
-                    outlined
-                    size="small"
-                    @click="handleResetLayout"
-                />
+
+                <template v-if="isEditing">
+                    <Button
+                        :label="t('common.widgets.add_widget')"
+                        icon="pi pi-plus"
+                        severity="success"
+                        size="small"
+                        @click="openAddDialog"
+                    />
+                    <Button
+                        :label="t('common.widgets.reset_layout')"
+                        icon="pi pi-refresh"
+                        severity="secondary"
+                        outlined
+                        size="small"
+                        @click="handleResetLayout"
+                    />
+                </template>
             </div>
             <div class="text-sm text-surface-500">
-                {{ widgetIds.length }} {{ t('common.widgets.title').toLowerCase() }}
+                <!-- {{ widgetIds.length }} {{ t('common.widgets.title').toLowerCase() }} -->
             </div>
         </div>
 
@@ -153,10 +186,14 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                     class="widget-grid-item"
                 >
                     <div
-                        class="widget-wrapper h-full flex flex-col bg-white rounded-lg shadow-sm border border-surface-200 overflow-hidden"
+                        class="widget-wrapper h-full flex flex-col bg-white rounded-lg shadow-sm border overflow-hidden"
+                        :class="[
+                            isEditing ? 'border-dashed border-primary-300' : 'border-transparent'
+                        ]"
                     >
-                        <!-- Widget header with remove button -->
+                        <!-- Widget header with remove button (Only in Edit Mode) -->
                         <div
+                            v-if="isEditing"
                             class="widget-header flex items-center justify-between px-3 py-2 bg-surface-50 border-b border-surface-200"
                         >
                             <div
@@ -179,10 +216,16 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                         </div>
 
                         <!-- Widget content -->
-                        <div class="widget-content flex-1 overflow-auto p-3">
+                        <div class="widget-content flex-1 overflow-auto p-3 relative h-full">
+                            <!-- Overlay to prevent interaction in Edit Mode -->
+                            <div
+                                v-if="isEditing"
+                                class="absolute inset-0 z-10 bg-white/10 cursor-move"
+                            ></div>
                             <component
                                 :is="getWidgetComponent(item.i)"
                                 v-if="getWidgetComponent(item.i)"
+                                :config="item.config"
                             />
                             <div
                                 v-else
@@ -288,6 +331,16 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                 </div>
             </div>
         </Dialog>
+
+
+        <!-- Widget Config Dialog -->
+        <WidgetConfigDialog
+            v-if="selectedWidgetForConfig"
+            v-model:visible="showConfigDialog"
+            :widget="selectedWidgetForConfig"
+            :context="context"
+            @save="handleConfigSave"
+        />
     </div>
 </template>
 
@@ -298,6 +351,12 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
 
 .grid-container {
     min-height: 400px;
+}
+
+/* Add grid background in edit mode */
+.grid-container:has(.vue-grid-item.vue-grid-placeholder) {
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
 .widget-grid-item {

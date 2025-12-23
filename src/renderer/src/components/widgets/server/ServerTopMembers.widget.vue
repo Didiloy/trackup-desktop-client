@@ -4,7 +4,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
-import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {

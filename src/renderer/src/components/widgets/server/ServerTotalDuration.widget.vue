@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
-import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {

@@ -51,6 +51,7 @@ declare module 'vue' {
     ActivityTimelineChartWidget: typeof import('./src/components/widgets/activity/ActivityTimelineChart.widget.vue')['default']
     'ActivityTopContributors.widget': typeof import('./src/components/widgets/activity/ActivityTopContributors.widget.vue')['default']
     ActivityTopContributorsWidget: typeof import('./src/components/widgets/activity/ActivityTopContributors.widget.vue')['default']
+    ActivityWidgetConfig: typeof import('./src/components/widgets/ActivityWidgetConfig.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     AppUpdateModal: typeof import('./src/components/app-updates/AppUpdateModal.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
@@ -177,6 +178,7 @@ declare module 'vue' {
     TransitionGroupWrapper: typeof import('./src/components/common/transitions/TransitionGroupWrapper.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
     Versions: typeof import('./src/components/app-updates/Versions.vue')['default']
+    WidgetConfigDialog: typeof import('./src/components/widgets/WidgetConfigDialog.vue')['default']
     WidgetDashboard: typeof import('./src/components/widgets/WidgetDashboard.vue')['default']
   }
   export interface GlobalDirectives {

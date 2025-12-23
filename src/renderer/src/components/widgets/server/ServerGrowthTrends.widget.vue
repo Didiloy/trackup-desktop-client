@@ -5,7 +5,7 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import { useServerStatsStore } from '@/stores/server-stats'
 import { useServerStore } from '@/stores/server'
 import type { IServerGrowthResponse } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
-import { EWidgetCategory } from '@shared/contracts/interfaces/widget.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {

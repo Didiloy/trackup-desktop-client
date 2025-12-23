@@ -25,7 +25,8 @@ const DEFAULT_LAYOUTS: Record<string, Record<string, IWidgetLayoutItem[]>> = {
 }
 
 /**
- * Composable to manage widget layout persistence
+ * Composable to manage widget layout persistence.
+ * RESPONSIBILITY: Grid State, Positioning, Persistence. Knows NOTHING about widget definitions.
  * @param context - The widget context ('server' | 'activity' | etc.)
  * @param entityId - The entity ID (serverId, activityId, etc.)
  */
@@ -42,7 +43,7 @@ export function useWidgetLayout(context: string, entityId: string) {
             const stored = localStorage.getItem(storageKey.value)
             if (stored) {
                 const parsed = JSON.parse(stored) as IWidgetLayoutItem[]
-                console.log(`Loaded layout for ${storageKey.value}:`, parsed.length, 'widgets')
+                // console.log(`Loaded layout for ${storageKey.value}:`, parsed.length, 'widgets')
                 return parsed
             }
         } catch (error) {
@@ -61,7 +62,7 @@ export function useWidgetLayout(context: string, entityId: string) {
             const layoutToSave = newLayout || layout.value
             localStorage.setItem(storageKey.value, JSON.stringify(layoutToSave))
             isDirty.value = false
-            console.log(`Saved layout for ${storageKey.value}:`, layoutToSave.length, 'widgets')
+            // console.log(`Saved layout for ${storageKey.value}:`, layoutToSave.length, 'widgets')
         } catch (error) {
             console.error('Error saving widget layout:', error)
         }
@@ -89,9 +90,10 @@ export function useWidgetLayout(context: string, entityId: string) {
     }
 
     /**
-     * Add a widget to the layout
+     * Add a widget to the layout.
+     * Takes metadata directly - does NOT look it up.
      */
-    function addWidget(widgetId: string, metadata: IWidgetMetadata) {
+    function addWidget(widgetId: string, metadata: IWidgetMetadata, config?: Record<string, any>) {
         // Check if widget already exists
         if (layout.value.some((item) => item.i === widgetId)) {
             console.warn(`Widget ${widgetId} already exists in layout`)
@@ -119,7 +121,8 @@ export function useWidgetLayout(context: string, entityId: string) {
             minW: metadata.defaultSize.minW,
             minH: metadata.defaultSize.minH,
             maxW: metadata.defaultSize.maxW,
-            maxH: metadata.defaultSize.maxH
+            maxH: metadata.defaultSize.maxH,
+            config // Store config in layout item
         }
 
         layout.value.push(newItem)
@@ -155,11 +158,6 @@ export function useWidgetLayout(context: string, entityId: string) {
         return layout.value.some((item) => item.i === widgetId)
     }
 
-    /**
-     * Get widget IDs currently in the layout
-     */
-    const widgetIds = computed(() => layout.value.map((item) => item.i))
-
     // Initialize layout
     layout.value = loadLayout()
 
@@ -176,7 +174,6 @@ export function useWidgetLayout(context: string, entityId: string) {
 
     return {
         layout: computed(() => layout.value),
-        widgetIds,
         isDirty: computed(() => isDirty.value),
         loadLayout,
         saveLayout,

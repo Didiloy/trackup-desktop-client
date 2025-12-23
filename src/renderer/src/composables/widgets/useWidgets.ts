@@ -1,11 +1,11 @@
-import { ref, computed, markRaw } from 'vue'
-import type {
-    IWidgetComponent,
-    IWidgetMetadata,
-    IWidgetCategory,
-    ISelectOption
+import { ref, computed, markRaw, shallowRef } from 'vue'
+import {
+    type IWidgetComponent,
+    type IWidgetMetadata,
+    type IWidgetCategory,
+    type ISelectOption
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { ComputedRef } from 'vue'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 interface IWidgetGroup {
     category: IWidgetCategory
@@ -13,20 +13,12 @@ interface IWidgetGroup {
 }
 
 /**
- * Composable to discover and load all widgets dynamically (no context filtering).
+ * Composable to discover and load all widgets dynamically.
+ * RESPONSIBILITY: Registry & Metadata. Knows NOTHING about layout or persistence.
  */
-export function useWidgets(): {
-    widgets: ComputedRef<IWidgetComponent[]>
-    sortedWidgets: ComputedRef<IWidgetComponent[]>
-    categories: ComputedRef<IWidgetCategory[]>
-    categoryOptions: ComputedRef<ISelectOption[]>
-    groups: ComputedRef<IWidgetGroup[]>
-    isLoading: ComputedRef<boolean>
-    error: ComputedRef<Error | null>
-    getWidgetById: (id: string) => IWidgetComponent | undefined
-    refresh: () => Promise<void>
-} {
-    const widgets = ref<IWidgetComponent[]>([])
+export function useWidgets() {
+    // Use shallowRef for performance as components don't need deep reactivity
+    const widgets = shallowRef<IWidgetComponent[]>([])
     const isLoading = ref(false)
     const error = ref<Error | null>(null)
 
@@ -93,16 +85,20 @@ export function useWidgets(): {
             // Simple label mapping: capitalize first letter; can be replaced by i18n map
             if (!labels.has(key)) labels.set(key, key.charAt(0).toUpperCase() + key.slice(1))
         }
-        return [...counts.entries()].map(([key, count]) => ({
-            key,
-            label: labels.get(key) ?? key,
-            count
+        return [...counts.keys()].map((key) => ({
+            key: key as EWidgetCategory,
+            label: labels.get(key) ?? key
         }))
     })
 
     // Options for UI selects
     const categoryOptions = computed<ISelectOption[]>(() => {
-        return categories.value.map((c) => ({ value: c.key, label: c.label, count: c.count }))
+        return categories.value.map((c) => ({
+            value: c.key,
+            label: c.label,
+            count: widgets.value.filter((w) => String(w.metadata.category).toLowerCase() === c.key)
+                .length
+        }))
     })
 
     // Group widgets by category for easier rendering
@@ -117,13 +113,14 @@ export function useWidgets(): {
         return categories.value.map((c) => ({ category: c, widgets: map.get(c.key) ?? [] }))
     })
 
-    const availableWidgets = computed<IWidgetComponent[]>(() => widgets.value)
 
-    void discoverWidgets()
+    // Auto-discover on first use
+    if (widgets.value.length === 0) {
+        void discoverWidgets()
+    }
 
     return {
-        widgets: availableWidgets,
-        sortedWidgets,
+        widgets: sortedWidgets, // Expose sorted by default
         categories,
         categoryOptions,
         groups,
