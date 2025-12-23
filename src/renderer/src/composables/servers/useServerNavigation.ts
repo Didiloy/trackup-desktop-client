@@ -96,13 +96,13 @@ export function useServerNavigation(): UseServerNavigationResult {
         const hasCache = server_store.loadFromCache(serverId)
         if (!hasCache) server_store.resetState()
 
+        await getServerInfos(serverId)
+
         await router.push({
             name: 'ServerStats',
             params: { id: serverId },
             query: { ...route.query }
         })
-
-        await getServerInfos(serverId)
     }
 
     return { navigateToServer }
