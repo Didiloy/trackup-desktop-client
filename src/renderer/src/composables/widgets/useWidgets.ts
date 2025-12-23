@@ -1,132 +1,21 @@
-import { ref, computed, markRaw, shallowRef } from 'vue'
-import {
-    type IWidgetComponent,
-    type IWidgetMetadata,
-    type IWidgetCategory,
-    type ISelectOption
-} from '@shared/contracts/interfaces/widget.interfaces'
-import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
-
-interface IWidgetGroup {
-    category: IWidgetCategory
-    widgets: IWidgetComponent[]
-}
+import { useWidgetDiscovery } from './useWidgetDiscovery'
+import { useWidgetFiltering } from './useWidgetFiltering'
 
 /**
- * Composable to discover and load all widgets dynamically.
- * RESPONSIBILITY: Registry & Metadata. Knows NOTHING about layout or persistence.
+ * Composable Facade for Widgets
+ * RESPONSIBILITY: Orchestrating discovery and filtering for the UI.
+ * This remains the primary entry point for components that just want "everything".
  */
 export function useWidgets() {
-    // Use shallowRef for performance as components don't need deep reactivity
-    const widgets = shallowRef<IWidgetComponent[]>([])
-    const isLoading = ref(false)
-    const error = ref<Error | null>(null)
-
-    async function discoverWidgets(): Promise<void> {
-        isLoading.value = true
-        error.value = null
-
-        try {
-            const widgetModules = import.meta.glob('@/components/widgets/**/*.widget.vue', {
-                eager: true
-            }) as Record<string, unknown>
-
-            const discoveredWidgets: IWidgetComponent[] = []
-
-            for (const [path, module] of Object.entries(widgetModules)) {
-                const sfc = (module as { default: unknown }).default as unknown as {
-                    widgetMetadata?: IWidgetMetadata
-                }
-
-                const metadata = sfc?.widgetMetadata
-                if (!metadata) {
-                    console.warn(`Widget at ${path} is missing widgetMetadata`)
-                    continue
-                }
-
-                // Skip widgets that opt out of discovery
-                if (metadata.discoverable === false) {
-                    continue
-                }
-
-                discoveredWidgets.push({
-                    id: metadata.id,
-                    metadata,
-                    component: markRaw(sfc) as unknown as never
-                })
-            }
-
-            widgets.value = discoveredWidgets
-        } catch (err) {
-            error.value = err instanceof Error ? err : new Error('Failed to discover widgets')
-            console.error('Error discovering widgets:', err)
-        } finally {
-            isLoading.value = false
-        }
-    }
-
-    function getWidgetById(id: string): IWidgetComponent | undefined {
-        return widgets.value.find((w) => w.id === id)
-    }
-
-    const sortedWidgets = computed<IWidgetComponent[]>(() => {
-        return [...widgets.value].sort((a, b) => a.metadata.title.localeCompare(b.metadata.title))
-    })
-
-    // Derive categories from widget metadata
-    const categories = computed<IWidgetCategory[]>(() => {
-        const counts = new Map<string, number>()
-        const labels = new Map<string, string>()
-
-        for (const w of widgets.value) {
-            const cat = w.metadata.category
-            if (!cat) continue
-            const key = cat.key
-            counts.set(key, (counts.get(key) ?? 0) + 1)
-            // Use the label provided in the metadata
-            if (!labels.has(key)) labels.set(key, cat.label)
-        }
-        return [...counts.keys()].map((key) => ({
-            key: key as EWidgetCategory,
-            label: labels.get(key) ?? key
-        }))
-    })
-
-    // Options for UI selects
-    const categoryOptions = computed<ISelectOption[]>(() => {
-        return categories.value.map((c) => ({
-            value: c.key,
-            label: c.label,
-            count: widgets.value.filter((w) => w.metadata.category.key === c.key)
-                .length
-        }))
-    })
-
-    // Group widgets by category for easier rendering
-    const groups = computed<IWidgetGroup[]>(() => {
-        const map = new Map<string, IWidgetComponent[]>()
-        for (const w of sortedWidgets.value) {
-            const key = w.metadata.category.key
-            if (!key) continue
-            if (!map.has(key)) map.set(key, [])
-            map.get(key)!.push(w)
-        }
-        return categories.value.map((c) => ({ category: c, widgets: map.get(c.key) ?? [] }))
-    })
-
-
-    // Auto-discover on first use
-    if (widgets.value.length === 0) {
-        void discoverWidgets()
-    }
+    const { widgets, isLoading, error, discoverWidgets } = useWidgetDiscovery()
+    const { sortedWidgets, categoryOptions, groups, getWidgetById } = useWidgetFiltering(widgets)
 
     return {
-        widgets: sortedWidgets, // Expose sorted by default
-        categories,
+        widgets: sortedWidgets,
         categoryOptions,
         groups,
-        isLoading: computed(() => isLoading.value),
-        error: computed(() => error.value),
+        isLoading,
+        error,
         getWidgetById,
         refresh: discoverWidgets
     }

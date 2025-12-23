@@ -190,7 +190,7 @@ const entityId = route.params.id as string
 </script>
 
 <template>
-    <WidgetDashboard context="server" :entity-id="entityId" />
+    <WidgetDashboard context="server" :server-id="entityId" />
 </template>
 ```
 

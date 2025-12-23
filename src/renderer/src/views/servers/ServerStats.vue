@@ -9,13 +9,8 @@ const serverId = computed(() => route.params.id as string)
 </script>
 
 <template>
-    <WidgetDashboard context="server" :entity-id="serverId" />
+    <WidgetDashboard :server-id="serverId" />
 </template>
 
 <style scoped>
-.server-stats-view {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
 </style>

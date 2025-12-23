@@ -9,12 +9,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 const props = defineProps<{
     visible: boolean
     widget: IWidgetComponent
-    context?: string
 }>()
 
 const emit = defineEmits<{
     (e: 'update:visible', value: boolean): void
-    (e: 'save', config: Record<string, any>): void
     (e: 'cancel'): void
 }>()
 
@@ -46,7 +44,6 @@ watch(
 )
 
 function handleSave() {
-    emit('save', config.value)
     emit('update:visible', false)
 }
 
@@ -78,7 +75,7 @@ function handleCancel() {
 
         <div class="p-4">
             <div v-if="configComponent" class="config-form">
-                <component :is="configComponent" v-model="config" :context="context" />
+                <component :is="configComponent" v-model="config"/>
             </div>
             <div v-else class="text-surface-500 italic">
                 {{ t('common.widgets.no_config_available') }}

@@ -178,8 +178,12 @@ declare module 'vue' {
     TransitionGroupWrapper: typeof import('./src/components/common/transitions/TransitionGroupWrapper.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
     Versions: typeof import('./src/components/app-updates/Versions.vue')['default']
+    WidgetAddDialog: typeof import('./src/components/widgets/WidgetAddDialog.vue')['default']
     WidgetConfigDialog: typeof import('./src/components/widgets/WidgetConfigDialog.vue')['default']
     WidgetDashboard: typeof import('./src/components/widgets/WidgetDashboard.vue')['default']
+    WidgetDashboardHeader: typeof import('./src/components/widgets/WidgetDashboardHeader.vue')['default']
+    WidgetGrid: typeof import('./src/components/widgets/WidgetGrid.vue')['default']
+    WidgetGridItem: typeof import('./src/components/widgets/WidgetGridItem.vue')['default']
   }
   export interface GlobalDirectives {
     BadgeDirective: typeof import('primevue/badgedirective')['default']

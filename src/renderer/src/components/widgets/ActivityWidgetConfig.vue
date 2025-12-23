@@ -6,7 +6,6 @@ import type { IActivity } from '@shared/contracts/interfaces/entities/activity.i
 
 const props = defineProps<{
     modelValue: Record<string, any>
-    context?: string
 }>()
 
 const emit = defineEmits<{

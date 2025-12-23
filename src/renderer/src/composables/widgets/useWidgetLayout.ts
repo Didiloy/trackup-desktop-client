@@ -1,109 +1,135 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, type ComputedRef } from 'vue'
 import type {
     IWidgetLayoutItem,
     IWidgetMetadata
 } from '@shared/contracts/interfaces/widget.interfaces'
+import { useWidgetPersistence } from './useWidgetPersistence'
+
+interface WidgetModule {
+    default: { widgetMetadata?: IWidgetMetadata }
+}
+type WidgetImporter = () => Promise<WidgetModule>
 
 /**
- * Default widget layouts per context
+ * Default widgets list
  */
-const DEFAULT_LAYOUTS: Record<string, Record<string, IWidgetLayoutItem[]>> = {
-    server: {
-        default: [
-            { i: 'server-total-sessions', x: 0, y: 0, w: 3, h: 2, minW: 2, minH: 2 },
-            { i: 'server-active-members', x: 3, y: 0, w: 3, h: 2, minW: 2, minH: 2 },
-            { i: 'server-timeline-chart', x: 0, y: 2, w: 12, h: 4, minW: 6, minH: 3 }
-        ]
-    },
-    activity: {
-        default: [
-            { i: 'activity-duration', x: 0, y: 0, w: 3, h: 2, minW: 2, minH: 2 },
-            { i: 'activity-participants', x: 3, y: 0, w: 3, h: 2, minW: 2, minH: 2 },
-            { i: 'activity-timeline-chart', x: 0, y: 2, w: 12, h: 4, minW: 6, minH: 3 }
-        ]
-    }
+const DEFAULT_WIDGETS: WidgetImporter[] = [
+    () => import('@/components/widgets/server/ServerTotalSessions.widget.vue') as Promise<WidgetModule>,
+    () => import('@/components/widgets/server/ServerActiveMembers.widget.vue') as Promise<WidgetModule>,
+    () => import('@/components/widgets/server/ServerTimelineChart.widget.vue') as Promise<WidgetModule>,
+    () => import('@/components/widgets/server/ServerTopActivities.widget.vue') as Promise<WidgetModule>,
+]
+
+interface UseWidgetLayoutResult {
+    layout: ComputedRef<IWidgetLayoutItem[]>
+    isDirty: ComputedRef<boolean>
+    isLoading: ComputedRef<boolean>
+    resetLayout: () => Promise<IWidgetLayoutItem[]>
+    addWidget: (widgetId: string, metadata: IWidgetMetadata) => void
+    removeWidget: (widgetId: string) => void
+    updateLayout: (newLayout: IWidgetLayoutItem[]) => void
+    hasWidget: (widgetId: string) => boolean
+    reload: () => Promise<void>
 }
 
 /**
- * Composable to manage widget layout persistence.
- * RESPONSIBILITY: Grid State, Positioning, Persistence. Knows NOTHING about widget definitions.
- * @param context - The widget context ('server' | 'activity' | etc.)
- * @param entityId - The entity ID (serverId, activityId, etc.)
+ * Composable to manage widget layout.
+ * RESPONSIBILITY: Grid State, Positioning, Coordination with Persistence.
  */
-export function useWidgetLayout(context: string, entityId: string) {
-    const storageKey = computed(() => `widgets-layout-${context}-${entityId}`)
+export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
+    const { load, save } = useWidgetPersistence()
+    const storageKey = computed(() => `widgets-layout-server-${serverId}`)
+
     const layout = ref<IWidgetLayoutItem[]>([])
     const isDirty = ref(false)
+    const isLoading = ref(false)
 
     /**
-     * Load layout from localStorage
+     * Automatically generate a layout based on widget metadata
      */
-    function loadLayout(): IWidgetLayoutItem[] {
-        try {
-            const stored = localStorage.getItem(storageKey.value)
-            if (stored) {
-                const parsed = JSON.parse(stored) as IWidgetLayoutItem[]
-                // console.log(`Loaded layout for ${storageKey.value}:`, parsed.length, 'widgets')
-                return parsed
+    async function getDefaultLayout(): Promise<IWidgetLayoutItem[]> {
+        const items: IWidgetLayoutItem[] = []
+
+        let currentX = 0
+        let currentY = 0
+        let rowMaxHeight = 0
+
+        for (const importFn of DEFAULT_WIDGETS) {
+            try {
+                const module = await importFn()
+                const metadata = module.default.widgetMetadata
+
+                if (!metadata) continue
+
+                const { w, h, minW, minH, maxW, maxH } = metadata.defaultSize
+
+                // Simple flow layout logic
+                if (currentX + w > 12) {
+                    currentX = 0
+                    currentY += rowMaxHeight
+                    rowMaxHeight = 0
+                }
+
+                items.push({
+                    i: metadata.id,
+                    x: currentX,
+                    y: currentY,
+                    w,
+                    h,
+                    minW,
+                    minH,
+                    maxW,
+                    maxH
+                })
+
+                currentX += w
+                rowMaxHeight = Math.max(rowMaxHeight, h)
+            } catch (error) {
+                console.error('Failed to load default widget:', error)
             }
-        } catch (error) {
-            console.error('Error loading widget layout:', error)
         }
 
-        // Return default layout if nothing is stored
-        return getDefaultLayout()
+        return items
     }
 
     /**
-     * Save layout to localStorage
+     * Load layout using atomic persistence
      */
-    function saveLayout(newLayout?: IWidgetLayoutItem[]) {
-        try {
-            const layoutToSave = newLayout || layout.value
-            localStorage.setItem(storageKey.value, JSON.stringify(layoutToSave))
-            isDirty.value = false
-            // console.log(`Saved layout for ${storageKey.value}:`, layoutToSave.length, 'widgets')
-        } catch (error) {
-            console.error('Error saving widget layout:', error)
+    async function loadLayout(): Promise<void> {
+        isLoading.value = true
+        const stored = load<IWidgetLayoutItem[]>(storageKey.value)
+        if (stored) {
+            layout.value = stored
+        } else {
+            layout.value = await getDefaultLayout()
         }
+        isDirty.value = false
+        isLoading.value = false
     }
 
     /**
-     * Get default layout for the context
+     * Save layout using atomic persistence
      */
-    function getDefaultLayout(): IWidgetLayoutItem[] {
-        const contextDefaults = DEFAULT_LAYOUTS[context]
-        if (contextDefaults) {
-            return [...contextDefaults.default]
-        }
-        return []
+    function saveLayout(customLayout?: IWidgetLayoutItem[]): void {
+        const toSave = customLayout || layout.value
+        save(storageKey.value, toSave)
+        isDirty.value = false
     }
 
-    /**
-     * Reset layout to default
-     */
-    function resetLayout() {
-        const defaultLayout = getDefaultLayout()
-        layout.value = defaultLayout
-        saveLayout(defaultLayout)
-        return defaultLayout
+    async function resetLayout(): Promise<IWidgetLayoutItem[]> {
+        isLoading.value = true
+        const defaults = await getDefaultLayout()
+        layout.value = defaults
+        saveLayout(defaults)
+        isLoading.value = false
+        return defaults
     }
 
-    /**
-     * Add a widget to the layout.
-     * Takes metadata directly - does NOT look it up.
-     */
-    function addWidget(widgetId: string, metadata: IWidgetMetadata, config?: Record<string, any>) {
-        // Check if widget already exists
-        if (layout.value.some((item) => item.i === widgetId)) {
-            console.warn(`Widget ${widgetId} already exists in layout`)
-            return
-        }
+    function addWidget(widgetId: string, metadata: IWidgetMetadata): void {
+        if (layout.value.some((item) => item.i === widgetId)) return
 
-        // Calculate position for new widget (bottom of the grid)
         let maxY = 0
         let maxYHeight = 0
-
         layout.value.forEach((item) => {
             const bottom = item.y + item.h
             if (bottom > maxY) {
@@ -122,7 +148,6 @@ export function useWidgetLayout(context: string, entityId: string) {
             minH: metadata.defaultSize.minH,
             maxW: metadata.defaultSize.maxW,
             maxH: metadata.defaultSize.maxH,
-            config // Store config in layout item
         }
 
         layout.value.push(newItem)
@@ -130,10 +155,7 @@ export function useWidgetLayout(context: string, entityId: string) {
         saveLayout()
     }
 
-    /**
-     * Remove a widget from the layout
-     */
-    function removeWidget(widgetId: string) {
+    function removeWidget(widgetId: string): void {
         const index = layout.value.findIndex((item) => item.i === widgetId)
         if (index !== -1) {
             layout.value.splice(index, 1)
@@ -142,45 +164,33 @@ export function useWidgetLayout(context: string, entityId: string) {
         }
     }
 
-    /**
-     * Update the entire layout (called when grid is modified)
-     */
-    function updateLayout(newLayout: IWidgetLayoutItem[]) {
+    function updateLayout(newLayout: IWidgetLayoutItem[]): void {
         layout.value = newLayout
         isDirty.value = true
         saveLayout(newLayout)
     }
 
-    /**
-     * Check if a widget is in the layout
-     */
     function hasWidget(widgetId: string): boolean {
         return layout.value.some((item) => item.i === widgetId)
     }
 
-    // Initialize layout
-    layout.value = loadLayout()
+    // Initial load
+    void loadLayout()
 
-    // Auto-save on layout changes
-    watch(
-        layout,
-        () => {
-            if (isDirty.value) {
-                saveLayout()
-            }
-        },
-        { deep: true }
-    )
+    // Watch for entity changes to reload layout
+    watch(storageKey, () => {
+        void loadLayout()
+    })
 
     return {
         layout: computed(() => layout.value),
         isDirty: computed(() => isDirty.value),
-        loadLayout,
-        saveLayout,
+        isLoading: computed(() => isLoading.value),
         resetLayout,
         addWidget,
         removeWidget,
         updateLayout,
-        hasWidget
+        hasWidget,
+        reload: loadLayout
     }
 }
