@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { GridLayout, GridItem } from 'grid-layout-plus'
 import type {
     IWidgetLayoutItem,
@@ -6,7 +7,7 @@ import type {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import WidgetGridItem from './WidgetGridItem.vue'
 
-defineProps<{
+const props = defineProps<{
     layout: IWidgetLayoutItem[]
     isEditing: boolean
     colNum: number
@@ -16,14 +17,22 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'update:layout', newLayout: IWidgetLayoutItem[]): void
-    (e: 'remove', widgetId: string): void
+    (e: 'remove', instanceId: string): void
 }>()
+
+// Map layout to include 'i' property required by grid-layout-plus
+const gridLayout = computed(() =>
+    props.layout.map((item) => ({
+        ...item,
+        i: item.instanceId
+    }))
+)
 </script>
 
 <template>
     <div class="grid-container" :class="{ 'is-editing': isEditing }">
         <GridLayout
-            :layout="layout"
+            :layout="gridLayout"
             :use-css-transforms="true"
             :vertical-compact="true"
             :is-resizable="isEditing"
@@ -32,12 +41,17 @@ const emit = defineEmits<{
             :col-num="colNum"
             @layout-updated="emit('update:layout', $event)"
         >
-            <GridItem v-for="item in layout" :key="item.i" v-bind="item" class="widget-grid-item">
+            <GridItem
+                v-for="item in layout"
+                :key="item.instanceId"
+                v-bind="{ ...item, i: item.instanceId }"
+                class="widget-grid-item"
+            >
                 <WidgetGridItem
-                    :widget="getWidgetById(item.i)"
+                    :widget="getWidgetById(item.widgetId)"
                     :is-editing="isEditing"
                     :config="item.config"
-                    @remove="emit('remove', item.i)"
+                    @remove="emit('remove', item.instanceId)"
                 />
             </GridItem>
         </GridLayout>

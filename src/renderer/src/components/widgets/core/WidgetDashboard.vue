@@ -35,7 +35,7 @@ const selectedWidgetForConfig = ref<IWidgetComponent | null>(null)
 
 // Derived state for the add dialog
 const availableWidgetsToAdd = computed(() =>
-    widgets.value.filter((widget) => !hasWidget(widget.id))
+    widgets.value.filter((widget) => !hasWidget(widget.id, widget.metadata))
 )
 
 /**

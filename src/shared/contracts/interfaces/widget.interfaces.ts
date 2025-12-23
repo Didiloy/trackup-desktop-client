@@ -44,7 +44,8 @@ export interface IActivityWidgetConfig {
 }
 
 export interface IWidgetLayoutItem {
-    i: string // widget id
+    instanceId: string // unique instance id (UUID)
+    widgetId: string // widget type id
     x: number
     y: number
     w: number
