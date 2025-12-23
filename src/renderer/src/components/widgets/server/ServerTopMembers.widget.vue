@@ -4,6 +4,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -27,31 +28,18 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.server_stats.top_members', 'Most Active Members') }}
-            </h3>
-        </div>
-
-        <div v-if="server_stats_store.isLoading" class="space-y-4">
-            <div v-for="i in 5" :key="i" class="flex items-center gap-4">
-                <Skeleton shape="circle" size="2.5rem" />
-                <div class="flex-1">
-                    <Skeleton width="60%" class="mb-2" />
-                    <Skeleton width="40%" height="0.8rem" />
-                </div>
-            </div>
-        </div>
-
+    <BaseWidgetContainer
+        :title="t('views.server_stats.top_members', 'Most Active Members')"
+        :loading="server_stats_store.isLoading"
+    >
         <div
-            v-else-if="!server_stats_store.getDetails?.top_members?.length"
-            class="text-center py-8 text-surface-400"
+            v-if="!server_stats_store.getDetails?.top_members?.length"
+            class="text-center py-8 text-surface-400 h-full flex items-center justify-center"
         >
             {{ t('common.fields.none') }}
         </div>
 
-        <div v-else class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+        <div v-else class="space-y-4 h-full overflow-y-auto pr-1">
             <div
                 v-for="(member, index) in server_stats_store.getDetails.top_members"
                 :key="member.member_id"
@@ -86,5 +74,5 @@ const { t } = useI18n()
                 </div>
             </div>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

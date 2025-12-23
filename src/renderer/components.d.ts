@@ -60,6 +60,7 @@ declare module 'vue' {
     AvatarButton: typeof import('./src/components/common/buttons/AvatarButton.vue')['default']
     Badge: typeof import('primevue/badge')['default']
     BaseOverviewStatWidget: typeof import('./src/components/widgets/BaseOverviewStatWidget.vue')['default']
+    BaseWidgetContainer: typeof import('./src/components/widgets/BaseWidgetContainer.vue')['default']
     Button: typeof import('primevue/button')['default']
     Calendar: typeof import('primevue/calendar')['default']
     Checkbox: typeof import('primevue/checkbox')['default']

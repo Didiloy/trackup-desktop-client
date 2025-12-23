@@ -6,6 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
@@ -50,7 +51,7 @@ const sessions_loading = ref(false)
 
 async function loadSessions(page = sessions_page.value, rows = sessions_rows.value): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
-    
+
     sessions_loading.value = true
     try {
         const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
@@ -86,22 +87,26 @@ watch(
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm relative">
+    <BaseWidgetContainer :loading="sessions_loading" >
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
-        
-        <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.activity.recent_sessions') }}
-            </p>
+
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <p class="text-sm font-semibold text-surface-600">
+                    {{ t('views.activity.recent_sessions') }}
+                </p>
+            </div>
+        </template>
+
+        <div class="h-full px-5 pb-5">
+            <ActivitySessionsTable
+                :sessions="sessions"
+                :loading="sessions_loading"
+                :total="sessions_total"
+                :page="sessions_page"
+                :rows="sessions_rows"
+                @page="handleSessionPage"
+            />
         </div>
-        
-        <ActivitySessionsTable
-            :sessions="sessions"
-            :loading="sessions_loading"
-            :total="sessions_total"
-            :page="sessions_page"
-            :rows="sessions_rows"
-            @page="handleSessionPage"
-        />
-    </div>
+    </BaseWidgetContainer>
 </template>

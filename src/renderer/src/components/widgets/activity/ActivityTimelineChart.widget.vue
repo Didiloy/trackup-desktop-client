@@ -11,6 +11,7 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import {
     type IWidgetMetadata,
     type IActivityWidgetConfig
@@ -259,40 +260,40 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6">
-        <div
-            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6"
-        >
-            <div class="flex items-center gap-3">
-                <h3 class="text-lg font-bold text-surface-900">
-                    {{ t('views.activity.performance_section.sessions_timeline') }}
-                </h3>
-                <ActivityIdentityCorner
-                    :show="props.showIdentity"
-                    class="static"
-                    :activity-id="activityId"
-                />
+    <BaseWidgetContainer :loading="isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg font-bold text-surface-900">
+                            {{ t('views.activity.performance_section.sessions_timeline') }}
+                        </h3>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                        />
+                    </div>
+
+                    <PeriodSelector
+                        v-model:period="period"
+                        v-model:selected-period-type="selectedPeriodType"
+                    />
+                </div>
             </div>
+        </template>
 
-            <PeriodSelector
-                v-model:period="period"
-                v-model:selected-period-type="selectedPeriodType"
-            />
-        </div>
-
-        <div v-if="isLoading" class="h-[300px] flex items-center justify-center">
-            <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
-        </div>
-
-        <div v-else-if="hasData" :style="{ minHeight: `${height}px` }">
+        <div v-if="hasData" class="h-full" :style="{ minHeight: `${height}px` }">
             <VueUiXy :dataset="dataset" :config="xyConfig" />
         </div>
 
         <div
             v-else
-            class="h-[300px] rounded-md flex items-center justify-center text-sm text-surface-400"
+            class="h-full rounded-md flex items-center justify-center text-sm text-surface-400"
         >
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

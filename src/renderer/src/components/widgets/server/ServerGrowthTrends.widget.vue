@@ -5,6 +5,7 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import { useServerStatsStore } from '@/stores/server-stats'
 import { useServerStore } from '@/stores/server'
 import type { IServerGrowthResponse } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -122,28 +123,26 @@ function getGrowthIcon(value: number): string {
 </script>
 
 <template>
-    <div
-        class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full flex flex-col"
-    >
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.server_stats.growth_trends') }}
-            </h3>
-            <Select
-                v-model="selectedPeriod"
-                :options="periodOptions"
-                option-label="label"
-                option-value="value"
-                class="w-32"
-                size="small"
-            />
-        </div>
+    <BaseWidgetContainer :loading="isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('views.server_stats.growth_trends') }}
+                    </h3>
+                    <Select
+                        v-model="selectedPeriod"
+                        :options="periodOptions"
+                        option-label="label"
+                        option-value="value"
+                        class="w-32"
+                        size="small"
+                    />
+                </div>
+            </div>
+        </template>
 
-        <div v-if="isLoading" class="flex-1 flex items-center justify-center">
-            <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
-        </div>
-
-        <div v-else-if="metrics.length > 0" class="grid grid-cols-1 gap-4 flex-1">
+        <div v-if="metrics.length > 0" class="grid grid-cols-1 gap-4 h-full">
             <div
                 v-for="metric in metrics"
                 :key="metric.key"
@@ -177,8 +176,8 @@ function getGrowthIcon(value: number): string {
             </div>
         </div>
 
-        <div v-else class="flex-1 flex items-center justify-center text-sm text-surface-400">
+        <div v-else class="h-full flex items-center justify-center text-sm text-surface-400">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

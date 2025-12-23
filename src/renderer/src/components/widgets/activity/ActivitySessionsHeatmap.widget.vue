@@ -6,6 +6,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import {
     type IWidgetMetadata,
     type IActivityWidgetConfig
@@ -130,28 +131,28 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm w-full">
-        <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-                <p class="text-sm font-semibold text-surface-600">
-                    {{ t('views.activity.performance_section.heatmap') }}
-                </p>
-                <ActivityIdentityCorner
-                    :show="props.showIdentity"
-                    class="static"
-                    :activity-id="activityId"
-                />
+    <BaseWidgetContainer :loading="isLoadingLocal">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <p class="text-sm font-semibold text-surface-600">
+                            {{ t('views.activity.performance_section.heatmap') }}
+                        </p>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                        />
+                    </div>
+                    <p class="text-xs text-surface-500">
+                        {{ t('views.activity.performance_section.last_year') }}
+                    </p>
+                </div>
             </div>
-            <p class="text-xs text-surface-500">
-                {{ t('views.activity.performance_section.last_year') }}
-            </p>
-        </div>
+        </template>
 
-        <div v-if="isLoadingLocal" class="h-[120px] flex items-center justify-center">
-            <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
-        </div>
-
-        <div v-else class="w-full overflow-x-auto">
+        <div class="w-full overflow-x-auto h-full">
             <div class="grid grid-cols-52 gap-1 min-w-full">
                 <div
                     v-for="(week, weekIndex) in heatmapData"
@@ -161,12 +162,12 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                     <div
                         v-for="day in week"
                         :key="day.date.toISOString()"
-                        class="w-full aspect-square rounded-sm transition-colors duration-200"
                         v-tooltip.bottom="tooltipFor(day)"
+                        class="w-full aspect-square rounded-sm transition-colors duration-200"
                         :class="intensity(day.count)"
                     ></div>
                 </div>
             </div>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

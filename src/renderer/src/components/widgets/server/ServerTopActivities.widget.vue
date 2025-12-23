@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { computed } from 'vue'
 import { useServerStatsStore } from '@/stores/server-stats'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -31,31 +32,18 @@ const maxSessions = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.server_stats.top_activities', 'Popular Activities') }}
-            </h3>
-        </div>
-
-        <div v-if="server_stats_store.isLoading" class="space-y-4">
-            <div v-for="i in 5" :key="i" class="flex flex-col gap-2">
-                <div class="flex justify-between">
-                    <Skeleton width="40%" />
-                    <Skeleton width="20%" />
-                </div>
-                <Skeleton width="100%" height="0.5rem" />
-            </div>
-        </div>
-
+    <BaseWidgetContainer
+        :title="t('views.server_stats.top_activities', 'Popular Activities')"
+        :loading="server_stats_store.isLoading"
+    >
         <div
-            v-else-if="!server_stats_store.getDetails?.top_activities?.length"
-            class="text-center py-8 text-surface-400"
+            v-if="!server_stats_store.getDetails?.top_activities?.length"
+            class="text-center py-8 text-surface-400 h-full flex items-center justify-center"
         >
             {{ t('common.fields.none') }}
         </div>
 
-        <div v-else class="space-y-5 max-h-[300px] overflow-y-auto pr-1">
+        <div v-else class="space-y-5 h-full overflow-y-auto pr-1">
             <div
                 v-for="activity in server_stats_store.getDetails.top_activities"
                 :key="activity.activity_id"
@@ -84,5 +72,5 @@ const maxSessions = computed(() => {
                 </div>
             </div>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

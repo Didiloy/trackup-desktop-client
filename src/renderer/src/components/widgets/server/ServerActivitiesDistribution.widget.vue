@@ -5,6 +5,7 @@ import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -121,23 +122,16 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.server_stats.distribution', 'Activity Distribution') }}
-            </h3>
-        </div>
-
-        <div v-if="server_stats_store.isLoading" class="h-[300px] flex items-center justify-center">
-            <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
-        </div>
-
-        <div v-else-if="dataset.length > 0" class="flex justify-center">
+    <BaseWidgetContainer
+        :title="t('views.server_stats.distribution', 'Activity Distribution')"
+        :loading="server_stats_store.isLoading"
+    >
+        <div v-if="dataset.length > 0" class="flex justify-center h-full">
             <VueUiDonut :dataset="dataset" :config="donutConfig" />
         </div>
 
-        <div v-else class="h-[300px] flex items-center justify-center text-surface-400">
+        <div v-else class="h-full flex items-center justify-center text-surface-400">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

@@ -9,6 +9,7 @@ import { useServerStore } from '@/stores/server'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -241,33 +242,33 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm mb-6 h-full">
-        <div
-            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6"
-        >
-            <h3 class="text-lg font-bold text-surface-900">
-                {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
-            </h3>
+    <BaseWidgetContainer :loading="isLoading" >
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
+                    </h3>
 
-            <PeriodSelector
-                v-model:period="period"
-                v-model:selected-period-type="selectedPeriodType"
-            />
-        </div>
+                    <PeriodSelector
+                        v-model:period="period"
+                        v-model:selected-period-type="selectedPeriodType"
+                    />
+                </div>
+            </div>
+        </template>
 
-        <div v-if="isLoading" class="h-[300px] flex items-center justify-center">
-            <i class="pi pi-spin pi-spinner text-primary-500 text-3xl"></i>
-        </div>
-
-        <div v-else-if="hasData" :style="{ minHeight: `${height}px` }">
+        <div v-if="hasData" class="h-full">
             <VueUiXy :dataset="dataset" :config="xyConfig" />
         </div>
 
         <div
             v-else
-            class="h-[300px] rounded-md flex items-center justify-center text-sm text-surface-400"
+            class="h-full rounded-md flex items-center justify-center text-sm text-surface-400"
         >
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>
