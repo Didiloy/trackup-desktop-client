@@ -30,7 +30,7 @@ const emit = defineEmits<{
             :is-draggable="isEditing"
             :row-height="rowHeight"
             :col-num="colNum"
-            @update:layout="emit('update:layout', $event)"
+            @layout-updated="emit('update:layout', $event)"
         >
             <GridItem v-for="item in layout" :key="item.i" v-bind="item" class="widget-grid-item">
                 <WidgetGridItem
