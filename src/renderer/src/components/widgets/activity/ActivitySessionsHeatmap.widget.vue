@@ -6,7 +6,10 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
@@ -133,17 +136,18 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                 <p class="text-sm font-semibold text-surface-600">
                     {{ t('views.activity.performance_section.heatmap') }}
                 </p>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
+                <ActivityIdentityCorner
+                    :show="props.showIdentity"
+                    class="static"
+                    :activity-id="activityId"
+                />
             </div>
             <p class="text-xs text-surface-500">
                 {{ t('views.activity.performance_section.last_year') }}
             </p>
         </div>
 
-        <div
-            v-if="isLoadingLocal"
-            class="h-[120px] flex items-center justify-center"
-        >
+        <div v-if="isLoadingLocal" class="h-[120px] flex items-center justify-center">
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
         </div>
 

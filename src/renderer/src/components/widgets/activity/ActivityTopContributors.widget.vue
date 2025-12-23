@@ -6,7 +6,10 @@ import { useRoute } from 'vue-router'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { computed, ref, onMounted, watch } from 'vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 

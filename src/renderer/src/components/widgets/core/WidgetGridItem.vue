@@ -53,9 +53,7 @@ const emit = defineEmits<{
             <div v-if="isEditing" class="absolute inset-0 z-10 bg-white/10 cursor-move"></div>
 
             <component :is="widget.component" v-if="widget" :config="config" />
-            <div v-else class="flex items-center justify-center h-full text-surface-400">
-                -
-            </div>
+            <div v-else class="flex items-center justify-center h-full text-surface-400">-</div>
         </div>
     </div>
 </template>

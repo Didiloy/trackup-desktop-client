@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import WidgetDashboard from '@/components/widgets/WidgetDashboard.vue'
+import WidgetDashboard from '@/components/widgets/core/WidgetDashboard.vue'
 
 const route = useRoute()
 const serverId = computed(() => route.params.id as string)

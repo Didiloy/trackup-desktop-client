@@ -6,7 +6,10 @@ import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsC
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityRanking } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -90,7 +93,11 @@ const rankPercent = computed(() => {
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.performance_section.ranking') }}
             </p>
-            <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
+            <ActivityIdentityCorner
+                :show="props.showIdentity"
+                class="static"
+                :activity-id="activityId"
+            />
         </div>
 
         <div v-if="isLoading" class="flex items-center justify-center py-10">

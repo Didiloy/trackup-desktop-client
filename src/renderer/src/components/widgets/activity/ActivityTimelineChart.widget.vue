@@ -11,7 +11,10 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -136,11 +139,11 @@ async function fetchTimeline(): Promise<void> {
         }
 
         if (fetchParams) {
-             const res = await getActivityStatsTimeline(serverId, activityId.value, fetchParams)
+            const res = await getActivityStatsTimeline(serverId, activityId.value, fetchParams)
 
-             if (res && 'data' in res && res.data) {
+            if (res && 'data' in res && res.data) {
                 timelineData.value = res.data
-             }
+            }
         }
     } finally {
         isLoading.value = false
@@ -264,7 +267,11 @@ const hasData = computed(() => !!sortedData.value.length)
                 <h3 class="text-lg font-bold text-surface-900">
                     {{ t('views.activity.performance_section.sessions_timeline') }}
                 </h3>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
+                <ActivityIdentityCorner
+                    :show="props.showIdentity"
+                    class="static"
+                    :activity-id="activityId"
+                />
             </div>
 
             <PeriodSelector

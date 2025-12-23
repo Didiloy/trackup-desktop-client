@@ -4,7 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 

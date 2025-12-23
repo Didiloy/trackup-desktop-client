@@ -24,7 +24,7 @@ const config = ref<Record<string, any>>({})
 // Map categories or specific widgets to their config components
 const configComponents: Record<string, any> = {
     // Dynamic import for Activity Widget Config
-    [EWidgetCategory.Activity]: defineAsyncComponent(() => import('./ActivityWidgetConfig.vue'))
+    [EWidgetCategory.Activity]: defineAsyncComponent(() => import('../ActivityWidgetConfig.vue'))
 }
 
 const configComponent = computed(() => {

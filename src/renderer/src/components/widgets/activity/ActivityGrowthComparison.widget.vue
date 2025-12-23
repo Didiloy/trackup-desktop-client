@@ -7,7 +7,10 @@ import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityGrowthTrends } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -54,7 +57,7 @@ async function fetchGrowth(): Promise<void> {
     isLoadingLocal.value = true
     try {
         const res = await getActivityStatsGrowthTrends(serverId, activityId.value, {
-             period: selectedPeriod.value
+            period: selectedPeriod.value
         })
         if (res.data) {
             localGrowthTrends.value = res.data
@@ -130,7 +133,11 @@ function formatValue(val: number, isDuration?: boolean): string {
                 <p class="text-sm font-semibold text-surface-600">
                     {{ t('views.activity.evolution_comparison') }}
                 </p>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
+                <ActivityIdentityCorner
+                    :show="props.showIdentity"
+                    class="static"
+                    :activity-id="activityId"
+                />
             </div>
             <PeriodSelector
                 :period="null"
