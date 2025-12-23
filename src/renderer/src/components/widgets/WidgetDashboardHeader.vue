@@ -26,7 +26,7 @@ const { t } = useI18n()
                 :offLabel="t('common.widgets.edit_layout')"
                 onIcon="pi pi-check"
                 offIcon="pi pi-pencil"
-                class="w-36"
+                class="w-auto"
                 size="small"
             />
 

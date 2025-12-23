@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useWidgets } from '@/composables/widgets/useWidgets'
 import { useWidgetLayout } from '@/composables/widgets/useWidgetLayout'
 import WidgetDashboardHeader from './WidgetDashboardHeader.vue'
 import WidgetGrid from './WidgetGrid.vue'
 import WidgetAddDialog from './WidgetAddDialog.vue'
+import WidgetConfigDialog from './WidgetConfigDialog.vue'
+import type { IWidgetComponent } from '@shared/contracts/interfaces/widget.interfaces'
 
 const props = defineProps<{
     serverId: string
 }>()
+
+const { t } = useI18n()
 
 // Use refactored composables
 const { widgets, categoryOptions, getWidgetById } = useWidgets()
@@ -25,6 +30,8 @@ const {
 // Dashboard state
 const isEditing = ref(false)
 const showAddDialog = ref(false)
+const showConfigDialog = ref(false)
+const selectedWidgetForConfig = ref<IWidgetComponent | null>(null)
 
 // Derived state for the add dialog
 const availableWidgetsToAdd = computed(() =>
@@ -39,7 +46,21 @@ function handleAddWidgetRequest(widgetId: string): void {
     if (!widget) return
 
     showAddDialog.value = false
-    addWidget(widgetId, widget.metadata)
+
+    if (widget.metadata.requiresConfig) {
+        selectedWidgetForConfig.value = widget
+        showConfigDialog.value = true
+    } else {
+        addWidget(widgetId, widget.metadata)
+    }
+}
+
+function handleConfigSave(config: any): void {
+    if (!selectedWidgetForConfig.value) return
+
+    addWidget(selectedWidgetForConfig.value.id, selectedWidgetForConfig.value.metadata, config)
+    showConfigDialog.value = false
+    selectedWidgetForConfig.value = null
 }
 </script>
 
@@ -70,13 +91,13 @@ function handleAddWidgetRequest(widgetId: string): void {
         <!-- Empty state -->
         <div v-else class="empty-state flex flex-col items-center justify-center py-16 text-center">
             <i class="pi pi-th-large text-6xl text-surface-300 mb-4"></i>
-            <p class="text-surface-500 mb-4">Widget dashboard is empty</p>
+            <p class="text-surface-500 mb-4">{{ t('common.widgets.empty_state') }}</p>
             <button
                 class="px-4 py-2 bg-success-500 text-white rounded-md flex items-center gap-2"
                 @click="showAddDialog = true"
             >
                 <i class="pi pi-plus"></i>
-                Add Widget
+                {{ t('common.widgets.add_widget') }}
             </button>
         </div>
 
@@ -85,6 +106,13 @@ function handleAddWidgetRequest(widgetId: string): void {
             :available-widgets="availableWidgetsToAdd"
             :category-options="categoryOptions"
             @select="handleAddWidgetRequest"
+        />
+
+        <WidgetConfigDialog
+            v-if="selectedWidgetForConfig"
+            v-model:visible="showConfigDialog"
+            :widget="selectedWidgetForConfig"
+            @save="handleConfigSave"
         />
     </div>
 </template>
