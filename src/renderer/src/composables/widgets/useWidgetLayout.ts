@@ -12,9 +12,20 @@ type WidgetImporter = () => Promise<WidgetModule>
 
 /**
  * Generate a unique instance ID for a widget
+ * Format: {widgetType}-{timestamp}-{random}
  */
-function generateWidgetInstanceId(): string {
-    return `widget-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+function generateWidgetInstanceId(widgetType: string): string {
+    return `${widgetType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+}
+
+/**
+ * Extract widget type from instance ID
+ */
+function getWidgetTypeFromId(instanceId: string): string {
+    // Format: {widgetType}-{timestamp}-{random}
+    // Extract everything before the last two segments
+    const parts = instanceId.split('-')
+    return parts.slice(0, -2).join('-')
 }
 
 /**
@@ -45,7 +56,7 @@ interface UseWidgetLayoutResult {
     isLoading: ComputedRef<boolean>
     resetLayout: () => Promise<IWidgetLayoutItem[]>
     addWidget: (widgetId: string, metadata: IWidgetMetadata, config?: any) => void
-    removeWidget: (instanceId: string) => void
+    removeWidget: (widgetId: string) => void
     updateLayout: (newLayout: IWidgetLayoutItem[]) => void
     hasWidget: (widgetId: string, metadata?: IWidgetMetadata) => boolean
     reload: () => Promise<void>
@@ -90,8 +101,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
                 }
 
                 items.push({
-                    instanceId: generateWidgetInstanceId(),
-                    widgetId: metadata.id,
+                    i: generateWidgetInstanceId(metadata.id),
                     x: currentX,
                     y: currentY,
                     w,
@@ -147,7 +157,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
 
     function addWidget(widgetId: string, metadata: IWidgetMetadata, config?: any): void {
         // For widgets without config, check if already exists
-        if (!metadata.requiresConfig && layout.value.some((item) => item.widgetId === widgetId)) {
+        if (!metadata.requiresConfig && layout.value.some((item) => getWidgetTypeFromId(item.i) === widgetId)) {
             return
         }
 
@@ -162,8 +172,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         })
 
         const newItem: IWidgetLayoutItem = {
-            instanceId: generateWidgetInstanceId(),
-            widgetId: widgetId,
+            i: generateWidgetInstanceId(widgetId),
             x: 0,
             y: maxY + maxYHeight,
             w: metadata.defaultSize.w,
@@ -180,8 +189,8 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         saveLayout()
     }
 
-    function removeWidget(instanceId: string): void {
-        const index = layout.value.findIndex((item) => item.instanceId === instanceId)
+    function removeWidget(widgetId: string): void {
+        const index = layout.value.findIndex((item) => item.i === widgetId)
         if (index !== -1) {
             layout.value.splice(index, 1)
             isDirty.value = true
@@ -201,7 +210,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
             return false
         }
         // Widgets without config can only have one instance
-        return layout.value.some((item) => item.widgetId === widgetId)
+        return layout.value.some((item) => getWidgetTypeFromId(item.i) === widgetId)
     }
 
     // Initial load
