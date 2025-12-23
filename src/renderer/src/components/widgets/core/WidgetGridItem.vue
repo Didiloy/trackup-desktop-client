@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 <template>
     <div
-        class="widget-wrapper h-full flex flex-col transition-all duration-200"
+        class="widget-wrapper h-full w-full flex flex-col transition-all duration-200 box-border"
         :class="[
             isEditing
                 ? 'bg-white rounded-lg shadow-md border border-dashed border-primary-300 overflow-hidden'
@@ -46,8 +46,7 @@ const emit = defineEmits<{
 
         <!-- Widget content -->
         <div
-            class="widget-content flex-1 overflow-auto relative h-full"
-            :class="[isEditing ? 'p-3' : 'p-1']"
+            class="widget-content flex-1 overflow-auto relative h-full p-1"
         >
             <!-- Overlay to prevent interaction in Edit Mode -->
             <div v-if="isEditing" class="absolute inset-0 z-10 bg-white/10 cursor-move"></div>
