@@ -54,12 +54,6 @@ const actions: ServerAction[] = [
         routeName: 'ServerDefinitions'
     },
     {
-        id: 'widgets',
-        label: t('views.server_widgets.title'),
-        icon: 'pi pi-th-large',
-        routeName: 'ServerWidgets'
-    },
-    {
         id: 'settings',
         label: t('views.server_settings.title'),
         icon: 'pi pi-cog',

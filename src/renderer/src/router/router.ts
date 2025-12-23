@@ -33,12 +33,6 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/servers/:id/widgets',
-        name: 'ServerWidgets',
-        component: () => import('@/views/servers/ServerWidgets.vue'),
-        meta: { requiresAuth: true }
-    },
-    {
         path: '/servers/:id/activities',
         name: 'ServerActivities',
         component: () => import('@/views/servers/ServerActivities.vue'),
