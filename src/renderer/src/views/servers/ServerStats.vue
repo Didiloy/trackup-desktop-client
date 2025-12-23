@@ -12,5 +12,4 @@ const serverId = computed(() => route.params.id as string)
     <WidgetDashboard :server-id="serverId" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -75,7 +75,7 @@ function handleCancel() {
 
         <div class="p-4">
             <div v-if="configComponent" class="config-form">
-                <component :is="configComponent" v-model="config"/>
+                <component :is="configComponent" v-model="config" />
             </div>
             <div v-else class="text-surface-500 italic">
                 {{ t('common.widgets.no_config_available') }}

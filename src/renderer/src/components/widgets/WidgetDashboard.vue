@@ -70,9 +70,7 @@ function handleAddWidgetRequest(widgetId: string): void {
         <!-- Empty state -->
         <div v-else class="empty-state flex flex-col items-center justify-center py-16 text-center">
             <i class="pi pi-th-large text-6xl text-surface-300 mb-4"></i>
-            <p class="text-surface-500 mb-4">
-                Widget dashboard is empty
-            </p>
+            <p class="text-surface-500 mb-4">Widget dashboard is empty</p>
             <button
                 class="px-4 py-2 bg-success-500 text-white rounded-md flex items-center gap-2"
                 @click="showAddDialog = true"

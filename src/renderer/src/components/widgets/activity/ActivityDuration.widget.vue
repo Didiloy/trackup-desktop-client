@@ -28,7 +28,7 @@ const props = withDefaults(
         showIdentity?: boolean
     }>(),
     {
-        showIdentity: true,
+        showIdentity: true
     }
 )
 const { t } = useI18n()

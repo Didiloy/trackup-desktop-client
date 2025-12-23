@@ -4,7 +4,10 @@ import Dialog from 'primevue/dialog'
 import Card from 'primevue/card'
 import Select from 'primevue/select'
 import { ref, computed, watch } from 'vue'
-import type { IWidgetComponent, ISelectOption } from '@shared/contracts/interfaces/widget.interfaces'
+import type {
+    IWidgetComponent,
+    ISelectOption
+} from '@shared/contracts/interfaces/widget.interfaces'
 
 const props = defineProps<{
     visible: boolean
@@ -21,11 +24,14 @@ const { t } = useI18n()
 const selectedCategory = ref<string | null>(null)
 
 // Initialize default category when dialog opens
-watch(() => props.visible, (visible) => {
-    if (visible && !selectedCategory.value) {
-        selectedCategory.value = props.categoryOptions[0]?.value ?? null
+watch(
+    () => props.visible,
+    (visible) => {
+        if (visible && !selectedCategory.value) {
+            selectedCategory.value = props.categoryOptions[0]?.value ?? null
+        }
     }
-})
+)
 
 const filteredWidgets = computed(() => {
     if (!selectedCategory.value) return props.availableWidgets

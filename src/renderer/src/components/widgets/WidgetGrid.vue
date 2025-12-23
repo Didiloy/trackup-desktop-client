@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { GridLayout, GridItem } from 'grid-layout-plus'
-import type { IWidgetLayoutItem, IWidgetComponent } from '@shared/contracts/interfaces/widget.interfaces'
+import type {
+    IWidgetLayoutItem,
+    IWidgetComponent
+} from '@shared/contracts/interfaces/widget.interfaces'
 import WidgetGridItem from './WidgetGridItem.vue'
 
 defineProps<{
@@ -21,20 +24,15 @@ const emit = defineEmits<{
     <div class="grid-container" :class="{ 'is-editing': isEditing }">
         <GridLayout
             :layout="layout"
-            @update:layout="emit('update:layout', $event)"
-            :col-num="colNum"
-            :row-height="rowHeight"
-            :is-draggable="isEditing"
-            :is-resizable="isEditing"
-            :vertical-compact="true"
             :use-css-transforms="true"
+            :vertical-compact="true"
+            :is-resizable="isEditing"
+            :is-draggable="isEditing"
+            :row-height="rowHeight"
+            :col-num="colNum"
+            @update:layout="emit('update:layout', $event)"
         >
-            <GridItem
-                v-for="item in layout"
-                :key="item.i"
-                v-bind="item"
-                class="widget-grid-item"
-            >
+            <GridItem v-for="item in layout" :key="item.i" v-bind="item" class="widget-grid-item">
                 <WidgetGridItem
                     :widget="getWidgetById(item.i)"
                     :is-editing="isEditing"

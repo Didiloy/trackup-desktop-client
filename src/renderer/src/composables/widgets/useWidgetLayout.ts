@@ -14,10 +14,22 @@ type WidgetImporter = () => Promise<WidgetModule>
  * Default widgets list
  */
 const DEFAULT_WIDGETS: WidgetImporter[] = [
-    () => import('@/components/widgets/server/ServerTotalSessions.widget.vue') as Promise<WidgetModule>,
-    () => import('@/components/widgets/server/ServerActiveMembers.widget.vue') as Promise<WidgetModule>,
-    () => import('@/components/widgets/server/ServerTimelineChart.widget.vue') as Promise<WidgetModule>,
-    () => import('@/components/widgets/server/ServerTopActivities.widget.vue') as Promise<WidgetModule>,
+    () =>
+        import(
+            '@/components/widgets/server/ServerTotalSessions.widget.vue'
+        ) as Promise<WidgetModule>,
+    () =>
+        import(
+            '@/components/widgets/server/ServerActiveMembers.widget.vue'
+        ) as Promise<WidgetModule>,
+    () =>
+        import(
+            '@/components/widgets/server/ServerTimelineChart.widget.vue'
+        ) as Promise<WidgetModule>,
+    () =>
+        import(
+            '@/components/widgets/server/ServerTopActivities.widget.vue'
+        ) as Promise<WidgetModule>
 ]
 
 interface UseWidgetLayoutResult {
@@ -147,7 +159,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
             minW: metadata.defaultSize.minW,
             minH: metadata.defaultSize.minH,
             maxW: metadata.defaultSize.maxW,
-            maxH: metadata.defaultSize.maxH,
+            maxH: metadata.defaultSize.maxH
         }
 
         layout.value.push(newItem)
