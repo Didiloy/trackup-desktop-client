@@ -3,11 +3,13 @@ import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IActivityGrowthTrends } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -28,9 +30,11 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
@@ -38,16 +42,40 @@ const { t } = useI18n()
 const route = useRoute()
 const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
-const activityId = computed(() => route.params.activityId as string)
+const { getActivityStatsGrowthTrends } = useActivityStatsCRUD()
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 
 const selectedPeriod = ref<EPeriod>(EPeriod.MONTHLY)
+const localGrowthTrends = ref<IActivityGrowthTrends | null>(null)
+const isLoadingLocal = ref(false)
+
+async function fetchLocalGrowth(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getActivityStatsGrowthTrends(server_store.getPublicId, props.config.activityId, {
+             period: selectedPeriod.value
+        })
+        if (res.data) {
+            localGrowthTrends.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
 
 async function fetchGrowth(): Promise<void> {
     const serverId = server_store.getPublicId
     if (!serverId || !activityId.value) return
-    await activity_stats_store.fetchGrowthTrends(serverId, activityId.value, {
-        period: selectedPeriod.value
-    })
+
+    if (route.params.activityId) {
+        await activity_stats_store.fetchGrowthTrends(serverId, activityId.value, {
+            period: selectedPeriod.value
+        })
+    } else if (props.config?.activityId) {
+        await fetchLocalGrowth()
+    }
 }
 
 onMounted(() => {
@@ -65,8 +93,8 @@ watch(
     }
 )
 
-const growthTrends = computed(() => activity_stats_store.getGrowthTrends)
-const isLoading = computed(() => activity_stats_store.isGrowthLoading)
+const growthTrends = computed(() => activity_stats_store.getGrowthTrends ?? localGrowthTrends.value)
+const isLoading = computed(() => activity_stats_store.isGrowthLoading || isLoadingLocal.value)
 
 const metrics = computed(() => {
     if (!growthTrends.value) return []
@@ -116,7 +144,7 @@ function formatValue(val: number, isDuration?: boolean): string {
                 <p class="text-sm font-semibold text-surface-600">
                     {{ t('views.activity.evolution_comparison') }}
                 </p>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
             </div>
             <PeriodSelector
                 :period="null"

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IActivityRanking } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -27,9 +29,11 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
@@ -37,12 +41,38 @@ const { t } = useI18n()
 const route = useRoute()
 const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
-const activityId = computed(() => route.params.activityId as string)
+const { getActivityStatsRanking } = useActivityStatsCRUD()
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
+
+const localRanking = ref<IActivityRanking | null>(null)
+const isLoadingLocal = ref(false)
+
+async function fetchLocalRanking(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getActivityStatsRanking(server_store.getPublicId, props.config.activityId)
+        if (res.data) {
+            localRanking.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
 
 async function fetchRanking(): Promise<void> {
     const serverId = server_store.getPublicId
-    if (!serverId || !activityId.value) return
-    await activity_stats_store.fetchRanking(serverId, activityId.value)
+    // If we have store data or we are in config mode (but store is empty), handle accordingly
+    // Actually, if we are on a page (route.params.activityId exists), the page handles fetching usually?
+    // The original code fetched on mount if params existed.
+    
+    if (route.params.activityId) {
+         if (!serverId || !activityId.value) return
+         await activity_stats_store.fetchRanking(serverId, activityId.value)
+    } else if (props.config?.activityId) {
+         await fetchLocalRanking()
+    }
 }
 
 onMounted(() => {
@@ -56,8 +86,8 @@ watch(
     }
 )
 
-const rankingData = computed(() => activity_stats_store.getRanking)
-const isLoading = computed(() => activity_stats_store.isRankingLoading)
+const rankingData = computed(() => activity_stats_store.getRanking ?? localRanking.value)
+const isLoading = computed(() => activity_stats_store.isRankingLoading || isLoadingLocal.value)
 
 const rankPercent = computed(() => {
     if (!rankingData.value) return 0
@@ -75,7 +105,7 @@ const rankPercent = computed(() => {
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.performance_section.ranking') }}
             </p>
-            <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+            <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
         </div>
 
         <div v-if="isLoading" class="flex items-center justify-center py-10">

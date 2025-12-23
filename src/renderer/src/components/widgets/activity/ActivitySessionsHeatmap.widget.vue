@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { EPeriod } from '@shared/contracts/enums/period.enum'
 
 defineOptions({
     widgetMetadata: {
@@ -27,9 +30,11 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
@@ -37,13 +42,38 @@ const { t } = useI18n()
 const route = useRoute()
 const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
+const { getActivityStatsTimeline } = useActivityStatsCRUD()
 
-const activityId = computed(() => route.params.activityId as string)
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const serverId = computed(() => server_store.getPublicId)
 
+const localTimeline = ref<IStatsTimeline[]>([])
+const isLoadingLocal = ref(false)
+
+async function fetchLocalHeatmap(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getActivityStatsTimeline(server_store.getPublicId, props.config.activityId, {
+            period: EPeriod.DAILY,
+            limit: 365
+        })
+        if (res.data) {
+            localTimeline.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
+
 async function fetchHeatmapData(): Promise<void> {
-    if (serverId.value && activityId.value) {
+    if (!serverId.value || !activityId.value) return
+
+    if (route.params.activityId) {
         await activity_stats_store.fetchHeatmapTimeline(serverId.value, activityId.value)
+    } else if (props.config?.activityId) {
+        await fetchLocalHeatmap()
     }
 }
 
@@ -63,7 +93,11 @@ const heatmapData = computed(() => {
     start.setDate(start.getDate() - (days - 1))
 
     const stats = new Map<string, { count: number; duration: number }>()
-    for (const entry of activity_stats_store.getHeatmapTimeline) {
+    const timeline = activity_stats_store.getHeatmapTimeline.length > 0 
+        ? activity_stats_store.getHeatmapTimeline 
+        : localTimeline.value
+
+    for (const entry of timeline) {
         const key = new Date(entry.period).toISOString().slice(0, 10)
         stats.set(key, {
             count: entry.sessions_count,
@@ -112,7 +146,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                 <p class="text-sm font-semibold text-surface-600">
                     {{ t('views.activity.performance_section.heatmap') }}
                 </p>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
             </div>
             <p class="text-xs text-surface-500">
                 {{ t('views.activity.performance_section.last_year') }}
@@ -120,7 +154,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
         </div>
 
         <div
-            v-if="activity_stats_store.isHeatmapLoading"
+            v-if="activity_stats_store.isHeatmapLoading || isLoadingLocal"
             class="h-[120px] flex items-center justify-center"
         >
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>

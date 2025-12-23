@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -24,16 +27,50 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
 const { t } = useI18n()
 const activity_stats_store = useActivityStatsStore()
+const server_store = useServerStore()
+const { getActivityStatsDetails } = useActivityStatsCRUD()
 
-const stats = computed(() => activity_stats_store.getDetails)
+const localDetails = ref<IActivityStatsDetails | null>(null)
+
+async function fetchLocalDetails(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    try {
+        const res = await getActivityStatsDetails(server_store.getPublicId, props.config.activityId)
+        if (res.data) {
+            localDetails.value = res.data
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+onMounted(() => {
+    if (!activity_stats_store.getDetails && props.config?.activityId) {
+        void fetchLocalDetails()
+    }
+})
+
+watch(
+    () => props.config?.activityId,
+    (newId) => {
+        if (newId && !activity_stats_store.getDetails) {
+            void fetchLocalDetails()
+        }
+    }
+)
+
+const stats = computed(() => activity_stats_store.getDetails ?? localDetails.value)
 
 function formatCount(val: any): string {
     if (Array.isArray(val)) {
@@ -72,7 +109,7 @@ const items = computed(() => {
 
 <template>
     <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
-        <ActivityIdentityCorner :show="props.showIdentity" />
+        <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.activity.performance_section.participants') }}
         </p>

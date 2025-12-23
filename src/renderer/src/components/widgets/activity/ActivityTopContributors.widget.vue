@@ -3,9 +3,11 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsStore } from '@/stores/activity-stats'
-import { computed } from 'vue'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
+import { computed, ref, onMounted, watch } from 'vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -26,22 +28,60 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
 const { t } = useI18n()
 const server_store = useServerStore()
 const activity_stats_store = useActivityStatsStore()
+const { getActivityStatsDetails } = useActivityStatsCRUD()
 
-const contributorsData = computed(() => activity_stats_store.getDetails?.top_contributors || [])
+const localDetails = ref<IActivityStatsDetails | null>(null)
+const isLoadingLocal = ref(false)
+
+async function fetchLocalDetails(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getActivityStatsDetails(server_store.getPublicId, props.config.activityId)
+        if (res.data) {
+            localDetails.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
+
+onMounted(() => {
+    if (!activity_stats_store.getDetails && props.config?.activityId) {
+        void fetchLocalDetails()
+    }
+})
+
+watch(
+    () => props.config?.activityId,
+    (newId) => {
+        if (newId && !activity_stats_store.getDetails) {
+            void fetchLocalDetails()
+        }
+    }
+)
+
+const contributorsData = computed(() => {
+    const details = activity_stats_store.getDetails ?? localDetails.value
+    return details?.top_contributors || []
+})
 </script>
 
 <template>
     <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
-        <ActivityIdentityCorner :show="props.showIdentity" />
+        <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.activity.card.top_contributor') }}

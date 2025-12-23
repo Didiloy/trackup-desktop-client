@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -25,16 +28,52 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 const { t } = useI18n()
 const activity_stats_store = useActivityStatsStore()
+const server_store = useServerStore()
+const { getActivityStatsDetails } = useActivityStatsCRUD()
 
-const statsData = computed(() => activity_stats_store.getDetails)
-const loading = computed(() => activity_stats_store.isLoading)
+const localDetails = ref<IActivityStatsDetails | null>(null)
+const isLoadingLocal = ref(false)
+
+async function fetchLocalDetails(): Promise<void> {
+    if (!props.config?.activityId || !server_store.getPublicId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getActivityStatsDetails(server_store.getPublicId, props.config.activityId)
+        if (res.data) {
+            localDetails.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
+
+onMounted(() => {
+    if (!activity_stats_store.getDetails && props.config?.activityId) {
+        void fetchLocalDetails()
+    }
+})
+
+watch(
+    () => props.config?.activityId,
+    (newId) => {
+        if (newId && !activity_stats_store.getDetails) {
+            void fetchLocalDetails()
+        }
+    }
+)
+
+const statsData = computed(() => activity_stats_store.getDetails ?? localDetails.value)
+const loading = computed(() => activity_stats_store.isLoading || isLoadingLocal.value)
 
 const value = computed(() => statsData.value?.total_likes.toLocaleString() ?? '0')
 const subValue = computed(() => {
@@ -57,7 +96,7 @@ const subValue = computed(() => {
         :loading="loading"
     >
         <template #corner>
-            <ActivityIdentityCorner :show="props.showIdentity" />
+            <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         </template>
     </BaseOverviewStatWidget>
 </template>

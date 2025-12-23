@@ -36,6 +36,7 @@ const emit = defineEmits<{
                 <WidgetGridItem
                     :widget="getWidgetById(item.i)"
                     :is-editing="isEditing"
+                    :config="item.config"
                     @remove="emit('remove', item.i)"
                 />
             </GridItem>

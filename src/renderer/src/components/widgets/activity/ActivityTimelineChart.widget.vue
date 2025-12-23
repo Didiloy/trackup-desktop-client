@@ -6,12 +6,13 @@ import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
-import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
+import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -33,10 +34,12 @@ const props = withDefaults(
     defineProps<{
         height?: number
         showIdentity?: boolean
+        config?: IActivityWidgetConfig
     }>(),
     {
         height: 340,
-        showIdentity: true
+        showIdentity: true,
+        config: undefined
     }
 )
 
@@ -44,7 +47,8 @@ const { t } = useI18n()
 const route = useRoute()
 const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
-const activityId = computed(() => route.params.activityId as string)
+const { getActivityStatsTimeline } = useActivityStatsCRUD()
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 
 const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
 const period = ref<Date[] | null>([
@@ -89,17 +93,16 @@ async function fetchTimeline(): Promise<void> {
 
     isLoading.value = true
     try {
+        let fetchParams: { period: EPeriod; limit: number } | null = null
+
         if (selectedPeriodType.value) {
             // Presets logic
             let limit = 365
             if (selectedPeriodType.value === EPeriod.DAILY) limit = 90
 
-            const res = await activity_stats_store.fetchTimeline(serverId, activityId.value, {
+            fetchParams = {
                 period: selectedPeriodType.value,
                 limit: limit
-            })
-            if ('data' in res && res.data) {
-                timelineData.value = res.data
             }
         } else if (
             period.value &&
@@ -128,13 +131,23 @@ async function fetchTimeline(): Promise<void> {
 
             limit = Math.min(limit, 365)
 
-            const res = await activity_stats_store.fetchTimeline(serverId, activityId.value, {
+            fetchParams = {
                 period: resolution,
                 limit: limit
-            })
-            if ('data' in res && res.data) {
-                timelineData.value = res.data
             }
+        }
+
+        if (fetchParams) {
+             let res
+             if (route.params.activityId) {
+                 res = await activity_stats_store.fetchTimeline(serverId, activityId.value, fetchParams)
+             } else {
+                 res = await getActivityStatsTimeline(serverId, activityId.value, fetchParams)
+             }
+
+             if (res && 'data' in res && res.data) {
+                timelineData.value = res.data
+             }
         }
     } finally {
         isLoading.value = false
@@ -258,7 +271,7 @@ const hasData = computed(() => !!sortedData.value.length)
                 <h3 class="text-lg font-bold text-surface-900">
                     {{ t('views.activity.performance_section.sessions_timeline') }}
                 </h3>
-                <ActivityIdentityCorner :show="props.showIdentity" class="static" />
+                <ActivityIdentityCorner :show="props.showIdentity" class="static" :activity-id="activityId" />
             </div>
 
             <PeriodSelector

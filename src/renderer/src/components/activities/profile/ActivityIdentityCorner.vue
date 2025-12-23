@@ -1,20 +1,69 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useServerStore } from '@/stores/server'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
+import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+
 const activity_stats_store = useActivityStatsStore()
+const server_store = useServerStore()
+const { getActivityById } = useActivityCRUD()
 
 const props = withDefaults(
     defineProps<{
         show?: boolean
         class?: string
+        activityId?: string
     }>(),
     {
         show: true,
-        class: 'top-4 right-4'
+        class: 'top-4 right-4',
+        activityId: undefined
     }
 )
 
-const activityName = computed(() => activity_stats_store.getDetails?.activity_name)
+const localActivityName = ref<string | null>(null)
+
+async function fetchActivityName(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!props.activityId || !serverId) return
+
+    // If matches store, don't fetch
+    if (activity_stats_store.getDetails?.activity_id === props.activityId) {
+        return
+    }
+
+    try {
+        const res = await getActivityById(serverId, props.activityId)
+        if (res.data) {
+            localActivityName.value = res.data.name
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+onMounted(() => {
+    if (props.activityId) {
+        void fetchActivityName()
+    }
+})
+
+watch(
+    () => props.activityId,
+    (newId) => {
+        if (newId) {
+            void fetchActivityName()
+        }
+    }
+)
+
+const activityName = computed(() => {
+    if (props.activityId && localActivityName.value) {
+        return localActivityName.value
+    }
+    return activity_stats_store.getDetails?.activity_name
+})
 const isVisible = computed(() => props.show)
 </script>
 
