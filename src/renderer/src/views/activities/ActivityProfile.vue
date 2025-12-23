@@ -16,14 +16,15 @@ import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialo
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
+import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useServerStore } from '@/stores/server'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import type {
     IActivity,
     IActivitySessionListItem
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -41,12 +42,13 @@ const router = useRouter()
 const activityId = computed(() => route.params.activityId as string)
 
 const { getActivityById, listActivitySessions, deleteActivity } = useActivityCRUD()
-const activity_stats_store = useActivityStatsStore()
+const { getActivityStatsDetails } = useActivityStatsCRUD()
 const { listSkillLevels } = useActivitySkillLevelCRUD()
 const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 const server_store = useServerStore()
 
 const activity = ref<IActivity | null>(null)
+const activityDetails = ref<IActivityStatsDetails | null>(null)
 const skillLevels = ref<IActivitySkillLevel[]>([])
 const metadataDefinitions = ref<IActivityMetadataDefinition[]>([])
 const sessions = ref<IActivitySessionListItem[]>([])
@@ -68,7 +70,7 @@ async function loadActivity(): Promise<void> {
         const serverId = server_store.getPublicId
         const [activityRes, detailsRes, skillRes, metadataRes] = await Promise.all([
             getActivityById(serverId, activityId.value),
-            activity_stats_store.fetchDetails(serverId, activityId.value),
+            getActivityStatsDetails(serverId, activityId.value),
             listSkillLevels(serverId, activityId.value),
             listMetadataDefinitions(serverId, activityId.value)
         ])
@@ -83,6 +85,7 @@ async function loadActivity(): Promise<void> {
         }
 
         activity.value = activityRes.data
+        activityDetails.value = detailsRes.data ?? null
         skillLevels.value = skillRes.data ?? []
         metadataDefinitions.value = metadataRes.data ?? []
         await loadSessions()
@@ -157,7 +160,10 @@ async function handleSessionCreated(): Promise<void> {
     await loadSessions()
     // Also reload stats as they might have changed
     if (server_store.getPublicId && activityId.value) {
-        await activity_stats_store.fetchDetails(server_store.getPublicId, activityId.value)
+        const res = await getActivityStatsDetails(server_store.getPublicId, activityId.value)
+        if (res.data) {
+            activityDetails.value = res.data
+        }
     }
 }
 
@@ -186,6 +192,7 @@ onMounted(async () => {
 
         <ActivityDetailHeader
             :activity="activity"
+            :stats="activityDetails"
             @create-session="show_create_session_dialog = true"
             @edit="handleEdit"
             @delete="handleDelete"
