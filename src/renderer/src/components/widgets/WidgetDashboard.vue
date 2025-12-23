@@ -159,7 +159,7 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
         </div>
 
         <!-- Grid Layout -->
-        <div v-if="layout.length > 0" class="grid-container">
+        <div v-if="layout.length > 0" class="grid-container" :class="{ 'is-editing': isEditing }">
             <GridLayout
                 :layout="layout"
                 :col-num="colNum"
@@ -186,9 +186,11 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                     class="widget-grid-item"
                 >
                     <div
-                        class="widget-wrapper h-full flex flex-col bg-white rounded-lg shadow-sm border overflow-hidden"
+                        class="widget-wrapper h-full flex flex-col transition-all duration-200"
                         :class="[
-                            isEditing ? 'border-dashed border-primary-300' : 'border-transparent'
+                            isEditing
+                                ? 'bg-white rounded-lg shadow-md border border-dashed border-primary-300 overflow-hidden'
+                                : 'bg-transparent border-none shadow-none'
                         ]"
                     >
                         <!-- Widget header with remove button (Only in Edit Mode) -->
@@ -216,7 +218,10 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                         </div>
 
                         <!-- Widget content -->
-                        <div class="widget-content flex-1 overflow-auto p-3 relative h-full">
+                        <div
+                            class="widget-content flex-1 overflow-auto relative h-full"
+                            :class="[isEditing ? 'p-3' : 'p-0']"
+                        >
                             <!-- Overlay to prevent interaction in Edit Mode -->
                             <div
                                 v-if="isEditing"
@@ -354,9 +359,13 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
 }
 
 /* Add grid background in edit mode */
-.grid-container:has(.vue-grid-item.vue-grid-placeholder) {
-    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+.grid-container.is-editing {
+    background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
     background-size: 20px 20px;
+    background-color: #f8fafc;
+    border-radius: 1rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
 }
 
 .widget-grid-item {
