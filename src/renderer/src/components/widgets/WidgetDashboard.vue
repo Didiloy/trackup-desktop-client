@@ -56,7 +56,7 @@ watch(showAddDialog, (visible) => {
 const availableWidgetsToAdd = computed<IWidgetComponent[]>(() => {
     const base = widgets.value.filter((widget) => !hasWidget(widget.id))
     if (!selectedCategory.value) return base
-    return base.filter((w) => String(w.metadata.category).toLowerCase() === selectedCategory.value)
+    return base.filter((w) => w.metadata.category.key === selectedCategory.value)
 })
 
 /**
@@ -311,7 +311,7 @@ function getWidgetComponent(widgetId: string): IWidgetComponent['component'] | u
                                 class="flex items-center justify-between px-4 pb-3 text-xs text-surface-400"
                             >
                                 <span class="font-medium capitalize">
-                                    {{ String(widget.metadata.category) }}
+                                    {{ widget.metadata.category.label }}
                                 </span>
                                 <span>
                                     {{ widget.metadata.defaultSize.w }}x{{

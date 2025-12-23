@@ -5,6 +5,7 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import { useServerStatsStore } from '@/stores/server-stats'
 import { useServerStore } from '@/stores/server'
 import type { IServerGrowthResponse } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -13,9 +14,12 @@ defineOptions({
         title: 'Tendances de Croissance',
         icon: 'pi pi-arrow-up-right',
         description: 'Affiche les tendances de croissance du serveur',
-        category: EWidgetCategory.Server,
+        category: {
+            key: EWidgetCategory.Server,
+            label: 'Server'
+        },
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const { t } = useI18n()

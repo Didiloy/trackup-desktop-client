@@ -5,6 +5,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -13,10 +14,13 @@ defineOptions({
         title: 'Durée Moyenne',
         icon: 'pi pi-clock',
         description: "Affiche la durée moyenne de l'activité",
-        category: EWidgetCategory.Activity,
+        category: {
+            key: EWidgetCategory.Activity,
+            label: 'Activity'
+        },
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 },
         requiresConfig: true
-    }
+    } satisfies IWidgetMetadata
 })
 
 const props = withDefaults(

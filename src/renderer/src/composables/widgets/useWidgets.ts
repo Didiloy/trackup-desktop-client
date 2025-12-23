@@ -79,11 +79,12 @@ export function useWidgets() {
         const labels = new Map<string, string>()
 
         for (const w of widgets.value) {
-            const key = String(w.metadata.category ?? '').toLowerCase()
-            if (!key) continue
+            const cat = w.metadata.category
+            if (!cat) continue
+            const key = cat.key
             counts.set(key, (counts.get(key) ?? 0) + 1)
-            // Simple label mapping: capitalize first letter; can be replaced by i18n map
-            if (!labels.has(key)) labels.set(key, key.charAt(0).toUpperCase() + key.slice(1))
+            // Use the label provided in the metadata
+            if (!labels.has(key)) labels.set(key, cat.label)
         }
         return [...counts.keys()].map((key) => ({
             key: key as EWidgetCategory,
@@ -96,7 +97,7 @@ export function useWidgets() {
         return categories.value.map((c) => ({
             value: c.key,
             label: c.label,
-            count: widgets.value.filter((w) => String(w.metadata.category).toLowerCase() === c.key)
+            count: widgets.value.filter((w) => w.metadata.category.key === c.key)
                 .length
         }))
     })
@@ -105,7 +106,7 @@ export function useWidgets() {
     const groups = computed<IWidgetGroup[]>(() => {
         const map = new Map<string, IWidgetComponent[]>()
         for (const w of sortedWidgets.value) {
-            const key = String(w.metadata.category ?? '').toLowerCase()
+            const key = w.metadata.category.key
             if (!key) continue
             if (!map.has(key)) map.set(key, [])
             map.get(key)!.push(w)

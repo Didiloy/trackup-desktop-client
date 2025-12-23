@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -12,9 +13,12 @@ defineOptions({
         title: 'Popularité',
         icon: 'pi pi-bolt',
         description: "Affiche le score de popularité de l'activité",
-        category: EWidgetCategory.Activity,
+        category: {
+            key: EWidgetCategory.Activity,
+            label: 'Activity'
+        },
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const props = withDefaults(

@@ -1,6 +1,5 @@
 import type { Component } from 'vue'
-import { EWidgetCategory } from "../enums/widget-category.enum";
-
+import { EWidgetCategory } from '../enums/widget-category.enum'
 
 export interface IWidgetMetadata {
     id: string
@@ -50,9 +49,6 @@ export interface IWidgetLayoutItem {
     minH?: number
     maxW?: number
     maxH?: number
-    /**
-     * Optional configuration for the widget (e.g. specific activity ID).
-     */
     config?: Record<string, any>
 }
 

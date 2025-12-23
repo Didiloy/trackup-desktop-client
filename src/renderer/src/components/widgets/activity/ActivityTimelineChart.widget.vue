@@ -11,6 +11,7 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -19,9 +20,12 @@ defineOptions({
         title: 'Graphique Timeline',
         icon: 'pi pi-chart-line',
         description: "Affiche l'évolution des statistiques de l'activité",
-        category: EWidgetCategory.Activity,
+        category: {
+            key: EWidgetCategory.Activity,
+            label: 'Activity'
+        },
         defaultSize: { w: 12, h: 5, minW: 6, minH: 4 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const props = withDefaults(

@@ -5,6 +5,7 @@ import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -13,9 +14,12 @@ defineOptions({
         title: 'Distribution Activités',
         icon: 'pi pi-chart-pie',
         description: 'Affiche la distribution des activités par durée',
-        category: EWidgetCategory.Server,
+        category: {
+            key: EWidgetCategory.Server,
+            label: 'Server'
+        },
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const { t } = useI18n()

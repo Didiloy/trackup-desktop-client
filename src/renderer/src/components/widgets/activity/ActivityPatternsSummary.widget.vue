@@ -2,9 +2,8 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
-
-import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -12,9 +11,12 @@ defineOptions({
         title: 'Résumé des Tendances',
         icon: 'pi pi-calendar',
         description: "Affiche les tendances temporelles de l'activité",
-        category: EWidgetCategory.Activity,
+        category: {
+            key: EWidgetCategory.Activity,
+            label: 'Activity'
+        },
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const props = withDefaults(

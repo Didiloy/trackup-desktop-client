@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import BaseOverviewStatWidget from '../BaseOverviewStatWidget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -10,9 +11,12 @@ defineOptions({
         title: 'Total Activités',
         icon: 'pi pi-bolt',
         description: "Affiche le nombre total d'activités",
-        category: EWidgetCategory.Server,
+        category: {
+            key: EWidgetCategory.Server,
+            label: 'Server'
+        },
         defaultSize: { w: 3, h: 2, minW: 2, minH: 2 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const { t } = useI18n()

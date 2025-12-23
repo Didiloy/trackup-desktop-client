@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityStatsStore } from '@/stores/activity-stats'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -11,9 +12,12 @@ defineOptions({
         title: 'Participants',
         icon: 'pi pi-users',
         description: 'Affiche les statistiques de participants',
-        category: EWidgetCategory.Activity,
+        category: {
+            key: EWidgetCategory.Activity,
+            label: 'Activity'
+        },
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const props = withDefaults(

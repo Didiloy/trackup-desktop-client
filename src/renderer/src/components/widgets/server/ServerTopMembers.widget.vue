@@ -4,6 +4,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -12,9 +13,12 @@ defineOptions({
         title: 'Top Membres',
         icon: 'pi pi-star',
         description: 'Affiche les membres les plus actifs du serveur',
-        category: EWidgetCategory.Server,
+        category: {
+            key: EWidgetCategory.Server,
+            label: 'Server'
+        },
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
-    }
+    } satisfies IWidgetMetadata
 })
 
 const server_store = useServerStore()
