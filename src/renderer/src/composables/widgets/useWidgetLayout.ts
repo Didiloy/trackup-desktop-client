@@ -43,10 +43,6 @@ const DEFAULT_WIDGETS: WidgetImporter[] = [
     () =>
         import(
             '@/components/widgets/server/ServerTimelineChart.widget.vue'
-        ) as Promise<WidgetModule>,
-    () =>
-        import(
-            '@/components/widgets/server/ServerTopActivities.widget.vue'
         ) as Promise<WidgetModule>
 ]
 
@@ -87,7 +83,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         for (const importFn of DEFAULT_WIDGETS) {
             try {
                 const module = await importFn()
-                const metadata = module.default.widgetMetadata
+                const metadata: IWidgetMetadata | undefined = module.default.widgetMetadata
 
                 if (!metadata) continue
 
