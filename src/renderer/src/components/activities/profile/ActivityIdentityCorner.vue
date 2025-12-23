@@ -23,7 +23,7 @@ const localActivityName = ref<string | null>(null)
 
 async function fetchActivityName(): Promise<void> {
     const serverId = server_store.getPublicId
-    if (!props.activityId || !serverId) return
+    if (!props.activityId || !serverId || !props.show) return
 
     try {
         const res = await getActivityById(serverId, props.activityId)
@@ -55,23 +55,19 @@ const isVisible = computed(() => props.show)
 </script>
 
 <template>
-    <Transition
-        enter-active-class="transition duration-200 ease-out"
-        enter-from-class="opacity-0 translate-y-1"
-        enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="transition duration-150 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 translate-y-1"
+    <div
+        v-if="isVisible && activityName"
+        v-tooltip.top="activityName"
+        class="absolute z-10"
+        :class="props.class"
     >
-        <div v-if="isVisible && activityName" class="absolute z-10" :class="props.class">
-            <div
-                class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors pointer-events-none"
-            >
-                <i class="pi pi-tag text-[9px]"></i>
-                <span class="max-w-[80px] truncate uppercase tracking-wider">{{
-                    activityName
-                }}</span>
-            </div>
+        <div
+            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors pointer-events-none"
+        >
+            <i class="pi pi-trophy text-[9px]"></i>
+            <span class="max-w-[80px] truncate uppercase tracking-wider">
+                {{ activityName }}
+            </span>
         </div>
-    </Transition>
+    </div>
 </template>
