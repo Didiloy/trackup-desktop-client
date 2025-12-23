@@ -96,7 +96,11 @@
             "layout_reset": "Disposition réinitialisée",
             "available_widgets": "Widgets Disponibles",
             "no_available": "Tous les widgets sont déjà ajoutés",
-            "all_added": "Tous les widgets ont été ajoutés"
+            "all_added": "Tous les widgets ont été ajoutés",
+            "configure_widget": "Configurer le Widget",
+            "no_config_available": "Aucune configuration disponible pour ce widget",
+            "select_activity": "Sélectionner une activité",
+            "select_activity_placeholder": "Rechercher une activité..."
         },
         "misc": {
             "or": "ou",

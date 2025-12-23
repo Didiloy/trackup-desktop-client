@@ -39,6 +39,10 @@ export interface ISelectOption {
     count?: number
 }
 
+export interface IActivityWidgetConfig {
+    activityId: string
+}
+
 export interface IWidgetLayoutItem {
     i: string // widget id
     x: number
@@ -49,7 +53,7 @@ export interface IWidgetLayoutItem {
     minH?: number
     maxW?: number
     maxH?: number
-    config?: Record<string, any>
+    config?: any
 }
 
 export interface IWidgetComponent {

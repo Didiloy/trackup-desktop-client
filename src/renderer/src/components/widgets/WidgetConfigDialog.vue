@@ -8,12 +8,13 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 const props = defineProps<{
     visible: boolean
-    widget: IWidgetComponent
+    widget: IWidgetComponent | null
 }>()
 
 const emit = defineEmits<{
     (e: 'update:visible', value: boolean): void
     (e: 'cancel'): void
+    (e: 'save', config: any): void
 }>()
 
 const { t } = useI18n()
@@ -27,9 +28,10 @@ const configComponents: Record<string, any> = {
 }
 
 const configComponent = computed(() => {
+    if (!props.widget) return null
     // First check if there's a specific config for this widget ID (future proofing)
     // Then check by category
-    const category = String(props.widget.metadata.category).toLowerCase()
+    const category = props.widget.metadata.category.key
     return configComponents[category] || null
 })
 
@@ -44,6 +46,7 @@ watch(
 )
 
 function handleSave() {
+    emit('save', config.value)
     emit('update:visible', false)
 }
 
@@ -58,12 +61,12 @@ function handleCancel() {
         :model-value="visible"
         :header-props="{
             title: t('common.widgets.configure_widget'),
-            subtitle: widget.metadata.title
+            subtitle: widget?.metadata?.title ?? ''
         }"
         @update:model-value="emit('update:visible', $event)"
     >
         <template #header>
-            <div class="flex flex-col">
+            <div v-if="widget" class="flex flex-col">
                 <h3 class="text-lg font-semibold">{{ t('common.widgets.configure_widget') }}</h3>
                 <div class="flex items-center gap-2 mt-1">
                     <i :class="widget.metadata.icon" class="text-primary-500"></i>

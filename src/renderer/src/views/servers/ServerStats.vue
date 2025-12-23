@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import ServerHeader from '@/components/servers/profile/ServerHeader.vue'
 import WidgetDashboard from '@/components/widgets/WidgetDashboard.vue'
 
 const route = useRoute()

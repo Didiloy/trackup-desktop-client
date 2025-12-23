@@ -37,7 +37,7 @@ interface UseWidgetLayoutResult {
     isDirty: ComputedRef<boolean>
     isLoading: ComputedRef<boolean>
     resetLayout: () => Promise<IWidgetLayoutItem[]>
-    addWidget: (widgetId: string, metadata: IWidgetMetadata) => void
+    addWidget: (widgetId: string, metadata: IWidgetMetadata, config?: any) => void
     removeWidget: (widgetId: string) => void
     updateLayout: (newLayout: IWidgetLayoutItem[]) => void
     hasWidget: (widgetId: string) => boolean
@@ -137,7 +137,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         return defaults
     }
 
-    function addWidget(widgetId: string, metadata: IWidgetMetadata): void {
+    function addWidget(widgetId: string, metadata: IWidgetMetadata, config?: any): void {
         if (layout.value.some((item) => item.i === widgetId)) return
 
         let maxY = 0
@@ -159,7 +159,8 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
             minW: metadata.defaultSize.minW,
             minH: metadata.defaultSize.minH,
             maxW: metadata.defaultSize.maxW,
-            maxH: metadata.defaultSize.maxH
+            maxH: metadata.defaultSize.maxH,
+            config
         }
 
         layout.value.push(newItem)
