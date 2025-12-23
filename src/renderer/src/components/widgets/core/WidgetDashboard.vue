@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useWidgets } from '@/composables/widgets/useWidgets'
 import { useWidgetLayout } from '@/composables/widgets/useWidgetLayout'
@@ -41,13 +41,15 @@ const availableWidgetsToAdd = computed(() =>
 /**
  * Event Handlers
  */
-function handleAddWidgetRequest(widgetId: string): void {
+async function handleAddWidgetRequest(widgetId: string): Promise<void> {
     const widget = getWidgetById(widgetId)
     if (!widget) return
 
     showAddDialog.value = false
 
     if (widget.metadata.requiresConfig) {
+        // Wait for dialog to close before opening config dialog
+        await nextTick()
         selectedWidgetForConfig.value = widget
         showConfigDialog.value = true
     } else {
@@ -62,6 +64,7 @@ function handleConfigSave(config: any): void {
     showConfigDialog.value = false
     selectedWidgetForConfig.value = null
 }
+
 </script>
 
 <template>

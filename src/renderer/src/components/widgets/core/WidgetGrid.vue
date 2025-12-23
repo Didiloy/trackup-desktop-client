@@ -27,6 +27,38 @@ const gridLayout = computed(() =>
         i: item.instanceId
     }))
 )
+
+/**
+ * Handle layout updates from grid-layout-plus
+ * Grid-layout-plus only returns {i, x, y, w, h, ...} but we need to preserve
+ * our custom fields: instanceId, widgetId, config
+ */
+function handleLayoutUpdate(updatedLayout: any[]): void {
+    const mappedLayout: IWidgetLayoutItem[] = updatedLayout.map((item) => {
+        // Find the original item to retrieve our custom fields
+        const originalItem = props.layout.find((orig) => orig.instanceId === item.i)
+
+        if (!originalItem) {
+            console.warn(`Could not find original item for instance ${item.i}`)
+        }
+
+        return {
+            instanceId: item.i,
+            widgetId: originalItem?.widgetId || item.i, // fallback for safety
+            x: item.x,
+            y: item.y,
+            w: item.w,
+            h: item.h,
+            minW: item.minW,
+            minH: item.minH,
+            maxW: item.maxW,
+            maxH: item.maxH,
+            config: originalItem?.config
+        }
+    })
+
+    emit('update:layout', mappedLayout)
+}
 </script>
 
 <template>
@@ -39,7 +71,7 @@ const gridLayout = computed(() =>
             :is-draggable="isEditing"
             :row-height="rowHeight"
             :col-num="colNum"
-            @layout-updated="emit('update:layout', $event)"
+            @layout-updated="handleLayoutUpdate"
         >
             <GridItem
                 v-for="item in layout"
