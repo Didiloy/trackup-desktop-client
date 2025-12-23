@@ -4,7 +4,6 @@ import { VueUiXy } from 'vue-data-ui'
 import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import 'vue-data-ui/style.css'
 import { useI18n } from 'vue-i18n'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
@@ -45,7 +44,6 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const route = useRoute()
-const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
 const { getActivityStatsTimeline } = useActivityStatsCRUD()
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
@@ -138,12 +136,7 @@ async function fetchTimeline(): Promise<void> {
         }
 
         if (fetchParams) {
-             let res
-             if (route.params.activityId) {
-                 res = await activity_stats_store.fetchTimeline(serverId, activityId.value, fetchParams)
-             } else {
-                 res = await getActivityStatsTimeline(serverId, activityId.value, fetchParams)
-             }
+             const res = await getActivityStatsTimeline(serverId, activityId.value, fetchParams)
 
              if (res && 'data' in res && res.data) {
                 timelineData.value = res.data

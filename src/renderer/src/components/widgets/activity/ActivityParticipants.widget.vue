@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
@@ -36,17 +36,19 @@ const props = withDefaults(
 )
 
 const { t } = useI18n()
-const activity_stats_store = useActivityStatsStore()
+const route = useRoute()
 const server_store = useServerStore()
 const { getActivityStatsDetails } = useActivityStatsCRUD()
 
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const localDetails = ref<IActivityStatsDetails | null>(null)
 
-async function fetchLocalDetails(): Promise<void> {
-    if (!props.config?.activityId || !server_store.getPublicId) return
+async function fetchStats(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!activityId.value || !serverId) return
 
     try {
-        const res = await getActivityStatsDetails(server_store.getPublicId, props.config.activityId)
+        const res = await getActivityStatsDetails(serverId, activityId.value)
         if (res.data) {
             localDetails.value = res.data
         }
@@ -56,21 +58,17 @@ async function fetchLocalDetails(): Promise<void> {
 }
 
 onMounted(() => {
-    if (!activity_stats_store.getDetails && props.config?.activityId) {
-        void fetchLocalDetails()
-    }
+    void fetchStats()
 })
 
 watch(
-    () => props.config?.activityId,
-    (newId) => {
-        if (newId && !activity_stats_store.getDetails) {
-            void fetchLocalDetails()
-        }
+    () => [server_store.getPublicId, activityId.value],
+    () => {
+        void fetchStats()
     }
 )
 
-const stats = computed(() => activity_stats_store.getDetails ?? localDetails.value)
+const stats = computed(() => localDetails.value)
 
 function formatCount(val: any): string {
     if (Array.isArray(val)) {

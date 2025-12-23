@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityStatsStore } from '@/stores/activity-stats'
+import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
@@ -36,19 +36,21 @@ const props = withDefaults(
     }
 )
 const { t } = useI18n()
-const activity_stats_store = useActivityStatsStore()
+const route = useRoute()
 const server_store = useServerStore()
 const { getActivityStatsDetails } = useActivityStatsCRUD()
 
+const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const localDetails = ref<IActivityStatsDetails | null>(null)
 const isLoadingLocal = ref(false)
 
-async function fetchLocalDetails(): Promise<void> {
-    if (!props.config?.activityId || !server_store.getPublicId) return
+async function fetchStats(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!activityId.value || !serverId) return
 
     isLoadingLocal.value = true
     try {
-        const res = await getActivityStatsDetails(server_store.getPublicId, props.config.activityId)
+        const res = await getActivityStatsDetails(serverId, activityId.value)
         if (res.data) {
             localDetails.value = res.data
         }
@@ -58,22 +60,18 @@ async function fetchLocalDetails(): Promise<void> {
 }
 
 onMounted(() => {
-    if (!activity_stats_store.getDetails && props.config?.activityId) {
-        void fetchLocalDetails()
-    }
+    void fetchStats()
 })
 
 watch(
-    () => props.config?.activityId,
-    (newId) => {
-        if (newId && !activity_stats_store.getDetails) {
-            void fetchLocalDetails()
-        }
+    () => [server_store.getPublicId, activityId.value],
+    () => {
+        void fetchStats()
     }
 )
 
-const statsData = computed(() => activity_stats_store.getDetails ?? localDetails.value)
-const loading = computed(() => activity_stats_store.isLoading || isLoadingLocal.value)
+const statsData = computed(() => localDetails.value)
+const loading = computed(() => isLoadingLocal.value)
 
 const value = computed(() => statsData.value?.total_likes.toLocaleString() ?? '0')
 const subValue = computed(() => {

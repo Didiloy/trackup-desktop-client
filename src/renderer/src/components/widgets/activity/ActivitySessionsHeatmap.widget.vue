@@ -3,7 +3,6 @@ import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
@@ -40,7 +39,7 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const route = useRoute()
-const activity_stats_store = useActivityStatsStore()
+
 const server_store = useServerStore()
 const { getActivityStatsTimeline } = useActivityStatsCRUD()
 
@@ -50,12 +49,12 @@ const serverId = computed(() => server_store.getPublicId)
 const localTimeline = ref<IStatsTimeline[]>([])
 const isLoadingLocal = ref(false)
 
-async function fetchLocalHeatmap(): Promise<void> {
-    if (!props.config?.activityId || !server_store.getPublicId) return
+async function fetchHeatmapData(): Promise<void> {
+    if (!serverId.value || !activityId.value) return
 
     isLoadingLocal.value = true
     try {
-        const res = await getActivityStatsTimeline(server_store.getPublicId, props.config.activityId, {
+        const res = await getActivityStatsTimeline(serverId.value, activityId.value, {
             period: EPeriod.DAILY,
             limit: 365
         })
@@ -64,16 +63,6 @@ async function fetchLocalHeatmap(): Promise<void> {
         }
     } finally {
         isLoadingLocal.value = false
-    }
-}
-
-async function fetchHeatmapData(): Promise<void> {
-    if (!serverId.value || !activityId.value) return
-
-    if (route.params.activityId) {
-        await activity_stats_store.fetchHeatmapTimeline(serverId.value, activityId.value)
-    } else if (props.config?.activityId) {
-        await fetchLocalHeatmap()
     }
 }
 
@@ -93,9 +82,7 @@ const heatmapData = computed(() => {
     start.setDate(start.getDate() - (days - 1))
 
     const stats = new Map<string, { count: number; duration: number }>()
-    const timeline = activity_stats_store.getHeatmapTimeline.length > 0 
-        ? activity_stats_store.getHeatmapTimeline 
-        : localTimeline.value
+    const timeline = localTimeline.value
 
     for (const entry of timeline) {
         const key = new Date(entry.period).toISOString().slice(0, 10)
@@ -154,7 +141,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
         </div>
 
         <div
-            v-if="activity_stats_store.isHeatmapLoading || isLoadingLocal"
+            v-if="isLoadingLocal"
             class="h-[120px] flex items-center justify-center"
         >
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>

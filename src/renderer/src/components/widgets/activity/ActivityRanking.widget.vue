@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
@@ -39,7 +38,6 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const route = useRoute()
-const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
 const { getActivityStatsRanking } = useActivityStatsCRUD()
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
@@ -47,31 +45,18 @@ const activityId = computed(() => (route.params.activityId as string) || props.c
 const localRanking = ref<IActivityRanking | null>(null)
 const isLoadingLocal = ref(false)
 
-async function fetchLocalRanking(): Promise<void> {
-    if (!props.config?.activityId || !server_store.getPublicId) return
+async function fetchRanking(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId || !activityId.value) return
 
     isLoadingLocal.value = true
     try {
-        const res = await getActivityStatsRanking(server_store.getPublicId, props.config.activityId)
+        const res = await getActivityStatsRanking(serverId, activityId.value)
         if (res.data) {
             localRanking.value = res.data
         }
     } finally {
         isLoadingLocal.value = false
-    }
-}
-
-async function fetchRanking(): Promise<void> {
-    const serverId = server_store.getPublicId
-    // If we have store data or we are in config mode (but store is empty), handle accordingly
-    // Actually, if we are on a page (route.params.activityId exists), the page handles fetching usually?
-    // The original code fetched on mount if params existed.
-    
-    if (route.params.activityId) {
-         if (!serverId || !activityId.value) return
-         await activity_stats_store.fetchRanking(serverId, activityId.value)
-    } else if (props.config?.activityId) {
-         await fetchLocalRanking()
     }
 }
 
@@ -86,8 +71,8 @@ watch(
     }
 )
 
-const rankingData = computed(() => activity_stats_store.getRanking ?? localRanking.value)
-const isLoading = computed(() => activity_stats_store.isRankingLoading || isLoadingLocal.value)
+const rankingData = computed(() => localRanking.value)
+const isLoading = computed(() => isLoadingLocal.value)
 
 const rankPercent = computed(() => {
     if (!rankingData.value) return 0

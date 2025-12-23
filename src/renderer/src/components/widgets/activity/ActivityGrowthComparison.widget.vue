@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useRoute } from 'vue-router'
@@ -40,7 +39,6 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const route = useRoute()
-const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
 const { getActivityStatsGrowthTrends } = useActivityStatsCRUD()
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
@@ -49,12 +47,13 @@ const selectedPeriod = ref<EPeriod>(EPeriod.MONTHLY)
 const localGrowthTrends = ref<IActivityGrowthTrends | null>(null)
 const isLoadingLocal = ref(false)
 
-async function fetchLocalGrowth(): Promise<void> {
-    if (!props.config?.activityId || !server_store.getPublicId) return
+async function fetchGrowth(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!serverId || !activityId.value) return
 
     isLoadingLocal.value = true
     try {
-        const res = await getActivityStatsGrowthTrends(server_store.getPublicId, props.config.activityId, {
+        const res = await getActivityStatsGrowthTrends(serverId, activityId.value, {
              period: selectedPeriod.value
         })
         if (res.data) {
@@ -62,19 +61,6 @@ async function fetchLocalGrowth(): Promise<void> {
         }
     } finally {
         isLoadingLocal.value = false
-    }
-}
-
-async function fetchGrowth(): Promise<void> {
-    const serverId = server_store.getPublicId
-    if (!serverId || !activityId.value) return
-
-    if (route.params.activityId) {
-        await activity_stats_store.fetchGrowthTrends(serverId, activityId.value, {
-            period: selectedPeriod.value
-        })
-    } else if (props.config?.activityId) {
-        await fetchLocalGrowth()
     }
 }
 
@@ -93,8 +79,8 @@ watch(
     }
 )
 
-const growthTrends = computed(() => activity_stats_store.getGrowthTrends ?? localGrowthTrends.value)
-const isLoading = computed(() => activity_stats_store.isGrowthLoading || isLoadingLocal.value)
+const growthTrends = computed(() => localGrowthTrends.value)
+const isLoading = computed(() => isLoadingLocal.value)
 
 const metrics = computed(() => {
     if (!growthTrends.value) return []

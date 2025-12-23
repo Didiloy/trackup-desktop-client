@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
-import { useActivityStatsStore } from '@/stores/activity-stats'
 import { useServerStore } from '@/stores/server'
-import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 
-const activity_stats_store = useActivityStatsStore()
 const server_store = useServerStore()
 const { getActivityById } = useActivityCRUD()
 
@@ -27,11 +24,6 @@ const localActivityName = ref<string | null>(null)
 async function fetchActivityName(): Promise<void> {
     const serverId = server_store.getPublicId
     if (!props.activityId || !serverId) return
-
-    // If matches store, don't fetch
-    if (activity_stats_store.getDetails?.activity_id === props.activityId) {
-        return
-    }
 
     try {
         const res = await getActivityById(serverId, props.activityId)
@@ -58,12 +50,7 @@ watch(
     }
 )
 
-const activityName = computed(() => {
-    if (props.activityId && localActivityName.value) {
-        return localActivityName.value
-    }
-    return activity_stats_store.getDetails?.activity_name
-})
+const activityName = computed(() => localActivityName.value)
 const isVisible = computed(() => props.show)
 </script>
 
