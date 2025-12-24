@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 import { computed, onMounted, ref, watch } from 'vue'
 import ActivityDetailHeader from '@/components/activities/profile/ActivityDetailHeader.vue'
-import ActivityDurationWidget from '@/components/widgets/activity/ActivityDuration.widget.vue'
+import ActivityAvgDurationWidget from '@/components/widgets/activity/ActivityAvgDuration.widget.vue'
 import ActivityPopularityWidget from '@/components/widgets/activity/ActivityPopularity.widget.vue'
 import ActivityLikesWidget from '@/components/widgets/activity/ActivityLikes.widget.vue'
 import ActivityTopContributorsWidget from '@/components/widgets/activity/ActivityTopContributors.widget.vue'
@@ -186,7 +186,7 @@ onMounted(async () => {
                     <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
                         <div v-if="activeTab === 'stats'" key="stats-content">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <ActivityDurationWidget :show-identity="false" />
+                                <ActivityAvgDurationWidget :show-identity="false" />
                                 <ActivityPopularityWidget :show-identity="false" />
                                 <ActivityLikesWidget :show-identity="false" />
                             </div>

@@ -10,7 +10,10 @@ import {
     type IWidgetMetadata,
     type IActivityWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
+import type {
+    IActivityStats,
+    IActivityStatsDetails
+} from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -41,10 +44,10 @@ const props = withDefaults(
 const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
-const { getActivityStatsDetails } = useActivityStatsCRUD()
+const { getActivityStats } = useActivityStatsCRUD()
 
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
-const localDetails = ref<IActivityStatsDetails | null>(null)
+const local_stats = ref<IActivityStats | null>(null)
 const isLoadingLocal = ref(false)
 
 async function fetchStats(): Promise<void> {
@@ -53,9 +56,9 @@ async function fetchStats(): Promise<void> {
 
     isLoadingLocal.value = true
     try {
-        const res = await getActivityStatsDetails(serverId, activityId.value)
+        const res = await getActivityStats(serverId, activityId.value)
         if (res.data) {
-            localDetails.value = res.data
+            local_stats.value = res.data
         }
     } finally {
         isLoadingLocal.value = false
@@ -73,7 +76,7 @@ watch(
     }
 )
 
-const statsData = computed(() => localDetails.value)
+const statsData = computed(() => local_stats.value)
 const loading = computed(() => isLoadingLocal.value)
 
 const value = computed(() => (statsData.value?.popularity_score ?? 0).toFixed(0))
