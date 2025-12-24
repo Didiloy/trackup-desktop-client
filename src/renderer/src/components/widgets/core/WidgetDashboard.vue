@@ -70,6 +70,7 @@ function handleConfigSave(config: any): void {
     <div class="widget-dashboard flex flex-col gap-6">
         <WidgetDashboardHeader
             v-model:is-editing="isEditing"
+            :widget-count="layout.length"
             @add="showAddDialog = true"
             @reset="resetLayout"
         />
