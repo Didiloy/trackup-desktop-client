@@ -15,7 +15,7 @@ defineOptions({
             key: EWidgetCategory.Server,
             label: 'Server'
         },
-        defaultSize: { w: 4, h: 4, minW: 2, minH: 4 }
+        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata
 })
 
