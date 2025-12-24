@@ -85,6 +85,7 @@
             "add_widget": "Ajouter un Widget",
             "remove_widget": "Retirer",
             "reset_layout": "Réinitialiser",
+            "reset_layout_confirm": "Êtes-vous sûr de vouloir réinitialiser la disposition des widgets ? Cette action ne peut pas être annulée.",
             "edit_layout": "Modifier la disposition",
             "done_editing": "Terminer",
             "empty_state": "Le tableau de bord est vide",

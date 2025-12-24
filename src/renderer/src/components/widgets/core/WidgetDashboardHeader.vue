@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
+import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 defineProps<{
     isEditing: boolean
@@ -14,11 +17,21 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const showResetConfirm = ref(false)
+
+function handleResetRequest(): void {
+    showResetConfirm.value = true
+}
+
+function confirmReset(): void {
+    emit('reset')
+    showResetConfirm.value = false
+}
 </script>
 
 <template>
     <div
-        class="sticky top-0 z-10 bg-surface-50/95 backdrop-blur-sm border-b border-surface-200 p-4 m-3"
+        class="sticky top-0 z-10 bg-surface-50/95 backdrop-blur-sm border-b border-surface-200 p-4 m-3 rounded-2xl"
     >
         <div class="flex items-center justify-between w-full h-12 px-2 pt-4">
             <h2 class="text-2xl font-bold">
@@ -39,25 +52,37 @@ const { t } = useI18n()
                     size="small"
                     @click="emit('update:isEditing', !isEditing)"
                 />
-
                 <template v-if="isEditing">
                     <Button
+                        v-if="isEditing"
+                        key="add-widget"
                         :label="t('common.widgets.add_widget')"
                         icon="pi pi-plus"
-                        severity="success"
+                        severity="primary"
                         size="small"
                         @click="emit('add')"
                     />
                     <Button
+                        v-if="isEditing"
+                        key="reset-layout"
                         :label="t('common.widgets.reset_layout')"
                         icon="pi pi-refresh"
                         severity="secondary"
                         outlined
                         size="small"
-                        @click="emit('reset')"
+                        @click="handleResetRequest"
                     />
                 </template>
             </div>
         </div>
+
+        <ConfirmationDialog
+            v-model="showResetConfirm"
+            :title="t('common.widgets.reset_layout')"
+            :message="t('common.widgets.reset_layout_confirm')"
+            :confirm-label="t('common.widgets.reset_layout')"
+            confirm-severity="danger"
+            @confirm="confirmReset"
+        />
     </div>
 </template>
