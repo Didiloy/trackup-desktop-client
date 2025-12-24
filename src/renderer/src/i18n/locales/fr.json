@@ -90,6 +90,7 @@
             "done_editing": "Terminer",
             "empty_state": "Le tableau de bord est vide",
             "select_widget": "Sélectionner un Widget",
+            "category": "Catégorie",
             "select_category": "Sélectionner une catégorie",
             "available": "disponibles",
             "widget_added": "Widget ajouté",

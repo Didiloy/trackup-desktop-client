@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import Dialog from 'primevue/dialog'
+import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Card from 'primevue/card'
 import Select from 'primevue/select'
 import { ref, computed, watch } from 'vue'
@@ -40,33 +40,38 @@ const filteredWidgets = computed(() => {
 </script>
 
 <template>
-    <Dialog
-        :visible="visible"
-        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-        :style="{ width: '50rem' }"
-        :header="t('common.widgets.select_widget')"
-        :modal="true"
-        @update:visible="emit('update:visible', $event)"
+    <AppDialog
+        :model-value="visible"
+        :dismissable-mask="false"
+        style-class="max-w-[50rem] w-full max-h-[80vh] overflow-hidden h-full"
+        @update:model-value="emit('update:visible', $event)"
     >
+        <template #header>
+            <h2 class="text-xl font-semibold">{{ t('common.widgets.select_widget') }}</h2>
+        </template>
+
         <div class="p-4 space-y-4">
             <!-- Category selector -->
-            <div class="flex items-center gap-3">
-                <Select
-                    v-model="selectedCategory"
-                    :options="categoryOptions"
-                    option-label="label"
-                    option-value="value"
-                    :placeholder="t('common.widgets.select_category')"
-                    class="min-w-[200px]"
-                    size="small"
-                />
+            <div class="flex items-center justify-between mb-2">
+                <div>
+                    <label class="font-medium mr-2"> {{ t('common.widgets.category') }} : </label>
+                    <Select
+                        v-model="selectedCategory"
+                        :options="categoryOptions"
+                        option-label="label"
+                        option-value="value"
+                        :placeholder="t('common.widgets.select_category')"
+                        class="min-w-[200px]"
+                    />
+                </div>
+
                 <span class="text-xs text-surface-500">
                     {{ filteredWidgets.length }} {{ t('common.widgets.available') }}
                 </span>
             </div>
 
             <!-- Widgets list -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto p-2">
                 <Card
                     v-for="widget in filteredWidgets"
                     :key="widget.id"
@@ -117,5 +122,5 @@ const filteredWidgets = computed(() => {
                 </div>
             </div>
         </div>
-    </Dialog>
+    </AppDialog>
 </template>

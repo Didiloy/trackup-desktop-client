@@ -62,12 +62,25 @@ const isVisible = computed(() => props.show)
         :class="props.class"
     >
         <div
-            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors pointer-events-none"
+            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80
+            backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium
+            text-surface-500 hover:text-primary-500 hover:border-primary-200
+            transition-colors cursor-pointer"
         >
             <i class="pi pi-trophy text-[9px]"></i>
-            <span class="max-w-[80px] truncate uppercase tracking-wider">
+
+            <router-link
+                :to="{
+                    name: 'ServerActivityProfile',
+                    params: {
+                        id: server_store.getPublicId,
+                        activityId: props.activityId
+                    }
+                }"
+                class="max-w-[80px] truncate uppercase tracking-wider"
+            >
                 {{ activityName }}
-            </span>
+            </router-link>
         </div>
     </div>
 </template>
