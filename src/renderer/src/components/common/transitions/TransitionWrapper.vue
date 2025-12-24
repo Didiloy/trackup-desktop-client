@@ -24,11 +24,13 @@ interface Props {
     name?: TransitionName
     mode?: 'out-in' | 'in-out' | 'default'
     duration?: number // in seconds
+    appear?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     name: 'fade',
-    mode: 'out-in'
+    mode: 'out-in',
+    appear: false
 })
 </script>
 
@@ -37,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
         :name="props.name"
         :mode="props.mode === 'default' ? undefined : props.mode"
         :style="props.duration ? { '--transition-duration': `${props.duration}s` } : undefined"
+        :appear="props.appear"
     >
         <slot />
     </transition>

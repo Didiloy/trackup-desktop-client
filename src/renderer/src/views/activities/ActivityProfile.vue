@@ -33,6 +33,7 @@ import ActivityTimelineChartWidget from '@/components/widgets/activity/ActivityT
 import ActivityRankingWidget from '@/components/widgets/activity/ActivityRanking.widget.vue'
 import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipants.widget.vue'
 import ActivityPatternsSummaryWidget from '@/components/widgets/activity/ActivityPatternsSummary.widget.vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -55,6 +56,7 @@ const show_create_session_dialog = ref(false)
 const show_edit_dialog = ref(false)
 const loading = ref(true)
 const error = ref<string | null>(null)
+const activeTab = ref<'stats' | 'details'>('stats')
 
 async function loadActivity(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
@@ -165,7 +167,7 @@ onMounted(async () => {
             @delete="handleDelete"
         />
 
-        <Tabs value="stats" class="mt-4">
+        <Tabs v-model:value="activeTab" class="mt-4">
             <TabList class="mb-4 flex items-center justify-between w-full pr-4">
                 <div class="flex items-center">
                     <Tab value="stats">
@@ -183,44 +185,51 @@ onMounted(async () => {
                 </div>
             </TabList>
 
-            <TabPanels class="bg-transparent! p-0!">
-                <TabPanel value="stats">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <ActivityDurationWidget :show-identity="false" />
-                        <ActivityPopularityWidget :show-identity="false" />
-                        <ActivityLikesWidget :show-identity="false" />
-                    </div>
+            <TabPanels class="bg-transparent! overflow-hidden">
+                <TabPanel value="stats" class="p-0!">
+                    <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
+                        <div v-if="activeTab === 'stats'" key="stats-content">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <ActivityDurationWidget :show-identity="false" />
+                                <ActivityPopularityWidget :show-identity="false" />
+                                <ActivityLikesWidget :show-identity="false" />
+                            </div>
 
-                    <ActivityTimelineChartWidget :show-identity="false" class="mb-6" />
+                            <ActivityTimelineChartWidget :show-identity="false" class="mb-6" />
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                        <div class="space-y-5 min-w-0">
-                            <ActivityRankingWidget :show-identity="false" />
-                            <ActivityGrowthComparisonWidget :show-identity="false" />
-                            <ActivityTopContributorsWidget :show-identity="false" />
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                                <div class="space-y-5 min-w-0">
+                                    <ActivityRankingWidget :show-identity="false" />
+                                    <ActivityGrowthComparisonWidget :show-identity="false" />
+                                    <ActivityTopContributorsWidget :show-identity="false" />
+                                </div>
+                                <div class="space-y-5 min-w-0">
+                                    <ActivityParticipantsWidget :show-identity="false" />
+                                    <ActivityPatternsSummaryWidget :show-identity="false" />
+                                </div>
+                            </div>
+
+                            <!-- Heatmap in its own full-width card -->
+                            <ActivitySessionsHeatmapWidget :show-identity="false" class="mb-6 w-full" />
+
+                            <!-- Recent sessions widget -->
+                            <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
                         </div>
-                        <div class="space-y-5 min-w-0">
-                            <ActivityParticipantsWidget :show-identity="false" />
-                            <ActivityPatternsSummaryWidget :show-identity="false" />
-                        </div>
-                    </div>
-
-                    <!-- Heatmap in its own full-width card -->
-                    <ActivitySessionsHeatmapWidget :show-identity="false" class="mb-6 w-full" />
-
-                    <!-- Recent sessions widget -->
-                    <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
+                    </TransitionWrapper>
                 </TabPanel>
-
-                <TabPanel value="details">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                        <div class="space-y-5 min-w-0">
-                            <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
+                <TabPanel value="details" class="p-0!">
+                    <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
+                        <div v-if="activeTab === 'details'" key="details-content">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                                <div class="space-y-5 min-w-0">
+                                    <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
+                                </div>
+                                <div class="space-y-5 min-w-0">
+                                    <ActivitySkillDistribution :skill-levels="skillLevels" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="space-y-5 min-w-0">
-                            <ActivitySkillDistribution :skill-levels="skillLevels" />
-                        </div>
-                    </div>
+                    </TransitionWrapper>
                 </TabPanel>
             </TabPanels>
         </Tabs>
