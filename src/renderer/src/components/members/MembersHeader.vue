@@ -6,8 +6,10 @@ import TextFilter from '@/components/filters/TextFilter.vue'
 import SelectFilter from '@/components/filters/SelectFilter.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
 import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
+import MemberAutocomplete from '@/components/members/MemberAutocomplete.vue'
 import { useServerStore } from '@/stores/server'
 import Button from 'primevue/button'
+import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 
 defineProps<{
     totalMembers?: number
@@ -26,6 +28,7 @@ const search = ref('')
 const search_field = ref<'nickname' | 'email'>('nickname')
 const joined_date_range = ref<Date[] | null>(null)
 const server_store = useServerStore()
+const selectedMember = ref<IServerMember | null>(null)
 
 const searchFieldOptions = computed(() => [
     { label: t('common.filters.search_modes.by_nickname'), value: 'nickname' },
@@ -60,6 +63,15 @@ function clearFilters(): void {
     emit('update:joinedStartDate', undefined)
     emit('update:joinedEndDate', undefined)
 }
+
+function handleMemberSelect(member: IServerMember | null): void {
+    selectedMember.value = member
+    if (member) {
+        search.value = member.nickname || ''
+    } else {
+        search.value = ''
+    }
+}
 </script>
 
 <template>
@@ -81,16 +93,17 @@ function clearFilters(): void {
     <div class="w-full px-2 pb-2">
         <GenericFilterBar :count="totalMembers">
             <template #primary-filters>
-                <span class="flex-1 w-[20px]">
-                    <TextFilter
-                        v-model="search"
+                <span class="flex-1 max-w-[200px]">
+                    <MemberAutocomplete
+                        :model-value="search"
                         :placeholder="
                             search_field === 'nickname'
                                 ? t('placeholder.search_nickname')
                                 : t('placeholder.search_email')
                         "
-                        icon="pi pi-search"
                         class="sm:w-96"
+                        @select="handleMemberSelect"
+                        @update:model-value="search = $event"
                     />
                 </span>
             </template>

@@ -26,6 +26,12 @@ const configComponents: Record<string, any> = {
     // Dynamic import for Activity Widget Config
     [EWidgetCategory.Activity]: defineAsyncComponent(
         () => import('../activity/ActivityWidgetConfigForm.vue')
+    ),
+    [EWidgetCategory.Member]: defineAsyncComponent(
+        () => import('../member/MemberWidgetConfigForm.vue')
+    ),
+    [EWidgetCategory.MemberActivities]: defineAsyncComponent(
+        () => import('../member/MemberActivityWidgetConfigForm.vue')
     )
 }
 

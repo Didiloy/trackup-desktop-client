@@ -1,0 +1,131 @@
+<script setup lang="ts">
+import { computed, ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+import { useMemberStatsCRUD } from '@/composables/members/useMemberStatsCRUD'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
+import {
+    type IWidgetMetadata,
+    type IMemberWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
+import type { IMemberActivityPatterns } from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
+
+defineOptions({
+    widgetMetadata: {
+        id: 'member-activity-patterns',
+        title: 'Patterns d\'Activité',
+        icon: 'pi pi-calendar',
+        description: 'Affiche les patterns d\'activité du membre',
+        category: {
+            key: EWidgetCategory.Member,
+            label: 'Member'
+        },
+        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        requiresConfig: true
+    } satisfies IWidgetMetadata
+})
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+        config?: IMemberWidgetConfig
+    }>(),
+    {
+        showIdentity: true,
+        config: undefined
+    }
+)
+const { t } = useI18n()
+const route = useRoute()
+const server_store = useServerStore()
+const { getMemberStatsPatterns } = useMemberStatsCRUD()
+
+const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
+const patterns = ref<IMemberActivityPatterns | null>(null)
+const isLoading = ref(false)
+
+async function fetchPatterns(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!memberId.value || !serverId) return
+
+    isLoading.value = true
+    try {
+        const res = await getMemberStatsPatterns(serverId, memberId.value)
+        if (res.data) {
+            patterns.value = res.data
+        }
+    } finally {
+        isLoading.value = false
+    }
+}
+
+onMounted(() => {
+    void fetchPatterns()
+})
+
+watch(
+    () => [server_store.getPublicId, memberId.value],
+    () => {
+        void fetchPatterns()
+    }
+)
+
+const weekdays = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+
+const mostActiveDay = computed(() => {
+    if (patterns.value?.most_active_day_of_week == null) return null
+    return weekdays[patterns.value.most_active_day_of_week]
+})
+
+const mostActiveHour = computed(() => {
+    if (patterns.value?.most_active_hour == null) return null
+    return `${patterns.value.most_active_hour}h`
+})
+</script>
+
+<template>
+    <BaseWidgetContainer :title="t('views.member.patterns.title')" :loading="isLoading">
+        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <div v-if="patterns" class="space-y-6">
+            <div>
+                <h4 class="text-sm font-medium mb-3">{{ t('views.member.patterns.most_active') }}</h4>
+                <div class="space-y-2">
+                    <div
+                        v-if="mostActiveDay"
+                        class="flex items-center justify-between p-2 rounded-xl bg-primary-50"
+                    >
+                        <span class="text-sm">{{ t('views.member.patterns.day') }}</span>
+                        <span class="font-bold text-primary-500">{{ mostActiveDay }}</span>
+                    </div>
+                    <div
+                        v-if="mostActiveHour"
+                        class="flex items-center justify-between p-2 rounded-xl bg-blue-50"
+                    >
+                        <span class="text-sm">{{ t('views.member.patterns.hour') }}</span>
+                        <span class="font-bold text-blue-500">{{ mostActiveHour }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-medium mb-3">{{ t('views.member.patterns.streaks') }}</h4>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-green-50">
+                        <span class="text-sm">{{ t('views.member.patterns.current_streak') }}</span>
+                        <span class="font-bold text-green-500">{{ patterns.streak_current }} jours</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-orange-50">
+                        <span class="text-sm">{{ t('views.member.patterns.longest_streak') }}</span>
+                        <span class="font-bold text-orange-500">{{ patterns.streak_longest }} jours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else class="flex items-center justify-center h-64 text-gray-500">
+            {{ t('common.no_data') }}
+        </div>
+    </BaseWidgetContainer>
+</template>

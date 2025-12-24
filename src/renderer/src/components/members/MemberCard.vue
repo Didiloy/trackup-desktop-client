@@ -11,6 +11,7 @@ import { useToast } from 'primevue/usetoast'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { formatDate, getInitials } from '@/utils'
+import router from '@/router/router'
 
 const props = defineProps<{
     member: IServerMember
@@ -39,7 +40,14 @@ const items = computed(() => {
         {
             label: t('views.members_aside.view_profile'),
             icon: 'pi pi-user',
-            command: () => {
+            command: async () => {
+                await router.push({
+                    name: 'ServerMemberProfile',
+                    params: {
+                        id: server_store.getPublicId,
+                        memberId: props.member?.public_id
+                    }
+                })
                 console.log('View profile for', props.member?.nickname)
             }
         }

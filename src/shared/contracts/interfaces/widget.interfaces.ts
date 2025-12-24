@@ -43,6 +43,17 @@ export interface IActivityWidgetConfig {
     activityId: string
 }
 
+export interface IMemberWidgetConfig {
+    memberId: string
+}
+
+export interface IMemberActivityWidgetConfig {
+    memberId: string
+    activityId: string
+}
+
+
+
 export interface IWidgetLayoutItem {
     i: string // unique instance id (UUID for multiple instances)
     x: number

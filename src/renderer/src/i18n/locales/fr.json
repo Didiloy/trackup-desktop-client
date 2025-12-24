@@ -102,7 +102,8 @@
             "configure_widget": "Configurer le Widget",
             "no_config_available": "Aucune configuration disponible pour ce widget",
             "select_activity": "Sélectionner une activité",
-            "select_activity_placeholder": "Rechercher une activité..."
+            "select_activity_placeholder": "Rechercher une activité...",
+            "select_member": "Sélectionner un membre"
         },
         "misc": {
             "or": "ou",
@@ -578,6 +579,47 @@
                 "comment": "Commentaire",
                 "date": "Date",
                 "duration": "Durée"
+            }
+        },
+        "member": {
+            "joined": "Membre depuis",
+            "tabs": {
+                "stats": "Statistiques",
+                "activities": "Activités",
+                "sessions": "Sessions"
+            },
+            "card": {
+                "total_duration": "Durée totale",
+                "total_sessions": "Sessions totales"
+            },
+            "ranking": {
+                "title": "Classement",
+                "overall": "Classement général",
+                "total_duration": "Durée totale",
+                "total_sessions": "Sessions totales",
+                "percentile": "{percentile}ème percentile"
+            },
+            "patterns": {
+                "title": "Habitudes d'activité",
+                "most_active": "Plus actif",
+                "day": "Jour",
+                "hour": "Heure",
+                "streaks": "Séries",
+                "current_streak": "Série en cours",
+                "longest_streak": "Plus longue série"
+            },
+            "activities": {
+                "title": "Activités du membre",
+                "sessions": "sessions"
+            },
+            "sessions": {
+                "all_title": "Toutes les sessions",
+                "activity_title": "Sessions - {activity}"
+            },
+            "timeline": {
+                "title": "Timeline d'activité",
+                "duration": "Durée",
+                "sessions": "Sessions"
             }
         },
         "server_settings": {

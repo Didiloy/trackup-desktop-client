@@ -1,35 +1,35 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
-import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 
 const server_store = useServerStore()
-const { getActivityById } = useActivityCRUD()
+const { getMemberById } = useMemberCRUD()
 
 const props = withDefaults(
     defineProps<{
         show?: boolean
         class?: string
-        activityId?: string
+        memberId?: string
     }>(),
     {
         show: true,
         class: 'top-4 right-4',
-        activityId: undefined
+        memberId: undefined
     }
 )
 
-const localActivityName = ref<string | null>(null)
+const localMemberNickname = ref<string | null>(null)
 
-async function fetchActivityName(): Promise<void> {
-    if (!props.activityId || !props.show) return
+async function fetchMemberName(): Promise<void> {
+    if (!props.memberId || !props.show) return
 
     // First, try to get from store
-    const activitiesInStore = server_store.getActivities || []
-    const activityInStore = activitiesInStore.find((a) => a.public_id === props.activityId)
+    const membersInStore = server_store.getMembers || []
+    const memberInStore = membersInStore.find((m) => m.public_id === props.memberId)
     
-    if (activityInStore) {
-        localActivityName.value = activityInStore.name
+    if (memberInStore) {
+        localMemberNickname.value = memberInStore.nickname
         return
     }
 
@@ -38,9 +38,9 @@ async function fetchActivityName(): Promise<void> {
     if (!serverId) return
 
     try {
-        const res = await getActivityById(serverId, props.activityId)
+        const res = await getMemberById(serverId, props.memberId)
         if (res.data) {
-            localActivityName.value = res.data.name
+            localMemberNickname.value = res.data.nickname
         }
     } catch (e) {
         console.error(e)
@@ -48,28 +48,28 @@ async function fetchActivityName(): Promise<void> {
 }
 
 onMounted(() => {
-    if (props.activityId) {
-        void fetchActivityName()
+    if (props.memberId) {
+        void fetchMemberName()
     }
 })
 
 watch(
-    () => props.activityId,
+    () => props.memberId,
     (newId) => {
         if (newId) {
-            void fetchActivityName()
+            void fetchMemberName()
         }
     }
 )
 
-const activityName = computed(() => localActivityName.value)
+const memberNickname = computed(() => localMemberNickname.value)
 const isVisible = computed(() => props.show)
 </script>
 
 <template>
     <div
-        v-if="isVisible && activityName"
-        v-tooltip.top="activityName"
+        v-if="isVisible && memberNickname"
+        v-tooltip.top="memberNickname"
         class="absolute z-10"
         :class="props.class"
     >
@@ -79,18 +79,18 @@ const isVisible = computed(() => props.show)
             text-surface-500 hover:text-primary-500 hover:border-primary-200
             transition-colors cursor-pointer"
         >
-            <i class="pi pi-trophy text-[9px]"></i>
+            <i class="pi pi-user text-[9px]"></i>
             <router-link
                 :to="{
-                    name: 'ServerActivityProfile',
+                    name: 'ServerMemberProfile',
                     params: {
                         id: server_store.getPublicId,
-                        activityId: props.activityId
+                        memberId: props.memberId
                     }
                 }"
                 class="max-w-[80px] truncate uppercase tracking-wider"
             >
-                {{ activityName }}
+                {{ memberNickname }}
             </router-link>
         </div>
     </div>
