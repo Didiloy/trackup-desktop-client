@@ -42,11 +42,11 @@ const filteredWidgets = computed(() => {
 <template>
     <Dialog
         :visible="visible"
-        @update:visible="emit('update:visible', $event)"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+        :style="{ width: '50rem' }"
         :header="t('common.widgets.select_widget')"
         :modal="true"
-        :style="{ width: '50rem' }"
-        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+        @update:visible="emit('update:visible', $event)"
     >
         <div class="p-4 space-y-4">
             <!-- Category selector -->

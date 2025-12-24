@@ -19,7 +19,7 @@ const selectedActivity = ref<IActivity | null>(null) // We can't easily restore 
 // For now, assuming new config starts empty or just ID is passed.
 // If we wanted to show the name for existing config, we'd need to fetch it.
 
-function handleSelect(activity: IActivity | null) {
+function handleSelect(activity: IActivity | null): void {
     selectedActivity.value = activity
     emit('update:modelValue', {
         ...props.modelValue,
@@ -38,8 +38,5 @@ function handleSelect(activity: IActivity | null) {
             :placeholder="t('common.widgets.select_activity_placeholder')"
             @select="handleSelect"
         />
-        <div v-if="selectedActivity" class="text-xs text-surface-500">
-            Selected: {{ selectedActivity.name }}
-        </div>
     </div>
 </template>

@@ -24,7 +24,9 @@ const config = ref<Record<string, any>>({})
 // Map categories or specific widgets to their config components
 const configComponents: Record<string, any> = {
     // Dynamic import for Activity Widget Config
-    [EWidgetCategory.Activity]: defineAsyncComponent(() => import('../ActivityWidgetConfig.vue'))
+    [EWidgetCategory.Activity]: defineAsyncComponent(
+        () => import('../activity/ActivityWidgetConfigForm.vue')
+    )
 }
 
 const configComponent = computed(() => {
@@ -45,12 +47,12 @@ watch(
     }
 )
 
-function handleSave() {
+function handleSave(): void {
     emit('save', config.value)
     emit('update:visible', false)
 }
 
-function handleCancel() {
+function handleCancel(): void {
     emit('cancel')
     emit('update:visible', false)
 }
@@ -63,6 +65,8 @@ function handleCancel() {
             title: t('common.widgets.configure_widget'),
             subtitle: widget?.metadata?.title ?? ''
         }"
+        :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
+        :dismissable-mask="false"
         @update:model-value="emit('update:visible', $event)"
     >
         <template #header>
@@ -88,14 +92,14 @@ function handleCancel() {
         <template #footer>
             <div class="flex justify-end gap-2 p-4">
                 <Button
-                    :label="t('common.cancel')"
+                    :label="t('common.actions.cancel')"
                     icon="pi pi-times"
                     text
                     severity="secondary"
                     @click="handleCancel"
                 />
                 <Button
-                    :label="t('common.save')"
+                    :label="t('common.actions.save')"
                     icon="pi pi-check"
                     severity="primary"
                     :loading="isLoading"

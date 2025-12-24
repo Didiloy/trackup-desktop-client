@@ -52,7 +52,7 @@ declare module 'vue' {
     ActivityTimelineChartWidget: typeof import('./src/components/widgets/activity/ActivityTimelineChart.widget.vue')['default']
     'ActivityTopContributors.widget': typeof import('./src/components/widgets/activity/ActivityTopContributors.widget.vue')['default']
     ActivityTopContributorsWidget: typeof import('./src/components/widgets/activity/ActivityTopContributors.widget.vue')['default']
-    ActivityWidgetConfig: typeof import('./src/components/widgets/ActivityWidgetConfig.vue')['default']
+    ActivityWidgetConfigForm: typeof import('./src/components/widgets/activity/ActivityWidgetConfigForm.vue')['default']
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     AppUpdateModal: typeof import('./src/components/app-updates/AppUpdateModal.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
