@@ -45,9 +45,7 @@ const emit = defineEmits<{
         </div>
 
         <!-- Widget content -->
-        <div
-            class="widget-content flex-1 overflow-hidden relative h-full p-0.5"
-        >
+        <div class="widget-content flex-1 overflow-hidden relative h-full p-0.5">
             <!-- Overlay to prevent interaction in Edit Mode -->
             <div v-if="isEditing" class="absolute inset-0 z-10 bg-white/10 cursor-move"></div>
 

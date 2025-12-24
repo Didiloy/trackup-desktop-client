@@ -22,7 +22,7 @@ defineProps<{
                 <i :class="icon" class="text-xl"></i>
             </div>
         </div>
-        <div class="flex-1 flex flex-col ">
+        <div class="flex-1 flex flex-col">
             <p class="text-sm text-surface-500 font-medium mb-1 line-clamp-1">
                 {{ label }}
             </p>

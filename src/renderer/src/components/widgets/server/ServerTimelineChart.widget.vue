@@ -242,7 +242,7 @@ const hasData = computed(() => !!sortedData.value.length)
 </script>
 
 <template>
-    <BaseWidgetContainer :loading="isLoading" >
+    <BaseWidgetContainer :loading="isLoading">
         <template #header>
             <div class="px-5 pt-5 pb-3">
                 <div

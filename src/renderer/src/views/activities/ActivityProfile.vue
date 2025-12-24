@@ -18,9 +18,7 @@ import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useActivityStatsCRUD } from '@/composables/activities/useActivityStatsCRUD'
 import { useServerStore } from '@/stores/server'
-import type {
-    IActivity
-} from '@shared/contracts/interfaces/entities/activity.interfaces'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/activity-skill-level.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
@@ -90,8 +88,6 @@ async function loadActivity(): Promise<void> {
         loading.value = false
     }
 }
-
-
 
 function handleEdit(): void {
     show_edit_dialog.value = true
@@ -210,7 +206,10 @@ onMounted(async () => {
                             </div>
 
                             <!-- Heatmap in its own full-width card -->
-                            <ActivitySessionsHeatmapWidget :show-identity="false" class="mb-6 w-full" />
+                            <ActivitySessionsHeatmapWidget
+                                :show-identity="false"
+                                class="mb-6 w-full"
+                            />
 
                             <!-- Recent sessions widget -->
                             <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
@@ -222,7 +221,9 @@ onMounted(async () => {
                         <div v-if="activeTab === 'details'" key="details-content">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                                 <div class="space-y-5 min-w-0">
-                                    <ActivityMetadataList :metadata-definitions="metadataDefinitions" />
+                                    <ActivityMetadataList
+                                        :metadata-definitions="metadataDefinitions"
+                                    />
                                 </div>
                                 <div class="space-y-5 min-w-0">
                                     <ActivitySkillDistribution :skill-levels="skillLevels" />

@@ -64,7 +64,6 @@ function handleConfigSave(config: any): void {
     showConfigDialog.value = false
     selectedWidgetForConfig.value = null
 }
-
 </script>
 
 <template>

@@ -153,7 +153,10 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
 
     function addWidget(widgetId: string, metadata: IWidgetMetadata, config?: any): void {
         // For widgets without config, check if already exists
-        if (!metadata.requiresConfig && layout.value.some((item) => getWidgetTypeFromId(item.i) === widgetId)) {
+        if (
+            !metadata.requiresConfig &&
+            layout.value.some((item) => getWidgetTypeFromId(item.i) === widgetId)
+        ) {
             return
         }
 

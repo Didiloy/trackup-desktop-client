@@ -7,7 +7,10 @@ import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
-import { type IWidgetMetadata, type IActivityWidgetConfig } from '@shared/contracts/interfaces/widget.interfaces'
+import {
+    type IWidgetMetadata,
+    type IActivityWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
@@ -16,7 +19,7 @@ defineOptions({
         id: 'activity-sessions-table',
         title: 'Sessions',
         icon: 'pi pi-list',
-        description: 'Affiche la liste des sessions récentes de l\'activité',
+        description: "Affiche la liste des sessions récentes de l'activité",
         category: {
             key: EWidgetCategory.Activity,
             label: 'Activity'
@@ -87,7 +90,7 @@ watch(
 </script>
 
 <template>
-    <BaseWidgetContainer :loading="sessions_loading" >
+    <BaseWidgetContainer :loading="sessions_loading">
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
 
         <template #header>
