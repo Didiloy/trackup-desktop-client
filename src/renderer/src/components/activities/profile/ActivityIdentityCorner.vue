@@ -68,7 +68,6 @@ const isVisible = computed(() => props.show)
             transition-colors cursor-pointer"
         >
             <i class="pi pi-trophy text-[9px]"></i>
-
             <router-link
                 :to="{
                     name: 'ServerActivityProfile',
