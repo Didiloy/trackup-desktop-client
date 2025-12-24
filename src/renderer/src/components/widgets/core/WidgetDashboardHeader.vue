@@ -17,15 +17,26 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div class="sticky top-0 z-10 px-6 py-4 mb-6 backdrop-blur-xl bg-surface-0/85 border-b border-surface-200/60 transition-all duration-300 hover:bg-surface-0/95 hover:border-surface-200/80">
-        <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
+    <div
+        class="sticky top-0 z-10 bg-surface-50/95 backdrop-blur-sm border-b border-surface-200 p-4 m-3"
+    >
+        <div class="flex items-center justify-between w-full h-12 px-2 pt-4">
+            <h2 class="text-2xl font-bold">
+                {{ t('common.widgets.dashboard') }}
+                <span v-if="widgetCount !== undefined" class="text-surface-500 text-lg ml-2">
+                    ({{ widgetCount + ' ' + t('common.widgets.title') }})
+                </span>
+            </h2>
+            <div class="flex items-center gap-2">
                 <Button
-                    :label="isEditing ? t('common.widgets.done_editing') : t('common.widgets.edit_layout')"
+                    :label="
+                        isEditing
+                            ? t('common.widgets.done_editing')
+                            : t('common.widgets.edit_layout')
+                    "
                     :icon="isEditing ? 'pi pi-check' : 'pi pi-pencil'"
                     :severity="isEditing ? 'success' : 'secondary'"
                     size="small"
-                    class="min-w-[140px]"
                     @click="emit('update:isEditing', !isEditing)"
                 />
 
@@ -35,7 +46,6 @@ const { t } = useI18n()
                         icon="pi pi-plus"
                         severity="success"
                         size="small"
-                        class="min-w-[140px]"
                         @click="emit('add')"
                     />
                     <Button
@@ -44,19 +54,9 @@ const { t } = useI18n()
                         severity="secondary"
                         outlined
                         size="small"
-                        class="min-w-[140px]"
                         @click="emit('reset')"
                     />
                 </template>
-            </div>
-
-            <div 
-                v-if="widgetCount !== undefined" 
-                class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-br from-primary-500/10 to-primary-600/15 border border-primary-500/20 text-primary-700 text-sm transition-all duration-300 hover:from-primary-500/15 hover:to-primary-600/20 hover:border-primary-500/30 hover:-translate-y-0.5"
-            >
-                <i class="pi pi-th-large text-primary-600"></i>
-                <span class="font-medium">{{ widgetCount }}</span>
-                <span class="opacity-80">{{ t('common.widgets.title') }}</span>
             </div>
         </div>
     </div>
