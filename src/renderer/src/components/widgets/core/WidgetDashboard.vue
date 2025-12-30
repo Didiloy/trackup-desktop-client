@@ -94,13 +94,13 @@ function handleConfigSave(config: any): void {
         <!-- Empty state -->
         <div v-else class="empty-state flex flex-col items-center justify-center py-16 text-center">
             <i class="pi pi-th-large text-6xl text-surface-300 mb-4"></i>
-            <p class="text-surface-500 mb-4">{{ t('common.widgets.empty_state') }}</p>
+            <p class="text-surface-500 mb-4">{{ t('widgets.ui.empty_state') }}</p>
             <Button
                 class="px-4 py-2 bg-success-500 text-white rounded-md flex items-center gap-2"
                 @click="showAddDialog = true"
             >
                 <i class="pi pi-plus"></i>
-                {{ t('common.widgets.add_widget') }}
+                {{ t('widgets.ui.add_widget') }}
             </Button>
         </div>
 

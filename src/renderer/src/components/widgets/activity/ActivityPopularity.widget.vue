@@ -19,12 +19,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-popularity',
-        title_key: 'common.widgets.activity.popularity.title',
+        title_key: 'widgets.activity.popularity.title',
         icon: 'pi pi-bolt',
-        description_key: 'common.widgets.activity.popularity.description',
+        description_key: 'widgets.activity.popularity.description',
         category: {
             key: EWidgetCategory.Activity,
-            label_key: 'common.widgets.categories.activity'
+            label_key: 'widgets.categories.activity'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true

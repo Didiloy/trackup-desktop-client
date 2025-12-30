@@ -19,12 +19,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-timeline',
-        title_key: 'common.widgets.member.timeline.title',
+        title_key: 'widgets.member.timeline.title',
         icon: 'pi pi-chart-line',
-        description_key: 'common.widgets.member.timeline.description',
+        description_key: 'widgets.member.timeline.description',
         category: {
             key: EWidgetCategory.Member,
-            label_key: 'common.widgets.categories.member'
+            label_key: 'widgets.categories.member'
         },
         defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
         requiresConfig: true

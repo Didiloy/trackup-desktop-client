@@ -31,12 +31,12 @@ function handleSelect(activity: IActivity | null): void {
 <template>
     <div class="space-y-4">
         <label class="block text-sm font-medium text-surface-700">
-            {{ t('common.widgets.select_activity') }}
+            {{
+                t('common.actions.select', {
+                    entity: t('views.activity.title_single').toLowerCase()
+                })
+            }}
         </label>
-        <ActivityAutocomplete
-            :model-value="selectedActivity?.name || ''"
-            :placeholder="t('common.widgets.select_activity_placeholder')"
-            @select="handleSelect"
-        />
+        <ActivityAutocomplete :model-value="selectedActivity?.name || ''" @select="handleSelect" />
     </div>
 </template>

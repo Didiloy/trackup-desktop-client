@@ -12,12 +12,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-activities-distribution',
-        title_key: 'common.widgets.server.activities_distribution.title',
+        title_key: 'widgets.server.activities_distribution.title',
         icon: 'pi pi-chart-pie',
-        description_key: 'common.widgets.server.activities_distribution.description',
+        description_key: 'widgets.server.activities_distribution.description',
         category: {
             key: EWidgetCategory.Server,
-            label_key: 'common.widgets.categories.server'
+            label_key: 'widgets.categories.server'
         },
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
     } satisfies IWidgetMetadata

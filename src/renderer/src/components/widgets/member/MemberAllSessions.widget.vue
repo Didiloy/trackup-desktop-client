@@ -17,12 +17,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-all-sessions',
-        title_key: 'common.widgets.member.all_sessions.title',
+        title_key: 'widgets.member.all_sessions.title',
         icon: 'pi pi-list',
-        description_key: 'common.widgets.member.all_sessions.description',
+        description_key: 'widgets.member.all_sessions.description',
         category: {
             key: EWidgetCategory.Member,
-            label_key: 'common.widgets.categories.member'
+            label_key: 'widgets.categories.member'
         },
         defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
         requiresConfig: true

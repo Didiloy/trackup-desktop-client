@@ -27,7 +27,7 @@ function handleSelect(member: IServerMember | null): void {
 <template>
     <div class="space-y-4">
         <label class="block text-sm font-medium text-surface-700">
-            {{ t('common.widgets.select_member', 'Sélectionner un membre') }}
+            {{ t('widgets.ui.select_member', 'Sélectionner un membre') }}
         </label>
         <MemberAutocomplete
             :model-value="selectedMember?.nickname || ''"

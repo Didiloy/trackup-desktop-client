@@ -14,12 +14,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-patterns-summary',
-        title_key: 'common.widgets.activity.patterns.title',
+        title_key: 'widgets.activity.patterns.title',
         icon: 'pi pi-calendar',
-        description_key: 'common.widgets.activity.patterns.description',
+        description_key: 'widgets.activity.patterns.description',
         category: {
             key: EWidgetCategory.Activity,
-            label_key: 'common.widgets.categories.activity'
+            label_key: 'widgets.categories.activity'
         },
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 },
         requiresConfig: true

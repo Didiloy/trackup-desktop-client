@@ -47,26 +47,26 @@ const filteredWidgets = computed(() => {
         @update:model-value="emit('update:visible', $event)"
     >
         <template #header>
-            <h2 class="text-xl font-semibold">{{ t('common.widgets.select_widget') }}</h2>
+            <h2 class="text-xl font-semibold">{{ t('widgets.ui.select_widget') }}</h2>
         </template>
 
         <div class="p-4 space-y-4">
             <!-- Category selector -->
             <div class="flex items-center justify-between mb-2">
                 <div>
-                    <label class="font-medium mr-2"> {{ t('common.widgets.category') }} : </label>
+                    <label class="font-medium mr-2"> {{ t('widgets.ui.category') }} : </label>
                     <Select
                         v-model="selectedCategory"
                         :options="categoryOptions"
                         option-label="label"
                         option-value="value"
-                        :placeholder="t('common.widgets.select_category')"
+                        :placeholder="t('widgets.ui.select_category')"
                         class="min-w-[200px]"
                     />
                 </div>
 
                 <span class="text-xs text-surface-500">
-                    {{ filteredWidgets.length }} {{ t('common.widgets.available') }}
+                    {{ filteredWidgets.length }} {{ t('widgets.ui.available') }}
                 </span>
             </div>
 
@@ -118,7 +118,7 @@ const filteredWidgets = computed(() => {
                     v-if="filteredWidgets.length === 0"
                     class="col-span-full text-center py-8 text-surface-500"
                 >
-                    {{ t('common.widgets.no_available') }}
+                    {{ t('widgets.ui.no_available') }}
                 </div>
             </div>
         </div>

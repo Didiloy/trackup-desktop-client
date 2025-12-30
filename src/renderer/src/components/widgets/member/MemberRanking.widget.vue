@@ -17,12 +17,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-ranking',
-        title_key: 'common.widgets.member.ranking.title',
+        title_key: 'widgets.member.ranking.title',
         icon: 'pi pi-trophy',
-        description_key: 'common.widgets.member.ranking.description',
+        description_key: 'widgets.member.ranking.description',
         category: {
             key: EWidgetCategory.Member,
-            label_key: 'common.widgets.categories.member'
+            label_key: 'widgets.categories.member'
         },
         defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
         requiresConfig: true

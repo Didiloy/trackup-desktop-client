@@ -17,12 +17,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-growth-comparison',
-        title_key: 'common.widgets.activity.growth_comparison.title',
+        title_key: 'widgets.activity.growth_comparison.title',
         icon: 'pi pi-chart-bar',
-        description_key: 'common.widgets.activity.growth_comparison.description',
+        description_key: 'widgets.activity.growth_comparison.description',
         category: {
             key: EWidgetCategory.Activity,
-            label_key: 'common.widgets.categories.activity'
+            label_key: 'widgets.categories.activity'
         },
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 },
         requiresConfig: true

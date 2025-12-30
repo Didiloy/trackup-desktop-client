@@ -73,7 +73,7 @@ function handleCancel(): void {
     >
         <template #header>
             <div v-if="widget" class="flex flex-col">
-                <h3 class="text-lg font-semibold">{{ t('common.widgets.configure_widget') }}</h3>
+                <h3 class="text-lg font-semibold">{{ t('widgets.ui.configure_widget') }}</h3>
                 <div class="flex items-center gap-2 mt-1">
                     <i :class="widget.metadata.icon" class="text-primary-500"></i>
                     <span class="text-surface-700 font-medium">{{
@@ -91,7 +91,7 @@ function handleCancel(): void {
                 <component :is="configComponent" v-model="config" />
             </div>
             <div v-else class="text-surface-500 italic">
-                {{ t('common.widgets.no_config_available') }}
+                {{ t('widgets.ui.no_config_available') }}
             </div>
         </div>
 

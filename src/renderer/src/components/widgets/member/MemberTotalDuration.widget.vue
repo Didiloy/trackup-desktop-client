@@ -17,12 +17,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-total-duration',
-        title_key: 'common.widgets.member.total_duration.title',
+        title_key: 'widgets.member.total_duration.title',
         icon: 'pi pi-clock',
-        description_key: 'common.widgets.member.total_duration.description',
+        description_key: 'widgets.member.total_duration.description',
         category: {
             key: EWidgetCategory.Member,
-            label_key: 'common.widgets.categories.member'
+            label_key: 'widgets.categories.member'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true

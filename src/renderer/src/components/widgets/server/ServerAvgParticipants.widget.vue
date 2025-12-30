@@ -8,12 +8,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-avg-participants',
-        title_key: 'common.widgets.server.avg_participants.title',
+        title_key: 'widgets.server.avg_participants.title',
         icon: 'pi pi-user-plus',
-        description_key: 'common.widgets.server.avg_participants.description',
+        description_key: 'widgets.server.avg_participants.description',
         category: {
             key: EWidgetCategory.Server,
-            label_key: 'common.widgets.categories.server'
+            label_key: 'widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata

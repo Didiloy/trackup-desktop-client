@@ -8,12 +8,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-total-activities',
-        title_key: 'common.widgets.server.total_activities.title',
+        title_key: 'widgets.server.total_activities.title',
         icon: 'pi pi-bolt',
-        description_key: 'common.widgets.server.total_activities.description',
+        description_key: 'widgets.server.total_activities.description',
         category: {
             key: EWidgetCategory.Server,
-            label_key: 'common.widgets.categories.server'
+            label_key: 'widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata

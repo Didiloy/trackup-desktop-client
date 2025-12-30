@@ -40,11 +40,14 @@ function handleActivitySelect(activity: IActivity | null): void {
         <!-- Member Selection -->
         <div>
             <label class="block text-sm font-medium text-surface-700 mb-2">
-                {{ t('common.widgets.select_member', 'Sélectionner un membre') }}
+                {{
+                    t('common.actions.select', {
+                        entity: t('views.server_members.title_single').toLowerCase()
+                    })
+                }}
             </label>
             <MemberAutocomplete
                 :model-value="selectedMember?.nickname || ''"
-                :placeholder="t('placeholder.search_nickname')"
                 @select="handleMemberSelect"
             />
         </div>
@@ -52,11 +55,14 @@ function handleActivitySelect(activity: IActivity | null): void {
         <!-- Activity Selection -->
         <div>
             <label class="block text-sm font-medium text-surface-700 mb-2">
-                {{ t('common.widgets.select_activity') }}
+                {{
+                    t('common.actions.select', {
+                        entity: t('views.activity.title_single').toLowerCase()
+                    })
+                }}
             </label>
             <ActivityAutocomplete
                 :model-value="selectedActivity?.name || ''"
-                :placeholder="t('common.widgets.select_activity_placeholder')"
                 @select="handleActivitySelect"
             />
         </div>

@@ -16,12 +16,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-activity-patterns',
-        title_key: 'common.widgets.member.activity_patterns.title',
+        title_key: 'widgets.member.activity_patterns.title',
         icon: 'pi pi-calendar',
-        description_key: 'common.widgets.member.activity_patterns.description',
+        description_key: 'widgets.member.activity_patterns.description',
         category: {
             key: EWidgetCategory.Member,
-            label_key: 'common.widgets.categories.member'
+            label_key: 'widgets.categories.member'
         },
         defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
         requiresConfig: true

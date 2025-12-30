@@ -16,12 +16,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-timeline-chart',
-        title_key: 'common.widgets.server.timeline.title',
+        title_key: 'widgets.server.timeline.title',
         icon: 'pi pi-chart-line',
-        description_key: 'common.widgets.server.timeline.description',
+        description_key: 'widgets.server.timeline.description',
         category: {
             key: EWidgetCategory.Server,
-            label_key: 'common.widgets.categories.server'
+            label_key: 'widgets.categories.server'
         },
         defaultSize: { w: 6, h: 8, minW: 6, minH: 8 }
     } satisfies IWidgetMetadata

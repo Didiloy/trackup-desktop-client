@@ -21,12 +21,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-timeline-chart',
-        title_key: 'common.widgets.activity.timeline.title',
+        title_key: 'widgets.activity.timeline.title',
         icon: 'pi pi-chart-line',
-        description_key: 'common.widgets.activity.timeline.description',
+        description_key: 'widgets.activity.timeline.description',
         category: {
             key: EWidgetCategory.Activity,
-            label_key: 'common.widgets.categories.activity'
+            label_key: 'widgets.categories.activity'
         },
         defaultSize: { w: 12, h: 5, minW: 6, minH: 4 },
         requiresConfig: true
