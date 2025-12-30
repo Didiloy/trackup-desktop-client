@@ -136,10 +136,12 @@ onMounted(async () => {
 
                             <MemberGrowthTrendsWidget :show-identity="false" class="mb-6" />
 
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+                                <div class="space-y-5 min-w-0">
+                                    <MemberRankingWidget :show-identity="false" />
+                                </div>
                                 <div class="space-y-5 min-w-0">
                                     <MemberDetailsSummaryWidget :show-identity="false" />
-                                    <MemberRankingWidget :show-identity="false" />
                                 </div>
                                 <div class="space-y-5 min-w-0">
                                     <MemberPatternsSummaryWidget :show-identity="false" />

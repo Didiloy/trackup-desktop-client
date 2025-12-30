@@ -56,22 +56,27 @@ export interface IMemberRanking {
 // Growth Trends
 // ============================================================================
 
-export interface IMemberGrowthTrends {
-    member_id: string
-    period: string
-    current_period_start: string
-    current_period_end: string
-    sessions: IGrowthMetric
-    duration: IGrowthMetric
-}
-
 export interface IMemberGrowthResponse {
     member_id: string
-    period: string
-    current_period_start: string
-    current_period_end: string
-    sessions: IGrowthMetric
-    duration: IGrowthMetric
+    period_info: {
+        period_type: EPeriod
+        current_start: string
+        current_end: string
+        previous_start: string
+        previous_end: string
+    }
+    current_period: {
+        total_sessions: number
+        total_duration: number
+    }
+    previous_period: {
+        total_sessions: number
+        total_duration: number
+    }
+    growth_rates: {
+        sessions_growth_rate: number
+        duration_growth_rate: number
+    }
 }
 
 // ============================================================================
