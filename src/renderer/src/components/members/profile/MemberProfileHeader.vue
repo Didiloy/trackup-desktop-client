@@ -36,8 +36,20 @@ const {
 const displayName = computed(() => props.member?.nickname || '')
 const initials = computed(() => getInitials(displayName.value, { mode: 'all', maxInitials: 2 }))
 
-const menuItems = computed<Array<{ label: string; icon: string; severity?: string; command: () => void | Promise<boolean> }>>(() => {
-    const items: Array<{ label: string; icon: string; severity?: string; command: () => void | Promise<boolean> }> = []
+const menuItems = computed<
+    Array<{
+        label: string
+        icon: string
+        severity?: string
+        command: () => void | Promise<boolean>
+    }>
+>(() => {
+    const items: Array<{
+        label: string
+        icon: string
+        severity?: string
+        command: () => void | Promise<boolean>
+    }> = []
 
     if (canUpdateNickname(props.member.user_email)) {
         items.push({
@@ -77,7 +89,9 @@ const onItemSelected = (item: unknown): void => {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 p-8 shadow-sm overflow-hidden border border-surface-200">
+    <div
+        class="relative rounded-3xl bg-surface-0 p-8 shadow-sm overflow-hidden border border-surface-200"
+    >
         <!-- Content -->
         <div class="relative flex items-start gap-6">
             <!-- Avatar -->
@@ -130,13 +144,15 @@ const onItemSelected = (item: unknown): void => {
                             rounded
                             @click="handleActionsClick"
                         />
-                        <ContextActionMenu ref="menu" :items="menuItems" @item-selected="onItemSelected" />
+                        <ContextActionMenu
+                            ref="menu"
+                            :items="menuItems"
+                            @item-selected="onItemSelected"
+                        />
                     </div>
                 </div>
             </div>
         </div>
-
-
 
         <!-- Nickname Dialog -->
         <InputDialog

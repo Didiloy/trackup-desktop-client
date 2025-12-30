@@ -48,7 +48,11 @@ export function useMemberActions() {
     /**
      * Confirm nickname update
      */
-    const confirmUpdateNickname = (memberId: string, newNickname: string, currentNickname: string): void => {
+    const confirmUpdateNickname = (
+        memberId: string,
+        newNickname: string,
+        currentNickname: string
+    ): void => {
         handleUpdateNickname(memberId, newNickname, currentNickname)
     }
 

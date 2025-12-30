@@ -121,16 +121,22 @@ const mostActiveHour = computed(() => {
             </div>
 
             <div>
-                <h4 class="text-sm font-medium mb-3">{{ t('views.server_members.patterns.streaks') }}</h4>
+                <h4 class="text-sm font-medium mb-3">
+                    {{ t('views.server_members.patterns.streaks') }}
+                </h4>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between p-2 rounded-xl bg-green-50">
-                        <span class="text-sm">{{ t('views.server_members.patterns.current_streak') }}</span>
+                        <span class="text-sm">{{
+                            t('views.server_members.patterns.current_streak')
+                        }}</span>
                         <span class="font-bold text-green-500"
                             >{{ patterns.streak_current }} {{ t('common.time.days') }}</span
                         >
                     </div>
                     <div class="flex items-center justify-between p-2 rounded-xl bg-orange-50">
-                        <span class="text-sm">{{ t('views.server_members.patterns.longest_streak') }}</span>
+                        <span class="text-sm">{{
+                            t('views.server_members.patterns.longest_streak')
+                        }}</span>
                         <span class="font-bold text-orange-500"
                             >{{ patterns.streak_longest }} {{ t('common.time.days') }}</span
                         >

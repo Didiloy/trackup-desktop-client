@@ -7,11 +7,7 @@ const props = defineProps<{
     member: IServerMember
 }>()
 
-const {
-    navigateToProfile,
-} = useMemberActions()
-
-
+const { navigateToProfile } = useMemberActions()
 
 const handleNavigateToProfile = async (): Promise<void> => {
     await navigateToProfile(props.member.public_id)

@@ -42,11 +42,7 @@ function confirmReset(): void {
             </h2>
             <div class="flex items-center gap-2">
                 <Button
-                    :label="
-                        isEditing
-                            ? t('widgets.ui.done_editing')
-                            : t('widgets.ui.edit_layout')
-                    "
+                    :label="isEditing ? t('widgets.ui.done_editing') : t('widgets.ui.edit_layout')"
                     :icon="isEditing ? 'pi pi-check' : 'pi pi-pencil'"
                     :severity="isEditing ? 'success' : 'secondary'"
                     size="small"

@@ -76,8 +76,6 @@ onMounted(async () => {
         await loadMember()
     }
 })
-
-
 </script>
 
 <template>
