@@ -31,7 +31,7 @@ const configComponents: Record<string, any> = {
         () => import('../member/MemberWidgetConfigForm.vue')
     ),
     [EWidgetCategory.MemberActivities]: defineAsyncComponent(
-        () => import('../member/MemberActivityWidgetConfigForm.vue')
+        () => import('../member-activity/MemberActivityWidgetConfigForm.vue')
     )
 }
 

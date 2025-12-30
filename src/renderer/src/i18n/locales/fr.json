@@ -29,7 +29,8 @@
             "chronos": "Chronos",
             "select_chrono": "Sélectionner un chrono",
             "duration": "Durée",
-            "no_description": "Aucune description"
+            "no_description": "Aucune description",
+            "no_data": "Aucune donnée disponible"
         },
         "actions": {
             "choose": "Choisir",

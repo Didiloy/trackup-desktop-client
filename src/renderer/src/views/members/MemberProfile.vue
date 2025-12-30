@@ -5,7 +5,7 @@ import MemberTotalDurationWidget from '@/components/widgets/member/MemberTotalDu
 import MemberTotalSessionsWidget from '@/components/widgets/member/MemberTotalSessions.widget.vue'
 import MemberRankingWidget from '@/components/widgets/member/MemberRanking.widget.vue'
 import MemberTimelineChartWidget from '@/components/widgets/member/MemberTimelineChart.widget.vue'
-import MemberActivityPatternsWidget from '@/components/widgets/member/MemberActivityPatterns.widget.vue'
+import MemberPatternsSummaryWidget from '@/components/widgets/member/MemberPatternsSummary.widget.vue'
 import MemberActivitiesTableWidget from '@/components/widgets/member/MemberActivitiesTable.widget.vue'
 import MemberAllSessionsWidget from '@/components/widgets/member/MemberAllSessions.widget.vue'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
@@ -145,7 +145,7 @@ const displayName = computed(() => {
                                     <MemberRankingWidget :show-identity="false" />
                                 </div>
                                 <div class="space-y-5 min-w-0">
-                                    <MemberActivityPatternsWidget :show-identity="false" />
+                                    <MemberPatternsSummaryWidget :show-identity="false" />
                                 </div>
                             </div>
                         </div>

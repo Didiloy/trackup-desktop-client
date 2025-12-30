@@ -124,7 +124,7 @@ function onPageChange(event: any): void {
             />
         </div>
         <div v-else class="flex items-center justify-center h-64 text-gray-500">
-            {{ t('common.no_data') }}
+            {{ t('common.fields.no_data') }}
         </div>
     </BaseWidgetContainer>
 </template>
