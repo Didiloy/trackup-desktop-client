@@ -79,7 +79,7 @@ onMounted(async () => {
 
 const displayName = computed(() => {
     if (!member.value) return ''
-    return member.value.nickname || member.value.user?.username || 'Member'
+    return member.value.nickname
 })
 </script>
 
@@ -99,7 +99,7 @@ const displayName = computed(() => {
                     <h1 class="text-2xl font-bold">{{ displayName }}</h1>
                     <div v-if="member" class="text-sm text-gray-500">
                         {{ t('views.member.joined') }}
-                        {{ new Date(member.joined_at).toLocaleDateString() }}
+                        {{ new Date(member.created_at).toLocaleDateString() }}
                     </div>
                 </div>
             </div>

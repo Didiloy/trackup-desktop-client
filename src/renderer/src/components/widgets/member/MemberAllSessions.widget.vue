@@ -49,6 +49,7 @@ const sessions = ref<IPaginatedSessions | null>(null)
 const isLoading = ref(false)
 const currentPage = ref(1)
 const pageSize = ref(10)
+const first = computed(() => (currentPage.value - 1) * pageSize.value)
 
 async function fetchSessions(): Promise<void> {
     const serverId = server_store.getPublicId
@@ -81,6 +82,10 @@ watch(
 
 const sessionList = computed(() => sessions.value?.data || [])
 const totalSessions = computed(() => sessions.value?.total || 0)
+
+function onPageChange(event: any): void {
+    currentPage.value = event.page + 1
+}
 </script>
 
 <template>
@@ -107,9 +112,10 @@ const totalSessions = computed(() => sessions.value?.total || 0)
                 </div>
             </div>
             <Paginator
-                v-model:first="currentPage"
+                :first="first"
                 :rows="pageSize"
                 :total-records="totalSessions"
+                @page="onPageChange"
                 class="mt-4"
             />
         </div>
