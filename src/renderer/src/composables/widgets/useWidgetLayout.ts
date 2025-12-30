@@ -55,18 +55,28 @@ interface UseWidgetLayoutResult {
     removeWidget: (widgetId: string) => void
     updateLayout: (newLayout: IWidgetLayoutItem[]) => void
     hasWidget: (widgetId: string, metadata?: IWidgetMetadata) => boolean
+    saveChanges: () => void
+    discardChanges: () => Promise<void>
     reload: () => Promise<void>
 }
 
 /**
  * Composable to manage widget layout.
  * RESPONSIBILITY: Grid State, Positioning, Coordination with Persistence.
+ * 
+ * Uses a "draft mode" approach:
+ * - Changes are made to a working copy (layout)
+ * - Changes are only persisted when saveChanges() is called
+ * - discardChanges() reverts to the last saved state
  */
 export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
     const { load, save } = useWidgetPersistence()
     const storageKey = computed(() => `widgets-layout-server-${serverId}`)
 
+    // Working copy of the layout (can be modified without saving)
     const layout = ref<IWidgetLayoutItem[]>([])
+    // Snapshot of the last saved layout
+    const savedLayout = ref<IWidgetLayoutItem[]>([])
     const isDirty = ref(false)
     const isLoading = ref(false)
 
@@ -125,28 +135,43 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         isLoading.value = true
         const stored = load<IWidgetLayoutItem[]>(storageKey.value)
         if (stored) {
-            layout.value = stored
+            layout.value = JSON.parse(JSON.stringify(stored))
+            savedLayout.value = JSON.parse(JSON.stringify(stored))
         } else {
-            layout.value = await getDefaultLayout()
+            const defaults = await getDefaultLayout()
+            layout.value = JSON.parse(JSON.stringify(defaults))
+            savedLayout.value = JSON.parse(JSON.stringify(defaults))
+            // Save default layout immediately
+            save(storageKey.value, defaults)
         }
         isDirty.value = false
         isLoading.value = false
     }
 
     /**
-     * Save layout using atomic persistence
+     * Save current layout to persistence
      */
-    function saveLayout(customLayout?: IWidgetLayoutItem[]): void {
-        const toSave = customLayout || layout.value
-        save(storageKey.value, toSave)
+    function saveChanges(): void {
+        save(storageKey.value, layout.value)
+        savedLayout.value = JSON.parse(JSON.stringify(layout.value))
+        isDirty.value = false
+    }
+
+    /**
+     * Discard all unsaved changes and revert to last saved state
+     */
+    async function discardChanges(): Promise<void> {
+        layout.value = JSON.parse(JSON.stringify(savedLayout.value))
         isDirty.value = false
     }
 
     async function resetLayout(): Promise<IWidgetLayoutItem[]> {
         isLoading.value = true
         const defaults = await getDefaultLayout()
-        layout.value = defaults
-        saveLayout(defaults)
+        layout.value = JSON.parse(JSON.stringify(defaults))
+        savedLayout.value = JSON.parse(JSON.stringify(defaults))
+        save(storageKey.value, defaults)
+        isDirty.value = false
         isLoading.value = false
         return defaults
     }
@@ -185,7 +210,7 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
 
         layout.value.push(newItem)
         isDirty.value = true
-        saveLayout()
+        // Don't save immediately - wait for user to confirm
     }
 
     function removeWidget(widgetId: string): void {
@@ -193,14 +218,14 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         if (index !== -1) {
             layout.value.splice(index, 1)
             isDirty.value = true
-            saveLayout()
+            // Don't save immediately - wait for user to confirm
         }
     }
 
     function updateLayout(newLayout: IWidgetLayoutItem[]): void {
         layout.value = newLayout
         isDirty.value = true
-        saveLayout(newLayout)
+        // Don't save immediately - wait for user to confirm
     }
 
     function hasWidget(widgetId: string, metadata?: IWidgetMetadata): boolean {
@@ -229,6 +254,8 @@ export function useWidgetLayout(serverId: string): UseWidgetLayoutResult {
         removeWidget,
         updateLayout,
         hasWidget,
+        saveChanges,
+        discardChanges,
         reload: loadLayout
     }
 }

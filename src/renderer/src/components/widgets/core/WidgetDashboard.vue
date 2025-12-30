@@ -19,11 +19,14 @@ const { t } = useI18n()
 const { widgets, categoryOptions, getWidgetById } = useWidgets()
 const {
     layout,
+    isDirty,
     addWidget,
     removeWidget,
     updateLayout,
     resetLayout,
     hasWidget,
+    saveChanges,
+    discardChanges,
     isLoading: isLayoutLoading
 } = useWidgetLayout(props.serverId)
 
@@ -64,6 +67,16 @@ function handleConfigSave(config: any): void {
     showConfigDialog.value = false
     selectedWidgetForConfig.value = null
 }
+
+async function handleCancel(): Promise<void> {
+    await discardChanges()
+    isEditing.value = false
+}
+
+function handleDone(): void {
+    saveChanges()
+    isEditing.value = false
+}
 </script>
 
 <template>
@@ -71,8 +84,11 @@ function handleConfigSave(config: any): void {
         <WidgetDashboardHeader
             v-model:is-editing="isEditing"
             :widget-count="layout.length"
+            :is-dirty="isDirty"
             @add="showAddDialog = true"
             @reset="resetLayout"
+            @cancel="handleCancel"
+            @done="handleDone"
         />
 
         <div v-if="isLayoutLoading" class="grow flex items-center justify-center py-16">

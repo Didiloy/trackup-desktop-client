@@ -3,21 +3,24 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
-import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
-defineProps<{
+const props = defineProps<{
     isEditing: boolean
     widgetCount?: number
+    isDirty?: boolean
 }>()
 
 const emit = defineEmits<{
     (e: 'update:isEditing', value: boolean): void
     (e: 'add'): void
     (e: 'reset'): void
+    (e: 'cancel'): void
+    (e: 'done'): void
 }>()
 
 const { t } = useI18n()
 const showResetConfirm = ref(false)
+const showCancelConfirm = ref(false)
 
 function handleResetRequest(): void {
     showResetConfirm.value = true
@@ -26,6 +29,19 @@ function handleResetRequest(): void {
 function confirmReset(): void {
     emit('reset')
     showResetConfirm.value = false
+}
+
+function handleCancelRequest(): void {
+    if (props.isDirty) {
+        showCancelConfirm.value = true
+    } else {
+        emit('cancel')
+    }
+}
+
+function confirmCancel(): void {
+    emit('cancel')
+    showCancelConfirm.value = false
 }
 </script>
 
@@ -42,11 +58,20 @@ function confirmReset(): void {
             </h2>
             <div class="flex items-center gap-2">
                 <Button
-                    :label="isEditing ? t('widgets.ui.done_editing') : t('widgets.ui.edit_layout')"
-                    :icon="isEditing ? 'pi pi-check' : 'pi pi-pencil'"
-                    :severity="isEditing ? 'success' : 'secondary'"
+                    v-if="!isEditing"
+                    :label="t('widgets.ui.edit_layout')"
+                    icon="pi pi-pencil"
+                    severity="secondary"
                     size="small"
-                    @click="emit('update:isEditing', !isEditing)"
+                    @click="emit('update:isEditing', true)"
+                />
+                <Button
+                    v-else
+                    :label="t('widgets.ui.done_editing')"
+                    icon="pi pi-check"
+                    severity="success"
+                    size="small"
+                    @click="emit('done')"
                 />
                 <template v-if="isEditing">
                     <Button
@@ -68,6 +93,16 @@ function confirmReset(): void {
                         size="small"
                         @click="handleResetRequest"
                     />
+                    <Button
+                        v-if="isEditing"
+                        key="cancel-editing"
+                        :label="t('common.actions.cancel')"
+                        icon="pi pi-times"
+                        severity="danger"
+                        outlined
+                        size="small"
+                        @click="handleCancelRequest"
+                    />
                 </template>
             </div>
         </div>
@@ -79,6 +114,15 @@ function confirmReset(): void {
             :confirm-label="t('widgets.ui.reset_layout')"
             confirm-severity="danger"
             @confirm="confirmReset"
+        />
+
+        <ConfirmationDialog
+            v-model="showCancelConfirm"
+            :title="t('widgets.ui.discard_changes')"
+            :message="t('widgets.ui.discard_changes_confirm')"
+            :confirm-label="t('widgets.ui.discard_changes')"
+            confirm-severity="danger"
+            @confirm="confirmCancel"
         />
     </div>
 </template>
