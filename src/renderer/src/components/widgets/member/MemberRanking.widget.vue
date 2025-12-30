@@ -78,7 +78,7 @@ const rankingData = computed(() => {
     if (!ranking.value) return []
     return [
         {
-            label: t('views.member.ranking.overall'),
+            label: t('views.server_members.ranking.overall'),
             rank: ranking.value.rank_in_server,
             total: ranking.value.total_members,
             percentile: ranking.value.percentile,
@@ -91,12 +91,12 @@ const statsData = computed(() => {
     if (!ranking.value) return []
     return [
         {
-            label: t('views.member.ranking.total_duration'),
+            label: t('views.server_members.ranking.total_duration'),
             value: formatMinutesToLabel(ranking.value.total_duration),
             icon: 'pi pi-clock'
         },
         {
-            label: t('views.member.ranking.total_sessions'),
+            label: t('views.server_members.ranking.total_sessions'),
             value: ranking.value.total_sessions.toString(),
             icon: 'pi pi-list'
         }
@@ -105,7 +105,7 @@ const statsData = computed(() => {
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.member.ranking.title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('views.server_members.ranking.title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <div class="space-y-4">
             <!-- Overall Ranking -->
@@ -120,7 +120,7 @@ const statsData = computed(() => {
                         <div class="text-sm font-medium text-gray-700">{{ item.label }}</div>
                         <div class="text-xs text-gray-500">
                             {{
-                                t('views.member.ranking.percentile', {
+                                t('views.server_members.ranking.percentile', {
                                     percentile: item.percentile.toFixed(1)
                                 })
                             }}

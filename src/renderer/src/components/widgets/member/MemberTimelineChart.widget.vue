@@ -90,7 +90,7 @@ const periods = computed(() =>
 // Convert durations to hours for better readability
 const chartData = computed<VueUiXyDatasetItem[]>(() => [
     {
-        name: t('views.member.timeline.duration') + ' (h)',
+        name: t('views.server_members.timeline.duration') + ' (h)',
         type: 'line',
         smooth: true,
         useArea: true,
@@ -98,7 +98,7 @@ const chartData = computed<VueUiXyDatasetItem[]>(() => [
         series: timeline.value.map((t) => Number((t.total_duration / 60).toFixed(2)))
     },
     {
-        name: t('views.member.timeline.sessions'),
+        name: t('views.server_members.timeline.sessions'),
         type: 'bar',
         color: '#10b981',
         series: timeline.value.map((t) => t.sessions_count)
@@ -160,7 +160,7 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.member.timeline.title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('views.server_members.timeline.title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <template #actions>
             <SelectButton

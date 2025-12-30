@@ -87,42 +87,42 @@ const mostActiveHour = computed(() => {
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.member.patterns.title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('views.server_members.patterns.title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <div v-if="patterns" class="space-y-6">
             <div>
                 <h4 class="text-sm font-medium mb-3">
-                    {{ t('views.member.patterns.most_active') }}
+                    {{ t('views.server_members.patterns.most_active') }}
                 </h4>
                 <div class="space-y-2">
                     <div
                         v-if="mostActiveDay"
                         class="flex items-center justify-between p-2 rounded-xl bg-primary-50"
                     >
-                        <span class="text-sm">{{ t('views.member.patterns.day') }}</span>
+                        <span class="text-sm">{{ t('views.server_members.patterns.day') }}</span>
                         <span class="font-bold text-primary-500">{{ mostActiveDay }}</span>
                     </div>
                     <div
                         v-if="mostActiveHour"
                         class="flex items-center justify-between p-2 rounded-xl bg-blue-50"
                     >
-                        <span class="text-sm">{{ t('views.member.patterns.hour') }}</span>
+                        <span class="text-sm">{{ t('views.server_members.patterns.hour') }}</span>
                         <span class="font-bold text-blue-500">{{ mostActiveHour }}</span>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h4 class="text-sm font-medium mb-3">{{ t('views.member.patterns.streaks') }}</h4>
+                <h4 class="text-sm font-medium mb-3">{{ t('views.server_members.patterns.streaks') }}</h4>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between p-2 rounded-xl bg-green-50">
-                        <span class="text-sm">{{ t('views.member.patterns.current_streak') }}</span>
+                        <span class="text-sm">{{ t('views.server_members.patterns.current_streak') }}</span>
                         <span class="font-bold text-green-500"
                             >{{ patterns.streak_current }} jours</span
                         >
                     </div>
                     <div class="flex items-center justify-between p-2 rounded-xl bg-orange-50">
-                        <span class="text-sm">{{ t('views.member.patterns.longest_streak') }}</span>
+                        <span class="text-sm">{{ t('views.server_members.patterns.longest_streak') }}</span>
                         <span class="font-bold text-orange-500"
                             >{{ patterns.streak_longest }} jours</span
                         >

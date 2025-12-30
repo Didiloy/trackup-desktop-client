@@ -98,7 +98,7 @@ const displayName = computed(() => {
                 <div class="flex-1">
                     <h1 class="text-2xl font-bold">{{ displayName }}</h1>
                     <div v-if="member" class="text-sm text-gray-500">
-                        {{ t('views.member.joined') }}
+                        {{ t('views.server_members.joined') }}
                         {{ new Date(member.created_at).toLocaleDateString() }}
                     </div>
                 </div>
@@ -111,19 +111,19 @@ const displayName = computed(() => {
                     <Tab value="stats">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-chart-bar"></i>
-                            <span>{{ t('views.member.tabs.stats') }}</span>
+                            <span>{{ t('views.server_members.tabs.stats') }}</span>
                         </div>
                     </Tab>
                     <Tab value="activities">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-th-large"></i>
-                            <span>{{ t('views.member.tabs.activities') }}</span>
+                            <span>{{ t('views.server_members.tabs.activities') }}</span>
                         </div>
                     </Tab>
                     <Tab value="sessions">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-list"></i>
-                            <span>{{ t('views.member.tabs.sessions') }}</span>
+                            <span>{{ t('views.server_members.tabs.sessions') }}</span>
                         </div>
                     </Tab>
                 </div>

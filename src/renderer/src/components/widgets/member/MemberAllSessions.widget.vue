@@ -89,7 +89,7 @@ function onPageChange(event: any): void {
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.member.sessions.all_title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('views.server_members.sessions.all_title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <div v-if="sessionList.length > 0" class="space-y-3">
             <div

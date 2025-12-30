@@ -89,7 +89,7 @@ function onPageChange(event: any): void {
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.member.activities.title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('views.server_members.activities.title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <div v-if="activityList.length > 0" class="space-y-3">
             <div
@@ -102,7 +102,7 @@ function onPageChange(event: any): void {
                         <div class="font-medium">{{ activity.activity_name }}</div>
                         <div class="text-xs text-gray-500">
                             {{ activity.total_sessions }}
-                            {{ t('views.member.activities.sessions') }}
+                            {{ t('views.server_members.activities.sessions') }}
                         </div>
                     </div>
                     <div class="text-right">

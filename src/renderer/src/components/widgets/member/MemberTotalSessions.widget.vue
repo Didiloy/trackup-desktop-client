@@ -81,7 +81,7 @@ const value = computed(() => (statsData.value ? statsData.value.total_sessions.t
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.member.card.total_sessions')"
+        :label="t('views.server_members.card.total_sessions')"
         :value="value"
         icon="pi pi-list"
         color="text-blue-500"

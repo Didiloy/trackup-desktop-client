@@ -84,7 +84,7 @@ const value = computed(() =>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.member.card.total_duration')"
+        :label="t('views.server_members.card.total_duration')"
         :value="value"
         icon="pi pi-clock"
         color="text-primary-500"

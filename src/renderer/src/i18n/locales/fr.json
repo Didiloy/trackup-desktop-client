@@ -408,7 +408,46 @@
             "member_kicked": "Membre expulsé",
             "member_kicked_detail": "Le membre a été expulsé avec succès",
             "member_kicked_error": "Échec de l'expulsion du membre",
-            "member_kicked_error_detail": "Veuillez réessayer."
+            "member_kicked_error_detail": "Veuillez réessayer.",
+            "joined": "Membre depuis",
+            "tabs": {
+                "stats": "Statistiques",
+                "activities": "Activités",
+                "sessions": "Sessions"
+            },
+            "card": {
+                "total_duration": "Durée totale",
+                "total_sessions": "Sessions totales"
+            },
+            "ranking": {
+                "title": "Classement",
+                "overall": "Classement général",
+                "total_duration": "Durée totale",
+                "total_sessions": "Sessions totales",
+                "percentile": "{percentile}ème percentile"
+            },
+            "patterns": {
+                "title": "Habitudes d'activité",
+                "most_active": "Plus actif",
+                "day": "Jour",
+                "hour": "Heure",
+                "streaks": "Séries",
+                "current_streak": "Série en cours",
+                "longest_streak": "Plus longue série"
+            },
+            "activities": {
+                "title": "Activités du membre",
+                "sessions": "sessions"
+            },
+            "sessions": {
+                "all_title": "Toutes les sessions",
+                "activity_title": "Sessions - {activity}"
+            },
+            "timeline": {
+                "title": "Timeline d'activité",
+                "duration": "Durée",
+                "sessions": "Sessions"
+            }
         },
         "server_stats": {
             "title": "Statistiques Générales",
@@ -539,230 +578,190 @@
                 "duration": "Durée"
             }
         },
-        "member": {
-            "joined": "Membre depuis",
-            "tabs": {
-                "stats": "Statistiques",
-                "activities": "Activités",
-                "sessions": "Sessions"
-            },
-            "card": {
-                "total_duration": "Durée totale",
-                "total_sessions": "Sessions totales"
-            },
-            "ranking": {
-                "title": "Classement",
-                "overall": "Classement général",
-                "total_duration": "Durée totale",
-                "total_sessions": "Sessions totales",
-                "percentile": "{percentile}ème percentile"
-            },
-            "patterns": {
-                "title": "Habitudes d'activité",
-                "most_active": "Plus actif",
-                "day": "Jour",
-                "hour": "Heure",
-                "streaks": "Séries",
-                "current_streak": "Série en cours",
-                "longest_streak": "Plus longue série"
-            },
-            "activities": {
-                "title": "Activités du membre",
-                "sessions": "sessions"
-            },
-            "sessions": {
-                "all_title": "Toutes les sessions",
-                "activity_title": "Sessions - {activity}"
-            },
-            "timeline": {
-                "title": "Timeline d'activité",
-                "duration": "Durée",
-                "sessions": "Sessions"
-            }
-        },
-        "server_settings": {
-            "title": "Paramètres",
-            "subtitle": "Gérez les paramètres de votre serveur",
-            "general": {
-                "title": "Général",
-                "server_name": "Nom du serveur",
-                "server_description": "Description du serveur",
-                "server_type": "Type de serveur",
-                "update_banner": "Mettre à jour la bannière du serveur",
-                "update_logo": "Mettre à jour le logo du serveur"
-            },
-            "danger_zone": {
-                "title": "Zone dangereuse",
-                "delete_server": {
-                    "title": "Supprimer le serveur",
-                    "description": "Cette action est irréversible. Toutes les données associées au serveur seront définitivement supprimées.",
-                    "confirm_placeholder": "Tapez <strong><u>{serverName}</u></strong> pour confirmer",
-                    "delete_button": "Supprimer le serveur"
-                }
-            }
-        }
     },
-    "widgets": {
-        "ui": {
-            "title": "Widgets",
-            "dashboard": "Tableau de bord",
-            "add_widget": "Ajouter un Widget",
-            "remove_widget": "Retirer",
-            "reset_layout": "Réinitialiser",
-            "reset_layout_confirm": "Êtes-vous sûr de vouloir réinitialiser la disposition des widgets ? Cette action ne peut pas être annulée.",
-            "edit_layout": "Modifier la disposition",
-            "done_editing": "Terminer",
-            "empty_state": "Le tableau de bord est vide",
-            "select_widget": "Sélectionner un Widget",
-            "category": "Catégorie",
-            "select_category": "Sélectionner une catégorie",
-            "available": "disponibles",
-            "widget_added": "Widget ajouté",
-            "widget_removed": "Widget supprimé",
-            "layout_reset": "Disposition réinitialisée",
-            "available_widgets": "Widgets Disponibles",
-            "no_available": "Tous les widgets sont déjà ajoutés",
-            "all_added": "Tous les widgets ont été ajoutés",
-            "configure_widget": "Configurer le Widget",
-            "no_config_available": "Aucune configuration disponible pour ce widget"
+    "server_settings": {
+        "title": "Paramètres",
+        "subtitle": "Gérez les paramètres de votre serveur",
+        "general": {
+            "title": "Général",
+            "server_name": "Nom du serveur",
+            "server_description": "Description du serveur",
+            "server_type": "Type de serveur",
+            "update_banner": "Mettre à jour la bannière du serveur",
+            "update_logo": "Mettre à jour le logo du serveur"
         },
-        "categories": {
-            "server": "Serveur",
-            "member": "Membre",
-            "activity": "Activité",
-            "member_activity": "Membre-Activité"
-        },
-        "server": {
-            "total_sessions": {
-                "title": "Total Sessions",
-                "description": "Affiche le nombre total de sessions"
-            },
-            "total_duration": {
-                "title": "Durée Totale",
-                "description": "Affiche la durée totale de toutes les sessions"
-            },
-            "total_activities": {
-                "title": "Total Activités",
-                "description": "Affiche le nombre total d'activités"
-            },
-            "active_members": {
-                "title": "Membres Actifs",
-                "description": "Affiche le nombre de membres actifs"
-            },
-            "top_members": {
-                "title": "Top Membres",
-                "description": "Affiche les membres les plus actifs"
-            },
-            "top_activities": {
-                "title": "Top Activités",
-                "description": "Affiche les activités les plus populaires"
-            },
-            "timeline": {
-                "title": "Timeline",
-                "description": "Affiche l'évolution des statistiques du serveur"
-            },
-            "growth_trends": {
-                "title": "Croissance",
-                "description": "Affiche les tendances de croissance du serveur"
-            },
-            "engagement_score": {
-                "title": "Score d'Engagement",
-                "description": "Affiche le score d'engagement global du serveur"
-            },
-            "avg_participants": {
-                "title": "Moy. Participants",
-                "description": "Affiche le nombre moyen de participants par session"
-            },
-            "avg_likes": {
-                "title": "Moy. J'aime",
-                "description": "Affiche le nombre moyen de j'aime par session"
-            },
-            "activities_distribution": {
-                "title": "Distribution Activités",
-                "description": "Affiche la répartition des activités"
-            }
-        },
-        "member": {
-            "total_sessions": {
-                "title": "Total Sessions",
-                "description": "Affiche le nombre total de sessions du membre"
-            },
-            "total_duration": {
-                "title": "Durée Totale",
-                "description": "Affiche la durée totale des sessions du membre"
-            },
-            "timeline": {
-                "title": "Timeline",
-                "description": "Affiche la timeline d'activité du membre"
-            },
-            "ranking": {
-                "title": "Classement",
-                "description": "Affiche le classement du membre"
-            },
-            "all_sessions": {
-                "title": "Toutes les Sessions",
-                "description": "Affiche toutes les sessions du membre"
-            },
-            "activities_table": {
-                "title": "Activités du Membre",
-                "description": "Affiche toutes les activités du membre"
-            },
-            "activity_patterns": {
-                "title": "Habitudes d'Activité",
-                "description": "Affiche les habitudes d'activité du membre"
-            }
-        },
-        "member_activity": {
-            "sessions": {
-                "title": "Sessions de l'Activité",
-                "description": "Affiche les sessions du membre pour une activité spécifique"
-            }
-        },
-        "activity": {
-            "avg_duration": {
-                "title": "Durée Moyenne",
-                "description": "Affiche la durée moyenne des sessions"
-            },
-            "growth_comparison": {
-                "title": "Comparaison de Croissance",
-                "description": "Compare la croissance avec la période précédente"
-            },
-            "likes": {
-                "title": "J'aime",
-                "description": "Affiche les statistiques de j'aime de l'activité"
-            },
-            "participants": {
-                "title": "Participants",
-                "description": "Affiche les statistiques de participants"
-            },
-            "patterns": {
-                "title": "Habitudes",
-                "description": "Affiche les habitudes d'activité"
-            },
-            "popularity": {
-                "title": "Popularité",
-                "description": "Affiche le score de popularité de l'activité"
-            },
-            "ranking": {
-                "title": "Classement",
-                "description": "Affiche le classement de l'activité"
-            },
-            "sessions_heatmap": {
-                "title": "Heatmap Sessions",
-                "description": "Affiche une heatmap des sessions sur l'année"
-            },
-            "sessions_table": {
-                "title": "Liste des Sessions",
-                "description": "Affiche toutes les sessions de l'activité"
-            },
-            "timeline": {
-                "title": "Timeline",
-                "description": "Affiche l'évolution de l'activité"
-            },
-            "top_contributors": {
-                "title": "Top Contributeurs",
-                "description": "Affiche les membres les plus actifs pour cette activité"
+        "danger_zone": {
+            "title": "Zone dangereuse",
+            "delete_server": {
+                "title": "Supprimer le serveur",
+                "description": "Cette action est irréversible. Toutes les données associées au serveur seront définitivement supprimées.",
+                "confirm_placeholder": "Tapez <strong><u>{serverName}</u></strong> pour confirmer",
+                "delete_button": "Supprimer le serveur"
             }
         }
     }
+},
+"widgets": {
+    "ui": {
+        "title": "Widgets",
+        "dashboard": "Tableau de bord",
+        "add_widget": "Ajouter un Widget",
+        "remove_widget": "Retirer",
+        "reset_layout": "Réinitialiser",
+        "reset_layout_confirm": "Êtes-vous sûr de vouloir réinitialiser la disposition des widgets ? Cette action ne peut pas être annulée.",
+        "edit_layout": "Modifier la disposition",
+        "done_editing": "Terminer",
+        "empty_state": "Le tableau de bord est vide",
+        "select_widget": "Sélectionner un Widget",
+        "category": "Catégorie",
+        "select_category": "Sélectionner une catégorie",
+        "available": "disponibles",
+        "widget_added": "Widget ajouté",
+        "widget_removed": "Widget supprimé",
+        "layout_reset": "Disposition réinitialisée",
+        "available_widgets": "Widgets Disponibles",
+        "no_available": "Tous les widgets sont déjà ajoutés",
+        "all_added": "Tous les widgets ont été ajoutés",
+        "configure_widget": "Configurer le Widget",
+        "no_config_available": "Aucune configuration disponible pour ce widget"
+    },
+    "categories": {
+        "server": "Serveur",
+        "member": "Membre",
+        "activity": "Activité",
+        "member_activity": "Membre-Activité"
+    },
+    "server": {
+        "total_sessions": {
+            "title": "Total Sessions",
+            "description": "Affiche le nombre total de sessions"
+        },
+        "total_duration": {
+            "title": "Durée Totale",
+            "description": "Affiche la durée totale de toutes les sessions"
+        },
+        "total_activities": {
+            "title": "Total Activités",
+            "description": "Affiche le nombre total d'activités"
+        },
+        "active_members": {
+            "title": "Membres Actifs",
+            "description": "Affiche le nombre de membres actifs"
+        },
+        "top_members": {
+            "title": "Top Membres",
+            "description": "Affiche les membres les plus actifs"
+        },
+        "top_activities": {
+            "title": "Top Activités",
+            "description": "Affiche les activités les plus populaires"
+        },
+        "timeline": {
+            "title": "Timeline",
+            "description": "Affiche l'évolution des statistiques du serveur"
+        },
+        "growth_trends": {
+            "title": "Croissance",
+            "description": "Affiche les tendances de croissance du serveur"
+        },
+        "engagement_score": {
+            "title": "Score d'Engagement",
+            "description": "Affiche le score d'engagement global du serveur"
+        },
+        "avg_participants": {
+            "title": "Moy. Participants",
+            "description": "Affiche le nombre moyen de participants par session"
+        },
+        "avg_likes": {
+            "title": "Moy. J'aime",
+            "description": "Affiche le nombre moyen de j'aime par session"
+        },
+        "activities_distribution": {
+            "title": "Distribution Activités",
+            "description": "Affiche la répartition des activités"
+        }
+    },
+    "member": {
+        "total_sessions": {
+            "title": "Total Sessions",
+            "description": "Affiche le nombre total de sessions du membre"
+        },
+        "total_duration": {
+            "title": "Durée Totale",
+            "description": "Affiche la durée totale des sessions du membre"
+        },
+        "timeline": {
+            "title": "Timeline",
+            "description": "Affiche la timeline d'activité du membre"
+        },
+        "ranking": {
+            "title": "Classement",
+            "description": "Affiche le classement du membre"
+        },
+        "all_sessions": {
+            "title": "Toutes les Sessions",
+            "description": "Affiche toutes les sessions du membre"
+        },
+        "activities_table": {
+            "title": "Activités du Membre",
+            "description": "Affiche toutes les activités du membre"
+        },
+        "activity_patterns": {
+            "title": "Habitudes d'Activité",
+            "description": "Affiche les habitudes d'activité du membre"
+        }
+    },
+    "member_activity": {
+        "sessions": {
+            "title": "Sessions de l'Activité",
+            "description": "Affiche les sessions du membre pour une activité spécifique"
+        }
+    },
+    "activity": {
+        "avg_duration": {
+            "title": "Durée Moyenne",
+            "description": "Affiche la durée moyenne des sessions"
+        },
+        "growth_comparison": {
+            "title": "Comparaison de Croissance",
+            "description": "Compare la croissance avec la période précédente"
+        },
+        "likes": {
+            "title": "J'aime",
+            "description": "Affiche les statistiques de j'aime de l'activité"
+        },
+        "participants": {
+            "title": "Participants",
+            "description": "Affiche les statistiques de participants"
+        },
+        "patterns": {
+            "title": "Habitudes",
+            "description": "Affiche les habitudes d'activité"
+        },
+        "popularity": {
+            "title": "Popularité",
+            "description": "Affiche le score de popularité de l'activité"
+        },
+        "ranking": {
+            "title": "Classement",
+            "description": "Affiche le classement de l'activité"
+        },
+        "sessions_heatmap": {
+            "title": "Heatmap Sessions",
+            "description": "Affiche une heatmap des sessions sur l'année"
+        },
+        "sessions_table": {
+            "title": "Liste des Sessions",
+            "description": "Affiche toutes les sessions de l'activité"
+        },
+        "timeline": {
+            "title": "Timeline",
+            "description": "Affiche l'évolution de l'activité"
+        },
+        "top_contributors": {
+            "title": "Top Contributeurs",
+            "description": "Affiche les membres les plus actifs pour cette activité"
+        }
+    }
+}
 }

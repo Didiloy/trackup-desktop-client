@@ -88,7 +88,7 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name || t('c
 
 <template>
     <BaseWidgetContainer
-        :title="t('views.member.sessions.activity_title', { activity: activityName })"
+        :title="t('views.server_members.sessions.activity_title', { activity: activityName })"
         :loading="isLoading"
     >
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
