@@ -78,7 +78,8 @@
             "resume": "Reprendre",
             "customize": "Personnaliser",
             "done": "Terminé",
-            "add_widget": "Ajouter un widget"
+            "add_widget": "Ajouter un widget",
+            "actions": "Actions"
         },
         "misc": {
             "or": "ou",

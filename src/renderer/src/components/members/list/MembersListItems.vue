@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUserStore } from '@/stores/user'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
-import { useMemberNickname } from '@/composables/members/useMemberNickname'
+import { useMemberActions } from '@/composables/members/useMemberActions'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import Member from '@/components/members/Member.vue'
 
@@ -16,36 +15,32 @@ interface Props {
 const props = defineProps<Props>()
 
 const { t } = useI18n()
-const user_store = useUserStore()
 const {
     show_nickname_dialog,
     new_nickname,
     is_updating,
-    openNicknameDialog,
-    handleUpdateNickname
-} = useMemberNickname()
-
-const confirmUpdateNickname = (nickname: string): void => {
-    handleUpdateNickname(props.member.public_id, nickname, props.member.nickname)
-}
+    navigateToProfile,
+    updateNickname,
+    confirmUpdateNickname,
+    canUpdateNickname
+} = useMemberActions()
 
 const items = computed(() => {
     const baseItems = [
         {
             label: t('views.members_aside.view_profile'),
             icon: 'pi pi-user',
-            command: () => {
-                console.log('View profile for', props.member?.nickname)
+            command: async () => {
+                await navigateToProfile(props.member.public_id)
             }
         }
     ]
 
-    // Only add Update Nickname option if the current member is the logged-in user
-    if (props.member?.user_email === user_store.getEmail) {
+    if (canUpdateNickname(props.member.user_email)) {
         baseItems.push({
             label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
-            command: () => openNicknameDialog(props.member.nickname)
+            command: () => updateNickname(props.member.public_id, props.member.nickname)
         })
     }
 
@@ -61,6 +56,10 @@ const handleContextMenu = (event: MouseEvent): void => {
 const onItemSelected = (item: unknown): void => {
     const menuItem = item as { command?: () => void }
     menuItem.command?.()
+}
+
+const handleNicknameUpdate = (nickname: string): void => {
+    confirmUpdateNickname(props.member.public_id, nickname, props.member.nickname)
 }
 </script>
 
@@ -89,6 +88,6 @@ const onItemSelected = (item: unknown): void => {
         :cancel-label="t('common.actions.cancel')"
         confirm-severity="primary"
         :loading="is_updating"
-        @confirm="confirmUpdateNickname"
+        @confirm="handleNicknameUpdate"
     />
 </template>

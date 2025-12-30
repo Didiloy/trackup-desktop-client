@@ -13,12 +13,12 @@ import { useMemberStatsCRUD } from '@/composables/members/useMemberStatsCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import type { IMemberStatsDetails } from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
-import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
+import MemberProfileHeader from '@/components/members/profile/MemberProfileHeader.vue'
+
 const route = useRoute()
-const toast = useToast()
 const { t } = useI18n()
 const memberId = computed(() => route.params.memberId as string)
 
@@ -77,10 +77,7 @@ onMounted(async () => {
     }
 })
 
-const displayName = computed(() => {
-    if (!member.value) return ''
-    return member.value.nickname
-})
+
 </script>
 
 <template>
@@ -90,20 +87,13 @@ const displayName = computed(() => {
         </div>
 
         <!-- Member Header -->
-        <div class="mb-6 p-6 rounded-3xl bg-surface-0 shadow-sm">
-            <div class="flex items-center gap-4">
-                <div class="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center">
-                    <i class="pi pi-user text-3xl text-primary-500"></i>
-                </div>
-                <div class="flex-1">
-                    <h1 class="text-2xl font-bold">{{ displayName }}</h1>
-                    <div v-if="member" class="text-sm text-gray-500">
-                        {{ t('views.server_members.joined') }}
-                        {{ new Date(member.created_at).toLocaleDateString() }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <MemberProfileHeader
+            v-if="member"
+            :member="member"
+            :stats="memberDetails"
+            :show-stats="true"
+            class="mb-6"
+        />
 
         <Tabs v-model:value="activeTab" class="mt-4">
             <TabList class="mb-4 flex items-center justify-between w-full pr-4">
