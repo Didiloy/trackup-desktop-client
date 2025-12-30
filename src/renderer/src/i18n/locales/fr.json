@@ -135,6 +135,12 @@
             "activity": "Activité",
             "skill_levels": "Niveaux de compétence"
         },
+        "skill_levels": {
+            "beginner": "Débutant",
+            "intermediate": "Intermédiaire",
+            "advanced": "Avancé",
+            "expert": "Expert"
+        },
         "filters": {
             "title": "Filtres",
             "participants": "Participants",
@@ -737,6 +743,18 @@
             }
         },
         "member_activity": {
+            "overview": {
+                "title": "Aperçu de l'Activité",
+                "description": "Affiche les statistiques détaillées du membre pour une activité spécifique",
+                "skill_level": "Niveau",
+                "proficiency": "Maîtrise",
+                "total_sessions": "Total sessions",
+                "total_duration": "Durée totale",
+                "avg_duration": "Durée moyenne",
+                "sessions_created": "Sessions créées",
+                "total_likes": "J'aime reçus",
+                "last_session": "Dernière session"
+            },
             "sessions": {
                 "title": "Sessions de l'Activité",
                 "description": "Affiche les sessions du membre pour une activité spécifique"

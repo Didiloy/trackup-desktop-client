@@ -12,6 +12,7 @@ import {
 import type { IPaginatedMemberActivityStats } from '@shared/contracts/interfaces/entities-stats/member-activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import { translateSkillLevel } from '@/utils/skill-level.utils'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 
 defineOptions({
@@ -110,7 +111,7 @@ function onPageChange(event: any): void {
                             {{ formatMinutesToLabel(activity.total_duration) }}
                         </div>
                         <div v-if="activity.skill_level" class="text-xs text-gray-500">
-                            {{ activity.skill_level }}
+                            {{ translateSkillLevel(activity.skill_level, t) }}
                         </div>
                     </div>
                 </div>

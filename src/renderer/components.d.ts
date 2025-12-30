@@ -97,6 +97,7 @@ declare module 'vue' {
     LanguageSelector: typeof import('./src/components/common/selectors/LanguageSelector.vue')['default']
     Member: typeof import('./src/components/members/Member.vue')['default']
     'MemberActivitiesTable.widget': typeof import('./src/components/widgets/member/MemberActivitiesTable.widget.vue')['default']
+    'MemberActivityOverview.widget': typeof import('./src/components/widgets/member-activity/MemberActivityOverview.widget.vue')['default']
     'MemberActivitySessions.widget': typeof import('./src/components/widgets/member-activity/MemberActivitySessions.widget.vue')['default']
     MemberActivityWidgetConfigForm: typeof import('./src/components/widgets/member-activity/MemberActivityWidgetConfigForm.vue')['default']
     'MemberAllSessions.widget': typeof import('./src/components/widgets/member/MemberAllSessions.widget.vue')['default']
