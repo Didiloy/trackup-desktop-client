@@ -83,12 +83,12 @@ watch(
 
 const sessionList = computed(() => sessions.value?.data || [])
 const totalSessions = computed(() => sessions.value?.total || 0)
-const activityName = computed(() => sessionList.value[0]?.activity?.name || t('common.activity'))
+const activityName = computed(() => sessionList.value[0]?.activity?.name)
 </script>
 
 <template>
     <BaseWidgetContainer
-        :title="t('views.server_members.sessions.activity_title', { activity: activityName })"
+        :title="t('views.server_members.sessions.activity_title', { activity: activityName ?? '' })"
         :loading="isLoading"
     >
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
