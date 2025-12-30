@@ -4,6 +4,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useServerStore } from '@/stores/server'
 import { useServerStatsStore } from '@/stores/server-stats'
+import { useMemberActions } from '@/composables/members/useMemberActions'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
@@ -24,7 +25,12 @@ defineOptions({
 
 const server_store = useServerStore()
 const server_stats_store = useServerStatsStore()
+const { navigateToProfile } = useMemberActions()
 const { t } = useI18n()
+
+const handleMemberClick = async (memberId: string): Promise<void> => {
+    await navigateToProfile(memberId)
+}
 </script>
 
 <template>
@@ -49,12 +55,14 @@ const { t } = useI18n()
                     <i v-if="index === 0" class="pi pi-crown text-amber-500 text-lg"></i>
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
-
+                
                 <AvatarButton
-                    :src="server_store.getMemberById(member.member_id)?.avatar_url"
-                    :name="server_store.getMemberById(member.member_id)?.nickname"
+                    :image-url="server_store.getMemberById(member.member_id)?.avatar_url"
+                    :label="server_store.getMemberById(member.member_id)?.nickname"
                     size="normal"
+                    @click="handleMemberClick(member.member_id)"
                 />
+                
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-surface-900 truncate">
                         {{ server_store.getMemberById(member.member_id)?.nickname }}
