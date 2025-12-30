@@ -8,6 +8,7 @@ import MemberTimelineChartWidget from '@/components/widgets/member/MemberTimelin
 import MemberPatternsSummaryWidget from '@/components/widgets/member/MemberPatternsSummary.widget.vue'
 import MemberActivitiesTableWidget from '@/components/widgets/member/MemberActivitiesTable.widget.vue'
 import MemberAllSessionsWidget from '@/components/widgets/member/MemberAllSessions.widget.vue'
+import MemberRankingOverviewWidget from '@/components/widgets/member/MemberRankingOverview.widget.vue'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useMemberStatsCRUD } from '@/composables/members/useMemberStatsCRUD'
 import { useServerStore } from '@/stores/server'
@@ -121,7 +122,8 @@ onMounted(async () => {
                 <TabPanel value="stats" class="p-0!">
                     <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
                         <div v-if="activeTab === 'stats'" key="stats-content">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <MemberRankingOverviewWidget :show-identity="false" />
                                 <MemberTotalDurationWidget :show-identity="false" />
                                 <MemberTotalSessionsWidget :show-identity="false" />
                             </div>
