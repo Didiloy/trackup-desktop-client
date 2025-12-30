@@ -97,7 +97,6 @@ const navigateToActivity = async (activityId: string): Promise<void> => {
         }
     })
 }
-
 </script>
 
 <template>
