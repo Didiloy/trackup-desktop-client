@@ -25,7 +25,7 @@ defineOptions({
             key: EWidgetCategory.MemberActivities,
             label_key: 'widgets.categories.member_activity'
         },
-        defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
+        defaultSize: { w: 4, h: 10, minW: 4, minH: 10},
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -49,7 +49,7 @@ const memberId = computed(() => (route.params.memberId as string) || props.confi
 const activityId = computed(() => props.config?.activityId)
 const sessions = ref<IPaginatedSessions | null>(null)
 const isLoading = ref(false)
-const currentPage = ref(1)
+const first = ref(0)
 const pageSize = ref(10)
 
 async function fetchSessions(): Promise<void> {
@@ -58,8 +58,9 @@ async function fetchSessions(): Promise<void> {
 
     isLoading.value = true
     try {
+        const page = Math.floor(first.value / pageSize.value) + 1
         const res = await getMemberSessionsForActivity(serverId, memberId.value, activityId.value, {
-            page: currentPage.value,
+            page,
             limit: pageSize.value
         })
         if (res.data) {
@@ -75,7 +76,7 @@ onMounted(() => {
 })
 
 watch(
-    () => [server_store.getPublicId, memberId.value, activityId.value, currentPage.value],
+    () => [server_store.getPublicId, memberId.value, activityId.value, first.value],
     () => {
         void fetchSessions()
     }
@@ -97,7 +98,7 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name)
             :activity-id="activityId"
             class="top-4 right-[130px]"
         />
-        <div v-if="sessionList.length > 0" class="space-y-3">
+        <div v-if="sessionList.length > 0" class="space-y-2">
             <div
                 v-for="session in sessionList"
                 :key="session.public_id"
@@ -120,10 +121,9 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name)
                 </div>
             </div>
             <Paginator
-                v-model:first="currentPage"
+                v-model:first="first"
                 :rows="pageSize"
                 :total-records="totalSessions"
-                class="mt-4"
             />
         </div>
         <div v-else class="flex items-center justify-center h-64 text-gray-500">
