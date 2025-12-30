@@ -17,52 +17,47 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div
-        class="widget-wrapper h-full w-full flex flex-col transition-all duration-200 box-border"
-        :class="[
-            isEditing
-                ? 'bg-white rounded-lg shadow-md border border-dashed border-primary-300 overflow-hidden'
-                : 'bg-transparent border-none shadow-none'
-        ]"
-    >
-        <!-- Widget header with remove button (Only in Edit Mode) -->
-        <div
-            v-if="isEditing"
-            class="widget-header flex items-center justify-between px-3 py-2 bg-surface-50 border-b border-surface-200"
-        >
-            <div class="widget-drag-handle flex-1 cursor-move flex items-center gap-2">
-                <i class="pi pi-bars text-surface-400 text-xs"></i>
-                <span class="text-sm font-medium text-surface-700">
-                    {{ widget?.metadata.title_key ? t(widget.metadata.title_key) : '' }}
-                </span>
-            </div>
-            <Button
-                icon="pi pi-times"
-                text
-                rounded
-                severity="danger"
-                size="small"
-                class="widget-remove-btn"
-                @click="emit('remove')"
-            />
-        </div>
-
-        <!-- Widget content -->
-        <div class="widget-content flex-1 overflow-hidden relative h-full p-0.5">
-            <!-- Overlay to prevent interaction in Edit Mode -->
-            <div v-if="isEditing" class="absolute inset-0 z-10 bg-white/10 cursor-move"></div>
-
+    <div class="widget-wrapper h-full w-full relative">
+        <!-- Widget content (always full size) -->
+        <div class="widget-content h-full w-full">
             <component :is="widget.component" v-if="widget" :config="config" />
             <div v-else class="flex items-center justify-center h-full text-surface-400">-</div>
         </div>
+
+        <!-- Edit mode overlay (on top of widget) -->
+        <template v-if="isEditing">
+            <!-- Border overlay (no pointer events) -->
+            <div class="absolute inset-0 border-2 border-dashed border-primary-400 rounded-xl pointer-events-none z-10"></div>
+            
+            <!-- Header bar (with pointer events for buttons) -->
+            <div
+                class="absolute top-0 left-0 right-0 flex items-center justify-between px-3 py-1.5 bg-primary-500/90 backdrop-blur-sm rounded-t-xl z-20"
+            >
+                <div class="widget-drag-handle flex-1 cursor-move flex items-center gap-2">
+                    <i class="pi pi-arrows-alt text-white text-xs"></i>
+                    <span class="text-xs font-medium text-white truncate">
+                        {{ widget?.metadata.title_key ? t(widget.metadata.title_key) : '' }}
+                    </span>
+                </div>
+                <Button
+                    icon="pi pi-times"
+                    text
+                    rounded
+                    severity="danger"
+                    size="small"
+                    class="widget-remove-btn !text-white hover:!bg-white/20"
+                    @click.stop="emit('remove')"
+                />
+            </div>
+
+            <!-- Content blocker for drag (but leave space for resize handles) -->
+            <div class="absolute inset-x-0 top-8 bottom-3 cursor-move z-10"></div>
+        </template>
     </div>
 </template>
 
 <style scoped>
 .widget-drag-handle {
     user-select: none;
-}
-.widget-content {
-    position: relative;
 }
 </style>
