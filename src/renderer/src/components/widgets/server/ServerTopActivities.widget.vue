@@ -33,7 +33,7 @@ const maxSessions = computed(() => {
 
 <template>
     <BaseWidgetContainer
-        :title="t('views.server_stats.top_activities', 'Popular Activities')"
+        :title="t('views.server_stats.top_activities')"
         :loading="server_stats_store.isLoading"
     >
         <div

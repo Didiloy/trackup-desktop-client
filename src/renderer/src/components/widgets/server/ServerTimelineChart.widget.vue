@@ -249,7 +249,7 @@ const hasData = computed(() => !!sortedData.value.length)
                     class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                 >
                     <h3 class="text-lg font-bold text-surface-900">
-                        {{ t('views.server_stats.activity_evolution', 'Activity Evolution') }}
+                        {{ t('views.server_stats.activity_evolution') }}
                     </h3>
 
                     <PeriodSelector

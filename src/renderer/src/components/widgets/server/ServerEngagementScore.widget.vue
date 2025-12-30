@@ -25,7 +25,8 @@ const server_stats_store = useServerStatsStore()
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_stats.engagement_score', 'Engagement Score')"
+        :label="t('views.server_stats.engagement_score')"
+        :description="t('views.server_stats.engagement_score_description')"
         :value="server_stats_store.getDetails?.server_stats.engagement_score.toFixed(1) ?? '0.0'"
         icon="pi pi-chart-line"
         color="text-red-500"

@@ -35,7 +35,7 @@ const handleMemberClick = async (memberId: string): Promise<void> => {
 
 <template>
     <BaseWidgetContainer
-        :title="t('views.server_stats.top_members', 'Most Active Members')"
+        :title="t('views.server_stats.top_members')"
         :loading="server_stats_store.isLoading"
     >
         <div
@@ -55,14 +55,14 @@ const handleMemberClick = async (memberId: string): Promise<void> => {
                     <i v-if="index === 0" class="pi pi-crown text-amber-500 text-lg"></i>
                     <span v-else>#{{ index + 1 }}</span>
                 </div>
-                
+
                 <AvatarButton
                     :image-url="server_store.getMemberById(member.member_id)?.avatar_url"
                     :label="server_store.getMemberById(member.member_id)?.nickname"
                     size="normal"
                     @click="handleMemberClick(member.member_id)"
                 />
-                
+
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-surface-900 truncate">
                         {{ server_store.getMemberById(member.member_id)?.nickname }}

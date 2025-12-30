@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
     label: string
+    description?: string
     value: string | number
     subValue?: string
     icon: string
@@ -25,6 +26,13 @@ defineProps<{
         <div class="flex-1 flex flex-col">
             <p class="text-sm text-surface-500 font-medium mb-1 line-clamp-1">
                 {{ label }}
+            </p>
+            <p
+                v-if="description"
+                class="text-xs text-surface-400 mb-2 line-clamp-2"
+                v-tooltip.bottom="description"
+            >
+                {{ description }}
             </p>
             <h3 class="text-2xl font-bold text-surface-900 truncate">
                 {{ value }}

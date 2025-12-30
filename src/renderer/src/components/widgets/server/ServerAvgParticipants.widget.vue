@@ -25,7 +25,7 @@ const server_stats_store = useServerStatsStore()
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_stats.avg_participants_per_session', 'Avg Participants')"
+        :label="t('views.server_stats.avg_participants_per_session')"
         :value="
             server_stats_store.getDetails?.server_stats.avg_participants_per_session.toFixed(2) ??
             '0.00'

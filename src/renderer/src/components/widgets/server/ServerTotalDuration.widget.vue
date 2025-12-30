@@ -26,7 +26,7 @@ const server_stats_store = useServerStatsStore()
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_stats.total_duration', 'Total Duration')"
+        :label="t('views.server_stats.total_duration')"
         :value="
             formatMinutesToLabel(server_stats_store.getDetails?.server_stats.total_duration ?? 0)
         "

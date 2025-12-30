@@ -25,7 +25,7 @@ const server_stats_store = useServerStatsStore()
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_stats.total_sessions', 'Total Sessions')"
+        :label="t('views.server_stats.total_sessions')"
         :value="server_stats_store.getDetails?.server_stats.total_sessions.toLocaleString() ?? 0"
         icon="pi pi-calendar"
         color="text-blue-500"

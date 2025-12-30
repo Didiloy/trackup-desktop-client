@@ -123,7 +123,7 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
 
 <template>
     <BaseWidgetContainer
-        :title="t('views.server_stats.distribution', 'Activity Distribution')"
+        :title="t('views.server_stats.distribution')"
         :loading="server_stats_store.isLoading"
     >
         <div v-if="dataset.length > 0" class="flex justify-center h-full">
