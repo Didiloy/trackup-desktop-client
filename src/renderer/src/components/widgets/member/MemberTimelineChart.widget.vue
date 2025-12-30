@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useMemberStatsCRUD } from '@/composables/members/useMemberStatsCRUD'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
+import PeriodSelector from '@/components/common/selectors/PeriodSelector.vue'
+import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 import {
     type IWidgetMetadata,
     type IMemberWidgetConfig
@@ -13,8 +15,8 @@ import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { VueUiXy } from 'vue-data-ui'
 import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
+import 'vue-data-ui/style.css'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
-import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -35,12 +37,15 @@ const props = withDefaults(
     defineProps<{
         showIdentity?: boolean
         config?: IMemberWidgetConfig
+        height?: number
     }>(),
     {
         showIdentity: true,
-        config: undefined
+        config: undefined,
+        height: 350
     }
 )
+
 const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
@@ -49,7 +54,8 @@ const { getMemberStatsTimeline } = useMemberStatsCRUD()
 const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
 const timeline = ref<IStatsTimeline[]>([])
 const isLoading = ref(false)
-const selectedPeriod = ref<EPeriod>(EPeriod.WEEKLY)
+const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
+const period = ref<Date[] | null>(null)
 
 async function fetchTimeline(): Promise<void> {
     const serverId = server_store.getPublicId
@@ -57,9 +63,12 @@ async function fetchTimeline(): Promise<void> {
 
     isLoading.value = true
     try {
+        let limit = 365
+        if (selectedPeriodType.value === EPeriod.DAILY) limit = 90
+
         const res = await getMemberStatsTimeline(serverId, memberId.value, {
-            period: selectedPeriod.value,
-            limit: 30
+            period: selectedPeriodType.value || EPeriod.ALL_TIME,
+            limit: limit
         })
         if (res.data) {
             timeline.value = res.data
@@ -74,14 +83,22 @@ onMounted(() => {
 })
 
 watch(
-    () => [server_store.getPublicId, memberId.value, selectedPeriod.value],
+    () => [server_store.getPublicId, memberId.value, selectedPeriodType.value],
     () => {
         void fetchTimeline()
     }
 )
 
+const sortedTimeline = computed(() => {
+    return [...timeline.value].sort((a, b) => {
+        const dateA = new Date(a.period).getTime()
+        const dateB = new Date(b.period).getTime()
+        return dateA - dateB
+    })
+})
+
 const periods = computed(() =>
-    timeline.value.map((entry) => {
+    sortedTimeline.value.map((entry) => {
         const date = new Date(entry.period)
         return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
     })
@@ -95,13 +112,13 @@ const chartData = computed<VueUiXyDatasetItem[]>(() => [
         smooth: true,
         useArea: true,
         color: '#6366f1',
-        series: timeline.value.map((t) => Number((t.total_duration / 60).toFixed(2)))
+        series: sortedTimeline.value.map((t) => Number((t.total_duration / 60).toFixed(2)))
     },
     {
         name: t('views.server_members.timeline.sessions'),
         type: 'bar',
         color: '#10b981',
-        series: timeline.value.map((t) => t.sessions_count)
+        series: sortedTimeline.value.map((t) => t.sessions_count)
     }
 ])
 
@@ -109,7 +126,7 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
     responsive: true,
     chart: {
         backgroundColor: 'transparent',
-        height: 300,
+        height: props.height,
         padding: { top: 20, right: 20, bottom: 20, left: 20 },
         legend: {
             show: true,
@@ -123,10 +140,12 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
             labels: {
                 show: true,
                 color: '#64748b',
+                fontSize: 10,
                 xAxisLabels: {
                     show: true,
                     values: periods.value,
-                    rotation: -45
+                    rotation: -45,
+                    fontSize: 10
                 }
             }
         },
@@ -140,9 +159,7 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
             showPercentage: false
         },
         title: { show: false },
-        userOptions: {
-            show: false
-        }
+        userOptions: { show: false }
     },
     bar: {
         borderRadius: 4,
@@ -157,29 +174,44 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
         }
     }
 }))
+
+const hasData = computed(() => sortedTimeline.value.length > 0)
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.server_members.timeline.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
-        <template #actions>
-            <SelectButton
-                v-model="selectedPeriod"
-                :options="[
-                    { label: t('common.periods.daily'), value: EPeriod.DAILY },
-                    { label: t('common.periods.weekly'), value: EPeriod.WEEKLY },
-                    { label: t('common.periods.monthly'), value: EPeriod.MONTHLY }
-                ]"
-                option-label="label"
-                option-value="value"
-                aria-labelledby="basic"
-                size="small"
-            />
+    <BaseWidgetContainer :loading="isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg font-bold text-surface-900">
+                            {{ t('views.server_members.timeline.title') }}
+                        </h3>
+                        <MemberIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :member-id="memberId"
+                        />
+                    </div>
+
+                    <PeriodSelector
+                        v-model:period="period"
+                        v-model:selected-period-type="selectedPeriodType"
+                    />
+                </div>
+            </div>
         </template>
-        <div v-if="timeline.length > 0" class="w-full h-96">
+
+        <div v-if="hasData" class="h-full" :style="{ minHeight: `${height}px` }">
             <VueUiXy :config="chartConfig" :dataset="chartData" />
         </div>
-        <div v-else class="flex items-center justify-center h-64 text-gray-500">
+
+        <div
+            v-else
+            class="h-full rounded-md flex items-center justify-center text-sm text-surface-400"
+        >
             {{ t('common.fields.no_data') }}
         </div>
     </BaseWidgetContainer>

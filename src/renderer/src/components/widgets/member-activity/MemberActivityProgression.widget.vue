@@ -25,6 +25,7 @@ defineOptions({
         title_key: 'widgets.member_activity.progression.title',
         icon: 'pi pi-chart-line',
         description_key: 'widgets.member_activity.progression.description',
+        discoverable: false,
         category: {
             key: EWidgetCategory.MemberActivities,
             label_key: 'widgets.categories.member_activity'
@@ -55,7 +56,7 @@ const { getMemberActivityStatsProgression } = useMemberActivityStatsCRUD()
 const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 
-const selectedPeriodType = ref<EPeriod | null>(EPeriod.WEEKLY)
+const selectedPeriodType = ref<EPeriod | null>(EPeriod.ALL_TIME)
 const period = ref<Date[] | null>(null)
 const progressionData = ref<IMemberActivityProgression[]>([])
 const isLoading = ref(false)
@@ -71,7 +72,7 @@ async function fetchProgression(): Promise<void> {
             memberId.value,
             activityId.value,
             {
-                period: selectedPeriodType.value || EPeriod.WEEKLY,
+                period: selectedPeriodType.value || EPeriod.ALL_TIME,
                 limit: 12
             }
         )
