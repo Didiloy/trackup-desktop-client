@@ -18,12 +18,12 @@ import ActivityIdentityCorner from '@/components/activities/profile/ActivityIden
 defineOptions({
     widgetMetadata: {
         id: 'member-activity-sessions',
-        title: 'Sessions par Activité',
+        title_key: 'common.widgets.member_activity.sessions.title',
         icon: 'pi pi-th-large',
-        description: 'Affiche les sessions du membre pour une activité spécifique',
+        description_key: 'common.widgets.member_activity.sessions.description',
         category: {
             key: EWidgetCategory.MemberActivities,
-            label: 'Member Activities'
+            label_key: 'common.widgets.categories.member_activity'
         },
         defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
         requiresConfig: true

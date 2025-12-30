@@ -17,12 +17,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-duration',
-        title: 'Durée Moyenne',
+        title_key: 'common.widgets.activity.avg_duration.title',
         icon: 'pi pi-clock',
-        description: "Affiche la durée moyenne de l'activité",
+        description_key: 'common.widgets.activity.avg_duration.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true

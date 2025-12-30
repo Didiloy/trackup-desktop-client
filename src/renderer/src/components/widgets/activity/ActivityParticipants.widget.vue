@@ -15,12 +15,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-participants',
-        title: 'Participants',
+        title_key: 'common.widgets.activity.participants.title',
         icon: 'pi pi-users',
-        description: 'Affiche les statistiques de participants',
+        description_key: 'common.widgets.activity.participants.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 6, h: 3, minW: 4, minH: 2 },
         requiresConfig: true

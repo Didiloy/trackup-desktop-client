@@ -9,12 +9,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-total-duration',
-        title: 'Durée Totale',
+        title_key: 'common.widgets.server.total_duration.title',
         icon: 'pi pi-clock',
-        description: 'Affiche la durée totale des sessions',
+        description_key: 'common.widgets.server.total_duration.description',
         category: {
             key: EWidgetCategory.Server,
-            label: 'Server'
+            label_key: 'common.widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata

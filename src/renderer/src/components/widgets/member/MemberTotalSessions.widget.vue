@@ -16,12 +16,12 @@ import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCor
 defineOptions({
     widgetMetadata: {
         id: 'member-total-sessions',
-        title: 'Sessions Totales',
+        title_key: 'common.widgets.member.total_sessions.title',
         icon: 'pi pi-list',
-        description: 'Affiche le nombre total de sessions du membre',
+        description_key: 'common.widgets.member.total_sessions.description',
         category: {
             key: EWidgetCategory.Member,
-            label: 'Member'
+            label_key: 'common.widgets.categories.member'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true

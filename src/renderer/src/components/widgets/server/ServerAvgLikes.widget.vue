@@ -8,12 +8,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-avg-likes',
-        title: 'Likes Moyens',
+        title_key: 'common.widgets.server.avg_likes.title',
         icon: 'pi pi-thumbs-up',
-        description: 'Affiche le nombre moyen de likes par session',
+        description_key: 'common.widgets.server.avg_likes.description',
         category: {
             key: EWidgetCategory.Server,
-            label: 'Server'
+            label_key: 'common.widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata

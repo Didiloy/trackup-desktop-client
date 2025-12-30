@@ -16,12 +16,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-ranking',
-        title: 'Classement',
+        title_key: 'common.widgets.activity.ranking.title',
         icon: 'pi pi-chart-bar',
-        description: "Affiche le classement de l'activité",
+        description_key: 'common.widgets.activity.ranking.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 },
         requiresConfig: true

@@ -8,12 +8,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-active-members',
-        title: 'Membres Actifs',
+        title_key: 'common.widgets.server.active_members.title',
         icon: 'pi pi-users',
-        description: 'Affiche le nombre de membres actifs',
+        description_key: 'common.widgets.server.active_members.description',
         category: {
             key: EWidgetCategory.Server,
-            label: 'Server'
+            label_key: 'common.widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata

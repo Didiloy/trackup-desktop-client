@@ -16,12 +16,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-top-contributors',
-        title: 'Top Contributeurs',
+        title_key: 'common.widgets.activity.top_contributors.title',
         icon: 'pi pi-star',
-        description: "Affiche les meilleurs contributeurs de l'activité",
+        description_key: 'common.widgets.activity.top_contributors.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 6, h: 4, minW: 4, minH: 3 },
         requiresConfig: true

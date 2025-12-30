@@ -12,12 +12,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-growth-trends',
-        title: 'Tendances de Croissance',
+        title_key: 'common.widgets.server.growth_trends.title',
         icon: 'pi pi-arrow-up-right',
-        description: 'Affiche les tendances de croissance du serveur',
+        description_key: 'common.widgets.server.growth_trends.description',
         category: {
             key: EWidgetCategory.Server,
-            label: 'Server'
+            label_key: 'common.widgets.categories.server'
         },
         defaultSize: { w: 12, h: 4, minW: 6, minH: 3 }
     } satisfies IWidgetMetadata

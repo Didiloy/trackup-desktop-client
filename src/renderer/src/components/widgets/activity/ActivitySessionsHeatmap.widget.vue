@@ -18,12 +18,12 @@ import { EPeriod } from '@shared/contracts/enums/period.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-sessions-heatmap',
-        title: 'Carte de Chaleur',
+        title_key: 'common.widgets.activity.sessions_heatmap.title',
         icon: 'pi pi-table',
-        description: 'Affiche la carte de chaleur des sessions',
+        description_key: 'common.widgets.activity.sessions_heatmap.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 12, h: 6, minW: 10, minH: 5 },
         requiresConfig: true

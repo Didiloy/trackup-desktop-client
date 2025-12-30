@@ -17,12 +17,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'activity-sessions-table',
-        title: 'Sessions',
+        title_key: 'common.widgets.activity.sessions_table.title',
         icon: 'pi pi-list',
-        description: "Affiche la liste des sessions récentes de l'activité",
+        description_key: 'common.widgets.activity.sessions_table.description',
         category: {
             key: EWidgetCategory.Activity,
-            label: 'Activity'
+            label_key: 'common.widgets.categories.activity'
         },
         defaultSize: { w: 12, h: 8, minW: 6, minH: 6 },
         requiresConfig: true

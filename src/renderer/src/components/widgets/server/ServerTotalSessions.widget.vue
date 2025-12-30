@@ -8,12 +8,12 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 defineOptions({
     widgetMetadata: {
         id: 'server-total-sessions',
-        title: 'Total Sessions',
+        title_key: 'common.widgets.server.total_sessions.title',
         icon: 'pi pi-calendar',
-        description: 'Affiche le nombre total de sessions',
+        description_key: 'common.widgets.server.total_sessions.description',
         category: {
             key: EWidgetCategory.Server,
-            label: 'Server'
+            label_key: 'common.widgets.categories.server'
         },
         defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
     } satisfies IWidgetMetadata
