@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
@@ -9,7 +9,7 @@ import {
     type IWidgetMetadata,
     type IMemberWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IPaginatedSessions } from '@shared/contracts/interfaces/entities/session.interfaces'
+import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
@@ -35,92 +35,160 @@ const props = withDefaults(
         config?: IMemberWidgetConfig
     }>(),
     {
-        showIdentity: true,
-        config: undefined
+        showIdentity: true
     }
 )
+
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const server_store = useServerStore()
 const { getMemberSessions } = useMemberCRUD()
 
 const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
-const sessions = ref<IPaginatedSessions | null>(null)
+const sessions = ref<ISessionListItem[]>([])
+const total = ref(0)
+const first = ref(0)
+const pageSize = 10
 const isLoading = ref(false)
-const currentPage = ref(1)
-const pageSize = ref(10)
-const first = computed(() => (currentPage.value - 1) * pageSize.value)
 
-async function fetchSessions(): Promise<void> {
+async function loadSessions(page = 0): Promise<void> {
     const serverId = server_store.getPublicId
     if (!memberId.value || !serverId) return
 
     isLoading.value = true
     try {
         const res = await getMemberSessions(serverId, memberId.value, {
-            page: currentPage.value,
-            limit: pageSize.value
+            page: page + 1,
+            limit: pageSize
         })
         if (res.data) {
-            sessions.value = res.data
+            sessions.value = res.data.data
+            total.value = res.data.total
         }
     } finally {
         isLoading.value = false
     }
 }
 
-onMounted(() => {
-    void fetchSessions()
-})
-
 watch(
-    () => [server_store.getPublicId, memberId.value, currentPage.value],
+    () => [server_store.getPublicId, memberId.value],
     () => {
-        void fetchSessions()
-    }
+        first.value = 0
+        void loadSessions(0)
+    },
+    { immediate: true }
 )
 
-const sessionList = computed(() => sessions.value?.data || [])
-const totalSessions = computed(() => sessions.value?.total || 0)
+const onPageChange = (event: { first: number; page: number }): void => {
+    first.value = event.first
+    void loadSessions(event.page)
+}
 
-function onPageChange(event: any): void {
-    currentPage.value = event.page + 1
+const navigateToSession = async (sessionId: string): Promise<void> => {
+    await router.push({
+        name: 'SessionDetails',
+        params: {
+            id: server_store.getPublicId,
+            sessionId
+        }
+    })
 }
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('views.server_members.sessions.all_title')" :loading="isLoading">
+    <BaseWidgetContainer :title="t('widgets.member.all_sessions.title')" :loading="isLoading">
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
-        <div v-if="sessionList.length > 0" class="space-y-3">
-            <div
-                v-for="session in sessionList"
-                :key="session.public_id"
-                class="p-3 rounded-2xl bg-surface-100 hover:bg-surface-200 transition-colors"
-            >
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <div class="font-medium">{{ session.activity?.name }}</div>
-                        <div class="text-xs text-gray-500">
-                            {{ new Date(session.date).toLocaleDateString() }}
+
+        <div
+            v-if="sessions.length === 0 && !isLoading"
+            class="flex items-center justify-center h-64"
+        >
+            <p class="text-surface-400">{{ t('common.fields.no_data') }}</p>
+        </div>
+
+        <div v-else class="flex flex-col h-full">
+            <div class="flex-1 overflow-y-auto pr-2 space-y-0.5">
+                <div
+                    v-for="session in sessions"
+                    :key="session.public_id"
+                    class="group flex items-center gap-4 p-3 rounded-xl hover:bg-surface-50 transition-all cursor-pointer border-b border-surface-50 last:border-0"
+                    @click="navigateToSession(session.public_id)"
+                >
+                    <!-- Date Box -->
+                    <div
+                        class="flex flex-col items-center justify-center w-14 h-14 bg-surface-100 rounded-xl text-surface-600 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors shrink-0"
+                    >
+                        <span class="text-lg font-bold leading-none">{{
+                            new Date(session.date).getDate()
+                        }}</span>
+                        <span class="text-[0.65rem] font-bold uppercase tracking-wider">{{
+                            new Date(session.date).toLocaleDateString('fr-FR', { month: 'short' })
+                        }}</span>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <h4 class="font-bold text-surface-900 truncate">
+                                {{ session.title || session.activity?.name || '-' }}
+                            </h4>
+                            <span
+                                v-if="session.activity?.name"
+                                class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-200 text-surface-600 uppercase tracking-wide"
+                            >
+                                {{ session.activity.name }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-4 text-xs text-surface-500">
+                            <!-- Duration -->
+                            <div class="flex items-center gap-1.5 font-medium text-surface-900">
+                                <i class="pi pi-clock text-primary-500"></i>
+                                <span>{{ formatMinutesToLabel(parseInt(session.duration)) }}</span>
+                            </div>
+
+                            <!-- Participants -->
+                            <div
+                                v-if="session.participants_count > 0"
+                                class="flex items-center gap-1.5"
+                            >
+                                <i class="pi pi-users"></i>
+                                <span>{{ session.participants_count }}</span>
+                            </div>
+
+                            <!-- Likes -->
+                            <div v-if="session.likes_count > 0" class="flex items-center gap-1.5">
+                                <i
+                                    :class="[
+                                        'pi',
+                                        session.liked_by_me
+                                            ? 'pi-heart-fill text-pink-500'
+                                            : 'pi-heart'
+                                    ]"
+                                ></i>
+                                <span :class="{ 'font-bold text-pink-600': session.liked_by_me }">{{
+                                    session.likes_count
+                                }}</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <div class="font-bold text-primary-500">
-                            {{ formatMinutesToLabel(parseInt(session.duration)) }}
-                        </div>
-                    </div>
+
+                    <!-- Chevron -->
+                    <i
+                        class="pi pi-chevron-right text-surface-300 group-hover:text-primary-500 transition-colors"
+                    ></i>
                 </div>
             </div>
+
             <Paginator
+                v-if="total > pageSize"
                 :first="first"
                 :rows="pageSize"
-                :total-records="totalSessions"
+                :total-records="total"
+                class="mt-4 border-t border-surface-100 pt-2"
                 @page="onPageChange"
-                class="mt-4"
             />
-        </div>
-        <div v-else class="flex items-center justify-center h-64 text-gray-500">
-            {{ t('common.fields.no_data') }}
         </div>
     </BaseWidgetContainer>
 </template>
