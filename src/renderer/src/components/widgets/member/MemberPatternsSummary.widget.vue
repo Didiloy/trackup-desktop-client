@@ -73,11 +73,19 @@ watch(
     }
 )
 
-const weekdays = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+const weekdays = computed(() => [
+    t('common.weekdays.short.sunday'),
+    t('common.weekdays.short.monday'),
+    t('common.weekdays.short.tuesday'),
+    t('common.weekdays.short.wednesday'),
+    t('common.weekdays.short.thursday'),
+    t('common.weekdays.short.friday'),
+    t('common.weekdays.short.saturday')
+])
 
 const mostActiveDay = computed(() => {
     if (patterns.value?.most_active_day_of_week == null) return null
-    return weekdays[patterns.value.most_active_day_of_week]
+    return weekdays.value[patterns.value.most_active_day_of_week]
 })
 
 const mostActiveHour = computed(() => {
