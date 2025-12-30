@@ -457,6 +457,16 @@
                 "title": "Timeline d'activité",
                 "duration": "Durée",
                 "sessions": "Sessions"
+            },
+            "details": {
+                "total_sessions": "Sessions totales",
+                "total_duration": "Durée totale",
+                "avg_duration": "Durée moyenne",
+                "likes_received": "J'aime reçus",
+                "favorite_activity": "Activité favorite",
+                "activity_sessions": "{count} sessions",
+                "patterns_title": "Points forts",
+                "current_streak": "Série actuelle"
             }
         },
         "server_stats": {
@@ -743,6 +753,18 @@
             "activity_patterns": {
                 "title": "Habitudes d'Activité",
                 "description": "Affiche les habitudes d'activité du membre"
+            },
+            "growth_trends": {
+                "title": "Tendances de Croissance",
+                "description": "Affiche la croissance des sessions et de la durée"
+            },
+            "details_summary": {
+                "title": "Résumé du profil",
+                "description": "Affiche un résumé des statistiques clés du membre"
+            },
+            "favorite_activity": {
+                "title": "Activité Favorite",
+                "description": "Affiche l'activité la plus pratiquée du membre"
             }
         },
         "member_activity": {
