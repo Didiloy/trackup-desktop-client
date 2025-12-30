@@ -67,10 +67,6 @@ function handleCancel(): void {
 <template>
     <AppDialog
         :model-value="visible"
-        :header-props="{
-            title: t('common.widgets.configure_widget'),
-            subtitle: widget?.metadata?.title ?? ''
-        }"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :dismissable-mask="false"
         @update:model-value="emit('update:visible', $event)"
@@ -80,9 +76,9 @@ function handleCancel(): void {
                 <h3 class="text-lg font-semibold">{{ t('common.widgets.configure_widget') }}</h3>
                 <div class="flex items-center gap-2 mt-1">
                     <i :class="widget.metadata.icon" class="text-primary-500"></i>
-                    <span class="text-surface-700 font-medium">{{ widget.metadata.title }}</span>
+                    <span class="text-surface-700 font-medium">{{ t(widget.metadata.title_key) }}</span>
                 </div>
-                <p class="text-sm text-surface-500 mt-1">{{ widget.metadata.description }}</p>
+                <p v-if="widget.metadata.description_key" class="text-sm text-surface-500 mt-1">{{ t(widget.metadata.description_key) }}</p>
             </div>
         </template>
 

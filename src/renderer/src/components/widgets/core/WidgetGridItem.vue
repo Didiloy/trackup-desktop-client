@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
 import type { IWidgetComponent } from '@shared/contracts/interfaces/widget.interfaces'
+
+const { t } = useI18n()
 
 defineProps<{
     widget: IWidgetComponent | undefined
@@ -30,7 +33,7 @@ const emit = defineEmits<{
             <div class="widget-drag-handle flex-1 cursor-move flex items-center gap-2">
                 <i class="pi pi-bars text-surface-400 text-xs"></i>
                 <span class="text-sm font-medium text-surface-700">
-                    {{ widget?.metadata.title }}
+                    {{ widget?.metadata.title_key ? t(widget.metadata.title_key) : '' }}
                 </span>
             </div>
             <Button

@@ -3,9 +3,9 @@ import { EWidgetCategory } from '../enums/widget-category.enum'
 
 export interface IWidgetMetadata {
     id: string
-    title: string
+    title_key: string
     icon?: string
-    description?: string
+    description_key?: string
     category: IWidgetCategory
     /**
      * When set to false, this widget will be skipped by the discovery mechanism.
@@ -29,8 +29,8 @@ export interface IWidgetMetadata {
 export interface IWidgetCategory {
     /** Category machine name from metadata.category (lowercase) */
     key: EWidgetCategory
-    /** Human-friendly label to show in UI (can map known categories) */
-    label: string
+    /** Translation key for category label */
+    label_key: string
 }
 
 export interface ISelectOption {

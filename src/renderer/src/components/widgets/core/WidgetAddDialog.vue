@@ -87,13 +87,13 @@ const filteredWidgets = computed(() => {
                             ></i>
                             <div class="flex-1">
                                 <h3 class="text-lg font-semibold">
-                                    {{ widget.metadata.title }}
+                                    {{ t(widget.metadata.title_key) }}
                                 </h3>
                                 <p
-                                    v-if="widget.metadata.description"
+                                    v-if="widget.metadata.description_key"
                                     class="text-sm text-surface-500 mt-1"
                                 >
-                                    {{ widget.metadata.description }}
+                                    {{ t(widget.metadata.description_key) }}
                                 </p>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const filteredWidgets = computed(() => {
                             class="flex items-center justify-between px-4 pb-3 text-xs text-surface-400"
                         >
                             <span class="font-medium capitalize">
-                                {{ widget.metadata.category.label }}
+                                {{ t(widget.metadata.category.label_key) }}
                             </span>
                             <span>
                                 {{ widget.metadata.defaultSize.w }}x{{
