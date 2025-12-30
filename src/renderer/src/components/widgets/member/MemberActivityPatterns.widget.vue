@@ -91,7 +91,9 @@ const mostActiveHour = computed(() => {
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
         <div v-if="patterns" class="space-y-6">
             <div>
-                <h4 class="text-sm font-medium mb-3">{{ t('views.member.patterns.most_active') }}</h4>
+                <h4 class="text-sm font-medium mb-3">
+                    {{ t('views.member.patterns.most_active') }}
+                </h4>
                 <div class="space-y-2">
                     <div
                         v-if="mostActiveDay"
@@ -115,11 +117,15 @@ const mostActiveHour = computed(() => {
                 <div class="space-y-2">
                     <div class="flex items-center justify-between p-2 rounded-xl bg-green-50">
                         <span class="text-sm">{{ t('views.member.patterns.current_streak') }}</span>
-                        <span class="font-bold text-green-500">{{ patterns.streak_current }} jours</span>
+                        <span class="font-bold text-green-500"
+                            >{{ patterns.streak_current }} jours</span
+                        >
                     </div>
                     <div class="flex items-center justify-between p-2 rounded-xl bg-orange-50">
                         <span class="text-sm">{{ t('views.member.patterns.longest_streak') }}</span>
-                        <span class="font-bold text-orange-500">{{ patterns.streak_longest }} jours</span>
+                        <span class="font-bold text-orange-500"
+                            >{{ patterns.streak_longest }} jours</span
+                        >
                     </div>
                 </div>
             </div>

@@ -92,9 +92,9 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name || t('c
         :loading="isLoading"
     >
         <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
-        <ActivityIdentityCorner 
-            :show="props.showIdentity" 
-            :activity-id="activityId" 
+        <ActivityIdentityCorner
+            :show="props.showIdentity"
+            :activity-id="activityId"
             class="top-4 right-[130px]"
         />
         <div v-if="sessionList.length > 0" class="space-y-3">

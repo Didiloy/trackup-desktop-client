@@ -109,7 +109,7 @@ function onPageChange(event: any): void {
                         <div class="font-bold text-primary-500">
                             {{ formatMinutesToLabel(activity.total_duration) }}
                         </div>
-                        <div v-if="activity.skill_level"  class="text-xs text-gray-500">
+                        <div v-if="activity.skill_level" class="text-xs text-gray-500">
                             {{ activity.skill_level }}
                         </div>
                     </div>

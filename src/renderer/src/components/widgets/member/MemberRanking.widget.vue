@@ -119,7 +119,11 @@ const statsData = computed(() => {
                     <div>
                         <div class="text-sm font-medium text-gray-700">{{ item.label }}</div>
                         <div class="text-xs text-gray-500">
-                            {{ t('views.member.ranking.percentile', { percentile: item.percentile.toFixed(1) }) }}
+                            {{
+                                t('views.member.ranking.percentile', {
+                                    percentile: item.percentile.toFixed(1)
+                                })
+                            }}
                         </div>
                     </div>
                 </div>

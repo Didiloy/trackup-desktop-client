@@ -76,9 +76,13 @@ function handleCancel(): void {
                 <h3 class="text-lg font-semibold">{{ t('common.widgets.configure_widget') }}</h3>
                 <div class="flex items-center gap-2 mt-1">
                     <i :class="widget.metadata.icon" class="text-primary-500"></i>
-                    <span class="text-surface-700 font-medium">{{ t(widget.metadata.title_key) }}</span>
+                    <span class="text-surface-700 font-medium">{{
+                        t(widget.metadata.title_key)
+                    }}</span>
                 </div>
-                <p v-if="widget.metadata.description_key" class="text-sm text-surface-500 mt-1">{{ t(widget.metadata.description_key) }}</p>
+                <p v-if="widget.metadata.description_key" class="text-sm text-surface-500 mt-1">
+                    {{ t(widget.metadata.description_key) }}
+                </p>
             </div>
         </template>
 

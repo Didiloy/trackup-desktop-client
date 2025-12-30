@@ -15,7 +15,9 @@ export function useWidgetFiltering(widgets: Ref<IWidgetComponent[]>) {
     const { t } = useI18n()
 
     const sortedWidgets = computed<IWidgetComponent[]>(() => {
-        return [...widgets.value].sort((a, b) => t(a.metadata.title_key).localeCompare(t(b.metadata.title_key)))
+        return [...widgets.value].sort((a, b) =>
+            t(a.metadata.title_key).localeCompare(t(b.metadata.title_key))
+        )
     })
 
     const categories = computed<IWidgetCategory[]>(() => {
