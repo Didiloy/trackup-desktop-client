@@ -126,13 +126,13 @@ const mostActiveHour = computed(() => {
                     <div class="flex items-center justify-between p-2 rounded-xl bg-green-50">
                         <span class="text-sm">{{ t('views.server_members.patterns.current_streak') }}</span>
                         <span class="font-bold text-green-500"
-                            >{{ patterns.streak_current }} jours</span
+                            >{{ patterns.streak_current }} {{ t('common.time.days') }}</span
                         >
                     </div>
                     <div class="flex items-center justify-between p-2 rounded-xl bg-orange-50">
                         <span class="text-sm">{{ t('views.server_members.patterns.longest_streak') }}</span>
                         <span class="font-bold text-orange-500"
-                            >{{ patterns.streak_longest }} jours</span
+                            >{{ patterns.streak_longest }} {{ t('common.time.days') }}</span
                         >
                     </div>
                 </div>

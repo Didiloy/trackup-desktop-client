@@ -119,11 +119,11 @@ const cards = computed(() => {
         },
         {
             label: t('views.activity.performance_section.current_streak'),
-            value: `${p?.streak_current ?? 0} ${t('views.activity.performance_section.days')}`
+            value: `${p?.streak_current ?? 0} ${t('common.time.days')}`
         },
         {
             label: t('views.activity.performance_section.longest_streak'),
-            value: `${p?.streak_longest ?? 0} ${t('views.activity.performance_section.days')}`
+            value: `${p?.streak_longest ?? 0} ${t('common.time.days')}`
         },
         {
             label: t('views.activity.performance_section.likes_per_session'),

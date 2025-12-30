@@ -97,6 +97,8 @@
             "seconds": "secondes",
             "second": "seconde",
             "seconds_short": "s",
+            "days": "jours",
+            "day": "jour",
             "ago": "il y a {time}",
             "in_future": "dans {time}",
             "just_now": "à l'instant",
@@ -499,7 +501,6 @@
                 "trend_down": "En baisse",
                 "trend_steady": "Stable",
                 "trend_unknown": "Inconnu",
-                "days": "jours",
                 "last_year": "52 dernières semaines",
                 "identity_tooltip": "Activité : {name}",
                 "show_identity": "Afficher l'identité"
