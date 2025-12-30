@@ -133,10 +133,9 @@ const displayName = computed(() => {
                 <TabPanel value="stats" class="p-0!">
                     <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
                         <div v-if="activeTab === 'stats'" key="stats-content">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <MemberTotalDurationWidget :show-identity="false" />
                                 <MemberTotalSessionsWidget :show-identity="false" />
-                                <div></div>
                             </div>
 
                             <MemberTimelineChartWidget :show-identity="false" class="mb-6" />

@@ -11,6 +11,7 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IStatsTimeline } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { VueUiXy } from 'vue-data-ui'
 import type { VueUiXyConfig, VueUiXyDatasetItem } from 'vue-data-ui'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
@@ -86,14 +87,15 @@ const periods = computed(() =>
     })
 )
 
+// Convert durations to hours for better readability
 const chartData = computed<VueUiXyDatasetItem[]>(() => [
     {
-        name: t('views.member.timeline.duration'),
+        name: t('views.member.timeline.duration') + ' (h)',
         type: 'line',
         smooth: true,
         useArea: true,
         color: '#6366f1',
-        series: timeline.value.map((t) => t.total_duration)
+        series: timeline.value.map((t) => Number((t.total_duration / 60).toFixed(2)))
     },
     {
         name: t('views.member.timeline.sessions'),
@@ -174,7 +176,7 @@ const chartConfig = computed<VueUiXyConfig>(() => ({
                 size="small"
             />
         </template>
-        <div v-if="timeline.length > 0" class="w-full">
+        <div v-if="timeline.length > 0" class="w-full h-96">
             <VueUiXy :config="chartConfig" :dataset="chartData" />
         </div>
         <div v-else class="flex items-center justify-center h-64 text-gray-500">
