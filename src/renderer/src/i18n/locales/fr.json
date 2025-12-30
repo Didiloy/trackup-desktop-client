@@ -567,7 +567,8 @@
                 "levels": "Niveaux",
                 "add_level": "Ajouter un niveau",
                 "minutes": "min",
-                "not_possible_with_type": "Impossible avec le type booléen ou date"
+                "not_possible_with_type": "Impossible avec le type booléen ou date",
+                "predefined_only": "Prédéfini uniquement"
             },
             "card": {
                 "sessions": "sessions",

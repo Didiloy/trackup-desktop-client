@@ -31,76 +31,95 @@ function getIconForType(type: string): string {
             return 'pi pi-align-left'
     }
 }
+
+function getColorForType(type: string): { bg: string; text: string } {
+    switch (type) {
+        case 'NUMBER':
+            return { bg: 'bg-blue-50', text: 'text-blue-600' }
+        case 'BOOLEAN':
+            return { bg: 'bg-green-50', text: 'text-green-600' }
+        case 'DATE':
+            return { bg: 'bg-purple-50', text: 'text-purple-600' }
+        default:
+            return { bg: 'bg-primary-50', text: 'text-primary-600' }
+    }
+}
 </script>
 
 <template>
     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
-        <p class="text-sm font-semibold text-surface-600 mb-4">
-            {{ t('views.activity.add_modal.metadata_list') }}
-        </p>
+        <div class="flex items-center gap-2 mb-4">
+            <i class="pi pi-database text-primary-500"></i>
+            <p class="text-sm font-semibold text-surface-700">
+                {{ t('views.activity.add_modal.metadata_list') }}
+            </p>
+        </div>
 
-        <div v-if="hasMetadata" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+        <div v-if="hasMetadata" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
             <div
                 v-for="meta in metadataDefinitions"
                 :key="meta.public_id"
-                class="bg-surface-50 rounded-xl p-3 border border-surface-200 flex items-center gap-3"
+                class="p-3 rounded-xl bg-surface-50 hover:bg-surface-100 transition-colors"
             >
-                <div
-                    class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center"
-                >
-                    <i :class="getIconForType(meta.type)"></i>
-                </div>
-
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2">
-                        <p class="text-sm font-semibold text-surface-900 truncate">
-                            {{ meta.label || meta.key }}
-                        </p>
-
-                        <span
-                            v-if="meta.required"
-                            class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-600 uppercase"
-                        >
-                            {{ t('common.fields.required') }}
-                        </span>
+                <div class="flex items-start gap-3">
+                    <!-- Type Icon -->
+                    <div
+                        class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                        :class="[getColorForType(meta.type).bg, getColorForType(meta.type).text]"
+                    >
+                        <i :class="getIconForType(meta.type)" class="text-lg"></i>
                     </div>
 
-                    <p v-if="meta.description" class="text-xs text-surface-500 truncate">
-                        {{ meta.description }}
-                    </p>
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <p class="font-medium text-surface-900">
+                                {{ meta.label || meta.key }}
+                            </p>
+                            <span
+                                v-if="meta.required"
+                                class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 uppercase"
+                            >
+                                {{ t('common.fields.required') }}
+                            </span>
+                        </div>
 
-                    <div class="flex flex-wrap gap-1 mt-1">
-                        <span
-                            class="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 text-surface-600 font-medium"
-                        >
-                            {{ formatTypeLabel(meta.type) }}
-                        </span>
+                        <p v-if="meta.description" class="text-xs text-surface-500 mt-0.5 line-clamp-2">
+                            {{ meta.description }}
+                        </p>
 
-                        <span
-                            v-if="meta.choices?.length"
-                            class="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 text-surface-600 font-medium"
-                        >
-                            {{ meta.choices.length }} {{ t('common.fields.choices') }}
-                        </span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span
+                                class="text-[10px] px-2 py-1 rounded-full bg-surface-200 text-surface-600 font-medium"
+                            >
+                                {{ formatTypeLabel(meta.type) }}
+                            </span>
+
+                            <span
+                                v-if="meta.choices?.length"
+                                class="text-[10px] px-2 py-1 rounded-full bg-amber-100 text-amber-700 font-medium"
+                            >
+                                {{ meta.choices.length }} {{ t('common.fields.choices') }}
+                            </span>
+
+                            <span
+                                v-if="!meta.allow_not_predefined && meta.choices?.length"
+                                class="text-[10px] px-2 py-1 rounded-full bg-surface-200 text-surface-600 font-medium"
+                            >
+                                {{ t('views.activity.add_modal.predefined_only') }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div v-else class="flex flex-col items-center justify-center py-8 text-center">
-            <div
-                class="w-12 h-12 rounded-full bg-surface-200 flex items-center justify-center mb-3"
-            >
-                <i class="pi pi-database text-surface-400 text-xl"></i>
-            </div>
-
-            <p class="text-sm text-surface-600 font-medium">
-                {{ t('views.activity.no_metadata') }}
-            </p>
-
-            <p class="text-xs text-surface-500 mt-1 max-w-[200px]">
-                {{ t('views.activity.no_metadata_description') }}
-            </p>
+        <div
+            v-else
+            class="flex flex-col items-center justify-center py-8 text-surface-400"
+        >
+            <i class="pi pi-database text-3xl mb-2 opacity-50"></i>
+            <span class="text-sm">{{ t('common.fields.none') }}</span>
         </div>
     </div>
 </template>
