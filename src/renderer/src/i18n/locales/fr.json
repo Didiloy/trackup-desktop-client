@@ -758,6 +758,12 @@
             "sessions": {
                 "title": "Sessions de l'Activité",
                 "description": "Affiche les sessions du membre pour une activité spécifique"
+            },
+            "progression": {
+                "title": "Progression de l'activité",
+                "description": "Affiche l'évolution des compétences et des sessions au fil du temps",
+                "sessions": "Sessions",
+                "proficiency": "Maîtrise"
             }
         },
         "activity": {
