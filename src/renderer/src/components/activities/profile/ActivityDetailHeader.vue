@@ -83,6 +83,7 @@ const summaryMetrics = computed(() => {
                 </h1>
                 <p
                     class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
+                    v-tooltip.left="activity?.description"
                 >
                     {{ activity?.description || t('common.fields.description') }}
                 </p>
