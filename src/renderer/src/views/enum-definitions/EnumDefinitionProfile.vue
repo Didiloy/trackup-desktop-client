@@ -17,6 +17,7 @@ import EnumDefinitionMostUsedValueWidget from '@/components/widgets/enum-definit
 import EnumDefinitionAvgLikesWidget from '@/components/widgets/enum-definition/EnumDefinitionAvgLikes.widget.vue'
 import EnumDefinitionAvgParticipantsWidget from '@/components/widgets/enum-definition/EnumDefinitionAvgParticipants.widget.vue'
 import EnumDefinitionCreateEditDialog from '@/components/definitions/EnumDefinitionCreateEditDialog.vue'
+import EnumDefinitionTopValuesWidget from '@/components/widgets/enum-definition/EnumDefinitionTopValues.widget.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 
@@ -144,6 +145,7 @@ onMounted(async () => {
         <!-- Stats Content -->
         <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
             <div key="stats-content" class="space-y-6">
+                <EnumDefinitionChoicesWidget :show-identity="false" />
                 <!-- Overview Widgets - 5 cards responsive -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     <EnumDefinitionTotalUsageWidget :show-identity="false" />
@@ -158,10 +160,10 @@ onMounted(async () => {
                 <!-- Main Grid: Distribution + Top Values on large screens, stacked on mobile -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <EnumDefinitionDistributionWidget :show-identity="false" />
+                    <EnumDefinitionTopValuesWidget :show-identity="false" />
                 </div>
 
                 <!-- Choices Widget - full width -->
-                <EnumDefinitionChoicesWidget :show-identity="false" />
             </div>
         </TransitionWrapper>
 

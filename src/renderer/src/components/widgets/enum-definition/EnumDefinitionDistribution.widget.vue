@@ -89,7 +89,9 @@ const chartColors = [
     '#14b8a6', // teal
     '#f97316', // orange
     '#ef4444', // red
-    '#06b6d4' // cyan
+    '#06b6d4', // cyan
+    '#10b981', // emerald
+    '#a855f7'  // purple
 ]
 
 // Must use 'values' array format as expected by VueUiDonut
@@ -153,7 +155,8 @@ const config = computed<VueUiDonutConfig>(() => ({
                 backgroundColor: 'transparent',
                 color: 'var(--surface-700)',
                 showPercentage: false,
-                showValue: false
+                showValue: false,
+                position: "top"
             },
             tooltip: {
                 show: true
@@ -198,7 +201,7 @@ const config = computed<VueUiDonutConfig>(() => ({
         </div>
 
         <!-- Chart -->
-        <div v-else class="flex justify-center h-64">
+        <div v-else class="flex justify-center h-80">
             <VueUiDonut :dataset="chartData" :config="config" />
         </div>
     </div>
