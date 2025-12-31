@@ -8,14 +8,14 @@ import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { useToast } from 'primevue/usetoast'
-import EnumDefinitionCreateDialog from './EnumDefinitionCreateDialog.vue'
-import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import EnumDefinitionCreateEditDialog from './EnumDefinitionCreateEditDialog.vue'
+import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
 
 const { t } = useI18n()
 const toast = useToast()
 const router = useRouter()
 const server_store = useServerStore()
-const { listEnumDefinitions, deleteEnumDefinition } = useEnumDefinitionCRUD()
+const { listEnumDefinitions } = useEnumDefinitionCRUD()
 const { getAllEnumDefinitionStats } = useEnumDefinitionStatsCRUD()
 
 const definitions = ref<IEnumDefinition[]>([])
@@ -23,29 +23,8 @@ const statsMap = ref<Map<string, IEnumDefinitionStats>>(new Map())
 const loading = ref(true)
 const showCreateDialog = ref(false)
 const definitionToEdit = ref<IEnumDefinition | null>(null)
-const showDeleteConfirm = ref(false)
-const deleteTargetId = ref<string | null>(null)
-const deleteTargetName = ref<string>('')
 
 const MAX_VALUES_PER_CHUNK = 5
-
-const gradientColors = [
-    'from-blue-500 to-indigo-600',
-    'from-emerald-500 to-teal-600',
-    'from-purple-500 to-violet-600',
-    'from-orange-500 to-amber-600',
-    'from-pink-500 to-rose-600',
-    'from-cyan-500 to-sky-600',
-    'from-green-500 to-lime-600',
-    'from-red-500 to-pink-600',
-    'from-yellow-500 to-orange-600',
-    'from-teal-500 to-emerald-600',
-    'from-indigo-500 to-blue-600',
-    'from-violet-500 to-purple-600',
-    'from-rose-500 to-fuchsia-600',
-    'from-sky-500 to-cyan-600',
-    'from-lime-500 to-green-600'
-]
 
 async function loadDefinitions() {
     if (!server_store.getPublicId) return
@@ -84,19 +63,6 @@ function openCreateDialog() {
     showCreateDialog.value = true
 }
 
-function openEditDialog(def: IEnumDefinition, event: Event) {
-    event.stopPropagation()
-    definitionToEdit.value = def
-    showCreateDialog.value = true
-}
-
-function confirmDelete(def: IEnumDefinition, event: Event) {
-    event.stopPropagation()
-    deleteTargetId.value = def.public_id
-    deleteTargetName.value = def.name
-    showDeleteConfirm.value = true
-}
-
 function navigateToProfile(def: IEnumDefinition, index: number) {
     router.push({
         name: 'ServerEnumDefinitionProfile',
@@ -106,31 +72,6 @@ function navigateToProfile(def: IEnumDefinition, index: number) {
         },
         query: { colorIndex: index.toString() }
     })
-}
-
-async function handleDelete() {
-    if (!server_store.getPublicId || !deleteTargetId.value) return
-    try {
-        const res = await deleteEnumDefinition(server_store.getPublicId, deleteTargetId.value)
-        if (res.error) throw new Error(res.error)
-
-        toast.add({
-            severity: 'success',
-            summary: t('messages.success.delete'),
-            life: 3000
-        })
-        await loadDefinitions()
-    } catch (e) {
-        toast.add({
-            severity: 'error',
-            summary: t('messages.error.delete'),
-            detail: e instanceof Error ? e.message : 'Unknown error',
-            life: 3000
-        })
-    } finally {
-        showDeleteConfirm.value = false
-        deleteTargetId.value = null
-    }
 }
 
 onMounted(() => {
@@ -161,7 +102,7 @@ function countChoices(def: IEnumDefinition): number {
 }
 
 function getGradient(index: number): string {
-    return gradientColors[index % gradientColors.length]
+    return enumDefGradientColorsList[index % enumDefGradientColorsList.length]
 }
 
 function getStats(defId: string): IEnumDefinitionStats | undefined {
@@ -265,28 +206,6 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                     >
                         <i class="pi pi-list text-2xl text-white"></i>
                     </div>
-
-                    <!-- Actions -->
-                    <div
-                        class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1"
-                    >
-                        <Button
-                            icon="pi pi-pencil"
-                            text
-                            rounded
-                            size="small"
-                            class="!w-8 !h-8 !bg-white/20 backdrop-blur-sm hover:!bg-white/40 !text-white"
-                            @click="openEditDialog(def, $event)"
-                        />
-                        <Button
-                            icon="pi pi-trash"
-                            text
-                            rounded
-                            size="small"
-                            class="!w-8 !h-8 !bg-white/20 backdrop-blur-sm hover:!bg-red-500/60 !text-white"
-                            @click="confirmDelete(def, $event)"
-                        />
-                    </div>
                 </div>
 
                 <!-- Content -->
@@ -375,20 +294,11 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
             </div>
         </div>
 
-        <EnumDefinitionCreateDialog
+        <EnumDefinitionCreateEditDialog
             v-model="showCreateDialog"
             :definition-to-edit="definitionToEdit"
             @created="loadDefinitions"
             @updated="loadDefinitions"
-        />
-
-        <ConfirmationDialog
-            :model-value="showDeleteConfirm"
-            :title="t('common.actions.delete')"
-            :message="t('messages.warning.delete')"
-            :confirmation-name="deleteTargetName"
-            @update:model-value="showDeleteConfirm = $event"
-            @confirm="handleDelete"
         />
     </div>
 </template>

@@ -181,7 +181,11 @@ function handleClose() {
 </script>
 
 <template>
-    <AppDialog :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)">
+    <AppDialog
+        :model-value="modelValue"
+        class="w-500 max-w-lg"
+        @update:model-value="emit('update:modelValue', $event)"
+    >
         <template #header>
             <div class="flex flex-col gap-2 p-3">
                 <div class="flex items-center gap-2">

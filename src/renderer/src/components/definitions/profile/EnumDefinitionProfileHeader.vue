@@ -4,38 +4,28 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
-const props = defineProps<{
+defineProps<{
     definition: IEnumDefinition | null
     stats: IEnumDefinitionStats | null
     loading?: boolean
 }>()
 
+const emit = defineEmits<{
+    edit: []
+    delete: []
+}>()
+
 const { t } = useI18n()
 const route = useRoute()
 
-const gradientColors = [
-    'from-blue-500 to-indigo-600',
-    'from-emerald-500 to-teal-600',
-    'from-purple-500 to-violet-600',
-    'from-orange-500 to-amber-600',
-    'from-pink-500 to-rose-600',
-    'from-cyan-500 to-sky-600'
-]
-
 const gradientClass = computed(() => {
     const colorIndex = parseInt(route.query.colorIndex as string) || 0
-    return gradientColors[colorIndex % gradientColors.length]
+    return enumDefGradientColorsList[colorIndex % enumDefGradientColorsList.length]
 })
 
-function formatDuration(minutes: number): string {
-    if (!minutes) return '0h'
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    if (hours === 0) return `${mins}min`
-    if (mins === 0) return `${hours}h`
-    return `${hours}h ${mins}min`
-}
 </script>
 
 <template>
@@ -51,6 +41,26 @@ function formatDuration(minutes: number): string {
             <div
                 class="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full translate-y-1/2 -translate-x-1/2"
             ></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="absolute top-4 right-4 z-20 flex gap-2">
+            <Button
+                icon="pi pi-pencil"
+                text
+                rounded
+                class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-white/40! text-white!"
+                :disabled="loading"
+                @click="emit('edit')"
+            />
+            <Button
+                icon="pi pi-trash"
+                text
+                rounded
+                class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-red-500/60! text-white!"
+                :disabled="loading"
+                @click="emit('delete')"
+            />
         </div>
 
         <!-- Content -->
@@ -97,7 +107,9 @@ function formatDuration(minutes: number): string {
                         <span class="text-sm text-white/70">sessions</span>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-3xl font-bold">{{ formatDuration(stats.total_duration) }}</span>
+                        <span class="text-3xl font-bold">{{
+                            formatMinutesToLabel(stats.total_duration)
+                        }}</span>
                         <span class="text-sm text-white/70">{{
                             t('views.server_definitions.profile.overview.total_duration')
                         }}</span>

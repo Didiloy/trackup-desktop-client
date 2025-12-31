@@ -82,7 +82,7 @@ declare module 'vue' {
     EntityBannerHandling: typeof import('./src/components/common/EntityBannerHandling.vue')['default']
     EntityLogoHandling: typeof import('./src/components/common/EntityLogoHandling.vue')['default']
     'EnumDefinitionChoices.widget': typeof import('./src/components/widgets/enum-definition/EnumDefinitionChoices.widget.vue')['default']
-    EnumDefinitionCreateDialog: typeof import('./src/components/definitions/EnumDefinitionCreateDialog.vue')['default']
+    EnumDefinitionCreateEditDialog: typeof import('./src/components/definitions/EnumDefinitionCreateEditDialog.vue')['default']
     'EnumDefinitionDistribution.widget': typeof import('./src/components/widgets/enum-definition/EnumDefinitionDistribution.widget.vue')['default']
     EnumDefinitionList: typeof import('./src/components/definitions/EnumDefinitionList.vue')['default']
     'EnumDefinitionOverview.widget': typeof import('./src/components/widgets/enum-definition/EnumDefinitionOverview.widget.vue')['default']
