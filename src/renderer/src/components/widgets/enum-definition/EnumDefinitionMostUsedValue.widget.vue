@@ -87,12 +87,19 @@ const value = computed(() => {
         'N/A'
     )
 })
+
+const usageCountLabel = computed(() => {
+    const count = local_stats.value?.most_used_value?.usage_count
+    if (!count || count === 0) return ''
+    return t('widgets.enum_definition.most_used_value.usage_count', { count })
+})
 </script>
 
 <template>
     <BaseOverviewStatWidget
         :label="t('views.server_definitions.profile.overview.most_used_value')"
         :value="value"
+        :sub-value="usageCountLabel"
         icon="pi pi-star"
         color="text-amber-600"
         bg="bg-amber-100"

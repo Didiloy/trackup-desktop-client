@@ -899,7 +899,8 @@
             },
             "most_used_value": {
                 "title": "Valeur la plus utilisée",
-                "description": "Affiche la valeur la plus utilisée pour ce critère"
+                "description": "Affiche la valeur la plus utilisée pour ce critère",
+                "usage_count": "avec plus de {count} utilisations"
             },
             "avg_likes": {
                 "title": "Moy. J'aime",
