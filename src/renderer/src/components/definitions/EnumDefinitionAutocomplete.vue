@@ -53,7 +53,7 @@ watch(query, (newVal) => {
     }
 })
 
-async function fetchDefinitions() {
+async function fetchDefinitions(): Promise<void> {
     if (!server_store.getPublicId) return
     try {
         const res = await listEnumDefinitions(server_store.getPublicId)

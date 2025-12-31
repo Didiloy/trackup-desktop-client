@@ -137,7 +137,7 @@ const favoriteActivity = computed(() => details.value?.favorite_activity)
                     <div
                         class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary-600 shadow-sm"
                     >
-                        <i class="pi pi-star-fill"></i>
+                        <i class="pi pi-trophy"></i>
                     </div>
                     <div>
                         <div
