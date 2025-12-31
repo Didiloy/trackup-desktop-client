@@ -12,8 +12,10 @@ import EnumDefinitionTotalSessionsWidget from '@/components/widgets/enum-definit
 import EnumDefinitionTotalDurationWidget from '@/components/widgets/enum-definition/EnumDefinitionTotalDuration.widget.vue'
 import EnumDefinitionUniqueUsersWidget from '@/components/widgets/enum-definition/EnumDefinitionUniqueUsers.widget.vue'
 import EnumDefinitionDistributionWidget from '@/components/widgets/enum-definition/EnumDefinitionDistribution.widget.vue'
-import EnumDefinitionTopValuesWidget from '@/components/widgets/enum-definition/EnumDefinitionTopValues.widget.vue'
 import EnumDefinitionChoicesWidget from '@/components/widgets/enum-definition/EnumDefinitionChoices.widget.vue'
+import EnumDefinitionMostUsedValueWidget from '@/components/widgets/enum-definition/EnumDefinitionMostUsedValue.widget.vue'
+import EnumDefinitionAvgLikesWidget from '@/components/widgets/enum-definition/EnumDefinitionAvgLikes.widget.vue'
+import EnumDefinitionAvgParticipantsWidget from '@/components/widgets/enum-definition/EnumDefinitionAvgParticipants.widget.vue'
 import EnumDefinitionCreateEditDialog from '@/components/definitions/EnumDefinitionCreateEditDialog.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
@@ -142,18 +144,20 @@ onMounted(async () => {
         <!-- Stats Content -->
         <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
             <div key="stats-content" class="space-y-6">
-                <!-- Overview Widgets - 4 cards responsive -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Overview Widgets - 5 cards responsive -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     <EnumDefinitionTotalUsageWidget :show-identity="false" />
                     <EnumDefinitionTotalSessionsWidget :show-identity="false" />
                     <EnumDefinitionTotalDurationWidget :show-identity="false" />
                     <EnumDefinitionUniqueUsersWidget :show-identity="false" />
+                    <EnumDefinitionAvgLikesWidget :show-identity="false" />
+                    <EnumDefinitionAvgParticipantsWidget :show-identity="false" />
+                    <EnumDefinitionMostUsedValueWidget :show-identity="false" />
                 </div>
 
                 <!-- Main Grid: Distribution + Top Values on large screens, stacked on mobile -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <EnumDefinitionDistributionWidget :show-identity="false" />
-                    <EnumDefinitionTopValuesWidget :show-identity="false" />
                 </div>
 
                 <!-- Choices Widget - full width -->

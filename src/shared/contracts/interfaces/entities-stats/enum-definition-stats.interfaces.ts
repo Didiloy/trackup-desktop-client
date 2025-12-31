@@ -45,6 +45,8 @@ export interface IEnumDefinitionStats {
     total_sessions: number
     total_duration: number
     unique_users: number
+    avg_likes_when_selected: number
+    avg_participants_when_selected: number
     most_used_value: IMostUsedValue | null
 }
 

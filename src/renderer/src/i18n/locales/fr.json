@@ -405,7 +405,10 @@
                     "total_usage": "Utilisations totales",
                     "total_sessions": "Sessions totales",
                     "total_duration": "Durée totale",
-                    "unique_users": "Utilisateurs uniques"
+                    "unique_users": "Utilisateurs uniques",
+                    "avg_likes_when_selected": "Moy. mentions j'aime",
+                    "avg_participants_when_selected": "Moy. participants",
+                    "most_used_value": "Valeur la plus utilisée"
                 },
                 "distribution": {
                     "title": "Répartition des valeurs",
@@ -893,6 +896,18 @@
             "choices": {
                 "title": "Choix",
                 "description": "Liste des choix disponibles"
+            },
+            "most_used_value": {
+                "title": "Valeur la plus utilisée",
+                "description": "Affiche la valeur la plus utilisée pour ce critère"
+            },
+            "avg_likes": {
+                "title": "Moy. J'aime",
+                "description": "Moyenne des j'aime quand ce critère est sélectionné"
+            },
+            "avg_participants": {
+                "title": "Moy. Participants",
+                "description": "Moyenne des participants quand ce critère est sélectionné"
             }
         }
     }
