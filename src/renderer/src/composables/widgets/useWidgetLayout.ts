@@ -63,7 +63,7 @@ interface UseWidgetLayoutResult {
 /**
  * Composable to manage widget layout.
  * RESPONSIBILITY: Grid State, Positioning, Coordination with Persistence.
- * 
+ *
  * Uses a "draft mode" approach:
  * - Changes are made to a working copy (layout)
  * - Changes are only persisted when saveChanges() is called

@@ -12,9 +12,7 @@ import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type {
-    IEnumDefinitionStatsDto
-} from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import type { IEnumDefinitionStatsDto } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -98,7 +96,10 @@ const value = computed(() => {
         :loading="isLoadingLocal"
     >
         <template #corner>
-            <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
+            <EnumDefinitionIdentityCorner
+                :show="props.showIdentity"
+                :definition-id="definitionId"
+            />
         </template>
     </BaseOverviewStatWidget>
 </template>

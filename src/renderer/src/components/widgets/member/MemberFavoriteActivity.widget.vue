@@ -76,7 +76,9 @@ watch(
 const statsData = computed(() => local_stats.value)
 const isLoading = computed(() => isLoadingLocal.value)
 
-const value = computed(() => (statsData.value?.favorite_activity ? statsData.value.favorite_activity.name : '-'))
+const value = computed(() =>
+    statsData.value?.favorite_activity ? statsData.value.favorite_activity.name : '-'
+)
 const subtitle = computed(() =>
     statsData.value?.favorite_activity
         ? t('views.server_members.details.activity_sessions', {

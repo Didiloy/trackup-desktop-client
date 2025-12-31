@@ -26,18 +26,18 @@ onMounted(async () => {
         let def = server_store.getEnumsDefinition?.find(
             (d) => d.public_id === props.modelValue.enumDefinitionId
         )
-        
+
         if (!def) {
             // Fallback to fetch if not in store (though usually it should be)
-             try {
+            try {
                 const res = await listEnumDefinitions(server_store.getPublicId)
                 if (res.data) {
                     server_store.setEnumsDefinition(res.data)
-                    def = res.data.find(d => d.public_id === props.modelValue.enumDefinitionId)
+                    def = res.data.find((d) => d.public_id === props.modelValue.enumDefinitionId)
                 }
-             } catch (e) {
+            } catch (e) {
                 console.error(e)
-             }
+            }
         }
 
         if (def) {
@@ -58,7 +58,7 @@ function handleSelect(definition: IEnumDefinition | null): void {
 <template>
     <div class="space-y-4">
         <label class="block text-sm font-medium text-surface-700">
-             {{
+            {{
                 t('common.actions.select', {
                     entity: t('views.server_definitions.profile.title').toLowerCase()
                 })
@@ -67,7 +67,7 @@ function handleSelect(definition: IEnumDefinition | null): void {
         <EnumDefinitionAutocomplete
             :initial-definition="selectedDefinition"
             :model-value="selectedDefinition?.name || ''"
-            @select="handleSelect" 
+            @select="handleSelect"
         />
     </div>
 </template>

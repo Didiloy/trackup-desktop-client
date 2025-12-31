@@ -67,7 +67,7 @@ async function fetchDefinitions() {
 
 async function handleComplete(event: { query: string }): Promise<void> {
     const q = event.query.toLowerCase()
-    
+
     // 1. Check store first
     let definitions = server_store.getEnumsDefinition || []
 
@@ -80,9 +80,7 @@ async function handleComplete(event: { query: string }): Promise<void> {
     if (!q) {
         suggestions.value = [...definitions]
     } else {
-        suggestions.value = definitions.filter((d) =>
-            d.name.toLowerCase().includes(q)
-        )
+        suggestions.value = definitions.filter((d) => d.name.toLowerCase().includes(q))
     }
 }
 
@@ -97,7 +95,7 @@ onMounted(() => {
     if (!server_store.getEnumsDefinition || server_store.getEnumsDefinition.length === 0) {
         void fetchDefinitions()
     }
-    
+
     if (props.initialDefinition) {
         query.value = props.initialDefinition.name
     }

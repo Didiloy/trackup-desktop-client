@@ -41,7 +41,9 @@ const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
 
-const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
+const definitionId = computed(
+    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+)
 
 const MAX_VALUES_PER_CHUNK = 5
 

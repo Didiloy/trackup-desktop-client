@@ -94,7 +94,10 @@ const value = computed(() => {
         :loading="isLoadingLocal"
     >
         <template #corner>
-            <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
+            <EnumDefinitionIdentityCorner
+                :show="props.showIdentity"
+                :definition-id="definitionId"
+            />
         </template>
     </BaseOverviewStatWidget>
 </template>

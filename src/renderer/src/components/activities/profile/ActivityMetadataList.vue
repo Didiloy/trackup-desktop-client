@@ -84,7 +84,10 @@ function getColorForType(type: string): { bg: string; text: string } {
                             </span>
                         </div>
 
-                        <p v-if="meta.description" class="text-xs text-surface-500 mt-0.5 line-clamp-2">
+                        <p
+                            v-if="meta.description"
+                            class="text-xs text-surface-500 mt-0.5 line-clamp-2"
+                        >
                             {{ meta.description }}
                         </p>
 
@@ -114,10 +117,7 @@ function getColorForType(type: string): { bg: string; text: string } {
             </div>
         </div>
 
-        <div
-            v-else
-            class="flex flex-col items-center justify-center py-8 text-surface-400"
-        >
+        <div v-else class="flex flex-col items-center justify-center py-8 text-surface-400">
             <i class="pi pi-database text-3xl mb-2 opacity-50"></i>
             <span class="text-sm">{{ t('common.fields.none') }}</span>
         </div>

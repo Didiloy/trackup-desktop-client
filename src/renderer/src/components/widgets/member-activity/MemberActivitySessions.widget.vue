@@ -25,7 +25,7 @@ defineOptions({
             key: EWidgetCategory.MemberActivities,
             label_key: 'widgets.categories.member_activity'
         },
-        defaultSize: { w: 4, h: 10, minW: 4, minH: 10},
+        defaultSize: { w: 4, h: 10, minW: 4, minH: 10 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -120,11 +120,7 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name)
                     </div>
                 </div>
             </div>
-            <Paginator
-                v-model:first="first"
-                :rows="pageSize"
-                :total-records="totalSessions"
-            />
+            <Paginator v-model:first="first" :rows="pageSize" :total-records="totalSessions" />
         </div>
         <div v-else class="flex items-center justify-center h-64 text-gray-500">
             {{ t('common.fields.no_data') }}

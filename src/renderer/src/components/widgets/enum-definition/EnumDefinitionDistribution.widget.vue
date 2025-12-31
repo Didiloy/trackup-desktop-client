@@ -45,7 +45,9 @@ const route = useRoute()
 const server_store = useServerStore()
 const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
 
-const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
+const definitionId = computed(
+    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+)
 const distribution = ref<IEnumValueDistribution[]>([])
 const isLoadingLocal = ref(false)
 
@@ -87,7 +89,7 @@ const chartColors = [
     '#14b8a6', // teal
     '#f97316', // orange
     '#ef4444', // red
-    '#06b6d4'  // cyan
+    '#06b6d4' // cyan
 ]
 
 // Must use 'values' array format as expected by VueUiDonut
@@ -95,13 +97,11 @@ const chartData = computed<VueUiDonutDatasetItem[]>(() => {
     if (!distribution.value || !Array.isArray(distribution.value)) {
         return []
     }
-    return distribution.value
-        .slice(0, 10)
-        .map((item, index) => ({
-            name: item.selected_value || 'N/A',
-            values: [item.usage_count || 0],
-            color: chartColors[index % chartColors.length]
-        }))
+    return distribution.value.slice(0, 10).map((item, index) => ({
+        name: item.selected_value || 'N/A',
+        values: [item.usage_count || 0],
+        color: chartColors[index % chartColors.length]
+    }))
 })
 
 const config = computed<VueUiDonutConfig>(() => ({
@@ -168,7 +168,9 @@ const config = computed<VueUiDonutConfig>(() => ({
         <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
+            <div
+                class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
+            >
                 <i class="pi pi-chart-pie text-lg"></i>
             </div>
             <div>

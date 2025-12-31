@@ -39,7 +39,12 @@ export function registerActivityMetadataDefinitionStatsIpc(): void {
         ): Promise<
             IActivityMetadataDefinitionStatsApiResponse<IPaginatedResponseOfMetadataDefinitionSummaryDto>
         > => {
-            logger.info('Getting all metadata enum-definitions stats:', serverId, activityId, params)
+            logger.info(
+                'Getting all metadata enum-definitions stats:',
+                serverId,
+                activityId,
+                params
+            )
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),

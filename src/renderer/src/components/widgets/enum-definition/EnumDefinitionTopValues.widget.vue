@@ -43,7 +43,9 @@ const route = useRoute()
 const server_store = useServerStore()
 const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
 
-const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
+const definitionId = computed(
+    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+)
 const distribution = ref<IEnumValueDistribution[]>([])
 const isLoadingLocal = ref(false)
 
@@ -104,7 +106,9 @@ const maxUsage = computed(() => {
         <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
+            <div
+                class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center"
+            >
                 <i class="pi pi-list text-lg"></i>
             </div>
             <div>
@@ -146,7 +150,9 @@ const maxUsage = computed(() => {
                 ></div>
 
                 <!-- Content -->
-                <div class="relative flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50/50 transition-colors">
+                <div
+                    class="relative flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50/50 transition-colors"
+                >
                     <!-- Rank badge -->
                     <span
                         class="shrink-0 w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center ring-1 ring-inset"

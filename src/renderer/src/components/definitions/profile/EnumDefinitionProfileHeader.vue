@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed} from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
@@ -22,8 +22,6 @@ const gradientClass = computed(() => {
     const colorIndex = parseInt(route.query.colorIndex as string) || 0
     return enumDefGradientColorsList[colorIndex % enumDefGradientColorsList.length]
 })
-
-
 </script>
 
 <template>
@@ -91,8 +89,6 @@ const gradientClass = computed(() => {
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
