@@ -1,10 +1,79 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useEnumDefinitionStatsStore } from '@/stores/enum-definition-stats'
+import { useRoute } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+import { useEnumDefinitionStatsCRUD } from '@/composables/enums-definition/useEnumDefinitionStatsCRUD'
+import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import type {
+    IWidgetMetadata,
+    IEnumDefinitionWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
+import type { IEnumValueDistribution } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+
+defineOptions({
+    widgetMetadata: {
+        id: 'enum-definition-top-values',
+        title_key: 'widgets.enum_definition.top_values.title',
+        icon: 'pi pi-list',
+        description_key: 'widgets.enum_definition.top_values.description',
+        category: {
+            key: EWidgetCategory.EnumDefinition,
+            label_key: 'widgets.categories.enum_definition'
+        },
+        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        requiresConfig: true
+    } satisfies IWidgetMetadata
+})
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+        config?: IEnumDefinitionWidgetConfig
+    }>(),
+    {
+        showIdentity: true,
+        config: undefined
+    }
+)
 
 const { t } = useI18n()
-const store = useEnumDefinitionStatsStore()
+const route = useRoute()
+const server_store = useServerStore()
+const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
+
+const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
+const distribution = ref<IEnumValueDistribution[]>([])
+const isLoadingLocal = ref(false)
+
+async function fetchDistribution(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!definitionId.value || !serverId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getEnumValueStatsDistribution(serverId, definitionId.value)
+        if (res.data && Array.isArray(res.data)) {
+            distribution.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
+
+onMounted(() => {
+    void fetchDistribution()
+})
+
+watch(
+    () => [server_store.getPublicId, definitionId.value],
+    () => {
+        void fetchDistribution()
+    }
+)
+
+const loading = computed(() => isLoadingLocal.value)
 
 const badgeColors = [
     'bg-blue-100 text-blue-700 ring-blue-500/20',
@@ -18,10 +87,10 @@ const badgeColors = [
 ]
 
 const sortedValues = computed(() => {
-    if (!store.valueDistribution || !Array.isArray(store.valueDistribution)) {
+    if (!distribution.value || !Array.isArray(distribution.value)) {
         return []
     }
-    return [...store.valueDistribution].sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0))
+    return [...distribution.value].sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0))
 })
 
 const maxUsage = computed(() => {
@@ -31,7 +100,8 @@ const maxUsage = computed(() => {
 </script>
 
 <template>
-    <div class="bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+        <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
@@ -45,7 +115,7 @@ const maxUsage = computed(() => {
         </div>
 
         <!-- Loading State -->
-        <div v-if="store.isLoading" class="space-y-3">
+        <div v-if="loading" class="space-y-3">
             <div v-for="i in 5" :key="i" class="flex items-center gap-3">
                 <Skeleton width="30px" height="24px" class="rounded-lg" />
                 <Skeleton width="100%" height="36px" class="rounded-lg" />

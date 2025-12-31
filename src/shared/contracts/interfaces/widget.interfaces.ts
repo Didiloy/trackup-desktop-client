@@ -52,6 +52,11 @@ export interface IMemberActivityWidgetConfig {
     activityId: string
 }
 
+export interface IEnumDefinitionWidgetConfig {
+    enumDefinitionId: string
+}
+
+
 export interface IWidgetLayoutItem {
     i: string // unique instance id (UUID for multiple instances)
     x: number

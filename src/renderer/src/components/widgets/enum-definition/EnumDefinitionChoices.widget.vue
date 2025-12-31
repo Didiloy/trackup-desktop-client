@@ -1,17 +1,63 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useEnumDefinitionStatsStore } from '@/stores/enum-definition-stats'
+import { useRoute } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+import type {
+    IWidgetMetadata,
+    IEnumDefinitionWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
+import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
+import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+
+defineOptions({
+    widgetMetadata: {
+        id: 'enum-definition-choices',
+        title_key: 'widgets.enum_definition.choices.title',
+        icon: 'pi pi-check-square',
+        description_key: 'widgets.enum_definition.choices.description',
+        category: {
+            key: EWidgetCategory.EnumDefinition,
+            label_key: 'widgets.categories.enum_definition'
+        },
+        defaultSize: { w: 4, h: 4, minW: 3, minH: 3 },
+        requiresConfig: true
+    } satisfies IWidgetMetadata
+})
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+        config?: IEnumDefinitionWidgetConfig
+    }>(),
+    {
+        showIdentity: true,
+        config: undefined
+    }
+)
 
 const { t } = useI18n()
-const store = useEnumDefinitionStatsStore()
+const route = useRoute()
+const server_store = useServerStore()
+
+const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
 
 const MAX_VALUES_PER_CHUNK = 5
 
+// Get definition directly from server store
+const definition = computed<IEnumDefinition | null>(() => {
+    const definitions = server_store.getEnumsDefinition
+    if (!definitions || !definitionId.value) return null
+    return definitions.find((d) => d.public_id === definitionId.value) || null
+})
+
+const loading = computed(() => server_store.isLoading)
+
 const choices = computed(() => {
-    if (!store.currentDefinition?.values?.length) return []
+    if (!definition.value?.values?.length) return []
     const flattened: string[] = []
-    store.currentDefinition.values.forEach((valueObj) => {
+    definition.value.values.forEach((valueObj) => {
         for (let i = 1; i <= MAX_VALUES_PER_CHUNK; i++) {
             const key = `value${i}` as keyof typeof valueObj
             const val = valueObj[key]
@@ -25,7 +71,8 @@ const choices = computed(() => {
 </script>
 
 <template>
-    <div class="bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+        <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-5">
             <div
@@ -35,7 +82,7 @@ const choices = computed(() => {
             </div>
             <div>
                 <h3 class="font-semibold text-surface-900">
-                    {{ t('common.fields.choices') }}
+                    {{ t('widgets.enum_definition.choices.title') }}
                 </h3>
                 <p class="text-sm text-surface-500">
                     {{ choices.length }} {{ t('common.fields.items') }}
@@ -44,7 +91,7 @@ const choices = computed(() => {
         </div>
 
         <!-- Loading State -->
-        <div v-if="store.isLoading" class="flex flex-wrap gap-2">
+        <div v-if="loading" class="flex flex-wrap gap-2">
             <Skeleton v-for="i in 6" :key="i" width="80px" height="32px" class="rounded-lg" />
         </div>
 

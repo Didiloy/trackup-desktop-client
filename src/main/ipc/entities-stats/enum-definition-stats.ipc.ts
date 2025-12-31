@@ -8,7 +8,7 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
-    IPaginatedEnumValueStats,
+    IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
     IEnumValueDetailsParams,
@@ -63,7 +63,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             enumDefinitionId: string,
             params: IEnumDefinitionDetailsParams,
             accessToken: string
-        ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+        ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
             logger.info('Getting enum definition stats:', serverId, enumDefinitionId, params)
 
             if (!serverId) {
@@ -73,14 +73,13 @@ export function registerEnumDefinitionStatsIpc(): void {
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(enumDefinitionId, 'Enum Definition ID'),
-                validatePagination(params.page, params.limit),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
 
             const queryString = buildQueryParams(params)
 
-            return apiService.get<IPaginatedEnumValueStats>(
+            return apiService.get<IEnumDefinitionStatsDto[]>(
                 `/api/v1/stats/servers/${serverId}/enums_definitions/${enumDefinitionId}${queryString}`,
                 accessToken
             )
@@ -95,7 +94,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             serverId: string,
             enumDefinitionId: string,
             accessToken: string
-        ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
+        ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution[]>> => {
             logger.info('Getting enum value distribution:', serverId, enumDefinitionId)
 
             const validationError = combineValidations(
@@ -105,7 +104,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             )
             if (validationError) return validationError
 
-            return apiService.get<IEnumValueDistribution>(
+            return apiService.get<IEnumValueDistribution[]>(
                 `/api/v1/stats/servers/${serverId}/enums_definitions/${enumDefinitionId}/distribution`,
                 accessToken
             )
@@ -122,7 +121,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             enumValueId: string,
             params: IEnumValueDetailsParams,
             accessToken: string
-        ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+        ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
             logger.info(
                 'Getting enum value stats:',
                 serverId,
@@ -135,14 +134,13 @@ export function registerEnumDefinitionStatsIpc(): void {
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(enumDefinitionId, 'Enum Definition ID'),
                 validateRequired(enumValueId, 'Enum Value ID'),
-                validatePagination(params.page, params.limit),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
 
             const queryString = buildQueryParams(params)
 
-            return apiService.get<IPaginatedEnumValueStats>(
+            return apiService.get<IEnumDefinitionStatsDto[]>(
                 `/api/v1/stats/servers/${serverId}/enums_definitions/${enumDefinitionId}/values/${enumValueId}${queryString}`,
                 accessToken
             )

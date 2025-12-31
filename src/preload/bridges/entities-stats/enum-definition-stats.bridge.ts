@@ -8,7 +8,7 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
-    IPaginatedEnumValueStats,
+    IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
     IEnumValueDetailsParams,
@@ -40,7 +40,7 @@ export const enumDefinitionStatsBridge = {
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams,
         accessToken: string
-    ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
         return ipcRenderer.invoke(
             ipc_channels.enumDefinitionStats.getStats,
             serverId,
@@ -57,7 +57,7 @@ export const enumDefinitionStatsBridge = {
         serverId: string,
         enumDefinitionId: string,
         accessToken: string
-    ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution[]>> => {
         return ipcRenderer.invoke(
             ipc_channels.enumDefinitionStats.getDistribution,
             serverId,
@@ -75,7 +75,7 @@ export const enumDefinitionStatsBridge = {
         enumValueId: string,
         params: IEnumValueDetailsParams,
         accessToken: string
-    ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
         return ipcRenderer.invoke(
             ipc_channels.enumDefinitionStats.getValueStats,
             serverId,

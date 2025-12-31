@@ -700,7 +700,8 @@
             "server": "Serveur",
             "member": "Membre",
             "activity": "Activité",
-            "member_activity": "Membre-Activité"
+            "member_activity": "Membre-Activité",
+            "enum_definition": "Critères de session"
         },
         "server": {
             "total_sessions": {
@@ -862,6 +863,36 @@
             "top_contributors": {
                 "title": "Top Contributeurs",
                 "description": "Affiche les membres les plus actifs pour cette activité"
+            }
+        },
+        "enum_definition": {
+            "total_usage": {
+                "title": "Utilisations Totales",
+                "description": "Nombre total d'utilisations"
+            },
+            "unique_users": {
+                "title": "Utilisateurs Uniques",
+                "description": "Utilisateurs uniques ayant sélectionné ce critère"
+            },
+            "total_sessions": {
+                "title": "Sessions Totales",
+                "description": "Sessions totales avec ce critère"
+            },
+            "total_duration": {
+                "title": "Durée Totale",
+                "description": "Durée totale des sessions"
+            },
+            "top_values": {
+                "title": "Valeurs Top",
+                "description": "Valeurs les plus utilisées"
+            },
+            "distribution": {
+                "title": "Distribution",
+                "description": "Répartition des valeurs"
+            },
+            "choices": {
+                "title": "Choix",
+                "description": "Liste des choix disponibles"
             }
         }
     }

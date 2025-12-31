@@ -1,12 +1,81 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useEnumDefinitionStatsStore } from '@/stores/enum-definition-stats'
+import { useRoute } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+import { useEnumDefinitionStatsCRUD } from '@/composables/enums-definition/useEnumDefinitionStatsCRUD'
+import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
 import { VueUiDonut } from 'vue-data-ui'
 import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
+import type {
+    IWidgetMetadata,
+    IEnumDefinitionWidgetConfig
+} from '@shared/contracts/interfaces/widget.interfaces'
+import type { IEnumValueDistribution } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+
+defineOptions({
+    widgetMetadata: {
+        id: 'enum-definition-distribution',
+        title_key: 'widgets.enum_definition.distribution.title',
+        icon: 'pi pi-chart-pie',
+        description_key: 'widgets.enum_definition.distribution.description',
+        category: {
+            key: EWidgetCategory.EnumDefinition,
+            label_key: 'widgets.categories.enum_definition'
+        },
+        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        requiresConfig: true
+    } satisfies IWidgetMetadata
+})
+
+const props = withDefaults(
+    defineProps<{
+        showIdentity?: boolean
+        config?: IEnumDefinitionWidgetConfig
+    }>(),
+    {
+        showIdentity: true,
+        config: undefined
+    }
+)
 
 const { t } = useI18n()
-const store = useEnumDefinitionStatsStore()
+const route = useRoute()
+const server_store = useServerStore()
+const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
+
+const definitionId = computed(() => (route.params.definitionId as string) || props.config?.enumDefinitionId)
+const distribution = ref<IEnumValueDistribution[]>([])
+const isLoadingLocal = ref(false)
+
+async function fetchDistribution(): Promise<void> {
+    const serverId = server_store.getPublicId
+    if (!definitionId.value || !serverId) return
+
+    isLoadingLocal.value = true
+    try {
+        const res = await getEnumValueStatsDistribution(serverId, definitionId.value)
+        if (res.data && Array.isArray(res.data)) {
+            distribution.value = res.data
+        }
+    } finally {
+        isLoadingLocal.value = false
+    }
+}
+
+onMounted(() => {
+    void fetchDistribution()
+})
+
+watch(
+    () => [server_store.getPublicId, definitionId.value],
+    () => {
+        void fetchDistribution()
+    }
+)
+
+const loading = computed(() => isLoadingLocal.value)
 
 const chartColors = [
     '#6366f1', // indigo
@@ -23,10 +92,10 @@ const chartColors = [
 
 // Must use 'values' array format as expected by VueUiDonut
 const chartData = computed<VueUiDonutDatasetItem[]>(() => {
-    if (!store.valueDistribution || !Array.isArray(store.valueDistribution)) {
+    if (!distribution.value || !Array.isArray(distribution.value)) {
         return []
     }
-    return store.valueDistribution
+    return distribution.value
         .slice(0, 10)
         .map((item, index) => ({
             name: item.selected_value || 'N/A',
@@ -95,7 +164,8 @@ const config = computed<VueUiDonutConfig>(() => ({
 </script>
 
 <template>
-    <div class="bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
+        <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
@@ -112,7 +182,7 @@ const config = computed<VueUiDonutConfig>(() => ({
         </div>
 
         <!-- Loading State -->
-        <div v-if="store.isLoading" class="flex items-center justify-center h-64">
+        <div v-if="loading" class="flex items-center justify-center h-64">
             <ProgressSpinner strokeWidth="4" style="width: 50px; height: 50px" />
         </div>
 

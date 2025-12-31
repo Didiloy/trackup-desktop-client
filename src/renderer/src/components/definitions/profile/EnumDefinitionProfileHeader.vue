@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed} from 'vue'
 import { useRoute } from 'vue-router'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
-import { formatMinutesToLabel } from '@/utils/time.utils'
+import { useServerStore } from '@/stores/server'
 
 defineProps<{
     definition: IEnumDefinition | null
-    stats: IEnumDefinitionStats | null
     loading?: boolean
 }>()
 
@@ -18,13 +15,14 @@ const emit = defineEmits<{
     delete: []
 }>()
 
-const { t } = useI18n()
 const route = useRoute()
+const server_store = useServerStore()
 
 const gradientClass = computed(() => {
     const colorIndex = parseInt(route.query.colorIndex as string) || 0
     return enumDefGradientColorsList[colorIndex % enumDefGradientColorsList.length]
 })
+
 
 </script>
 
@@ -44,7 +42,7 @@ const gradientClass = computed(() => {
         </div>
 
         <!-- Action buttons -->
-        <div class="absolute top-4 right-4 z-20 flex gap-2">
+        <div class="absolute top-4 right-4 z-20 flex gap-2" v-if="server_store.isOwnership">
             <Button
                 icon="pi pi-pencil"
                 text
@@ -94,45 +92,7 @@ const gradientClass = computed(() => {
                     </div>
                 </div>
 
-                <!-- Stats Row -->
-                <div v-if="stats" class="flex flex-wrap gap-8 mt-6 pt-6 border-t border-white/20">
-                    <div class="flex flex-col">
-                        <span class="text-3xl font-bold">{{ stats.total_usage }}</span>
-                        <span class="text-sm text-white/70">{{
-                            t('views.server_definitions.total_usage')
-                        }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-3xl font-bold">{{ stats.total_sessions }}</span>
-                        <span class="text-sm text-white/70">sessions</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-3xl font-bold">{{
-                            formatMinutesToLabel(stats.total_duration)
-                        }}</span>
-                        <span class="text-sm text-white/70">{{
-                            t('views.server_definitions.profile.overview.total_duration')
-                        }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-3xl font-bold">{{ stats.unique_users }}</span>
-                        <span class="text-sm text-white/70">{{
-                            t('views.server_definitions.unique_users')
-                        }}</span>
-                    </div>
 
-                    <!-- Most used value badge -->
-                    <div v-if="stats.most_used_value" class="ml-auto flex items-center gap-2">
-                        <span class="text-sm text-white/70">{{
-                            t('views.server_definitions.most_used')
-                        }}</span>
-                        <span
-                            class="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm font-medium"
-                        >
-                            {{ stats.most_used_value.selected_value }}
-                        </span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

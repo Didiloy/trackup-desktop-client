@@ -2,7 +2,7 @@ import { useUserStore } from '@/stores/user'
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
-    IPaginatedEnumValueStats,
+    IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
     IEnumValueDetailsParams,
@@ -18,17 +18,17 @@ interface UseEnumDefinitionStatsCRUDReturn {
         serverId: string,
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
-    ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
+    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>>
     getEnumValueStatsDistribution: (
         serverId: string,
         enumDefinitionId: string
-    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>>
+    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution[]>>
     getEnumValueStats: (
         serverId: string,
         enumDefinitionId: string,
         enumValueId: string,
         params: IEnumValueDetailsParams
-    ) => Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>>
+    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>>
 }
 
 /**
@@ -59,7 +59,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
         serverId: string,
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
-    ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
         return window.api.enumDefinitionStats.getStats(
             serverId,
             enumDefinitionId,
@@ -74,7 +74,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     const getEnumValueStatsDistribution = async (
         serverId: string,
         enumDefinitionId: string
-    ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumValueDistribution[]>> => {
         return window.api.enumDefinitionStats.getDistribution(
             serverId,
             enumDefinitionId,
@@ -90,7 +90,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
         enumDefinitionId: string,
         enumValueId: string,
         params: IEnumValueDetailsParams
-    ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumValueStats>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
         return window.api.enumDefinitionStats.getValueStats(
             serverId,
             enumDefinitionId,

@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useEnumDefinitionStatsStore } from '@/stores/enum-definition-stats'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import EnumDefinitionProfileHeader from '@/components/definitions/profile/EnumDefinitionProfileHeader.vue'
-import EnumDefinitionOverviewWidget from '@/components/widgets/enum-definition/EnumDefinitionOverview.widget.vue'
+import EnumDefinitionTotalUsageWidget from '@/components/widgets/enum-definition/EnumDefinitionTotalUsage.widget.vue'
+import EnumDefinitionTotalSessionsWidget from '@/components/widgets/enum-definition/EnumDefinitionTotalSessions.widget.vue'
+import EnumDefinitionTotalDurationWidget from '@/components/widgets/enum-definition/EnumDefinitionTotalDuration.widget.vue'
+import EnumDefinitionUniqueUsersWidget from '@/components/widgets/enum-definition/EnumDefinitionUniqueUsers.widget.vue'
 import EnumDefinitionDistributionWidget from '@/components/widgets/enum-definition/EnumDefinitionDistribution.widget.vue'
 import EnumDefinitionTopValuesWidget from '@/components/widgets/enum-definition/EnumDefinitionTopValues.widget.vue'
 import EnumDefinitionChoicesWidget from '@/components/widgets/enum-definition/EnumDefinitionChoices.widget.vue'
 import EnumDefinitionCreateEditDialog from '@/components/definitions/EnumDefinitionCreateEditDialog.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -21,17 +24,44 @@ const route = useRoute()
 const router = useRouter()
 const definitionId = computed(() => route.params.definitionId as string)
 
-const enum_def_stats_store = useEnumDefinitionStatsStore()
 const server_store = useServerStore()
 const { deleteEnumDefinition } = useEnumDefinitionCRUD()
+
+// Local state
+const enumDefinition = ref<IEnumDefinition | null>(null)
+const loading = ref(true)
+const error = ref<string | null>(null)
 
 // Dialogs
 const showEditDialog = ref(false)
 const showDeleteConfirm = ref(false)
 
-async function loadData(): Promise<void> {
+async function loadEnumDefinition(): Promise<void> {
     if (!server_store.getPublicId || !definitionId.value) return
-    await enum_def_stats_store.loadDefinition(server_store.getPublicId, definitionId.value)
+
+    loading.value = true
+    error.value = null
+
+    try {
+        // Get definition from server store (already loaded)
+        const definitions = server_store.getEnumsDefinition
+        if (!definitions || definitions.length === 0) {
+            error.value = t('messages.error.fetch')
+            return
+        }
+
+        const foundDef = definitions.find((d) => d.public_id === definitionId.value)
+        if (!foundDef) {
+            error.value = t('messages.error.not_found')
+            return
+        }
+
+        enumDefinition.value = foundDef
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : t('messages.error.fetch')
+    } finally {
+        loading.value = false
+    }
 }
 
 function openEditDialog() {
@@ -73,14 +103,14 @@ async function handleDelete() {
 
 async function handleUpdated() {
     showEditDialog.value = false
-    await loadData()
+    await loadEnumDefinition()
 }
 
 watch(
     () => [server_store.getPublicId, definitionId.value],
     () => {
         if (server_store.getPublicId && definitionId.value) {
-            void loadData()
+            void loadEnumDefinition()
         }
     },
     { immediate: true }
@@ -88,30 +118,22 @@ watch(
 
 onMounted(async () => {
     if (server_store.getPublicId && definitionId.value) {
-        await loadData()
+        await loadEnumDefinition()
     }
-})
-
-onUnmounted(() => {
-    enum_def_stats_store.reset()
 })
 </script>
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
-        <div
-            v-if="enum_def_stats_store.error"
-            class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700"
-        >
-            {{ enum_def_stats_store.error }}
+        <div v-if="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700">
+            {{ error }}
         </div>
 
         <!-- Header with skeleton -->
         <EnumDefinitionProfileHeader
-            v-if="enum_def_stats_store.currentDefinition || enum_def_stats_store.isLoading"
-            :definition="enum_def_stats_store.currentDefinition"
-            :stats="enum_def_stats_store.currentDefinitionStats"
-            :loading="enum_def_stats_store.isLoading"
+            v-if="enumDefinition || loading"
+            :definition="enumDefinition"
+            :loading="loading"
             class="mb-6"
             @edit="openEditDialog"
             @delete="openDeleteConfirm"
@@ -121,23 +143,28 @@ onUnmounted(() => {
         <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
             <div key="stats-content" class="space-y-6">
                 <!-- Overview Widgets - 4 cards responsive -->
-                <EnumDefinitionOverviewWidget />
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <EnumDefinitionTotalUsageWidget :show-identity="false" />
+                    <EnumDefinitionTotalSessionsWidget :show-identity="false" />
+                    <EnumDefinitionTotalDurationWidget :show-identity="false" />
+                    <EnumDefinitionUniqueUsersWidget :show-identity="false" />
+                </div>
 
                 <!-- Main Grid: Distribution + Top Values on large screens, stacked on mobile -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <EnumDefinitionDistributionWidget />
-                    <EnumDefinitionTopValuesWidget />
+                    <EnumDefinitionDistributionWidget :show-identity="false" />
+                    <EnumDefinitionTopValuesWidget :show-identity="false" />
                 </div>
 
                 <!-- Choices Widget - full width -->
-                <EnumDefinitionChoicesWidget />
+                <EnumDefinitionChoicesWidget :show-identity="false" />
             </div>
         </TransitionWrapper>
 
         <!-- Edit Dialog -->
         <EnumDefinitionCreateEditDialog
             v-model="showEditDialog"
-            :definition-to-edit="enum_def_stats_store.currentDefinition"
+            :definition-to-edit="enumDefinition"
             @updated="handleUpdated"
         />
 
@@ -146,7 +173,7 @@ onUnmounted(() => {
             :model-value="showDeleteConfirm"
             :title="t('common.actions.delete')"
             :message="t('messages.warning.delete')"
-            :confirmation-name="enum_def_stats_store.currentDefinition?.name || ''"
+            :confirmation-name="enumDefinition?.name || ''"
             @update:model-value="showDeleteConfirm = $event"
             @confirm="handleDelete"
         />

@@ -33,6 +33,10 @@ export interface IMostUsedValue {
 // Enum Definition Summary (List Item)
 // ============================================================================
 
+// ============================================================================
+// Enum Definition Summary (List Item)
+// ============================================================================
+
 export interface IEnumDefinitionStats {
     enum_definition_id: string
     enum_definition_name: string
@@ -45,10 +49,10 @@ export interface IEnumDefinitionStats {
 }
 
 // ============================================================================
-// Enum Value Stats (Detailed - per period)
+// Enum Definition Stats & Value Stats (Detailed - Array Response)
 // ============================================================================
 
-export interface IEnumValueStats {
+export interface IEnumDefinitionStatsDto {
     period_type: string
     period_start: string
     period_end: string
@@ -96,14 +100,6 @@ export interface IPaginatedEnumDefinitionStats {
     data: IEnumDefinitionStats[]
 }
 
-export interface IPaginatedEnumValueStats {
-    total: number
-    page: number
-    limit: number
-    pageCount: number
-    data: IEnumValueStats[]
-}
-
 // ============================================================================
 // Query Parameters
 // ============================================================================
@@ -114,14 +110,10 @@ export interface IEnumDefinitionPaginationParams {
 }
 
 export interface IEnumDefinitionDetailsParams {
-    page: number
-    limit: number
     period?: EPeriod
 }
 
 export interface IEnumValueDetailsParams {
-    page: number
-    limit: number
     period?: EPeriod
 }
 
