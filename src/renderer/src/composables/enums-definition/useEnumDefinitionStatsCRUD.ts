@@ -2,6 +2,7 @@ import { useUserStore } from '@/stores/user'
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
+    IEnumDefinitionStats,
     IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
@@ -18,7 +19,7 @@ interface UseEnumDefinitionStatsCRUDReturn {
         serverId: string,
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
-    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>>
+    ) => Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStats>>
     getEnumValueStatsDistribution: (
         serverId: string,
         enumDefinitionId: string
@@ -53,13 +54,13 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     }
 
     /**
-     * Get enum definition statistics (paginated values)
+     * Get enum definition statistics (single object)
      */
     const getEnumDefinitionStats = async (
         serverId: string,
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams
-    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStats>> => {
         return window.api.enumDefinitionStats.getStats(
             serverId,
             enumDefinitionId,

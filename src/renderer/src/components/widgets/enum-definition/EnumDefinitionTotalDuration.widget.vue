@@ -12,7 +12,7 @@ import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IEnumDefinitionStatsDto } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -49,7 +49,7 @@ const { getEnumDefinitionStats } = useEnumDefinitionStatsCRUD()
 const definitionId = computed(
     () => (route.params.definitionId as string) || props.config?.enumDefinitionId
 )
-const local_stats = ref<IEnumDefinitionStatsDto[]>([])
+const local_stats = ref<IEnumDefinitionStats | null>(null)
 const isLoadingLocal = ref(false)
 
 async function fetchStats(): Promise<void> {
@@ -81,7 +81,7 @@ watch(
 )
 
 const value = computed(() => {
-    const total = local_stats.value.reduce((acc, curr) => acc + curr.total_duration, 0)
+    const total = local_stats.value?.total_duration || 0
     return formatMinutesToLabel(total)
 })
 </script>

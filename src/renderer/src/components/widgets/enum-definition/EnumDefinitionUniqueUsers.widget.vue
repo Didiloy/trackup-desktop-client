@@ -11,7 +11,7 @@ import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IEnumDefinitionStatsDto } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
+import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
@@ -48,7 +48,7 @@ const { getEnumDefinitionStats } = useEnumDefinitionStatsCRUD()
 const definitionId = computed(
     () => (route.params.definitionId as string) || props.config?.enumDefinitionId
 )
-const local_stats = ref<IEnumDefinitionStatsDto[]>([])
+const local_stats = ref<IEnumDefinitionStats | null>(null)
 const isLoadingLocal = ref(false)
 
 async function fetchStats(): Promise<void> {
@@ -80,10 +80,7 @@ watch(
 )
 
 const value = computed(() => {
-    // Note: This sums unique users OF EACH VALUE.
-    // If a user selected multiple values, they are counted multiple times.
-    // This is an approximation as we don't have the definition-aggregated unique users here.
-    return local_stats.value.reduce((acc, curr) => acc + curr.unique_users, 0)
+    return local_stats.value?.unique_users || 0
 })
 </script>
 

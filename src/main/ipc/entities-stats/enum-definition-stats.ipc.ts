@@ -8,6 +8,7 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
+    IEnumDefinitionStats,
     IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
@@ -54,7 +55,7 @@ export function registerEnumDefinitionStatsIpc(): void {
         }
     )
 
-    // Get enum definition statistics (paginated values)
+    // Get enum definition statistics (single object)
     ipcMain.handle(
         ipc_channels.enumDefinitionStats.getStats,
         async (
@@ -63,7 +64,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             enumDefinitionId: string,
             params: IEnumDefinitionDetailsParams,
             accessToken: string
-        ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
+        ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStats>> => {
             logger.info('Getting enum definition stats:', serverId, enumDefinitionId, params)
 
             if (!serverId) {
@@ -79,7 +80,7 @@ export function registerEnumDefinitionStatsIpc(): void {
 
             const queryString = buildQueryParams(params)
 
-            return apiService.get<IEnumDefinitionStatsDto[]>(
+            return apiService.get<IEnumDefinitionStats>(
                 `/api/v1/stats/servers/${serverId}/enums_definitions/${enumDefinitionId}${queryString}`,
                 accessToken
             )

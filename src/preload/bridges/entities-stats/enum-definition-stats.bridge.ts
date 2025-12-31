@@ -8,6 +8,7 @@ import { ipc_channels } from '../../../shared/contracts/ipc-channels/index.chann
 import type {
     IEnumValueDistribution,
     IPaginatedEnumDefinitionStats,
+    IEnumDefinitionStats,
     IEnumDefinitionStatsDto,
     IEnumDefinitionPaginationParams,
     IEnumDefinitionDetailsParams,
@@ -33,14 +34,14 @@ export const enumDefinitionStatsBridge = {
     },
 
     /**
-     * Get enum definition statistics (paginated values)
+     * Get enum definition statistics (single object)
      */
     getStats: (
         serverId: string,
         enumDefinitionId: string,
         params: IEnumDefinitionDetailsParams,
         accessToken: string
-    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStatsDto[]>> => {
+    ): Promise<IEnumDefinitionStatsApiResponse<IEnumDefinitionStats>> => {
         return ipcRenderer.invoke(
             ipc_channels.enumDefinitionStats.getStats,
             serverId,
