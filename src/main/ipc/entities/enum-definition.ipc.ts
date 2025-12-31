@@ -49,7 +49,7 @@ export function registerEnumDefinitionIpc(): void {
         }
     )
 
-    // List all enum definitions in a servers
+    // List all enum enum-definitions in a servers
     ipcMain.handle(
         ipc_channels.enumDefinition.list,
         async (
@@ -57,7 +57,7 @@ export function registerEnumDefinitionIpc(): void {
             serverId: string,
             accessToken: string
         ): Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>> => {
-            logger.info('Listing enum definitions for servers:', serverId)
+            logger.info('Listing enum enum-definitions for servers:', serverId)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
-import EnumDefinitionList from '@/components/servers/definitions/EnumDefinitionList.vue'
+import EnumDefinitionList from '@/components/definitions/EnumDefinitionList.vue'
 
 const { t } = useI18n()
 </script>

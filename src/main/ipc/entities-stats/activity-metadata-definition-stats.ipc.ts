@@ -27,7 +27,7 @@ import {
 const logger = new Logger('IPC:ActivityMetadataDefinitionStats')
 
 export function registerActivityMetadataDefinitionStatsIpc(): void {
-    // Get all metadata definitions statistics
+    // Get all metadata enum-definitions statistics
     ipcMain.handle(
         ipc_channels.activityMetadataDefinitionStats.getAll,
         async (
@@ -39,7 +39,7 @@ export function registerActivityMetadataDefinitionStatsIpc(): void {
         ): Promise<
             IActivityMetadataDefinitionStatsApiResponse<IPaginatedResponseOfMetadataDefinitionSummaryDto>
         > => {
-            logger.info('Getting all metadata definitions stats:', serverId, activityId, params)
+            logger.info('Getting all metadata enum-definitions stats:', serverId, activityId, params)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),

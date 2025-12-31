@@ -39,7 +39,7 @@ export function useEnumDefinitionStatsCRUD(): UseEnumDefinitionStatsCRUDReturn {
     const user_store = useUserStore()
 
     /**
-     * Get all enum definitions statistics (paginated)
+     * Get all enum enum-definitions statistics (paginated)
      */
     const getAllEnumDefinitionStats = async (
         serverId: string,

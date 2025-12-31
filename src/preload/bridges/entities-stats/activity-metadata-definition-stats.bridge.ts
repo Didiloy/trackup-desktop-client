@@ -17,7 +17,7 @@ import type {
 
 export const activityMetadataDefinitionStatsBridge = {
     /**
-     * Get all metadata definitions statistics
+     * Get all metadata enum-definitions statistics
      */
     getAll: (
         serverId: string,

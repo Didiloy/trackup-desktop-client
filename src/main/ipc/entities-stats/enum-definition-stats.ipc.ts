@@ -27,7 +27,7 @@ import {
 const logger = new Logger('IPC:EnumDefinitionStats')
 
 export function registerEnumDefinitionStatsIpc(): void {
-    // Get all enum definitions statistics (paginated)
+    // Get all enum enum-definitions statistics (paginated)
     ipcMain.handle(
         ipc_channels.enumDefinitionStats.getAllStats,
         async (
@@ -36,7 +36,7 @@ export function registerEnumDefinitionStatsIpc(): void {
             params: IEnumDefinitionPaginationParams,
             accessToken: string
         ): Promise<IEnumDefinitionStatsApiResponse<IPaginatedEnumDefinitionStats>> => {
-            logger.info('Getting all enum definitions stats:', serverId, params)
+            logger.info('Getting all enum enum-definitions stats:', serverId, params)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),

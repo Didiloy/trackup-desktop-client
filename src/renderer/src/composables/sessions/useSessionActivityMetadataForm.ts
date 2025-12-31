@@ -46,7 +46,7 @@ export function useSessionActivityMetadataForm(
             }
             return false
         } catch (e) {
-            console.error('Failed to load metadata definitions', e)
+            console.error('Failed to load metadata enum-definitions', e)
             return false
         } finally {
             isLoadingDefinitions.value = false
@@ -69,7 +69,7 @@ export function useSessionActivityMetadataForm(
         for (const def of definitions.value) {
             let val = values.value[def.public_id]
             if (val !== undefined && val !== null && val !== '') {
-                // Ensure number type for NUMBER definitions
+                // Ensure number type for NUMBER enum-definitions
                 if (def.type === 'NUMBER' && typeof val === 'string') {
                     const num = parseFloat(val)
                     if (!isNaN(num)) {

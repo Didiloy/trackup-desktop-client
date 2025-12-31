@@ -43,7 +43,7 @@ export function useEnumDefinitionCRUD(): UseEnumDefinitionCRUDReturn {
     }
 
     /**
-     * List all enum definitions in a servers
+     * List all enum enum-definitions in a servers
      */
     const listEnumDefinitions = async (
         serverId: string

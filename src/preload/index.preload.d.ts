@@ -21,7 +21,7 @@ import type { BillingBridge } from './bridges/billing.bridge'
 import type { ActivityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
 
 /**
- * Global type definitions for window.api
+ * Global type enum-definitions for window.api
  */
 export interface API {
     window: WindowBridge

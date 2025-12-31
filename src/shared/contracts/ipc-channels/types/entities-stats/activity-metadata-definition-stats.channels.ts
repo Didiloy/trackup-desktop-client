@@ -3,7 +3,7 @@
  */
 
 export const ACTIVITY_METADATA_DEFINITION_STATS_CHANNELS = {
-    // Get all metadata definitions statistics
+    // Get all metadata enum-definitions statistics
     getAll: 'activity-metadata-definition-stats:getAll',
 
     // Get specific metadata definition statistics

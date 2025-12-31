@@ -50,7 +50,7 @@ export function registerActivityMetadataDefinitionIpc(): void {
         }
     )
 
-    // List all metadata definitions for an activity
+    // List all metadata enum-definitions for an activity
     ipcMain.handle(
         ipc_channels.activityMetadataDefinition.list,
         async (
@@ -59,7 +59,7 @@ export function registerActivityMetadataDefinitionIpc(): void {
             activityId: string,
             accessToken: string
         ): Promise<IActivityMetadataDefinitionApiResponse<IActivityMetadataDefinition[]>> => {
-            logger.info('Listing metadata definitions for activity:', activityId)
+            logger.info('Listing metadata enum-definitions for activity:', activityId)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),

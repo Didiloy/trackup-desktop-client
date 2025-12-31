@@ -3,7 +3,7 @@
  */
 
 export const ENUM_DEFINITION_STATS_CHANNELS = {
-    // All enum definitions
+    // All enum enum-definitions
     getAllStats: 'enums-definition-stats:getAllStats',
 
     // Specific enum definition details

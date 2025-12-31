@@ -29,7 +29,7 @@ export const enumDefinitionBridge = {
     },
 
     /**
-     * List all enum definitions in a servers
+     * List all enum enum-definitions in a servers
      */
     list: (
         serverId: string,

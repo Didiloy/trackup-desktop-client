@@ -17,7 +17,7 @@ import type {
 
 export const enumDefinitionStatsBridge = {
     /**
-     * Get all enum definitions statistics (paginated)
+     * Get all enum enum-definitions statistics (paginated)
      */
     getAllStats: (
         serverId: string,
