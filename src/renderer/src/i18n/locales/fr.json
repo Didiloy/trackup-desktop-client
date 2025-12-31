@@ -130,7 +130,7 @@
         "steps": {
             "generic": "Étape {index}",
             "info": "Infos Session",
-            "enums": "Sélections",
+            "enums": "Critères de session",
             "metadata": "Attributs de l'activité",
             "activity": "Activité",
             "skill_levels": "Niveaux de compétence"
@@ -383,21 +383,48 @@
             }
         },
         "server_definitions": {
-            "title": "Définitions du serveur",
-            "description": "Définissez les définitions pour votre serveur",
-            "add_definition": "Ajouter une définition",
-            "edit_definition": "Modifier une définition",
-            "delete_definition": "Supprimer une définition",
-            "enums_list_title": "Liste des définitions",
-            "no_definitions": "Aucune définition trouvée. Créez une pour commencer.",
+            "title": "Critères de session",
+            "description": "Définissez des listes de choix à remplir lors de vos sessions",
+            "add_definition": "Ajouter un critère",
+            "edit_definition": "Modifier le critère",
+            "delete_definition": "Supprimer le critère",
+            "enums_list_title": "Critères de session",
+            "no_definitions": "Aucun critère trouvé. Créez-en un pour commencer.",
+            "no_definitions_title": "Aucun critère",
+            "total_usage": "utilisations",
+            "unique_users": "utilisateurs",
+            "most_used": "Plus utilisé",
+            "view_stats": "Voir les stats",
+            "profile": {
+                "title": "Profil du critère",
+                "tabs": {
+                    "stats": "Statistiques",
+                    "values": "Valeurs"
+                },
+                "overview": {
+                    "total_usage": "Utilisations totales",
+                    "total_sessions": "Sessions totales",
+                    "total_duration": "Durée totale",
+                    "unique_users": "Utilisateurs uniques"
+                },
+                "distribution": {
+                    "title": "Répartition des valeurs",
+                    "description": "Distribution des choix sélectionnés"
+                },
+                "top_values": {
+                    "title": "Valeurs les plus utilisées",
+                    "usage_count": "utilisations",
+                    "percentage": "du total"
+                }
+            },
             "create_modal": {
-                "title": "Créer une définition",
-                "subtitle": "Définissez une nouvelle définition pour votre serveur",
+                "title": "Créer un critère",
+                "subtitle": "Définissez un nouveau critère pour vos sessions",
                 "name_placeholder": "Ex: Amusement, Difficulté, Météo...",
-                "description_placeholder": "Décris la définition en quelques mots",
+                "description_placeholder": "Décris le critère en quelques mots",
                 "choices_placeholder": "Choix (optionnel)",
                 "choices_placeholder_detail": "Cela peut être des choix que vous souhaitez vous attribuer comme 'Cool', 'Neutre', 'Nul', etc.",
-                "max_chunk_warning": "Impossible d'ajouter davantage de valeurs pour cette définition."
+                "max_chunk_warning": "Impossible d'ajouter davantage de valeurs pour ce critère."
             }
         },
         "server_widgets": {
@@ -605,7 +632,7 @@
                 "title_placeholder": "Titre optionnel",
                 "select_participants": "Sélectionner des participants supplémentaires",
                 "comment_placeholder": "Commentaire...",
-                "no_enums": "Aucune sélection disponible",
+                "no_enums": "Aucune critères de session disponible",
                 "no_metadata": "Aucun attribut disponible",
                 "search_activity_placeholder": "Rechercher une activité..."
             },

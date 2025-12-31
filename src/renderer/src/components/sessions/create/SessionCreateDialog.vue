@@ -122,7 +122,7 @@ watch(
     }
 )
 
-// When activity changes, check for metadata definitions
+// When activity changes, check for metadata enum-definitions
 async function handleActivityChange(activityId: string | null): Promise<void> {
     if (activityId) {
         await checkActivityMetadata(activityId)

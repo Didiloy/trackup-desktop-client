@@ -51,7 +51,7 @@ onMounted(async () => {
     emit('valid', canSubmit.value)
 })
 
-// Emit validity whenever definitions or values change
+// Emit validity whenever enum-definitions or values change
 watch([() => canSubmit.value, () => definitions.value], () => {
     emit('valid', canSubmit.value)
 })
