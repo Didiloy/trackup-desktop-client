@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, Component } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
 import SessionCreateForm from './SessionCreateForm.vue'
 import SessionEnumsForm from './SessionEnumsForm.vue'
@@ -44,7 +44,11 @@ function setMetadataValid(v: boolean): void {
 }
 
 const steps = computed(() => {
-    const list = [
+    const list: {
+        key: Step
+        label: string
+        icon: string | Component
+    }[] = [
         {
             key: 'info',
             label: t('common.steps.info'),

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Component } from 'vue'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import { useI18n } from 'vue-i18n'
 
@@ -8,7 +8,7 @@ const { t } = useI18n()
 interface StepItem {
     label?: string
     key?: string
-    icon?: string
+    icon?: string | Component
 }
 
 interface Props {
