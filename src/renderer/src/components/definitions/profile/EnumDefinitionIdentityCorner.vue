@@ -21,15 +21,29 @@ const props = withDefaults(
 
 const localDefinitionName = ref<string | null>(null)
 
+// Computed property that reactively checks store first, then falls back to API-fetched name
+const definitionName = computed(() => {
+    if (!props.definitionId || !props.show) return null
+
+    // Try store first (this will be reactive to store changes)
+    const definitionsInStore = server_store.getEnumsDefinition || []
+    const found = definitionsInStore.find((d) => d.public_id === props.definitionId)
+    if (found) {
+        return found.name
+    }
+
+    // Fallback to fetched name from API
+    return localDefinitionName.value
+})
+
 async function fetchDefinitionName(): Promise<void> {
     if (!props.definitionId || !props.show) return
 
-    // First, try to get from store
+    // Only fetch from API if not in store
     const definitionsInStore = server_store.getEnumsDefinition || []
     const definitionInStore = definitionsInStore.find((d) => d.public_id === props.definitionId)
-
     if (definitionInStore) {
-        localDefinitionName.value = definitionInStore.name
+        // Already in store, no need to fetch
         return
     }
 
@@ -40,8 +54,6 @@ async function fetchDefinitionName(): Promise<void> {
     try {
         const res = await listEnumDefinitions(serverId)
         if (res.data) {
-            // Optimistically update store? Maybe better not to interfere with other logic unless sure.
-            // But we can find the name.
             const found = res.data.find((d) => d.public_id === props.definitionId)
             if (found) {
                 localDefinitionName.value = found.name
@@ -52,12 +64,14 @@ async function fetchDefinitionName(): Promise<void> {
     }
 }
 
+// Trigger API fetch on mount if needed
 onMounted(() => {
     if (props.definitionId) {
         void fetchDefinitionName()
     }
 })
 
+// Watch for definitionId changes
 watch(
     () => props.definitionId,
     (newId) => {
@@ -67,7 +81,6 @@ watch(
     }
 )
 
-const definitionName = computed(() => localDefinitionName.value)
 const isVisible = computed(() => props.show)
 </script>
 
