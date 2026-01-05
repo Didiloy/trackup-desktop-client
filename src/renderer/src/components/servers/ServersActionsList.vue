@@ -4,7 +4,7 @@ import { useServerStore } from '@/stores/server'
 import { useI18n } from 'vue-i18n'
 import type { Component } from 'vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
-import MembersIcon from '@/components/common/icons/MembersIcon.vue'
+import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 const router = useRouter()
@@ -42,7 +42,7 @@ const actions: ServerAction[] = [
     {
         id: 'members',
         label: t('views.server_members.title_base'),
-        icon: MembersIcon,
+        icon: MemberIcon,
         routeName: 'ServerMembers'
     },
     {

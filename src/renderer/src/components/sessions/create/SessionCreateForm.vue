@@ -19,7 +19,7 @@ import { formatDuration, convertMsToMinutes } from '@/utils/time.utils'
 import { ICONS } from '@/constants/icons'
 import Icon from '@/components/common/icons/Icon.vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
-import MembersIcon from '@/components/common/icons/MembersIcon.vue'
+import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -298,7 +298,7 @@ const isHexColor = (v?: string): boolean => {
         <!-- Participants -->
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-                <MembersIcon class="text-surface-500" />
+                <MemberIcon class="text-surface-500" />
                 <span class="text-sm font-medium text-surface-700">{{
                     t('views.server_sessions.session_details.extra_participants')
                 }}</span>

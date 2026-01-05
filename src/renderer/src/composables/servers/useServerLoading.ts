@@ -1,6 +1,6 @@
 import { createSharedComposable } from '@vueuse/core'
 import { reactive, readonly, DeepReadonly, Component } from 'vue'
-import MembersIcon from '@/components/common/icons/MembersIcon.vue'
+import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
 import ServerIcon from '@/components/common/icons/ServerIcon.vue'
 
@@ -28,7 +28,7 @@ export interface IUseServerLoading {
 
 const DEFAULT_STEPS: ILoadingStep[] = [
     { key: 'server_details', icon: ServerIcon, status: 'pending' },
-    { key: 'members', icon: MembersIcon, status: 'pending' },
+    { key: 'members', icon: MemberIcon, status: 'pending' },
     { key: 'enum_definitions', icon: EnumDefinitionsIcon, status: 'pending' }
 ]
 
