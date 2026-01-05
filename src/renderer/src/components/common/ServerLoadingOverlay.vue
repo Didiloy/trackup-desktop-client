@@ -22,16 +22,13 @@ onUnmounted(() => {
 })
 
 const getStepLabel = (key: string): string => {
-    return t(`server_loading.steps.${key}`)
+    return t(`views.server_loading.steps.${key}`)
 }
 </script>
 
 <template>
     <TransitionWrapper name="fade-scale">
-        <div
-            v-if="state.visible"
-            class="fixed inset-0 z-9999 flex items-center justify-center"
-        >
+        <div v-if="state.visible" class="fixed inset-0 z-9999 flex items-center justify-center">
             <!-- Animated background -->
             <div
                 class="absolute inset-0 backdrop-blur-sm bg-linear-to-br from-primary-500/15 via-secondary-500/10 to-primary-500/15 animate-bg-pulse"
@@ -42,18 +39,11 @@ const getStepLabel = (key: string): string => {
             >
                 <!-- Animated community icon -->
                 <div class="relative w-24 h-24 flex items-center justify-center">
-                    <!-- Pulsing rings -->
-                    <div
-                        class="absolute inset-0 border-2 border-primary-500/30 rounded-full animate-ring-pulse"
-                    ></div>
-                    <div
-                        class="absolute inset-0 border-2 border-primary-500/30 rounded-full animate-ring-pulse [animation-delay:0.5s]"
-                    ></div>
-                    <div
-                        class="absolute inset-0 border-2 border-primary-500/30 rounded-full animate-ring-pulse [animation-delay:1s]"
-                    ></div>
                     <!-- Main icon -->
-                    <i class="pi pi-compass text-primary-500 animate-icon-bounce"></i>
+                    <i
+                        class="pi pi-compass text-primary-500 animate-icon-bounce z-10"
+                        style="font-size: 2.2rem"
+                    />
                 </div>
 
                 <!-- Server name if provided -->
@@ -66,7 +56,7 @@ const getStepLabel = (key: string): string => {
 
                 <!-- Main loading message -->
                 <p class="text-base text-surface-600 m-0 min-w-[200px] text-center">
-                    {{ t('server_loading.title') }}{{ dots }}
+                    {{ t('views.server_loading.title') }}{{ dots }}
                 </p>
 
                 <!-- Steps container -->
@@ -119,7 +109,8 @@ const getStepLabel = (key: string): string => {
                             <span
                                 class="text-sm transition-all duration-300"
                                 :class="{
-                                    'text-surface-700 font-medium': step.status === 'pending' || step.status === 'completed',
+                                    'text-surface-700 font-medium':
+                                        step.status === 'pending' || step.status === 'completed',
                                     'text-surface-900 font-semibold': step.status === 'loading'
                                 }"
                             >
@@ -137,7 +128,7 @@ const getStepLabel = (key: string): string => {
 
                 <!-- Subtle hint -->
                 <p class="text-xs text-surface-500 m-0 text-center">
-                    {{ t('server_loading.hint') }}
+                    {{ t('views.server_loading.hint') }}
                 </p>
             </div>
         </div>

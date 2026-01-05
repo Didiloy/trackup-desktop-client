@@ -671,6 +671,15 @@
                     "delete_button": "Supprimer le serveur"
                 }
             }
+        },
+        "server_loading": {
+            "title": "Chargement du serveur",
+            "hint": "Préparation de votre espace statistiques...",
+            "steps": {
+                "server_details": "Récupération des informations",
+                "members": "Chargement des membres",
+                "enum_definitions": "Chargement des critères de sessions"
+            }
         }
     },
     "widgets": {
@@ -910,15 +919,6 @@
                 "title": "Moy. Participants",
                 "description": "Moyenne des participants quand ce critère est sélectionné"
             }
-        }
-    },
-    "server_loading": {
-        "title": "Chargement du serveur",
-        "hint": "Préparation de votre espace de statistiques...",
-        "steps": {
-            "server_details": "Récupération des informations",
-            "members": "Chargement des membres",
-            "enum_definitions": "Chargement des critères de sessions"
         }
     }
 }
