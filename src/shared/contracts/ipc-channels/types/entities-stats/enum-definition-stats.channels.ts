@@ -4,14 +4,14 @@
 
 export const ENUM_DEFINITION_STATS_CHANNELS = {
     // All enum enum-definitions
-    getAllStats: 'enums-definition-stats:getAllStats',
+    getAllStats: 'enum-definitions-stats:getAllStats',
 
     // Specific enum definition details
-    getStats: 'enums-definition-stats:getStats',
+    getStats: 'enum-definitions-stats:getStats',
 
     // Value distribution
-    getDistribution: 'enums-definition-stats:getDistribution',
+    getDistribution: 'enum-definitions-stats:getDistribution',
 
     // Specific enum value stats
-    getValueStats: 'enums-definition-stats:getValueStats'
+    getValueStats: 'enum-definitions-stats:getValueStats'
 } as const

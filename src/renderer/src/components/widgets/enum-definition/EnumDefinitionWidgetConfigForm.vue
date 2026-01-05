@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EnumDefinitionAutocomplete from '@/components/definitions/EnumDefinitionAutocomplete.vue'
 import { useServerStore } from '@/stores/server'
-import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 
 const props = defineProps<{

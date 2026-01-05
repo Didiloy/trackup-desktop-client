@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
-import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
 
 const server_store = useServerStore()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()

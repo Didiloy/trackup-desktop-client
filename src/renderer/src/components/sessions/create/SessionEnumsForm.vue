@@ -2,7 +2,7 @@
 import { ref, shallowRef, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
+import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
