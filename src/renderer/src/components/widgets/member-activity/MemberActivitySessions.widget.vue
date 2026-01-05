@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
@@ -42,6 +42,7 @@ const props = withDefaults(
 )
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const server_store = useServerStore()
 const { getMemberSessionsForActivity } = useMemberCRUD()
 
@@ -85,6 +86,16 @@ watch(
 const sessionList = computed(() => sessions.value?.data || [])
 const totalSessions = computed(() => sessions.value?.total || 0)
 const activityName = computed(() => sessionList.value[0]?.activity?.name)
+
+async function navigateToSession(sessionId: string): Promise<void> {
+    await router.push({
+        name: 'ServerSessionProfile',
+        params: {
+            serverId: server_store.getPublicId,
+            sessionId
+        }
+    })
+}
 </script>
 
 <template>
@@ -102,7 +113,8 @@ const activityName = computed(() => sessionList.value[0]?.activity?.name)
             <div
                 v-for="session in sessionList"
                 :key="session.public_id"
-                class="p-3 rounded-2xl bg-surface-100 hover:bg-surface-200 transition-colors"
+                class="p-3 rounded-2xl bg-surface-100 hover:bg-surface-200 transition-colors cursor-pointer border border-surface-200"
+                @click="navigateToSession(session.public_id)"
             >
                 <div class="flex items-center justify-between">
                     <div class="flex-1">

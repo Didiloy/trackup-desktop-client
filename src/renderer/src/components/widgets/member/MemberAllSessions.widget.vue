@@ -87,7 +87,7 @@ const onPageChange = (event: { first: number; page: number }): void => {
 
 const navigateToSession = async (sessionId: string): Promise<void> => {
     await router.push({
-        name: 'SessionDetails',
+        name: 'ServerSessionProfile',
         params: {
             id: server_store.getPublicId,
             sessionId

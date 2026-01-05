@@ -108,13 +108,13 @@ onMounted(async () => {
                     </Tab>
                     <Tab value="activities">
                         <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-th-large"></i>
+                            <i class="pi pi-trophy"></i>
                             <span>{{ t('views.server_members.tabs.activities') }}</span>
                         </div>
                     </Tab>
                     <Tab value="sessions">
                         <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-list"></i>
+                            <i class="pi pi-calendar"></i>
                             <span>{{ t('views.server_members.tabs.sessions') }}</span>
                         </div>
                     </Tab>
