@@ -3,14 +3,7 @@ import { useServerStore } from '@/stores/server'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useEnumDefinitionCRUD } from '@/composables/enums-definition/useEnumDefinitionCRUD'
-import {
-    showServerLoading,
-    hideServerLoading,
-    startLoadingStep,
-    completeLoadingStep,
-    errorLoadingStep,
-    completeAllLoadingSteps
-} from '@/composables/servers/useServerLoading'
+import { useServerLoading } from '@/composables/servers/useServerLoading'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 
@@ -35,6 +28,14 @@ export function useServerNavigation(): UseServerNavigationResult {
     const { getServerDetails } = useServerCRUD()
     const { listMembers } = useMemberCRUD()
     const { listEnumDefinitions } = useEnumDefinitionCRUD()
+    const {
+        showServerLoading,
+        hideServerLoading,
+        startLoadingStep,
+        completeLoadingStep,
+        errorLoadingStep,
+        completeAllLoadingSteps
+    } = useServerLoading()
 
     async function getServerInfos(serverId: string, force = false): Promise<void> {
         if (!force && server_store.loadFromCache(serverId)) {
@@ -108,17 +109,18 @@ export function useServerNavigation(): UseServerNavigationResult {
         showServerLoading(serverName)
 
         try {
-            await getServerInfos(serverId)
-
-            // Small delay to show completion animation
-            await delay(300)
-            hideServerLoading()
-
             await router.push({
                 name: 'ServerStats',
                 params: { id: serverId },
                 query: { ...route.query }
             })
+
+            await getServerInfos(serverId)
+
+            // Small delay to show completion animation
+            await delay(300)
+
+            hideServerLoading()
         } catch {
             // Error already handled in getServerInfos
             hideServerLoading()
@@ -127,4 +129,3 @@ export function useServerNavigation(): UseServerNavigationResult {
 
     return { navigateToServer }
 }
-
