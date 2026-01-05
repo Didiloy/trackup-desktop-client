@@ -88,7 +88,8 @@ const safeCurrent = computed(() => {
                                             : 'bg-surface-100'
                                     "
                                 >
-                                    <i v-if="step.icon" :class="step.icon"></i>
+                                    <i v-if="typeof step.icon === 'string'" :class="step.icon"></i>
+                                    <component :is="step.icon" v-else-if="step.icon" />
                                     <span v-else>{{ index + 1 }}</span>
                                 </div>
                                 <span class="text-xs font-medium">

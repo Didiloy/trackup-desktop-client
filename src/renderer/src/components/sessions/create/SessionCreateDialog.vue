@@ -10,6 +10,8 @@ import { useServerStore } from '@/stores/server'
 import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
+import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
 
 interface Props {
     modelValue: boolean
@@ -53,14 +55,14 @@ const steps = computed(() => {
         list.push({
             key: 'enums',
             label: t('common.steps.enum_definitions'),
-            icon: 'pi pi-list'
+            icon: EnumDefinitionsIcon
         })
     }
     if (has_metadata.value) {
         list.push({
             key: 'metadata',
             label: t('common.steps.metadata'),
-            icon: 'pi pi-database'
+            icon: MetadataIcon
         })
     }
     return list
