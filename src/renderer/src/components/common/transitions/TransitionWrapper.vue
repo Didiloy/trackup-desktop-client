@@ -19,6 +19,7 @@ type TransitionName =
     | 'roll'
     | 'panel-right'
     | 'panel-left'
+    | 'fade-scale'
 
 interface Props {
     name?: TransitionName
@@ -438,4 +439,22 @@ const props = withDefaults(defineProps<Props>(), {
     opacity: 0;
     transform: translateX(-12px);
 }
+
+/* Fade Scale */
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+    transition:
+        opacity var(--transition-duration, 0.4s) ease,
+        transform var(--transition-duration, 0.4s) ease;
+}
+.fade-scale-enter-from {
+    opacity: 0;
+    transform: scale(0.95);
+}
+.fade-scale-leave-to {
+    opacity: 0;
+    transform: scale(1.02);
+}
+
+
 </style>
