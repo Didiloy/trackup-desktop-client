@@ -24,6 +24,7 @@ import MemberProfileHeader from '@/components/members/profile/MemberProfileHeade
 import { ICONS } from '@/constants/icons'
 import Icon from '@/components/common/icons/Icon.vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -117,7 +118,7 @@ onMounted(async () => {
                     </Tab>
                     <Tab value="sessions">
                         <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-calendar"></i>
+                            <SessionIcon/>
                             <span>{{ t('views.server_members.tabs.sessions') }}</span>
                         </div>
                     </Tab>

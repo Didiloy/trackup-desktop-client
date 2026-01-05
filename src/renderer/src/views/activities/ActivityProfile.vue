@@ -32,6 +32,7 @@ import ActivityRankingWidget from '@/components/widgets/activity/ActivityRanking
 import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipants.widget.vue'
 import ActivityPatternsSummaryWidget from '@/components/widgets/activity/ActivityPatternsSummary.widget.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -174,7 +175,7 @@ onMounted(async () => {
                     </Tab>
                     <Tab value="sessions">
                         <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-calendar"></i>
+                            <SessionIcon/>
                             <span>{{ t('views.server_activities.tabs.sessions') }}</span>
                         </div>
                     </Tab>
