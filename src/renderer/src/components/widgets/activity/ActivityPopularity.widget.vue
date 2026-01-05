@@ -84,7 +84,7 @@ const value = computed(() => (statsData.value?.popularity_score ?? 0).toFixed(0)
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.activity.card.popularity')"
+        :label="t('views.server_activities.card.popularity')"
         :value="value"
         icon="pi pi-bolt"
         color="text-amber-500"

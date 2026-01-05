@@ -11,7 +11,7 @@ const { t, te } = useI18n()
 
 function formatTypeLabel(type?: string): string {
     if (!type) return ''
-    const key = `views.activity.add_modal.metadata_type_${String(type).toLowerCase()}`
+    const key = `views.server_activities.add_modal.metadata_type_${String(type).toLowerCase()}`
     return te(key) ? t(key) : String(type)
 }
 
@@ -51,7 +51,7 @@ function getColorForType(type: string): { bg: string; text: string } {
         <div class="flex items-center gap-2 mb-4">
             <i class="pi pi-database text-primary-500"></i>
             <p class="text-sm font-semibold text-surface-700">
-                {{ t('views.activity.add_modal.metadata_list') }}
+                {{ t('views.server_activities.add_modal.metadata_list') }}
             </p>
         </div>
 
@@ -109,7 +109,7 @@ function getColorForType(type: string): { bg: string; text: string } {
                                 v-if="!meta.allow_not_predefined && meta.choices?.length"
                                 class="text-[10px] px-2 py-1 rounded-full bg-surface-200 text-surface-600 font-medium"
                             >
-                                {{ t('views.activity.add_modal.predefined_only') }}
+                                {{ t('views.server_activities.add_modal.predefined_only') }}
                             </span>
                         </div>
                     </div>

@@ -131,7 +131,7 @@ function formatValue(val: number, isDuration?: boolean): string {
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{ t('views.activity.evolution_comparison') }}
+                    {{ t('views.server_activities.evolution_comparison') }}
                 </p>
                 <ActivityIdentityCorner
                     :show="props.showIdentity"
@@ -178,7 +178,7 @@ function formatValue(val: number, isDuration?: boolean): string {
                             {{ formatValue(metric.current, metric.isDuration) }}
                         </p>
                         <p class="text-[10px] text-surface-400 mt-1">
-                            {{ t('views.activity.previous_period') }}:
+                            {{ t('views.server_activities.previous_period') }}:
                             {{ formatValue(metric.previous, metric.isDuration) }}
                         </p>
                     </div>

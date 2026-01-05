@@ -85,7 +85,7 @@ const contributorsData = computed(() => {
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.activity.card.top_contributor') }}
+                {{ t('views.server_activities.card.top_contributor') }}
             </p>
             <span class="text-xs text-surface-400">{{ contributorsData.length }} </span>
         </div>
@@ -103,7 +103,7 @@ const contributorsData = computed(() => {
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }}
-                        {{ t('views.activity.performance_section.sessions') }} ·
+                        {{ t('views.server_activities.performance_section.sessions') }} ·
                         {{ formatMinutesToLabel(member.total_duration) }}
                     </p>
                 </div>

@@ -268,7 +268,7 @@ const hasData = computed(() => !!sortedData.value.length)
                 >
                     <div class="flex items-center gap-3">
                         <h3 class="text-lg font-bold text-surface-900">
-                            {{ t('views.activity.performance_section.sessions_timeline') }}
+                            {{ t('views.server_activities.performance_section.sessions_timeline') }}
                         </h3>
                         <ActivityIdentityCorner
                             :show="props.showIdentity"

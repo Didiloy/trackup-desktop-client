@@ -69,7 +69,7 @@ const handleMemberClick = async (memberId: string): Promise<void> => {
                     </p>
                     <p class="text-xs text-surface-500 truncate">
                         {{ member.total_sessions }}
-                        {{ t('views.activity.performance_section.sessions', 'sessions') }}
+                        {{ t('views.server_activities.performance_section.sessions', 'sessions') }}
                     </p>
                 </div>
 

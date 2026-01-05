@@ -122,12 +122,12 @@ onMounted(() => {
     <div class="flex flex-col items-center justify-start w-full h-full">
         <div class="flex flex-row items-center justify-between w-full h-12 p-2">
             <h2 class="text-2xl font-bold">
-                {{ t('views.activity.title') }}
+                {{ t('views.server_activities.title') }}
             </h2>
             <div class="flex flex-row items-center justify-center">
                 <Button
                     icon="pi pi-plus"
-                    :label="t('views.activity.add_modal.title')"
+                    :label="t('views.server_activities.add_modal.title')"
                     severity="primary"
                     size="small"
                     :pt="{

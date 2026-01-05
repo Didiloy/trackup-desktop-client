@@ -169,13 +169,13 @@ onMounted(async () => {
                     <Tab value="stats">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-chart-bar"></i>
-                            <span>{{ t('views.activity.tabs.stats') }}</span>
+                            <span>{{ t('views.server_activities.tabs.stats') }}</span>
                         </div>
                     </Tab>
                     <Tab value="details">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-info-circle"></i>
-                            <span>{{ t('views.activity.tabs.details') }}</span>
+                            <span>{{ t('views.server_activities.tabs.details') }}</span>
                         </div>
                     </Tab>
                 </div>

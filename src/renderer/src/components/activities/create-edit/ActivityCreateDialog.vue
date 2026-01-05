@@ -49,17 +49,17 @@ const currentIndex = computed(() => steps.value.findIndex((s) => s.key === curre
 const subtitle = computed(() => {
     switch (current_step.value) {
         case 'info':
-            return t('views.activity.add_modal.description')
+            return t('views.server_activities.add_modal.description')
         case 'metadata':
             return (
-                t('views.activity.add_modal.metadata_description') +
+                t('views.server_activities.add_modal.metadata_description') +
                 ' (' +
                 t('common.fields.optional') +
                 ')'
             )
         case 'skill-levels':
             return (
-                t('views.activity.add_modal.skill_levels_description') +
+                t('views.server_activities.add_modal.skill_levels_description') +
                 ' (' +
                 t('common.fields.optional') +
                 ')'
@@ -124,7 +124,7 @@ function finishWizard(): void {
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] rounded-xl select-none shadow-2 h-content'"
         :content-class="'p-0 bg-surface-50 h-full'"
-        :title="t('views.activity.add_modal.title')"
+        :title="t('views.server_activities.add_modal.title')"
         :subtitle="subtitle"
         icon-class="pi pi-plus-circle"
         :steps="steps"

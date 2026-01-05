@@ -33,15 +33,15 @@ const summaryMetrics = computed(() => {
     }
     return [
         {
-            label: t('views.activity.card.sessions'),
+            label: t('views.server_activities.card.sessions'),
             value: props.stats.total_sessions.toLocaleString()
         },
         {
-            label: t('views.activity.card.duration'),
+            label: t('views.server_activities.card.duration'),
             value: `${formatMinutesToLabel(props.stats.total_duration)}`
         },
         {
-            label: t('views.activity.card.unique_participants'),
+            label: t('views.server_activities.card.unique_participants'),
             value: props.stats.unique_participants.toLocaleString()
         }
     ]
@@ -92,7 +92,7 @@ const summaryMetrics = computed(() => {
             <div class="flex flex-wrap gap-3">
                 <Button
                     icon="pi pi-plus"
-                    :label="t('views.activity.create_session')"
+                    :label="t('views.server_activities.create_session')"
                     size="small"
                     :pt="{
                         label: { class: 'text-surface-100' },

@@ -91,7 +91,7 @@ const rankPercent = computed(() => {
     <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <div class="flex items-center gap-3 mb-4">
             <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.activity.performance_section.ranking') }}
+                {{ t('views.server_activities.performance_section.ranking') }}
             </p>
             <ActivityIdentityCorner
                 :show="props.showIdentity"
@@ -108,11 +108,11 @@ const rankPercent = computed(() => {
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-3xl font-bold text-surface-900">
-                        {{ t('views.activity.ranking_title', { rank: rankingData.rank }) }}
+                        {{ t('views.server_activities.ranking_title', { rank: rankingData.rank }) }}
                     </p>
                     <p class="text-xs text-surface-500">
                         {{
-                            t('views.activity.ranking_out_of', {
+                            t('views.server_activities.ranking_out_of', {
                                 rank: rankingData.rank,
                                 total: rankingData.total_activities
                             })
@@ -124,7 +124,7 @@ const rankPercent = computed(() => {
                         {{ rankingData.popularity_score.toFixed(0) }}
                     </p>
                     <p class="text-xs text-surface-500">
-                        {{ t('views.activity.card.popularity') }}
+                        {{ t('views.server_activities.card.popularity') }}
                     </p>
                 </div>
             </div>
@@ -139,26 +139,26 @@ const rankPercent = computed(() => {
                     ></div>
                 </div>
                 <div class="flex justify-between text-[10px] text-surface-400 font-medium px-1">
-                    <span>{{ t('views.activity.rank_low') }}</span>
-                    <span>{{ t('views.activity.rank_high') }}</span>
+                    <span>{{ t('views.server_activities.rank_low') }}</span>
+                    <span>{{ t('views.server_activities.rank_high') }}</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('views.activity.total_sessions') }}</p>
+                    <p class="text-xs text-surface-500">{{ t('views.server_activities.total_sessions') }}</p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ rankingData.total_sessions }}
                     </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('views.activity.card.duration') }}</p>
+                    <p class="text-xs text-surface-500">{{ t('views.server_activities.card.duration') }}</p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ formatMinutesToLabel(rankingData.total_duration) }}
                     </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60 col-span-2">
-                    <p class="text-xs text-surface-500">{{ t('views.activity.popularity') }}</p>
+                    <p class="text-xs text-surface-500">{{ t('views.server_activities.popularity') }}</p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ rankingData.popularity_score.toFixed(1) }}
                     </p>

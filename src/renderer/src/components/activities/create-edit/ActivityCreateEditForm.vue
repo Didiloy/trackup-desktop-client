@@ -119,7 +119,7 @@ async function onSubmit(): Promise<void> {
             </div>
             <InputText
                 v-model="name"
-                :placeholder="t('views.activity.add_modal.name')"
+                :placeholder="t('views.server_activities.add_modal.name')"
                 class="w-full"
             />
             <div class="flex items-center gap-2">
@@ -132,7 +132,7 @@ async function onSubmit(): Promise<void> {
                 v-model="description"
                 rows="3"
                 auto-resize
-                :placeholder="t('views.activity.add_modal.description_input')"
+                :placeholder="t('views.server_activities.add_modal.description_input')"
             />
         </div>
 

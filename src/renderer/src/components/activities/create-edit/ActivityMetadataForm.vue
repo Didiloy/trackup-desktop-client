@@ -189,7 +189,7 @@ async function onSubmit(): Promise<void> {
 
 function formatTypeLabel(type?: string): string {
     if (!type) return ''
-    const key = `views.activity.add_modal.metadata_type_${String(type).toLowerCase()}`
+    const key = `views.server_activities.add_modal.metadata_type_${String(type).toLowerCase()}`
     return te(key) ? t(key) : String(type)
 }
 </script>
@@ -200,13 +200,13 @@ function formatTypeLabel(type?: string): string {
             <i class="pi pi-database text-surface-500"></i>
             <div class="flex flex-col">
                 <span class="text-sm font-medium text-surface-700">
-                    {{ t('views.activity.add_modal.metadata_title') }}
+                    {{ t('views.server_activities.add_modal.metadata_title') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{ t('views.activity.add_modal.metadata_description') }}
+                    {{ t('views.server_activities.add_modal.metadata_description') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{ t('views.activity.add_modal.metadata_description_detail') }}
+                    {{ t('views.server_activities.add_modal.metadata_description_detail') }}
                 </span>
             </div>
         </div>
@@ -216,7 +216,7 @@ function formatTypeLabel(type?: string): string {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('views.activity.add_modal.metadata_label')
+                        t('views.server_activities.add_modal.metadata_label')
                     }}</label>
                     <InputText v-model="draft.label" class="w-full" />
                 </div>
@@ -243,7 +243,7 @@ function formatTypeLabel(type?: string): string {
                 <div class="flex items-center gap-2">
                     <Checkbox v-model="draft.required" binary />
                     <label class="text-sm text-surface-700">{{
-                        t('views.activity.add_modal.metadata_required')
+                        t('views.server_activities.add_modal.metadata_required')
                     }}</label>
                 </div>
                 <div class="flex items-center gap-2">
@@ -253,14 +253,14 @@ function formatTypeLabel(type?: string): string {
                         :disabled="!canUseChoices"
                     />
                     <label class="text-sm text-surface-700">{{
-                        t('views.activity.add_modal.metadata_allow_not_predefined')
+                        t('views.server_activities.add_modal.metadata_allow_not_predefined')
                     }}</label>
                 </div>
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{
-                    t('views.activity.add_modal.metadata_choices')
+                    t('views.server_activities.add_modal.metadata_choices')
                 }}</label>
                 <div class="flex gap-2">
                     <InputText
@@ -274,8 +274,8 @@ function formatTypeLabel(type?: string): string {
                     <Button
                         v-tooltip.top="
                             draft.type === 'BOOLEAN' || draft.type === 'DATE'
-                                ? t('views.activity.add_modal.not_possible_with_type')
-                                : t('views.activity.add_modal.metadata_add_choice')
+                                ? t('views.server_activities.add_modal.not_possible_with_type')
+                                : t('views.server_activities.add_modal.metadata_add_choice')
                         "
                         icon="pi pi-plus"
                         outlined
@@ -315,7 +315,7 @@ function formatTypeLabel(type?: string): string {
                     :label="
                         editingMetadataId
                             ? t('common.actions.update')
-                            : t('views.activity.add_modal.metadata_validate')
+                            : t('views.server_activities.add_modal.metadata_validate')
                     "
                     :icon="editingMetadataId ? 'pi pi-save' : 'pi pi-check'"
                     class="w-full"
@@ -330,7 +330,7 @@ function formatTypeLabel(type?: string): string {
         <!-- Definitions list -->
         <div v-if="defs.length || existingMetadataList.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
-                {{ t('views.activity.add_modal.metadata_list') }}
+                {{ t('views.server_activities.add_modal.metadata_list') }}
             </div>
             <div class="flex flex-col gap-2">
                 <!-- Existing Metadata -->

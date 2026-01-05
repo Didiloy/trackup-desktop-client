@@ -22,7 +22,7 @@ const sortedSkillLevels = computed(() => {
         <div class="flex items-center gap-2 mb-4">
             <i class="pi pi-graduation-cap text-primary-500"></i>
             <p class="text-sm font-semibold text-surface-700">
-                {{ t('views.activity.performance_section.skill_levels_title') }}
+                {{ t('views.server_activities.performance_section.skill_levels_title') }}
             </p>
         </div>
 

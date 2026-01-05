@@ -82,7 +82,7 @@ const loading = computed(() => isLoadingLocal.value)
 const value = computed(() => statsData.value?.total_likes.toLocaleString() ?? '0')
 const subValue = computed(() => {
     if (!statsData.value) return ''
-    return t('views.activity.card.avg_likes', {
+    return t('views.server_activities.card.avg_likes', {
         value: statsData.value.avg_likes_per_session.toFixed(1)
     })
 })
@@ -90,7 +90,7 @@ const subValue = computed(() => {
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.activity.card.likes')"
+        :label="t('views.server_activities.card.likes')"
         :value="value"
         :sub-value="subValue"
         icon="pi pi-heart-fill"

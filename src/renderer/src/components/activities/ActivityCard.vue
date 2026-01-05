@@ -100,14 +100,14 @@ function onCardClick(): void {
                     </div>
                     <div class="flex items-start gap-3 justify-end">
                         <div
-                            v-tooltip.left="t('views.activity.card.likes')"
+                            v-tooltip.left="t('views.server_activities.card.likes')"
                             class="flex items-center gap-1 text-red-500 font-semibold text-sm"
                         >
                             <i class="pi pi-heart-fill"></i>
                             <span>{{ likesText }}</span>
                         </div>
                         <div
-                            v-tooltip.left="t('views.activity.card.avg_likes')"
+                            v-tooltip.left="t('views.server_activities.card.avg_likes')"
                             class="flex items-center gap-1 text-primary-500 font-semibold text-sm"
                         >
                             <i class="pi pi-chart-line"></i>
@@ -122,7 +122,7 @@ function onCardClick(): void {
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('views.activity.card.sessions')
+                        t('views.server_activities.card.sessions')
                     }}</span>
                     <span class="text-lg font-semibold text-surface-900">
                         {{ metrics?.totalSessions ?? t('common.misc.none') }}
@@ -132,13 +132,13 @@ function onCardClick(): void {
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('views.activity.card.duration')
+                        t('views.server_activities.card.duration')
                     }}</span>
                     <span class="text-lg font-semibold text-surface-900">
                         {{ durationText }}
                     </span>
                     <span class="text-xs text-surface-400 mt-1">{{
-                        t('views.activity.card.avg_duration', {
+                        t('views.server_activities.card.avg_duration', {
                             value: formatMinutesToLabel(
                                 Number(props.metrics?.avgSessionDuration ?? 0)
                             )
@@ -149,7 +149,7 @@ function onCardClick(): void {
                     class="flex flex-col rounded-xl bg-surface-200 p-3 shadow-inner border border-surface-100"
                 >
                     <span class="text-xs text-surface-500">{{
-                        t('views.activity.card.unique_participants')
+                        t('views.server_activities.card.unique_participants')
                     }}</span>
                     <span class="text-base font-semibold text-surface-900">
                         {{ metrics?.uniqueParticipants ?? t('common.fields.none') }}

@@ -24,10 +24,10 @@ export function useActivityMetadataDefinitionTypes(): UseActivityMetadataDefinit
 
     const getFallbackTypes = (): TypeOption[] => {
         return [
-            { label: t('views.activity.add_modal.metadata_type_string'), value: 'STRING' },
-            { label: t('views.activity.add_modal.metadata_type_number'), value: 'NUMBER' },
-            { label: t('views.activity.add_modal.metadata_type_boolean'), value: 'BOOLEAN' },
-            { label: t('views.activity.add_modal.metadata_type_date'), value: 'DATE' }
+            { label: t('views.server_activities.add_modal.metadata_type_string'), value: 'STRING' },
+            { label: t('views.server_activities.add_modal.metadata_type_number'), value: 'NUMBER' },
+            { label: t('views.server_activities.add_modal.metadata_type_boolean'), value: 'BOOLEAN' },
+            { label: t('views.server_activities.add_modal.metadata_type_date'), value: 'DATE' }
         ]
     }
 
@@ -43,7 +43,7 @@ export function useActivityMetadataDefinitionTypes(): UseActivityMetadataDefinit
                 // Map API-provided types to options with translated labels when available
                 type_options.value = res.data.map((val) => {
                     const upper = String(val).toUpperCase()
-                    const key = `views.activity.add_modal.metadata_type_${String(upper).toLowerCase()}`
+                    const key = `views.server_activities.add_modal.metadata_type_${String(upper).toLowerCase()}`
                     return {
                         label: te(key) ? t(key) : String(val),
                         value: upper

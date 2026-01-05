@@ -46,10 +46,10 @@ const currentIndex = computed(() => steps.value.findIndex((s) => s.key === curre
 
 const subtitle = computed(() =>
     current_step.value === 'info'
-        ? t('views.activity.add_modal.description')
+        ? t('views.server_activities.add_modal.description')
         : current_step.value === 'metadata'
-          ? t('views.activity.add_modal.metadata_description')
-          : t('views.activity.add_modal.skill_levels_description')
+          ? t('views.server_activities.add_modal.metadata_description')
+          : t('views.server_activities.add_modal.skill_levels_description')
 )
 
 function resetState(): void {

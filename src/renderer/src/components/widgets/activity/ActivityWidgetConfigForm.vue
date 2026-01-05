@@ -33,7 +33,7 @@ function handleSelect(activity: IActivity | null): void {
         <label class="block text-sm font-medium text-surface-700">
             {{
                 t('common.actions.select', {
-                    entity: t('views.activity.title_single').toLowerCase()
+                    entity: t('views.server_activities.title_single').toLowerCase()
                 })
             }}
         </label>

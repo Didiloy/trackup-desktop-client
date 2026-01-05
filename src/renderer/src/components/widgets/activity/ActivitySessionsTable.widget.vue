@@ -96,7 +96,7 @@ watch(
         <template #header>
             <div class="px-5 pt-5 pb-3">
                 <p class="text-sm font-semibold text-surface-600">
-                    {{ t('views.activity.recent_sessions') }}
+                    {{ t('views.server_activities.recent_sessions') }}
                 </p>
             </div>
         </template>

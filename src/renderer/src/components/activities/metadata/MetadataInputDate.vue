@@ -56,7 +56,7 @@ const descriptionText = computed(() => {
                 </p>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-0.5">
-                {{ t('views.activity.add_modal.metadata_type_date') }}
+                {{ t('views.server_activities.add_modal.metadata_type_date') }}
             </div>
         </div>
 

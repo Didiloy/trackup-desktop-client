@@ -59,6 +59,6 @@ function onPage(event: { page: number; rows: number }): void {
             field="participants_count"
             :header="t('views.server_sessions.session_details.participants')"
         />
-        <Column field="likes_count" :header="t('views.activity.card.likes')" />
+        <Column field="likes_count" :header="t('views.server_activities.card.likes')" />
     </DataTable>
 </template>

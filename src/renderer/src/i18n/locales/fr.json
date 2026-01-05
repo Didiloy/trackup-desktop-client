@@ -526,7 +526,7 @@
             "members": "Membres",
             "growth_trends": "Tendances de croissance"
         },
-        "activity": {
+        "server_activities": {
             "title": "Activités du serveur",
             "title_base": "Activités",
             "title_single": "Activité",

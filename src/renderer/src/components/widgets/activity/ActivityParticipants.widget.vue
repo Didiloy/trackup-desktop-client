@@ -84,21 +84,21 @@ const items = computed(() => {
     if (!stats.value) return []
     return [
         {
-            label: t('views.activity.performance_section.unique_participants'),
+            label: t('views.server_activities.performance_section.unique_participants'),
             value: stats.value.unique_participants.toLocaleString(),
             icon: 'pi pi-users',
             color: 'text-blue-500',
             bg: 'bg-blue-50'
         },
         {
-            label: t('views.activity.card.total_participants'),
+            label: t('views.server_activities.card.total_participants'),
             value: formatCount(stats.value.total_participants),
             icon: 'pi pi-user-plus',
             color: 'text-indigo-500',
             bg: 'bg-indigo-50'
         },
         {
-            label: t('views.activity.card.avg_participants'),
+            label: t('views.server_activities.card.avg_participants'),
             value: stats.value.avg_participants_per_session.toFixed(1),
             icon: 'pi pi-chart-line',
             color: 'text-emerald-500',
@@ -112,7 +112,7 @@ const items = computed(() => {
     <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <p class="text-sm font-semibold text-surface-600 mb-4">
-            {{ t('views.activity.performance_section.participants') }}
+            {{ t('views.server_activities.performance_section.participants') }}
         </p>
 
         <div v-if="items.length" class="space-y-4">

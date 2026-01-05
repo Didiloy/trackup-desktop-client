@@ -173,13 +173,13 @@ async function onSubmit(): Promise<void> {
             <i class="pi pi-sliders-h text-surface-500"></i>
             <div class="flex flex-col">
                 <span class="text-sm font-medium text-surface-700">
-                    {{ t('views.activity.add_modal.skill_levels_title') }}
+                    {{ t('views.server_activities.add_modal.skill_levels_title') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{ t('views.activity.add_modal.skill_levels_description') }}
+                    {{ t('views.server_activities.add_modal.skill_levels_description') }}
                 </span>
                 <span class="text-xs text-surface-500">
-                    {{ t('views.activity.add_modal.skill_levels_description_detail') }}
+                    {{ t('views.server_activities.add_modal.skill_levels_description_detail') }}
                 </span>
             </div>
         </div>
@@ -193,7 +193,7 @@ async function onSubmit(): Promise<void> {
 
             <div class="flex flex-col gap-2">
                 <label class="text-sm text-surface-500">{{
-                    t('views.activity.add_modal.color')
+                    t('views.server_activities.add_modal.color')
                 }}</label>
                 <div class="flex items-center gap-2">
                     <ColorPicker v-model="draft.color" />
@@ -209,13 +209,13 @@ async function onSubmit(): Promise<void> {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('views.activity.add_modal.min_sessions')
+                        t('views.server_activities.add_modal.min_sessions')
                     }}</label>
                     <InputNumber v-model="draft.min_sessions" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('views.activity.add_modal.max_sessions')
+                        t('views.server_activities.add_modal.max_sessions')
                     }}</label>
                     <InputNumber v-model="draft.max_sessions" class="w-full" show-buttons />
                 </div>
@@ -224,13 +224,13 @@ async function onSubmit(): Promise<void> {
             <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('views.activity.add_modal.min_duration')
+                        t('views.server_activities.add_modal.min_duration')
                     }}</label>
                     <InputNumber v-model="draft.min_duration" class="w-full" show-buttons />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-sm text-surface-500">{{
-                        t('views.activity.add_modal.max_duration')
+                        t('views.server_activities.add_modal.max_duration')
                     }}</label>
                     <InputNumber v-model="draft.max_duration" class="w-full" show-buttons />
                 </div>
@@ -243,7 +243,7 @@ async function onSubmit(): Promise<void> {
 
             <div class="flex justify-end">
                 <Button
-                    :label="t('views.activity.add_modal.add_level')"
+                    :label="t('views.server_activities.add_modal.add_level')"
                     icon="pi pi-plus"
                     :disabled="!can_add"
                     outlined
@@ -255,7 +255,7 @@ async function onSubmit(): Promise<void> {
         <!-- Levels list -->
         <div v-if="levels.length || existingLevels.length" class="flex flex-col gap-2">
             <div class="text-sm font-medium text-surface-700">
-                {{ t('views.activity.add_modal.levels') }}
+                {{ t('views.server_activities.add_modal.levels') }}
             </div>
             <div class="flex flex-col gap-2">
                 <!-- Existing levels -->
@@ -269,9 +269,9 @@ async function onSubmit(): Promise<void> {
                         <span class="text-sm text-surface-900 font-medium">{{ lvl.name }}</span>
                         <span class="text-xs text-surface-600">
                             {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? ' ∞' }}
-                            {{ t('views.activity.performance_section.sessions') }},
+                            {{ t('views.server_activities.performance_section.sessions') }},
                             {{ lvl.min_duration }}-{{ lvl.max_duration ?? ' ∞' }}
-                            {{ t('views.activity.add_modal.minutes') }}
+                            {{ t('views.server_activities.add_modal.minutes') }}
                         </span>
                     </div>
                     <Button
@@ -295,9 +295,9 @@ async function onSubmit(): Promise<void> {
                         <span class="text-sm text-surface-900">{{ lvl.name }}</span>
                         <span class="text-xs text-surface-600">
                             {{ lvl.min_sessions }}-{{ lvl.max_sessions ?? '∞' }}
-                            {{ t('views.activity.performance_section.sessions') }},
+                            {{ t('views.server_activities.performance_section.sessions') }},
                             {{ lvl.min_duration }}-{{ lvl.max_duration ?? '∞' }}
-                            {{ t('views.activity.add_modal.minutes') }}
+                            {{ t('views.server_activities.add_modal.minutes') }}
                         </span>
                     </div>
                     <Button
