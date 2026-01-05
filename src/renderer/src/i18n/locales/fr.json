@@ -549,7 +549,11 @@
             "title_single": "Activité",
             "tabs": {
                 "stats": "Statistiques",
-                "details": "Détails"
+                "details": "Détails",
+                "sessions": "Sessions"
+            },
+            "sessions_tab": {
+                "empty_state": "Aucune session trouvée"
             },
             "create_session": "Créer une session",
             "recent_sessions": "Sessions récentes",

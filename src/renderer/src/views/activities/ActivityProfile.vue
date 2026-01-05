@@ -54,7 +54,7 @@ const show_create_session_dialog = ref(false)
 const show_edit_dialog = ref(false)
 const loading = ref(true)
 const error = ref<string | null>(null)
-const activeTab = ref<'stats' | 'details'>('stats')
+const activeTab = ref<'stats' | 'details' | 'sessions'>('stats')
 
 async function loadActivity(): Promise<void> {
     if (!server_store.getPublicId || !activityId.value) return
@@ -172,6 +172,12 @@ onMounted(async () => {
                             <span>{{ t('views.server_activities.tabs.stats') }}</span>
                         </div>
                     </Tab>
+                    <Tab value="sessions">
+                        <div class="flex items-center gap-2 px-2">
+                            <i class="pi pi-calendar"></i>
+                            <span>{{ t('views.server_activities.tabs.sessions') }}</span>
+                        </div>
+                    </Tab>
                     <Tab value="details">
                         <div class="flex items-center gap-2 px-2">
                             <i class="pi pi-info-circle"></i>
@@ -210,9 +216,6 @@ onMounted(async () => {
                                 :show-identity="false"
                                 class="mb-6 w-full"
                             />
-
-                            <!-- Recent sessions widget -->
-                            <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
                         </div>
                     </TransitionWrapper>
                 </TabPanel>
@@ -229,6 +232,13 @@ onMounted(async () => {
                                     <ActivitySkillDistribution :skill-levels="skillLevels" />
                                 </div>
                             </div>
+                        </div>
+                    </TransitionWrapper>
+                </TabPanel>
+                <TabPanel value="sessions" class="p-0!">
+                    <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
+                        <div v-if="activeTab === 'sessions'" key="sessions-content">
+                            <ActivitySessionsTableWidget :show-identity="false" class="mb-6" />
                         </div>
                     </TransitionWrapper>
                 </TabPanel>

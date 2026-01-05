@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import ActivitySessionsTable from '@/components/activities/profile/ActivitySessionsTable.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
@@ -46,51 +47,51 @@ const server_store = useServerStore()
 const { listActivitySessions } = useActivityCRUD()
 
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
-const sessions = ref<IActivitySessionListItem[]>([])
-const sessions_total = ref(0)
-const sessions_page = ref(1)
-const sessions_rows = ref(10)
-const sessions_loading = ref(false)
 
-async function loadSessions(page = sessions_page.value, rows = sessions_rows.value): Promise<void> {
-    if (!server_store.getPublicId || !activityId.value) return
+const {
+    items: sessions,
+    loading,
+    hasMore,
+    load,
+    loadMore
+} = usePaginatedFetcher<IActivitySessionListItem>({
+    fetcher: async ({ page, limit }) => {
+        if (!server_store.getPublicId || !activityId.value) {
+            return { data: [], total: 0 }
+        }
 
-    sessions_loading.value = true
-    try {
         const res = await listActivitySessions(server_store.getPublicId, activityId.value, {
             page,
-            limit: rows
+            limit
         })
-        if (res.error || !res.data) {
-            return
-        }
-        sessions.value = res.data.data as unknown as IActivitySessionListItem[]
-        sessions_total.value = res.data.total
-        sessions_page.value = res.data.page
-        sessions_rows.value = res.data.limit
-    } finally {
-        sessions_loading.value = false
-    }
-}
 
-function handleSessionPage(event: { page: number; rows: number }): void {
-    void loadSessions(event.page, event.rows)
-}
+        if (res.error || !res.data) {
+            return { data: [], total: 0, error: res.error }
+        }
+
+        return {
+            data: res.data.data as unknown as IActivitySessionListItem[],
+            total: res.data.total
+        }
+    },
+    limit: 25,
+    filters: [() => server_store.getPublicId, activityId]
+})
 
 onMounted(() => {
-    void loadSessions()
+    void load()
 })
 
 watch(
     () => [server_store.getPublicId, activityId.value],
     () => {
-        void loadSessions()
+        void load()
     }
 )
 </script>
 
 <template>
-    <BaseWidgetContainer :loading="sessions_loading">
+    <BaseWidgetContainer :loading="loading && sessions.length === 0">
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
 
         <template #header>
@@ -101,14 +102,12 @@ watch(
             </div>
         </template>
 
-        <div class="h-full px-5 pb-5">
+        <div class="max-h-[500px] overflow-y-auto">
             <ActivitySessionsTable
                 :sessions="sessions"
-                :loading="sessions_loading"
-                :total="sessions_total"
-                :page="sessions_page"
-                :rows="sessions_rows"
-                @page="handleSessionPage"
+                :loading="loading"
+                :has-more="hasMore"
+                @load-more="loadMore"
             />
         </div>
     </BaseWidgetContainer>
