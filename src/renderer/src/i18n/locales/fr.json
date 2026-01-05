@@ -147,6 +147,7 @@
             "date_range": "Plage de dates",
             "joined_date": "Date d'inscription",
             "search_field": "Champ de recherche",
+            "search_by": "Rechercher par",
             "duration": {
                 "title": "Durée (minutes)"
             },
@@ -159,7 +160,21 @@
                 "ends_with": "Se termine par",
                 "exact_match": "Correspondance exacte",
                 "by_nickname": "Par surnom",
-                "by_email": "Par email"
+                "by_email": "Par email",
+                "by_name": "Par nom",
+                "by_description": "Par description"
+            },
+            "sort_by": {
+                "label": "Trier par",
+                "name": "Nom",
+                "choices_count": "Nombre de choix",
+                "total_usage": "Utilisations totales",
+                "unique_users": "Utilisateurs uniques"
+            },
+            "sort_order": {
+                "label": "Ordre de tri",
+                "asc": "Croissant",
+                "desc": "Décroissant"
             }
         }
     },
@@ -174,6 +189,8 @@
         "search_nickname": "Rechercher par surnom...",
         "search_activity": "Rechercher une activité...",
         "search_email": "Rechercher par email...",
+        "search_name": "Rechercher par nom...",
+        "search_description": "Rechercher par description...",
         "select": "Sélectionner une option",
         "choose": "Choisir une option",
         "enter": "Entrer une valeur",

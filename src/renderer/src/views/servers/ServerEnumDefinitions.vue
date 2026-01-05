@@ -6,26 +6,22 @@ import EnumDefinitionFilterBar from '@/components/definitions/EnumDefinitionFilt
 import EnumDefinitionCardGrid from '@/components/definitions/EnumDefinitionCardGrid.vue'
 import EnumDefinitionCreateEditDialog from '@/components/definitions/EnumDefinitionCreateEditDialog.vue'
 import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
-import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { useToast } from 'primevue/usetoast'
 
 const { t } = useI18n()
 const server_store = useServerStore()
 const toast = useToast()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()
-const { getAllEnumDefinitionStats } = useEnumDefinitionStatsCRUD()
 
 // Filter state
 const search_query = ref('')
 const search_field = ref<'name' | 'description'>('name')
-const sort_by = ref<'name' | 'choices_count' | 'total_usage' | 'unique_users'>('name')
+const sort_by = ref<'name' | 'choices_count'>('name')
 const sort_order = ref<'asc' | 'desc'>('asc')
 
 // Data state
-const definitions = ref<IEnumDefinition[]>([])
-const statsMap = ref<Map<string, IEnumDefinitionStats>>(new Map())
+const definitions = ref<IEnumDefinition[]>(server_store.getEnumsDefinition || [])
 const loading = ref(false)
 const showCreateDialog = ref(false)
 
@@ -71,18 +67,6 @@ const filteredDefinitions = computed(() => {
             case 'choices_count':
                 comparison = countChoices(a) - countChoices(b)
                 break
-            case 'total_usage': {
-                const aUsage = statsMap.value.get(a.public_id)?.total_usage ?? 0
-                const bUsage = statsMap.value.get(b.public_id)?.total_usage ?? 0
-                comparison = aUsage - bUsage
-                break
-            }
-            case 'unique_users': {
-                const aUsers = statsMap.value.get(a.public_id)?.unique_users ?? 0
-                const bUsers = statsMap.value.get(b.public_id)?.unique_users ?? 0
-                comparison = aUsers - bUsers
-                break
-            }
         }
         return sort_order.value === 'asc' ? comparison : -comparison
     })
@@ -94,21 +78,12 @@ async function loadDefinitions(): Promise<void> {
     if (!server_store.getPublicId) return
     loading.value = true
     try {
-        const [defsRes, statsRes] = await Promise.all([
+        const [defsRes] = await Promise.all([
             listEnumDefinitions(server_store.getPublicId),
-            getAllEnumDefinitionStats(server_store.getPublicId, { page: 1, limit: 100 })
         ])
 
         if (defsRes.data) {
             definitions.value = defsRes.data
-        }
-
-        if (statsRes.data?.data) {
-            const map = new Map<string, IEnumDefinitionStats>()
-            statsRes.data.data.forEach((s) => {
-                map.set(s.enum_definition_id, s)
-            })
-            statsMap.value = map
         }
     } catch (e) {
         console.error(e)
@@ -127,7 +102,9 @@ function onAddDefinition(): void {
 }
 
 onMounted(() => {
-    loadDefinitions()
+    if (!server_store.getEnumsDefinition) {
+        loadDefinitions()
+    }
 })
 </script>
 
@@ -165,7 +142,6 @@ onMounted(() => {
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
             <EnumDefinitionCardGrid
                 :definitions="filteredDefinitions"
-                :stats-map="statsMap"
                 :loading="loading"
                 @refresh="loadDefinitions"
             />

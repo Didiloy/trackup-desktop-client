@@ -5,11 +5,12 @@ import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
 import SelectFilter from '@/components/filters/SelectFilter.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
 import FilterGroup from '@/components/filters/FilterGroup.vue'
+import EnumDefinitionAutocomplete from '@/components/definitions/EnumDefinitionAutocomplete.vue'
 
 interface Props {
     search?: string
     searchField?: 'name' | 'description'
-    sortBy?: 'name' | 'choices_count' | 'total_usage' | 'unique_users'
+    sortBy?: 'name' | 'choices_count'
     sortOrder?: 'asc' | 'desc'
     count?: number
 }
@@ -17,7 +18,7 @@ interface Props {
 interface Emits {
     (e: 'update:search', value: string): void
     (e: 'update:searchField', value: 'name' | 'description'): void
-    (e: 'update:sortBy', value: 'name' | 'choices_count' | 'total_usage' | 'unique_users'): void
+    (e: 'update:sortBy', value: 'name' | 'choices_count'): void
     (e: 'update:sortOrder', value: 'asc' | 'desc'): void
 }
 
@@ -45,8 +46,6 @@ const searchFieldOptions = computed(() => [
 const sortByOptions = computed(() => [
     { label: t('common.filters.sort_by.name'), value: 'name' },
     { label: t('common.filters.sort_by.choices_count'), value: 'choices_count' },
-    { label: t('common.filters.sort_by.total_usage'), value: 'total_usage' },
-    { label: t('common.filters.sort_by.unique_users'), value: 'unique_users' }
 ])
 
 const sortOrderOptions = computed(() => [
@@ -104,8 +103,8 @@ function onSearchFieldChange(value: unknown): void {
 }
 
 function onSortByChange(value: unknown): void {
-    localSortBy.value = value as 'name' | 'choices_count' | 'total_usage' | 'unique_users'
-    emit('update:sortBy', value as 'name' | 'choices_count' | 'total_usage' | 'unique_users')
+    localSortBy.value = value as 'name' | 'choices_count'
+    emit('update:sortBy', value as 'name' | 'choices_count')
 }
 
 function onSortOrderChange(value: unknown): void {
@@ -130,7 +129,7 @@ function clearFilters(): void {
         <template #primary-filters>
             <FilterGroup icon="pi pi-search" class="flex-1">
                 <span class="w-[220px]">
-                    <InputText
+                    <EnumDefinitionAutocomplete
                         :model-value="localSearch"
                         :placeholder="
                             localSearchField === 'name'
@@ -161,6 +160,7 @@ function clearFilters(): void {
                                     t('common.filters.title')
                                 }}</span>
                                 <Button
+                                    v-if="hasActiveFilters"
                                     :label="t('common.actions.clear_all')"
                                     link
                                     size="small"
@@ -210,15 +210,6 @@ function clearFilters(): void {
                         </div>
                     </template>
                 </GenericPopover>
-
-                <Button
-                    v-if="hasActiveFilters"
-                    :label="t('common.actions.clear_all')"
-                    link
-                    size="small"
-                    class="p-0"
-                    @click="clearFilters"
-                />
             </div>
         </template>
     </GenericFilterBar>

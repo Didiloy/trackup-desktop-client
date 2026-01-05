@@ -3,7 +3,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
 
 const { t } = useI18n()
@@ -12,12 +11,10 @@ const server_store = useServerStore()
 
 interface Props {
     definition: IEnumDefinition
-    stats?: IEnumDefinitionStats
     colorIndex?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    stats: undefined,
     colorIndex: 0
 })
 
@@ -100,24 +97,6 @@ function navigateToProfile(): void {
                 <p class="text-sm text-surface-500 line-clamp-2">
                     {{ definition.description || t('common.fields.no_description') }}
                 </p>
-            </div>
-
-            <!-- Stats Row -->
-            <div v-if="stats" class="flex items-center gap-4 mb-4 text-sm">
-                <div class="flex items-center gap-1.5 text-surface-600">
-                    <i class="pi pi-check-square text-xs text-primary-500"></i>
-                    <span class="font-medium">{{ stats.total_usage }}</span>
-                    <span class="text-surface-400">{{
-                        t('views.server_enum_definitions.total_usage')
-                    }}</span>
-                </div>
-                <div class="flex items-center gap-1.5 text-surface-600">
-                    <i class="pi pi-users text-xs text-green-500"></i>
-                    <span class="font-medium">{{ stats.unique_users }}</span>
-                    <span class="text-surface-400">{{
-                        t('views.server_enum_definitions.unique_users')
-                    }}</span>
-                </div>
             </div>
 
             <!-- Choices Section -->

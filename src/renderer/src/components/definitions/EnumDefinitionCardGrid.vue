@@ -2,15 +2,14 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import type { IEnumDefinitionStats } from '@shared/contracts/interfaces/entities-stats/enum-definition-stats.interfaces'
 import EnumDefinitionCard from './EnumDefinitionCard.vue'
 import EnumDefinitionCreateEditDialog from './EnumDefinitionCreateEditDialog.vue'
+import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
 
 const { t } = useI18n()
 
 interface Props {
     definitions: IEnumDefinition[]
-    statsMap: Map<string, IEnumDefinitionStats>
     loading?: boolean
 }
 
@@ -23,9 +22,6 @@ const definitionToEdit = ref<IEnumDefinition | null>(null)
 
 const isEmpty = computed(() => props.definitions.length === 0 && !props.loading)
 
-function getStats(defId: string): IEnumDefinitionStats | undefined {
-    return props.statsMap.get(defId)
-}
 
 function openCreateDialog(): void {
     definitionToEdit.value = null
@@ -88,7 +84,7 @@ defineEmits<{
         </div>
 
         <!-- Cards Grid -->
-        <TransitionGroup
+        <transitionGroupWrapper
             v-else
             name="fade"
             tag="div"
@@ -98,10 +94,9 @@ defineEmits<{
                 v-for="(def, index) in definitions"
                 :key="def.public_id"
                 :definition="def"
-                :stats="getStats(def.public_id)"
                 :color-index="index"
             />
-        </TransitionGroup>
+        </transitionGroupWrapper>
 
         <EnumDefinitionCreateEditDialog
             v-model="showCreateDialog"
