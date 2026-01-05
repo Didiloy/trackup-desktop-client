@@ -102,7 +102,7 @@ async function handleSubmit() {
                 toast.add({
                     severity: 'warn',
                     summary: t('messages.error.update'),
-                    detail: t('views.server_definitions.create_modal.max_chunk_warning'),
+                    detail: t('views.server_enum_definitions.create_modal.max_chunk_warning'),
                     life: 3000
                 })
                 return
@@ -195,16 +195,16 @@ function handleClose() {
                             isEditing
                                 ? t('common.actions.update', {
                                       entity: t(
-                                          'views.server_definitions.entity_name',
+                                          'views.server_enum_definitions.entity_name',
                                           'Definition'
                                       )
                                   })
-                                : t('views.server_definitions.create_modal.title')
+                                : t('views.server_enum_definitions.create_modal.title')
                         }}
                     </span>
                 </div>
                 <span class="text-xs text-surface-600">
-                    {{ t('views.server_definitions.create_modal.subtitle') }}
+                    {{ t('views.server_enum_definitions.create_modal.subtitle') }}
                 </span>
             </div>
         </template>
@@ -215,7 +215,7 @@ function handleClose() {
                 </label>
                 <InputText
                     v-model="name"
-                    :placeholder="t('views.server_definitions.create_modal.name_placeholder')"
+                    :placeholder="t('views.server_enum_definitions.create_modal.name_placeholder')"
                     class="w-full"
                 />
             </div>
@@ -229,7 +229,7 @@ function handleClose() {
                     rows="2"
                     auto-resize
                     :placeholder="
-                        t('views.server_definitions.create_modal.description_placeholder')
+                        t('views.server_enum_definitions.create_modal.description_placeholder')
                     "
                     class="w-full"
                 />
@@ -251,7 +251,7 @@ function handleClose() {
                         <InputText
                             v-model="choices[index]"
                             :placeholder="
-                                t('views.server_definitions.create_modal.choices_placeholder')
+                                t('views.server_enum_definitions.create_modal.choices_placeholder')
                             "
                             class="flex-1 p-inputtext-sm"
                             @keydown.enter.prevent="addChoice"

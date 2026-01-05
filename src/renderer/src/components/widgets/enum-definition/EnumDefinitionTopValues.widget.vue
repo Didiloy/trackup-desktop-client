@@ -113,7 +113,7 @@ const maxUsage = computed(() => {
             </div>
             <div>
                 <h3 class="font-semibold text-surface-900">
-                    {{ t('views.server_definitions.profile.top_values.title') }}
+                    {{ t('views.server_enum_definitions.profile.top_values.title') }}
                 </h3>
             </div>
         </div>
@@ -171,7 +171,7 @@ const maxUsage = computed(() => {
                         <span class="font-semibold text-surface-800">
                             {{ item.usage_count || 0 }}
                             <span class="font-normal">{{
-                                t('views.server_definitions.profile.top_values.usage_count')
+                                t('views.server_enum_definitions.profile.top_values.usage_count')
                             }}</span>
                         </span>
                         <span class="px-2 py-0.5 rounded-full bg-surface-100 text-xs">

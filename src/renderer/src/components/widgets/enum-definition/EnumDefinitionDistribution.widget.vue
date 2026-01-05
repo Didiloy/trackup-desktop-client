@@ -178,10 +178,10 @@ const config = computed<VueUiDonutConfig>(() => ({
             </div>
             <div>
                 <h3 class="font-semibold text-surface-900">
-                    {{ t('views.server_definitions.profile.distribution.title') }}
+                    {{ t('views.server_enum_definitions.profile.distribution.title') }}
                 </h3>
                 <p class="text-sm text-surface-500">
-                    {{ t('views.server_definitions.profile.distribution.description') }}
+                    {{ t('views.server_enum_definitions.profile.distribution.description') }}
                 </p>
             </div>
         </div>

@@ -145,7 +145,7 @@ onMounted(loadDefinitions)
         >
             <i class="pi pi-info-circle text-2xl mb-2"></i>
             <p>
-                {{ t('views.server_sessions.add_modal.no_enums') }}
+                {{ t('views.server_sessions.add_modal.no_enum_definitions') }}
             </p>
         </div>
 

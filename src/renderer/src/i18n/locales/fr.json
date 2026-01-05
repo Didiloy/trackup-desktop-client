@@ -130,7 +130,7 @@
         "steps": {
             "generic": "Étape {index}",
             "info": "Infos Session",
-            "enums": "Critères de session",
+            "enum_definitions": "Critères de session",
             "metadata": "Attributs de l'activité",
             "activity": "Activité",
             "skill_levels": "Niveaux de compétence"
@@ -382,13 +382,13 @@
                 "save": "Enregistrer"
             }
         },
-        "server_definitions": {
+        "server_enum_definitions": {
             "title": "Critères de session",
             "description": "Définissez des listes de choix à remplir lors de vos sessions",
             "add_definition": "Ajouter un critère",
             "edit_definition": "Modifier le critère",
             "delete_definition": "Supprimer le critère",
-            "enums_list_title": "Critères de session",
+            "list_title": "Critères de session",
             "no_definitions": "Aucun critère trouvé. Créez-en un pour commencer.",
             "no_definitions_title": "Aucun critère",
             "total_usage": "utilisations",
@@ -630,12 +630,12 @@
             "add_modal": {
                 "title": "Créer une session",
                 "info_description": "Entrez les détails de la session",
-                "enums_description": "Sélectionnez les options",
+                "enum_definitions_description": "Remplissez les critères de session",
                 "metadata_description": "Remplissez les attributs liés à l'activité",
                 "title_placeholder": "Titre optionnel",
                 "select_participants": "Sélectionner des participants supplémentaires",
                 "comment_placeholder": "Commentaire...",
-                "no_enums": "Aucune critères de session disponible",
+                "no_enum_definitions": "Aucune critères de session disponible",
                 "no_metadata": "Aucun attribut disponible",
                 "search_activity_placeholder": "Rechercher une activité..."
             },
@@ -918,7 +918,7 @@
         "steps": {
             "server_details": "Récupération des informations",
             "members": "Chargement des membres",
-            "definitions": "Chargement des critères de sessions"
+            "enum_definitions": "Chargement des critères de sessions"
         }
     }
 }

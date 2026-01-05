@@ -60,7 +60,7 @@ function handleSelect(definition: IEnumDefinition | null): void {
         <label class="block text-sm font-medium text-surface-700">
             {{
                 t('common.actions.select', {
-                    entity: t('views.server_definitions.profile.title').toLowerCase()
+                    entity: t('views.server_enum_definitions.profile.title').toLowerCase()
                 })
             }}
         </label>

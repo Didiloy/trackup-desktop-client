@@ -70,13 +70,13 @@ export function useServerNavigation(): UseServerNavigationResult {
             await delay(STEP_DELAY)
 
             // Step 3: Enum Definitions
-            startLoadingStep('definitions')
+            startLoadingStep('enum_definitions')
             const enumsRes = await listEnumDefinitions(serverId)
             if (enumsRes.error || !enumsRes.data) {
-                errorLoadingStep('definitions')
+                errorLoadingStep('enum_definitions')
                 throw new Error('Failed to load enum definitions')
             }
-            completeLoadingStep('definitions')
+            completeLoadingStep('enum_definitions')
             server_store.setEnumsDefinition(enumsRes.data)
             await delay(STEP_DELAY)
         } catch {

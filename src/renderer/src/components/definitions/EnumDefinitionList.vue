@@ -122,7 +122,7 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-surface-900">
-                        {{ t('views.server_definitions.enums_list_title') }}
+                        {{ t('views.server_enum_definitions.list_title') }}
                     </h2>
                     <p class="text-sm text-surface-500">
                         {{ definitions.length }} {{ t('common.fields.items') }}
@@ -130,7 +130,7 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                 </div>
             </div>
             <Button
-                :label="t('views.server_definitions.add_definition')"
+                :label="t('views.server_enum_definitions.add_definition')"
                 icon="pi pi-plus"
                 size="small"
                 class="shadow-md"
@@ -165,13 +165,13 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                 <i class="pi pi-list text-3xl text-primary-600"></i>
             </div>
             <h3 class="text-xl font-bold text-surface-900 mb-2">
-                {{ t('views.server_definitions.no_definitions_title') }}
+                {{ t('views.server_enum_definitions.no_definitions_title') }}
             </h3>
             <p class="text-surface-500 text-sm mb-6 max-w-sm text-center">
-                {{ t('views.server_definitions.no_definitions') }}
+                {{ t('views.server_enum_definitions.no_definitions') }}
             </p>
             <Button
-                :label="t('views.server_definitions.add_definition')"
+                :label="t('views.server_enum_definitions.add_definition')"
                 icon="pi pi-plus"
                 rounded
                 class="shadow-lg shadow-primary-500/25"
@@ -233,7 +233,7 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                                 getStats(def.public_id)?.total_usage
                             }}</span>
                             <span class="text-surface-400">{{
-                                t('views.server_definitions.total_usage')
+                                t('views.server_enum_definitions.total_usage')
                             }}</span>
                         </div>
                         <div class="flex items-center gap-1.5 text-surface-600">
@@ -242,7 +242,7 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                                 getStats(def.public_id)?.unique_users
                             }}</span>
                             <span class="text-surface-400">{{
-                                t('views.server_definitions.unique_users')
+                                t('views.server_enum_definitions.unique_users')
                             }}</span>
                         </div>
                     </div>
@@ -284,7 +284,7 @@ function getStats(defId: string): IEnumDefinitionStats | undefined {
                         <div
                             class="flex items-center justify-end text-sm text-primary-600 font-medium group-hover:underline"
                         >
-                            {{ t('views.server_definitions.view_stats') }}
+                            {{ t('views.server_enum_definitions.view_stats') }}
                             <i
                                 class="pi pi-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"
                             ></i>

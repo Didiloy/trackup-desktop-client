@@ -52,7 +52,7 @@ const steps = computed(() => {
     if (has_enums.value) {
         list.push({
             key: 'enums',
-            label: t('common.steps.enums'),
+            label: t('common.steps.enum_definitions'),
             icon: 'pi pi-list'
         })
     }
@@ -73,7 +73,7 @@ const subtitle = computed(() => {
         case 'info':
             return t('views.server_sessions.add_modal.info_description')
         case 'enums':
-            return t('views.server_sessions.add_modal.enums_description')
+            return t('views.server_sessions.add_modal.enum_definitions_description')
         case 'metadata':
             return t('views.server_sessions.add_modal.metadata_description')
         default:

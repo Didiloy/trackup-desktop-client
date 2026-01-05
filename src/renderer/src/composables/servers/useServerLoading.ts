@@ -21,7 +21,7 @@ const state = reactive<ServerLoadingState>({
 const defaultSteps: LoadingStep[] = [
     { key: 'server_details', icon: 'pi pi-server', status: 'pending' },
     { key: 'members', icon: 'pi pi-users', status: 'pending' },
-    { key: 'definitions', icon: 'pi pi-list', status: 'pending' }
+    { key: 'enum_definitions', icon: 'pi pi-list', status: 'pending' }
 ]
 
 /**

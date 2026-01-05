@@ -86,7 +86,7 @@ const value = computed(() => {
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_definitions.profile.overview.unique_users')"
+        :label="t('views.server_enum_definitions.profile.overview.unique_users')"
         :value="value"
         icon="pi pi-users"
         color="text-orange-600"

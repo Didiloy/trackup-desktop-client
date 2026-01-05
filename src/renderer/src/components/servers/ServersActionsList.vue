@@ -49,7 +49,7 @@ const actions: ServerAction[] = [
     },
     {
         id: 'definitions',
-        label: t('views.server_definitions.title'),
+        label: t('views.server_enum_definitions.title'),
         icon: 'pi pi-list',
         routeName: 'ServerDefinitions'
     },

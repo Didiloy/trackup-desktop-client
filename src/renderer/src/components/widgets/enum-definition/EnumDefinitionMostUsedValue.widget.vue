@@ -97,7 +97,7 @@ const usageCountLabel = computed(() => {
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_definitions.profile.overview.most_used_value')"
+        :label="t('views.server_enum_definitions.profile.overview.most_used_value')"
         :value="value"
         :sub-value="usageCountLabel"
         icon="pi pi-star"

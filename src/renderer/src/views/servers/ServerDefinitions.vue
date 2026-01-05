@@ -13,10 +13,10 @@ const { t } = useI18n()
                 <div class="flex flex-col gap-8 w-full">
                     <div>
                         <h1 class="text-3xl font-bold text-surface-900 tracking-tight">
-                            {{ t('views.server_definitions.title') }}
+                            {{ t('views.server_enum_definitions.title') }}
                         </h1>
                         <p class="text-surface-500 text-lg max-w-2xl mt-2">
-                            {{ t('views.server_definitions.description') }}
+                            {{ t('views.server_enum_definitions.description') }}
                         </p>
                     </div>
 
