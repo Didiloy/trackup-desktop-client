@@ -84,7 +84,7 @@ defineEmits<{
         </div>
 
         <!-- Cards Grid -->
-        <transitionGroupWrapper
+        <TransitionGroupWrapper
             v-else
             name="fade"
             tag="div"
@@ -96,7 +96,7 @@ defineEmits<{
                 :definition="def"
                 :color-index="index"
             />
-        </transitionGroupWrapper>
+        </TransitionGroupWrapper>
 
         <EnumDefinitionCreateEditDialog
             v-model="showCreateDialog"

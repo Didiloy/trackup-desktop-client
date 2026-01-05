@@ -60,10 +60,6 @@ const activeFiltersCount = computed(() => {
     return count
 })
 
-const hasActiveFilters = computed(() => {
-    return localSearch.value !== '' || activeFiltersCount.value > 0
-})
-
 watch(
     () => props.search,
     (v) => {
@@ -160,7 +156,6 @@ function clearFilters(): void {
                                     t('common.filters.title')
                                 }}</span>
                                 <Button
-                                    v-if="hasActiveFilters"
                                     :label="t('common.actions.clear_all')"
                                     link
                                     size="small"

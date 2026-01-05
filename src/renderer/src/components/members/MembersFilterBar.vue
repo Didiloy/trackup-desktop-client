@@ -151,7 +151,7 @@ function clearFilters(): void {
                 >
                     <template #content>
                         <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
-                            <div class="flex items-center justify-end">
+                            <div class="flex items-center justify-between">
                                 <span class="font-semibold text-surface-900">{{
                                     t('common.filters.title')
                                 }}</span>
@@ -172,7 +172,6 @@ function clearFilters(): void {
                                 <SelectFilter
                                     :model-value="localSearchField"
                                     :options="searchFieldOptions"
-                                    class="w-48"
                                     @update:model-value="onSearchFieldChange"
                                 />
                             </div>
