@@ -4,12 +4,11 @@ import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useServerStore } from '@/stores/server'
 import { useRouter } from 'vue-router'
-import { formatDate } from '@/utils'
+import { useRouter } from 'vue-router'
 import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
 import { computed } from 'vue'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
-import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 const { t } = useI18n()
 const server_store = useServerStore()
@@ -50,87 +49,88 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         container-class="p-0"
         @load-more="emit('loadMore')"
     >
-        <!-- Sessions Grid -->
+        <!-- Sessions List -->
         <TransitionGroupWrapper
             name="fade"
             tag="div"
-            class="flex flex-col gap-4 pb-4"
+            class="flex flex-col"
         >
             <div
                 v-for="session in sessions"
                 :key="session.public_id"
-                class="group relative w-full rounded-2xl border border-surface-200 bg-white shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
+                class="group flex items-center gap-4 p-3 rounded-xl hover:bg-surface-50 transition-all cursor-pointer border-b border-surface-50 last:border-0"
                 @click="navigateToSession(session.public_id)"
             >
-                <!-- Header -->
-                <div class="px-5 pt-5 pb-3">
-                    <h3 class="text-lg font-semibold text-surface-900 truncate">
-                        {{ session.title || t('common.fields.no_title') }}
-                    </h3>
-                    <div class="flex items-center gap-2 text-sm text-surface-600 mt-1">
-                        <i class="pi pi-calendar text-xs"></i>
-                        <span>{{ formatDate(session.date) }}</span>
-                    </div>
+                <!-- Date Box -->
+                <div
+                    class="flex flex-col items-center justify-center w-14 h-14 bg-surface-100 rounded-xl text-surface-600 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors shrink-0"
+                >
+                    <span class="text-lg font-bold leading-none">{{
+                        new Date(session.date).getDate()
+                    }}</span>
+                    <span class="text-[0.65rem] font-bold uppercase tracking-wider">{{
+                        new Date(session.date).toLocaleDateString('fr-FR', { month: 'short' })
+                    }}</span>
                 </div>
 
-                <!-- Body -->
-                <div class="px-5 pb-4">
-                    <!-- Stats Row -->
-                    <div class="flex items-center gap-4 flex-wrap">
+                <!-- Main Content -->
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-surface-900 truncate mb-1">
+                        {{ session.title || t('common.fields.no_title') }}
+                    </h3>
+
+                    <div class="flex items-center gap-4 text-xs text-surface-500">
                         <!-- Duration -->
-                        <div
-                            class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 text-primary-700"
-                        >
-                            <i class="pi pi-clock text-xs"></i>
-                            <span class="text-sm font-medium">{{
+                        <div class="flex items-center gap-1.5 font-medium text-surface-900">
+                            <i class="pi pi-clock text-primary-500"></i>
+                            <span>{{
                                 formatMinutesToLabel(session.duration as unknown as number)
                             }}</span>
                         </div>
 
                         <!-- Participants -->
                         <div
-                            class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700"
+                            v-if="session.participants_count > 0"
+                            class="flex items-center gap-1.5"
                         >
-                            <MemberIcon/>
-                            <span class="text-sm font-medium">{{ session.participants_count }}</span>
+                            <MemberIcon />
+                            <span>{{ session.participants_count }}</span>
                         </div>
 
                         <!-- Likes -->
-                        <div
-                            class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-pink-50 text-pink-700"
-                        >
-                            <i class="pi pi-heart text-xs"></i>
-                            <span class="text-sm font-medium">{{ session.likes_count }}</span>
+                        <div v-if="session.likes_count > 0" class="flex items-center gap-1.5">
+                            <i class="pi pi-heart"></i>
+                            <span>{{ session.likes_count }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hover indicator -->
-                <div
-                    class="absolute inset-x-0 bottom-0 h-1 bg-linear-to-r from-primary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                ></div>
+                <!-- Chevron -->
+                <i
+                    class="pi pi-chevron-right text-surface-300 group-hover:text-primary-500 transition-colors"
+                ></i>
             </div>
         </TransitionGroupWrapper>
 
         <!-- Loading State -->
         <div
             v-if="loading && sessions.length === 0"
-            class="flex flex-col gap-4 pb-4"
+            class="flex flex-col"
         >
             <div
                 v-for="n in 6"
                 :key="n"
-                class="w-full rounded-2xl border border-surface-200 bg-white shadow-sm overflow-hidden"
+                class="flex items-center gap-4 p-3 border-b border-surface-50 last:border-0"
             >
-                <div class="px-5 pt-5 pb-3">
-                    <div class="w-3/4 h-6 bg-surface-200 animate-pulse rounded"></div>
-                    <div class="w-1/2 h-4 bg-surface-200 animate-pulse rounded mt-2"></div>
-                </div>
-                <div class="px-5 pb-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-20 h-8 bg-surface-200 animate-pulse rounded-full"></div>
-                        <div class="w-16 h-8 bg-surface-200 animate-pulse rounded-full"></div>
-                        <div class="w-16 h-8 bg-surface-200 animate-pulse rounded-full"></div>
+                <!-- Date Box Skeleton -->
+                <div class="w-14 h-14 bg-surface-100 rounded-xl animate-pulse shrink-0"></div>
+
+                <!-- Content Skeleton -->
+                <div class="flex-1 min-w-0 space-y-2">
+                    <div class="w-1/3 h-5 bg-surface-100 rounded animate-pulse"></div>
+                    <div class="flex gap-4">
+                        <div class="w-16 h-4 bg-surface-100 rounded animate-pulse"></div>
+                        <div class="w-12 h-4 bg-surface-100 rounded animate-pulse"></div>
                     </div>
                 </div>
             </div>
@@ -139,10 +139,10 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         <!-- Empty State -->
         <div
             v-else-if="isEmpty"
-            class="flex flex-col items-center justify-center h-full min-h-[400px]"
+            class="flex flex-col items-center justify-center h-full min-h-[300px]"
         >
-            <i class="pi pi-calendar text-7xl text-surface-300 mb-4"></i>
-            <p class="text-xl font-medium text-surface-600">
+            <i class="pi pi-calendar text-5xl text-surface-300 mb-3"></i>
+            <p class="text-lg font-medium text-surface-600">
                 {{ t('views.server_activities.sessions_tab.empty_state') }}
             </p>
         </div>
