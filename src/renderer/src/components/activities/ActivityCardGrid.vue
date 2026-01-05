@@ -6,6 +6,7 @@ import type { ActivityCardMetrics } from '@/components/activities/types/activity
 import { useI18n } from 'vue-i18n'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
 import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 interface Props {
     activities: IActivity[]
@@ -92,7 +93,7 @@ const isEmpty = computed(() => !props.loading && !props.activities.length)
                 v-else-if="isEmpty"
                 class="flex flex-col items-center justify-center h-full min-h-[400px]"
             >
-                <i class="pi pi-trophy text-7xl text-surface-300 mb-4"></i>
+                <ActivityIcon class="text-7xl text-surface-300 mb-4" />
                 <p class="text-xl font-medium text-surface-600">
                     {{ t('common.filters.no_results') }}
                 </p>

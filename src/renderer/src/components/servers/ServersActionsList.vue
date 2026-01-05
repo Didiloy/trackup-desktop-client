@@ -2,6 +2,10 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useI18n } from 'vue-i18n'
+import type { Component } from 'vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import MembersIcon from '@/components/common/icons/MembersIcon.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -11,7 +15,7 @@ const { t } = useI18n()
 interface ServerAction {
     id: string
     label: string
-    icon?: string
+    icon?: Component | string
     routeName?: string
     description?: string
 }
@@ -32,19 +36,19 @@ const actions: ServerAction[] = [
     {
         id: 'activities',
         label: t('views.server_activities.title_base'),
-        icon: 'pi pi-trophy',
+        icon: ActivityIcon,
         routeName: 'ServerActivities'
     },
     {
         id: 'members',
         label: t('views.server_members.title_base'),
-        icon: 'pi pi-users',
+        icon: MembersIcon,
         routeName: 'ServerMembers'
     },
     {
         id: 'sessions',
         label: t('views.server_sessions.title_base'),
-        icon: 'pi pi-calendar',
+        icon: SessionIcon,
         routeName: 'ServerSessions'
     },
     {
@@ -86,7 +90,10 @@ function isActionActive(action: ServerAction): boolean {
             :class="{ 'bg-surface-200 font-semibold': isActionActive(a) }"
             @click="onActionClick(a)"
         >
-            <i v-if="a.icon" :class="a.icon" class="text-surface-600"></i>
+            <!-- Si l'icône est une string (classe PrimeIcons), utiliser <i> -->
+            <i v-if="typeof a.icon === 'string'" :class="a.icon" />
+            <!-- Si l'icône est un composant Vue, utiliser <component> -->
+            <component :is="a.icon" v-else />
             <span class="text-sm text-surface-900">{{ a.label }}</span>
         </button>
     </div>
