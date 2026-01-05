@@ -21,6 +21,9 @@ import { useI18n } from 'vue-i18n'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 import MemberProfileHeader from '@/components/members/profile/MemberProfileHeader.vue'
+import { ICONS } from '@/constants/icons'
+import Icon from '@/components/common/icons/Icon.vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -108,7 +111,7 @@ onMounted(async () => {
                     </Tab>
                     <Tab value="activities">
                         <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-trophy"></i>
+                            <ActivityIcon/>
                             <span>{{ t('views.server_members.tabs.activities') }}</span>
                         </div>
                     </Tab>

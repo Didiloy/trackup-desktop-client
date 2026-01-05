@@ -2,6 +2,8 @@
 import { useI18n } from 'vue-i18n'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { computed } from 'vue'
+import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
+import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 
 const props = defineProps<{
     metadataDefinitions?: IActivityMetadataDefinition[]
@@ -18,38 +20,12 @@ function formatTypeLabel(type?: string): string {
 const hasMetadata = computed(() => {
     return props.metadataDefinitions && props.metadataDefinitions.length > 0
 })
-
-function getIconForType(type: string): string {
-    switch (type) {
-        case 'NUMBER':
-            return 'pi pi-hashtag'
-        case 'BOOLEAN':
-            return 'pi pi-check-square'
-        case 'DATE':
-            return 'pi pi-calendar'
-        default:
-            return 'pi pi-align-left'
-    }
-}
-
-function getColorForType(type: string): { bg: string; text: string } {
-    switch (type) {
-        case 'NUMBER':
-            return { bg: 'bg-blue-50', text: 'text-blue-600' }
-        case 'BOOLEAN':
-            return { bg: 'bg-green-50', text: 'text-green-600' }
-        case 'DATE':
-            return { bg: 'bg-purple-50', text: 'text-purple-600' }
-        default:
-            return { bg: 'bg-primary-50', text: 'text-primary-600' }
-    }
-}
 </script>
 
 <template>
     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
         <div class="flex items-center gap-2 mb-4">
-            <i class="pi pi-database text-primary-500"></i>
+            <MetadataIcon class="text-primary-500" />
             <p class="text-sm font-semibold text-surface-700">
                 {{ t('views.server_activities.add_modal.metadata_list') }}
             </p>
@@ -63,12 +39,7 @@ function getColorForType(type: string): { bg: string; text: string } {
             >
                 <div class="flex items-start gap-3">
                     <!-- Type Icon -->
-                    <div
-                        class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                        :class="[getColorForType(meta.type).bg, getColorForType(meta.type).text]"
-                    >
-                        <i :class="getIconForType(meta.type)" class="text-lg"></i>
-                    </div>
+                    <MetadataTypeBadge :type="meta.type" />
 
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
@@ -106,7 +77,7 @@ function getColorForType(type: string): { bg: string; text: string } {
                             </span>
 
                             <span
-                                v-if="!meta.allow_not_predefined && meta.choices?.length"
+                                v-if="!meta.allow_not_predefined_value && meta.choices?.length"
                                 class="text-[10px] px-2 py-1 rounded-full bg-surface-200 text-surface-600 font-medium"
                             >
                                 {{ t('views.server_activities.add_modal.predefined_only') }}
@@ -118,7 +89,7 @@ function getColorForType(type: string): { bg: string; text: string } {
         </div>
 
         <div v-else class="flex flex-col items-center justify-center py-8 text-surface-400">
-            <i class="pi pi-database text-3xl mb-2 opacity-50"></i>
+            <MetadataIcon class="text-3xl mb-2 opacity-50" />
             <span class="text-sm">{{ t('common.fields.none') }}</span>
         </div>
     </div>

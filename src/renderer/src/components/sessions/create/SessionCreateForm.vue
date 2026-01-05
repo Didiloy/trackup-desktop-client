@@ -16,6 +16,9 @@ import Select from 'primevue/select'
 import { useChronos, type IChrono } from '@/composables/useChronos'
 import DurationInput from '@/components/common/inputs/DurationInput.vue'
 import { formatDuration, convertMsToMinutes } from '@/utils/time.utils'
+import { ICONS } from '@/constants/icons'
+import Icon from '@/components/common/icons/Icon.vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -185,7 +188,7 @@ const isHexColor = (v?: string): boolean => {
             <!-- Activity -->
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
-                    <i class="pi pi-trophy text-surface-500"></i>
+                    <ActivityIcon class="text-surface-500" />
                     <span class="text-sm font-medium text-surface-700"
                         >{{ t('common.steps.activity') }} <span class="text-red-500">*</span></span
                     >

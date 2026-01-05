@@ -13,6 +13,9 @@ import type { IMemberStatsDetails } from '@shared/contracts/interfaces/entities-
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import { ICONS } from '@/constants/icons'
+import Icon from '@/components/common/icons/Icon.vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -137,7 +140,7 @@ const favoriteActivity = computed(() => details.value?.favorite_activity)
                     <div
                         class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary-600 shadow-sm"
                     >
-                        <i class="pi pi-trophy"></i>
+                        <ActivityIcon/>
                     </div>
                     <div>
                         <div

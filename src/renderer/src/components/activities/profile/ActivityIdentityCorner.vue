@@ -2,6 +2,9 @@
 import { computed, ref, onMounted, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import Icon from '@/components/common/icons/Icon.vue'
+import { ICONS } from '@/constants/icons'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 const server_store = useServerStore()
 const { getActivityById } = useActivityCRUD()
@@ -76,7 +79,7 @@ const isVisible = computed(() => props.show)
         <div
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
-            <i class="pi pi-trophy text-[9px]"></i>
+            <ActivityIcon class="text-[9px]"/>
             <router-link
                 :to="{
                     name: 'ServerActivityProfile',

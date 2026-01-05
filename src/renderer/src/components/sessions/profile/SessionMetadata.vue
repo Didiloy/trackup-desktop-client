@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { ISessionMetadata } from '@shared/contracts/interfaces/entities/session.interfaces'
+import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 
 interface Props {
     metadata?: ISessionMetadata[]
@@ -19,7 +20,7 @@ function formatValue(value: unknown): string {
 <template>
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
-            <i class="pi pi-database text-primary-500"></i>
+            <MetadataIcon class="text-primary-500" />
             {{ t('common.steps.metadata') }}
         </h3>
 
