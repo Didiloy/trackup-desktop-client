@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TopAside from '@/components/asides/TopAside.vue'
 import AppUpdateModal from '@/components/app-updates/AppUpdateModal.vue'
+import ServerLoadingOverlay from '@/components/common/ServerLoadingOverlay.vue'
 import { useAuth } from '@/composables/auth/useAuth'
 import LoginOrSignup from '@/views/auth/LoginOrSignup.vue'
 import Application from '@/views/app/Application.vue'
@@ -21,5 +22,9 @@ const { isAuthenticated } = useAuth()
             <Application v-else key="application" />
         </TransitionWrapper>
         <Toast />
+        
+        <!-- Server Loading Overlay -->
+        <ServerLoadingOverlay />
     </div>
 </template>
+

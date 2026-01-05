@@ -911,5 +911,14 @@
                 "description": "Moyenne des participants quand ce critère est sélectionné"
             }
         }
+    },
+    "server_loading": {
+        "title": "Chargement du serveur",
+        "hint": "Préparation de votre espace de statistiques...",
+        "steps": {
+            "server_details": "Récupération des informations",
+            "members": "Chargement des membres",
+            "definitions": "Chargement des critères de sessions"
+        }
     }
 }

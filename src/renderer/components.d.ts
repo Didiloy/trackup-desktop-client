@@ -175,6 +175,7 @@ declare module 'vue' {
     'ServerGrowthTrends.widget': typeof import('./src/components/widgets/server/ServerGrowthTrends.widget.vue')['default']
     ServerGrowthTrendsWidget: typeof import('./src/components/widgets/server/ServerGrowthTrends.widget.vue')['default']
     ServerHeader: typeof import('./src/components/servers/profile/ServerHeader.vue')['default']
+    ServerLoadingOverlay: typeof import('./src/components/common/ServerLoadingOverlay.vue')['default']
     ServersActionsList: typeof import('./src/components/servers/ServersActionsList.vue')['default']
     ServersAside: typeof import('./src/components/asides/ServersAside.vue')['default']
     ServersList: typeof import('./src/components/servers/list/ServersList.vue')['default']
