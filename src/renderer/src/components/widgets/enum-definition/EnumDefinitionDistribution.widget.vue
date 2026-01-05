@@ -46,7 +46,7 @@ const server_store = useServerStore()
 const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
 
 const definitionId = computed(
-    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+    () => (route.params.enumDefinitionId as string) || props.config?.enumDefinitionId
 )
 const distribution = ref<IEnumValueDistribution[]>([])
 const isLoadingLocal = ref(false)
@@ -91,7 +91,7 @@ const chartColors = [
     '#ef4444', // red
     '#06b6d4', // cyan
     '#10b981', // emerald
-    '#a855f7'  // purple
+    '#a855f7' // purple
 ]
 
 // Must use 'values' array format as expected by VueUiDonut
@@ -156,7 +156,7 @@ const config = computed<VueUiDonutConfig>(() => ({
                 color: 'var(--surface-700)',
                 showPercentage: false,
                 showValue: false,
-                position: "top"
+                position: 'top'
             },
             tooltip: {
                 show: true

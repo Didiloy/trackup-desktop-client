@@ -44,7 +44,7 @@ const server_store = useServerStore()
 const { getEnumValueStatsDistribution } = useEnumDefinitionStatsCRUD()
 
 const definitionId = computed(
-    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+    () => (route.params.enumDefinitionId as string) || props.config?.enumDefinitionId
 )
 const distribution = ref<IEnumValueDistribution[]>([])
 const isLoadingLocal = ref(false)

@@ -10,6 +10,7 @@ import type { ISession } from '@shared/contracts/interfaces/entities/session.int
 import SessionProfileHeader from '@/components/sessions/profile/SessionProfileHeader.vue'
 import SessionParticipants from '@/components/sessions/profile/SessionParticipants.vue'
 import SessionMetadata from '@/components/sessions/profile/SessionMetadata.vue'
+import SessionEnumDefinitions from '@/components/sessions/profile/SessionEnumDefinitions.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 const { t } = useI18n()
@@ -112,8 +113,9 @@ onMounted(async () => {
                     
                     <!-- Right Column: Metadata (takes 2 cols on large screens) -->
                     <div class="lg:col-span-2 space-y-6">
+                        <SessionEnumDefinitions :enums="session.enum_definitions" />
+                        
                          <SessionMetadata 
-                            :enums="session.enum_definitions"
                             :metadata="session.metadata"
                         />
                     </div>

@@ -52,7 +52,7 @@ function navigateToProfile(): void {
         name: 'ServerEnumDefinitionProfile',
         params: {
             id: server_store.getPublicId,
-            definitionId: props.definition.public_id
+            enumDefinitionId: props.definition.public_id
         },
         query: { colorIndex: props.colorIndex.toString() }
     })
@@ -102,9 +102,7 @@ function navigateToProfile(): void {
             <!-- Choices Section -->
             <div class="pt-4 border-t border-surface-100">
                 <div class="flex items-center justify-between mb-2">
-                    <span
-                        class="text-xs font-semibold text-surface-400 uppercase tracking-wider"
-                    >
+                    <span class="text-xs font-semibold text-surface-400 uppercase tracking-wider">
                         {{ t('common.fields.choices') }}
                     </span>
                     <span
@@ -145,4 +143,3 @@ function navigateToProfile(): void {
         </div>
     </div>
 </template>
-

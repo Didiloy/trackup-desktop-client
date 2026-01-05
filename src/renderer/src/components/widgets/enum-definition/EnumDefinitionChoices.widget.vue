@@ -42,7 +42,7 @@ const route = useRoute()
 const server_store = useServerStore()
 
 const definitionId = computed(
-    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+    () => (route.params.enumDefinitionId as string) || props.config?.enumDefinitionId
 )
 
 const MAX_VALUES_PER_CHUNK = 5

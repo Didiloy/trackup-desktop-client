@@ -87,7 +87,7 @@ const isVisible = computed(() => props.show)
                     name: 'ServerEnumDefinitionProfile',
                     params: {
                         id: server_store.getPublicId,
-                        definitionId: props.definitionId
+                        enumDefinitionId: props.definitionId
                     }
                 }"
                 class="max-w-[80px] truncate uppercase tracking-wider"

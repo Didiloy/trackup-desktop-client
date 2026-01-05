@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { ISessionEnum, ISessionMetadata } from '@shared/contracts/interfaces/entities/session.interfaces'
+import type { ISessionMetadata } from '@shared/contracts/interfaces/entities/session.interfaces'
 
 interface Props {
-    enums?: ISessionEnum[]
     metadata?: ISessionMetadata[]
 }
 
@@ -21,45 +20,28 @@ function formatValue(value: unknown): string {
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
             <i class="pi pi-list text-primary-500"></i>
-            {{ t('views.server_activities.tabs.details') }}
+            {{ t('views.') }}
         </h3>
 
         <div class="space-y-6">
-            <!-- Enums -->
-            <div>
-                <h4 class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
-                    {{ t('common.fields.tags') }}
-                </h4>
-                <div v-if="enums && enums.length > 0" class="flex flex-wrap gap-2">
-                    <div
-                        v-for="item in enums"
-                        :key="item.enum_selection_public_id"
-                        class="px-3 py-1.5 bg-surface-100 rounded-lg border border-surface-200 text-sm"
-                    >
-                        <span class="text-surface-500 mr-2">{{ item.enum_definition_name }}:</span>
-                        <span class="font-medium text-surface-900">{{ formatValue(item.selected_value) }}</span>
-                    </div>
-                </div>
-                 <div v-else class="text-sm text-surface-400 italic">
-                    {{ t('views.server_sessions.add_modal.no_enum_definitions') }}
-                </div>
-            </div>
-
-            <div class="h-px bg-surface-100"></div>
-
             <!-- Custom Metadata -->
             <div>
                 <h4 class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
                     {{ t('common.fields.metadata') }}
                 </h4>
-                <div v-if="metadata && metadata.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div
+                    v-if="metadata && metadata.length > 0"
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
                     <div
                         v-for="item in metadata"
                         :key="item.metadata_selection_public_id"
                         class="p-3 bg-surface-50 rounded-xl border border-surface-100"
                     >
                         <div class="text-sm text-surface-500 mb-1">{{ item.label }}</div>
-                        <div class="font-medium text-surface-900">{{ formatValue(item.value) }}</div>
+                        <div class="font-medium text-surface-900">
+                            {{ formatValue(item.value) }}
+                        </div>
                     </div>
                 </div>
                 <div v-else class="text-sm text-surface-400 italic">

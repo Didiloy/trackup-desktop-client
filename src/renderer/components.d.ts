@@ -203,6 +203,7 @@ declare module 'vue' {
     SessionCardList: typeof import('./src/components/sessions/SessionCardList.vue')['default']
     SessionCreateDialog: typeof import('./src/components/sessions/create/SessionCreateDialog.vue')['default']
     SessionCreateForm: typeof import('./src/components/sessions/create/SessionCreateForm.vue')['default']
+    SessionEnumDefinitions: typeof import('./src/components/sessions/profile/SessionEnumDefinitions.vue')['default']
     SessionEnumsForm: typeof import('./src/components/sessions/create/SessionEnumsForm.vue')['default']
     SessionFilterBar: typeof import('./src/components/sessions/SessionFilterBar.vue')['default']
     SessionMetadata: typeof import('./src/components/sessions/profile/SessionMetadata.vue')['default']

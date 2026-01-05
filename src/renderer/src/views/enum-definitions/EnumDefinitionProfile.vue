@@ -25,7 +25,7 @@ const { t } = useI18n()
 const toast = useToast()
 const route = useRoute()
 const router = useRouter()
-const definitionId = computed(() => route.params.definitionId as string)
+const definitionId = computed(() => route.params.enumDefinitionId as string)
 
 const server_store = useServerStore()
 const { deleteEnumDefinition } = useEnumDefinitionCRUD()

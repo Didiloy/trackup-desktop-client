@@ -46,7 +46,7 @@ const server_store = useServerStore()
 const { getEnumDefinitionStats } = useEnumDefinitionStatsCRUD()
 
 const definitionId = computed(
-    () => (route.params.definitionId as string) || props.config?.enumDefinitionId
+    () => (route.params.enumDefinitionId as string) || props.config?.enumDefinitionId
 )
 const local_stats = ref<IEnumDefinitionStats | null>(null)
 const isLoadingLocal = ref(false)
@@ -106,7 +106,10 @@ const usageCountLabel = computed(() => {
         :loading="isLoadingLocal"
     >
         <template #corner>
-            <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
+            <EnumDefinitionIdentityCorner
+                :show="props.showIdentity"
+                :definition-id="definitionId"
+            />
         </template>
     </BaseOverviewStatWidget>
 </template>
