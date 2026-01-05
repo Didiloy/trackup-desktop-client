@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
+import Icon from '@/components/common/icons/Icon.vue'
+
 defineProps<{
     label: string
     description?: string
     value: string | number
     subValue?: string
-    icon: string
+    icon: string | Component
     color: string
     bg: string
     loading?: boolean
@@ -20,7 +23,7 @@ defineProps<{
         <slot name="corner" />
         <div class="flex items-start justify-between mb-4">
             <div :class="`p-3 rounded-xl ${bg} ${color}`">
-                <i :class="icon" class="text-xl"></i>
+                <Icon :icon="icon" class="text-xl" />
             </div>
         </div>
         <div class="flex-1 flex flex-col">

@@ -12,6 +12,7 @@ import {
 import type { IMemberStats } from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -83,7 +84,7 @@ const value = computed(() => (statsData.value ? statsData.value.total_sessions.t
     <BaseOverviewStatWidget
         :label="t('views.server_members.card.total_sessions')"
         :value="value"
-        icon="pi pi-list"
+        :icon="SessionIcon"
         color="text-blue-500"
         bg="bg-blue-50"
         :loading="isLoading"

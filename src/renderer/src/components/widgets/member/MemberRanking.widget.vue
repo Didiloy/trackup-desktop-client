@@ -13,6 +13,8 @@ import {
 import type { IMemberRanking } from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
+import Icon from '@/components/common/icons/Icon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -98,7 +100,7 @@ const statsData = computed(() => {
         {
             label: t('views.server_members.ranking.total_sessions'),
             value: ranking.value.total_sessions.toString(),
-            icon: 'pi pi-list'
+            icon: SessionIcon
         }
     ]
 })
@@ -115,7 +117,7 @@ const statsData = computed(() => {
                 class="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-primary-50 to-primary-100"
             >
                 <div class="flex items-center gap-3">
-                    <i :class="[item.icon, 'text-primary-600 text-2xl']"></i>
+                    <Icon :icon="item.icon" class="text-primary-600 text-2xl" />
                     <div>
                         <div class="text-sm font-medium text-gray-700">{{ item.label }}</div>
                         <div class="text-xs text-gray-500">
@@ -141,7 +143,7 @@ const statsData = computed(() => {
                     class="flex items-center justify-between p-3 rounded-xl bg-surface-100"
                 >
                     <div class="flex items-center gap-2">
-                        <i :class="[stat.icon, 'text-gray-500']"></i>
+                        <Icon :icon="stat.icon" class="text-gray-500" />
                         <span class="text-sm">{{ stat.label }}</span>
                     </div>
                     <span class="font-semibold">{{ stat.value }}</span>

@@ -13,9 +13,9 @@ import type { IMemberStatsDetails } from '@shared/contracts/interfaces/entities-
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-import { ICONS } from '@/constants/icons'
 import Icon from '@/components/common/icons/Icon.vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -84,7 +84,7 @@ const statsList = computed(() => {
         {
             label: t('views.server_members.details.total_sessions'),
             value: details.value.total_sessions,
-            icon: 'pi pi-list'
+            icon: SessionIcon
         },
         {
             label: t('views.server_members.details.total_duration'),
@@ -119,7 +119,7 @@ const favoriteActivity = computed(() => details.value?.favorite_activity)
                     :key="stat.label"
                     class="p-3 rounded-2xl bg-surface-50 border border-surface-100 flex flex-col items-center text-center"
                 >
-                    <i :class="[stat.icon, 'text-primary-500 mb-2']"></i>
+                    <Icon :icon="stat.icon" class="text-primary-500 mb-2" />
                     <div
                         class="text-[10px] text-surface-500 uppercase font-bold tracking-wider mb-1"
                     >
@@ -140,7 +140,7 @@ const favoriteActivity = computed(() => details.value?.favorite_activity)
                     <div
                         class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary-600 shadow-sm"
                     >
-                        <ActivityIcon/>
+                        <ActivityIcon />
                     </div>
                     <div>
                         <div
