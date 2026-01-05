@@ -150,6 +150,7 @@
             "joined_date": "Date d'inscription",
             "search_field": "Champ de recherche",
             "search_by": "Rechercher par",
+            "search_mode": "Mode de recherche",
             "duration": {
                 "title": "Durée (minutes)"
             },
