@@ -8,6 +8,7 @@ import { formatDate } from '@/utils'
 import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
 import { computed } from 'vue'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
+import MembersIcon from '@/components/common/icons/MembersIcon.vue'
 
 const { t } = useI18n()
 const server_store = useServerStore()
@@ -89,7 +90,7 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
                         <div
                             class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700"
                         >
-                            <i class="pi pi-users text-xs"></i>
+                            <MembersIcon/>
                             <span class="text-sm font-medium">{{ session.participants_count }}</span>
                         </div>
 

@@ -6,6 +6,7 @@ import type {
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useServerStore } from '@/stores/server'
 import { useRouter } from 'vue-router'
+import MembersIcon from '@/components/common/icons/MembersIcon.vue'
 
 interface Props {
     participants: ISessionMember[]
@@ -35,7 +36,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
 <template>
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
-            <i class="pi pi-users text-primary-500"></i>
+            <MembersIcon class="text-primary-500" />
             {{ t('views.server_sessions.session_details.participants') }}
             <Badge :value="participants.length" severity="secondary" class="ml-auto" />
         </h3>

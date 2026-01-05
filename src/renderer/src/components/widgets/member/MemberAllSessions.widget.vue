@@ -13,6 +13,7 @@ import type { ISessionListItem } from '@shared/contracts/interfaces/entities/ses
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
+import MembersIcon from '@/components/common/icons/MembersIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -153,7 +154,7 @@ const navigateToSession = async (sessionId: string): Promise<void> => {
                                 v-if="session.participants_count > 0"
                                 class="flex items-center gap-1.5"
                             >
-                                <i class="pi pi-users"></i>
+                                <MembersIcon/>
                                 <span>{{ session.participants_count }}</span>
                             </div>
 

@@ -3,6 +3,7 @@ import type { IServerMember } from '@shared/contracts/interfaces/entities/member
 import { computed } from 'vue'
 import MemberCard from '@/components/members/MemberCard.vue'
 import { useI18n } from 'vue-i18n'
+import MembersIcon from '@/components/common/icons/MembersIcon.vue'
 
 const { t } = useI18n()
 
@@ -58,7 +59,7 @@ const isEmpty = computed(() => props.members.length === 0 && !props.loading)
             v-else-if="isEmpty"
             class="flex flex-col items-center justify-center h-full min-h-[400px]"
         >
-            <i class="pi pi-users text-7xl text-surface-300 mb-4"></i>
+            <MembersIcon class="text-7xl text-surface-300 mb-4" />
             <p class="text-xl font-medium text-surface-600">{{ t('common.filters.no_results') }}</p>
             <p class="text-sm text-surface-500 mt-2">{{ t('common.filters.try_adjusting') }}</p>
         </div>

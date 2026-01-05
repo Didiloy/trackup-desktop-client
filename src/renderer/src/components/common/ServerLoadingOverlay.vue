@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerLoading } from '@/composables/servers/useServerLoading'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import ServerIcon from '@/components/common/icons/ServerIcon.vue'
 
 const { t } = useI18n()
 const { state } = useServerLoading()
@@ -40,8 +41,8 @@ const getStepLabel = (key: string): string => {
                 <!-- Animated community icon -->
                 <div class="relative w-24 h-24 flex items-center justify-center">
                     <!-- Main icon -->
-                    <i
-                        class="pi pi-compass text-primary-500 animate-icon-bounce z-10"
+                    <ServerIcon
+                        class="text-primary-500 animate-icon-bounce z-10"
                         style="font-size: 2.2rem"
                     />
                 </div>
@@ -94,9 +95,9 @@ const getStepLabel = (key: string): string => {
 
                         <!-- Step icon and label -->
                         <div class="flex items-center gap-3">
-                            <i
+                            <component
+                                :is="step.icon"
                                 :class="[
-                                    step.icon,
                                     'text-lg transition-colors duration-300',
                                     {
                                         'text-surface-600': step.status === 'pending',
@@ -105,7 +106,7 @@ const getStepLabel = (key: string): string => {
                                         'text-green-500': step.status === 'completed'
                                     }
                                 ]"
-                            ></i>
+                            ></component>
                             <span
                                 class="text-sm transition-all duration-300"
                                 :class="{
