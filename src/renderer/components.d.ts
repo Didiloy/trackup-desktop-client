@@ -130,6 +130,7 @@ declare module 'vue' {
     'MemberRankingOverview.widget': typeof import('./src/components/widgets/member/MemberRankingOverview.widget.vue')['default']
     MembersAside: typeof import('./src/components/asides/MembersAside.vue')['default']
     MembersCardGrid: typeof import('./src/components/members/MembersCardGrid.vue')['default']
+    MembersFilterBar: typeof import('./src/components/members/MembersFilterBar.vue')['default']
     MembersHeader: typeof import('./src/components/members/MembersHeader.vue')['default']
     MembersList: typeof import('./src/components/members/list/MembersList.vue')['default']
     MembersListItems: typeof import('./src/components/members/list/MembersListItems.vue')['default']

@@ -1,33 +1,48 @@
 <script setup lang="ts">
+import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { computed, ref, watch } from 'vue'
 import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
-import TextFilter from '@/components/filters/TextFilter.vue'
 import SelectFilter from '@/components/filters/SelectFilter.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
 import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
 import MemberAutocomplete from '@/components/members/MemberAutocomplete.vue'
-import { useServerStore } from '@/stores/server'
-import Button from 'primevue/button'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
+import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
+import FilterGroup from '@/components/filters/FilterGroup.vue'
 
-defineProps<{
-    totalMembers?: number
-}>()
+interface Props {
+    search?: string
+    searchField?: 'nickname' | 'email'
+    joinedStartDate?: Date
+    joinedEndDate?: Date
+    count?: number
+}
 
-const emit = defineEmits<{
+interface Emits {
     (e: 'update:search', value: string): void
     (e: 'update:searchField', value: 'nickname' | 'email'): void
     (e: 'update:joinedStartDate', value: Date | undefined): void
     (e: 'update:joinedEndDate', value: Date | undefined): void
-    (e: 'invite'): void
-}>()
+}
 
+const props = withDefaults(defineProps<Props>(), {
+    search: '',
+    searchField: 'nickname',
+    joinedStartDate: undefined,
+    joinedEndDate: undefined,
+    count: 0
+})
+
+const emit = defineEmits<Emits>()
 const { t } = useI18n()
-const search = ref('')
-const search_field = ref<'nickname' | 'email'>('nickname')
-const joined_date_range = ref<Date[] | null>(null)
-const server_store = useServerStore()
+
+const localSearch = ref(props.search)
+const localSearchField = ref<'nickname' | 'email'>(props.searchField)
+const localDateRange = ref<Date[] | null>(
+    props.joinedStartDate || props.joinedEndDate
+        ? ([props.joinedStartDate, props.joinedEndDate].filter(Boolean) as Date[])
+        : null
+)
 const selectedMember = ref<IServerMember | null>(null)
 
 const searchFieldOptions = computed(() => [
@@ -37,15 +52,40 @@ const searchFieldOptions = computed(() => [
 
 const activeFiltersCount = computed(() => {
     let count = 0
-    if (joined_date_range.value && joined_date_range.value.length > 0) count++
+    if (localDateRange.value && localDateRange.value.length > 0) count++
     return count
 })
 
-watch(search, (val) => emit('update:search', val))
-watch(search_field, (val) => emit('update:searchField', val))
+const hasActiveFilters = computed(() => {
+    return localSearch.value !== '' || activeFiltersCount.value > 0
+})
+
+watch(
+    () => props.search,
+    (v) => {
+        if (v !== localSearch.value) localSearch.value = v
+    }
+)
+
+watch(
+    () => props.searchField,
+    (v) => {
+        if (v !== localSearchField.value) localSearchField.value = v
+    }
+)
+
+function onSearchInput(value: string): void {
+    localSearch.value = value
+    emit('update:search', value)
+}
+
+function onSearchFieldChange(value: unknown): void {
+    localSearchField.value = value as 'nickname' | 'email'
+    emit('update:searchField', value as 'nickname' | 'email')
+}
 
 function onDateRangeChange(value: Date[] | null): void {
-    joined_date_range.value = value
+    localDateRange.value = value
     if (value && value.length === 2) {
         emit('update:joinedStartDate', value[0])
         emit('update:joinedEndDate', value[1])
@@ -58,60 +98,52 @@ function onDateRangeChange(value: Date[] | null): void {
     }
 }
 
-function clearFilters(): void {
-    joined_date_range.value = null
-    emit('update:joinedStartDate', undefined)
-    emit('update:joinedEndDate', undefined)
-}
-
 function handleMemberSelect(member: IServerMember | null): void {
     selectedMember.value = member
     if (member) {
-        search.value = member.nickname || ''
+        localSearch.value = member.nickname || ''
+        emit('update:search', member.nickname || '')
     } else {
-        search.value = ''
+        localSearch.value = ''
+        emit('update:search', '')
     }
+}
+
+function clearFilters(): void {
+    localSearch.value = ''
+    localSearchField.value = 'nickname'
+    localDateRange.value = null
+    emit('update:search', '')
+    emit('update:searchField', 'nickname')
+    emit('update:joinedStartDate', undefined)
+    emit('update:joinedEndDate', undefined)
 }
 </script>
 
 <template>
-    <div class="flex flex-row items-center justify-between w-full h-12 p-2">
-        <h2 class="text-2xl font-bold">
-            {{ t('views.server_members.title') }}
-        </h2>
-        <div v-if="server_store.isOwnership" class="flex flex-row items-center justify-center">
-            <Button
-                :label="t('views.server_members.invite_members')"
-                icon="pi pi-user-plus"
-                size="small"
-                :style="{ background: 'var(--gradient-primary)' }"
-                @click="emit('invite')"
-            />
-        </div>
-    </div>
-
-    <div class="w-full px-2 pb-2">
-        <GenericFilterBar :count="totalMembers">
-            <template #primary-filters>
-                <span class="flex-1 max-w-[200px]">
+    <GenericFilterBar :count="count">
+        <template #primary-filters>
+            <FilterGroup icon="pi pi-search" class="flex-1">
+                <span class="w-[220px]">
                     <MemberAutocomplete
-                        :model-value="search"
+                        :model-value="localSearch"
                         :placeholder="
-                            search_field === 'nickname'
+                            localSearchField === 'nickname'
                                 ? t('placeholder.search_nickname')
                                 : t('placeholder.search_email')
                         "
-                        class="sm:w-96"
+                        size="small"
                         @select="handleMemberSelect"
-                        @update:model-value="search = $event"
+                        @update:model-value="onSearchInput"
                     />
                 </span>
-            </template>
+            </FilterGroup>
+        </template>
 
-            <template #actions>
+        <template #advanced-filters>
+            <div class="flex-1 flex items-center justify-end gap-2">
                 <GenericPopover
                     button-icon="pi pi-filter"
-                    :popover-class="'w-fit-content'"
                     :button-badge="
                         activeFiltersCount > 0 ? activeFiltersCount.toString() : undefined
                     "
@@ -119,7 +151,7 @@ function handleMemberSelect(member: IServerMember | null): void {
                 >
                     <template #content>
                         <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-end">
                                 <span class="font-semibold text-surface-900">{{
                                     t('common.filters.title')
                                 }}</span>
@@ -132,15 +164,16 @@ function handleMemberSelect(member: IServerMember | null): void {
                                 />
                             </div>
 
-                            <!-- Name Or Email Sort -->
+                            <!-- Search Field Filter -->
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-medium text-surface-700">{{
-                                    t('views.server_members.title_base').toLowerCase()
+                                    t('common.filters.search_by')
                                 }}</label>
                                 <SelectFilter
-                                    v-model="search_field"
+                                    :model-value="localSearchField"
                                     :options="searchFieldOptions"
                                     class="w-48"
+                                    @update:model-value="onSearchFieldChange"
                                 />
                             </div>
 
@@ -150,14 +183,23 @@ function handleMemberSelect(member: IServerMember | null): void {
                                     t('common.filters.joined_date')
                                 }}</label>
                                 <DateRangeFilter
-                                    :model-value="joined_date_range"
+                                    :model-value="localDateRange"
                                     @update:model-value="onDateRangeChange"
                                 />
                             </div>
                         </div>
                     </template>
                 </GenericPopover>
-            </template>
-        </GenericFilterBar>
-    </div>
+
+                <Button
+                    v-if="hasActiveFilters"
+                    :label="t('common.actions.clear_all')"
+                    link
+                    size="small"
+                    class="p-0"
+                    @click="clearFilters"
+                />
+            </div>
+        </template>
+    </GenericFilterBar>
 </template>

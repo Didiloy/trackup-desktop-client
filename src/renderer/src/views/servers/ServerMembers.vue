@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import MembersHeader from '@/components/members/MembersHeader.vue'
+import MembersFilterBar from '@/components/members/MembersFilterBar.vue'
 import MembersCardGrid from '@/components/members/MembersCardGrid.vue'
 import { useToast } from 'primevue/usetoast'
 import { copyKeyToClipBoard } from '@/utils'
@@ -57,14 +57,33 @@ async function handleInvite(): Promise<void> {
 
 <template>
     <div class="flex flex-col items-center justify-start w-full h-full">
-        <MembersHeader
-            :total-members="server_store.getMembers?.length || 0"
-            @update:search="search_query = $event"
-            @update:search-field="search_field = $event"
-            @update:joined-start-date="joined_start_date = $event"
-            @update:joined-end-date="joined_end_date = $event"
-            @invite="handleInvite"
-        />
+        <div class="flex flex-row items-center justify-between w-full h-12 p-2">
+            <h2 class="text-2xl font-bold">
+                {{ i18n.t('views.server_members.title') }}
+            </h2>
+            <div v-if="server_store.isOwnership" class="flex flex-row items-center justify-center">
+                <Button
+                    :label="i18n.t('views.server_members.invite_members')"
+                    icon="pi pi-user-plus"
+                    size="small"
+                    @click="handleInvite"
+                />
+            </div>
+        </div>
+
+        <div class="w-full px-2 pb-2">
+            <MembersFilterBar
+                :search="search_query"
+                :search-field="search_field"
+                :joined-start-date="joined_start_date"
+                :joined-end-date="joined_end_date"
+                :count="filteredMembers.length"
+                @update:search="(v) => (search_query = v)"
+                @update:search-field="(v) => (search_field = v)"
+                @update:joined-start-date="(v) => (joined_start_date = v)"
+                @update:joined-end-date="(v) => (joined_end_date = v)"
+            />
+        </div>
 
         <div class="flex-1 w-full px-2 pb-2 overflow-hidden">
             <MembersCardGrid :members="filteredMembers" :loading="loading" />
