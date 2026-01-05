@@ -92,8 +92,15 @@ function handleLike() {
 
                         <!-- Title & Details -->
                         <div class="flex-1 min-w-0 mb-1">
-                            <div
-                                class="flex items-center gap-2 text-surface-600 mb-1 font-medium text-sm"
+                            <h1
+                                class="text-3xl font-bold text-surface-900 truncate"
+                                :title="session.title"
+                            >
+                                {{ session.title }}
+                            </h1>
+                            <h3
+                                class="flex items-center gap-2 text-surface-600 mb-1 font-medium"
+                                :class="{ 'text-3xl font-bold': session.title === '' }"
                             >
                                 <router-link
                                     :to="{
@@ -107,13 +114,7 @@ function handleLike() {
                                 >
                                     {{ session.activity.name }}
                                 </router-link>
-                            </div>
-                            <h1
-                                class="text-3xl font-bold text-surface-900 truncate"
-                                :title="session.title"
-                            >
-                                {{ session.title }}
-                            </h1>
+                            </h3>
                         </div>
 
                         <!-- Actions -->
@@ -125,13 +126,12 @@ function handleLike() {
                                 :outlined="!session.liked_by_me"
                                 @click="handleLike"
                             />
-                            <!-- Add Edit/Delete buttons logic here if needed, based on permissions -->
                         </div>
                     </div>
 
-                    <!-- Widgets Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-                        <!-- Date Widget -->
+                    <!-- Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full">
+                        <!-- Date -->
                         <div
                             class="bg-surface-0 border border-surface-200 rounded-xl p-4 flex flex-col gap-2 shadow-xs"
                         >
@@ -146,7 +146,7 @@ function handleLike() {
                             </div>
                         </div>
 
-                        <!-- Duration Widget -->
+                        <!-- Duration -->
                         <div
                             class="bg-surface-0 border border-surface-200 rounded-xl p-4 flex flex-col gap-2 shadow-xs"
                         >
@@ -160,34 +160,6 @@ function handleLike() {
                                 {{ formatMinutesToLabel(Number(session.duration)) }}
                             </div>
                         </div>
-
-                        <!-- Creator Widget -->
-                        <div
-                            class="bg-surface-0 border border-surface-200 rounded-xl p-4 flex flex-col gap-2 shadow-xs"
-                            v-if="session.creator"
-                        >
-                            <div
-                                class="flex items-center gap-2 text-surface-500 text-sm font-medium"
-                            >
-                                <i class="pi pi-user text-primary-500"></i>
-                                <span>{{ t('common.fields.creator') }}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <Avatar
-                                    :image="session.creator.avatar_url ?? undefined"
-                                    :label="
-                                        !session.creator.avatar_url
-                                            ? session.creator.nickname.charAt(0).toUpperCase()
-                                            : undefined
-                                    "
-                                    shape="circle"
-                                    class="w-6 h-6"
-                                />
-                                <span class="text-lg font-semibold text-surface-900 truncate">{{
-                                    session.creator.nickname
-                                }}</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -199,7 +171,7 @@ function handleLike() {
                         class="text-sm font-medium text-surface-500 mb-2 uppercase tracking-wide flex items-center gap-2"
                     >
                         <i class="pi pi-align-left text-primary-500"></i>
-                        {{ t('common.fields.description') }}
+                        {{ t('views.server_sessions.session_details.comment') }}
                     </h3>
                     <p
                         v-if="session.comment"
@@ -207,11 +179,8 @@ function handleLike() {
                     >
                         {{ session.comment }}
                     </p>
-                    <p
-                        v-else
-                        class="text-surface-400 italic"
-                    >
-                        {{ t('views.session_profile.no_description') }}
+                    <p v-else class="text-surface-400 italic">
+                        {{ t('views.server_sessions.session_details.no_comment') }}
                     </p>
                 </div>
             </div>

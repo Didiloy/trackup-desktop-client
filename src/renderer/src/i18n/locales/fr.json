@@ -664,8 +664,7 @@
                 "extra_participants": "Participants supplémentaires",
                 "select_participants": "Sélectionner les participants",
                 "comment": "Commentaire",
-                "date": "Date",
-                "duration": "Durée"
+                "no_comment": "Aucun commentaire"
             }
         },
         "server_settings": {

@@ -6,7 +6,7 @@ interface Props {
     metadata?: ISessionMetadata[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const { t } = useI18n()
 
 function formatValue(value: unknown): string {
@@ -19,16 +19,13 @@ function formatValue(value: unknown): string {
 <template>
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
-            <i class="pi pi-list text-primary-500"></i>
-            {{ t('views.') }}
+            <i class="pi pi-database text-primary-500"></i>
+            {{ t('common.steps.metadata') }}
         </h3>
 
         <div class="space-y-6">
             <!-- Custom Metadata -->
             <div>
-                <h4 class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">
-                    {{ t('common.fields.metadata') }}
-                </h4>
                 <div
                     v-if="metadata && metadata.length > 0"
                     class="grid grid-cols-1 sm:grid-cols-2 gap-4"

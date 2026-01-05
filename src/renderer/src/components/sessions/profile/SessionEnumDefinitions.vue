@@ -33,7 +33,7 @@ async function navigateToEnumDefinition(enum_definition_public_id: string): Prom
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
             <i class="pi pi-list text-primary-500"></i>
-            {{ t('common.fields.tags') }}
+            {{ t('common.steps.enum_definitions') }}
         </h3>
 
         <div v-if="enums && enums.length > 0" class="flex flex-wrap gap-2">
@@ -44,7 +44,9 @@ async function navigateToEnumDefinition(enum_definition_public_id: string): Prom
                 @click="navigateToEnumDefinition(item.enum_definition_public_id)"
             >
                 <span class="text-surface-500 mr-2">{{ item.enum_definition_name }}:</span>
-                <span class="font-medium text-surface-900">{{ formatValue(item.selected_value) }}</span>
+                <span class="font-medium text-surface-900">{{
+                    formatValue(item.selected_value)
+                }}</span>
             </div>
         </div>
         <div v-else class="text-sm text-surface-400 italic">

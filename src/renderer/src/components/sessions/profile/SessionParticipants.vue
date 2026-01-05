@@ -36,7 +36,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
     <div class="bg-surface-0 border border-surface-200 rounded-2xl shadow-sm p-6">
         <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
             <i class="pi pi-users text-primary-500"></i>
-            {{ t('views.server_activities.tabs.participants') }}
+            {{ t('views.server_sessions.session_details.participants') }}
             <Badge :value="participants.length" severity="secondary" class="ml-auto" />
         </h3>
 
@@ -44,7 +44,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
             <div
                 v-for="participant in participants"
                 :key="participant.public_id"
-                class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-50 transition-colors cursor-pointer hover:shadow-sm"
+                class="flex items-center gap-3 p-2 m-2 rounded-xl hover:bg-surface-50 transition-colors cursor-pointer hover:shadow"
                 :class="{ 'bg-primary-50/50': isCreator(participant, creator) }"
                 @click="goToMemberProfile(participant)"
             >
@@ -63,9 +63,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
                 />
                 <div class="flex-1 min-w-0">
                     <div class="font-medium text-surface-900 truncate flex items-center gap-2">
-                        <span
-                            class="text-sm text-surface-500 hover:underline cursor-pointer"
-                        >
+                        <span class="text-sm text-surface-500 hover:underline cursor-pointer">
                             {{ server_store.getMemberById(participant.public_id)?.nickname }}
                         </span>
                         <i
