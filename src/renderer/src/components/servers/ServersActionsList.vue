@@ -6,6 +6,7 @@ import type { Component } from 'vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 import SessionIcon from '@/components/common/icons/SessionIcon.vue'
+import Icon from '@/components/common/icons/Icon.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -90,10 +91,7 @@ function isActionActive(action: ServerAction): boolean {
             :class="{ 'bg-surface-200 font-semibold': isActionActive(a) }"
             @click="onActionClick(a)"
         >
-            <!-- Si l'icône est une string (classe PrimeIcons), utiliser <i> -->
-            <i v-if="typeof a.icon === 'string'" :class="a.icon" />
-            <!-- Si l'icône est un composant Vue, utiliser <component> -->
-            <component :is="a.icon" v-else />
+            <Icon :icon="a.icon" />
             <span class="text-sm text-surface-900">{{ a.label }}</span>
         </button>
     </div>

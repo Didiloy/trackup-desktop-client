@@ -3,7 +3,7 @@ import type { Component } from 'vue'
 
 interface Props {
     /** L'icône à afficher - soit une classe PrimeIcon (string) soit un composant Vue */
-    icon: string | Component
+    icon: string | Component | undefined | null
     /** Classes CSS supplémentaires à appliquer */
     class?: string
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import Icon from '@/components/common/icons/Icon.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -88,8 +89,7 @@ const safeCurrent = computed(() => {
                                             : 'bg-surface-100'
                                     "
                                 >
-                                    <i v-if="typeof step.icon === 'string'" :class="step.icon"></i>
-                                    <component :is="step.icon" v-else-if="step.icon" />
+                                    <Icon v-if="step.icon" :icon="step.icon" />
                                     <span v-else>{{ index + 1 }}</span>
                                 </div>
                                 <span class="text-xs font-medium">
