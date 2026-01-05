@@ -30,8 +30,12 @@ const getStepLabel = (key: string): string => {
     <TransitionWrapper name="fade-scale">
         <div
             v-if="state.visible"
-            class="fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm bg-linear-to-br from-primary-500/15 via-purple-500/10 to-blue-500/15 animate-bg-pulse"
+            class="fixed inset-0 z-9999 flex items-center justify-center"
         >
+            <!-- Animated background -->
+            <div
+                class="absolute inset-0 backdrop-blur-sm bg-linear-to-br from-primary-500/15 via-secondary-500/10 to-primary-500/15 animate-bg-pulse"
+            ></div>
             <!-- Content -->
             <div
                 class="relative flex flex-col items-center gap-6 p-12 bg-surface-0/95 rounded-3xl shadow-2xl border border-primary-500/10 max-w-[420px] w-[90%]"
@@ -49,11 +53,14 @@ const getStepLabel = (key: string): string => {
                         class="absolute inset-0 border-2 border-primary-500/30 rounded-full animate-ring-pulse [animation-delay:1s]"
                     ></div>
                     <!-- Main icon -->
-                    <i class="pi pi-users text-5xl text-primary-500 animate-icon-bounce"></i>
+                    <i class="pi pi-compass text-primary-500 animate-icon-bounce"></i>
                 </div>
 
                 <!-- Server name if provided -->
-                <h2 v-if="state.serverName" class="text-xl font-semibold text-surface-900 m-0 text-center">
+                <h2
+                    v-if="state.serverName"
+                    class="text-xl font-semibold text-surface-900 m-0 text-center"
+                >
                     {{ state.serverName }}
                 </h2>
 
@@ -69,9 +76,7 @@ const getStepLabel = (key: string): string => {
                         :key="step.key"
                         class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 relative"
                         :class="{
-                            'bg-primary-500/8': step.status === 'loading',
-                            'opacity-70': step.status === 'completed',
-                            'opacity-50': step.status === 'pending'
+                            'bg-primary-500/8': step.status === 'loading'
                         }"
                     >
                         <!-- Step indicator -->
@@ -114,9 +119,8 @@ const getStepLabel = (key: string): string => {
                             <span
                                 class="text-sm transition-all duration-300"
                                 :class="{
-                                    'text-surface-700 font-medium': step.status === 'pending',
-                                    'text-surface-900 font-semibold': step.status === 'loading',
-                                    'text-surface-700 font-medium': step.status === 'completed'
+                                    'text-surface-700 font-medium': step.status === 'pending' || step.status === 'completed',
+                                    'text-surface-900 font-semibold': step.status === 'loading'
                                 }"
                             >
                                 {{ getStepLabel(step.key) }}
@@ -145,9 +149,11 @@ const getStepLabel = (key: string): string => {
     0%,
     100% {
         opacity: 0.8;
+        background-color: rgba(var(--p-primary-500), 0.15);
     }
     50% {
         opacity: 1;
+        background-color: rgba(var(--p-primary-500), 0.2);
     }
 }
 
