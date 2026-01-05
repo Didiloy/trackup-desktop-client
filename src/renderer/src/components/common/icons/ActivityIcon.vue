@@ -8,5 +8,5 @@ defineProps<Props>()
 </script>
 
 <template>
-    <i :class="['pi pi-amazon', $props.class]"></i>
+    <i :class="['pi pi-bell', $props.class]"></i>
 </template>

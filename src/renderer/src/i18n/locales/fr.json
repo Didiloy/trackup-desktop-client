@@ -86,7 +86,8 @@
             "settings": "Paramètres",
             "yes": "Oui",
             "no": "Non",
-            "no_chronos": "Aucun chrono enregistré"
+            "no_chronos": "Aucun chrono enregistré",
+            "none": "Aucun"
         },
         "time": {
             "hours": "heures",
@@ -114,7 +115,8 @@
             "weekly": "Hebdomadaire",
             "monthly": "Mensuel",
             "yearly": "Annuel",
-            "custom": "Personnalisé"
+            "custom": "Personnalisé",
+            "select": "Sélectionner une période"
         },
         "weekdays": {
             "short": {

@@ -113,6 +113,7 @@ const currentLocale = localStorage.getItem('locale') || getBrowserLocale()
 
 // Create i18n instance
 const i18n = createI18n({
+    legacy: false, // Use Composition API mode
     locale: currentLocale,
     fallbackLocale: 'en',
     messages: {}, // Dynamic loading
@@ -134,7 +135,7 @@ async function setI18nLanguage(locale: string): Promise<string | null> {
     const messages = await loadLanguageAsync(locale)
     if (messages) {
         i18n.global.setLocaleMessage(locale, messages)
-        i18n.global.locale = locale
+        i18n.global.locale.value = locale // Use .value for Composition API mode
         return locale
     }
     return null

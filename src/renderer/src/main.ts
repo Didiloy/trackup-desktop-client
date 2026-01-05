@@ -42,20 +42,20 @@ app.use(i18n)
 async function initializeApp(): Promise<void> {
     try {
         // If we have preferences with a language setting, use it
-        const locale = i18n.global.locale // Default
+        const locale = i18n.global.locale.value // Get value from ref (Composition API mode)
 
         // Load the language
         const messages = await loadLanguageAsync(locale)
         if (messages) {
             i18n.global.setLocaleMessage(locale, messages)
-            i18n.global.locale = locale
+            i18n.global.locale.value = locale
         }
 
         // Mount the app after language is loaded
         app.mount('#app')
     } catch (error) {
         // If we can't load preferences, fall back to default behavior
-        const locale = i18n.global.locale
+        const locale = i18n.global.locale.value // Get value from ref (Composition API mode)
         const messages = await loadLanguageAsync(locale)
         if (messages) {
             i18n.global.setLocaleMessage(locale, messages)
@@ -67,7 +67,7 @@ async function initializeApp(): Promise<void> {
 }
 
 // Start the initialization
-;(async function () {
+; (async function () {
     await initializeApp()
     document.title = i18n.global.t('app.title')
 })()

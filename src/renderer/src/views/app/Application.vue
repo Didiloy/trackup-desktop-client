@@ -23,11 +23,11 @@ const isServerActionsAsideVisible = computed(
             class="grow bg-surface-50 h-full w-full rounded-r-xl flex flex-row overflow-hidden p-6"
             :class="{ 'rounded-l-xl': !isServerActionsAsideVisible }"
         >
-            <TransitionWrapper name="fade" mode="out-in" :duration="1">
-                <router-view v-slot="{ Component, route: currentRoute }">
+            <router-view v-slot="{ Component, route: currentRoute }">
+                <TransitionWrapper name="fade" mode="out-in" :duration="0.25">
                     <component :is="Component" :key="currentRoute.path" />
-                </router-view>
-            </TransitionWrapper>
+                </TransitionWrapper>
+            </router-view>
         </main>
         <TransitionWrapper name="panel-right">
             <MembersAside
