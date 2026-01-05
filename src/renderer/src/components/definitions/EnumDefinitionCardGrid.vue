@@ -5,6 +5,8 @@ import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum
 import EnumDefinitionCard from './EnumDefinitionCard.vue'
 import EnumDefinitionCreateEditDialog from './EnumDefinitionCreateEditDialog.vue'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
+import MemberIcon from '@/components/common/icons/MemberIcon.vue'
+import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
 
 const { t } = useI18n()
 
@@ -21,7 +23,6 @@ const showCreateDialog = ref(false)
 const definitionToEdit = ref<IEnumDefinition | null>(null)
 
 const isEmpty = computed(() => props.definitions.length === 0 && !props.loading)
-
 
 function openCreateDialog(): void {
     definitionToEdit.value = null
@@ -40,11 +41,7 @@ defineEmits<{
             v-if="loading && definitions.length === 0"
             class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full"
         >
-            <div
-                v-for="i in 6"
-                :key="i"
-                class="bg-surface-0 rounded-3xl overflow-hidden shadow-sm"
-            >
+            <div v-for="i in 6" :key="i" class="bg-surface-0 rounded-3xl overflow-hidden shadow-sm">
                 <Skeleton height="80px" class="!rounded-none" />
                 <div class="p-5 space-y-3">
                     <Skeleton width="70%" height="1.5rem" />
@@ -59,28 +56,14 @@ defineEmits<{
         </div>
 
         <!-- Empty State -->
+        <!-- Empty State -->
         <div
             v-else-if="isEmpty"
-            class="flex flex-col items-center justify-center h-full min-h-[400px] bg-gradient-to-br from-surface-50 to-surface-100 rounded-3xl border-2 border-dashed border-surface-200"
+            class="flex flex-col items-center justify-center h-full min-h-[400px]"
         >
-            <div
-                class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center mb-5 shadow-lg shadow-primary-500/10"
-            >
-                <i class="pi pi-list text-3xl text-primary-600"></i>
-            </div>
-            <h3 class="text-xl font-bold text-surface-900 mb-2">
-                {{ t('views.server_enum_definitions.no_definitions_title') }}
-            </h3>
-            <p class="text-surface-500 text-sm mb-6 max-w-sm text-center">
-                {{ t('views.server_enum_definitions.no_definitions') }}
-            </p>
-            <Button
-                :label="t('views.server_enum_definitions.add_definition')"
-                icon="pi pi-plus"
-                rounded
-                class="shadow-lg shadow-primary-500/25"
-                @click="openCreateDialog"
-            />
+            <EnumDefinitionsIcon class="text-7xl text-surface-300 mb-4" />
+            <p class="text-xl font-medium text-surface-600">{{ t('common.filters.no_results') }}</p>
+            <p class="text-sm text-surface-500 mt-2">{{ t('common.filters.try_adjusting') }}</p>
         </div>
 
         <!-- Cards Grid -->
