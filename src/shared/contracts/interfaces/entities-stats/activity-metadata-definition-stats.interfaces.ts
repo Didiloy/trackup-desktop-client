@@ -122,7 +122,6 @@ export interface IPaginatedResponseOfMetadataDefinitionDetailDto {
 export interface IMetadataDefinitionStatsParams {
     page: number
     limit: number
-    period?: EPeriod
 }
 
 export interface IMetadataDefinitionTimelineParams {

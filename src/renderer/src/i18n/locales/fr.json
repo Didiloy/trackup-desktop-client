@@ -736,7 +736,8 @@
             "member": "Membre",
             "activity": "Activité",
             "member_activity": "Membre-Activité",
-            "enum_definition": "Critères de session"
+            "enum_definition": "Critères de session",
+            "activity_metadata": "Attributs d'activité"
         },
         "server": {
             "total_sessions": {
@@ -942,6 +943,34 @@
                 "title": "Moy. Participants",
                 "description": "Moyenne des participants quand ce critère est sélectionné"
             }
+        },
+        "activity_metadata": {
+            "total_usage": {
+                "title": "Utilisations Totales",
+                "description": "Nombre de fois que cet attribut a été rempli"
+            },
+            "unique_values": {
+                "title": "Valeurs Uniques",
+                "description": "Nombre de valeurs différentes"
+            },
+            "most_common_value": {
+                "title": "Valeur la plus commune",
+                "description": "La valeur la plus fréquemment utilisée"
+            },
+            "numeric_summary": {
+                "title": "Récapitulatif Numérique",
+                "description": "Statistiques numériques de l'attribut",
+                "sum": "Somme",
+                "avg": "Moyenne",
+                "min": "Minimum",
+                "max": "Maximum"
+            },
+            "distribution": {
+                "title": "Distribution",
+                "description": "Répartition des valeurs"
+            },
+            "incompatible_type": "Type d'attribut non compatible",
+            "supported_types": "Types supportés : {types}"
         }
     }
 }

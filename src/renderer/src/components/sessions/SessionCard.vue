@@ -87,18 +87,7 @@ async function navigateToSessionProfile(): Promise<void> {
 
                     <!-- Nom de l'activité (secondaire) -->
                     <h3 class="text-md font-medium text-surface-600 drop-shadow">
-                        <router-link
-                            :to="{
-                                name: 'ServerActivityProfile',
-                                params: {
-                                    id: server_store.getPublicId,
-                                    activityId: session.activity.public_id
-                                }
-                            }"
-                            class="text-surface-600 hover:text-primary-600"
-                        >
-                            {{ session.activity.name }}
-                        </router-link>
+                        {{ session.activity.name }}
                     </h3>
                 </div>
             </div>

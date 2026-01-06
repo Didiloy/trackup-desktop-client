@@ -56,6 +56,11 @@ export interface IEnumDefinitionWidgetConfig {
     enumDefinitionId: string
 }
 
+export interface IActivityMetadataWidgetConfig {
+    activityId: string
+    metadataDefinitionId: string
+}
+
 export interface IWidgetLayoutItem {
     i: string // unique instance id (UUID for multiple instances)
     x: number
