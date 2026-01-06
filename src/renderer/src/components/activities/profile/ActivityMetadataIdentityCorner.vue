@@ -5,6 +5,7 @@ import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
+import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 
 const route = useRoute()
 const server_store = useServerStore()
@@ -31,11 +32,6 @@ const activityIdValue = computed(() => props.activityId || (route.params.activit
 const definitionName = computed(() => {
     if (!props.metadataDefinitionId || !props.show) return null
     return localDefinition.value?.label || localDefinition.value?.key || null
-})
-
-const definitionType = computed(() => {
-    if (!props.metadataDefinitionId || !props.show) return null
-    return localDefinition.value?.type || null
 })
 
 async function fetchDefinition(): Promise<void> {
@@ -86,11 +82,7 @@ const isVisible = computed(() => props.show)
         <div
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
-            <MetadataTypeBadge
-                :type="definitionType"
-                class="text-[9px] text-surface-500 hover:text-primary-500"
-                size="sm"
-            />
+            <MetadataIcon/>
             <router-link
                 :to="{
                     name: 'ServerActivityMetadataProfile',

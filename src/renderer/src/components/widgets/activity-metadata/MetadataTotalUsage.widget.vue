@@ -12,6 +12,7 @@ import type {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IMetadataDefinitionSummaryDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -98,10 +99,12 @@ const value = computed(() => local_stats.value?.total_usage || 0)
         :loading="isLoadingLocal"
     >
         <template #corner>
+            <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
             <ActivityMetadataIdentityCorner
                 :show="props.showIdentity"
                 :activity-id="activityId"
                 :metadata-definition-id="definitionId"
+                class="top-13 right-[10px]"
             />
         </template>
     </BaseOverviewStatWidget>

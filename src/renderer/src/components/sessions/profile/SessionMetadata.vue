@@ -1,19 +1,40 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { ISessionMetadata } from '@shared/contracts/interfaces/entities/session.interfaces'
+import type {
+    ISession,
+    ISessionMetadata
+} from '@shared/contracts/interfaces/entities/session.interfaces'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
+import { useRouter } from 'vue-router'
+import { useServerStore } from '@/stores/server'
 
 interface Props {
+    session: ISession
     metadata?: ISessionMetadata[]
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const { t } = useI18n()
+const router = useRouter()
+const server_store = useServerStore()
 
 function formatValue(value: unknown): string {
     if (value === null || value === undefined) return '-'
     if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
     return String(value)
+}
+
+async function navigateToMetaDataProfile(
+    metadata_definition_public_id: string
+): Promise<void> {
+    await router.push({
+        name: 'ServerActivityMetadataProfile',
+        params: {
+            id: server_store.getPublicId,
+            activityId: props.session.activity.public_id,
+            metadataDefinitionId: metadata_definition_public_id
+        }
+    })
 }
 </script>
 
@@ -34,7 +55,8 @@ function formatValue(value: unknown): string {
                     <div
                         v-for="item in metadata"
                         :key="item.metadata_selection_public_id"
-                        class="p-3 bg-surface-50 rounded-xl border border-surface-100"
+                        class="p-3 bg-surface-50 rounded-xl border border-surface-100 hover:border-primary-200 transition-colors cursor-pointer"
+                        @click="navigateToMetaDataProfile(item.metadata_definition_public_id)"
                     >
                         <div class="text-sm text-surface-500 mb-1">{{ item.label }}</div>
                         <div class="font-medium text-surface-900">

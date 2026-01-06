@@ -114,7 +114,7 @@ onMounted(async () => {
                     <div class="lg:col-span-2 space-y-6">
                         <SessionEnumDefinitions :enums="session.enum_definitions" />
 
-                        <SessionMetadata :metadata="session.metadata" />
+                        <SessionMetadata :session="session" :metadata="session.metadata" />
                     </div>
                 </div>
             </div>

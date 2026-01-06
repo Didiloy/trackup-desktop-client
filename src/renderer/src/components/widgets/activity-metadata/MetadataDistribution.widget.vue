@@ -18,6 +18,7 @@ import type {
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -203,6 +204,12 @@ const config = computed<VueUiDonutConfig>(() => ({
             :show="props.showIdentity"
             :activity-id="activityId"
             :metadata-definition-id="definitionId"
+        />
+
+        <ActivityIdentityCorner
+            :show="props.showIdentity"
+            :activity-id="activityId"
+            class="top-4 right-[125px]"
         />
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4">

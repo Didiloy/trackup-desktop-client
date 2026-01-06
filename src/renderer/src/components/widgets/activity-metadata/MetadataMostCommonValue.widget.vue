@@ -17,6 +17,7 @@ import type {
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -64,10 +65,6 @@ const SUPPORTED_TYPES: ActivityMetadataType[] = ['STRING', 'BOOLEAN']
 const isTypeCompatible = computed(() => {
     if (!local_stats.value) return true
     return isMetadataTypeSupported(local_stats.value.metadata_type, SUPPORTED_TYPES)
-})
-
-const translatedSupportedTypes = computed(() => {
-    return getTranslatedMetadataTypes(SUPPORTED_TYPES, t)
 })
 
 async function fetchStats(): Promise<void> {
@@ -128,11 +125,6 @@ const value = computed(() => {
         v-if="!isLoadingLocal && !isTypeCompatible"
         class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm h-full"
     >
-        <ActivityMetadataIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            :metadata-definition-id="definitionId"
-        />
         <div class="flex items-start justify-between mb-4">
             <div class="p-3 rounded-xl bg-amber-100 text-amber-600">
                 <i class="pi pi-star text-xl"></i>
@@ -159,10 +151,12 @@ const value = computed(() => {
         :loading="isLoadingLocal"
     >
         <template #corner>
+            <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
             <ActivityMetadataIdentityCorner
                 :show="props.showIdentity"
                 :activity-id="activityId"
                 :metadata-definition-id="definitionId"
+                class="top-13 right-[10px]"
             />
         </template>
     </BaseOverviewStatWidget>

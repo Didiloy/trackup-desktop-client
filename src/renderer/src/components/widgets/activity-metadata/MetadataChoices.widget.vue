@@ -11,6 +11,7 @@ import type {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -89,6 +90,12 @@ const choices = computed(() => localDefinition.value?.choices || [])
             :show="props.showIdentity"
             :activity-id="activityId"
             :metadata-definition-id="definitionId"
+        />
+
+        <ActivityIdentityCorner
+            :show="props.showIdentity"
+            :activity-id="activityId"
+            class="top-4 right-[125px]"
         />
 
         <!-- Header -->
