@@ -17,10 +17,10 @@ export class MainWindow {
 
     async create(): Promise<BrowserWindow> {
         this.window = new BrowserWindow({
-            width: 1200,
-            minWidth: 950,
-            height: 690,
-            minHeight: 500,
+            width: 1500,
+            minWidth: 1500,
+            height: 910,
+            minHeight: 910,
             show: false,
             autoHideMenuBar: true,
             frame: false,

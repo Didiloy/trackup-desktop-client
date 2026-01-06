@@ -23,7 +23,7 @@ defineOptions({
             key: EWidgetCategory.ActivityMetadata,
             label_key: 'widgets.categories.activity_metadata'
         },
-        defaultSize: { w: 2, h: 2, minW: 2, minH: 2 },
+        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -101,7 +101,7 @@ const choices = computed(() => localDefinition.value?.choices || [])
         <!-- Header -->
         <div class="flex items-center gap-3 mb-4 shrink-0">
             <div
-                class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
+                class="w-10 h-13 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
             >
                 <i class="pi pi-tags text-lg"></i>
             </div>
@@ -109,7 +109,7 @@ const choices = computed(() => localDefinition.value?.choices || [])
                 <h3 class="font-semibold text-surface-900">
                     {{ t('widgets.activity_metadata.choices.title') }}
                 </h3>
-                <p class="text-xs text-surface-500">
+                <p class="text-xs text-surface-500 mt-2">
                     {{ t('widgets.activity_metadata.choices.description') }}
                 </p>
             </div>

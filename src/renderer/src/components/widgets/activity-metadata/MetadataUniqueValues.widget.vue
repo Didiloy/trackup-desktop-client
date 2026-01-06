@@ -29,7 +29,7 @@ defineOptions({
             key: EWidgetCategory.ActivityMetadata,
             label_key: 'widgets.categories.activity_metadata'
         },
-        defaultSize: { w: 1, h: 2, minW: 1, minH: 2 },
+        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -123,18 +123,6 @@ const value = computed(() => {
         v-if="!isLoadingLocal && !isTypeCompatible"
         class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm h-full"
     >
-        <ActivityMetadataIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            :metadata-definition-id="definitionId"
-        />
-
-        <ActivityIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            class="top-4 right-[125px]"
-        />
-
         <div class="flex items-start justify-between mb-4">
             <div class="p-3 rounded-xl bg-purple-100 text-purple-600">
                 <i class="pi pi-list text-xl"></i>
@@ -165,6 +153,12 @@ const value = computed(() => {
                 :show="props.showIdentity"
                 :activity-id="activityId"
                 :metadata-definition-id="definitionId"
+            />
+
+            <ActivityIdentityCorner
+                :show="props.showIdentity"
+                :activity-id="activityId"
+                class="top-4 right-[125px]"
             />
         </template>
     </BaseOverviewStatWidget>
