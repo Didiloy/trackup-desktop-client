@@ -7,20 +7,14 @@ import { useServerStore } from '@/stores/server'
 import ChronosButton from '@/components/chronos/ChronosButton.vue'
 
 const { t } = useI18n()
-const route = useRoute()
-const router = useRouter()
-const showMembersAsideToggle = computed(
-    () => typeof route.name === 'string' && route.name.startsWith('Server')
-)
-const isMembersAsideVisible = computed(() => route.query.members === 'true')
-const server_store = useServerStore()
-const pageTitle = computed(() => {
-    if (showMembersAsideToggle.value) {
-        const serverName = server_store.getName || ''
-        return `${t('navigation.server')} - ${serverName}`
-    }
-    return t('navigation.home')
-})
+// const route = useRoute()
+// const router = useRouter()
+// const showMembersAsideToggle = computed(
+//     () => typeof route.name === 'string' && route.name.startsWith('Server')
+// )
+// const isMembersAsideVisible = computed(() => route.query.members === 'true')
+// const server_store = useServerStore()
+
 
 onMounted(() => {
     handleWindowControls()
@@ -56,10 +50,10 @@ function handleWindowControls(): void {
     }
 }
 
-function handleToggleMembersAside(): void {
-    const current = route.query.members === 'true'
-    router.replace({ query: { ...route.query, members: current ? 'false' : 'true' } })
-}
+// function handleToggleMembersAside(): void {
+//     const current = route.query.members === 'true'
+//     router.replace({ query: { ...route.query, members: current ? 'false' : 'true' } })
+// }
 </script>
 <template>
     <nav
@@ -68,9 +62,6 @@ function handleToggleMembersAside(): void {
     >
         <div>
             <span class="">{{ t('app.title') }}</span>
-        </div>
-        <div>
-            <span class="">{{ pageTitle }}</span>
         </div>
         <div
             id="window-controls"

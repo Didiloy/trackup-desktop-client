@@ -9,7 +9,7 @@ import type {
 } from '@shared/contracts/interfaces/entities-stats/user-stats.interfaces'
 
 export const useUserStatsStore = defineStore('user-stats', () => {
-    const { getStats, getLastSessions, startAppSession } = useUserStatsCRUD()
+    const { getStats, getLastSessions, startAppSession, endAppSession } = useUserStatsCRUD()
     const user_store = useUserStore()
 
     const state = reactive({
@@ -18,7 +18,9 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         is_loading: false,
         error: null as string | null,
         // Real-time tracking
-        real_time_app_seconds: 0
+        real_time_app_seconds: 0,
+        // Current app session ID for tracking
+        current_session_id: null as string | null
     })
 
     let time_interval: NodeJS.Timeout | null = null
@@ -106,9 +108,24 @@ export const useUserStatsStore = defineStore('user-stats', () => {
 
     const init_session_tracking = async (): Promise<void> => {
         try {
-            await startAppSession()
+            const res = await startAppSession()
+            if (res.data?.session_id) {
+                state.current_session_id = res.data.session_id
+            }
         } catch (e) {
             console.error('Failed to start app session from store', e)
+        }
+    }
+
+    const end_session_tracking = async (): Promise<void> => {
+        if (!state.current_session_id) {
+            return
+        }
+        try {
+            await endAppSession(state.current_session_id)
+            state.current_session_id = null
+        } catch (e) {
+            console.error('Failed to end app session from store', e)
         }
     }
 
@@ -157,6 +174,7 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         state.is_loading = false
         state.error = null
         state.real_time_app_seconds = 0
+        state.current_session_id = null
         stop_time_tracking()
     }
 
@@ -173,6 +191,7 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         fetch_last_user_sessions,
         fetch_all,
         init_session_tracking,
+        end_session_tracking,
         force_refresh,
         reset_state,
         start_time_tracking,

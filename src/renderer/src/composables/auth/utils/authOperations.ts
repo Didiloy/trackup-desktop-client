@@ -3,6 +3,7 @@ import type { Provider } from '@supabase/supabase-js'
 import { loading, error, setStateFromSession, setError } from './authState'
 import { setupAuthStateListener } from './authListeners'
 import { setupDeepLinkListener } from './deepLinkHandler'
+import { useUserStatsStore } from '@/stores/user-stats'
 
 /**
  * Initialize auth session and setup listeners
@@ -63,11 +64,16 @@ export async function signInWithOAuth(provider: Provider, redirectTo?: string): 
 
 /**
  * Sign out current user
+ * Ends the app session tracking before signing out to persist time on app
  */
 export async function signOut(): Promise<void> {
     loading.value = true
     error.value = null
     try {
+        // End app session tracking before signing out
+        const user_stats_store = useUserStatsStore()
+        await user_stats_store.end_session_tracking()
+
         const { error: signOutError } = await supabase.auth.signOut()
         if (signOutError) {
             error.value = signOutError.message
