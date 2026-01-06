@@ -500,6 +500,7 @@
             "title": "Membres du serveur",
             "title_base": "Membres",
             "title_single": "Membre",
+            "profile": "Profil du membre",
             "members_count": "Membres ({count})",
             "no_members": "Aucun membre dans ce serveur.",
             "invite_members": "Inviter des membres",
@@ -589,6 +590,7 @@
             "title": "Activités du serveur",
             "title_base": "Activités",
             "title_single": "Activité",
+            "profile": "Profil de l'activité",
             "tabs": {
                 "stats": "Statistiques",
                 "details": "Détails",
@@ -696,6 +698,7 @@
         "server_sessions": {
             "title": "Sessions du serveur",
             "title_base": "Sessions",
+            "profile": "Profil de la session",
             "add_modal": {
                 "title": "Créer une session",
                 "info_description": "Entrez les détails de la session",

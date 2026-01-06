@@ -252,6 +252,7 @@ declare module 'vue' {
     Topbar: typeof import('./src/components/asides/topbar.vue')['default']
     TransitionGroupWrapper: typeof import('./src/components/common/transitions/TransitionGroupWrapper.vue')['default']
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
+    TreeBranchIcon: typeof import('./src/components/common/icons/TreeBranchIcon.vue')['default']
     UserProfileHeader: typeof import('./src/components/users/profile/UserProfileHeader.vue')['default']
     UserRecentSessions: typeof import('./src/components/users/UserRecentSessions.vue')['default']
     UserSettingsModal: typeof import('./src/components/modals/UserSettingsModal.vue')['default']
