@@ -51,7 +51,15 @@ const maxSessions = computed(() => {
             >
                 <div class="flex justify-between items-center mb-1.5">
                     <span class="text-sm font-medium text-surface-900 truncate pr-4">
-                        {{ activity.activity_name }}
+                        <router-link
+                            :to="{
+                                name: 'ServerActivityProfile',
+                                params: { activityId: activity.activity_id }
+                            }"
+                            class="hover:text-primary-600 hover:underline transition-colors"
+                        >
+                            {{ activity.activity_name }}
+                        </router-link>
                     </span>
                     <span class="text-xs text-surface-500 flex items-center gap-2">
                         <span class="flex items-center gap-1">
