@@ -45,10 +45,12 @@ export function useContextMenu(items: ContextMenuItem[]): ContextMenuProps {
 
     onMounted(() => {
         document.addEventListener('click', closeMenu)
+        document.addEventListener('scroll', closeMenu, true)
     })
 
     onUnmounted(() => {
         document.removeEventListener('click', closeMenu)
+        document.removeEventListener('scroll', closeMenu, true)
         if (globalMenu.value === menu.value) {
             globalMenu.value = undefined
         }
