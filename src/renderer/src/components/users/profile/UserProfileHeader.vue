@@ -31,16 +31,17 @@ const getProviderStyle = (provider: string | null) => {
                 <h1 class="text-3xl font-bold text-surface-900 mb-2">
                     {{ t('views.home.welcome') }} {{ user_store.getUsername }} !
                 </h1>
-                <p v-if="user_store.getEmail" class="text-surface-600 mb-2">
-                    {{ user_store.getEmail }}
-                </p>
-                <div 
-                    v-if="user_store.getAuthProvider" 
+
+                <div
+                    v-if="user_store.getAuthProvider"
                     class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md text-xs font-medium"
                     :class="getProviderStyle(user_store.getAuthProvider).class"
                 >
                     <i :class="getProviderStyle(user_store.getAuthProvider).icon"></i>
-                    {{ getProviderStyle(user_store.getAuthProvider).label }}
+                    {{ getProviderStyle(user_store.getAuthProvider).label }} :
+                    <p v-if="user_store.getEmail" class="text-surface-600 ">
+                        {{ user_store.getEmail }}
+                    </p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
