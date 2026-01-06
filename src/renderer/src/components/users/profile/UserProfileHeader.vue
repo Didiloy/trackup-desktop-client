@@ -15,17 +15,11 @@ const refreshStats = async () => {
 }
 
 const getProviderStyle = (provider: string | null) => {
-    switch (provider) {
-        case 'google':
-            return { icon: 'pi pi-google', label: 'Google', class: 'text-red-500 bg-red-50 border-red-200' }
-        case 'github':
-            return { icon: 'pi pi-github', label: 'GitHub', class: 'text-gray-900 bg-gray-50 border-gray-200' }
-        case 'discord':
-            return { icon: 'pi pi-discord', label: 'Discord', class: 'text-indigo-500 bg-indigo-50 border-indigo-200' }
-        case 'email':
-            return { icon: 'pi pi-envelope', label: 'Email', class: 'text-surface-600 bg-surface-50 border-surface-200' }
-        default:
-            return { icon: 'pi pi-user', label: provider || 'Unknown', class: 'text-surface-600 bg-surface-50 border-surface-200' }
+    if (!provider) return { icon: 'pi pi-user', label: 'Unknown', class: 'hidden' }
+    return {
+        icon: `pi pi-${provider}`,
+        label: provider.charAt(0).toUpperCase() + provider.slice(1),
+        class: 'text-surface-500 bg-surface-100 border-surface-200'
     }
 }
 </script>
@@ -37,15 +31,12 @@ const getProviderStyle = (provider: string | null) => {
                 <h1 class="text-3xl font-bold text-surface-900 mb-2">
                     {{ t('views.home.welcome') }} {{ user_store.getUsername }} !
                 </h1>
-                <p v-if="user_store.getEmail" class="text-surface-600">
-                    {{ user_store.getEmail }}
-                </p>
-                <p v-if="user_store.getEmail" class="text-surface-600 mb-3">
+                <p v-if="user_store.getEmail" class="text-surface-600 mb-2">
                     {{ user_store.getEmail }}
                 </p>
                 <div 
                     v-if="user_store.getAuthProvider" 
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border"
+                    class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md text-xs font-medium"
                     :class="getProviderStyle(user_store.getAuthProvider).class"
                 >
                     <i :class="getProviderStyle(user_store.getAuthProvider).icon"></i>
