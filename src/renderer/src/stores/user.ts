@@ -26,6 +26,9 @@ export const useUserStore = defineStore('user', () => {
     const getUsername: ComputedRef<string | null> = computed(
         () => user.value?.user_metadata?.full_name ?? null
     )
+    const getAuthProvider: ComputedRef<string | null> = computed(
+        () => user.value?.app_metadata?.provider ?? null
+    )
     const getAccessToken: ComputedRef<string | null> = computed(
         () => session.value?.access_token ?? null
     )
@@ -51,6 +54,7 @@ export const useUserStore = defineStore('user', () => {
         getUsername,
         getAccessToken,
         getMyServers,
+        getAuthProvider,
 
         // Actions
         setMyServers

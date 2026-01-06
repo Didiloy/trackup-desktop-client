@@ -3,17 +3,30 @@ import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/composables/auth/useAuth'
 import { useUserStatsStore } from '@/stores/user-stats'
 import { formatSecondsToLabel } from '@/utils/time.utils'
-
-defineProps<{
-    email?: string
-}>()
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
 const { signOut } = useAuth()
 const user_stats_store = useUserStatsStore()
+const user_store = useUserStore()
 
 const refreshStats = async () => {
     await user_stats_store.force_refresh()
+}
+
+const getProviderStyle = (provider: string | null) => {
+    switch (provider) {
+        case 'google':
+            return { icon: 'pi pi-google', label: 'Google', class: 'text-red-500 bg-red-50 border-red-200' }
+        case 'github':
+            return { icon: 'pi pi-github', label: 'GitHub', class: 'text-gray-900 bg-gray-50 border-gray-200' }
+        case 'discord':
+            return { icon: 'pi pi-discord', label: 'Discord', class: 'text-indigo-500 bg-indigo-50 border-indigo-200' }
+        case 'email':
+            return { icon: 'pi pi-envelope', label: 'Email', class: 'text-surface-600 bg-surface-50 border-surface-200' }
+        default:
+            return { icon: 'pi pi-user', label: provider || 'Unknown', class: 'text-surface-600 bg-surface-50 border-surface-200' }
+    }
 }
 </script>
 
@@ -22,18 +35,29 @@ const refreshStats = async () => {
         <div class="flex items-start justify-between mb-6">
             <div class="flex-1">
                 <h1 class="text-3xl font-bold text-surface-900 mb-2">
-                    {{ t('views.home.welcome') }}
+                    {{ t('views.home.welcome') }} {{ user_store.getUsername }} !
                 </h1>
-                <p v-if="email" class="text-surface-600">
-                    {{ email }}
+                <p v-if="user_store.getEmail" class="text-surface-600">
+                    {{ user_store.getEmail }}
                 </p>
+                <p v-if="user_store.getEmail" class="text-surface-600 mb-3">
+                    {{ user_store.getEmail }}
+                </p>
+                <div 
+                    v-if="user_store.getAuthProvider" 
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border"
+                    :class="getProviderStyle(user_store.getAuthProvider).class"
+                >
+                    <i :class="getProviderStyle(user_store.getAuthProvider).icon"></i>
+                    {{ getProviderStyle(user_store.getAuthProvider).label }}
+                </div>
             </div>
             <div class="flex items-center gap-3">
                 <Button
-                    :label="t('common.misc.settings')"
                     icon="pi pi-cog"
                     severity="secondary"
                     outlined
+                    v-tooltip.bottom="t('common.misc.settings')"
                 />
                 <Button
                     icon="pi pi-refresh"
@@ -44,10 +68,10 @@ const refreshStats = async () => {
                     v-tooltip.bottom="t('common.actions.refresh')"
                 />
                 <Button
-                    :label="t('views.login.logout_button')"
                     icon="pi pi-sign-out"
                     severity="secondary"
                     @click="signOut"
+                    v-tooltip.bottom="t('views.login.logout_button')"
                 />
             </div>
         </div>
@@ -59,9 +83,13 @@ const refreshStats = async () => {
                     <i class="pi pi-sign-in text-indigo-500 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.servers_joined') }}</p>
+                    <p class="text-sm text-surface-500 mb-0.5">
+                        {{ t('views.home.stats.servers_joined') }}
+                    </p>
                     <p class="text-xl font-bold text-surface-900">
-                        {{ user_stats_store.get_stats?.total_servers_joined.toLocaleString() ?? '0' }}
+                        {{
+                            user_stats_store.get_stats?.total_servers_joined.toLocaleString() ?? '0'
+                        }}
                     </p>
                 </div>
             </div>
@@ -71,9 +99,14 @@ const refreshStats = async () => {
                     <i class="pi pi-users text-purple-500 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.servers_created') }}</p>
+                    <p class="text-sm text-surface-500 mb-0.5">
+                        {{ t('views.home.stats.servers_created') }}
+                    </p>
                     <p class="text-xl font-bold text-surface-900">
-                        {{ user_stats_store.get_stats?.total_servers_created.toLocaleString() ?? '0' }}
+                        {{
+                            user_stats_store.get_stats?.total_servers_created.toLocaleString() ??
+                            '0'
+                        }}
                     </p>
                 </div>
             </div>
@@ -83,9 +116,15 @@ const refreshStats = async () => {
                     <i class="pi pi-desktop text-teal-500 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.app_time') }}</p>
+                    <p class="text-sm text-surface-500 mb-0.5">
+                        {{ t('views.home.stats.app_time') }}
+                    </p>
                     <p class="text-xl font-bold text-surface-900">
-                        {{ user_stats_store.get_stats ? formatSecondsToLabel(user_stats_store.get_real_time_app_seconds) : '0s' }}
+                        {{
+                            user_stats_store.get_stats
+                                ? formatSecondsToLabel(user_stats_store.get_real_time_app_seconds)
+                                : '0s'
+                        }}
                     </p>
                 </div>
             </div>
