@@ -250,6 +250,7 @@ declare module 'vue' {
     TransitionWrapper: typeof import('./src/components/common/transitions/TransitionWrapper.vue')['default']
     UserProfileHeader: typeof import('./src/components/users/profile/UserProfileHeader.vue')['default']
     UserRecentSessions: typeof import('./src/components/users/UserRecentSessions.vue')['default']
+    UserSettingsModal: typeof import('./src/components/modals/UserSettingsModal.vue')['default']
     UserStatCard: typeof import('./src/components/users/UserStatCard.vue')['default']
     Versions: typeof import('./src/components/app-updates/Versions.vue')['default']
     WidgetAddDialog: typeof import('./src/components/widgets/core/WidgetAddDialog.vue')['default']

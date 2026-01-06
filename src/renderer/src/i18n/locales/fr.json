@@ -387,6 +387,10 @@
             "title": "Profil",
             "preferences": {
                 "title": "Préférences",
+                "appearance": {
+                    "title": "Apparence",
+                    "description": "Personnalisez l'apparence de l'application"
+                },
                 "language": {
                     "title": "Langue",
                     "switch": {

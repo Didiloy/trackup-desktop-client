@@ -1,17 +1,26 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/composables/auth/useAuth'
 import { useUserStatsStore } from '@/stores/user-stats'
 import { formatSecondsToLabel } from '@/utils/time.utils'
 import { useUserStore } from '@/stores/user'
+import UserSettingsModal from '@/components/modals/UserSettingsModal.vue'
 
 const { t } = useI18n()
 const { signOut } = useAuth()
 const user_stats_store = useUserStatsStore()
 const user_store = useUserStore()
 
+// Settings modal visibility
+const showSettingsModal = ref(false)
+
 const refreshStats = async () => {
     await user_stats_store.force_refresh()
+}
+
+const openSettings = () => {
+    showSettingsModal.value = true
 }
 
 const getProviderStyle = (provider: string | null) => {
@@ -57,6 +66,7 @@ const getProviderStyle = (provider: string | null) => {
                     icon="pi pi-cog"
                     severity="secondary"
                     outlined
+                    @click="openSettings"
                     v-tooltip.bottom="t('common.misc.settings')"
                 />
                 <Button
@@ -123,4 +133,7 @@ const getProviderStyle = (provider: string | null) => {
             </div>
         </div>
     </div>
+
+    <!-- Settings Modal -->
+    <UserSettingsModal v-model:visible="showSettingsModal" />
 </template>

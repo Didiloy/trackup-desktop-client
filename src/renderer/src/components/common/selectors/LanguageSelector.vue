@@ -1,28 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { getAvailableLanguages, Language, setI18nLanguage } from '@/i18n'
-
+import { getAvailableLanguages } from '@/i18n'
+import { useUserPreferencesStore } from '@/stores/user-preferences'
 import Select from 'primevue/select'
 
 const i18n = useI18n()
 const toast = useToast()
+const preferencesStore = useUserPreferencesStore()
 
-const languages = ref<Language[]>(getAvailableLanguages())
-const current_language = ref(i18n.locale.value)
-
-onMounted(() => {
-    current_language.value = i18n.locale.value
-})
+const languages = getAvailableLanguages()
+const currentLanguage = computed(() => preferencesStore.getLanguage)
 
 const switchLanguage = async (event: { value: string }): Promise<void> => {
     const locale = event.value
 
     try {
-        localStorage.setItem('locale', locale)
-
-        const result = await setI18nLanguage(locale)
+        const result = await preferencesStore.setLanguage(locale)
         if (result) {
             toast.add({
                 severity: 'success',
@@ -53,7 +48,7 @@ const switchLanguage = async (event: { value: string }): Promise<void> => {
     <div class="language-switcher">
         <h3>{{ i18n.t('views.user_profile.preferences.language.title') }}</h3>
         <Select
-            v-model="current_language"
+            :model-value="currentLanguage"
             :options="languages"
             option-label="name"
             option-value="code"

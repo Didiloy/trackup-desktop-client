@@ -89,7 +89,7 @@ export const getInitials = (name: string, options?: IInitialsOptions): string =>
 
 // Apply theme based on selection or system preference
 export const applyTheme = (
-    themeValue: 'system' | boolean,
+    themeValue: 'system' | 'light' | 'dark',
     isSystemDarkMode?: () => boolean
 ): boolean => {
     const rootElement = document.documentElement
@@ -97,8 +97,10 @@ export const applyTheme = (
 
     if (themeValue === 'system') {
         isDark = isSystemDarkMode ? isSystemDarkMode() : false
+    } else if (themeValue === 'dark') {
+        isDark = true
     } else {
-        isDark = themeValue
+        isDark = false
     }
 
     if (isDark) {
