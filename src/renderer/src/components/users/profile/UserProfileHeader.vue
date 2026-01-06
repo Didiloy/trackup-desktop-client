@@ -39,18 +39,12 @@ const getProviderStyle = (provider: string | null) => {
                 >
                     <i :class="getProviderStyle(user_store.getAuthProvider).icon"></i>
                     {{ getProviderStyle(user_store.getAuthProvider).label }} :
-                    <p v-if="user_store.getEmail" class="text-surface-600 ">
+                    <p v-if="user_store.getEmail" class="text-surface-600">
                         {{ user_store.getEmail }}
                     </p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <Button
-                    icon="pi pi-cog"
-                    severity="secondary"
-                    outlined
-                    v-tooltip.bottom="t('common.misc.settings')"
-                />
                 <Button
                     icon="pi pi-refresh"
                     severity="secondary"
@@ -60,8 +54,15 @@ const getProviderStyle = (provider: string | null) => {
                     v-tooltip.bottom="t('common.actions.refresh')"
                 />
                 <Button
-                    icon="pi pi-sign-out"
+                    icon="pi pi-cog"
                     severity="secondary"
+                    outlined
+                    v-tooltip.bottom="t('common.misc.settings')"
+                />
+                <Button
+                    icon="pi pi-sign-out"
+                    severity="danger"
+                    outlined
                     @click="signOut"
                     v-tooltip.bottom="t('views.login.logout_button')"
                 />
