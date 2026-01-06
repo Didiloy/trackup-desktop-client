@@ -9,7 +9,7 @@ import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IMetadataDefinitionSummaryDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type { IMetadataDefinitionSummaryDto, IMetadataDefinitionDetailDto, INumericSummary } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
@@ -45,13 +45,13 @@ const props = withDefaults(
 const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
-const { getAllMetadataDefinitionsStats } = useActivityMetadataDefinitionStatsCRUD()
+const { getMetadataDefinitionStats } = useActivityMetadataDefinitionStatsCRUD()
 
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const definitionId = computed(
     () => props.metadataDefinitionId || props.config?.metadataDefinitionId
 )
-const local_stats = ref<IMetadataDefinitionSummaryDto | null>(null)
+const local_stats = ref<IMetadataDefinitionSummaryDto | IMetadataDefinitionDetailDto | null>(null)
 const isLoadingLocal = ref(false)
 
 // Only show this widget for NUMBER type metadata
@@ -72,17 +72,12 @@ async function fetchStats(): Promise<void> {
 
     isLoadingLocal.value = true
     try {
-        const res = await getAllMetadataDefinitionsStats(serverId, activityId.value, {
+        const res = await getMetadataDefinitionStats(serverId, activityId.value, definitionId.value, {
             page: 1,
-            limit: 100
+            limit: 1
         })
-        if (res.data?.data) {
-            const found = res.data.data.find(
-                (d) => d.metadata_definition_id === definitionId.value
-            )
-            if (found) {
-                local_stats.value = found
-            }
+        if (res.data?.data && res.data.data.length > 0) {
+             local_stats.value = res.data.data[0]
         }
     } finally {
         isLoadingLocal.value = false
@@ -100,7 +95,28 @@ watch(
     }
 )
 
-const numericSummary = computed(() => local_stats.value?.numeric_summary)
+const numericSummary = computed((): INumericSummary | undefined => {
+    if (!local_stats.value) return undefined
+    
+    // Check if it's SummaryDto
+    if ('numeric_summary' in local_stats.value && local_stats.value.numeric_summary) {
+        return local_stats.value.numeric_summary
+    }
+
+    // Check if it's DetailDto with direct fields
+    // We assume DetailDto fields are populated if used as summary
+    const detail = local_stats.value as IMetadataDefinitionDetailDto
+    if (detail.sum !== undefined && detail.avg !== undefined && detail.min !== undefined && detail.max !== undefined) {
+        return {
+            sum: detail.sum,
+            avg: detail.avg,
+            min: detail.min,
+            max: detail.max
+        }
+    }
+    
+    return undefined
+})
 
 function formatNumber(val: number | undefined): string {
     if (val === undefined || val === null) return '-'

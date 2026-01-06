@@ -977,6 +977,10 @@
                 "title": "Distribution",
                 "description": "Répartition des valeurs"
             },
+            "choices": {
+                "title": "Choix",
+                "description": "Liste des choix prédéfinis pour cet attribut"
+            },
             "incompatible_type": "Type d'attribut non compatible",
             "supported_types": "Types supportés : {types}"
         }

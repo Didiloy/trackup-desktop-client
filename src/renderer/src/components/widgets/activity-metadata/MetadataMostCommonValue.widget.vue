@@ -10,7 +10,7 @@ import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IMetadataDefinitionSummaryDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type { IMetadataDefinitionSummaryDto, IMetadataDefinitionDetailDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
@@ -46,13 +46,13 @@ const props = withDefaults(
 const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
-const { getAllMetadataDefinitionsStats } = useActivityMetadataDefinitionStatsCRUD()
+const { getMetadataDefinitionStats } = useActivityMetadataDefinitionStatsCRUD()
 
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const definitionId = computed(
     () => props.metadataDefinitionId || props.config?.metadataDefinitionId
 )
-const local_stats = ref<IMetadataDefinitionSummaryDto | null>(null)
+const local_stats = ref<IMetadataDefinitionSummaryDto | IMetadataDefinitionDetailDto | null>(null)
 const isLoadingLocal = ref(false)
 
 // Only show for STRING and BOOLEAN types
@@ -73,17 +73,12 @@ async function fetchStats(): Promise<void> {
 
     isLoadingLocal.value = true
     try {
-        const res = await getAllMetadataDefinitionsStats(serverId, activityId.value, {
+        const res = await getMetadataDefinitionStats(serverId, activityId.value, definitionId.value, {
             page: 1,
-            limit: 100
+            limit: 1
         })
-        if (res.data?.data) {
-            const found = res.data.data.find(
-                (d) => d.metadata_definition_id === definitionId.value
-            )
-            if (found) {
-                local_stats.value = found
-            }
+        if (res.data?.data && res.data.data.length > 0) {
+            local_stats.value = res.data.data[0]
         }
     } finally {
         isLoadingLocal.value = false
@@ -102,7 +97,17 @@ watch(
 )
 
 const value = computed(() => {
-    const v = local_stats.value?.most_common_value
+    let v: string | number | boolean | undefined
+    if (local_stats.value) {
+        if ('most_common_value' in local_stats.value) {
+            v = local_stats.value.most_common_value
+        } else {
+            // Assume DetailDto where the item itself is the value (distribution item)
+            // DetailDto has 'value' property which is string usually
+            v = (local_stats.value as IMetadataDefinitionDetailDto).value
+        }
+    }
+    
     if (v === undefined || v === null) return '-'
     if (typeof v === 'boolean') return v ? t('common.misc.yes') : t('common.misc.no')
     return String(v)

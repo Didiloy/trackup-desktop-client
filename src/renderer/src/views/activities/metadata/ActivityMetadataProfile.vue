@@ -4,8 +4,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
+import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 import MetadataTotalUsageWidget from '@/components/widgets/activity-metadata/MetadataTotalUsage.widget.vue'
 import MetadataUniqueValuesWidget from '@/components/widgets/activity-metadata/MetadataUniqueValues.widget.vue'
@@ -20,11 +22,13 @@ const router = useRouter()
 const { t } = useI18n()
 const server_store = useServerStore()
 const { getMetadataDefinitionById } = useActivityMetadataDefinitionCRUD()
+const { getActivityById } = useActivityCRUD()
 
 const activityId = computed(() => route.params.activityId as string)
 const definitionId = computed(() => route.params.metadataDefinitionId as string)
 
 const definition = ref<IActivityMetadataDefinition | null>(null)
+const activity = ref<IActivity | null>(null)
 const loading = ref(true)
 
 async function fetchDefinition(): Promise<void> {
@@ -33,12 +37,19 @@ async function fetchDefinition(): Promise<void> {
 
     loading.value = true
     try {
-        const res = await getMetadataDefinitionById(serverId, activityId.value, definitionId.value)
-        if (res.data) {
-            definition.value = res.data
+        const [defRes, actRes] = await Promise.all([
+            getMetadataDefinitionById(serverId, activityId.value, definitionId.value),
+            getActivityById(serverId, activityId.value)
+        ])
+
+        if (defRes.data) {
+            definition.value = defRes.data
+        }
+        if (actRes.data) {
+            activity.value = actRes.data
         }
     } catch (e) {
-        console.error('Failed to fetch metadata definition:', e)
+        console.error('Failed to fetch data:', e)
     } finally {
         loading.value = false
     }
@@ -54,12 +65,50 @@ watch(
         void fetchDefinition()
     }
 )
+
+function handleBack(): void {
+    const serverId = server_store.getPublicId
+    if (serverId && activityId.value) {
+        router.push({
+            name: 'ServerActivityProfile',
+            params: { id: serverId, activityId: activityId.value }
+        })
+    }
+}
 </script>
 
 <template>
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
         <!-- Header -->
         <div class="mb-6">
+            <div
+                v-if="activity"
+                class="flex items-center gap-3 mb-4 cursor-pointer group"
+                @click="handleBack"
+            >
+                <div
+                    class="w-10 h-10 rounded-xl bg-surface-0 shadow-sm ring-1 ring-surface-200 flex items-center justify-center overflow-hidden"
+                >
+                    <img
+                        v-if="activity.logo"
+                        :src="activity.logo"
+                        :alt="activity.name"
+                        class="w-full h-full object-cover"
+                    />
+                    <span v-else class="text-lg font-bold text-surface-400">
+                        {{ activity.name.charAt(0).toUpperCase() }}
+                    </span>
+                </div>
+                <div>
+                    <h2 class="text-sm font-medium text-surface-500 group-hover:text-primary-600 transition-colors">
+                        {{ activity.name }}
+                    </h2>
+                    <div class="flex items-center gap-1 text-xs text-surface-400">
+                        <i class="pi pi-arrow-left text-[10px]"></i>
+                        <span>{{ t('common.actions.back') }}</span>
+                    </div>
+                </div>
+            </div>
 
             <div
                 v-if="definition"

@@ -8,7 +8,7 @@ import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 
 const route = useRoute()
 const server_store = useServerStore()
-const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
+const { getMetadataDefinitionById } = useActivityMetadataDefinitionCRUD()
 
 const props = withDefaults(
     defineProps<{
@@ -45,12 +45,9 @@ async function fetchDefinition(): Promise<void> {
     if (!serverId || !activityIdValue.value) return
 
     try {
-        const res = await listMetadataDefinitions(serverId, activityIdValue.value)
+        const res = await getMetadataDefinitionById(serverId, activityIdValue.value, props.metadataDefinitionId)
         if (res.data) {
-            const found = res.data.find((d) => d.public_id === props.metadataDefinitionId)
-            if (found) {
-                localDefinition.value = found
-            }
+            localDefinition.value = res.data
         }
     } catch (e) {
         console.error(e)
