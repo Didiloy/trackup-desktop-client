@@ -1,4 +1,5 @@
 import './style/style.css'
+import './style/preferences.css'
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
 import App from '@/App.vue'
@@ -67,7 +68,7 @@ async function initializeApp(): Promise<void> {
 }
 
 // Start the initialization
-;(async function () {
+; (async function () {
     await initializeApp()
     document.title = i18n.global.t('app.title')
 })()

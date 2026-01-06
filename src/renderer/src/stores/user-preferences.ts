@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed } from 'vue'
 import type {
     IUserPreferences
 } from '@shared/contracts/interfaces/user-preferences.interfaces'
@@ -42,12 +42,8 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
     // Getters
     const getTheme = computed(() => preferences.theme)
     const getLanguage = computed(() => preferences.language)
-    const getNotifications = computed(() => preferences.notifications)
-    const getDateTimeFormat = computed(() => preferences.dateTimeFormat)
-    const getAutoStartup = computed(() => preferences.autoStartup)
-    const getAutoUpdates = computed(() => preferences.autoUpdates)
-    const getAnalyticsConsent = computed(() => preferences.analyticsConsent)
     const getCompactMode = computed(() => preferences.compactMode)
+    const getAnimationsEnabled = computed(() => preferences.animationsEnabled)
 
     // Actions
     const setTheme = (theme: 'system' | 'light' | 'dark'): void => {
@@ -76,52 +72,33 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
         }
     }
 
-    const setNotificationsEnabled = (enabled: boolean): void => {
-        if (!preferences.notifications) {
-            preferences.notifications = { enabled, sound: true }
-        } else {
-            preferences.notifications.enabled = enabled
-        }
-        savePreferences()
-    }
-
-    const setNotificationsSound = (sound: boolean): void => {
-        if (!preferences.notifications) {
-            preferences.notifications = { enabled: true, sound }
-        } else {
-            preferences.notifications.sound = sound
-        }
-        savePreferences()
-    }
-
-    const setDateTimeFormat = (
-        format: Partial<{ use24Hour: boolean; dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD' }>
-    ): void => {
-        preferences.dateTimeFormat = {
-            ...preferences.dateTimeFormat,
-            ...format
-        } as IUserPreferences['dateTimeFormat']
-        savePreferences()
-    }
-
-    const setAutoStartup = (enabled: boolean): void => {
-        preferences.autoStartup = enabled
-        savePreferences()
-    }
-
-    const setAutoUpdates = (enabled: boolean): void => {
-        preferences.autoUpdates = enabled
-        savePreferences()
-    }
-
-    const setAnalyticsConsent = (consent: boolean): void => {
-        preferences.analyticsConsent = consent
-        savePreferences()
-    }
-
     const setCompactMode = (enabled: boolean): void => {
         preferences.compactMode = enabled
         savePreferences()
+        applyCompactMode(enabled)
+    }
+
+    const setAnimationsEnabled = (enabled: boolean): void => {
+        preferences.animationsEnabled = enabled
+        savePreferences()
+        applyAnimations(enabled)
+    }
+
+    // Helper functions for applying preferences
+    const applyCompactMode = (enabled: boolean): void => {
+        if (enabled) {
+            document.documentElement.classList.add('compact-mode')
+        } else {
+            document.documentElement.classList.remove('compact-mode')
+        }
+    }
+
+    const applyAnimations = (enabled: boolean): void => {
+        if (enabled) {
+            document.documentElement.classList.remove('no-animations')
+        } else {
+            document.documentElement.classList.add('no-animations')
+        }
     }
 
     // Initialize on store creation
@@ -133,6 +110,8 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
     }
     applyTheme(preferences.theme, isSystemDarkMode)
     setI18nLanguage(preferences.language)
+    applyCompactMode(preferences.compactMode)
+    applyAnimations(preferences.animationsEnabled)
 
     // Watch for system theme changes when using 'system' theme
     const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
@@ -150,23 +129,14 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
         // Getters
         getTheme,
         getLanguage,
-        getNotifications,
-        getDateTimeFormat,
-        getAutoStartup,
-        getAutoUpdates,
-        getAnalyticsConsent,
         getCompactMode,
+        getAnimationsEnabled,
 
         // Actions
         setTheme,
         setLanguage,
-        setNotificationsEnabled,
-        setNotificationsSound,
-        setDateTimeFormat,
-        setAutoStartup,
-        setAutoUpdates,
-        setAnalyticsConsent,
         setCompactMode,
+        setAnimationsEnabled,
         loadPreferences,
         savePreferences
     }

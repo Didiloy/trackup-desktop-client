@@ -5,34 +5,13 @@
 export interface IUserPreferences {
     theme: 'system' | 'light' | 'dark'
     language: string
-    // Optional future preferences
-    notifications?: {
-        enabled: boolean
-        sound?: boolean
-    }
-    dateTimeFormat?: {
-        use24Hour: boolean
-        dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD'
-    }
-    autoStartup?: boolean
-    autoUpdates?: boolean
-    analyticsConsent?: boolean
-    compactMode?: boolean
+    compactMode: boolean // Reduces spacing and sizes for more info density
+    animationsEnabled: boolean // Enable/disable CSS transitions and animations
 }
 
 export const DEFAULT_USER_PREFERENCES: Readonly<IUserPreferences> = {
     theme: 'system',
     language: 'fr',
-    notifications: {
-        enabled: true,
-        sound: true
-    },
-    dateTimeFormat: {
-        use24Hour: true,
-        dateFormat: 'DD/MM/YYYY'
-    },
-    autoStartup: false,
-    autoUpdates: true,
-    analyticsConsent: false,
-    compactMode: false
+    compactMode: false,
+    animationsEnabled: true
 } as const

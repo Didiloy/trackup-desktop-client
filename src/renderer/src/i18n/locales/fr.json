@@ -391,6 +391,18 @@
                     "title": "Apparence",
                     "description": "Personnalisez l'apparence de l'application"
                 },
+                "display": {
+                    "title": "Affichage",
+                    "description": "Contrôlez l'affichage et le formatage des données",
+                    "compact_mode": {
+                        "title": "Mode compact",
+                        "description": "Réduit l'espacement pour afficher plus d'informations"
+                    },
+                    "animations": {
+                        "title": "Animations",
+                        "description": "Active les transitions et animations visuelles"
+                    }
+                },
                 "language": {
                     "title": "Langue",
                     "switch": {
