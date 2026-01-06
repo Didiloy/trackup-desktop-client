@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
-import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 
 const route = useRoute()
@@ -54,19 +53,17 @@ async function fetchDefinition(): Promise<void> {
     }
 }
 
-onMounted(() => {
-    if (props.metadataDefinitionId) {
-        void fetchDefinition()
-    }
-})
-
 watch(
-    () => props.metadataDefinitionId,
-    (newId) => {
-        if (newId) {
-            void fetchDefinition()
-        }
-    }
+    () => [
+        props.metadataDefinitionId,
+        server_store.getPublicId,
+        activityIdValue.value,
+        props.show
+    ],
+    () => {
+        void fetchDefinition()
+    },
+    { immediate: true }
 )
 
 const isVisible = computed(() => props.show)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
 
@@ -65,20 +65,12 @@ async function fetchDefinitionName(): Promise<void> {
 }
 
 // Trigger API fetch on mount if needed
-onMounted(() => {
-    if (props.definitionId) {
-        void fetchDefinitionName()
-    }
-})
-
-// Watch for definitionId changes
 watch(
-    () => props.definitionId,
-    (newId) => {
-        if (newId) {
-            void fetchDefinitionName()
-        }
-    }
+    () => [props.definitionId, server_store.getPublicId, props.show],
+    () => {
+        void fetchDefinitionName()
+    },
+    { immediate: true }
 )
 
 const isVisible = computed(() => props.show)

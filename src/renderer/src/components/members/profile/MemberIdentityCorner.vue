@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 
@@ -47,19 +47,12 @@ async function fetchMemberName(): Promise<void> {
     }
 }
 
-onMounted(() => {
-    if (props.memberId) {
-        void fetchMemberName()
-    }
-})
-
 watch(
-    () => props.memberId,
-    (newId) => {
-        if (newId) {
-            void fetchMemberName()
-        }
-    }
+    () => [props.memberId, server_store.getPublicId, props.show],
+    () => {
+        void fetchMemberName()
+    },
+    { immediate: true }
 )
 
 const memberNickname = computed(() => localMemberNickname.value)

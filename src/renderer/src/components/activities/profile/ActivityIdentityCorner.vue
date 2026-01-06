@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
-import Icon from '@/components/common/icons/Icon.vue'
-import { ICONS } from '@/constants/icons'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 const server_store = useServerStore()
@@ -50,19 +48,12 @@ async function fetchActivityName(): Promise<void> {
     }
 }
 
-onMounted(() => {
-    if (props.activityId) {
-        void fetchActivityName()
-    }
-})
-
 watch(
-    () => props.activityId,
-    (newId) => {
-        if (newId) {
-            void fetchActivityName()
-        }
-    }
+    () => [props.activityId, server_store.getPublicId, props.show],
+    () => {
+        void fetchActivityName()
+    },
+    { immediate: true }
 )
 
 const activityName = computed(() => localActivityName.value)
