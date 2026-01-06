@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { ILastSession } from '@shared/contracts/interfaces/entities-stats/user-stats.interfaces'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-
-defineProps<{
-    sessions: ILastSession[]
-    loading?: boolean
-}>()
+import { useUserStatsStore } from '@/stores/user-stats'
 
 const { t } = useI18n()
+const user_stats_store = useUserStatsStore()
 </script>
 
 <template>
@@ -17,18 +13,18 @@ const { t } = useI18n()
             {{ t('views.home.recent_sessions.title') }}
         </h2>
 
-        <div v-if="loading" class="space-y-3">
+        <div v-if="user_stats_store.is_loading" class="space-y-3">
             <div v-for="i in 5" :key="i" class="h-16 bg-surface-100 rounded-xl animate-pulse"></div>
         </div>
 
-        <div v-else-if="sessions.length === 0" class="text-center py-8 text-surface-400">
+        <div v-else-if="user_stats_store.get_sessions.length === 0" class="text-center py-8 text-surface-400">
             <i class="pi pi-inbox text-4xl mb-2"></i>
             <p>{{ t('views.home.recent_sessions.empty') }}</p>
         </div>
 
         <div v-else class="space-y-2">
             <div
-                v-for="session in sessions"
+                v-for="session in user_stats_store.get_sessions"
                 :key="session.id"
                 class="flex items-center justify-between p-4 bg-surface-50 rounded-xl hover:bg-surface-100 transition-colors"
             >

@@ -13,6 +13,79 @@ import { IUserApiResponse } from '../../../shared/contracts/interfaces/entities/
 
 const logger = new Logger('IPC:UserStats')
 
+// Session State Management
+let activeSessionId: string | null = null
+let activeToken: string | null = null
+let sessionTimeout: NodeJS.Timeout | null = null
+
+// 8 hours in milliseconds
+const SESSION_MAX_DURATION = 8 * 60 * 60 * 1000
+
+/**
+ * End the currently active session if any
+ */
+export async function endActiveSession(): Promise<void> {
+    if (activeSessionId && activeToken) {
+        logger.info(`Ending active app session: ${activeSessionId}`)
+        try {
+            await apiService.post<void>(
+                `/api/v1/users/me/stats/app-session/${activeSessionId}/end`,
+                activeToken,
+                {}
+            )
+        } catch (error) {
+            logger.error('Failed to end active session on cleanup', error)
+        }
+    }
+
+    // Clear state
+    activeSessionId = null
+    activeToken = null
+    if (sessionTimeout) {
+        clearTimeout(sessionTimeout)
+        sessionTimeout = null
+    }
+}
+
+/**
+ * Start a new active session
+ */
+async function startActiveSession(accessToken: string): Promise<IUserApiResponse<IAppSessionResponse>> {
+    // End previous session if exists
+    if (activeSessionId) {
+        await endActiveSession()
+    }
+
+    const response = await apiService.post<IAppSessionResponse>(
+        '/api/v1/users/me/stats/app-session/start',
+        accessToken,
+        {}
+    )
+
+    if (response.data) {
+        activeSessionId = response.data.session_id
+        activeToken = accessToken
+
+        // Set autoclose timeout (8h) and RESTART
+        if (sessionTimeout) clearTimeout(sessionTimeout)
+        sessionTimeout = setTimeout(async () => {
+            logger.info('Session timed out (8h Limit). Restarting new session...')
+            // Capture token to reuse
+            const tokenToReuse = activeToken
+
+            // End current
+            await endActiveSession()
+
+            // Restart if we have the token
+            if (tokenToReuse) {
+                await startActiveSession(tokenToReuse)
+            }
+        }, SESSION_MAX_DURATION)
+    }
+
+    return response
+}
+
 /**
  * Register user stats IPC handlers
  */
@@ -66,7 +139,7 @@ export function registerUserStatsIpc(): void {
             const validationError = validateAuth(accessToken)
             if (validationError) return validationError
 
-            return apiService.post<IAppSessionResponse>('/api/v1/users/me/stats/app-session/start', accessToken, {})
+            return startActiveSession(accessToken)
         }
     )
 
@@ -79,7 +152,15 @@ export function registerUserStatsIpc(): void {
             const validationError = validateAuth(accessToken)
             if (validationError) return validationError
 
-            return apiService.post<void>(`/api/v1/users/me/stats/app-session/${sessionId}/end`, accessToken, {})
+            // Clear local state if matches or just force strict end
+            if (activeSessionId === sessionId || activeSessionId) {
+                await endActiveSession()
+            } else {
+                // Fallback if ID doesn't match but we want to ensure request goes through
+                return apiService.post<void>(`/api/v1/users/me/stats/app-session/${sessionId}/end`, accessToken, {})
+            }
+
+            return { data: undefined }
         }
     )
 

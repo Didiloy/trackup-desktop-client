@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/composables/auth/useAuth'
-import type { IUserStats } from '@shared/contracts/interfaces/entities-stats/user-stats.interfaces'
+import { useUserStatsStore } from '@/stores/user-stats'
+import { formatSecondsToLabel } from '@/utils/time.utils'
 
 defineProps<{
     email?: string
-    stats?: IUserStats | null
-    loading?: boolean
 }>()
 
 const { t } = useI18n()
 const { signOut } = useAuth()
+const user_stats_store = useUserStatsStore()
+
+const refreshStats = async () => {
+    await user_stats_store.force_refresh()
+}
 </script>
 
 <template>
     <div class="bg-surface-0 rounded-2xl shadow-sm ring-1 ring-surface-200/60 p-6 mb-6">
-        <div class="flex items-start justify-between">
+        <div class="flex items-start justify-between mb-6">
             <div class="flex-1">
                 <h1 class="text-3xl font-bold text-surface-900 mb-2">
                     {{ t('views.home.welcome') }}
@@ -32,6 +36,14 @@ const { signOut } = useAuth()
                     outlined
                 />
                 <Button
+                    icon="pi pi-refresh"
+                    severity="secondary"
+                    outlined
+                    :loading="user_stats_store.is_loading"
+                    @click="refreshStats"
+                    v-tooltip.bottom="t('common.actions.refresh')"
+                />
+                <Button
                     :label="t('views.login.logout_button')"
                     icon="pi pi-sign-out"
                     severity="secondary"
@@ -40,30 +52,42 @@ const { signOut } = useAuth()
             </div>
         </div>
 
-        <div v-if="stats && !loading" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div class="text-center p-3 bg-surface-50 rounded-xl">
-                <p class="text-sm text-surface-500 mb-1">{{ t('views.home.stats.servers') }}</p>
-                <p class="text-2xl font-bold text-surface-900">
-                    {{ stats.total_servers_joined }}
-                </p>
+        <!-- Header Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex items-center gap-4 p-4 bg-surface-50 rounded-xl">
+                <div class="p-3 bg-indigo-500/10 rounded-lg">
+                    <i class="pi pi-sign-in text-indigo-500 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.servers_joined') }}</p>
+                    <p class="text-xl font-bold text-surface-900">
+                        {{ user_stats_store.get_stats?.total_servers_joined.toLocaleString() ?? '0' }}
+                    </p>
+                </div>
             </div>
-            <div class="text-center p-3 bg-surface-50 rounded-xl">
-                <p class="text-sm text-surface-500 mb-1">{{ t('views.home.stats.sessions') }}</p>
-                <p class="text-2xl font-bold text-surface-900">
-                    {{ stats.total_sessions }}
-                </p>
+
+            <div class="flex items-center gap-4 p-4 bg-surface-50 rounded-xl">
+                <div class="p-3 bg-purple-500/10 rounded-lg">
+                    <i class="pi pi-users text-purple-500 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.servers_created') }}</p>
+                    <p class="text-xl font-bold text-surface-900">
+                        {{ user_stats_store.get_stats?.total_servers_created.toLocaleString() ?? '0' }}
+                    </p>
+                </div>
             </div>
-            <div class="text-center p-3 bg-surface-50 rounded-xl">
-                <p class="text-sm text-surface-500 mb-1">{{ t('views.home.stats.activities') }}</p>
-                <p class="text-2xl font-bold text-surface-900">
-                    {{ stats.total_activities_created }}
-                </p>
-            </div>
-            <div class="text-center p-3 bg-surface-50 rounded-xl">
-                <p class="text-sm text-surface-500 mb-1">{{ t('views.home.stats.likes') }}</p>
-                <p class="text-2xl font-bold text-surface-900">
-                    {{ stats.total_likes_received }}
-                </p>
+
+            <div class="flex items-center gap-4 p-4 bg-surface-50 rounded-xl">
+                <div class="p-3 bg-teal-500/10 rounded-lg">
+                    <i class="pi pi-desktop text-teal-500 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-surface-500 mb-0.5">{{ t('views.home.stats.app_time') }}</p>
+                    <p class="text-xl font-bold text-surface-900">
+                        {{ user_stats_store.get_stats ? formatSecondsToLabel(user_stats_store.get_real_time_app_seconds) : '0s' }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>

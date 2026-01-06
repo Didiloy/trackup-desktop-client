@@ -8,6 +8,7 @@ import { applySecurity } from './security/hardening'
 import { ExtensionService } from './services/ExtensionService'
 import dotenv from 'dotenv'
 import path from 'path'
+import { endActiveSession } from './ipc/entities-stats/user-stats.ipc'
 dotenv.config()
 
 // Ensure single instance to receive deep links on Win/Linux
@@ -86,8 +87,16 @@ app.whenReady().then(async () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
+    // End any active app session
+    await endActiveSession()
+
     if (process.platform !== 'darwin') {
         app.quit()
     }
+})
+
+app.on('before-quit', async () => {
+    // Ensure session is ended if quitting directly (Cmd+Q or similar)
+    await endActiveSession()
 })

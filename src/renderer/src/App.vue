@@ -6,8 +6,30 @@ import { useAuth } from '@/composables/auth/useAuth'
 import LoginOrSignup from '@/views/auth/LoginOrSignup.vue'
 import Application from '@/views/app/Application.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import { watch, onMounted } from 'vue'
+import { useUserStatsStore } from '@/stores/user-stats'
 
 const { isAuthenticated } = useAuth()
+const userStatsStore = useUserStatsStore()
+
+// Automatic session tracking
+// We only need to START the session. The backend (Main process) handles ending it
+// when the app closes or timeouts (8h).
+async function initSession(): Promise<void> {
+    if (isAuthenticated.value) {
+        await userStatsStore.init_session_tracking()
+    }
+}
+
+// Watch for login
+watch(isAuthenticated, (newValue) => {
+    if (newValue) initSession()
+})
+
+// Check on mount (reload/restart)
+onMounted(() => {
+    initSession()
+})
 </script>
 
 <template>

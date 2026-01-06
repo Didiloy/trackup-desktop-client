@@ -302,10 +302,17 @@
                 "sessions": "Sessions",
                 "activities": "Activités",
                 "likes": "J'aime reçus",
-                "total_duration": "Durée totale",
+                "total_duration": "Durée totale des sessions",
                 "avg_session": "Durée moy. session",
                 "likes_given": "J'aime donnés",
-                "servers_created": "Serveurs créés"
+                "servers_created": "Serveurs créés",
+                "servers_joined": "Serveurs rejoints",
+                "total_sessions": "Sessions totales",
+                "unique_activities": "Activités uniques",
+                "likes_received": "J'aime reçus",
+                "app_time": "Temps sur l'app",
+                "most_active_server": "Serveur favori",
+                "avg_participants": "Moy. participants par session créée par vous"
             },
             "recent_sessions": {
                 "title": "Sessions récentes",

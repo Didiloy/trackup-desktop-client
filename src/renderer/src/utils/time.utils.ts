@@ -71,3 +71,23 @@ export function convertMsToMinutes(ms: number): number {
     if (!ms || ms < 0) return 0
     return Math.ceil(ms / MILLISECONDS_PER_MINUTE)
 }
+
+/**
+ * Formats seconds to a label like "1h 30m 15s".
+ * @param totalSeconds
+ */
+export function formatSecondsToLabel(totalSeconds: number): string {
+    if (!totalSeconds || Number.isNaN(totalSeconds)) return '0s'
+
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = Math.floor(totalSeconds % 60)
+
+    const parts: string[] = []
+
+    if (hours > 0) parts.push(`${hours}h`)
+    if (minutes > 0 || hours > 0) parts.push(`${minutes}m`)
+    parts.push(`${seconds}s`)
+
+    return parts.join(' ')
+}
