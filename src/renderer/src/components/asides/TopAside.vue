@@ -79,21 +79,21 @@ function handleToggleMembersAside(): void {
             <div class="h-full flex items-center justify-center px-1">
                 <ChronosButton />
             </div>
-            <div
-                v-if="showMembersAsideToggle"
-                id="toggle-sidebar-button"
-                class="h-full w-11 flex justify-center items-center bg-surface-200 text-gray-600 hover:bg-surface-400 hover:cursor-pointer hover:text-black dark:text-gray-400 dark:hover:text-gray-50"
-                :title="t('common.actions.toggle_sidebar')"
-                @click="handleToggleMembersAside"
-            >
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <span
-                    class="icon inline-flex items-center justify-center w-1/2 h-1/2"
-                    :class="isMembersAsideVisible ? 'text-primary-600' : ''"
-                    aria-hidden="true"
-                    v-html="toggle_sidebar_icon"
-                />
-            </div>
+<!--            <div-->
+<!--                v-if="showMembersAsideToggle"-->
+<!--                id="toggle-sidebar-button"-->
+<!--                class="h-full w-11 flex justify-center items-center bg-surface-200 text-gray-600 hover:bg-surface-400 hover:cursor-pointer hover:text-black dark:text-gray-400 dark:hover:text-gray-50"-->
+<!--                :title="t('common.actions.toggle_sidebar')"-->
+<!--                @click="handleToggleMembersAside"-->
+<!--            >-->
+<!--                &lt;!&ndash; eslint-disable-next-line vue/no-v-html &ndash;&gt;-->
+<!--                <span-->
+<!--                    class="icon inline-flex items-center justify-center w-1/2 h-1/2"-->
+<!--                    :class="isMembersAsideVisible ? 'text-primary-600' : ''"-->
+<!--                    aria-hidden="true"-->
+<!--                    v-html="toggle_sidebar_icon"-->
+<!--                />-->
+<!--            </div>-->
             <div
                 id="devtools-button"
                 class="h-full w-11 flex justify-center items-center bg-surface-200 hover:bg-surface-400 hover:cursor-pointer text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-gray-50"

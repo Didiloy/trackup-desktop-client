@@ -34,7 +34,7 @@ async function navigateToMetadataProfile(metadataDefinitionId: string): Promise<
         await router.push({
             name: 'ServerActivityMetadataProfile',
             params: {
-                serverId: server_store.getPublicId,
+                id: server_store.getPublicId,
                 activityId: props.activity.public_id,
                 metadataDefinitionId
             }
