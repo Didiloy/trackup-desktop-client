@@ -295,6 +295,23 @@
                 "invalid_email": "Veuillez entrer une adresse email valide"
             }
         },
+        "home": {
+            "welcome": "Bienvenue sur TrackUp",
+            "stats": {
+                "servers": "Serveurs",
+                "sessions": "Sessions",
+                "activities": "Activités",
+                "likes": "J'aime reçus",
+                "total_duration": "Durée totale",
+                "avg_session": "Durée moy. session",
+                "likes_given": "J'aime donnés",
+                "servers_created": "Serveurs créés"
+            },
+            "recent_sessions": {
+                "title": "Sessions récentes",
+                "empty": "Aucune session récente"
+            }
+        },
         "create_server": {
             "title": "Créer un serveur",
             "subtitle": "Créez votre propre espace communautaire",
@@ -609,7 +626,6 @@
                     "date": "Date"
                 }
             },
-
             "add_modal": {
                 "title": "Ajouter une activité",
                 "description": "Ajoutez une nouvelle activité pour votre serveur",
@@ -626,7 +642,6 @@
                 "metadata_allow_not_predefined": "Autoriser les valeurs non prédéfinies",
                 "metadata_choices": "Choix (optionnel)",
                 "metadata_list": "Liste des attributs",
-
                 "skill_levels_title": "Niveaux de compétence",
                 "skill_levels_description": "Ajoutez les niveaux de compétence pour votre activité.",
                 "skill_levels_description_detail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",

@@ -23,6 +23,7 @@ import { ENUM_DEFINITION_STATS_CHANNELS } from './types/entities-stats/enum-defi
 import { SNAPSHOT_STATS_CHANNELS } from './types/entities-stats/snapshot-stats.channels'
 import { BILLING_CHANNELS } from './types/billing.channels'
 import { ACTIVITY_METADATA_DEFINITION_STATS_CHANNELS } from './types/entities-stats/activity-metadata-definition-stats.channels'
+import { USER_STATS_CHANNELS } from './types/entities-stats/user-stats.channels'
 
 export const ipc_channels = {
     window: WINDOW_CHANNELS,
@@ -44,5 +45,6 @@ export const ipc_channels = {
     enumDefinitionStats: ENUM_DEFINITION_STATS_CHANNELS,
     snapshotStats: SNAPSHOT_STATS_CHANNELS,
     activityMetadataDefinitionStats: ACTIVITY_METADATA_DEFINITION_STATS_CHANNELS,
-    billing: BILLING_CHANNELS
+    billing: BILLING_CHANNELS,
+    userStats: USER_STATS_CHANNELS
 } as const

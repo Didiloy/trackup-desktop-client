@@ -21,6 +21,7 @@ import { snapshotStatsBridge } from './bridges/entities-stats/snapshot-stats.bri
 import { billingBridge } from './bridges/billing.bridge'
 import { Logger } from '../shared/logger'
 import { activityMetadataDefinitionStatsBridge } from './bridges/entities-stats/activity-metadata-definition-stats.bridge'
+import { userStatsBridge } from './bridges/entities-stats/user-stats.bridge'
 
 const logger = new Logger('Preload')
 
@@ -50,7 +51,8 @@ const api = {
     enumDefinitionStats: enumDefinitionStatsBridge,
     snapshotStats: snapshotStatsBridge,
     activityMetadataDefinitionStats: activityMetadataDefinitionStatsBridge,
-    billing: billingBridge
+    billing: billingBridge,
+    userStats: userStatsBridge
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
