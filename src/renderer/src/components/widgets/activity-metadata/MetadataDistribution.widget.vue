@@ -15,7 +15,9 @@ import type {
     IMetadataDistributionDto,
     IMetadataValueItemDto
 } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
 
 defineOptions({
     widgetMetadata: {
@@ -59,12 +61,16 @@ const distribution = ref<IMetadataValueItemDto[]>([])
 const isLoadingLocal = ref(false)
 
 // Only show for STRING and BOOLEAN types
+const SUPPORTED_TYPES: ActivityMetadataType[] = ['STRING', 'BOOLEAN']
+
 const isTypeCompatible = computed(() => {
     if (!distributionData.value) return true
-    return ['STRING', 'BOOLEAN'].includes(distributionData.value.metadata_type)
+    return isMetadataTypeSupported(distributionData.value.metadata_type, SUPPORTED_TYPES)
 })
 
-const supportedTypes = ['STRING', 'BOOLEAN']
+const translatedSupportedTypes = computed(() => {
+    return getTranslatedMetadataTypes(SUPPORTED_TYPES, t)
+})
 
 async function fetchDistribution(): Promise<void> {
     const serverId = server_store.getPublicId
@@ -83,6 +89,10 @@ async function fetchDistribution(): Promise<void> {
                 distribution.value = res.data.values
             }
         }
+    } catch (error) {
+        // Handle empty response or JSON parse errors gracefully
+        console.warn('Failed to fetch metadata distribution:', error)
+        distribution.value = []
     } finally {
         isLoadingLocal.value = false
     }
@@ -226,7 +236,7 @@ const config = computed<VueUiDonutConfig>(() => ({
                 {{ t('widgets.activity_metadata.incompatible_type') }}
             </p>
             <p class="text-xs text-surface-400 mt-1">
-                {{ t('widgets.activity_metadata.supported_types', { types: supportedTypes.join(', ') }) }}
+                {{ t('widgets.activity_metadata.supported_types', { types: translatedSupportedTypes }) }}
             </p>
         </div>
 

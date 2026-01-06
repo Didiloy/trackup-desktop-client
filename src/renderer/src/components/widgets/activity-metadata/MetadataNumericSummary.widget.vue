@@ -10,7 +10,9 @@ import type {
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IMetadataDefinitionSummaryDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
 
 defineOptions({
     widgetMetadata: {
@@ -53,12 +55,16 @@ const local_stats = ref<IMetadataDefinitionSummaryDto | null>(null)
 const isLoadingLocal = ref(false)
 
 // Only show this widget for NUMBER type metadata
+const SUPPORTED_TYPES: ActivityMetadataType[] = ['NUMBER']
+
 const isTypeCompatible = computed(() => {
     if (!local_stats.value) return true // Don't show incompatible msg while loading
-    return local_stats.value.metadata_type === 'NUMBER'
+    return isMetadataTypeSupported(local_stats.value.metadata_type, SUPPORTED_TYPES)
 })
 
-const supportedTypes = ['NUMBER']
+const translatedSupportedTypes = computed(() => {
+    return getTranslatedMetadataTypes(SUPPORTED_TYPES, t)
+})
 
 async function fetchStats(): Promise<void> {
     const serverId = server_store.getPublicId
@@ -177,7 +183,7 @@ const stats = computed(() => [
                 {{ t('widgets.activity_metadata.incompatible_type') }}
             </p>
             <p class="text-xs text-surface-400 mt-1">
-                {{ t('widgets.activity_metadata.supported_types', { types: supportedTypes.join(', ') }) }}
+                {{ t('widgets.activity_metadata.supported_types', { types: translatedSupportedTypes }) }}
             </p>
         </div>
 

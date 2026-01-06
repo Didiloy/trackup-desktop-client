@@ -4,6 +4,8 @@ import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/e
 import { computed } from 'vue'
 import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
+import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 const props = defineProps<{
     metadataDefinitions?: IActivityMetadataDefinition[]
@@ -13,7 +15,7 @@ const { t, te } = useI18n()
 
 function formatTypeLabel(type?: string): string {
     if (!type) return ''
-    const key = `views.server_activities.add_modal.metadata_type_${String(type).toLowerCase()}`
+    const key = getMetadataTypeTranslationKey(type as ActivityMetadataType)
     return te(key) ? t(key) : String(type)
 }
 

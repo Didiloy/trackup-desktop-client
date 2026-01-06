@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
 
 const props = defineProps<{
     def: IActivityMetadataDefinition
@@ -48,7 +49,7 @@ const value = computed({
                 </span>
             </div>
             <div class="ml-auto text-xs text-surface-400 italic shrink-0 mt-1">
-                {{ t('views.server_activities.add_modal.metadata_type_boolean') }}
+                {{ t(getMetadataTypeTranslationKey('BOOLEAN')) }}
             </div>
         </div>
     </div>

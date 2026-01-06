@@ -12,6 +12,8 @@ import { useActivityMetadataDefinitionDraft } from '@/composables/activities/met
 import { useActivityMetadataDefinitionList } from '@/composables/activities/metadata/useActivityMetadataDefinitionList'
 import { useServerStore } from '@/stores/server'
 import { useToast } from 'primevue/usetoast'
+import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 const emit = defineEmits<{
     (e: 'skip'): void
@@ -189,7 +191,7 @@ async function onSubmit(): Promise<void> {
 
 function formatTypeLabel(type?: string): string {
     if (!type) return ''
-    const key = `views.server_activities.add_modal.metadata_type_${String(type).toLowerCase()}`
+    const key = getMetadataTypeTranslationKey(type as ActivityMetadataType)
     return te(key) ? t(key) : String(type)
 }
 </script>

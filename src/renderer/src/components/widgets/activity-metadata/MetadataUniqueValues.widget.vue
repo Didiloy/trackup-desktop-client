@@ -11,7 +11,9 @@ import type {
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IMetadataDefinitionSummaryDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
 
 defineOptions({
     widgetMetadata: {
@@ -54,12 +56,16 @@ const local_stats = ref<IMetadataDefinitionSummaryDto | null>(null)
 const isLoadingLocal = ref(false)
 
 // Only show for STRING and BOOLEAN types
+const SUPPORTED_TYPES: ActivityMetadataType[] = ['STRING', 'BOOLEAN']
+
 const isTypeCompatible = computed(() => {
     if (!local_stats.value) return true
-    return supportedTypes.includes(local_stats.value.metadata_type)
+    return isMetadataTypeSupported(local_stats.value.metadata_type, SUPPORTED_TYPES)
 })
 
-const supportedTypes = ['STRING', 'BOOLEAN']
+const translatedSupportedTypes = computed(() => {
+    return getTranslatedMetadataTypes(SUPPORTED_TYPES, t)
+})
 
 async function fetchStats(): Promise<void> {
     const serverId = server_store.getPublicId

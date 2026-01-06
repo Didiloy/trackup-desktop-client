@@ -1,6 +1,8 @@
 import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
+import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
+import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 
 interface TypeOption {
     label: string
@@ -23,12 +25,11 @@ export function useActivityMetadataDefinitionTypes(): UseActivityMetadataDefinit
     const types_error = ref<string | null>(null)
 
     const getFallbackTypes = (): TypeOption[] => {
-        return [
-            { label: t('views.server_activities.add_modal.metadata_type_string'), value: 'STRING' },
-            { label: t('views.server_activities.add_modal.metadata_type_number'), value: 'NUMBER' },
-            { label: t('views.server_activities.add_modal.metadata_type_boolean'), value: 'BOOLEAN' },
-            { label: t('views.server_activities.add_modal.metadata_type_date'), value: 'DATE' }
-        ]
+        const types: ActivityMetadataType[] = ['STRING', 'NUMBER', 'BOOLEAN', 'DATE']
+        return types.map((type) => ({
+            label: t(getMetadataTypeTranslationKey(type)),
+            value: type
+        }))
     }
 
     const loadTypes = async (serverId: string, activityId: string): Promise<void> => {
@@ -42,8 +43,8 @@ export function useActivityMetadataDefinitionTypes(): UseActivityMetadataDefinit
             } else if (res.data && Array.isArray(res.data)) {
                 // Map API-provided types to options with translated labels when available
                 type_options.value = res.data.map((val) => {
-                    const upper = String(val).toUpperCase()
-                    const key = `views.server_activities.add_modal.metadata_type_${String(upper).toLowerCase()}`
+                    const upper = String(val).toUpperCase() as ActivityMetadataType
+                    const key = getMetadataTypeTranslationKey(upper)
                     return {
                         label: te(key) ? t(key) : String(val),
                         value: upper
