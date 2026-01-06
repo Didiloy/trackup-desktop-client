@@ -22,7 +22,6 @@ const emit = defineEmits<Emits>()
 const { t } = useI18n()
 const router = useRouter()
 
-
 function toggleLike(session: ISessionListItem): void {
     if (session.liked_by_me) {
         emit('unlike', session.public_id)

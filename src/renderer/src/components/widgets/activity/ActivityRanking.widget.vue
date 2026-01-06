@@ -146,19 +146,25 @@ const rankPercent = computed(() => {
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('views.server_activities.total_sessions') }}</p>
+                    <p class="text-xs text-surface-500">
+                        {{ t('views.server_activities.total_sessions') }}
+                    </p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ rankingData.total_sessions }}
                     </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60">
-                    <p class="text-xs text-surface-500">{{ t('views.server_activities.card.duration') }}</p>
+                    <p class="text-xs text-surface-500">
+                        {{ t('views.server_activities.card.duration') }}
+                    </p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ formatMinutesToLabel(rankingData.total_duration) }}
                     </p>
                 </div>
                 <div class="bg-surface-0 rounded-2xl p-3 ring-1 ring-surface-200/60 col-span-2">
-                    <p class="text-xs text-surface-500">{{ t('views.server_activities.popularity') }}</p>
+                    <p class="text-xs text-surface-500">
+                        {{ t('views.server_activities.popularity') }}
+                    </p>
                     <p class="text-lg font-semibold text-surface-900">
                         {{ rankingData.popularity_score.toFixed(1) }}
                     </p>

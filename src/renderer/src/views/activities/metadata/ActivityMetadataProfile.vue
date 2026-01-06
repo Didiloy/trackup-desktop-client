@@ -100,7 +100,9 @@ function handleBack(): void {
                     </span>
                 </div>
                 <div>
-                    <h2 class="text-sm font-medium text-surface-500 group-hover:text-primary-600 transition-colors">
+                    <h2
+                        class="text-sm font-medium text-surface-500 group-hover:text-primary-600 transition-colors"
+                    >
                         {{ activity.name }}
                     </h2>
                     <div class="flex items-center gap-1 text-xs text-surface-400">
@@ -182,7 +184,6 @@ function handleBack(): void {
                     :show-identity="false"
                     :metadata-definition-id="definitionId"
                 />
-
             </div>
 
             <!-- Distribution Chart -->

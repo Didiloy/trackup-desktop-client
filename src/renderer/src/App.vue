@@ -22,9 +22,8 @@ const { isAuthenticated } = useAuth()
             <Application v-else key="application" />
         </TransitionWrapper>
         <Toast />
-        
+
         <!-- Server Loading Overlay -->
         <ServerLoadingOverlay />
     </div>
 </template>
-

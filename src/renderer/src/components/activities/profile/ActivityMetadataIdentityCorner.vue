@@ -45,7 +45,11 @@ async function fetchDefinition(): Promise<void> {
     if (!serverId || !activityIdValue.value) return
 
     try {
-        const res = await getMetadataDefinitionById(serverId, activityIdValue.value, props.metadataDefinitionId)
+        const res = await getMetadataDefinitionById(
+            serverId,
+            activityIdValue.value,
+            props.metadataDefinitionId
+        )
         if (res.data) {
             localDefinition.value = res.data
         }

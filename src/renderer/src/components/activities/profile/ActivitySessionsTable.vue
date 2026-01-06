@@ -49,11 +49,7 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         @load-more="emit('loadMore')"
     >
         <!-- Sessions List -->
-        <TransitionGroupWrapper
-            name="fade"
-            tag="div"
-            class="flex flex-col"
-        >
+        <TransitionGroupWrapper name="fade" tag="div" class="flex flex-col">
             <div
                 v-for="session in sessions"
                 :key="session.public_id"
@@ -112,10 +108,7 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         </TransitionGroupWrapper>
 
         <!-- Loading State -->
-        <div
-            v-if="loading && sessions.length === 0"
-            class="flex flex-col"
-        >
+        <div v-if="loading && sessions.length === 0" class="flex flex-col">
             <div
                 v-for="n in 6"
                 :key="n"
@@ -148,6 +141,4 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
     </InfiniteScrollContainer>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

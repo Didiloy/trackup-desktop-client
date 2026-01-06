@@ -78,9 +78,7 @@ async function loadDefinitions(): Promise<void> {
     if (!server_store.getPublicId) return
     loading.value = true
     try {
-        const [defsRes] = await Promise.all([
-            listEnumDefinitions(server_store.getPublicId),
-        ])
+        const [defsRes] = await Promise.all([listEnumDefinitions(server_store.getPublicId)])
 
         if (defsRes.data) {
             definitions.value = defsRes.data

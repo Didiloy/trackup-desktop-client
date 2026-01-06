@@ -26,10 +26,10 @@ const error = ref<string | null>(null)
 
 async function loadSession() {
     if (!server_store.getPublicId || !sessionId.value) return
-    
+
     loading.value = true
     error.value = null
-    
+
     try {
         const res = await getSessionById(server_store.getPublicId, sessionId.value)
         if (res.error || !res.data) {
@@ -46,7 +46,7 @@ async function loadSession() {
 
 async function handleLike() {
     if (!session.value || !server_store.getPublicId) return
-    
+
     try {
         if (session.value.liked_by_me) {
             await unlikeSession(server_store.getPublicId, session.value.public_id)
@@ -78,7 +78,7 @@ watch(
 )
 
 onMounted(async () => {
-   if (server_store.getPublicId && sessionId.value) {
+    if (server_store.getPublicId && sessionId.value) {
         await loadSession()
     }
 })
@@ -92,35 +92,32 @@ onMounted(async () => {
         </div>
 
         <!-- content -->
-         <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
+        <TransitionWrapper name="slide-fade" :duration="0.25" appear mode="out-in">
             <div v-if="session || loading" key="content" class="space-y-6 max-w-7xl mx-auto">
-                
-                <SessionProfileHeader 
-                    :session="session" 
+                <SessionProfileHeader
+                    :session="session"
                     :loading="loading"
                     @like="handleLike"
                     @unlike="handleLike"
                 />
-                
+
                 <div v-if="session" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Left Column: Participants (takes 1 col on large screens) -->
                     <div class="space-y-6">
-                        <SessionParticipants 
-                            :participants="session.server_member" 
+                        <SessionParticipants
+                            :participants="session.server_member"
                             :creator="session.creator"
                         />
                     </div>
-                    
+
                     <!-- Right Column: Metadata (takes 2 cols on large screens) -->
                     <div class="lg:col-span-2 space-y-6">
                         <SessionEnumDefinitions :enums="session.enum_definitions" />
-                        
-                         <SessionMetadata 
-                            :metadata="session.metadata"
-                        />
+
+                        <SessionMetadata :metadata="session.metadata" />
                     </div>
                 </div>
             </div>
-         </TransitionWrapper>
+        </TransitionWrapper>
     </div>
 </template>

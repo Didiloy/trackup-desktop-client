@@ -45,7 +45,7 @@ const searchFieldOptions = computed(() => [
 
 const sortByOptions = computed(() => [
     { label: t('common.filters.sort_by.name'), value: 'name' },
-    { label: t('common.filters.sort_by.choices_count'), value: 'choices_count' },
+    { label: t('common.filters.sort_by.choices_count'), value: 'choices_count' }
 ])
 
 const sortOrderOptions = computed(() => [
@@ -209,4 +209,3 @@ function clearFilters(): void {
         </template>
     </GenericFilterBar>
 </template>
-

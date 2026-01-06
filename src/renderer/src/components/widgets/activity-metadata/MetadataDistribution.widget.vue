@@ -236,7 +236,11 @@ const config = computed<VueUiDonutConfig>(() => ({
                 {{ t('widgets.activity_metadata.incompatible_type') }}
             </p>
             <p class="text-xs text-surface-400 mt-1">
-                {{ t('widgets.activity_metadata.supported_types', { types: translatedSupportedTypes }) }}
+                {{
+                    t('widgets.activity_metadata.supported_types', {
+                        types: translatedSupportedTypes
+                    })
+                }}
             </p>
         </div>
 

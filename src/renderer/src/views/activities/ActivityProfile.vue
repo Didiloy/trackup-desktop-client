@@ -148,8 +148,6 @@ onMounted(async () => {
         await loadActivity()
     }
 })
-
-
 </script>
 
 <template>
@@ -177,7 +175,7 @@ onMounted(async () => {
                     </Tab>
                     <Tab value="sessions">
                         <div class="flex items-center gap-2 px-2">
-                            <SessionIcon/>
+                            <SessionIcon />
                             <span>{{ t('views.server_activities.tabs.sessions') }}</span>
                         </div>
                     </Tab>

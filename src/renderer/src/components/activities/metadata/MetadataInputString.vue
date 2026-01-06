@@ -33,8 +33,6 @@ const descriptionText = computed(() => {
     if (te(d as string)) return t(d as string)
     return d as string
 })
-
-
 </script>
 
 <template>

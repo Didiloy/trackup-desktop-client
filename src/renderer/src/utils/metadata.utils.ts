@@ -40,4 +40,3 @@ export function isMetadataTypeSupported(
     if (!type) return false
     return supportedTypes.includes(type as ActivityMetadataType)
 }
-

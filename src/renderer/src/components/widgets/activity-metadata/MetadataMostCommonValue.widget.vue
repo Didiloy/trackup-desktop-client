@@ -10,7 +10,10 @@ import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IMetadataDefinitionSummaryDto, IMetadataDefinitionDetailDto } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type {
+    IMetadataDefinitionSummaryDto,
+    IMetadataDefinitionDetailDto
+} from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
@@ -73,10 +76,15 @@ async function fetchStats(): Promise<void> {
 
     isLoadingLocal.value = true
     try {
-        const res = await getMetadataDefinitionStats(serverId, activityId.value, definitionId.value, {
-            page: 1,
-            limit: 1
-        })
+        const res = await getMetadataDefinitionStats(
+            serverId,
+            activityId.value,
+            definitionId.value,
+            {
+                page: 1,
+                limit: 1
+            }
+        )
         if (res.data?.data && res.data.data.length > 0) {
             local_stats.value = res.data.data[0]
         }
@@ -107,7 +115,7 @@ const value = computed(() => {
             v = (local_stats.value as IMetadataDefinitionDetailDto).value
         }
     }
-    
+
     if (v === undefined || v === null) return '-'
     if (typeof v === 'boolean') return v ? t('common.misc.yes') : t('common.misc.no')
     return String(v)
@@ -135,7 +143,9 @@ const value = computed(() => {
         </p>
         <div class="flex flex-col items-center justify-center py-2 text-surface-400">
             <i class="pi pi-exclamation-triangle text-amber-500 text-lg mb-1"></i>
-            <p class="text-xs text-center">{{ t('widgets.activity_metadata.incompatible_type') }}</p>
+            <p class="text-xs text-center">
+                {{ t('widgets.activity_metadata.incompatible_type') }}
+            </p>
         </div>
     </div>
 

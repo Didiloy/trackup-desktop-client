@@ -455,6 +455,4 @@ const props = withDefaults(defineProps<Props>(), {
     opacity: 0;
     transform: scale(1.02);
 }
-
-
 </style>

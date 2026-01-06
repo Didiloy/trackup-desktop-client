@@ -233,8 +233,7 @@ const isHexColor = (v?: string): boolean => {
             <div class="flex items-center gap-2">
                 <i class="pi pi-clock text-surface-500"></i>
                 <span class="text-sm font-medium text-surface-700"
-                    >{{ t('common.fields.duration') }}
-                    <span class="text-red-500">*</span></span
+                    >{{ t('common.fields.duration') }} <span class="text-red-500">*</span></span
                 >
             </div>
 

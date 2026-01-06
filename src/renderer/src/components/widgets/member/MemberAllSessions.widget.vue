@@ -154,7 +154,7 @@ const navigateToSession = async (sessionId: string): Promise<void> => {
                                 v-if="session.participants_count > 0"
                                 class="flex items-center gap-1.5"
                             >
-                                <MemberIcon/>
+                                <MemberIcon />
                                 <span>{{ session.participants_count }}</span>
                             </div>
 

@@ -23,11 +23,17 @@ const { listMetadataDefinitions } = useActivityMetadataDefinitionCRUD()
 const selectedActivity = ref<IActivity | null>(null)
 const selectedMetadata = ref<IActivityMetadataDefinition | null>(null)
 
-const currentActivityId = computed(() => selectedActivity.value?.public_id || props.modelValue.activityId)
+const currentActivityId = computed(
+    () => selectedActivity.value?.public_id || props.modelValue.activityId
+)
 
 // Restore selections on mount if config has IDs
 onMounted(async () => {
-    if (props.modelValue.activityId && props.modelValue.metadataDefinitionId && server_store.getPublicId) {
+    if (
+        props.modelValue.activityId &&
+        props.modelValue.metadataDefinitionId &&
+        server_store.getPublicId
+    ) {
         try {
             const res = await listMetadataDefinitions(
                 server_store.getPublicId,

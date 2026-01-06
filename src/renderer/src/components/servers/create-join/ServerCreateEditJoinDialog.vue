@@ -64,7 +64,7 @@ function closeDialog(): void {
     >
         <template #header>
             <div class="flex items-center gap-2 p-3">
-                <ServerIcon/>
+                <ServerIcon />
                 <span class="font-semibold text-surface-900">
                     {{
                         current_action === 'create'

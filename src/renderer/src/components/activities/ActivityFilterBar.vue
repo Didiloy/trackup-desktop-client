@@ -116,7 +116,9 @@ const activeFiltersCount = computed(() => {
                 <template #content>
                     <div class="flex flex-col gap-4 p-4 bg-surface-0 rounded-md">
                         <div class="flex items-center justify-between">
-                            <span class="font-semibold text-surface-900">{{ t('common.filters.title') }}</span>
+                            <span class="font-semibold text-surface-900">{{
+                                t('common.filters.title')
+                            }}</span>
                             <Button
                                 :label="t('common.actions.clear_all')"
                                 link
@@ -128,7 +130,9 @@ const activeFiltersCount = computed(() => {
 
                         <!-- Search Mode Filter -->
                         <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-surface-700">{{ t('common.filters.search_mode') }}</label>
+                            <label class="text-sm font-medium text-surface-700">{{
+                                t('common.filters.search_mode')
+                            }}</label>
                             <Select
                                 :model-value="localSearchMode"
                                 :options="searchModeOptions"

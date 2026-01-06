@@ -64,9 +64,7 @@ async function fetchStats(): Promise<void> {
             limit: 100
         })
         if (res.data?.data) {
-            const found = res.data.data.find(
-                (d) => d.metadata_definition_id === definitionId.value
-            )
+            const found = res.data.data.find((d) => d.metadata_definition_id === definitionId.value)
             if (found) {
                 local_stats.value = found
             }

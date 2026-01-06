@@ -9,7 +9,11 @@ import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
-import type { IMetadataDefinitionSummaryDto, IMetadataDefinitionDetailDto, INumericSummary } from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
+import type {
+    IMetadataDefinitionSummaryDto,
+    IMetadataDefinitionDetailDto,
+    INumericSummary
+} from '@shared/contracts/interfaces/entities-stats/activity-metadata-definition-stats.interfaces'
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { getTranslatedMetadataTypes, isMetadataTypeSupported } from '@/utils/metadata.utils'
@@ -72,12 +76,17 @@ async function fetchStats(): Promise<void> {
 
     isLoadingLocal.value = true
     try {
-        const res = await getMetadataDefinitionStats(serverId, activityId.value, definitionId.value, {
-            page: 1,
-            limit: 1
-        })
+        const res = await getMetadataDefinitionStats(
+            serverId,
+            activityId.value,
+            definitionId.value,
+            {
+                page: 1,
+                limit: 1
+            }
+        )
         if (res.data?.data && res.data.data.length > 0) {
-             local_stats.value = res.data.data[0]
+            local_stats.value = res.data.data[0]
         }
     } finally {
         isLoadingLocal.value = false
@@ -97,7 +106,7 @@ watch(
 
 const numericSummary = computed((): INumericSummary | undefined => {
     if (!local_stats.value) return undefined
-    
+
     // Check if it's SummaryDto
     if ('numeric_summary' in local_stats.value && local_stats.value.numeric_summary) {
         return local_stats.value.numeric_summary
@@ -106,7 +115,12 @@ const numericSummary = computed((): INumericSummary | undefined => {
     // Check if it's DetailDto with direct fields
     // We assume DetailDto fields are populated if used as summary
     const detail = local_stats.value as IMetadataDefinitionDetailDto
-    if (detail.sum !== undefined && detail.avg !== undefined && detail.min !== undefined && detail.max !== undefined) {
+    if (
+        detail.sum !== undefined &&
+        detail.avg !== undefined &&
+        detail.min !== undefined &&
+        detail.max !== undefined
+    ) {
         return {
             sum: detail.sum,
             avg: detail.avg,
@@ -114,7 +128,7 @@ const numericSummary = computed((): INumericSummary | undefined => {
             max: detail.max
         }
     }
-    
+
     return undefined
 })
 
@@ -182,11 +196,7 @@ const stats = computed(() => [
 
         <!-- Loading State -->
         <div v-if="isLoadingLocal" class="grid grid-cols-2 gap-3">
-            <div
-                v-for="i in 4"
-                :key="i"
-                class="h-16 rounded-xl bg-surface-100 animate-pulse"
-            ></div>
+            <div v-for="i in 4" :key="i" class="h-16 rounded-xl bg-surface-100 animate-pulse"></div>
         </div>
 
         <!-- Incompatible Type Warning -->
@@ -199,7 +209,11 @@ const stats = computed(() => [
                 {{ t('widgets.activity_metadata.incompatible_type') }}
             </p>
             <p class="text-xs text-surface-400 mt-1">
-                {{ t('widgets.activity_metadata.supported_types', { types: translatedSupportedTypes }) }}
+                {{
+                    t('widgets.activity_metadata.supported_types', {
+                        types: translatedSupportedTypes
+                    })
+                }}
             </p>
         </div>
 
@@ -221,10 +235,7 @@ const stats = computed(() => [
         </div>
 
         <!-- Empty State -->
-        <div
-            v-else
-            class="flex flex-col items-center justify-center h-32 text-surface-400"
-        >
+        <div v-else class="flex flex-col items-center justify-center h-32 text-surface-400">
             <i class="pi pi-calculator text-2xl mb-2"></i>
             <p class="text-sm">{{ t('common.fields.no_data') }}</p>
         </div>

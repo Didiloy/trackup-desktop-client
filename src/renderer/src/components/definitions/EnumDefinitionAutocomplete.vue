@@ -107,7 +107,9 @@ onMounted(() => {
         v-model="query"
         :suggestions="suggestions"
         option-label="name"
-        :placeholder="placeholder || t('views.server_enum_definitions.create_modal.name_placeholder')"
+        :placeholder="
+            placeholder || t('views.server_enum_definitions.create_modal.name_placeholder')
+        "
         :size="size"
         :disabled="disabled"
         :pt="{

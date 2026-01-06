@@ -85,8 +85,7 @@ async function handleComplete(event: { query: string }): Promise<void> {
         suggestions.value = [...allDefinitions.value]
     } else {
         suggestions.value = allDefinitions.value.filter(
-            (d) =>
-                (d.label || d.key).toLowerCase().includes(q) || d.key.toLowerCase().includes(q)
+            (d) => (d.label || d.key).toLowerCase().includes(q) || d.key.toLowerCase().includes(q)
         )
     }
 }
@@ -124,10 +123,12 @@ onMounted(() => {
                 <div
                     class="w-6 h-6 rounded bg-surface-200 flex items-center justify-center text-xs text-surface-600"
                 >
-                    <MetadataTypeBadge :type="slotProps.option.type"/>
+                    <MetadataTypeBadge :type="slotProps.option.type" />
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-sm">{{ slotProps.option.label || slotProps.option.key }}</span>
+                    <span class="text-sm">{{
+                        slotProps.option.label || slotProps.option.key
+                    }}</span>
                     <span v-if="slotProps.option.label" class="text-xs text-surface-400">
                         {{ slotProps.option.key }}
                     </span>
