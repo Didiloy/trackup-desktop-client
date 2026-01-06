@@ -8,9 +8,10 @@ import { computed } from 'vue'
 type MetadataType = 'STRING' | 'NUMBER' | 'BOOLEAN' | 'DATE'
 
 interface Props {
-    type: MetadataType | string
+    type: MetadataType | string | null
     size?: 'sm' | 'md' | 'lg'
     rounded?: 'md' | 'lg' | 'xl' | '2xl'
+    class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +20,9 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const iconClass = computed(() => {
+    if (!props.type) {
+        return 'pi pi-align-left'
+    }
     switch (props.type.toUpperCase()) {
         case 'NUMBER':
             return 'pi pi-hashtag'
@@ -36,7 +40,7 @@ const sizeClasses = computed(() => {
     switch (props.size) {
         case 'sm':
             return {
-                container: 'w-8 h-8',
+                container: 'w-3 h-3',
                 icon: 'text-sm'
             }
         case 'md':
@@ -73,27 +77,33 @@ const roundedClass = computed(() => {
 })
 
 const colorClasses = computed(() => {
+    if (!props.type) {
+        return {
+            bg: 'bg-primary-50',
+            text: 'text-primary-500'
+        }
+    }
     switch (props.type.toUpperCase()) {
         case 'NUMBER':
             return {
                 bg: 'bg-blue-50',
-                text: 'text-blue-600'
+                text: 'text-blue-500'
             }
         case 'BOOLEAN':
             return {
                 bg: 'bg-green-50',
-                text: 'text-green-600'
+                text: 'text-green-500'
             }
         case 'DATE':
             return {
                 bg: 'bg-purple-50',
-                text: 'text-purple-600'
+                text: 'text-purple-500'
             }
         case 'STRING':
         default:
             return {
                 bg: 'bg-primary-50',
-                text: 'text-primary-600'
+                text: 'text-primary-500'
             }
     }
 })
@@ -106,6 +116,7 @@ const colorClasses = computed(() => {
             roundedClass,
             colorClasses.bg,
             colorClasses.text,
+            props.class,
             'flex items-center justify-center shrink-0'
         ]"
     >

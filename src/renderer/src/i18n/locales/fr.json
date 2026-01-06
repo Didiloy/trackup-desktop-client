@@ -599,6 +599,17 @@
                 "identity_tooltip": "Activité : {name}",
                 "show_identity": "Afficher l'identité"
             },
+            "metadata": {
+                "title": "Types d'attributs",
+                "description": "Sélectionnez le type d'attribut que vous souhaitez ajouter.",
+                "type_options": {
+                    "string": "Texte",
+                    "number": "Nombre",
+                    "boolean": "Booléen",
+                    "date": "Date"
+                }
+            },
+
             "add_modal": {
                 "title": "Ajouter une activité",
                 "description": "Ajoutez une nouvelle activité pour votre serveur",
@@ -615,10 +626,7 @@
                 "metadata_allow_not_predefined": "Autoriser les valeurs non prédéfinies",
                 "metadata_choices": "Choix (optionnel)",
                 "metadata_list": "Liste des attributs",
-                "metadata_type_string": "Texte",
-                "metadata_type_number": "Nombre",
-                "metadata_type_boolean": "Booléen",
-                "metadata_type_date": "Date",
+
                 "skill_levels_title": "Niveaux de compétence",
                 "skill_levels_description": "Ajoutez les niveaux de compétence pour votre activité.",
                 "skill_levels_description_detail": "Cela peut être des niveaux de compétence que vous souhaitez vous attribuer comme 'Débutant', 'Intermédiaire', 'Expert', etc.",

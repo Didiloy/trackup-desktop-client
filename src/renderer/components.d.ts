@@ -149,6 +149,7 @@ declare module 'vue' {
     'MemberTotalDuration.widget': typeof import('./src/components/widgets/member/MemberTotalDuration.widget.vue')['default']
     'MemberTotalSessions.widget': typeof import('./src/components/widgets/member/MemberTotalSessions.widget.vue')['default']
     MemberWidgetConfigForm: typeof import('./src/components/widgets/member/MemberWidgetConfigForm.vue')['default']
+    'MetadataChoices.widget': typeof import('./src/components/widgets/activity-metadata/MetadataChoices.widget.vue')['default']
     MetadataDefinitionAutocomplete: typeof import('./src/components/activities/metadata/MetadataDefinitionAutocomplete.vue')['default']
     'MetadataDistribution.widget': typeof import('./src/components/widgets/activity-metadata/MetadataDistribution.widget.vue')['default']
     MetadataIcon: typeof import('./src/components/common/icons/MetadataIcon.vue')['default']

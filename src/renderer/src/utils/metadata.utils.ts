@@ -3,7 +3,7 @@ import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities
 /**
  * Translation key prefix for metadata types
  */
-const METADATA_TYPE_I18N_PREFIX = 'views.server_activities.add_modal.metadata_type_'
+const METADATA_TYPE_I18N_PREFIX = 'views.server_activities.metadata.type_options.'
 
 /**
  * Get the i18n translation key for a metadata type

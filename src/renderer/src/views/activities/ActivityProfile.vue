@@ -33,12 +33,6 @@ import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityPa
 import ActivityPatternsSummaryWidget from '@/components/widgets/activity/ActivityPatternsSummary.widget.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import SessionIcon from '@/components/common/icons/SessionIcon.vue'
-import MetadataTotalUsageWidget from '@/components/widgets/activity-metadata/MetadataTotalUsage.widget.vue'
-import MetadataUniqueValuesWidget from '@/components/widgets/activity-metadata/MetadataUniqueValues.widget.vue'
-import MetadataMostCommonValueWidget from '@/components/widgets/activity-metadata/MetadataMostCommonValue.widget.vue'
-import MetadataNumericSummaryWidget from '@/components/widgets/activity-metadata/MetadataNumericSummary.widget.vue'
-import MetadataDistributionWidget from '@/components/widgets/activity-metadata/MetadataDistribution.widget.vue'
-import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 
 const route = useRoute()
 const toast = useToast()
@@ -154,6 +148,8 @@ onMounted(async () => {
         await loadActivity()
     }
 })
+
+
 </script>
 
 <template>
@@ -223,53 +219,6 @@ onMounted(async () => {
                                 :show-identity="false"
                                 class="mb-6 w-full"
                             />
-
-                            <!-- Metadata Stats Section -->
-                            <template v-if="metadataDefinitions.length > 0">
-                                <div class="mb-4">
-                                    <h3 class="text-lg font-semibold text-surface-900 mb-1">
-                                        {{ t('common.steps.metadata') }}
-                                    </h3>
-                                </div>
-
-                                <div
-                                    v-for="metadata in metadataDefinitions"
-                                    :key="metadata.public_id"
-                                    class="mb-8"
-                                >
-                                    <h4 class="text-sm font-medium text-surface-700 mb-3 flex items-center gap-2">
-                                        <MetadataIcon/>
-                                        {{ metadata.label || metadata.key }}
-                                    </h4>
-
-                                    <!-- All widgets rendered - they self-filter based on type -->
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <MetadataTotalUsageWidget
-                                            :show-identity="false"
-                                            :metadata-definition-id="metadata.public_id"
-                                        />
-                                        <MetadataUniqueValuesWidget
-                                            :show-identity="false"
-                                            :metadata-definition-id="metadata.public_id"
-                                        />
-                                        <MetadataMostCommonValueWidget
-                                            :show-identity="false"
-                                            :metadata-definition-id="metadata.public_id"
-                                        />
-                                        <MetadataNumericSummaryWidget
-                                            :show-identity="false"
-                                            :metadata-definition-id="metadata.public_id"
-                                        />
-                                    </div>
-
-                                    <!-- Distribution chart -->
-                                    <MetadataDistributionWidget
-                                        :show-identity="false"
-                                        :metadata-definition-id="metadata.public_id"
-                                        class="mt-4"
-                                    />
-                                </div>
-                            </template>
                         </div>
                     </TransitionWrapper>
                 </TabPanel>
@@ -279,6 +228,7 @@ onMounted(async () => {
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                                 <div class="space-y-5 min-w-0">
                                     <ActivityMetadataList
+                                        :activity="activity"
                                         :metadata-definitions="metadataDefinitions"
                                     />
                                 </div>

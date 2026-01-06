@@ -6,12 +6,18 @@ import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
 import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import { useRouter } from 'vue-router'
+import { useServerStore } from '@/stores/server'
+import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
 const props = defineProps<{
+    activity: IActivity | null
     metadataDefinitions?: IActivityMetadataDefinition[]
 }>()
 
 const { t, te } = useI18n()
+const router = useRouter()
+const server_store = useServerStore()
 
 function formatTypeLabel(type?: string): string {
     if (!type) return ''
@@ -22,6 +28,19 @@ function formatTypeLabel(type?: string): string {
 const hasMetadata = computed(() => {
     return props.metadataDefinitions && props.metadataDefinitions.length > 0
 })
+
+async function navigateToMetadataProfile(metadataDefinitionId: string): Promise<void> {
+    if (server_store.getPublicId && props.activity) {
+        await router.push({
+            name: 'ServerActivityMetadataProfile',
+            params: {
+                serverId: server_store.getPublicId,
+                activityId: props.activity.public_id,
+                metadataDefinitionId
+            }
+        })
+    }
+}
 </script>
 
 <template>
@@ -37,7 +56,8 @@ const hasMetadata = computed(() => {
             <div
                 v-for="meta in metadataDefinitions"
                 :key="meta.public_id"
-                class="p-3 rounded-xl bg-surface-50 hover:bg-surface-100 transition-colors"
+                class="p-3 rounded-xl bg-surface-50 hover:bg-surface-100 transition-colors cursor-pointer"
+                @click="navigateToMetadataProfile(meta.public_id)"
             >
                 <div class="flex items-start gap-3">
                     <!-- Type Icon -->

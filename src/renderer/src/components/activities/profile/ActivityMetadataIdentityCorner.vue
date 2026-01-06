@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
+import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 
 const route = useRoute()
 const server_store = useServerStore()
@@ -32,18 +33,9 @@ const definitionName = computed(() => {
     return localDefinition.value?.label || localDefinition.value?.key || null
 })
 
-const iconClass = computed(() => {
-    const type = localDefinition.value?.type || 'STRING'
-    switch (type) {
-        case 'NUMBER':
-            return 'pi pi-hashtag'
-        case 'BOOLEAN':
-            return 'pi pi-check-circle'
-        case 'DATE':
-            return 'pi pi-calendar'
-        default:
-            return 'pi pi-database'
-    }
+const definitionType = computed(() => {
+    if (!props.metadataDefinitionId || !props.show) return null
+    return localDefinition.value?.type || null
 })
 
 async function fetchDefinition(): Promise<void> {
@@ -93,10 +85,24 @@ const isVisible = computed(() => props.show)
         <div
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
-            <i :class="[iconClass, 'text-[9px]']"></i>
-            <span class="max-w-[80px] truncate uppercase tracking-wider">
+            <MetadataTypeBadge
+                :type="definitionType"
+                class="text-[9px] text-surface-500 hover:text-primary-500"
+                size="sm"
+            />
+            <router-link
+                :to="{
+                    name: 'ServerActivityMetadataProfile',
+                    params: {
+                        id: server_store.getPublicId,
+                        activityId: props.activityId,
+                        metadataDefinitionId: props.metadataDefinitionId
+                    }
+                }"
+                class="max-w-[80px] truncate uppercase tracking-wider"
+            >
                 {{ definitionName }}
-            </span>
+            </router-link>
         </div>
     </div>
 </template>
