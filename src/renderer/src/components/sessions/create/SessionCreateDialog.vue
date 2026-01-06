@@ -12,6 +12,7 @@ import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
 import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 interface Props {
     modelValue: boolean
@@ -202,7 +203,7 @@ const isClosable = computed(() => {
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('views.server_sessions.add_modal.title')"
         :subtitle="subtitle"
-        icon-class="pi pi-plus-circle"
+        :icon-class="SessionIcon"
         :steps="steps"
         :current="currentIndex"
         :closable="isClosable"

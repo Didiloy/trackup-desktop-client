@@ -6,6 +6,7 @@ import ActivitySkillLevelsForm from './ActivitySkillLevelsForm.vue'
 import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 
 interface Props {
     modelValue: boolean
@@ -126,7 +127,7 @@ function finishWizard(): void {
         :content-class="'p-0 bg-surface-50 h-full'"
         :title="t('views.server_activities.add_modal.title')"
         :subtitle="subtitle"
-        icon-class="pi pi-plus-circle"
+        :icon-class="ActivityIcon"
         :steps="steps"
         :current="currentIndex"
         @update:model-value="emit('update:modelValue', $event)"

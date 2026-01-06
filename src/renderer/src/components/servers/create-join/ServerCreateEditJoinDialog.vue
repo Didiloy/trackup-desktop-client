@@ -5,6 +5,7 @@ import CreateEditServerForm from '@/components/servers/create-join/CreateEditSer
 import JoinServerForm from '@/components/servers/create-join/JoinServerForm.vue'
 import type { IServer } from '@shared/contracts/interfaces/entities/server.interfaces'
 import { useI18n } from 'vue-i18n'
+import ServerIcon from '@/components/common/icons/ServerIcon.vue'
 
 interface Props {
     modelValue: boolean
@@ -63,7 +64,7 @@ function closeDialog(): void {
     >
         <template #header>
             <div class="flex items-center gap-2 p-3">
-                <i class="pi pi-plus-circle text-primary-500"></i>
+                <ServerIcon/>
                 <span class="font-semibold text-surface-900">
                     {{
                         current_action === 'create'

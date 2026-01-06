@@ -14,6 +14,7 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
+import { formatDate } from '@/utils'
 
 defineOptions({
     widgetMetadata: {
@@ -119,7 +120,7 @@ async function navigateToSession(sessionId: string): Promise<void> {
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
                         <div class="text-xs text-gray-500">
-                            {{ new Date(session.date).toLocaleDateString() }}
+                            {{ formatDate(session.date) }}
                         </div>
                         <div v-if="session.title" class="text-sm font-medium mt-1">
                             {{ session.title }}

@@ -18,7 +18,7 @@ interface Props {
     current?: number
     title?: string
     subtitle?: string
-    iconClass?: string
+    iconClass?: string | Component
     styleClass?: string
     contentClass?: string
     closable?: boolean
@@ -63,7 +63,7 @@ const safeCurrent = computed(() => {
         <template #header>
             <div class="flex flex-col gap-2 p-3">
                 <div class="flex items-center gap-2">
-                    <i :class="iconClass + ' text-primary-500'"></i>
+                    <Icon v-if="iconClass" :icon="iconClass" />
                     <span class="font-semibold text-surface-900">{{ title }}</span>
                 </div>
                 <div v-if="subtitle" class="text-xs text-surface-600">

@@ -11,6 +11,7 @@ import type {
     IEnumValueUpdate
 } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
 
 const MAX_VALUES_PER_CHUNK = 5
 
@@ -189,7 +190,7 @@ function handleClose() {
         <template #header>
             <div class="flex flex-col gap-2 p-3">
                 <div class="flex items-center gap-2">
-                    <i class="pi pi-plus-circle text-primary-500"></i>
+                    <EnumDefinitionsIcon />
                     <span class="font-semibold text-surface-900">
                         {{
                             isEditing
@@ -210,9 +211,11 @@ function handleClose() {
         </template>
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-semibold text-surface-700 dark:text-surface-300">
-                    {{ t('common.fields.name') }} <span class="text-red-500">*</span>
-                </label>
+                <span class="text-sm font-medium text-surface-700">
+                    <i class="pi pi-file-edit text-surface-500 mr-1"></i>
+                    {{ t('common.fields.name') }}
+                    <span class="text-red-500">*</span>
+                </span>
                 <InputText
                     v-model="name"
                     :placeholder="t('views.server_enum_definitions.create_modal.name_placeholder')"
@@ -221,9 +224,10 @@ function handleClose() {
             </div>
 
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-semibold text-surface-700 dark:text-surface-300">
+                <span class="text-sm font-medium text-surface-700">
+                    <i class="pi pi-pen-to-square text-surface-500 mr-1"></i>
                     {{ t('common.fields.description') }}
-                </label>
+                </span>
                 <Textarea
                     v-model="description"
                     rows="2"
@@ -236,16 +240,17 @@ function handleClose() {
             </div>
 
             <div class="flex flex-col gap-2">
-                <label
-                    class="text-sm font-semibold text-surface-700 dark:text-surface-300 flex justify-between items-center"
-                >
-                    <span>{{ t('common.fields.choices') }}</span>
+                <label class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-surface-700">
+                        <i class="pi pi-check text-surface-500 mr-1"></i>
+                        {{ t('common.fields.choices') }}
+                    </span>
                     <Button icon="pi pi-plus" size="small" text rounded @click="addChoice" />
                 </label>
 
                 <div class="flex flex-col gap-2 max-h-[200px] overflow-y-auto pr-2">
                     <div v-for="(_, index) in choices" :key="index" class="flex items-center gap-2">
-                        <span class="text-xs text-surface-400 w-6 text-right"
+                        <span class="text-xs text-surface-800 w-6 text-right"
                             >{{ index + 1 }}.</span
                         >
                         <InputText
