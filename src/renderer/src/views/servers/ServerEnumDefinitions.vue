@@ -82,6 +82,7 @@ async function loadDefinitions(): Promise<void> {
 
         if (defsRes.data) {
             definitions.value = defsRes.data
+            server_store.setEnumsDefinition(defsRes.data)
         }
     } catch (e) {
         console.error(e)
