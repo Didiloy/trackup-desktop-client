@@ -5,7 +5,7 @@ import { useAuth } from '@/composables/auth/useAuth'
 import { useUserStatsStore } from '@/stores/user-stats'
 import { formatSecondsToLabel } from '@/utils/time.utils'
 import { useUserStore } from '@/stores/user'
-import UserSettingsModal from '@/components/modals/UserSettingsModal.vue'
+import UserSettingsModal from '@/components/users/UserSettingsModal.vue'
 
 const { t } = useI18n()
 const { signOut } = useAuth()
