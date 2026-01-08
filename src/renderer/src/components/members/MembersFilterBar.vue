@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
-import SelectFilter from '@/components/filters/SelectFilter.vue'
+import GenericFilterBar from '@/components/common/filters/GenericFilterBar.vue'
+import SelectFilter from '@/components/common/filters/SelectFilter.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
-import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
+import DateRangeFilter from '@/components/common/filters/DateRangeFilter.vue'
 import MemberAutocomplete from '@/components/members/MemberAutocomplete.vue'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
-import FilterGroup from '@/components/filters/FilterGroup.vue'
+import FilterGroup from '@/components/common/filters/FilterGroup.vue'
 
 interface Props {
     search?: string

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import GenericFilterBar from '@/components/filters/GenericFilterBar.vue'
+import GenericFilterBar from '@/components/common/filters/GenericFilterBar.vue'
 import GenericPopover from '@/components/common/contexts/GenericPopover.vue'
-import TextFilter from '@/components/filters/TextFilter.vue'
-import FilterGroup from '@/components/filters/FilterGroup.vue'
+import TextFilter from '@/components/common/filters/TextFilter.vue'
+import FilterGroup from '@/components/common/filters/FilterGroup.vue'
 import { ESearchMode } from '@shared/contracts/enums/search-mode.enum'
 
 interface Props {

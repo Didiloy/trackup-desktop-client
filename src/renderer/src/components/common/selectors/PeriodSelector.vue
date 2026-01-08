@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import DateRangeFilter from '@/components/filters/DateRangeFilter.vue'
+import DateRangeFilter from '@/components/common/filters/DateRangeFilter.vue'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import { computed, ref } from 'vue'
 
