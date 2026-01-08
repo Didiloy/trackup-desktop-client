@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
+import { enumDefGradientColorsList } from '@/components/enum-definitions/constants/constants'
 import { useServerStore } from '@/stores/server'
 
 defineProps<{

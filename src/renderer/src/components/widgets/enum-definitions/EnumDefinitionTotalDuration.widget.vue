@@ -6,7 +6,8 @@ import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -16,10 +17,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-unique-users',
-        title_key: 'widgets.enum_definition.unique_users.title',
-        icon: 'pi pi-users',
-        description_key: 'widgets.enum_definition.unique_users.description',
+        id: 'enum-definitions-total-duration',
+        title_key: 'widgets.enum_definition.total_duration.title',
+        icon: 'pi pi-clock',
+        description_key: 'widgets.enum_definition.total_duration.description',
         category: {
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
@@ -80,17 +81,18 @@ watch(
 )
 
 const value = computed(() => {
-    return local_stats.value?.unique_users || 0
+    const total = local_stats.value?.total_duration || 0
+    return formatMinutesToLabel(total)
 })
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_enum_definitions.profile.overview.unique_users')"
+        :label="t('views.server_enum_definitions.profile.overview.total_duration')"
         :value="value"
-        icon="pi pi-users"
-        color="text-orange-600"
-        bg="bg-orange-100"
+        icon="pi pi-clock"
+        color="text-purple-600"
+        bg="bg-purple-100"
         :loading="isLoadingLocal"
     >
         <template #corner>

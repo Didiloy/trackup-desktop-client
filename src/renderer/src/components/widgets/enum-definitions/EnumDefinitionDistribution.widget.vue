@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import { VueUiDonut } from 'vue-data-ui'
 import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import type {
@@ -16,7 +16,7 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-distribution',
+        id: 'enum-definitions-distribution',
         title_key: 'widgets.enum_definition.distribution.title',
         icon: 'pi pi-chart-pie',
         description_key: 'widgets.enum_definition.distribution.description',

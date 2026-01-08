@@ -34,7 +34,7 @@ const configComponents: Record<string, any> = {
         () => import('../member-activity/MemberActivityWidgetConfigForm.vue')
     ),
     [EWidgetCategory.EnumDefinition]: defineAsyncComponent(
-        () => import('../enum-definition/EnumDefinitionWidgetConfigForm.vue')
+        () => import('@/components/widgets/enum-definitions/EnumDefinitionWidgetConfigForm.vue')
     ),
     [EWidgetCategory.ActivityMetadata]: defineAsyncComponent(
         () => import('../activity-metadata/ActivityMetadataWidgetConfigForm.vue')

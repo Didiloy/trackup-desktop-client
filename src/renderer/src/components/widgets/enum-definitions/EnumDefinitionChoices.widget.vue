@@ -8,12 +8,12 @@ import type {
     IEnumDefinitionWidgetConfig
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-choices',
+        id: 'enum-definitions-choices',
         title_key: 'widgets.enum_definition.choices.title',
         icon: 'pi pi-check-square',
         description_key: 'widgets.enum_definition.choices.description',

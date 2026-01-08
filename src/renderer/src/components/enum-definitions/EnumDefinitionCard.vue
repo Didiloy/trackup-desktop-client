@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import { useEnumDefinitionNavigation } from '@/composables/enum-definitions/useEnumDefinitionNavigation'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
-import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
+import { enumDefGradientColorsList } from '@/components/enum-definitions/constants/constants'
 
 const { t } = useI18n()
 const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()

@@ -6,7 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -16,10 +16,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-avg-likes',
-        title_key: 'widgets.enum_definition.avg_likes.title',
-        icon: 'pi pi-heart-fill',
-        description_key: 'widgets.enum_definition.avg_likes.description',
+        id: 'enum-definitions-total-usage',
+        title_key: 'widgets.enum_definition.total_usage.title',
+        icon: 'pi pi-check-square',
+        description_key: 'widgets.enum_definition.total_usage.description',
         category: {
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
@@ -80,17 +80,17 @@ watch(
 )
 
 const value = computed(() => {
-    return local_stats.value?.avg_likes_when_selected?.toFixed(1) || '0.0'
+    return local_stats.value?.total_usage || 0
 })
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_enum_definitions.profile.overview.avg_likes_when_selected')"
+        :label="t('views.server_enum_definitions.profile.overview.total_usage')"
         :value="value"
-        icon="pi pi-heart-fill"
-        color="text-red-500"
-        bg="bg-red-50"
+        icon="pi pi-check-square"
+        color="text-blue-600"
+        bg="bg-blue-100"
         :loading="isLoadingLocal"
     >
         <template #corner>

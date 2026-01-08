@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -14,7 +14,7 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-top-values',
+        id: 'enum-definitions-top-values',
         title_key: 'widgets.enum_definition.top_values.title',
         icon: 'pi pi-list',
         description_key: 'widgets.enum_definition.top_values.description',

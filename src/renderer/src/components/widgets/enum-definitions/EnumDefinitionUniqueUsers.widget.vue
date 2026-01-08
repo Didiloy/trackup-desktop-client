@@ -6,7 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -16,10 +16,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-total-sessions',
-        title_key: 'widgets.enum_definition.total_sessions.title',
-        icon: 'pi pi-calendar',
-        description_key: 'widgets.enum_definition.total_sessions.description',
+        id: 'enum-definitions-unique-users',
+        title_key: 'widgets.enum_definition.unique_users.title',
+        icon: 'pi pi-users',
+        description_key: 'widgets.enum_definition.unique_users.description',
         category: {
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
@@ -80,17 +80,17 @@ watch(
 )
 
 const value = computed(() => {
-    return local_stats.value?.total_sessions || 0
+    return local_stats.value?.unique_users || 0
 })
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_enum_definitions.profile.overview.total_sessions')"
+        :label="t('views.server_enum_definitions.profile.overview.unique_users')"
         :value="value"
-        icon="pi pi-calendar"
-        color="text-green-600"
-        bg="bg-green-100"
+        icon="pi pi-users"
+        color="text-orange-600"
+        bg="bg-orange-100"
         :loading="isLoadingLocal"
     >
         <template #corner>

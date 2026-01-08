@@ -6,8 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
-import { formatMinutesToLabel } from '@/utils/time.utils'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -17,10 +16,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-total-duration',
-        title_key: 'widgets.enum_definition.total_duration.title',
-        icon: 'pi pi-clock',
-        description_key: 'widgets.enum_definition.total_duration.description',
+        id: 'enum-definitions-most-used-value',
+        title_key: 'widgets.enum_definition.most_used_value.title',
+        icon: 'pi pi-star',
+        description_key: 'widgets.enum_definition.most_used_value.description',
         category: {
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
@@ -81,18 +80,29 @@ watch(
 )
 
 const value = computed(() => {
-    const total = local_stats.value?.total_duration || 0
-    return formatMinutesToLabel(total)
+    if (!local_stats.value?.most_used_value) return t('common.fields.none')
+    return (
+        local_stats.value.most_used_value.selected_value ||
+        local_stats.value.most_used_value.selected_key ||
+        'N/A'
+    )
+})
+
+const usageCountLabel = computed(() => {
+    const count = local_stats.value?.most_used_value?.usage_count
+    if (!count || count === 0) return ''
+    return t('widgets.enum_definition.most_used_value.usage_count', { count })
 })
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_enum_definitions.profile.overview.total_duration')"
+        :label="t('views.server_enum_definitions.profile.overview.most_used_value')"
         :value="value"
-        icon="pi pi-clock"
-        color="text-purple-600"
-        bg="bg-purple-100"
+        :sub-value="usageCountLabel"
+        icon="pi pi-star"
+        color="text-amber-600"
+        bg="bg-amber-100"
         :loading="isLoadingLocal"
     >
         <template #corner>

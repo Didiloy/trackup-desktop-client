@@ -6,7 +6,7 @@ import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import { EPeriod } from '@shared/contracts/enums/period.enum'
 import BaseOverviewStatWidget from '@/components/widgets/BaseOverviewStatWidget.vue'
-import EnumDefinitionIdentityCorner from '@/components/definitions/profile/EnumDefinitionIdentityCorner.vue'
+import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -16,10 +16,10 @@ import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 
 defineOptions({
     widgetMetadata: {
-        id: 'enum-definition-most-used-value',
-        title_key: 'widgets.enum_definition.most_used_value.title',
-        icon: 'pi pi-star',
-        description_key: 'widgets.enum_definition.most_used_value.description',
+        id: 'enum-definitions-avg-likes',
+        title_key: 'widgets.enum_definition.avg_likes.title',
+        icon: 'pi pi-heart-fill',
+        description_key: 'widgets.enum_definition.avg_likes.description',
         category: {
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
@@ -80,29 +80,17 @@ watch(
 )
 
 const value = computed(() => {
-    if (!local_stats.value?.most_used_value) return t('common.fields.none')
-    return (
-        local_stats.value.most_used_value.selected_value ||
-        local_stats.value.most_used_value.selected_key ||
-        'N/A'
-    )
-})
-
-const usageCountLabel = computed(() => {
-    const count = local_stats.value?.most_used_value?.usage_count
-    if (!count || count === 0) return ''
-    return t('widgets.enum_definition.most_used_value.usage_count', { count })
+    return local_stats.value?.avg_likes_when_selected?.toFixed(1) || '0.0'
 })
 </script>
 
 <template>
     <BaseOverviewStatWidget
-        :label="t('views.server_enum_definitions.profile.overview.most_used_value')"
+        :label="t('views.server_enum_definitions.profile.overview.avg_likes_when_selected')"
         :value="value"
-        :sub-value="usageCountLabel"
-        icon="pi pi-star"
-        color="text-amber-600"
-        bg="bg-amber-100"
+        icon="pi pi-heart-fill"
+        color="text-red-500"
+        bg="bg-red-50"
         :loading="isLoadingLocal"
     >
         <template #corner>
