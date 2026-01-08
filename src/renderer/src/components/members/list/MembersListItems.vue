@@ -41,7 +41,7 @@ const items = computed(() => {
         baseItems.push({
             label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
-            command: async () => updateNickname(props.member.public_id, props.member.nickname)
+            command: async () => updateNickname(props.member.nickname)
         })
     }
 

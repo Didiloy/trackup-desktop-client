@@ -96,8 +96,6 @@ onMounted(async () => {
         <MemberProfileHeader
             v-if="member"
             :member="member"
-            :stats="memberDetails"
-            :show-stats="true"
             class="mb-6"
         />
 

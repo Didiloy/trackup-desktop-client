@@ -9,17 +9,10 @@ import { getInitials, formatDate } from '@/utils'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 
-const props = withDefaults(
-    defineProps<{
+const props = defineProps<{
         member: IServerMember
-        stats?: IMemberStatsDetails | null
-        showStats?: boolean
-    }>(),
-    {
-        stats: null,
-        showStats: true
-    }
-)
+    }>()
+
 
 const { t } = useI18n()
 const {
@@ -54,7 +47,7 @@ const menuItems = computed<
         items.push({
             label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
-            command: () => updateNickname(props.member.public_id, props.member.nickname)
+            command: () => updateNickname(props.member.nickname)
         })
     }
 
