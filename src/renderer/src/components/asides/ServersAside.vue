@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ServersList from '@/components/servers/list/ServersList.vue'
 import ServersActionsList from '@/components/servers/ServersActionsList.vue'
-import ProfileButton from '@/components/user/ProfileButton.vue'
+import UserProfileButton from '@/components/users/profile/UserProfileButton.vue'
 import { useRoute } from 'vue-router'
 import { computed, ref, watch } from 'vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
@@ -59,7 +59,7 @@ async function copyInvite(): Promise<void> {
     >
         <div class="flex flex-col items-center w-16 min-w-16 h-full my-2 bg-surface-200 rounded-lg">
             <div class="flex flex-col items-center gap-2 py-2 shrink-0 mx-2">
-                <ProfileButton />
+                <UserProfileButton />
                 <div class="w-8 h-px bg-surface-400 my-1"></div>
             </div>
             <ServersList />

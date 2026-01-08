@@ -7,6 +7,7 @@ import { useContextMenu } from '@/composables/useContextMenu'
 import { useMemberActions } from '@/composables/members/useMemberActions'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import Member from '@/components/members/Member.vue'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
 interface Props {
     member: IServerMember
@@ -18,11 +19,12 @@ const { t } = useI18n()
 const {
     show_nickname_dialog,
     new_nickname,
-    navigateToProfile,
     updateNickname,
     confirmUpdateNickname,
     canUpdateNickname
 } = useMemberActions()
+
+const { navigateToMemberProfile } = useMemberNavigation()
 
 const items = computed(() => {
     const baseItems = [
@@ -30,7 +32,7 @@ const items = computed(() => {
             label: t('views.members_aside.view_profile'),
             icon: 'pi pi-user',
             command: async () => {
-                await navigateToProfile(props.member.public_id)
+                await navigateToMemberProfile(props.member.public_id)
             }
         }
     ]
@@ -39,7 +41,7 @@ const items = computed(() => {
         baseItems.push({
             label: t('views.members_aside.update_nickname'),
             icon: 'pi pi-user-edit',
-            command: () => updateNickname(props.member.public_id, props.member.nickname)
+            command: async () => updateNickname(props.member.public_id, props.member.nickname)
         })
     }
 

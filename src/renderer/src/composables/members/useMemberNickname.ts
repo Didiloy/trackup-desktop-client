@@ -4,7 +4,8 @@ import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 
-export function useMemberNickname() {
+
+export function useMemberNickname()  {
     const server_store = useServerStore()
     const { updateMemberNickname, listMembers } = useMemberCRUD()
     const toast = useToast()

@@ -45,7 +45,7 @@ function getGradient(): string {
     return enumDefGradientColorsList[props.colorIndex % enumDefGradientColorsList.length]
 }
 
-function navigateToProfile(): void {
+function navigateToEnumDefProfile(): void {
     navigateToEnumDefinitionProfile(props.definition.public_id, props.colorIndex)
 }
 </script>
@@ -53,7 +53,7 @@ function navigateToProfile(): void {
 <template>
     <div
         class="group relative bg-surface-0 rounded-3xl overflow-hidden shadow-sm ring-1 ring-surface-200/60 hover:shadow-xl hover:ring-primary-300 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-        @click="navigateToProfile"
+        @click="navigateToEnumDefProfile"
     >
         <!-- Gradient Header -->
         <div

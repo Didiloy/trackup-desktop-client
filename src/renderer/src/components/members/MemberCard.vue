@@ -2,15 +2,16 @@
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import { useMemberActions } from '@/composables/members/useMemberActions'
 import { getInitials } from '@/utils'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
 const props = defineProps<{
     member: IServerMember
 }>()
 
-const { navigateToProfile } = useMemberActions()
+const { navigateToMemberProfile } = useMemberNavigation()
 
 const handleNavigateToProfile = async (): Promise<void> => {
-    await navigateToProfile(props.member.public_id)
+    await navigateToMemberProfile(props.member.public_id)
 }
 </script>
 

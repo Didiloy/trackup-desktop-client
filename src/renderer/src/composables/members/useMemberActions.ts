@@ -7,8 +7,8 @@ import { useUserStore } from '@/stores/user'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useMemberNickname } from '@/composables/members/useMemberNickname'
 
+
 export function useMemberActions() {
-    const router = useRouter()
     const { t } = useI18n()
     const toast = useToast()
     const server_store = useServerStore()
@@ -25,18 +25,6 @@ export function useMemberActions() {
 
     const isKicking = ref(false)
 
-    /**
-     * Navigate to member profile page
-     */
-    const navigateToProfile = async (memberId: string): Promise<void> => {
-        await router.push({
-            name: 'ServerMemberProfile',
-            params: {
-                id: server_store.getPublicId,
-                memberId
-            }
-        })
-    }
 
     /**
      * Update member nickname
@@ -124,7 +112,6 @@ export function useMemberActions() {
         isKicking,
 
         // Actions
-        navigateToProfile,
         updateNickname,
         confirmUpdateNickname,
         kickMember,

@@ -8,6 +8,7 @@ import { useMemberActions } from '@/composables/members/useMemberActions'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
 defineOptions({
     widgetMetadata: {
@@ -25,11 +26,11 @@ defineOptions({
 
 const server_store = useServerStore()
 const server_stats_store = useServerStatsStore()
-const { navigateToProfile } = useMemberActions()
+const { navigateToMemberProfile } = useMemberNavigation()
 const { t } = useI18n()
 
 const handleMemberClick = async (memberId: string): Promise<void> => {
-    await navigateToProfile(memberId)
+    await navigateToMemberProfile(memberId)
 }
 </script>
 
