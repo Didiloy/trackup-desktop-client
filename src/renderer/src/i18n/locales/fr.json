@@ -568,9 +568,9 @@
             "activity_distribution": "Répartition des activités",
             "session_durations": "Durées des sessions",
             "likes_received": "Mentions j'aime reçues",
-            "total_sessions": "Total des sessions",
+            "total_sessions": "Total des sessions uniques",
             "active_members": "Membres actifs",
-            "total_duration": "Durée totale",
+            "total_duration": "Durée totale unique",
             "total_activities": "Total des activités",
             "total_members": "Total des membres",
             "unique_members": "Membres uniques",
@@ -789,11 +789,11 @@
         },
         "server": {
             "total_sessions": {
-                "title": "Total Sessions",
+                "title": "Total Sessions uniques",
                 "description": "Affiche le nombre total de sessions"
             },
             "total_duration": {
-                "title": "Durée Totale",
+                "title": "Durée Totale unique",
                 "description": "Affiche la durée totale de toutes les sessions"
             },
             "total_activities": {
