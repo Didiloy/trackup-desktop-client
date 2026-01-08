@@ -44,6 +44,7 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
     const getLanguage = computed(() => preferences.language)
     const getCompactMode = computed(() => preferences.compactMode)
     const getAnimationsEnabled = computed(() => preferences.animationsEnabled)
+    const getAutoFetchIntervalMinutes = computed(() => preferences.autoFetchIntervalMinutes)
 
     // Actions
     const setTheme = (theme: 'system' | 'light' | 'dark'): void => {
@@ -82,6 +83,13 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
         preferences.animationsEnabled = enabled
         savePreferences()
         applyAnimations(enabled)
+    }
+
+    const setAutoFetchIntervalMinutes = (minutes: number): void => {
+        // Validate range (5-10 minutes)
+        const validMinutes = Math.max(5, Math.min(10, minutes))
+        preferences.autoFetchIntervalMinutes = validMinutes
+        savePreferences()
     }
 
     // Helper functions for applying preferences
@@ -131,12 +139,14 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
         getLanguage,
         getCompactMode,
         getAnimationsEnabled,
+        getAutoFetchIntervalMinutes,
 
         // Actions
         setTheme,
         setLanguage,
         setCompactMode,
         setAnimationsEnabled,
+        setAutoFetchIntervalMinutes,
         loadPreferences,
         savePreferences
     }

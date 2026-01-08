@@ -59,6 +59,7 @@ declare module 'vue' {
     AppDialog: typeof import('./src/components/common/dialogs/AppDialog.vue')['default']
     AppUpdateModal: typeof import('./src/components/app-updates/AppUpdateModal.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
+    AutoFetchIntervalSelector: typeof import('./src/components/common/selectors/AutoFetchIntervalSelector.vue')['default']
     AutoRefreshSelector: typeof import('./src/components/common/selectors/AutoRefreshSelector.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarButton: typeof import('./src/components/common/buttons/AvatarButton.vue')['default']

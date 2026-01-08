@@ -416,6 +416,15 @@
                     "light": "Clair",
                     "dark": "Sombre",
                     "system": "Système"
+                },
+                "data": {
+                    "title": "Données",
+                    "description": "Gérer la synchronisation des données",
+                    "auto_fetch_interval": {
+                        "label": "Intervalle de rafraîchissement",
+                        "description": "Fréquence de mise à jour automatique des données",
+                        "minutes": "{n} minute(s)"
+                    }
                 }
             }
         },

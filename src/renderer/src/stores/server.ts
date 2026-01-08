@@ -70,6 +70,7 @@ export const useServerStore = defineStore('server', () => {
         state.server = srv
         if (srv?.public_id) {
             serverStatsStore.fetchAll(srv.public_id)
+            serverStatsStore.start_auto_fetch(srv.public_id)
         }
     }
 
@@ -144,6 +145,7 @@ export const useServerStore = defineStore('server', () => {
         state.serverEnumsDefinition = cached.enumDefinition
 
         serverStatsStore.fetchAll(serverId)
+        serverStatsStore.start_auto_fetch(serverId)
         return true
     }
 

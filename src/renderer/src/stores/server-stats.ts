@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { reactive, computed } from 'vue'
+import { reactive, computed, watch } from 'vue'
 import { useServerStatsCRUD } from '@/composables/servers/useServerStatsCRUD'
+import { useUserPreferencesStore } from '@/stores/user-preferences'
 import type {
     IServerStats,
     IServerStatsDetails,
@@ -31,6 +32,9 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         isTimelineLoading: false,
         error: null as string | null
     })
+
+    let auto_fetch_interval: NodeJS.Timeout | null = null
+    let current_server_id: string | null = null
 
     // Getters
     const getDetails = computed(() => state.details)
@@ -176,7 +180,41 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         state.isLoading = false
         state.isTimelineLoading = false
         state.error = null
+        stop_auto_fetch()
+        current_server_id = null
     }
+
+    // Auto-fetch logic
+    const start_auto_fetch = (serverId: string): void => {
+        stop_auto_fetch()
+        current_server_id = serverId
+        const userPreferencesStore = useUserPreferencesStore()
+        const intervalMs = userPreferencesStore.getAutoFetchIntervalMinutes * 60 * 1000
+
+        auto_fetch_interval = setInterval(() => {
+            if (current_server_id) {
+                fetchAll(current_server_id)
+            }
+        }, intervalMs)
+    }
+
+    const stop_auto_fetch = (): void => {
+        if (auto_fetch_interval) {
+            clearInterval(auto_fetch_interval)
+            auto_fetch_interval = null
+        }
+    }
+
+    // Watch for preference changes to restart auto-fetch with new interval
+    const userPreferencesStore = useUserPreferencesStore()
+    watch(
+        () => userPreferencesStore.getAutoFetchIntervalMinutes,
+        () => {
+            if (current_server_id) {
+                start_auto_fetch(current_server_id)
+            }
+        }
+    )
 
     return {
         // State/Getters
@@ -197,6 +235,8 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         fetchGrowthTrends,
         fetchComparativeAnalysis,
         fetchAll,
-        resetState
+        resetState,
+        start_auto_fetch,
+        stop_auto_fetch
     }
 })

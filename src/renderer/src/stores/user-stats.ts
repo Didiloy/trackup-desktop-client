@@ -1,8 +1,9 @@
 
 import { defineStore } from 'pinia'
-import { reactive, computed } from 'vue'
+import { reactive, computed, watch } from 'vue'
 import { useUserStatsCRUD } from '@/composables/users/useUserStatsCRUD'
 import { useUserStore } from '@/stores/user'
+import { useUserPreferencesStore } from '@/stores/user-preferences'
 import type {
     IUserStats,
     ILastSession
@@ -24,6 +25,7 @@ export const useUserStatsStore = defineStore('user-stats', () => {
     })
 
     let time_interval: NodeJS.Timeout | null = null
+    let auto_fetch_interval: NodeJS.Timeout | null = null
 
     // Getters
     const get_stats = computed(() => state.stats)
@@ -176,7 +178,38 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         state.real_time_app_seconds = 0
         state.current_session_id = null
         stop_time_tracking()
+        stop_auto_fetch()
     }
+
+    // Auto-fetch logic
+    const start_auto_fetch = (): void => {
+        stop_auto_fetch()
+        const userPreferencesStore = useUserPreferencesStore()
+        const intervalMs = userPreferencesStore.getAutoFetchIntervalMinutes * 60 * 1000
+
+        auto_fetch_interval = setInterval(() => {
+            fetch_all(true)
+        }, intervalMs)
+    }
+
+    const stop_auto_fetch = (): void => {
+        if (auto_fetch_interval) {
+            clearInterval(auto_fetch_interval)
+            auto_fetch_interval = null
+        }
+    }
+
+    // Initialize auto-fetch on store creation
+    start_auto_fetch()
+
+    // Watch for preference changes to restart auto-fetch with new interval
+    const userPreferencesStore = useUserPreferencesStore()
+    watch(
+        () => userPreferencesStore.getAutoFetchIntervalMinutes,
+        () => {
+            start_auto_fetch()
+        }
+    )
 
     return {
         // State/Getters
@@ -195,6 +228,8 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         force_refresh,
         reset_state,
         start_time_tracking,
-        stop_time_tracking
+        stop_time_tracking,
+        start_auto_fetch,
+        stop_auto_fetch
     }
 })

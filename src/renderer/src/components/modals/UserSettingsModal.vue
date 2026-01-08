@@ -4,6 +4,7 @@ import Dialog from 'primevue/dialog'
 import ThemeSelector from '@/components/common/selectors/ThemeSelector.vue'
 import LanguageSelector from '@/components/common/selectors/LanguageSelector.vue'
 import DisplaySettings from '@/components/common/selectors/DisplaySettings.vue'
+import AutoFetchIntervalSelector from '@/components/common/selectors/AutoFetchIntervalSelector.vue'
 
 const { t } = useI18n()
 
@@ -48,6 +49,22 @@ const visible = defineModel<boolean>('visible', { default: false })
 
                 <div class="space-y-6">
                     <DisplaySettings />
+                </div>
+            </div>
+
+            <Divider />
+
+            <!-- Data Section -->
+            <div>
+                <h3 class="text-lg font-semibold text-surface-900 mb-1">
+                    {{ t('views.user_profile.preferences.data.title') }}
+                </h3>
+                <p class="text-sm text-surface-500 mb-4">
+                    {{ t('views.user_profile.preferences.data.description') }}
+                </p>
+
+                <div class="space-y-6">
+                    <AutoFetchIntervalSelector />
                 </div>
             </div>
         </div>
