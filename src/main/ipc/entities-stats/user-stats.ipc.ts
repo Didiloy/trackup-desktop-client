@@ -50,7 +50,9 @@ export async function endActiveSession(): Promise<void> {
 /**
  * Start a new active session
  */
-async function startActiveSession(accessToken: string): Promise<IUserApiResponse<IAppSessionResponse>> {
+async function startActiveSession(
+    accessToken: string
+): Promise<IUserApiResponse<IAppSessionResponse>> {
     // End previous session if exists
     if (activeSessionId) {
         await endActiveSession()
@@ -119,14 +121,21 @@ export function registerUserStatsIpc(): void {
     // Get last sessions
     ipcMain.handle(
         ipc_channels.userStats.getLastSessions,
-        async (_event, accessToken: string, limit?: number): Promise<IUserApiResponse<ILastSession[]>> => {
+        async (
+            _event,
+            accessToken: string,
+            limit?: number
+        ): Promise<IUserApiResponse<ILastSession[]>> => {
             logger.info('Getting last sessions')
 
             const validationError = validateAuth(accessToken)
             if (validationError) return validationError
 
             const queryParams = limit ? `?limit=${limit}` : ''
-            return apiService.get<ILastSession[]>(`/api/v1/users/me/stats/last-sessions${queryParams}`, accessToken)
+            return apiService.get<ILastSession[]>(
+                `/api/v1/users/me/stats/last-sessions${queryParams}`,
+                accessToken
+            )
         }
     )
 
@@ -157,7 +166,11 @@ export function registerUserStatsIpc(): void {
                 await endActiveSession()
             } else {
                 // Fallback if ID doesn't match but we want to ensure request goes through
-                return apiService.post<void>(`/api/v1/users/me/stats/app-session/${sessionId}/end`, accessToken, {})
+                return apiService.post<void>(
+                    `/api/v1/users/me/stats/app-session/${sessionId}/end`,
+                    accessToken,
+                    {}
+                )
             }
 
             return { data: undefined }

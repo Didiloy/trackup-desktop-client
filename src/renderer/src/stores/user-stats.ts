@@ -1,4 +1,3 @@
-
 import { defineStore } from 'pinia'
 import { reactive, computed, watch } from 'vue'
 import { useUserStatsCRUD } from '@/composables/users/useUserStatsCRUD'
@@ -63,7 +62,11 @@ export const useUserStatsStore = defineStore('user-stats', () => {
 
                 // Use the maximum of: current state, backend value, and persisted value
                 // This prevents the timer from jumping back if backend is lagging
-                state.real_time_app_seconds = Math.max(state.real_time_app_seconds, backend_seconds, stored_seconds)
+                state.real_time_app_seconds = Math.max(
+                    state.real_time_app_seconds,
+                    backend_seconds,
+                    stored_seconds
+                )
 
                 // Ensure tracking is running
                 if (!time_interval) {
@@ -152,7 +155,10 @@ export const useUserStatsStore = defineStore('user-stats', () => {
 
             // Persist to localStorage if identified
             if (user_store.user?.id) {
-                localStorage.setItem(`trackup_app_time_${user_store.user.id}`, state.real_time_app_seconds.toString())
+                localStorage.setItem(
+                    `trackup_app_time_${user_store.user.id}`,
+                    state.real_time_app_seconds.toString()
+                )
             }
         }, 1000)
     }

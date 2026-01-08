@@ -155,10 +155,7 @@ function isChildActive(child: ServerActionChild): boolean {
 
             <!-- Child items (sub-tree) -->
             <TransitionWrapper name="slide-down" mode="out-in">
-                <div
-                    v-if="isActionExpanded(a) && a.children"
-                    class="w-full pl-2 flex flex-col"
-                >
+                <div v-if="isActionExpanded(a) && a.children" class="w-full pl-2 flex flex-col">
                     <div
                         v-for="child in a.children"
                         :key="child.id"

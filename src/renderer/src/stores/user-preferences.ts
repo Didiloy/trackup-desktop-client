@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, computed } from 'vue'
-import type {
-    IUserPreferences
-} from '@shared/contracts/interfaces/user-preferences.interfaces'
+import type { IUserPreferences } from '@shared/contracts/interfaces/user-preferences.interfaces'
 import {
     DEFAULT_USER_PREFERENCES,
     MIN_AUTO_FETCH_INTERVAL_MINUTES,
@@ -91,7 +89,10 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
 
     const setAutoFetchIntervalMinutes = (minutes: number): void => {
         // Validate range using constants
-        const validMinutes = Math.max(MIN_AUTO_FETCH_INTERVAL_MINUTES, Math.min(MAX_AUTO_FETCH_INTERVAL_MINUTES, minutes))
+        const validMinutes = Math.max(
+            MIN_AUTO_FETCH_INTERVAL_MINUTES,
+            Math.min(MAX_AUTO_FETCH_INTERVAL_MINUTES, minutes)
+        )
         preferences.autoFetchIntervalMinutes = validMinutes
         savePreferences()
     }

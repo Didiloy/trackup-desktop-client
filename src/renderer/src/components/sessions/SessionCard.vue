@@ -8,7 +8,6 @@ interface Props {
     session: ISessionListItem
 }
 
-
 interface Emits {
     (e: 'like', sessionId: string): void
     (e: 'unlike', sessionId: string): void
@@ -42,7 +41,6 @@ async function navigateToSession(): Promise<void> {
     await navigateToSessionProfile(props.session.public_id)
 }
 </script>
-
 
 <template>
     <div

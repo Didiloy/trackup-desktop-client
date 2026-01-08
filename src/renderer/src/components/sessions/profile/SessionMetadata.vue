@@ -22,13 +22,8 @@ function formatValue(value: unknown): string {
     return String(value)
 }
 
-async function navigateToMetaDataProfile(
-    metadata_definition_public_id: string
-): Promise<void> {
-    await navigateToMetadataProfile(
-        props.session.activity.public_id,
-        metadata_definition_public_id
-    )
+async function navigateToMetaDataProfile(metadata_definition_public_id: string): Promise<void> {
+    await navigateToMetadataProfile(props.session.activity.public_id, metadata_definition_public_id)
 }
 </script>
 

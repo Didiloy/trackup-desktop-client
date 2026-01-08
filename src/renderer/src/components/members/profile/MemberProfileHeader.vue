@@ -10,9 +10,8 @@ import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 
 const props = defineProps<{
-        member: IServerMember
-    }>()
-
+    member: IServerMember
+}>()
 
 const { t } = useI18n()
 const {

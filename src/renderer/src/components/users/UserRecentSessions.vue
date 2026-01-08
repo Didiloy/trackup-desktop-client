@@ -17,7 +17,10 @@ const user_stats_store = useUserStatsStore()
             <div v-for="i in 5" :key="i" class="h-16 bg-surface-100 rounded-xl animate-pulse"></div>
         </div>
 
-        <div v-else-if="user_stats_store.get_sessions.length === 0" class="text-center py-8 text-surface-400">
+        <div
+            v-else-if="user_stats_store.get_sessions.length === 0"
+            class="text-center py-8 text-surface-400"
+        >
             <i class="pi pi-inbox text-4xl mb-2"></i>
             <p>{{ t('views.home.recent_sessions.empty') }}</p>
         </div>

@@ -94,7 +94,6 @@ async function navigateToSession(sessionId: string): Promise<void> {
 }
 </script>
 
-
 <template>
     <BaseWidgetContainer
         :title="t('views.server_members.sessions.activity_title', { activity: activityName ?? '' })"

@@ -9,7 +9,6 @@ import type { ActivityMetadataType } from '@shared/contracts/interfaces/entities
 import { useMetadataNavigation } from '@/composables/activities/useMetadataNavigation'
 import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 
-
 const props = defineProps<{
     activity: IActivity | null
     metadataDefinitions?: IActivityMetadataDefinition[]

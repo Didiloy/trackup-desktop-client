@@ -68,7 +68,7 @@ async function initializeApp(): Promise<void> {
 }
 
 // Start the initialization
-; (async function () {
+;(async function () {
     await initializeApp()
     document.title = i18n.global.t('app.title')
 })()

@@ -5,7 +5,6 @@ import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 
-
 export function useMemberActions() {
     const { t } = useI18n()
     const toast = useToast()

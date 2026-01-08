@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Slider from 'primevue/slider'
 import { useUserPreferencesStore } from '@/stores/user-preferences'
-import { 
+import {
     MIN_AUTO_FETCH_INTERVAL_MINUTES,
     MAX_AUTO_FETCH_INTERVAL_MINUTES
 } from '@shared/contracts/interfaces/user-preferences.interfaces'

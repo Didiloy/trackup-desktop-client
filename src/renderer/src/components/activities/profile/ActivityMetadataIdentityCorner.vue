@@ -54,12 +54,7 @@ async function fetchDefinition(): Promise<void> {
 }
 
 watch(
-    () => [
-        props.metadataDefinitionId,
-        server_store.getPublicId,
-        activityIdValue.value,
-        props.show
-    ],
+    () => [props.metadataDefinitionId, server_store.getPublicId, activityIdValue.value, props.show],
     () => {
         void fetchDefinition()
     },
@@ -79,7 +74,7 @@ const isVisible = computed(() => props.show)
         <div
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
-            <MetadataIcon/>
+            <MetadataIcon />
             <router-link
                 :to="{
                     name: 'ServerActivityMetadataProfile',

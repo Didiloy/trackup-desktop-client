@@ -93,11 +93,7 @@ onMounted(async () => {
         </div>
 
         <!-- Member Header -->
-        <MemberProfileHeader
-            v-if="member"
-            :member="member"
-            class="mb-6"
-        />
+        <MemberProfileHeader v-if="member" :member="member" class="mb-6" />
 
         <Tabs v-model:value="activeTab" class="mt-4">
             <TabList class="mb-4 flex items-center justify-between w-full pr-4">

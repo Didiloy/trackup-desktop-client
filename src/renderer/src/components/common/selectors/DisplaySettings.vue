@@ -23,7 +23,9 @@ const animationsEnabled = computed({
         <!-- Compact Mode -->
         <div class="flex items-center justify-between gap-12">
             <div class="flex-1">
-                <h3 class="font-medium">{{ t('views.user_profile.preferences.display.compact_mode.title') }}</h3>
+                <h3 class="font-medium">
+                    {{ t('views.user_profile.preferences.display.compact_mode.title') }}
+                </h3>
                 <p class="text-sm text-surface-500 mt-1">
                     {{ t('views.user_profile.preferences.display.compact_mode.description') }}
                 </p>
@@ -34,7 +36,9 @@ const animationsEnabled = computed({
         <!-- Animations -->
         <div class="flex items-center justify-between gap-12">
             <div class="flex-1">
-                <h3 class="font-medium">{{ t('views.user_profile.preferences.display.animations.title') }}</h3>
+                <h3 class="font-medium">
+                    {{ t('views.user_profile.preferences.display.animations.title') }}
+                </h3>
                 <p class="text-sm text-surface-500 mt-1">
                     {{ t('views.user_profile.preferences.display.animations.description') }}
                 </p>

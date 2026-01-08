@@ -27,10 +27,7 @@ export const userStatsBridge = {
     startAppSession: (accessToken: string): Promise<IUserApiResponse<IAppSessionResponse>> => {
         return ipcRenderer.invoke(ipc_channels.userStats.startAppSession, accessToken)
     },
-    endAppSession: (
-        accessToken: string,
-        sessionId: string
-    ): Promise<IUserApiResponse<void>> => {
+    endAppSession: (accessToken: string, sessionId: string): Promise<IUserApiResponse<void>> => {
         return ipcRenderer.invoke(ipc_channels.userStats.endAppSession, accessToken, sessionId)
     }
 }

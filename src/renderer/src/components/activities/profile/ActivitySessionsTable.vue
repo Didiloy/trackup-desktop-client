@@ -33,7 +33,6 @@ async function navigateToSession(sessionId: string): Promise<void> {
 const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
 </script>
 
-
 <template>
     <InfiniteScrollContainer
         :loading="loading"

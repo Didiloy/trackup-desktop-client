@@ -82,7 +82,7 @@ watch(
     { immediate: true }
 )
 
-const onPageChange = (event: { first: number; page: number}): void => {
+const onPageChange = (event: { first: number; page: number }): void => {
     first.value = event.first
     void loadSessions(event.page)
 }
