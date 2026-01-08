@@ -5,44 +5,32 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const { t } = useI18n()
 
-const props = defineProps({
-    modelValue: {
-        type: Boolean,
-        required: true
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    message: {
-        type: String,
-        required: true
-    },
-    cancelLabel: {
-        type: String
-    },
-    confirmLabel: {
-        type: String
-    },
-    cancelSeverity: {
-        type: String,
-        default: 'secondary'
-    },
-    confirmSeverity: {
-        type: String,
-        default: 'danger'
-    },
-    confirmationName: {
-        type: String,
-        default: ''
-    }
+interface Props {
+    modelValue: boolean
+    title: string
+    message: string
+    cancelLabel?: string
+    confirmLabel?: string
+    cancelSeverity?: string
+    confirmSeverity?: string
+    confirmationName?: string
+    /** Function prop for async confirmation - manages loading state internally */
+    onConfirm?: () => void | Promise<void>
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    cancelSeverity: 'secondary',
+    confirmSeverity: 'danger',
+    confirmationName: ''
 })
 
 // Use new translation key paths under `common.actions` to match provided fr.json
 const cancelLabel = computed(() => props.cancelLabel || t('common.actions.cancel'))
 const confirmLabel = computed(() => props.confirmLabel || t('common.actions.confirm'))
 
-const emit = defineEmits(['update:modelValue', 'confirm'])
+const emit = defineEmits<{
+    (e: 'update:modelValue', value: boolean): void
+}>()
 
 const visible = computed({
     get: () => props.modelValue,
@@ -52,12 +40,17 @@ const visible = computed({
 })
 
 const userInput = ref('')
-const isInputValid = computed(() => userInput.value === props.confirmationName)
+const loading = ref(false)
+const isInputValid = computed(() => {
+    if (!props.confirmationName) return true
+    return userInput.value === props.confirmationName
+})
 
-// Reset input when dialog is closed/opened
+// Reset input and loading when dialog is closed/opened
 watch(visible, (newVal) => {
     if (newVal) {
         userInput.value = ''
+        loading.value = false
     }
 })
 
@@ -65,9 +58,18 @@ const closeDialog = (): void => {
     emit('update:modelValue', false)
 }
 
-const confirmAction = (): void => {
-    if (isInputValid.value) {
-        emit('confirm')
+const confirmAction = async (): Promise<void> => {
+    if (!isInputValid.value || loading.value) return
+
+    if (props.onConfirm) {
+        loading.value = true
+        try {
+            await props.onConfirm()
+            closeDialog()
+        } finally {
+            loading.value = false
+        }
+    } else {
         closeDialog()
     }
 }
@@ -108,18 +110,17 @@ const confirmAction = (): void => {
         </div>
 
         <div class="o-delete-buttons">
-            <Button :label="cancelLabel" :severity="props.cancelSeverity" @click="closeDialog" />
             <Button
-                v-if="props.confirmationName"
-                :label="confirmLabel"
-                :severity="props.confirmSeverity"
-                :disabled="props.confirmationName ? !isInputValid : false"
-                @click="confirmAction"
+                :label="cancelLabel"
+                :severity="props.cancelSeverity"
+                :disabled="loading"
+                @click="closeDialog"
             />
             <Button
-                v-else
                 :label="confirmLabel"
                 :severity="props.confirmSeverity"
+                :disabled="!isInputValid || loading"
+                :loading="loading"
                 @click="confirmAction"
             />
         </div>

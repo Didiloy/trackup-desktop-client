@@ -25,7 +25,6 @@ const { t } = useI18n()
 const {
     show_nickname_dialog,
     new_nickname,
-    is_updating,
     updateNickname,
     confirmUpdateNickname,
     kickMember,
@@ -71,8 +70,8 @@ const menuItems = computed<
     return items
 })
 
-const handleNicknameUpdate = (nickname: string): void => {
-    confirmUpdateNickname(props.member.public_id, nickname, props.member.nickname)
+const handleNicknameUpdate = async (nickname: string): Promise<void> => {
+    await confirmUpdateNickname(props.member.public_id, nickname, props.member.nickname)
 }
 
 const { menu, onRightClick } = useContextMenu(menuItems.value)
@@ -165,7 +164,6 @@ const onItemSelected = (item: unknown): void => {
             :confirm-label="t('views.members_aside.update_nickname')"
             :cancel-label="t('common.actions.cancel')"
             confirm-severity="primary"
-            :loading="is_updating"
             @confirm="handleNicknameUpdate"
         />
     </div>

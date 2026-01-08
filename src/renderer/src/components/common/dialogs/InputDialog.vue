@@ -4,49 +4,28 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const props = defineProps({
-    modelValue: {
-        type: Boolean,
-        required: true
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    message: {
-        type: String,
-        default: ''
-    },
-    inputValue: {
-        type: String,
-        default: ''
-    },
-    inputLabel: {
-        type: String,
-        default: ''
-    },
-    inputPlaceholder: {
-        type: String,
-        default: ''
-    },
-    cancelLabel: {
-        type: String
-    },
-    confirmLabel: {
-        type: String
-    },
-    cancelSeverity: {
-        type: String,
-        default: 'secondary'
-    },
-    confirmSeverity: {
-        type: String,
-        default: 'primary'
-    },
-    loading: {
-        type: Boolean,
-        default: false
-    }
+interface Props {
+    modelValue: boolean
+    title: string
+    message?: string
+    inputValue?: string
+    inputLabel?: string
+    inputPlaceholder?: string
+    cancelLabel?: string
+    confirmLabel?: string
+    cancelSeverity?: string
+    confirmSeverity?: string
+    /** Function prop for async confirmation - manages loading state internally */
+    onConfirm?: (inputValue: string) => void | Promise<void>
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    message: '',
+    inputValue: '',
+    inputLabel: '',
+    inputPlaceholder: '',
+    cancelSeverity: 'secondary',
+    confirmSeverity: 'primary'
 })
 
 const cancelLabel = computed(() => props.cancelLabel || t('common.actions.cancel'))
@@ -54,7 +33,10 @@ const confirmLabel = computed(() => props.confirmLabel || t('common.actions.conf
 const inputPlaceholderComputed = computed(() => props.inputPlaceholder || t('placeholder.enter'))
 const dialogWidth = '400px'
 
-const emit = defineEmits(['update:modelValue', 'update:inputValue', 'confirm'])
+const emit = defineEmits<{
+    (e: 'update:modelValue', value: boolean): void
+    (e: 'update:inputValue', value: string): void
+}>()
 
 const visible = computed({
     get: () => props.modelValue,
@@ -64,6 +46,7 @@ const visible = computed({
 })
 
 const inputText = ref('')
+const loading = ref(false)
 
 // Sync input value with prop
 watch(
@@ -74,10 +57,11 @@ watch(
     { immediate: true }
 )
 
-// Reset input when dialog is opened
+// Reset input and loading when dialog is opened
 watch(visible, (newVal) => {
     if (newVal) {
         inputText.value = props.inputValue
+        loading.value = false
     }
 })
 
@@ -90,8 +74,20 @@ const closeDialog = (): void => {
     emit('update:modelValue', false)
 }
 
-const confirmAction = (): void => {
-    emit('confirm', inputText.value)
+const confirmAction = async (): Promise<void> => {
+    if (!inputText.value || loading.value) return
+
+    if (props.onConfirm) {
+        loading.value = true
+        try {
+            await props.onConfirm(inputText.value)
+            closeDialog()
+        } finally {
+            loading.value = false
+        }
+    } else {
+        closeDialog()
+    }
 }
 </script>
 
@@ -126,7 +122,7 @@ const confirmAction = (): void => {
                 id="dialog-input"
                 :model-value="inputText"
                 :placeholder="inputPlaceholderComputed"
-                :disabled="props.loading"
+                :disabled="loading"
                 class="w-full"
                 @update:model-value="updateInputValue"
                 @keyup.enter="confirmAction"
@@ -137,14 +133,14 @@ const confirmAction = (): void => {
             <Button
                 :label="cancelLabel"
                 :severity="props.cancelSeverity"
-                :disabled="props.loading"
+                :disabled="loading"
                 @click="closeDialog"
             />
             <Button
                 :label="confirmLabel"
                 :severity="props.confirmSeverity"
-                :disabled="props.loading || !inputText"
-                :loading="props.loading"
+                :disabled="loading || !inputText"
+                :loading="loading"
                 @click="confirmAction"
             />
         </div>

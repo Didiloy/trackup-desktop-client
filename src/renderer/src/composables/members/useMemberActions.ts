@@ -48,12 +48,12 @@ export function useMemberActions() {
     /**
      * Confirm nickname update
      */
-    const confirmUpdateNickname = (
+    const confirmUpdateNickname = async (
         memberId: string,
         newNickname: string,
         currentNickname: string
-    ): void => {
-        handleUpdateNickname(memberId, newNickname, currentNickname)
+    ): Promise<void> => {
+        await handleUpdateNickname(memberId, newNickname, currentNickname)
     }
 
     /**
