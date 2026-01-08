@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
+import { useEnumDefinitionNavigation } from '@/composables/enum-definitions/useEnumDefinitionNavigation'
 import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
@@ -24,11 +25,11 @@ import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum
 const { t } = useI18n()
 const toast = useToast()
 const route = useRoute()
-const router = useRouter()
 const definitionId = computed(() => route.params.enumDefinitionId as string)
 
 const server_store = useServerStore()
 const { deleteEnumDefinition } = useEnumDefinitionCRUD()
+const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()
 
 // Local state
 const enumDefinition = ref<IEnumDefinition | null>(null)
@@ -87,11 +88,8 @@ async function handleDelete() {
             life: 3000
         })
 
-        // Navigate back to list
-        router.push({
-            name: 'ServerDefinitions',
-            params: { id: server_store.getPublicId }
-        })
+        // Navigate back to list - doesn't need navigation since it's going to list view
+        //navigateToEnumDefinitionProfile(server_store.getPublicId)
     } catch (e) {
         toast.add({
             severity: 'error',

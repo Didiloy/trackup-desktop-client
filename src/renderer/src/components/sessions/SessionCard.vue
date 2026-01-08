@@ -2,14 +2,12 @@
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-import { useServerStore } from '@/stores/server'
-import { useRouter } from 'vue-router'
+import { useSessionNavigation } from '@/composables/sessions/useSessionNavigation'
 import { formatDate } from '@/utils'
 interface Props {
     session: ISessionListItem
 }
 
-const server_store = useServerStore()
 
 interface Emits {
     (e: 'like', sessionId: string): void
@@ -20,7 +18,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
-const router = useRouter()
+const { navigateToSessionProfile } = useSessionNavigation()
 
 function toggleLike(session: ISessionListItem): void {
     if (session.liked_by_me) {
@@ -40,21 +38,16 @@ function getParticipantTooltip(
         : participant.nickname
 }
 
-async function navigateToSessionProfile(): Promise<void> {
-    await router.push({
-        name: 'ServerSessionProfile',
-        params: {
-            id: server_store.getPublicId,
-            sessionId: props.session.public_id
-        }
-    })
+async function navigateToSession(): Promise<void> {
+    await navigateToSessionProfile(props.session.public_id)
 }
 </script>
+
 
 <template>
     <div
         class="group relative rounded-2xl border border-surface-200 shadow-sm hover:shadow-xl transition-all overflow-hidden cursor-pointer transform-gpu will-change-transform"
-        @click="navigateToSessionProfile"
+        @click="navigateToSession"
     >
         <div
             v-if="session.activity.banner"

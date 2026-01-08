@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useSessionNavigation } from '@/composables/sessions/useSessionNavigation'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import {
     type IWidgetMetadata,
@@ -42,9 +43,9 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const route = useRoute()
-const router = useRouter()
 const server_store = useServerStore()
 const { getMemberSessions } = useMemberCRUD()
+const { navigateToSessionProfile } = useSessionNavigation()
 
 const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
 const sessions = ref<ISessionListItem[]>([])
@@ -81,19 +82,13 @@ watch(
     { immediate: true }
 )
 
-const onPageChange = (event: { first: number; page: number }): void => {
+const onPageChange = (event: { first: number; page: number}): void => {
     first.value = event.first
     void loadSessions(event.page)
 }
 
-const navigateToSession = async (sessionId: string): Promise<void> => {
-    await router.push({
-        name: 'ServerSessionProfile',
-        params: {
-            id: server_store.getPublicId,
-            sessionId
-        }
-    })
+async function navigateToSession(sessionId: string): Promise<void> {
+    await navigateToSessionProfile(sessionId)
 }
 </script>
 

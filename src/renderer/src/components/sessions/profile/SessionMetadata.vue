@@ -5,8 +5,7 @@ import type {
     ISessionMetadata
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
-import { useRouter } from 'vue-router'
-import { useServerStore } from '@/stores/server'
+import { useMetadataNavigation } from '@/composables/activities/useMetadataNavigation'
 
 interface Props {
     session: ISession
@@ -15,8 +14,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { t } = useI18n()
-const router = useRouter()
-const server_store = useServerStore()
+const { navigateToMetadataProfile } = useMetadataNavigation()
 
 function formatValue(value: unknown): string {
     if (value === null || value === undefined) return '-'
@@ -27,14 +25,10 @@ function formatValue(value: unknown): string {
 async function navigateToMetaDataProfile(
     metadata_definition_public_id: string
 ): Promise<void> {
-    await router.push({
-        name: 'ServerActivityMetadataProfile',
-        params: {
-            id: server_store.getPublicId,
-            activityId: props.session.activity.public_id,
-            metadataDefinitionId: metadata_definition_public_id
-        }
-    })
+    await navigateToMetadataProfile(
+        props.session.activity.public_id,
+        metadata_definition_public_id
+    )
 }
 </script>
 

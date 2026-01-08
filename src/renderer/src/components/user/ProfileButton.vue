@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
+import { useHomeNavigation } from '@/composables/app/useHomeNavigation'
 
 const i18n = useI18n()
 
@@ -12,14 +13,14 @@ const user_store = useUserStore()
 const server_store = useServerStore()
 
 const route = useRoute()
-const router = useRouter()
+const { navigateToHome } = useHomeNavigation()
 
 const isActive = computed(() => route.path === '/')
 const profileTitle = computed(() => user_store.getUsername ?? undefined)
 
 const goHome = async (): Promise<void> => {
     server_store.resetState()
-    await router.push({ name: 'Home' })
+    await navigateToHome()
 }
 </script>
 

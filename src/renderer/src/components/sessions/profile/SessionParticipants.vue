@@ -5,7 +5,7 @@ import type {
     ISessionCreator
 } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useServerStore } from '@/stores/server'
-import { useRouter } from 'vue-router'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 
 interface Props {
@@ -16,20 +16,14 @@ interface Props {
 defineProps<Props>()
 const { t } = useI18n()
 const server_store = useServerStore()
-const router = useRouter()
+const { navigateToMemberProfile } = useMemberNavigation()
 
 function isCreator(participant: ISessionMember, creator?: ISessionCreator): boolean {
     return !!creator && participant.public_id === creator.member_public_id
 }
 
 async function goToMemberProfile(participant: ISessionMember): Promise<void> {
-    await router.push({
-        name: 'ServerMemberProfile',
-        params: {
-            id: server_store.getPublicId,
-            memberId: participant.public_id
-        }
-    })
+    await navigateToMemberProfile(participant.public_id)
 }
 </script>
 

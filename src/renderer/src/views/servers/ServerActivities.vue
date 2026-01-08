@@ -12,11 +12,11 @@ import type { ActivityCardMetrics } from '@/components/activities/types/activity
 import { asyncPool } from '@/utils'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import { IActivityStats } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
-import { useRouter } from 'vue-router'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import { ESearchMode } from '@shared/contracts/enums/search-mode.enum'
 
 const { t } = useI18n()
-const router = useRouter()
+const { navigateToActivityProfile } = useActivityNavigation()
 const { listActivities } = useActivityCRUD()
 const { getActivityStats } = useActivityStatsCRUD()
 const server_store = useServerStore()
@@ -107,10 +107,7 @@ function onAddActivity(): void {
 }
 
 async function onViewActivity(activityId: string): Promise<void> {
-    await router.push({
-        name: 'ServerActivityProfile',
-        params: { id: server_store.getPublicId, activityId }
-    })
+    await navigateToActivityProfile(activityId)
 }
 
 onMounted(() => {

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { ISessionEnum } from '@shared/contracts/interfaces/entities/session.interfaces'
-import { useRoute, useRouter } from 'vue-router'
-import { useServerStore } from '@/stores/server'
+import { useEnumDefinitionNavigation } from '@/composables/enum-definitions/useEnumDefinitionNavigation'
 
 interface Props {
     enums?: ISessionEnum[]
@@ -10,8 +9,7 @@ interface Props {
 
 defineProps<Props>()
 const { t } = useI18n()
-const router = useRouter()
-const server_store = useServerStore()
+const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()
 
 function formatValue(value: unknown): string {
     if (value === null || value === undefined) return '-'
@@ -19,13 +17,7 @@ function formatValue(value: unknown): string {
     return String(value)
 }
 async function navigateToEnumDefinition(enum_definition_public_id: string): Promise<void> {
-    await router.push({
-        name: 'ServerEnumDefinitionProfile',
-        params: {
-            id: server_store.getPublicId,
-            enumDefinitionId: enum_definition_public_id
-        }
-    })
+    await navigateToEnumDefinitionProfile(enum_definition_public_id)
 }
 </script>
 

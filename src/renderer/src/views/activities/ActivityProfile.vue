@@ -23,7 +23,7 @@ import type { IActivitySkillLevel } from '@shared/contracts/interfaces/entities/
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { useToast } from 'primevue/usetoast'
-import { useRouter } from 'vue-router'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import { useI18n } from 'vue-i18n'
 
 import ActivityEditDialog from '@/components/activities/create-edit/ActivityEditDialog.vue'
@@ -37,7 +37,7 @@ import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 const route = useRoute()
 const toast = useToast()
 const { t } = useI18n()
-const router = useRouter()
+const { navigateToActivityProfile } = useActivityNavigation()
 const activityId = computed(() => route.params.activityId as string)
 
 const { getActivityById, deleteActivity } = useActivityCRUD()
@@ -112,7 +112,7 @@ async function confirmDelete(): Promise<void> {
             return
         }
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
-        await router.push({ name: 'ServerActivities', params: { id: server_store.getPublicId } })
+        await navigateToActivityProfile(server_store.getPublicId)
     } catch (e) {
         toast.add({
             severity: 'error',

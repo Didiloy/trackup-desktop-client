@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useMemberActivityStatsCRUD } from '@/composables/members/useMemberActivityStatsCRUD'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import {
     type IWidgetMetadata,
@@ -42,10 +43,10 @@ const props = withDefaults(
 )
 
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
 const server_store = useServerStore()
 const { getAllMemberActivitiesStats } = useMemberActivityStatsCRUD()
+const { navigateToActivityProfile } = useActivityNavigation()
 
 const memberId = computed(() => (route.params.memberId as string) || props.config?.memberId)
 const activities = ref<IMemberActivityStats[]>([])
@@ -89,13 +90,7 @@ const onPageChange = (event: { first: number; page: number }): void => {
 }
 
 const navigateToActivity = async (activityId: string): Promise<void> => {
-    await router.push({
-        name: 'ServerActivityProfile',
-        params: {
-            id: server_store.getPublicId,
-            activityId
-        }
-    })
+    await navigateToActivityProfile(activityId)
 }
 </script>
 

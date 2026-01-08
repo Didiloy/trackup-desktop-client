@@ -2,16 +2,14 @@
 import type { IActivitySessionListItem } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { useI18n } from 'vue-i18n'
 import { formatMinutesToLabel } from '@/utils/time.utils'
-import { useServerStore } from '@/stores/server'
-import { useRouter } from 'vue-router'
+import { useSessionNavigation } from '@/composables/sessions/useSessionNavigation'
 import InfiniteScrollContainer from '@/components/common/InfiniteScrollContainer.vue'
 import { computed } from 'vue'
 import TransitionGroupWrapper from '@/components/common/transitions/TransitionGroupWrapper.vue'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 
 const { t } = useI18n()
-const server_store = useServerStore()
-const router = useRouter()
+const { navigateToSessionProfile } = useSessionNavigation()
 
 interface Props {
     sessions: IActivitySessionListItem[]
@@ -29,17 +27,12 @@ const emit = defineEmits<{
 }>()
 
 async function navigateToSession(sessionId: string): Promise<void> {
-    await router.push({
-        name: 'ServerSessionProfile',
-        params: {
-            id: server_store.getPublicId,
-            sessionId
-        }
-    })
+    await navigateToSessionProfile(sessionId)
 }
 
 const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
 </script>
+
 
 <template>
     <InfiniteScrollContainer

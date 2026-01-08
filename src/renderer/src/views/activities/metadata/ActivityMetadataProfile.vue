@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { getMetadataTypeTranslationKey } from '@/utils/metadata.utils'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
@@ -18,7 +19,7 @@ import MetadataChoicesWidget from '@/components/widgets/activity-metadata/Metada
 import MetadataTypeBadge from '@/components/common/icons/MetadataTypeBadge.vue'
 
 const route = useRoute()
-const router = useRouter()
+const { navigateToActivityProfile } = useActivityNavigation()
 const { t } = useI18n()
 const server_store = useServerStore()
 const { getMetadataDefinitionById } = useActivityMetadataDefinitionCRUD()
@@ -69,10 +70,7 @@ watch(
 function handleBack(): void {
     const serverId = server_store.getPublicId
     if (serverId && activityId.value) {
-        router.push({
-            name: 'ServerActivityProfile',
-            params: { id: serverId, activityId: activityId.value }
-        })
+        navigateToActivityProfile(activityId.value)
     }
 }
 </script>

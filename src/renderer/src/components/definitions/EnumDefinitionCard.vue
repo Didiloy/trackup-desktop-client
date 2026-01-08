@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useServerStore } from '@/stores/server'
+import { useEnumDefinitionNavigation } from '@/composables/enum-definitions/useEnumDefinitionNavigation'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import { enumDefGradientColorsList } from '@/components/definitions/constants/constants'
 
 const { t } = useI18n()
-const router = useRouter()
-const server_store = useServerStore()
+const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()
 
 interface Props {
     definition: IEnumDefinition
@@ -48,14 +46,7 @@ function getGradient(): string {
 }
 
 function navigateToProfile(): void {
-    router.push({
-        name: 'ServerEnumDefinitionProfile',
-        params: {
-            id: server_store.getPublicId,
-            enumDefinitionId: props.definition.public_id
-        },
-        query: { colorIndex: props.colorIndex.toString() }
-    })
+    navigateToEnumDefinitionProfile(props.definition.public_id, props.colorIndex)
 }
 </script>
 

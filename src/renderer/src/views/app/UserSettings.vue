@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useHomeNavigation } from '@/composables/app/useHomeNavigation'
 import ThemeSelector from '@/components/common/selectors/ThemeSelector.vue'
 import LanguageSelector from '@/components/common/selectors/LanguageSelector.vue'
 import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
-const router = useRouter()
 const user_store = useUserStore()
+const { navigateToHome } = useHomeNavigation()
 
 const goBack = () => {
-    router.push({ name: 'Home' })
+    navigateToHome()
 }
 </script>
 
