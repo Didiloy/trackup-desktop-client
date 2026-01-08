@@ -3,7 +3,11 @@ import { reactive, computed } from 'vue'
 import type {
     IUserPreferences
 } from '@shared/contracts/interfaces/user-preferences.interfaces'
-import { DEFAULT_USER_PREFERENCES } from '@shared/contracts/interfaces/user-preferences.interfaces'
+import {
+    DEFAULT_USER_PREFERENCES,
+    MIN_AUTO_FETCH_INTERVAL_MINUTES,
+    MAX_AUTO_FETCH_INTERVAL_MINUTES
+} from '@shared/contracts/interfaces/user-preferences.interfaces'
 import { applyTheme } from '@/utils'
 import { setI18nLanguage } from '@/i18n'
 
@@ -86,8 +90,8 @@ export const useUserPreferencesStore = defineStore('user-preferences', () => {
     }
 
     const setAutoFetchIntervalMinutes = (minutes: number): void => {
-        // Validate range (5-10 minutes)
-        const validMinutes = Math.max(5, Math.min(10, minutes))
+        // Validate range using constants
+        const validMinutes = Math.max(MIN_AUTO_FETCH_INTERVAL_MINUTES, Math.min(MAX_AUTO_FETCH_INTERVAL_MINUTES, minutes))
         preferences.autoFetchIntervalMinutes = validMinutes
         savePreferences()
     }

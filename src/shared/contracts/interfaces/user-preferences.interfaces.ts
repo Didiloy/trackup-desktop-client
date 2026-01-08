@@ -10,10 +10,14 @@ export interface IUserPreferences {
     autoFetchIntervalMinutes: number // Auto-fetch interval in minutes (5-10)
 }
 
+// Auto-fetch interval configuration
+export const MIN_AUTO_FETCH_INTERVAL_MINUTES = 10
+export const MAX_AUTO_FETCH_INTERVAL_MINUTES = 20
+
 export const DEFAULT_USER_PREFERENCES: Readonly<IUserPreferences> = {
     theme: 'system',
     language: 'fr',
     compactMode: false,
     animationsEnabled: true,
-    autoFetchIntervalMinutes: 5
+    autoFetchIntervalMinutes: MIN_AUTO_FETCH_INTERVAL_MINUTES
 } as const
