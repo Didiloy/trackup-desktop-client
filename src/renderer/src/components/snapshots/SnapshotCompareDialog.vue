@@ -29,7 +29,7 @@ const emit = defineEmits<{
     (e: 'update:visible', value: boolean): void
 }>()
 
-const { t, d } = useI18n()
+const { t } = useI18n()
 const toast = useToast()
 const snapshotStore = useSnapshotStore()
 const { getSnapshotDisplayName, formatTrendValue, getTrendSeverity } = useSnapshot()
@@ -197,7 +197,7 @@ const closeDialog = (): void => {
                                 {{ getSnapshotDisplayName(comparison.snapshot1) }}
                             </p>
                             <p class="text-sm text-surface-600">
-                                {{ d(new Date(comparison.snapshot1.date), 'short') }}
+                                {{ formatDate(comparison.snapshot1.snapshot_date) }}
                             </p>
                         </div>
                         <div class="flex items-center">
@@ -211,7 +211,7 @@ const closeDialog = (): void => {
                                 {{ getSnapshotDisplayName(comparison.snapshot2) }}
                             </p>
                             <p class="text-sm text-surface-600">
-                                {{ d(new Date(comparison.snapshot2.date), 'short') }}
+                                {{ formatDate(comparison.snapshot2.snapshot_date) }}
                             </p>
                         </div>
                     </div>
@@ -256,7 +256,9 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
                             </p>
                             <Badge
-                                :value="formatTrendValue(comparison.comparison.engagement_diff, true)"
+                                :value="
+                                    formatTrendValue(comparison.comparison.engagement_diff, true)
+                                "
                                 :severity="getTrendSeverity(comparison.comparison.engagement_diff)"
                                 class="text-lg"
                             />

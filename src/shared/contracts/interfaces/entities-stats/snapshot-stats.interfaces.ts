@@ -149,7 +149,7 @@ export interface ISnapshotLight {
 
 export interface ISnapshotReference {
     id: string
-    date: string
+    snapshot_date: string
     snapshot_type: SnapshotType
     title?: string
 }

@@ -103,7 +103,7 @@ const handleHide = (): void => {
                     <SnapshotIcon class="text-primary-600 mr-2" />
                     {{ t('views.server_settings.snapshots.actions.create') }}
                 </h2>
-                <p class="text-sm text-surface-500 truncate">
+                <p class="text-sm text-surface-500 whitespace-normal break-words">
                     {{ t('views.server_settings.snapshots.description') }}
                 </p>
             </div>
