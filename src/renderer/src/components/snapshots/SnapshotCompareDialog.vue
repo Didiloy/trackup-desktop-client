@@ -11,6 +11,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import Badge from 'primevue/badge'
 import type { ISnapshotLight } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import { formatDate } from '@/utils'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 interface Props {
     visible: boolean
@@ -138,7 +139,7 @@ const closeDialog = (): void => {
 <template>
     <AppDialog
         :model-value="visible"
-        style-class="w-full max-w-5xl h-[80vh]"
+        style-class="w-full max-w-5xl"
         content-class="bg-surface-50 h-full overflow-hidden"
         @update:model-value="emit('update:visible', $event)"
     >
@@ -161,7 +162,9 @@ const closeDialog = (): void => {
 
             <template v-else>
                 <div class="flex flex-col gap-4 mb-2">
-                    <div class="grid grid-cols-[260px_1fr_260px] md:grid-cols-[280px_1fr_280px] gap-4 items-end">
+                    <div
+                        class="grid grid-cols-[260px_1fr_260px] md:grid-cols-[280px_1fr_280px] gap-4 items-end"
+                    >
                         <div class="flex flex-col gap-2 w-full">
                             <label class="font-medium text-surface-900 truncate">
                                 {{ t('views.server_settings.snapshots.compare.snapshot_1') }}
@@ -171,14 +174,19 @@ const closeDialog = (): void => {
                                 :options="availableSnapshots"
                                 option-label="label"
                                 option-value="value"
-                                :placeholder="t('views.server_settings.snapshots.compare.select_placeholder')"
+                                :placeholder="
+                                    t('views.server_settings.snapshots.compare.select_placeholder')
+                                "
                                 class="w-full"
                                 @change="needsComparison = true"
                             />
                         </div>
 
                         <div class="flex flex-col items-center justify-center pb-1">
-                             <div v-if="needsComparison || !comparison" class="w-full flex justify-center">
+                            <div
+                                v-if="needsComparison || !comparison"
+                                class="w-full flex justify-center"
+                            >
                                 <Button
                                     icon="pi pi-search"
                                     :label="t('views.server_settings.snapshots.actions.compare')"
@@ -187,9 +195,11 @@ const closeDialog = (): void => {
                                     rounded
                                     @click="handleCompare"
                                 />
-                             </div>
+                            </div>
                             <div v-else class="flex flex-col items-center gap-1 pb-2">
-                                <span class="text-xs text-surface-400 uppercase tracking-widest">{{ t('views.server_activities.evolution_comparison').split(' ')[0] }}</span>
+                                <span class="text-xs text-surface-400 uppercase tracking-widest">{{
+                                    t('views.server_activities.evolution_comparison').split(' ')[0]
+                                }}</span>
                                 <i class="pi pi-arrow-right text-surface-400 text-xl"></i>
                             </div>
                         </div>
@@ -203,7 +213,9 @@ const closeDialog = (): void => {
                                 :options="availableSnapshots"
                                 option-label="label"
                                 option-value="value"
-                                :placeholder="t('views.server_settings.snapshots.compare.select_placeholder')"
+                                :placeholder="
+                                    t('views.server_settings.snapshots.compare.select_placeholder')
+                                "
                                 class="w-full"
                                 @change="needsComparison = true"
                             />
@@ -221,7 +233,9 @@ const closeDialog = (): void => {
                     <!-- Stats Table -->
                     <div class="border border-surface-200 rounded-xl bg-white shadow-sm">
                         <!-- Table Header -->
-                        <div class="grid grid-cols-[260px_1fr_260px] md:grid-cols-[280px_1fr_280px] bg-surface-50 border-b border-surface-200 p-4">
+                        <div
+                            class="grid grid-cols-[260px_1fr_260px] md:grid-cols-[280px_1fr_280px] bg-surface-50 border-b border-surface-200 p-4"
+                        >
                             <div class="text-center font-medium text-surface-600 truncate px-2">
                                 {{
                                     selectedSnapshot1Data?.title ||
@@ -231,7 +245,9 @@ const closeDialog = (): void => {
                             <div
                                 class="text-center font-medium text-surface-400 uppercase text-xs tracking-wider flex items-center justify-center"
                             >
-                                {{ t('views.server_activities.evolution_comparison').split(' ')[0] }}
+                                {{
+                                    t('views.server_activities.evolution_comparison').split(' ')[0]
+                                }}
                             </div>
                             <div class="text-center font-medium text-surface-600 truncate px-2">
                                 {{
@@ -321,12 +337,9 @@ const closeDialog = (): void => {
                             >
                                 <div class="text-center text-xl font-bold text-surface-900">
                                     {{
-                                        (selectedSnapshot1Data?.highlights?.total_duration
-                                            ? (
-                                                  selectedSnapshot1Data?.highlights
-                                                      ?.total_duration / 3600
-                                              ).toFixed(1)
-                                            : '-') + 'h'
+                                        formatMinutesToLabel(
+                                            selectedSnapshot1Data?.highlights?.total_duration ?? 0
+                                        )
                                     }}
                                 </div>
                                 <div class="flex flex-col items-center justify-center gap-1">
@@ -356,12 +369,9 @@ const closeDialog = (): void => {
                                 </div>
                                 <div class="text-center text-xl font-bold text-surface-900">
                                     {{
-                                        (selectedSnapshot2Data?.highlights?.total_duration
-                                            ? (
-                                                  selectedSnapshot2Data?.highlights
-                                                      ?.total_duration / 3600
-                                              ).toFixed(1)
-                                            : '-') + 'h'
+                                        formatMinutesToLabel(
+                                            selectedSnapshot2Data?.highlights?.total_duration ?? 0
+                                        )
                                     }}
                                 </div>
                             </div>
@@ -417,9 +427,7 @@ const closeDialog = (): void => {
                     <!-- Top items changes -->
                     <div class="flex flex-col gap-4 mt-2">
                         <!-- Top Members Support -->
-                        <div
-                            class="border border-surface-200 rounded-xl bg-white shadow-sm"
-                        >
+                        <div class="border border-surface-200 rounded-xl bg-white shadow-sm">
                             <div
                                 class="bg-surface-50 border-b border-surface-200 p-3 text-center font-semibold text-surface-700"
                             >
@@ -471,9 +479,7 @@ const closeDialog = (): void => {
                         </div>
 
                         <!-- Top Activities Changes -->
-                        <div
-                            class="border border-surface-200 rounded-xl bg-white shadow-sm"
-                        >
+                        <div class="border border-surface-200 rounded-xl bg-white shadow-sm">
                             <div
                                 class="bg-surface-50 border-b border-surface-200 p-3 text-center font-semibold text-surface-700"
                             >
