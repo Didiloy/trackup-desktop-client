@@ -191,6 +191,7 @@ declare module 'vue' {
     SnapshotCompareDialog: typeof import('./src/components/snapshots/SnapshotCompareDialog.vue')['default']
     SnapshotCreateDialog: typeof import('./src/components/snapshots/SnapshotCreateDialog.vue')['default']
     SnapshotDetailDialog: typeof import('./src/components/snapshots/SnapshotDetailDialog.vue')['default']
+    SnapshotIcon: typeof import('./src/components/common/icons/SnapshotIcon.vue')['default']
     SnapshotList: typeof import('./src/components/snapshots/SnapshotList.vue')['default']
     SnapshotManagement: typeof import('./src/components/snapshots/SnapshotManagement.vue')['default']
     SnapshotSummary: typeof import('./src/components/snapshots/SnapshotSummary.vue')['default']

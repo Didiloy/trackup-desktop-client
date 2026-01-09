@@ -8,6 +8,9 @@ import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Button from 'primevue/button'
 import Badge from 'primevue/badge'
+import { formatDate } from '@/utils'
+import Icon from '@/components/common/icons/Icon.vue'
+import SnapshotIcon from '@/components/common/icons/SnapshotIcon.vue'
 
 interface Props {
     visible: boolean
@@ -36,11 +39,6 @@ const snapshotType = computed(() => props.snapshot?.snapshot_type ?? 'custom')
 
 const typeLabel = computed(() => getTypeLabel(snapshotType.value))
 
-const formattedDate = computed(() => {
-    if (!props.snapshot) return ''
-    return d(new Date(props.snapshot.created_at), 'medium')
-})
-
 const displayTitle = computed(() => {
     return getSnapshotDisplayName(props.snapshot)
 })
@@ -64,84 +62,118 @@ const handleDownload = async (): Promise<void> => {
         @update:model-value="emit('update:visible', $event)"
     >
         <template #header>
-            <div v-if="snapshot" class="flex flex-col gap-2 w-full pr-8">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 rounded-lg bg-primary-50 text-primary-600">
-                        <i class="pi pi-camera text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <h2 class="text-xl font-bold text-surface-900 leading-tight">
-                            {{ displayTitle }}
-                        </h2>
-                        <div class="flex items-center gap-2 text-sm text-surface-500">
-                            <span>{{ formattedDate }}</span>
-                            <span>•</span>
-                            <Badge
-                                :value="typeLabel"
-                                :severity="snapshotType === 'milestone' ? 'danger' : 'info'"
-                                size="small"
-                            />
-                        </div>
-                    </div>
+            <div v-if="snapshot" class="flex flex-col gap-1 w-full pr-8">
+                <div class="flex gap-4 mb-1">
+                    <SnapshotIcon class="mt-3"/>
+                    <h2
+                        class="text-2xl font-bold text-surface-900 leading-tight flex items-center gap-2"
+                    >
+                        {{ displayTitle }}
+                    </h2>
+                    <Badge
+                        :value="typeLabel"
+                        :severity="snapshotType === 'milestone' ? 'danger' : 'secondary'"
+                        class="uppercase tracking-wider font-bold mt-2"
+                    />
+                    <span class="text-surface-500 text-sm font-medium mt-2">{{
+                        formatDate(snapshot.snapshot_date)
+                    }}</span>
                 </div>
             </div>
         </template>
 
-        <div v-if="snapshot" class="flex flex-col gap-8 p-6">
+        <div v-if="snapshot" class="flex flex-col gap-4 p-1">
             <!-- Description -->
             <div
                 v-if="snapshot.description"
-                class="bg-surface-50 p-4 rounded-xl border border-surface-100"
+                class="bg-surface-50 p-4 rounded-xl"
             >
                 <div class="flex items-center gap-2 mb-2 text-surface-900 font-semibold">
-                    <i class="pi pi-align-left text-lg"></i>
+                    <i class="pi pi-align-left text-primary-500"></i>
                     <h3>{{ t('views.server_settings.snapshots.detail.description') }}</h3>
                 </div>
-                <p class="text-surface-600 leading-relaxed">{{ snapshot.description }}</p>
+                <p class="text-surface-700 leading-relaxed">{{ snapshot.description }}</p>
             </div>
 
             <!-- Server Stats -->
             <div v-if="snapshot.data.server_stats">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="pi pi-chart-bar text-xl text-primary-600"></i>
-                    <h3 class="text-lg font-bold text-surface-900">
-                        {{ t('views.server_settings.snapshots.detail.server_stats') }}
-                    </h3>
-                </div>
+                <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+                    <i class="pi pi-chart-pie text-primary-500"></i>
+                    {{ t('views.server_settings.snapshots.detail.server_stats') }}
+                </h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="stat-card bg-blue-50/50 border border-blue-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-blue-600 uppercase mb-1">
-                            {{ t('views.server_stats.total_sessions') }}
-                        </p>
-                        <p class="text-2xl font-bold text-surface-900">
+                    <div
+                        class="stat-card bg-surface-0 border border-surface-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all"
+                    >
+                        <div class="flex items-center justify-between mb-3">
+                            <span
+                                class="text-sm font-medium text-surface-500 uppercase tracking-wide"
+                            >
+                                {{ t('views.server_stats.total_sessions') }}
+                            </span>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i class="pi pi-desktop text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-surface-900">
                             {{ snapshot.data.server_stats.total_sessions }}
                         </p>
                     </div>
-                    <div class="stat-card bg-green-50/50 border border-green-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-green-600 uppercase mb-1">
-                            {{ t('views.server_stats.total_members') }}
-                        </p>
-                        <p class="text-2xl font-bold text-surface-900">
+
+                    <div
+                        class="stat-card bg-surface-0 border border-surface-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all"
+                    >
+                        <div class="flex items-center justify-between mb-3">
+                            <span
+                                class="text-sm font-medium text-surface-500 uppercase tracking-wide"
+                            >
+                                {{ t('views.server_stats.total_members') }}
+                            </span>
+                            <div class="p-2 bg-green-50 text-green-600 rounded-lg">
+                                <i class="pi pi-users text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-surface-900">
                             {{ snapshot.data.server_stats.total_members }}
                         </p>
                     </div>
-                    <div class="stat-card bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-orange-600 uppercase mb-1">
-                            {{ t('views.server_stats.active_members') }}
-                        </p>
-                        <p class="text-2xl font-bold text-surface-900">
+
+                    <div
+                        class="stat-card bg-surface-0 border border-surface-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all"
+                    >
+                        <div class="flex items-center justify-between mb-3">
+                            <span
+                                class="text-sm font-medium text-surface-500 uppercase tracking-wide"
+                            >
+                                {{ t('views.server_stats.active_members') }}
+                            </span>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i class="pi pi-star text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-surface-900">
                             {{ snapshot.data.server_stats.active_members }}
                         </p>
                     </div>
-                    <div class="stat-card bg-purple-50/50 border border-purple-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-purple-600 uppercase mb-1">
-                            {{ t('views.server_stats.engagement_score') }}
-                        </p>
+
+                    <div
+                        class="stat-card bg-surface-0 border border-surface-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all"
+                    >
+                        <div class="flex items-center justify-between mb-3">
+                            <span
+                                class="text-sm font-medium text-surface-500 uppercase tracking-wide"
+                            >
+                                {{ t('views.server_stats.engagement_score') }}
+                            </span>
+                            <div class="p-2 bg-purple-50 text-purple-600 rounded-lg">
+                                <i class="pi pi-chart-line text-lg"></i>
+                            </div>
+                        </div>
                         <div class="flex items-baseline gap-1">
-                            <p class="text-2xl font-bold text-surface-900">
+                            <p class="text-3xl font-bold text-surface-900">
                                 {{ Math.round(snapshot.data.server_stats.engagement_score || 0) }}
                             </p>
-                            <span class="text-sm text-surface-500">/100</span>
+                            <span class="text-surface-400 font-medium">/100</span>
                         </div>
                     </div>
                 </div>
@@ -149,40 +181,68 @@ const handleDownload = async (): Promise<void> => {
 
             <!-- Trends -->
             <div v-if="snapshot.data.trends?.sessions_change !== undefined">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="pi pi-arrow-up-right text-xl text-primary-600"></i>
-                    <h3 class="text-lg font-bold text-surface-900">
-                        {{ t('views.server_settings.snapshots.detail.trends') }}
-                    </h3>
-                </div>
+                <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+                    <i class="pi pi-sort-alt text-primary-500"></i>
+                    {{ t('views.server_settings.snapshots.detail.trends') }}
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">
-                                {{ t('views.server_settings.snapshots.compare.sessions_diff') }}
-                            </span>
+                    <div
+                        class="p-4 rounded-xl border border-surface-200 bg-surface-50/50 flex items-center justify-between"
+                    >
+                        <span class="font-medium text-surface-600">
+                            {{ t('views.server_settings.snapshots.compare.sessions_diff') }}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <i
+                                v-if="(snapshot.data.trends.sessions_change || 0) > 0"
+                                class="pi pi-arrow-up text-green-500"
+                            ></i>
+                            <i
+                                v-else-if="(snapshot.data.trends.sessions_change || 0) < 0"
+                                class="pi pi-arrow-down text-red-500"
+                            ></i>
                             <Badge
                                 :value="formatTrendValue(snapshot.data.trends.sessions_change)"
                                 :severity="getTrendSeverity(snapshot.data.trends.sessions_change)"
                             />
                         </div>
                     </div>
-                    <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">
-                                {{ t('views.server_settings.snapshots.compare.members_diff') }}
-                            </span>
+                    <div
+                        class="p-4 rounded-xl border border-surface-200 bg-surface-50/50 flex items-center justify-between"
+                    >
+                        <span class="font-medium text-surface-600">
+                            {{ t('views.server_settings.snapshots.compare.members_diff') }}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <i
+                                v-if="(snapshot.data.trends.members_change || 0) > 0"
+                                class="pi pi-arrow-up text-green-500"
+                            ></i>
+                            <i
+                                v-else-if="(snapshot.data.trends.members_change || 0) < 0"
+                                class="pi pi-arrow-down text-red-500"
+                            ></i>
                             <Badge
                                 :value="formatTrendValue(snapshot.data.trends.members_change)"
                                 :severity="getTrendSeverity(snapshot.data.trends.members_change)"
                             />
                         </div>
                     </div>
-                    <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">
-                                {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
-                            </span>
+                    <div
+                        class="p-4 rounded-xl border border-surface-200 bg-surface-50/50 flex items-center justify-between"
+                    >
+                        <span class="font-medium text-surface-600">
+                            {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <i
+                                v-if="(snapshot.data.trends.engagement_change || 0) > 0"
+                                class="pi pi-arrow-up text-green-500"
+                            ></i>
+                            <i
+                                v-else-if="(snapshot.data.trends.engagement_change || 0) < 0"
+                                class="pi pi-arrow-down text-red-500"
+                            ></i>
                             <Badge
                                 :value="
                                     formatTrendValue(
@@ -202,29 +262,31 @@ const handleDownload = async (): Promise<void> => {
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Top Members -->
-                <div v-if="snapshot.data.top_members?.length">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="pi pi-star text-xl text-yellow-500"></i>
-                        <h3 class="text-lg font-bold text-surface-900">
-                            {{ t('views.server_settings.snapshots.detail.top_members') }}
-                        </h3>
-                    </div>
-                    <div class="space-y-2">
+                <div v-if="snapshot.data.top_members?.length" class="flex flex-col gap-3">
+                    <h3 class="text-lg font-bold text-surface-900 flex items-center gap-2">
+                        <i class="pi pi-trophy text-yellow-500"></i>
+                        {{ t('views.server_settings.snapshots.detail.top_members') }}
+                    </h3>
+                    <div class="flex flex-col gap-2">
                         <div
                             v-for="member in snapshot.data.top_members.slice(0, 5)"
                             :key="member.member_id"
-                            class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-50 border border-transparent hover:border-surface-200 transition-colors"
+                            class="flex items-center justify-between p-3 rounded-xl bg-surface-0 border border-surface-200 hover:border-primary-300 transition-colors shadow-sm"
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm"
+                                    class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold shadow-inner"
+                                    :class="{
+                                        'bg-yellow-100 text-yellow-700': (member.rank || 0) === 1,
+                                        'bg-surface-100 text-surface-600': (member.rank || 0) > 1
+                                    }"
                                 >
                                     {{ member.rank }}
                                 </div>
                                 <span class="font-medium text-surface-900">{{ member.email }}</span>
                             </div>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-sm font-semibold text-surface-900">
+                                <span class="text-sm font-bold text-primary-600">
                                     {{ member.total_sessions }}
                                     {{ t('views.server_settings.snapshots.detail.sessions') }}
                                 </span>
@@ -237,22 +299,24 @@ const handleDownload = async (): Promise<void> => {
                 </div>
 
                 <!-- Top Activities -->
-                <div v-if="snapshot.data.top_activities?.length">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="pi pi-bolt text-xl text-purple-500"></i>
-                        <h3 class="text-lg font-bold text-surface-900">
-                            {{ t('views.server_settings.snapshots.detail.top_activities') }}
-                        </h3>
-                    </div>
-                    <div class="space-y-2">
+                <div v-if="snapshot.data.top_activities?.length" class="flex flex-col gap-3">
+                    <h3 class="text-lg font-bold text-surface-900 flex items-center gap-2">
+                        <i class="pi pi-bolt text-purple-500"></i>
+                        {{ t('views.server_settings.snapshots.detail.top_activities') }}
+                    </h3>
+                    <div class="flex flex-col gap-2">
                         <div
                             v-for="activity in snapshot.data.top_activities.slice(0, 5)"
                             :key="activity.activity_id"
-                            class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-50 border border-transparent hover:border-surface-200 transition-colors"
+                            class="flex items-center justify-between p-3 rounded-xl bg-surface-0 border border-surface-200 hover:border-purple-300 transition-colors shadow-sm"
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm"
+                                    class="w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold shadow-inner"
+                                    :class="{
+                                        'bg-purple-100 text-purple-700': (activity.rank || 0) === 1,
+                                        'bg-surface-100 text-surface-600': (activity.rank || 0) > 1
+                                    }"
                                 >
                                     {{ activity.rank }}
                                 </div>
@@ -261,14 +325,17 @@ const handleDownload = async (): Promise<void> => {
                                 }}</span>
                             </div>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-sm font-semibold text-surface-900">
+                                <span class="text-sm font-bold text-purple-600">
                                     {{ activity.total_sessions }}
                                     {{ t('views.server_settings.snapshots.detail.sessions') }}
                                 </span>
-                                <span class="text-xs text-surface-500">
-                                    {{ t('views.server_settings.snapshots.detail.popularity') }}:
+                                <div class="flex items-center gap-1 text-xs text-surface-500">
+                                    <i
+                                        class="pi pi-star-fill text-orange-400"
+                                        style="font-size: 0.7rem"
+                                    ></i>
                                     {{ Math.round(activity.popularity_score || 0) }}
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,7 +345,7 @@ const handleDownload = async (): Promise<void> => {
 
         <template #footer>
             <div
-                class="flex justify-end gap-3 p-4 border-t border-surface-200 bg-surface-50/50 -mx-6 -mb-6 mt-6 rounded-b-xl"
+                class="flex justify-end gap-3 p-4 border-t border-surface-200 bg-surface-50 -mx-6 -mb-6 mt-6 rounded-b-lg"
             >
                 <Button
                     :label="t('views.server_settings.snapshots.actions.download')"
@@ -295,10 +362,5 @@ const handleDownload = async (): Promise<void> => {
 </template>
 
 <style scoped>
-.stat-card {
-    transition: transform 0.2s;
-}
-.stat-card:hover {
-    transform: translateY(-2px);
-}
+/* No specific styles needed anymore with utility classes, but keeping block for safety or future needs */
 </style>

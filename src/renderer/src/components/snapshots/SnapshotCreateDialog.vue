@@ -10,6 +10,7 @@ import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
 import type { SnapshotType } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
+import SnapshotIcon from '@/components/common/icons/SnapshotIcon.vue'
 
 interface Props {
     visible: boolean
@@ -99,9 +100,10 @@ const handleHide = (): void => {
         <template #header>
             <div class="flex flex-col gap-1">
                 <h2 class="text-xl font-bold text-surface-900">
+                    <SnapshotIcon class="text-primary-600 mr-2" />
                     {{ t('views.server_settings.snapshots.actions.create') }}
                 </h2>
-                <p class="text-sm text-surface-500">
+                <p class="text-sm text-surface-500 truncate">
                     {{ t('views.server_settings.snapshots.description') }}
                 </p>
             </div>
@@ -122,22 +124,21 @@ const handleHide = (): void => {
                 />
             </div>
 
-
             <!-- Type selector -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-type" class="font-medium text-surface-900">
                     {{ t('common.fields.type') }}
+                    <span class="text-red-500">*</span>
                 </label>
                 <Select
-                id="snapshot-type"
-                v-model="form.type"
-                :options="typeCreateOptions"
-                option-label="label"
-                option-value="value"
-                class="w-full"
+                    id="snapshot-type"
+                    v-model="form.type"
+                    :options="typeCreateOptions"
+                    option-label="label"
+                    option-value="value"
+                    class="w-full"
                 />
             </div>
-
 
             <!-- Description -->
             <div class="flex flex-col gap-2">
@@ -147,9 +148,7 @@ const handleHide = (): void => {
                 <Textarea
                     id="snapshot-description"
                     v-model="form.description"
-                    :placeholder="
-                        t('common.fields.description')
-                    "
+                    :placeholder="t('common.fields.description')"
                     rows="4"
                     class="w-full"
                 />

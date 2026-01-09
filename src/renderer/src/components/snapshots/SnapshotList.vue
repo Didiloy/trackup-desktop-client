@@ -18,6 +18,7 @@ import type {
     ISnapshotLight
 } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import { formatDate } from '@/utils'
+import SnapshotIcon from '@/components/common/icons/SnapshotIcon.vue'
 
 interface Props {
     serverId: string
@@ -175,7 +176,7 @@ defineExpose({ refresh: () => load() })
             <!-- Empty message -->
             <template #empty>
                 <div class="text-center py-8 text-surface-500">
-                    <i class="pi pi-camera text-4xl mb-3 block"></i>
+                    <SnapshotIcon class="text-primary-600 mb-3 block mx-auto" />
                     {{ t('common.filters.no_results') }}
                 </div>
             </template>

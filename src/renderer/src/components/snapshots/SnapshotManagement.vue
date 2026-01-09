@@ -8,6 +8,7 @@ import SnapshotCompareDialog from './SnapshotCompareDialog.vue'
 import SnapshotCleanupDialog from './SnapshotCleanupDialog.vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
+import SnapshotIcon from '@/components/common/icons/SnapshotIcon.vue'
 
 interface Props {
     serverId: string
@@ -42,8 +43,9 @@ const handleSnapshotsCleaned = async (): Promise<void> => {
         <!-- Header -->
         <div class="flex flex-col gap-2">
             <div class="flex items-start justify-between">
-                <div>
+                <div class="flex flex-col gap-1">
                     <h2 class="text-2xl font-bold text-surface-900">
+                        <SnapshotIcon class="text-primary-600 mr-2" />
                         {{ t('views.server_settings.snapshots.title') }}
                     </h2>
                     <p class="text-surface-600 mt-1">
