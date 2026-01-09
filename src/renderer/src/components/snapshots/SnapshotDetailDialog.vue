@@ -64,7 +64,7 @@ const handleDownload = async (): Promise<void> => {
         <template #header>
             <div v-if="snapshot" class="flex flex-col gap-1 w-full pr-8">
                 <div class="flex gap-4 mb-1">
-                    <SnapshotIcon class="mt-3"/>
+                    <SnapshotIcon class="mt-3 text-primary-600" />
                     <h2
                         class="text-2xl font-bold text-surface-900 leading-tight flex items-center gap-2"
                     >
@@ -82,11 +82,11 @@ const handleDownload = async (): Promise<void> => {
             </div>
         </template>
 
-        <div v-if="snapshot" class="flex flex-col gap-4 p-1">
+        <div v-if="snapshot" class="flex flex-col gap-8 p-1">
             <!-- Description -->
             <div
                 v-if="snapshot.description"
-                class="bg-surface-50 p-4 rounded-xl"
+                class="bg-surface-50  rounded-xl"
             >
                 <div class="flex items-center gap-2 mb-2 text-surface-900 font-semibold">
                     <i class="pi pi-align-left text-primary-500"></i>

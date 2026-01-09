@@ -45,6 +45,7 @@ const loadSnapshots = async (): Promise<void> => {
     try {
         const res = await snapshotStore.fetch_snapshots(props.serverId, { page: 1, limit: 100 })
         if (!res.error && res.data) {
+            rawSnapshots.value = res.data.data
             availableSnapshots.value = res.data.data.map((s: ISnapshotLight) => {
                 const typeLabel = t(`common.periods.${s.snapshot_type}`)
                 const dateLabel = formatDate(s.snapshot_date)
@@ -66,6 +67,10 @@ watch(
     (newVal) => {
         if (newVal) {
             loadSnapshots()
+        } else {
+            snapshotStore.clear_comparison()
+            selectedSnapshotId1.value = null
+            selectedSnapshotId2.value = null
         }
     }
 )
@@ -106,6 +111,16 @@ const handleCompare = async (): Promise<void> => {
 const comparison = computed(() => snapshotStore.comparison)
 const isComparing = computed(() => snapshotStore.is_comparing)
 
+// Store full snapshot data for displaying specific values
+const rawSnapshots = ref<ISnapshotLight[]>([])
+
+const selectedSnapshot1Data = computed(() =>
+    rawSnapshots.value.find(s => s.id === selectedSnapshotId1.value)
+)
+const selectedSnapshot2Data = computed(() =>
+    rawSnapshots.value.find(s => s.id === selectedSnapshotId2.value)
+)
+
 const closeDialog = (): void => {
     emit('update:visible', false)
     snapshotStore.clear_comparison()
@@ -117,7 +132,7 @@ const closeDialog = (): void => {
 <template>
     <AppDialog
         :model-value="visible"
-        style-class="w-full max-w-4xl"
+        style-class="w-full max-w-5xl"
         @update:model-value="emit('update:visible', $event)"
     >
         <template #header>
@@ -138,9 +153,8 @@ const closeDialog = (): void => {
             </div>
 
             <template v-else>
-                <!-- Snapshot selectors -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-2">
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_60px_1fr_auto] gap-4 items-end">
+                    <div class="flex flex-col gap-2 w-full">
                         <label class="font-medium text-surface-900">
                             {{ t('views.server_settings.snapshots.compare.snapshot_1') }}
                         </label>
@@ -156,7 +170,12 @@ const closeDialog = (): void => {
                         />
                     </div>
 
-                    <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-center pb-3">
+                        <i class="pi pi-arrow-right text-surface-400 text-xl hidden md:block"></i>
+                        <i class="pi pi-arrow-down text-surface-400 text-xl md:hidden"></i>
+                    </div>
+
+                    <div class="flex flex-col gap-2 w-full">
                         <label class="font-medium text-surface-900">
                             {{ t('views.server_settings.snapshots.compare.snapshot_2') }}
                         </label>
@@ -171,15 +190,15 @@ const closeDialog = (): void => {
                             class="w-full"
                         />
                     </div>
-                </div>
 
-                <!-- Compare button -->
-                <Button
-                    :label="t('views.server_settings.snapshots.actions.compare')"
-                    :loading="isComparing"
-                    class="w-full md:w-auto"
-                    @click="handleCompare"
-                />
+                    <Button
+                        icon="pi pi-search"
+                        :label="t('views.server_settings.snapshots.actions.compare')"
+                        :loading="isComparing"
+                        class="w-full md:w-auto mt-4 md:mt-0"
+                        @click="handleCompare"
+                    />
+                </div>
 
                 <!-- Comparison results -->
                 <div v-if="comparison" class="flex flex-col gap-4">
@@ -187,175 +206,158 @@ const closeDialog = (): void => {
                         {{ t('views.server_settings.snapshots.compare.results') }}
                     </h3>
 
-                    <!-- Snapshot info -->
-                    <div class="flex gap-4 p-4 rounded-xl bg-surface-50 border border-surface-200">
-                        <div class="flex-1">
-                            <p class="text-sm text-surface-500 mb-1">
-                                {{ t('views.server_settings.snapshots.compare.snapshot_1') }}
-                            </p>
-                            <p class="font-semibold text-surface-900">
-                                {{ getSnapshotDisplayName(comparison.snapshot1) }}
-                            </p>
-                            <p class="text-sm text-surface-600">
-                                {{ formatDate(comparison.snapshot1.snapshot_date) }}
-                            </p>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="pi pi-arrow-right text-2xl text-surface-400"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-sm text-surface-500 mb-1">
-                                {{ t('views.server_settings.snapshots.compare.snapshot_2') }}
-                            </p>
-                            <p class="font-semibold text-surface-900">
-                                {{ getSnapshotDisplayName(comparison.snapshot2) }}
-                            </p>
-                            <p class="text-sm text-surface-600">
-                                {{ formatDate(comparison.snapshot2.snapshot_date) }}
-                            </p>
-                        </div>
-                    </div>
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-[auto_1fr_auto_1fr] gap-x-4 gap-y-6 items-center">
+                        <!-- Headers (optional, or just labels per row) -->
 
-                    <!-- Stats differences -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <p class="text-sm text-surface-500 mb-2">
-                                {{ t('views.server_settings.snapshots.compare.sessions_diff') }}
-                            </p>
-                            <Badge
-                                :value="formatTrendValue(comparison.comparison.sessions_diff, true)"
-                                :severity="getTrendSeverity(comparison.comparison.sessions_diff)"
-                                class="text-lg"
-                            />
+                        <!-- Sessions -->
+                        <div class="col-span-4 grid grid-cols-[1fr_auto_1fr] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                             <div class="text-center">
+                                <p class="text-sm text-surface-500 mb-1">
+                                    {{ t('views.server_settings.snapshots.compare.snapshot_1') }}
+                                </p>
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot1Data?.highlights?.total_sessions ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.sessions') }}</p>
+                             </div>
+
+                             <div class="flex flex-col items-center">
+                                <Badge
+                                    :value="formatTrendValue(comparison.comparison.sessions_diff, true)"
+                                    :severity="getTrendSeverity(comparison.comparison.sessions_diff)"
+                                    class="text-lg"
+                                />
+                                <p class="text-xs text-surface-500 mt-1">{{ t('views.server_settings.snapshots.compare.sessions_diff') }}</p>
+                             </div>
+
+                             <div class="text-center">
+                                <p class="text-sm text-surface-500 mb-1">
+                                    {{ t('views.server_settings.snapshots.compare.snapshot_2') }}
+                                </p>
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot2Data?.highlights?.total_sessions ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.sessions') }}</p>
+                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <p class="text-sm text-surface-500 mb-2">
-                                {{ t('views.server_settings.snapshots.compare.members_diff') }}
-                            </p>
-                            <Badge
-                                :value="formatTrendValue(comparison.comparison.members_diff, true)"
-                                :severity="getTrendSeverity(comparison.comparison.members_diff)"
-                                class="text-lg"
-                            />
+                        <!-- Members -->
+                        <div class="col-span-4 grid grid-cols-[1fr_auto_1fr] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot1Data?.highlights?.total_members ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.members') }}</p>
+                             </div>
+
+                             <div class="flex flex-col items-center">
+                                <Badge
+                                    :value="formatTrendValue(comparison.comparison.members_diff, true)"
+                                    :severity="getTrendSeverity(comparison.comparison.members_diff)"
+                                    class="text-lg"
+                                />
+                                <p class="text-xs text-surface-500 mt-1">{{ t('views.server_settings.snapshots.compare.members_diff') }}</p>
+                             </div>
+
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot2Data?.highlights?.total_members ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.members') }}</p>
+                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <p class="text-sm text-surface-500 mb-2">
-                                {{ t('views.server_settings.snapshots.compare.duration_diff') }}
-                            </p>
-                            <Badge
-                                :value="formatTrendValue(comparison.comparison.duration_diff, true)"
-                                :severity="getTrendSeverity(comparison.comparison.duration_diff)"
-                                class="text-lg"
-                            />
+                        <!-- Duration -->
+                        <div class="col-span-4 grid grid-cols-[1fr_auto_1fr] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ (selectedSnapshot1Data?.highlights?.total_duration ? (selectedSnapshot1Data?.highlights?.total_duration / 3600).toFixed(1) : '-') + 'h' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.total_duration') }}</p>
+                             </div>
+
+                             <div class="flex flex-col items-center">
+                                <Badge
+                                    :value="formatTrendValue(comparison.comparison.duration_diff, true)"
+                                    :severity="getTrendSeverity(comparison.comparison.duration_diff)"
+                                    class="text-lg"
+                                />
+                                <p class="text-xs text-surface-500 mt-1">{{ t('views.server_settings.snapshots.compare.duration_diff') }}</p>
+                             </div>
+
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ (selectedSnapshot2Data?.highlights?.total_duration ? (selectedSnapshot2Data?.highlights?.total_duration / 3600).toFixed(1) : '-') + 'h' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.total_duration') }}</p>
+                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <p class="text-sm text-surface-500 mb-2">
-                                {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
-                            </p>
-                            <Badge
-                                :value="
-                                    formatTrendValue(comparison.comparison.engagement_diff, true)
-                                "
-                                :severity="getTrendSeverity(comparison.comparison.engagement_diff)"
-                                class="text-lg"
-                            />
+                        <!-- Engagement -->
+                        <div class="col-span-4 grid grid-cols-[1fr_auto_1fr] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot1Data?.highlights?.engagement_score?.toFixed(1) ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.engagement') }}</p>
+                             </div>
+
+                             <div class="flex flex-col items-center">
+                                <Badge
+                                    :value="formatTrendValue(comparison.comparison.engagement_diff, true)"
+                                    :severity="getTrendSeverity(comparison.comparison.engagement_diff)"
+                                    class="text-lg"
+                                />
+                                <p class="text-xs text-surface-500 mt-1">{{ t('views.server_settings.snapshots.compare.engagement_diff') }}</p>
+                             </div>
+
+                             <div class="text-center">
+                                <p class="text-lg font-semibold text-surface-900">
+                                    {{ selectedSnapshot2Data?.highlights?.engagement_score?.toFixed(1) ?? '-' }}
+                                </p>
+                                <p class="text-xs text-surface-500">{{ t('common.stats.engagement') }}</p>
+                             </div>
                         </div>
                     </div>
 
                     <!-- Top items changes -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <h4 class="font-semibold text-surface-900 mb-3">
-                                {{
-                                    t('views.server_settings.snapshots.compare.top_members_changes')
-                                }}
-                            </h4>
-                            <div class="flex gap-4 text-sm">
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t(
-                                                'views.server_settings.snapshots.compare.new_entries'
-                                            )
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-green-600 ml-2">{{
-                                        comparison.top_members_changes.new_entries.length
-                                    }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t(
-                                                'views.server_settings.snapshots.compare.dropped_entries'
-                                            )
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-red-600 ml-2">{{
-                                        comparison.top_members_changes.dropped_entries.length
-                                    }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t('views.server_settings.snapshots.compare.maintained')
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-surface-900 ml-2">{{
-                                        comparison.top_members_changes.maintained
-                                    }}</span>
-                                </div>
-                            </div>
+                    <h4 class="font-semibold text-surface-900 mt-2">
+                        {{ t('views.server_settings.snapshots.compare.top_members_changes') }}
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_60px_1fr_auto] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                        <div class="text-center md:text-left">
+                           <span class="text-surface-500 text-sm block">{{ t('views.server_settings.snapshots.compare.dropped_entries') }}</span>
+                           <span class="font-bold text-red-600 text-lg">{{ comparison.top_members_changes.dropped_entries.length }}</span>
                         </div>
-
-                        <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
-                            <h4 class="font-semibold text-surface-900 mb-3">
-                                {{
-                                    t(
-                                        'views.server_settings.snapshots.compare.top_activities_changes'
-                                    )
-                                }}
-                            </h4>
-                            <div class="flex gap-4 text-sm">
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t(
-                                                'views.server_settings.snapshots.compare.new_entries'
-                                            )
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-green-600 ml-2">{{
-                                        comparison.top_activities_changes.new_entries.length
-                                    }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t(
-                                                'views.server_settings.snapshots.compare.dropped_entries'
-                                            )
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-red-600 ml-2">{{
-                                        comparison.top_activities_changes.dropped_entries.length
-                                    }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-surface-500"
-                                        >{{
-                                            t('views.server_settings.snapshots.compare.maintained')
-                                        }}:</span
-                                    >
-                                    <span class="font-bold text-surface-900 ml-2">{{
-                                        comparison.top_activities_changes.maintained
-                                    }}</span>
-                                </div>
-                            </div>
+                        <div class="text-center">
+                           <span class="text-surface-500 text-xs block mb-1">{{ t('views.server_settings.snapshots.compare.maintained') }}</span>
+                           <span class="font-bold text-surface-900">{{ comparison.top_members_changes.maintained }}</span>
                         </div>
+                        <div class="text-center md:text-left">
+                           <span class="text-surface-500 text-sm block">{{ t('views.server_settings.snapshots.compare.new_entries') }}</span>
+                           <span class="font-bold text-green-600 text-lg">{{ comparison.top_members_changes.new_entries.length }}</span>
+                        </div>
+                         <div class="hidden md:block w-[100px]"></div>
+                    </div>
+                    
+                    <h4 class="font-semibold text-surface-900 mt-2">
+                        {{ t('views.server_settings.snapshots.compare.top_activities_changes') }}
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_60px_1fr_auto] gap-4 items-center p-4 rounded-xl bg-surface-50 border border-surface-200">
+                        <div class="text-center md:text-left">
+                           <span class="text-surface-500 text-sm block">{{ t('views.server_settings.snapshots.compare.dropped_entries') }}</span>
+                           <span class="font-bold text-red-600 text-lg">{{ comparison.top_activities_changes.dropped_entries.length }}</span>
+                        </div>
+                        <div class="text-center">
+                           <span class="text-surface-500 text-xs block mb-1">{{ t('views.server_settings.snapshots.compare.maintained') }}</span>
+                           <span class="font-bold text-surface-900">{{ comparison.top_activities_changes.maintained }}</span>
+                        </div>
+                        <div class="text-center md:text-left">
+                           <span class="text-surface-500 text-sm block">{{ t('views.server_settings.snapshots.compare.new_entries') }}</span>
+                           <span class="font-bold text-green-600 text-lg">{{ comparison.top_activities_changes.new_entries.length }}</span>
+                        </div>
+                         <div class="hidden md:block w-[100px]"></div>
                     </div>
                 </div>
 
