@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useI18n } from 'vue-i18n'
-import { type Component } from 'vue'
+import { type Component, computed } from 'vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 import SessionIcon from '@/components/common/icons/SessionIcon.vue'
@@ -32,86 +32,93 @@ interface ServerAction {
     children?: ServerActionChild[] // Sub-items to display when on a child route
 }
 
-const actions: ServerAction[] = [
-    {
-        id: 'stats',
-        label: t('views.server_stats.title'),
-        icon: 'pi pi-chart-bar',
-        routeName: 'ServerStats'
-    },
-    {
-        id: 'server-profile',
-        label: t('views.server_profile.title'),
-        icon: 'pi pi-home',
-        routeName: 'ServerProfile'
-    },
-    {
-        id: 'activities',
-        label: t('views.server_activities.title_base'),
-        icon: ActivityIcon,
-        routeName: 'ServerActivities',
-        childRoutes: ['ServerActivityProfile', 'ServerActivityMetadataProfile'],
-        children: [
-            {
-                id: 'activity-profile',
-                label: t('views.server_activities.profile'),
-                icon: 'pi pi-id-card',
-                routeNames: ['ServerActivityProfile', 'ServerActivityMetadataProfile']
-            }
-        ]
-    },
-    {
-        id: 'members',
-        label: t('views.server_members.title_base'),
-        icon: MemberIcon,
-        routeName: 'ServerMembers',
-        childRoutes: ['ServerMemberProfile'],
-        children: [
-            {
-                id: 'member-profile',
-                label: t('views.server_members.profile'),
-                icon: 'pi pi-id-card',
-                routeNames: ['ServerMemberProfile']
-            }
-        ]
-    },
-    {
-        id: 'sessions',
-        label: t('views.server_sessions.title_base'),
-        icon: SessionIcon,
-        routeName: 'ServerSessions',
-        childRoutes: ['ServerSessionProfile'],
-        children: [
-            {
-                id: 'session-profile',
-                label: t('views.server_sessions.profile'),
-                icon: 'pi pi-id-card',
-                routeNames: ['ServerSessionProfile']
-            }
-        ]
-    },
-    {
-        id: 'enum-definitions',
-        label: t('views.server_enum_definitions.title'),
-        icon: 'pi pi-list',
-        routeName: 'ServerDefinitions',
-        childRoutes: ['ServerEnumDefinitionProfile'],
-        children: [
-            {
-                id: 'enum-profile',
-                label: t('views.server_enum_definitions.profile.title'),
-                icon: 'pi pi-id-card',
-                routeNames: ['ServerEnumDefinitionProfile']
-            }
-        ]
-    },
-    {
-        id: 'settings',
-        label: t('views.server_settings.title'),
-        icon: 'pi pi-cog',
-        routeName: 'ServerSettings'
+const actions = computed<ServerAction[]>(() => {
+    const baseActions: ServerAction[] = [
+        {
+            id: 'stats',
+            label: t('views.server_stats.title'),
+            icon: 'pi pi-chart-bar',
+            routeName: 'ServerStats'
+        },
+        {
+            id: 'server-profile',
+            label: t('views.server_profile.title'),
+            icon: 'pi pi-home',
+            routeName: 'ServerProfile'
+        },
+        {
+            id: 'activities',
+            label: t('views.server_activities.title_base'),
+            icon: ActivityIcon,
+            routeName: 'ServerActivities',
+            childRoutes: ['ServerActivityProfile', 'ServerActivityMetadataProfile'],
+            children: [
+                {
+                    id: 'activity-profile',
+                    label: t('views.server_activities.profile'),
+                    icon: 'pi pi-id-card',
+                    routeNames: ['ServerActivityProfile', 'ServerActivityMetadataProfile']
+                }
+            ]
+        },
+        {
+            id: 'members',
+            label: t('views.server_members.title_base'),
+            icon: MemberIcon,
+            routeName: 'ServerMembers',
+            childRoutes: ['ServerMemberProfile'],
+            children: [
+                {
+                    id: 'member-profile',
+                    label: t('views.server_members.profile'),
+                    icon: 'pi pi-id-card',
+                    routeNames: ['ServerMemberProfile']
+                }
+            ]
+        },
+        {
+            id: 'sessions',
+            label: t('views.server_sessions.title_base'),
+            icon: SessionIcon,
+            routeName: 'ServerSessions',
+            childRoutes: ['ServerSessionProfile'],
+            children: [
+                {
+                    id: 'session-profile',
+                    label: t('views.server_sessions.profile'),
+                    icon: 'pi pi-id-card',
+                    routeNames: ['ServerSessionProfile']
+                }
+            ]
+        },
+        {
+            id: 'enum-definitions',
+            label: t('views.server_enum_definitions.title'),
+            icon: 'pi pi-list',
+            routeName: 'ServerDefinitions',
+            childRoutes: ['ServerEnumDefinitionProfile'],
+            children: [
+                {
+                    id: 'enum-profile',
+                    label: t('views.server_enum_definitions.profile.title'),
+                    icon: 'pi pi-id-card',
+                    routeNames: ['ServerEnumDefinitionProfile']
+                }
+            ]
+        }
+    ]
+
+    if (server_store.isOwnership) {
+        baseActions.push({
+            id: 'settings',
+            label: t('views.server_settings.title'),
+            icon: 'pi pi-cog',
+            routeName: 'ServerSettings'
+        })
     }
-]
+
+    return baseActions
+})
 
 async function onActionClick(action: ServerAction): Promise<void> {
     // Navigate to the route if routeName is defined
