@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import SnapshotManagement from '@/components/server-settings/snapshots/SnapshotManagement.vue'
+import SnapshotManagement from '@/components/snapshots/SnapshotManagement.vue'
 import Divider from 'primevue/divider'
 
 const { t } = useI18n()

@@ -43,6 +43,7 @@ interface UseSnapshotCRUDReturn {
         serverId: string,
         params?: ICleanupSnapshotsParams
     ) => Promise<ISnapshotApiResponse<ICleanupSnapshotsResponse>>
+    downloadSnapshot: (serverId: string, snapshotId: string) => Promise<void>
 }
 
 /**
@@ -153,6 +154,29 @@ export function useSnapshotCRUD(): UseSnapshotCRUDReturn {
         return window.api.snapshotStats.cleanup(serverId, params, userStore.getAccessToken!)
     }
 
+    /**
+     * Download a snapshot as JSON file
+     * @param serverId - The server ID
+     * @param snapshotId - The snapshot ID to download
+     */
+    const downloadSnapshot = async (serverId: string, snapshotId: string): Promise<void> => {
+        const res = await getSnapshotById(serverId, snapshotId)
+        if (res.error || !res.data) {
+            throw new Error('Failed to fetch snapshot data')
+        }
+
+        const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        const filename = `snapshot-${res.data.title || res.data.snapshot_type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+    }
+
     return {
         createSnapshot,
         listSnapshots,
@@ -161,6 +185,7 @@ export function useSnapshotCRUD(): UseSnapshotCRUDReturn {
         getSnapshotsSummary,
         compareSnapshots,
         deleteSnapshot,
-        cleanupSnapshots
+        cleanupSnapshots,
+        downloadSnapshot
     }
 }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStore } from '@/stores/snapshot'
+import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Select from 'primevue/select'
 import InputText from 'primevue/inputtext'
@@ -25,6 +26,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const toast = useToast()
 const snapshotStore = useSnapshotStore()
+const { typeCreateOptions } = useSnapshot()
 
 // Form state
 const form = ref({
@@ -35,16 +37,10 @@ const form = ref({
 
 const isSubmitting = ref(false)
 
-// Type options (only manual types)
-const typeOptions = computed(() => [
-    { label: t('views.server_settings.snapshots.types.milestone'), value: 'milestone' },
-    { label: t('views.server_settings.snapshots.types.custom'), value: 'custom' }
-])
-
 const handleSubmit = async (): Promise<void> => {
     isSubmitting.value = true
     try {
-        const res = await snapshotStore.createSnapshot(props.serverId, {
+        const res = await snapshotStore.create_snapshot(props.serverId, {
             type: form.value.type,
             title: form.value.title || undefined,
             description: form.value.description || undefined
@@ -112,7 +108,7 @@ const handleHide = (): void => {
                 <Select
                     id="snapshot-type"
                     v-model="form.type"
-                    :options="typeOptions"
+                    :options="typeCreateOptions"
                     option-label="label"
                     option-value="value"
                     class="w-full"

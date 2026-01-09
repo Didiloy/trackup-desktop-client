@@ -40,16 +40,16 @@ const isLoadingSnapshots = ref(false)
 const loadSnapshots = async (): Promise<void> => {
     isLoadingSnapshots.value = true
     try {
-        const res = await snapshotStore.fetchSnapshots(props.serverId, { page: 1, limit: 50 })
+        const res = await snapshotStore.fetch_snapshots(props.serverId, { page: 1, limit: 100 })
         if (!res.error && res.data) {
             availableSnapshots.value = res.data.data.map((s: ISnapshotLight) => {
-                const typeLabel = t(`views.server_settings.snapshots.types.${s.type}`)
+                const typeLabel = t(`common.periods.${s.snapshot_type}`)
                 const dateLabel = d(new Date(s.created_at), 'short')
                 const titlePart = s.title ? `${s.title} - ` : ''
                 return {
                     label: `${titlePart}${typeLabel} - ${dateLabel}`,
                     value: s.id,
-                    type: s.type
+                    type: s.snapshot_type
                 }
             })
         }
@@ -84,7 +84,7 @@ const handleCompare = async (): Promise<void> => {
         return
     }
 
-    const res = await snapshotStore.compareSnapshots(
+    const res = await snapshotStore.compare_snapshots(
         props.serverId,
         selectedSnapshotId1.value,
         selectedSnapshotId2.value
@@ -101,7 +101,7 @@ const handleCompare = async (): Promise<void> => {
 }
 
 const comparison = computed(() => snapshotStore.comparison)
-const isComparing = computed(() => snapshotStore.isComparing)
+const isComparing = computed(() => snapshotStore.is_comparing)
 
 const formatDiff = (value: number): string => {
     const sign = value >= 0 ? '+' : ''
@@ -114,7 +114,7 @@ const getDiffSeverity = (value: number): 'success' | 'danger' => {
 
 const closeDialog = (): void => {
     emit('update:visible', false)
-    snapshotStore.clearComparison()
+    snapshotStore.clear_comparison()
     selectedSnapshotId1.value = null
     selectedSnapshotId2.value = null
 }
@@ -198,7 +198,7 @@ const closeDialog = (): void => {
                             <p class="font-semibold text-surface-900">
                                 {{
                                     comparison.snapshot1.title ||
-                                    t(`views.server_settings.snapshots.types.${comparison.snapshot1.type}`)
+                                    t(`views.server_settings.snapshots.types.${comparison.snapshot1.snapshot_type}`)
                                 }}
                             </p>
                             <p class="text-sm text-surface-600">
@@ -215,7 +215,7 @@ const closeDialog = (): void => {
                             <p class="font-semibold text-surface-900">
                                 {{
                                     comparison.snapshot2.title ||
-                                    t(`views.server_settings.snapshots.types.${comparison.snapshot2.type}`)
+                                    t(`views.server_settings.snapshots.types.${comparison.snapshot2.snapshot_type}`)
                                 }}
                             </p>
                             <p class="text-sm text-surface-600">

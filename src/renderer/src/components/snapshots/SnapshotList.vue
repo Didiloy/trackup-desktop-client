@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
+import { storeToRefs } from 'pinia'
 import { useSnapshotStore } from '@/stores/snapshot'
 import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
+import { useSnapshot } from '@/composables/snapshots/useSnapshot'
+import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import SnapshotDetailDialog from './SnapshotDetailDialog.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import DataTable from 'primevue/datatable'
@@ -15,6 +18,7 @@ import type {
     SnapshotType,
     ISnapshotLight
 } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
+import { formatDate } from '@/utils'
 
 interface Props {
     serverId: string
@@ -22,10 +26,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { t, d } = useI18n()
+const { t } = useI18n()
 const toast = useToast()
 const snapshotStore = useSnapshotStore()
-const { getSnapshotById } = useSnapshotCRUD()
+const { current_snapshot } = storeToRefs(snapshotStore)
+const { downloadSnapshot } = useSnapshotCRUD()
+const { typeFilterOptions, getTypeLabel, getTypeSeverity } = useSnapshot()
 
 // Filter state
 const selectedType = ref<SnapshotType | 'all'>('all')
@@ -35,73 +41,46 @@ const isDetailDialogVisible = ref(false)
 const isDeleteDialogVisible = ref(false)
 const snapshotToDelete = ref<string | null>(null)
 
-// Type filter options
-const typeFilterOptions = computed(() => [
-    { label: t('views.server_settings.snapshots.list.all_types'), value: 'all' },
-    { label: t('views.server_settings.snapshots.types.daily'), value: 'daily' },
-    { label: t('views.server_settings.snapshots.types.weekly'), value: 'weekly' },
-    { label: t('views.server_settings.snapshots.types.monthly'), value: 'monthly' },
-    { label: t('views.server_settings.snapshots.types.yearly'), value: 'yearly' },
-    { label: t('views.server_settings.snapshots.types.milestone'), value: 'milestone' },
-    { label: t('views.server_settings.snapshots.types.custom'), value: 'custom' }
-])
+// Pagination & Data Fetching
+const {
+    items: snapshots,
+    loading,
+    total,
+    page,
+    goToPage,
+    load
+} = usePaginatedFetcher<ISnapshotLight>({
+    fetcher: async ({ page, limit }) => {
+        const res = await snapshotStore.fetch_snapshots(props.serverId, {
+            page,
+            limit,
+            type: selectedType.value !== 'all' ? selectedType.value : undefined
+        })
+        
+        if (res.error) {
+            return { data: [], total: 0, error: res.error }
+        }
 
-// Pagination state
-const currentPage = ref(0)
-const rowsPerPage = ref(10)
-
-// Fetch snapshots function
-const fetchSnapshots = async (): Promise<void> => {
-    const params: { page: number; limit: number; type?: SnapshotType } = {
-        page: currentPage.value + 1,
-        limit: rowsPerPage.value
-    }
-    if (selectedType.value !== 'all') {
-        params.type = selectedType.value
-    }
-    await snapshotStore.fetchSnapshots(props.serverId, params)
-}
-
-// Watch for filter changes
-watch(selectedType, () => {
-    currentPage.value = 0
-    fetchSnapshots()
+        return {
+            data: res.data?.data ?? [],
+            total: res.data?.total ?? 0
+        }
+    },
+    limit: 10,
+    filters: [selectedType],
+    mode: 'replace'
 })
 
 // Initial load
 onMounted(() => {
-    fetchSnapshots()
+    snapshotStore.init(props.serverId) // Init store (summary etc)
+    load() // Load list
 })
-
-// Format date for display
-const formatDate = (date: string): string => {
-    return d(new Date(date), 'short')
-}
-
-// Get type label
-const getTypeLabel = (type: SnapshotType): string => {
-    return t(`views.server_settings.snapshots.types.${type}`)
-}
-
-// Get type severity for badge
-const getTypeSeverity = (
-    type: SnapshotType
-): 'info' | 'success' | 'warn' | 'danger' | 'secondary' | 'contrast' | undefined => {
-    const severityMap: Record<SnapshotType, 'info' | 'success' | 'warn' | 'danger' | 'secondary'> = {
-        daily: 'info',
-        weekly: 'success',
-        monthly: 'warn',
-        yearly: 'secondary',
-        milestone: 'danger',
-        custom: 'secondary'
-    }
-    return severityMap[type]
-}
 
 // Handle row click - show detail dialog
 const handleRowClick = async (event: { data: ISnapshotLight }): Promise<void> => {
     const snapshot = event.data
-    const res = await snapshotStore.fetchSnapshotById(props.serverId, snapshot.id)
+    const res = await snapshotStore.fetch_snapshot_by_id(props.serverId, snapshot.id)
     if (!res.error && res.data) {
         isDetailDialogVisible.value = true
     } else {
@@ -117,27 +96,7 @@ const handleRowClick = async (event: { data: ISnapshotLight }): Promise<void> =>
 // Handle download
 const handleDownload = async (snapshot: ISnapshotLight): Promise<void> => {
     try {
-        const res = await getSnapshotById(props.serverId, snapshot.id)
-        if (res.error || !res.data) {
-            toast.add({
-                severity: 'error',
-                summary: t('messages.error.title'),
-                detail: t('views.server_settings.snapshots.download.error'),
-                life: 3000
-            })
-            return
-        }
-
-        const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `snapshot-${res.data.title ?? res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        URL.revokeObjectURL(url)
-
+        await downloadSnapshot(props.serverId, snapshot.id)
         toast.add({
             severity: 'success',
             summary: t('messages.success.title'),
@@ -164,7 +123,7 @@ const handleDeleteRequest = (snapshot: ISnapshotLight): void => {
 const confirmDelete = async (): Promise<void> => {
     if (!snapshotToDelete.value) return
 
-    const res = await snapshotStore.deleteSnapshot(props.serverId, snapshotToDelete.value)
+    const res = await snapshotStore.delete_snapshot(props.serverId, snapshotToDelete.value)
     if (res.error) {
         toast.add({
             severity: 'error',
@@ -179,7 +138,8 @@ const confirmDelete = async (): Promise<void> => {
             detail: t('views.server_settings.snapshots.delete.success'),
             life: 3000
         })
-        await fetchSnapshots()
+        // Reload current page to refresh list
+        load()
     }
 
     snapshotToDelete.value = null
@@ -187,13 +147,11 @@ const confirmDelete = async (): Promise<void> => {
 
 // Handle page change
 const handlePage = (event: { page: number; rows: number }): void => {
-    currentPage.value = event.page
-    rowsPerPage.value = event.rows
-    fetchSnapshots()
+    goToPage(event.page + 1)
 }
 
-// Expose refetch for parent component
-defineExpose({ fetchSnapshots })
+// Expose refresh for parent component
+defineExpose({ refresh: () => load() })
 </script>
 
 <template>
@@ -215,13 +173,13 @@ defineExpose({ fetchSnapshots })
 
         <!-- Snapshot table -->
         <DataTable
-            :value="snapshotStore.snapshots"
-            :loading="snapshotStore.isLoading"
+            :value="snapshots"
+            :loading="loading"
             :paginator="true"
-            :rows="rowsPerPage"
-            :total-records="snapshotStore.pagination.total"
+            :rows="10"
+            :total-records="total"
             :lazy="true"
-            :first="currentPage * rowsPerPage"
+            :first="(page - 1) * 10"
             :rows-per-page-options="[5, 10, 20]"
             data-key="id"
             striped-rows
@@ -239,16 +197,24 @@ defineExpose({ fetchSnapshots })
             </template>
 
             <!-- Title column -->
-            <Column field="title" :header="t('views.server_settings.snapshots.columns.title')" style="width: 25%">
+            <Column
+                field="title"
+                :header="t('views.server_settings.snapshots.columns.title')"
+                style="width: 25%"
+            >
                 <template #body="{ data }">
                     <span class="font-medium text-surface-900">
-                        {{ data.title || getTypeLabel(data.type) }}
+                        {{ data.title || getTypeLabel(data.snapshot_type) }}
                     </span>
                 </template>
             </Column>
 
             <!-- Description column -->
-            <Column field="description" :header="t('views.server_settings.snapshots.columns.description')" style="width: 30%">
+            <Column
+                field="description"
+                :header="t('views.server_settings.snapshots.columns.description')"
+                style="width: 30%"
+            >
                 <template #body="{ data }">
                     <span class="text-surface-600 line-clamp-1">
                         {{ data.description || '-' }}
@@ -257,21 +223,35 @@ defineExpose({ fetchSnapshots })
             </Column>
 
             <!-- Type column -->
-            <Column field="type" :header="t('views.server_settings.snapshots.columns.type')" style="width: 15%">
+            <Column
+                field="snapshot_type"
+                :header="t('views.server_settings.snapshots.columns.type')"
+                style="width: 15%"
+            >
                 <template #body="{ data }">
-                    <Badge :value="getTypeLabel(data.type)" :severity="getTypeSeverity(data.type)" />
+                    <Badge
+                        :value="getTypeLabel(data.snapshot_type)"
+                        :severity="getTypeSeverity(data.snapshot_type)"
+                    />
                 </template>
             </Column>
 
             <!-- Date column -->
-            <Column field="created_at" :header="t('views.server_settings.snapshots.columns.date')" style="width: 15%">
+            <Column
+                field="snapshot_date"
+                :header="t('views.server_settings.snapshots.columns.date')"
+                style="width: 15%"
+            >
                 <template #body="{ data }">
-                    <span class="text-surface-600">{{ formatDate(data.created_at) }}</span>
+                    <span class="text-surface-600">{{ formatDate(data.snapshot_date) }}</span>
                 </template>
             </Column>
 
             <!-- Actions column -->
-            <Column :header="t('views.server_settings.snapshots.columns.actions')" style="width: 15%">
+            <Column
+                :header="t('views.server_settings.snapshots.columns.actions')"
+                style="width: 15%"
+            >
                 <template #body="{ data }">
                     <div class="flex gap-1">
                         <Button
@@ -300,7 +280,7 @@ defineExpose({ fetchSnapshots })
         <!-- Detail Dialog -->
         <SnapshotDetailDialog
             v-model:visible="isDetailDialogVisible"
-            :snapshot="snapshotStore.currentSnapshot"
+            :snapshot="current_snapshot"
         />
 
         <!-- Delete Confirmation Dialog -->

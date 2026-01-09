@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import type { ISnapshot } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
+import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Button from 'primevue/button'
 import Badge from 'primevue/badge'
@@ -21,15 +22,14 @@ const emit = defineEmits<{
 
 const { t, d } = useI18n()
 const toast = useToast()
-const { getSnapshotById } = useSnapshotCRUD()
+const { downloadSnapshot } = useSnapshotCRUD()
+const { getTypeLabel } = useSnapshot()
 
 const isDownloading = ref(false)
 
-const snapshotType = computed(() => props.snapshot?.type ?? 'custom')
+const snapshotType = computed(() => props.snapshot?.snapshot_type ?? 'custom')
 
-const typeLabel = computed(() => {
-    return t(`views.server_settings.snapshots.types.${snapshotType.value}`)
-})
+const typeLabel = computed(() => getTypeLabel(snapshotType.value))
 
 const formattedDate = computed(() => {
     if (!props.snapshot) return ''
@@ -45,21 +45,7 @@ const handleDownload = async (): Promise<void> => {
 
     isDownloading.value = true
     try {
-        const res = await getSnapshotById(props.snapshot.server_id, props.snapshot.id)
-        if (res.error || !res.data) {
-            throw new Error('Failed to fetch snapshot data')
-        }
-
-        const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `snapshot-${res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        URL.revokeObjectURL(url)
-
+        await downloadSnapshot(props.snapshot.server_id, props.snapshot.id)
         toast.add({
             severity: 'success',
             summary: t('messages.success.title'),

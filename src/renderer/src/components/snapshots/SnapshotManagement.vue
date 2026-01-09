@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSnapshotStore } from '@/stores/snapshot'
-import SnapshotSummary from './SnapshotSummary.vue'
 import SnapshotList from './SnapshotList.vue'
 import SnapshotCreateDialog from './SnapshotCreateDialog.vue'
 import SnapshotCompareDialog from './SnapshotCompareDialog.vue'
@@ -28,13 +27,13 @@ const isCleanupDialogVisible = ref(false)
 const snapshotListRef = ref<InstanceType<typeof SnapshotList> | null>(null)
 
 const handleSnapshotCreated = async (): Promise<void> => {
-    await snapshotStore.fetchSummary(props.serverId)
-    snapshotListRef.value?.fetchSnapshots()
+    await snapshotStore.fetch_summary(props.serverId)
+    snapshotListRef.value?.refresh()
 }
 
 const handleSnapshotsCleaned = async (): Promise<void> => {
-    await snapshotStore.fetchSummary(props.serverId)
-    snapshotListRef.value?.fetchSnapshots()
+    await snapshotStore.fetch_summary(props.serverId)
+    snapshotListRef.value?.refresh()
 }
 </script>
 
@@ -77,10 +76,7 @@ const handleSnapshotsCleaned = async (): Promise<void> => {
 
         <Divider />
 
-        <!-- Summary Section -->
-        <SnapshotSummary :server-id="serverId" />
 
-        <Divider />
 
         <!-- List Section -->
         <SnapshotList ref="snapshotListRef" :server-id="serverId" />

@@ -115,6 +115,7 @@
             "weekly": "Hebdomadaire",
             "monthly": "Mensuel",
             "yearly": "Annuel",
+            "milestone": "Jalon",
             "custom": "Personnalisé",
             "select": "Sélectionner une période"
         },
@@ -770,13 +771,27 @@
                     "monthly": "Mensuel",
                     "yearly": "Annuel",
                     "no_snapshot": "Aucun snapshot",
-                    "last_update": "Dernière mise à jour"
+                    "last_snapshot": "Dernier snapshot",
+                    "status": "Statut",
+                    "available": "Disponible",
+                    "not_available": "Non disponible"
                 },
                 "list": {
                     "title": "Historique des snapshots",
                     "empty": "Aucun snapshot disponible",
+                    "empty_hint": "Créez un snapshot pour commencer à suivre vos statistiques",
                     "filter_by_type": "Filtrer par type",
                     "all_types": "Tous les types"
+                },
+                "columns": {
+                    "title": "Titre",
+                    "description": "Description",
+                    "type": "Type",
+                    "date": "Date",
+                    "actions": "Actions",
+                    "sessions": "Sessions",
+                    "members": "Membres",
+                    "engagement": "Engagement"
                 },
                 "card": {
                     "created_at": "Créé le",
@@ -784,7 +799,8 @@
                     "sessions": "Sessions",
                     "members": "Membres",
                     "duration": "Durée",
-                    "engagement": "Engagement"
+                    "engagement": "Engagement",
+                    "no_stats": "Pas de statistiques"
                 },
                 "create": {
                     "title": "Créer un snapshot",
@@ -802,6 +818,7 @@
                     "snapshot_1": "Premier snapshot",
                     "snapshot_2": "Deuxième snapshot",
                     "select_placeholder": "Sélectionner un snapshot",
+                    "select_both": "Veuillez sélectionner deux snapshots à comparer",
                     "submit": "Comparer",
                     "results": "Résultats de la comparaison",
                     "sessions_diff": "Différence de sessions",
@@ -820,6 +837,9 @@
                     "description": "Supprimez les anciens snapshots pour libérer de l'espace",
                     "days_label": "Supprimer les snapshots plus vieux que",
                     "days_unit": "jours",
+                    "types_label": "Types de snapshot à inclure",
+                    "types_placeholder": "Sélectionner les types",
+                    "types_hint": "Seuls les types sélectionnés seront supprimés",
                     "preview": "Environ {count} snapshot(s) seront supprimé(s)",
                     "confirm": "Confirmer la suppression",
                     "submit": "Nettoyer",
@@ -847,10 +867,14 @@
                 },
                 "detail": {
                     "title": "Détails du snapshot",
+                    "description": "Description",
                     "server_stats": "Statistiques du serveur",
                     "top_members": "Membres les plus actifs",
                     "top_activities": "Activités populaires",
-                    "trends": "Tendances"
+                    "trends": "Tendances",
+                    "sessions": "sessions",
+                    "popularity": "Popularité",
+                    "load_error": "Impossible de charger le snapshot"
                 }
             }
         },

@@ -110,7 +110,7 @@ export interface ISnapshot {
     id: string
     server_id: string
     snapshot_date: string
-    type: SnapshotType
+    snapshot_type: SnapshotType
     title?: string
     description?: string
     created_at: string
@@ -136,7 +136,7 @@ export interface ISnapshotLight {
     id: string
     server_id: string
     snapshot_date: string
-    type: SnapshotType
+    snapshot_type: SnapshotType
     title?: string
     description?: string
     created_at: string
@@ -150,7 +150,7 @@ export interface ISnapshotLight {
 export interface ISnapshotReference {
     id: string
     date: string
-    type: SnapshotType
+    snapshot_type: SnapshotType
     title?: string
 }
 
@@ -222,6 +222,7 @@ export interface IGetLatestSnapshotParams {
 
 export interface ICleanupSnapshotsParams {
     days?: number
+    include_types?: SnapshotType[]
 }
 
 export interface ICleanupSnapshotsResponse {

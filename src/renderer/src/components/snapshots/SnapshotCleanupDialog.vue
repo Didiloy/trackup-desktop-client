@@ -3,8 +3,10 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStore } from '@/stores/snapshot'
+import type { SnapshotType } from '@/../../shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import InputNumber from 'primevue/inputnumber'
+import MultiSelect from 'primevue/multiselect'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
 
@@ -27,11 +29,23 @@ const snapshotStore = useSnapshotStore()
 const daysOld = ref(30)
 const isSubmitting = ref(false)
 
+const availableTypes: { label: string; value: SnapshotType }[] = [
+    { label: 'Daily', value: 'daily' },
+    { label: 'Weekly', value: 'weekly' },
+    { label: 'Monthly', value: 'monthly' },
+    { label: 'Yearly', value: 'yearly' },
+    { label: 'Milestone', value: 'milestone' },
+    { label: 'Custom', value: 'custom' }
+]
+
+const selectedTypes = ref<SnapshotType[]>(['daily', 'weekly', 'monthly', 'yearly', 'milestone', 'custom'])
+
 const handleCleanup = async (): Promise<void> => {
     isSubmitting.value = true
     try {
-        const res = await snapshotStore.cleanupSnapshots(props.serverId, {
-            days: daysOld.value
+        const res = await snapshotStore.cleanup_snapshots(props.serverId, {
+            days: daysOld.value,
+            include_types: selectedTypes.value.length > 0 ? selectedTypes.value : undefined
         })
 
         if (res.error) {
@@ -63,6 +77,7 @@ const closeDialog = (): void => {
 
 const handleHide = (): void => {
     daysOld.value = 30
+    selectedTypes.value = ['daily', 'weekly', 'monthly', 'yearly', 'milestone', 'custom']
 }
 </script>
 
@@ -96,6 +111,26 @@ const handleHide = (): void => {
                         {{ t('views.server_settings.snapshots.cleanup.days_unit') }}
                     </span>
                 </div>
+            </div>
+
+            <!-- Snapshot types selection -->
+            <div class="flex flex-col gap-2">
+                <label for="snapshot-types" class="font-medium text-surface-900">
+                    {{ t('views.server_settings.snapshots.cleanup.types_label') }}
+                </label>
+                <MultiSelect
+                    id="snapshot-types"
+                    v-model="selectedTypes"
+                    :options="availableTypes"
+                    option-label="label"
+                    option-value="value"
+                    :placeholder="t('views.server_settings.snapshots.cleanup.types_placeholder')"
+                    class="w-full"
+                    display="chip"
+                />
+                <span class="text-xs text-surface-500">
+                    {{ t('views.server_settings.snapshots.cleanup.types_hint') }}
+                </span>
             </div>
 
             <!-- Info message -->
