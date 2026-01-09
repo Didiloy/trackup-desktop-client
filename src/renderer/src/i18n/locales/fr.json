@@ -750,6 +750,94 @@
                     "confirm_placeholder": "Tapez <strong><u>{serverName}</u></strong> pour confirmer",
                     "delete_button": "Supprimer le serveur"
                 }
+            },
+            "snapshots": {
+                "title": "Gestion des Snapshots",
+                "description": "Créez et gérez des snapshots de vos statistiques serveur pour suivre l'évolution dans le temps",
+                "actions": {
+                    "create": "Créer un snapshot",
+                    "compare": "Comparer",
+                    "cleanup": "Nettoyer"
+                },
+                "summary": {
+                    "title": "Derniers snapshots",
+                    "daily": "Quotidien",
+                    "weekly": "Hebdomadaire",
+                    "monthly": "Mensuel",
+                    "yearly": "Annuel",
+                    "no_snapshot": "Aucun snapshot",
+                    "last_update": "Dernière mise à jour"
+                },
+                "list": {
+                    "title": "Historique des snapshots",
+                    "empty": "Aucun snapshot disponible",
+                    "filter_by_type": "Filtrer par type",
+                    "all_types": "Tous les types"
+                },
+                "card": {
+                    "created_at": "Créé le",
+                    "type": "Type",
+                    "sessions": "Sessions",
+                    "members": "Membres",
+                    "duration": "Durée",
+                    "engagement": "Engagement"
+                },
+                "create": {
+                    "title": "Créer un snapshot",
+                    "description": "Créez un snapshot manuel de vos statistiques serveur",
+                    "type_label": "Type de snapshot",
+                    "description_label": "Description (optionnelle)",
+                    "description_placeholder": "Ex: Snapshot avant événement spécial",
+                    "submit": "Créer le snapshot",
+                    "success": "Snapshot créé avec succès",
+                    "error": "Échec de la création du snapshot"
+                },
+                "compare": {
+                    "title": "Comparer des snapshots",
+                    "description": "Sélectionnez deux snapshots pour comparer leurs statistiques",
+                    "snapshot_1": "Premier snapshot",
+                    "snapshot_2": "Deuxième snapshot",
+                    "select_placeholder": "Sélectionner un snapshot",
+                    "submit": "Comparer",
+                    "results": "Résultats de la comparaison",
+                    "sessions_diff": "Différence de sessions",
+                    "members_diff": "Différence de membres",
+                    "duration_diff": "Différence de durée",
+                    "engagement_diff": "Différence d'engagement",
+                    "top_members_changes": "Changements membres actifs",
+                    "top_activities_changes": "Changements activités populaires",
+                    "new_entries": "Nouvelles entrées",
+                    "dropped_entries": "Entrées disparues",
+                    "maintained": "Maintenues",
+                    "error": "Échec de la comparaison"
+                },
+                "cleanup": {
+                    "title": "Nettoyer les snapshots",
+                    "description": "Supprimez les anciens snapshots pour libérer de l'espace",
+                    "days_label": "Supprimer les snapshots plus vieux que",
+                    "days_unit": "jours",
+                    "preview": "Environ {count} snapshot(s) seront supprimé(s)",
+                    "confirm": "Confirmer la suppression",
+                    "submit": "Nettoyer",
+                    "success": "{count} snapshot(s) supprimé(s) avec succès",
+                    "error": "Échec du nettoyage",
+                    "warning": "Cette action est irréversible"
+                },
+                "types": {
+                    "daily": "Quotidien",
+                    "weekly": "Hebdomadaire",
+                    "monthly": "Mensuel",
+                    "yearly": "Annuel",
+                    "milestone": "Jalon",
+                    "custom": "Personnalisé"
+                },
+                "detail": {
+                    "title": "Détails du snapshot",
+                    "server_stats": "Statistiques du serveur",
+                    "top_members": "Membres les plus actifs",
+                    "top_activities": "Activités populaires",
+                    "trends": "Tendances"
+                }
             }
         },
         "server_loading": {

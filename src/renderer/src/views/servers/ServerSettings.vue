@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useServerStore } from '@/stores/server'
+import SnapshotManagement from '@/components/server-settings/snapshots/SnapshotManagement.vue'
+import Divider from 'primevue/divider'
 
 const { t } = useI18n()
+const serverStore = useServerStore()
 </script>
 
 <template>
@@ -15,6 +19,12 @@ const { t } = useI18n()
                     {{ t('views.server_settings.subtitle') }}
                 </p>
             </div>
+        </div>
+
+        <!-- Snapshots Section (Owner only) -->
+        <div v-if="serverStore.isOwnership && serverStore.getPublicId" class="mb-8">
+            <SnapshotManagement :server-id="serverStore.getPublicId" />
+            <Divider class="my-8" />
         </div>
     </div>
 </template>

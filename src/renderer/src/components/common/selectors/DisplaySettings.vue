@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserPreferencesStore } from '@/stores/user-preferences'
-import InputSwitch from 'primevue/inputswitch'
+import ToggleSwitch from 'primevue/toggleswitch'
 
 const { t } = useI18n()
 const preferencesStore = useUserPreferencesStore()
@@ -30,7 +30,7 @@ const animationsEnabled = computed({
                     {{ t('views.user_profile.preferences.display.compact_mode.description') }}
                 </p>
             </div>
-            <InputSwitch v-model="compactMode" />
+            <ToggleSwitch v-model="compactMode" />
         </div>
 
         <!-- Animations -->
@@ -43,7 +43,7 @@ const animationsEnabled = computed({
                     {{ t('views.user_profile.preferences.display.animations.description') }}
                 </p>
             </div>
-            <InputSwitch v-model="animationsEnabled" />
+            <ToggleSwitch v-model="animationsEnabled" />
         </div>
     </div>
 </template>
