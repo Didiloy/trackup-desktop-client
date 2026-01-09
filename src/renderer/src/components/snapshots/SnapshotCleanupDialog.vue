@@ -59,7 +59,7 @@ const handleCleanup = async (): Promise<void> => {
             toast.add({
                 severity: 'error',
                 summary: t('messages.error.title'),
-                detail: t('views.server_settings.snapshots.cleanup.error'),
+                detail: t('messages.error.delete'),
                 life: 3000
             })
         } else {
@@ -67,7 +67,7 @@ const handleCleanup = async (): Promise<void> => {
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.title'),
-                detail: t('views.server_settings.snapshots.cleanup.success', { count }),
+                detail: t('messages.success.delete'),
                 life: 3000
             })
             emit('cleaned', count)
@@ -162,7 +162,7 @@ const handleHide = (): void => {
                     @click="closeDialog"
                 />
                 <Button
-                    :label="t('views.server_settings.snapshots.cleanup.submit')"
+                    :label="t('common.actions.confirm')"
                     severity="danger"
                     :loading="isSubmitting"
                     @click="handleCleanup"

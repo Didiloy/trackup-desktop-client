@@ -175,7 +175,7 @@ const closeDialog = (): void => {
 
                 <!-- Compare button -->
                 <Button
-                    :label="t('views.server_settings.snapshots.compare.submit')"
+                    :label="t('views.server_settings.snapshots.actions.compare')"
                     :loading="isComparing"
                     class="w-full md:w-auto"
                     @click="handleCompare"

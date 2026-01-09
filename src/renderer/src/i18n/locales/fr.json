@@ -778,40 +778,13 @@
                     "not_available": "Non disponible"
                 },
                 "list": {
-                    "title": "Historique des snapshots",
-                    "empty": "Aucun snapshot disponible",
-                    "empty_hint": "Créez un snapshot pour commencer à suivre vos statistiques",
-                    "filter_by_type": "Filtrer par type",
-                    "all_types": "Tous les types"
-                },
-                "columns": {
-                    "title": "Titre",
-                    "description": "Description",
-                    "type": "Type",
-                    "date": "Date",
-                    "actions": "Actions",
-                    "sessions": "Sessions",
-                    "members": "Membres",
-                    "engagement": "Engagement"
-                },
-                "card": {
-                    "created_at": "Créé le",
-                    "type": "Type",
-                    "sessions": "Sessions",
-                    "members": "Membres",
-                    "duration": "Durée",
-                    "engagement": "Engagement",
-                    "no_stats": "Pas de statistiques"
+                    "title": "Historique des snapshots"
                 },
                 "create": {
-                    "title": "Créer un snapshot",
                     "description": "Créez un snapshot manuel de vos statistiques serveur",
                     "type_label": "Type de snapshot",
                     "description_label": "Description (optionnelle)",
-                    "description_placeholder": "Ex: Snapshot avant événement spécial",
-                    "submit": "Créer le snapshot",
-                    "success": "Snapshot créé avec succès",
-                    "error": "Échec de la création du snapshot"
+                    "description_placeholder": "Ex: Snapshot avant événement spécial"
                 },
                 "compare": {
                     "title": "Comparer des snapshots",
@@ -820,7 +793,6 @@
                     "snapshot_2": "Deuxième snapshot",
                     "select_placeholder": "Sélectionner un snapshot",
                     "select_both": "Veuillez sélectionner deux snapshots à comparer",
-                    "submit": "Comparer",
                     "results": "Résultats de la comparaison",
                     "sessions_diff": "Différence de sessions",
                     "members_diff": "Différence de membres",
@@ -842,21 +814,11 @@
                     "types_placeholder": "Sélectionner les types",
                     "types_hint": "Seuls les types sélectionnés seront supprimés",
                     "preview": "Environ {count} snapshot(s) seront supprimé(s)",
-                    "confirm": "Confirmer la suppression",
-                    "submit": "Nettoyer",
-                    "success": "{count} snapshot(s) supprimé(s) avec succès",
-                    "error": "Échec du nettoyage",
                     "warning": "Cette action est irréversible"
                 },
                 "delete": {
                     "confirm_title": "Supprimer le snapshot",
-                    "confirm_message": "Êtes-vous sûr de vouloir supprimer ce snapshot ? Cette action est irréversible.",
-                    "success": "Snapshot supprimé avec succès",
-                    "error": "Échec de la suppression du snapshot"
-                },
-                "download": {
-                    "success": "Données du snapshot téléchargées",
-                    "error": "Échec du téléchargement"
+                    "confirm_message": "Êtes-vous sûr de vouloir supprimer ce snapshot ? Cette action est irréversible."
                 },
                 "types": {
                     "daily": "Quotidien",
@@ -874,8 +836,7 @@
                     "top_activities": "Activités populaires",
                     "trends": "Tendances",
                     "sessions": "sessions",
-                    "popularity": "Popularité",
-                    "load_error": "Impossible de charger le snapshot"
+                    "popularity": "Popularité"
                 }
             }
         },

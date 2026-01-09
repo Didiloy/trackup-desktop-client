@@ -91,7 +91,7 @@ const handleRowClick = async (event: { data: ISnapshotLight }): Promise<void> =>
         toast.add({
             severity: 'error',
             summary: t('messages.error.title'),
-            detail: t('views.server_settings.snapshots.detail.load_error'),
+            detail: t('messages.error.fetch'),
             life: 3000
         })
     }
@@ -112,14 +112,14 @@ const confirmDelete = async (): Promise<void> => {
         toast.add({
             severity: 'error',
             summary: t('messages.error.title'),
-            detail: t('views.server_settings.snapshots.delete.error'),
+            detail: t('messages.error.delete'),
             life: 3000
         })
     } else {
         toast.add({
             severity: 'success',
             summary: t('messages.success.title'),
-            detail: t('views.server_settings.snapshots.delete.success'),
+            detail: t('messages.success.delete'),
             life: 3000
         })
         // Reload current page to refresh list
@@ -150,7 +150,7 @@ defineExpose({ refresh: () => load() })
                 :options="typeFilterOptions"
                 option-label="label"
                 option-value="value"
-                :placeholder="t('views.server_settings.snapshots.list.filter_by_type')"
+                :placeholder="t('placeholder.filter_by_type')"
                 class="w-56"
             />
         </div>
@@ -176,14 +176,14 @@ defineExpose({ refresh: () => load() })
             <template #empty>
                 <div class="text-center py-8 text-surface-500">
                     <i class="pi pi-camera text-4xl mb-3 block"></i>
-                    {{ t('views.server_settings.snapshots.list.empty') }}
+                    {{ t('common.filters.no_results') }}
                 </div>
             </template>
 
             <!-- Title column -->
             <Column
                 field="title"
-                :header="t('views.server_settings.snapshots.columns.title')"
+                :header="t('common.fields.title')"
                 style="width: 25%"
             >
                 <template #body="{ data }">
@@ -196,7 +196,7 @@ defineExpose({ refresh: () => load() })
             <!-- Description column -->
             <Column
                 field="description"
-                :header="t('views.server_settings.snapshots.columns.description')"
+                :header="t('common.fields.description')"
                 style="width: 30%"
             >
                 <template #body="{ data }">
@@ -209,7 +209,7 @@ defineExpose({ refresh: () => load() })
             <!-- Type column -->
             <Column
                 field="snapshot_type"
-                :header="t('views.server_settings.snapshots.columns.type')"
+                :header="t('common.fields.type')"
                 style="width: 15%"
             >
                 <template #body="{ data }">
@@ -223,7 +223,7 @@ defineExpose({ refresh: () => load() })
             <!-- Date column -->
             <Column
                 field="snapshot_date"
-                :header="t('views.server_settings.snapshots.columns.date')"
+                :header="t('common.fields.date')"
                 style="width: 15%"
             >
                 <template #body="{ data }">
@@ -233,7 +233,7 @@ defineExpose({ refresh: () => load() })
 
             <!-- Actions column -->
             <Column
-                :header="t('views.server_settings.snapshots.columns.actions')"
+                :header="t('common.actions.actions')"
                 style="width: 15%"
             >
                 <template #body="{ data }">
@@ -253,7 +253,7 @@ defineExpose({ refresh: () => load() })
                             rounded
                             size="small"
                             severity="danger"
-                            v-tooltip.top="t('views.server_settings.snapshots.actions.delete')"
+                            v-tooltip.top="t('common.actions.delete')"
                             @click.stop="handleDeleteRequest(data)"
                         />
                     </div>

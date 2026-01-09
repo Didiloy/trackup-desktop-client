@@ -66,7 +66,7 @@ const handleSnapshotsCleaned = async (): Promise<void> => {
                         @click="isCleanupDialogVisible = true"
                     />
                     <Button
-                        :label="t('views.server_settings.snapshots.actions.create')"
+                        :label="t('common.actions.create')"
                         icon="pi pi-plus"
                         @click="isCreateDialogVisible = true"
                     />
