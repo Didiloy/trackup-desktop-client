@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStore } from '@/stores/snapshot'
@@ -29,14 +29,14 @@ const snapshotStore = useSnapshotStore()
 const daysOld = ref(30)
 const isSubmitting = ref(false)
 
-const availableTypes: { label: string; value: SnapshotType }[] = [
-    { label: 'Daily', value: 'daily' },
-    { label: 'Weekly', value: 'weekly' },
-    { label: 'Monthly', value: 'monthly' },
-    { label: 'Yearly', value: 'yearly' },
-    { label: 'Milestone', value: 'milestone' },
-    { label: 'Custom', value: 'custom' }
-]
+const availableTypes = computed<{ label: string; value: SnapshotType }[]>(() => [
+    { label: t('common.periods.daily'), value: 'daily' },
+    { label: t('common.periods.weekly'), value: 'weekly' },
+    { label: t('common.periods.monthly'), value: 'monthly' },
+    { label: t('common.periods.yearly'), value: 'yearly' },
+    { label: t('common.periods.milestone'), value: 'milestone' },
+    { label: t('common.periods.custom'), value: 'custom' }
+])
 
 const selectedTypes = ref<SnapshotType[]>(['daily', 'weekly', 'monthly', 'yearly', 'milestone', 'custom'])
 
@@ -82,7 +82,12 @@ const handleHide = (): void => {
 </script>
 
 <template>
-    <AppDialog :model-value="visible" @update:model-value="emit('update:visible', $event)" @hide="handleHide">
+    <AppDialog
+        :model-value="visible"
+        style-class="w-full max-w-2xl"
+        @update:model-value="emit('update:visible', $event)"
+        @hide="handleHide"
+    >
         <template #header>
             <div class="flex flex-col gap-1">
                 <h2 class="text-xl font-bold text-surface-900">
@@ -105,8 +110,8 @@ const handleHide = (): void => {
                 <label for="days-old" class="font-medium text-surface-900">
                     {{ t('views.server_settings.snapshots.cleanup.days_label') }}
                 </label>
-                <div class="flex items-center gap-2">
-                    <InputNumber id="days-old" v-model="daysOld" :min="1" :max="365" class="w-32" />
+                <div class="flex items-center gap-10">
+                    <InputNumber id="days-old" v-model="daysOld" :min="1" :max="365" class="w-full" />
                     <span class="text-surface-600">
                         {{ t('views.server_settings.snapshots.cleanup.days_unit') }}
                     </span>
@@ -133,10 +138,6 @@ const handleHide = (): void => {
                 </span>
             </div>
 
-            <!-- Info message -->
-            <Message severity="info" :closable="false">
-                {{ t('views.server_settings.snapshots.cleanup.confirm') }}
-            </Message>
         </div>
 
         <template #footer>

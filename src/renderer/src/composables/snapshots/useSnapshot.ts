@@ -20,7 +20,7 @@ export function useSnapshot() {
 
     // Options pour les filtres de type
     const typeFilterOptions = computed(() => [
-        { label: t('common.all'), value: 'all' },
+        { label: t('common.misc.all'), value: 'all' },
         { label: t('common.periods.daily'), value: 'daily' },
         { label: t('common.periods.weekly'), value: 'weekly' },
         { label: t('common.periods.monthly'), value: 'monthly' },

@@ -87,7 +87,8 @@
             "yes": "Oui",
             "no": "Non",
             "no_chronos": "Aucun chrono enregistré",
-            "none": "Aucun"
+            "none": "Aucun",
+            "all": "Tous"
         },
         "time": {
             "hours": "heures",
