@@ -24,6 +24,9 @@ interface UsePaginatedFetcherParams<T> {
 
     /** Watchers qui doivent déclencher un reset */
     filters?: unknown[]
+
+    /** Mode de pagination: 'append' (infinite scroll) ou 'replace' (pagination classique) */
+    mode?: 'append' | 'replace'
 }
 
 interface UsePaginatedFetcherReturn<T> {
@@ -36,12 +39,13 @@ interface UsePaginatedFetcherReturn<T> {
     load: () => Promise<void>
     reset: () => Promise<void>
     loadMore: () => Promise<void>
+    goToPage: (newPage: number) => Promise<void>
 }
 
 export function usePaginatedFetcher<T>(
     params: UsePaginatedFetcherParams<T>
 ): UsePaginatedFetcherReturn<T> {
-    const { fetcher, onItemsAdded, filters = [], limit = 20 } = params
+    const { fetcher, onItemsAdded, filters = [], limit = 20, mode = 'append' } = params
 
     const items = ref<UnwrapRef<T>[]>([]) as Ref<UnwrapRef<T>[]>
     const total = ref(0)
@@ -55,7 +59,12 @@ export function usePaginatedFetcher<T>(
     }))
 
     // Computed property to check if there are more items to load
-    const hasMore = computed(() => items.value.length < total.value)
+    const hasMore = computed(() => {
+        if (mode === 'replace') {
+            return (page.value * limit) < total.value
+        }
+        return items.value.length < total.value
+    })
 
     async function load(): Promise<void> {
         loading.value = true
@@ -72,11 +81,15 @@ export function usePaginatedFetcher<T>(
             const newItems = result.data
             total.value = result.total
 
-            if (page.value === 1) {
+            if (mode === 'replace') {
                 items.value = newItems as unknown as UnwrapRef<T>[]
             } else {
-                // cast incoming items to UnwrapRef<T>[] to satisfy Vue typing
-                items.value.push(...(newItems as unknown as UnwrapRef<T>[]))
+                if (page.value === 1) {
+                    items.value = newItems as unknown as UnwrapRef<T>[]
+                } else {
+                    // cast incoming items to UnwrapRef<T>[] to satisfy Vue typing
+                    items.value.push(...(newItems as unknown as UnwrapRef<T>[]))
+                }
             }
 
             // Appeler l'action "secondaire" (ex: charger les stats)
@@ -97,10 +110,16 @@ export function usePaginatedFetcher<T>(
 
     function loadMore(): Promise<void> {
         // Don't load more if already loading or no more items
-        if (loading.value || !hasMore.value) {
+        if (loading.value || (mode === 'append' && !hasMore.value)) {
             return Promise.resolve()
         }
         page.value++
+        return load()
+    }
+
+    function goToPage(newPage: number): Promise<void> {
+        if (loading.value || newPage === page.value) return Promise.resolve()
+        page.value = newPage
         return load()
     }
 
@@ -118,6 +137,7 @@ export function usePaginatedFetcher<T>(
         hasMore,
         load,
         reset,
-        loadMore
+        loadMore,
+        goToPage
     }
 }
