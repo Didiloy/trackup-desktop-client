@@ -3,6 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStore } from '@/stores/snapshot'
+import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
@@ -31,6 +32,7 @@ const emit = defineEmits<{
 const { t, d } = useI18n()
 const toast = useToast()
 const snapshotStore = useSnapshotStore()
+const { getSnapshotDisplayName, formatTrendValue, getTrendSeverity } = useSnapshot()
 
 const selectedSnapshotId1 = ref<string | null>(null)
 const selectedSnapshotId2 = ref<string | null>(null)
@@ -103,15 +105,6 @@ const handleCompare = async (): Promise<void> => {
 
 const comparison = computed(() => snapshotStore.comparison)
 const isComparing = computed(() => snapshotStore.is_comparing)
-
-const formatDiff = (value: number): string => {
-    const sign = value >= 0 ? '+' : ''
-    return `${sign}${value.toFixed(1)}%`
-}
-
-const getDiffSeverity = (value: number): 'success' | 'danger' => {
-    return value >= 0 ? 'success' : 'danger'
-}
 
 const closeDialog = (): void => {
     emit('update:visible', false)
@@ -201,12 +194,7 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.snapshot_1') }}
                             </p>
                             <p class="font-semibold text-surface-900">
-                                {{
-                                    comparison.snapshot1.title ||
-                                    t(
-                                        `views.server_settings.snapshots.types.${comparison.snapshot1.snapshot_type}`
-                                    )
-                                }}
+                                {{ getSnapshotDisplayName(comparison.snapshot1) }}
                             </p>
                             <p class="text-sm text-surface-600">
                                 {{ d(new Date(comparison.snapshot1.date), 'short') }}
@@ -220,12 +208,7 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.snapshot_2') }}
                             </p>
                             <p class="font-semibold text-surface-900">
-                                {{
-                                    comparison.snapshot2.title ||
-                                    t(
-                                        `views.server_settings.snapshots.types.${comparison.snapshot2.snapshot_type}`
-                                    )
-                                }}
+                                {{ getSnapshotDisplayName(comparison.snapshot2) }}
                             </p>
                             <p class="text-sm text-surface-600">
                                 {{ d(new Date(comparison.snapshot2.date), 'short') }}
@@ -240,8 +223,8 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.sessions_diff') }}
                             </p>
                             <Badge
-                                :value="formatDiff(comparison.comparison.sessions_diff)"
-                                :severity="getDiffSeverity(comparison.comparison.sessions_diff)"
+                                :value="formatTrendValue(comparison.comparison.sessions_diff, true)"
+                                :severity="getTrendSeverity(comparison.comparison.sessions_diff)"
                                 class="text-lg"
                             />
                         </div>
@@ -251,8 +234,8 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.members_diff') }}
                             </p>
                             <Badge
-                                :value="formatDiff(comparison.comparison.members_diff)"
-                                :severity="getDiffSeverity(comparison.comparison.members_diff)"
+                                :value="formatTrendValue(comparison.comparison.members_diff, true)"
+                                :severity="getTrendSeverity(comparison.comparison.members_diff)"
                                 class="text-lg"
                             />
                         </div>
@@ -262,8 +245,8 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.duration_diff') }}
                             </p>
                             <Badge
-                                :value="formatDiff(comparison.comparison.duration_diff)"
-                                :severity="getDiffSeverity(comparison.comparison.duration_diff)"
+                                :value="formatTrendValue(comparison.comparison.duration_diff, true)"
+                                :severity="getTrendSeverity(comparison.comparison.duration_diff)"
                                 class="text-lg"
                             />
                         </div>
@@ -273,8 +256,8 @@ const closeDialog = (): void => {
                                 {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
                             </p>
                             <Badge
-                                :value="formatDiff(comparison.comparison.engagement_diff)"
-                                :severity="getDiffSeverity(comparison.comparison.engagement_diff)"
+                                :value="formatTrendValue(comparison.comparison.engagement_diff, true)"
+                                :severity="getTrendSeverity(comparison.comparison.engagement_diff)"
                                 class="text-lg"
                             />
                         </div>

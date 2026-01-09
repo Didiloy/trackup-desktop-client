@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'
 import { useSnapshotStore } from '@/stores/snapshot'
-import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
 import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import SnapshotDetailDialog from './SnapshotDetailDialog.vue'
@@ -30,8 +29,13 @@ const { t } = useI18n()
 const toast = useToast()
 const snapshotStore = useSnapshotStore()
 const { current_snapshot } = storeToRefs(snapshotStore)
-const { downloadSnapshot } = useSnapshotCRUD()
-const { typeFilterOptions, getTypeLabel, getTypeSeverity } = useSnapshot()
+const {
+    typeFilterOptions,
+    getTypeLabel,
+    getTypeSeverity,
+    downloadSnapshotWithFeedback,
+    getSnapshotDisplayName
+} = useSnapshot()
 
 // Filter state
 const selectedType = ref<SnapshotType | 'all'>('all')
@@ -88,26 +92,6 @@ const handleRowClick = async (event: { data: ISnapshotLight }): Promise<void> =>
             severity: 'error',
             summary: t('messages.error.title'),
             detail: t('views.server_settings.snapshots.detail.load_error'),
-            life: 3000
-        })
-    }
-}
-
-// Handle download
-const handleDownload = async (snapshot: ISnapshotLight): Promise<void> => {
-    try {
-        await downloadSnapshot(props.serverId, snapshot.id)
-        toast.add({
-            severity: 'success',
-            summary: t('messages.success.title'),
-            detail: t('views.server_settings.snapshots.download.success'),
-            life: 3000
-        })
-    } catch {
-        toast.add({
-            severity: 'error',
-            summary: t('messages.error.title'),
-            detail: t('views.server_settings.snapshots.download.error'),
             life: 3000
         })
     }
@@ -204,7 +188,7 @@ defineExpose({ refresh: () => load() })
             >
                 <template #body="{ data }">
                     <span class="font-medium text-surface-900">
-                        {{ data.title || getTypeLabel(data.snapshot_type) }}
+                        {{ getSnapshotDisplayName(data) }}
                     </span>
                 </template>
             </Column>
@@ -261,7 +245,7 @@ defineExpose({ refresh: () => load() })
                             size="small"
                             severity="info"
                             v-tooltip.top="t('views.server_settings.snapshots.actions.download')"
-                            @click.stop="handleDownload(data)"
+                            @click.stop="downloadSnapshotWithFeedback(props.serverId, data.id)"
                         />
                         <Button
                             icon="pi pi-trash"

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
+
 import type { ISnapshot } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
-import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
+
 import { useSnapshot } from '@/composables/snapshots/useSnapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Button from 'primevue/button'
@@ -21,9 +21,14 @@ const emit = defineEmits<{
 }>()
 
 const { t, d } = useI18n()
-const toast = useToast()
-const { downloadSnapshot } = useSnapshotCRUD()
-const { getTypeLabel } = useSnapshot()
+
+const {
+    getTypeLabel,
+    downloadSnapshotWithFeedback,
+    getSnapshotDisplayName,
+    formatTrendValue,
+    getTrendSeverity
+} = useSnapshot()
 
 const isDownloading = ref(false)
 
@@ -37,7 +42,7 @@ const formattedDate = computed(() => {
 })
 
 const displayTitle = computed(() => {
-    return props.snapshot?.title || typeLabel.value
+    return getSnapshotDisplayName(props.snapshot)
 })
 
 const handleDownload = async (): Promise<void> => {
@@ -45,33 +50,10 @@ const handleDownload = async (): Promise<void> => {
 
     isDownloading.value = true
     try {
-        await downloadSnapshot(props.snapshot.server_id, props.snapshot.id)
-        toast.add({
-            severity: 'success',
-            summary: t('messages.success.title'),
-            detail: t('views.server_settings.snapshots.download.success'),
-            life: 3000
-        })
-    } catch {
-        toast.add({
-            severity: 'error',
-            summary: t('messages.error.title'),
-            detail: t('views.server_settings.snapshots.download.error'),
-            life: 3000
-        })
+        await downloadSnapshotWithFeedback(props.snapshot.server_id, props.snapshot.id)
     } finally {
         isDownloading.value = false
     }
-}
-
-const formatTrendValue = (value: number | undefined): string => {
-    if (value === undefined) return '0'
-    const sign = value >= 0 ? '+' : ''
-    return `${sign}${value}`
-}
-
-const getTrendSeverity = (value: number | undefined): 'success' | 'danger' => {
-    return (value ?? 0) >= 0 ? 'success' : 'danger'
 }
 </script>
 

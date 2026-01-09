@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStore } from '@/stores/snapshot'
@@ -37,6 +37,10 @@ const form = ref({
 
 const isSubmitting = ref(false)
 
+const isFormValid = computed(() => {
+    return form.value.title.trim().length > 0
+})
+
 const handleSubmit = async (): Promise<void> => {
     isSubmitting.value = true
     try {
@@ -50,14 +54,14 @@ const handleSubmit = async (): Promise<void> => {
             toast.add({
                 severity: 'error',
                 summary: t('messages.error.title'),
-                detail: t('views.server_settings.snapshots.create.error'),
+                detail: t('messages.error.create'),
                 life: 3000
             })
         } else {
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.title'),
-                detail: t('views.server_settings.snapshots.create.success'),
+                detail: t('messages.success.create'),
                 life: 3000
             })
             emit('created')
@@ -95,53 +99,56 @@ const handleHide = (): void => {
         <template #header>
             <div class="flex flex-col gap-1">
                 <h2 class="text-xl font-bold text-surface-900">
-                    {{ t('views.server_settings.snapshots.create.title') }}
+                    {{ t('views.server_settings.snapshots.actions.create') }}
                 </h2>
                 <p class="text-sm text-surface-500">
-                    {{ t('views.server_settings.snapshots.create.description') }}
+                    {{ t('views.server_settings.snapshots.description') }}
                 </p>
             </div>
         </template>
 
         <div class="flex flex-col gap-5 p-6">
-            <!-- Type selector -->
-            <div class="flex flex-col gap-2">
-                <label for="snapshot-type" class="font-medium text-surface-900">
-                    {{ t('views.server_settings.snapshots.create.type_label') }}
-                </label>
-                <Select
-                    id="snapshot-type"
-                    v-model="form.type"
-                    :options="typeCreateOptions"
-                    option-label="label"
-                    option-value="value"
-                    class="w-full"
-                />
-            </div>
-
             <!-- Title -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-title" class="font-medium text-surface-900">
-                    {{ t('views.server_settings.snapshots.create.title_label') }}
+                    {{ t('common.fields.title') }}
+                    <span class="text-red-500">*</span>
                 </label>
                 <InputText
                     id="snapshot-title"
                     v-model="form.title"
-                    :placeholder="t('views.server_settings.snapshots.create.title_placeholder')"
+                    :placeholder="t('views.server_settings.snapshots.title_placeholder')"
                     class="w-full"
                 />
             </div>
 
+            
+            <!-- Type selector -->
+            <div class="flex flex-col gap-2">
+                <label for="snapshot-type" class="font-medium text-surface-900">
+                    {{ t('common.fields.type') }}
+                </label>
+                <Select
+                id="snapshot-type"
+                v-model="form.type"
+                :options="typeCreateOptions"
+                option-label="label"
+                option-value="value"
+                class="w-full"
+                />
+            </div>
+
+
             <!-- Description -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-description" class="font-medium text-surface-900">
-                    {{ t('views.server_settings.snapshots.create.description_label') }}
+                    {{ t('common.fields.description') }}
                 </label>
                 <Textarea
                     id="snapshot-description"
                     v-model="form.description"
                     :placeholder="
-                        t('views.server_settings.snapshots.create.description_placeholder')
+                        t('common.fields.description')
                     "
                     rows="4"
                     class="w-full"
@@ -159,8 +166,9 @@ const handleHide = (): void => {
                     @click="closeDialog"
                 />
                 <Button
-                    :label="t('views.server_settings.snapshots.create.submit')"
+                    :label="t('common.actions.create')"
                     :loading="isSubmitting"
+                    :disabled="!isFormValid"
                     @click="handleSubmit"
                 />
             </div>
