@@ -276,3 +276,22 @@ defineExpose({ refresh: () => load() })
         />
     </div>
 </template>
+
+<style scoped>
+:deep(.p-datatable-tbody > tr) {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+:deep(.p-datatable-tbody > tr:hover) {
+    background-color: var(--p-surface-100) !important;
+    border-left-color: var(--p-primary-500);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    position: relative;
+}
+
+.dark :deep(.p-datatable-tbody > tr:hover) {
+    background-color: var(--p-surface-800) !important;
+}
+</style>

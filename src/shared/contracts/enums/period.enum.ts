@@ -3,5 +3,7 @@ export enum EPeriod {
     DAILY = 'daily',
     WEEKLY = 'weekly',
     MONTHLY = 'monthly',
-    YEARLY = 'yearly'
+    YEARLY = 'yearly',
+    MILESTONE = 'milestone',
+    CUSTOM = 'custom',
 }

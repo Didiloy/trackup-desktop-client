@@ -122,7 +122,7 @@ const handleHide = (): void => {
                 />
             </div>
 
-            
+
             <!-- Type selector -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-type" class="font-medium text-surface-900">
