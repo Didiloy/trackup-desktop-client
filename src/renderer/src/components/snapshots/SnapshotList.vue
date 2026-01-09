@@ -182,11 +182,7 @@ defineExpose({ refresh: () => load() })
             </template>
 
             <!-- Title column -->
-            <Column
-                field="title"
-                :header="t('common.fields.title')"
-                style="width: 25%"
-            >
+            <Column field="title" :header="t('common.fields.title')" style="width: 25%">
                 <template #body="{ data }">
                     <span class="font-medium text-surface-900">
                         {{ getSnapshotDisplayName(data) }}
@@ -195,11 +191,7 @@ defineExpose({ refresh: () => load() })
             </Column>
 
             <!-- Description column -->
-            <Column
-                field="description"
-                :header="t('common.fields.description')"
-                style="width: 30%"
-            >
+            <Column field="description" :header="t('common.fields.description')" style="width: 30%">
                 <template #body="{ data }">
                     <span class="text-surface-600 line-clamp-1">
                         {{ data.description || '-' }}
@@ -208,11 +200,7 @@ defineExpose({ refresh: () => load() })
             </Column>
 
             <!-- Type column -->
-            <Column
-                field="snapshot_type"
-                :header="t('common.fields.type')"
-                style="width: 15%"
-            >
+            <Column field="snapshot_type" :header="t('common.fields.type')" style="width: 15%">
                 <template #body="{ data }">
                     <Badge
                         :value="getTypeLabel(data.snapshot_type)"
@@ -222,21 +210,14 @@ defineExpose({ refresh: () => load() })
             </Column>
 
             <!-- Date column -->
-            <Column
-                field="snapshot_date"
-                :header="t('common.fields.date')"
-                style="width: 15%"
-            >
+            <Column field="snapshot_date" :header="t('common.fields.date')" style="width: 15%">
                 <template #body="{ data }">
                     <span class="text-surface-600">{{ formatDate(data.snapshot_date) }}</span>
                 </template>
             </Column>
 
             <!-- Actions column -->
-            <Column
-                :header="t('common.actions.actions')"
-                style="width: 15%"
-            >
+            <Column :header="t('common.actions.actions')" style="width: 15%">
                 <template #body="{ data }">
                     <div class="flex gap-1">
                         <Button

@@ -84,10 +84,7 @@ const handleDownload = async (): Promise<void> => {
 
         <div v-if="snapshot" class="flex flex-col gap-8 p-1">
             <!-- Description -->
-            <div
-                v-if="snapshot.description"
-                class="bg-surface-50  rounded-xl"
-            >
+            <div v-if="snapshot.description" class="bg-surface-50 rounded-xl">
                 <div class="flex items-center gap-2 mb-2 text-surface-900 font-semibold">
                     <i class="pi pi-align-left text-primary-500"></i>
                     <h3>{{ t('views.server_settings.snapshots.detail.description') }}</h3>

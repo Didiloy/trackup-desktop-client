@@ -12,6 +12,7 @@ import Badge from 'primevue/badge'
 import type { ISnapshotLight } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 import { formatDate } from '@/utils'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 
 interface Props {
     visible: boolean
@@ -183,25 +184,34 @@ const closeDialog = (): void => {
                         </div>
 
                         <div class="flex flex-col items-center justify-center pb-1">
-                            <div
-                                v-if="needsComparison || !comparison"
-                                class="w-full flex justify-center"
-                            >
-                                <Button
-                                    icon="pi pi-search"
-                                    :label="t('views.server_settings.snapshots.actions.compare')"
-                                    :loading="isComparing"
-                                    size="small"
-                                    rounded
-                                    @click="handleCompare"
-                                />
-                            </div>
-                            <div v-else class="flex flex-col items-center gap-1 pb-2">
-                                <span class="text-xs text-surface-400 uppercase tracking-widest">{{
-                                    t('views.server_activities.evolution_comparison').split(' ')[0]
-                                }}</span>
-                                <i class="pi pi-arrow-right text-surface-400 text-xl"></i>
-                            </div>
+                            <TransitionWrapper name="fade" mode="out-in">
+                                <div
+                                    v-if="needsComparison || !comparison"
+                                    class="w-full flex justify-center"
+                                >
+                                    <Button
+                                        icon="pi pi-search"
+                                        :label="
+                                            t('views.server_settings.snapshots.actions.compare')
+                                        "
+                                        :loading="isComparing"
+                                        size="small"
+                                        rounded
+                                        @click="handleCompare"
+                                    />
+                                </div>
+                                <div v-else class="flex flex-col items-center gap-1 pb-2">
+                                    <span
+                                        class="text-xs text-surface-400 uppercase tracking-widest"
+                                        >{{
+                                            t('views.server_activities.evolution_comparison').split(
+                                                ' '
+                                            )[0]
+                                        }}</span
+                                    >
+                                    <i class="pi pi-arrow-right text-surface-400 text-xl"></i>
+                                </div>
+                            </TransitionWrapper>
                         </div>
 
                         <div class="flex flex-col gap-2 w-full">

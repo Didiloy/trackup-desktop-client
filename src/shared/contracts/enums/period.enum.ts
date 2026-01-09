@@ -5,5 +5,5 @@ export enum EPeriod {
     MONTHLY = 'monthly',
     YEARLY = 'yearly',
     MILESTONE = 'milestone',
-    CUSTOM = 'custom',
+    CUSTOM = 'custom'
 }
