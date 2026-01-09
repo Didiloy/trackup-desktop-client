@@ -2,8 +2,9 @@
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
-import UserStatCard from '@/components/users/UserStatCard.vue'
 import ProgressSpinner from 'primevue/progressspinner'
+import Icon from '@/components/common/icons/Icon.vue'
+import Badge from 'primevue/badge'
 
 const props = defineProps<{
     serverId: string
@@ -18,9 +19,8 @@ onMounted(async () => {
 
 const summaryCards = computed(() => {
     const summary = snapshotStore.getSummary
-    if (!summary) return []
-
-    const types: Array<{ key: keyof typeof summary; icon: string; color: string; bg: string }> = [
+    
+    const types: Array<{ key: 'daily' | 'weekly' | 'monthly' | 'yearly'; icon: string; color: string; bg: string }> = [
         { key: 'daily', icon: 'mdi:calendar-today', color: 'text-blue-600', bg: 'bg-blue-100' },
         { key: 'weekly', icon: 'mdi:calendar-week', color: 'text-green-600', bg: 'bg-green-100' },
         { key: 'monthly', icon: 'mdi:calendar-month', color: 'text-purple-600', bg: 'bg-purple-100' },
@@ -28,7 +28,7 @@ const summaryCards = computed(() => {
     ]
 
     return types.map((type) => {
-        const snapshot = summary[type.key]
+        const snapshot = summary?.[type.key]
         return {
             label: t(`views.server_settings.snapshots.summary.${type.key}`),
             value: snapshot
@@ -36,7 +36,8 @@ const summaryCards = computed(() => {
                 : t('views.server_settings.snapshots.summary.no_snapshot'),
             icon: type.icon,
             color: type.color,
-            bg: type.bg
+            bg: type.bg,
+            hasData: !!snapshot
         }
     })
 })
@@ -44,26 +45,82 @@ const summaryCards = computed(() => {
 
 <template>
     <div class="flex flex-col gap-4">
-        <h3 class="text-lg font-semibold text-surface-900">
-            {{ t('views.server_settings.snapshots.summary.title') }}
-        </h3>
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-surface-900">
+                {{ t('views.server_settings.snapshots.summary.title') }}
+            </h3>
+        </div>
 
         <!-- Loading state -->
         <div v-if="snapshotStore.isLoading" class="flex justify-center items-center py-8">
             <ProgressSpinner style="width: 50px; height: 50px" />
         </div>
 
-        <!-- Summary cards -->
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <UserStatCard
+            <div
                 v-for="card in summaryCards"
                 :key="card.label"
-                :label="card.label"
-                :value="card.value"
-                :icon="card.icon"
-                :color="card.color"
-                :bg="card.bg"
-            />
+                class="summary-card relative overflow-hidden rounded-xl border-2 transition-all"
+                :class="card.hasData ? 'bg-surface-0 border-primary-200 hover:border-primary-400 shadow-sm hover:shadow-md cursor-pointer' : 'bg-surface-50 border-surface-200'"
+            >
+                <!-- Background gradient -->
+                <div :class="`absolute inset-0 opacity-5 ${card.bg}`"></div>
+                
+                <div class="relative z-10 p-5">
+                    <!-- Icon and Type -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div :class="`flex items-center justify-center w-12 h-12 rounded-lg ${card.bg} ${card.color}`">
+                            <Icon :icon="card.icon" class="text-xl" />
+                        </div>
+                        <Badge 
+                            :value="card.label" 
+                            :severity="card.hasData ? 'success' : 'secondary'"
+                            class="text-xs"
+                        />
+                    </div>
+
+                    <!-- Value -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-medium text-surface-500 uppercase tracking-wide">
+                            {{ card.hasData ? 'Dernier snapshot' : 'Statut' }}
+                        </p>
+                        <p 
+                            class="text-lg font-bold"
+                            :class="card.hasData ? 'text-surface-900' : 'text-surface-400'"
+                        >
+                            {{ card.value }}
+                        </p>
+                    </div>
+
+                    <!-- Indicator -->
+                    <div class="mt-4 pt-3 border-t border-surface-200">
+                        <div class="flex items-center gap-2">
+                            <div 
+                                class="w-2 h-2 rounded-full"
+                                :class="card.hasData ? 'bg-green-500 animate-pulse' : 'bg-surface-300'"
+                            ></div>
+                            <p class="text-xs text-surface-500">
+                                {{ card.hasData ? 'Disponible' : 'Non disponible' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>

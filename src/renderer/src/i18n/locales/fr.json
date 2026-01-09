@@ -754,10 +754,14 @@
             "snapshots": {
                 "title": "Gestion des Snapshots",
                 "description": "Créez et gérez des snapshots de vos statistiques serveur pour suivre l'évolution dans le temps",
+                "title_label": "Titre (optionnel)",
+                "title_placeholder": "Ex: Snapshot avant mise à jour majeure",
                 "actions": {
                     "create": "Créer un snapshot",
                     "compare": "Comparer",
-                    "cleanup": "Nettoyer"
+                    "cleanup": "Nettoyer",
+                    "download": "Télécharger",
+                    "delete": "Supprimer"
                 },
                 "summary": {
                     "title": "Derniers snapshots",
@@ -822,6 +826,16 @@
                     "success": "{count} snapshot(s) supprimé(s) avec succès",
                     "error": "Échec du nettoyage",
                     "warning": "Cette action est irréversible"
+                },
+                "delete": {
+                    "confirm_title": "Supprimer le snapshot",
+                    "confirm_message": "Êtes-vous sûr de vouloir supprimer ce snapshot ? Cette action est irréversible.",
+                    "success": "Snapshot supprimé avec succès",
+                    "error": "Échec de la suppression du snapshot"
+                },
+                "download": {
+                    "success": "Données du snapshot téléchargées",
+                    "error": "Échec du téléchargement"
                 },
                 "types": {
                     "daily": "Quotidien",

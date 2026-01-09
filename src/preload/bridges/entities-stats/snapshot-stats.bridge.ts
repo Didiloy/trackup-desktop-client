@@ -102,6 +102,22 @@ export const snapshotStatsBridge = {
     },
 
     /**
+     * Delete a specific snapshot
+     */
+    delete: (
+        serverId: string,
+        snapshotId: string,
+        accessToken: string
+    ): Promise<ISnapshotApiResponse<ISnapshot>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.snapshotStats.delete,
+            serverId,
+            snapshotId,
+            accessToken
+        )
+    },
+
+    /**
      * Cleanup old snapshots
      */
     cleanup: (

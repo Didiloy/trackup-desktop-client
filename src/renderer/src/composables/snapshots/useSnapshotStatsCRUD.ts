@@ -35,6 +35,10 @@ interface UseSnapshotStatsCRUDReturn {
         snapshotId1: string,
         snapshotId2: string
     ) => Promise<ISnapshotApiResponse<ISnapshotComparisonResult>>
+    deleteSnapshotStats: (
+        serverId: string,
+        snapshotId: string
+    ) => Promise<ISnapshotApiResponse<ISnapshot>>
     cleanupSnapshotsStats: (
         serverId: string,
         params?: ICleanupSnapshotsParams
@@ -114,6 +118,16 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
     }
 
     /**
+     * Delete a specific snapshot
+     */
+    const deleteSnapshotStats = async (
+        serverId: string,
+        snapshotId: string
+    ): Promise<ISnapshotApiResponse<ISnapshot>> => {
+        return window.api.snapshotStats.delete(serverId, snapshotId, user_store.getAccessToken!)
+    }
+
+    /**
      * Cleanup old snapshots
      */
     const cleanupSnapshotsStats = async (
@@ -130,6 +144,7 @@ export function useSnapshotStatsCRUD(): UseSnapshotStatsCRUDReturn {
         getLatestSnapshotStats,
         getSnapshotsStatsSummary,
         compareSnapshotsStats,
+        deleteSnapshotStats,
         cleanupSnapshotsStats
     }
 }

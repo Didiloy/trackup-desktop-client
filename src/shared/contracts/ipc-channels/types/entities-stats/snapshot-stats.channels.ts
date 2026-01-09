@@ -15,6 +15,11 @@ export const SNAPSHOT_STATS_CHANNELS = {
     // Compare snapshots
     compare: 'snapshot-stats:compare',
 
+    // Delete snapshot
+    delete: 'snapshot-stats:delete',
+
     // Cleanup
     cleanup: 'snapshot-stats:cleanup'
 } as const
+
+

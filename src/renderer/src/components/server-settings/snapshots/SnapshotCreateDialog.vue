@@ -5,6 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Select from 'primevue/select'
+import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
 import type { SnapshotType } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
@@ -24,6 +25,7 @@ const toast = useToast()
 const snapshotStore = useSnapshotStatsStore()
 
 const selectedType = ref<SnapshotType>('milestone')
+const title = ref('')
 const description = ref('')
 const isCreating = ref(false)
 
@@ -37,6 +39,7 @@ const handleCreate = async () => {
     try {
         const res = await snapshotStore.createSnapshot(props.serverId, {
             type: selectedType.value,
+            title: title.value || undefined,
             description: description.value || undefined
         })
 
@@ -65,6 +68,7 @@ const handleCreate = async () => {
 
 const resetForm = () => {
     selectedType.value = 'milestone'
+    title.value = ''
     description.value = ''
 }
 
@@ -98,6 +102,19 @@ const onHide = () => {
                     :options="typeOptions"
                     option-label="label"
                     option-value="value"
+                    class="w-full"
+                />
+            </div>
+
+            <!-- Title -->
+            <div class="flex flex-col gap-2">
+                <label for="snapshot-title" class="font-medium text-surface-900">
+                    {{ t('views.server_settings.snapshots.title_label') }}
+                </label>
+                <InputText
+                    id="snapshot-title"
+                    v-model="title"
+                    :placeholder="t('views.server_settings.snapshots.title_placeholder')"
                     class="w-full"
                 />
             </div>

@@ -111,6 +111,7 @@ export interface ISnapshot {
     server_id: string
     snapshot_date: string
     type: SnapshotType
+    title?: string
     description?: string
     created_at: string
     data: ISnapshotData
@@ -136,6 +137,7 @@ export interface ISnapshotLight {
     server_id: string
     snapshot_date: string
     type: SnapshotType
+    title?: string
     description?: string
     created_at: string
     highlights?: ISnapshotHighlights
@@ -149,6 +151,7 @@ export interface ISnapshotReference {
     id: string
     date: string
     type: SnapshotType
+    title?: string
 }
 
 export interface ISnapshotComparison {
@@ -201,6 +204,7 @@ export interface IPaginatedSnapshots {
 
 export interface ICreateSnapshotRequest {
     type: SnapshotType
+    title?: string
     description?: string
 }
 

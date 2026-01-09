@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'primevue/usetoast'
 import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
+import { useSnapshotStatsCRUD } from '@/composables/snapshots/useSnapshotStatsCRUD'
 import SnapshotCard from './SnapshotCard.vue'
 import Select from 'primevue/select'
 import Paginator from 'primevue/paginator'
 import ProgressSpinner from 'primevue/progressspinner'
 import SnapshotDetailDialog from './SnapshotDetailDialog.vue'
+import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import type { SnapshotType, ISnapshot } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
 const props = defineProps<{
@@ -14,12 +17,16 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const toast = useToast()
 const snapshotStore = useSnapshotStatsStore()
+const { getSnapshotStatsById } = useSnapshotStatsCRUD()
 
 const selectedType = ref<SnapshotType | 'all'>('all')
 const currentPage = ref(1)
 const showDetailDialog = ref(false)
 const selectedSnapshot = ref<ISnapshot | null>(null)
+const showDeleteConfirm = ref(false)
+const snapshotToDelete = ref<string | null>(null)
 
 const typeOptions = computed(() => [
     { label: t('views.server_settings.snapshots.list.all_types'), value: 'all' },
@@ -56,6 +63,79 @@ const handleSnapshotClick = async (snapshotId: string) => {
         selectedSnapshot.value = res.data
         showDetailDialog.value = true
     }
+}
+
+const handleDownload = async (snapshotId: string) => {
+    try {
+        const res = await getSnapshotStatsById(props.serverId, snapshotId)
+        if (res.error) {
+            toast.add({
+                severity: 'error',
+                summary: t('messages.error.title'),
+                detail: t('views.server_settings.snapshots.download.error'),
+                life: 3000
+            })
+            return
+        }
+
+        if (res.data) {
+            // Create a blob and download the file
+            const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `snapshot-${res.data.title ?? res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
+            URL.revokeObjectURL(url)
+
+            toast.add({
+                severity: 'success',
+                summary: t('messages.success.title'),
+                detail: t('views.server_settings.snapshots.download.success'),
+                life: 3000
+            })
+        }
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: t('messages.error.title'),
+            detail: t('views.server_settings.snapshots.download.error'),
+            life: 3000
+        })
+    }
+}
+
+const handleDelete = (snapshotId: string) => {
+    snapshotToDelete.value = snapshotId
+    showDeleteConfirm.value = true
+}
+
+const confirmDelete = async () => {
+    if (!snapshotToDelete.value) return
+
+    const res = await snapshotStore.deleteSnapshot(props.serverId, snapshotToDelete.value)
+    if (res.error) {
+        toast.add({
+            severity: 'error',
+            summary: t('messages.error.title'),
+            detail: t('views.server_settings.snapshots.delete.error'),
+            life: 3000
+        })
+    } else {
+        toast.add({
+            severity: 'success',
+            summary: t('messages.success.title'),
+            detail: t('views.server_settings.snapshots.delete.success'),
+            life: 3000
+        })
+        // Refresh the list
+        await fetchSnapshots()
+    }
+
+    showDeleteConfirm.value = false
+    snapshotToDelete.value = null
 }
 
 const onPageChange = (event: any) => {
@@ -102,6 +182,8 @@ const onPageChange = (event: any) => {
                 :key="snapshot.id"
                 :snapshot="snapshot"
                 @click="handleSnapshotClick(snapshot.id)"
+                @download="handleDownload(snapshot.id)"
+                @delete="handleDelete(snapshot.id)"
             />
         </div>
 
@@ -118,6 +200,14 @@ const onPageChange = (event: any) => {
         <SnapshotDetailDialog
             v-model:visible="showDetailDialog"
             :snapshot="selectedSnapshot"
+        />
+
+        <!-- Delete Confirmation Dialog -->
+        <ConfirmationDialog
+            v-model="showDeleteConfirm"
+            :title="t('views.server_settings.snapshots.delete.confirm_title')"
+            :message="t('views.server_settings.snapshots.delete.confirm_message')"
+            :on-confirm="confirmDelete"
         />
     </div>
 </template>

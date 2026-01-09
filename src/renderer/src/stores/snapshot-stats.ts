@@ -30,6 +30,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         getLatestSnapshotStats,
         getSnapshotsStatsSummary,
         compareSnapshotsStats,
+        deleteSnapshotStats,
         cleanupSnapshotsStats
     } = useSnapshotStatsCRUD()
 
@@ -222,6 +223,35 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         }
     }
 
+    const deleteSnapshot = async (
+        serverId: string,
+        snapshotId: string
+    ): Promise<ISnapshotApiResponse<ISnapshot>> => {
+        state.isLoading = true
+        state.error = null
+        try {
+            const res = await deleteSnapshotStats(serverId, snapshotId)
+            if (res.error) {
+                state.error = res.error
+                return { error: res.error }
+            }
+            // Remove from local state if successful
+            if (res.data) {
+                state.snapshots = state.snapshots.filter(s => s.id !== snapshotId)
+                if (state.currentSnapshot?.id === snapshotId) {
+                    state.currentSnapshot = null
+                }
+            }
+            return res
+        } catch (e: unknown) {
+            const message = e instanceof Error ? e.message : String(e)
+            state.error = message
+            return { error: message }
+        } finally {
+            state.isLoading = false
+        }
+    }
+
     const resetState = (): void => {
         state.snapshots = []
         state.currentSnapshot = null
@@ -254,6 +284,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         fetchSummary,
         createSnapshot,
         compareSnapshots,
+        deleteSnapshot,
         cleanupSnapshots,
         resetState
     }

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import Icon from '@/components/common/icons/Icon.vue'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
@@ -29,10 +30,16 @@ const availableSnapshots = ref<any[]>([])
 onMounted(async () => {
     // Fetch snapshots for selection
     await snapshotStore.fetchSnapshots(props.serverId, { page: 1, limit: 50 })
-    availableSnapshots.value = snapshotStore.getSnapshots.map((s) => ({
-        label: `${t(`views.server_settings.snapshots.types.${s.type}`)} - ${d(new Date(s.created_at), 'short')}`,
-        value: s.id
-    }))
+    availableSnapshots.value = snapshotStore.getSnapshots.map((s) => {
+        const typeLabel = t(`views.server_settings.snapshots.types.${s.type}`)
+        const dateLabel = d(new Date(s.created_at), 'short')
+        const titlePart = s.title ? `${s.title} - ` : ''
+        return {
+            label: `${titlePart}${typeLabel} - ${dateLabel}`,
+            value: s.id,
+            type: s.type
+        }
+    })
 })
 
 const handleCompare = async () => {
@@ -141,6 +148,31 @@ const getDiffColor = (value: number) => {
                 <h3 class="text-lg font-semibold text-surface-900">
                     {{ t('views.server_settings.snapshots.compare.results') }}
                 </h3>
+
+                <!-- Snapshot info -->
+                <div class="flex gap-4 p-4 rounded-xl bg-surface-50 ring-1 ring-surface-200/60">
+                    <div class="flex-1">
+                        <p class="text-sm text-surface-500 mb-1">{{ t('views.server_settings.snapshots.compare.snapshot_1') }}</p>
+                        <p class="font-semibold text-surface-900">
+                            {{ comparisonResult.snapshot1.title || t(`views.server_settings.snapshots.types.${comparisonResult.snapshot1.type}`) }}
+                        </p>
+                        <p class="text-sm text-surface-600">
+                            {{ t(`views.server_settings.snapshots.types.${comparisonResult.snapshot1.type}`) }} - {{ d(new Date(comparisonResult.snapshot1.date), 'short') }}
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <Icon icon="mdi:arrow-right" class="text-2xl text-surface-400" />
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm text-surface-500 mb-1">{{ t('views.server_settings.snapshots.compare.snapshot_2') }}</p>
+                        <p class="font-semibold text-surface-900">
+                            {{ comparisonResult.snapshot2.title || t(`views.server_settings.snapshots.types.${comparisonResult.snapshot2.type}`) }}
+                        </p>
+                        <p class="text-sm text-surface-600">
+                            {{ t(`views.server_settings.snapshots.types.${comparisonResult.snapshot2.type}`) }} - {{ d(new Date(comparisonResult.snapshot2.date), 'short') }}
+                        </p>
+                    </div>
+                </div>
 
                 <!-- Stats differences -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

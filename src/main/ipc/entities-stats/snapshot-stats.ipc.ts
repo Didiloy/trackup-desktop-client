@@ -184,6 +184,31 @@ export function registerSnapshotStatsIpc(): void {
         }
     )
 
+    // Delete a specific snapshot
+    ipcMain.handle(
+        ipc_channels.snapshotStats.delete,
+        async (
+            _event,
+            serverId: string,
+            snapshotId: string,
+            accessToken: string
+        ): Promise<ISnapshotApiResponse<ISnapshot>> => {
+            logger.info('Deleting snapshot:', serverId, snapshotId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(snapshotId, 'Snapshot ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.delete<ISnapshot>(
+                `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId}`,
+                accessToken
+            )
+        }
+    )
+
     // Cleanup old snapshots
     ipcMain.handle(
         ipc_channels.snapshotStats.cleanup,
