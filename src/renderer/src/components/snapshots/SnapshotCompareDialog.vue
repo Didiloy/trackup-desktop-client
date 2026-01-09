@@ -9,6 +9,7 @@ import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 import Badge from 'primevue/badge'
 import type { ISnapshotLight } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
+import { formatDate } from '@/utils'
 
 interface Props {
     visible: boolean
@@ -44,7 +45,7 @@ const loadSnapshots = async (): Promise<void> => {
         if (!res.error && res.data) {
             availableSnapshots.value = res.data.data.map((s: ISnapshotLight) => {
                 const typeLabel = t(`common.periods.${s.snapshot_type}`)
-                const dateLabel = d(new Date(s.created_at), 'short')
+                const dateLabel = formatDate(s.snapshot_date)
                 const titlePart = s.title ? `${s.title} - ` : ''
                 return {
                     label: `${titlePart}${typeLabel} - ${dateLabel}`,
