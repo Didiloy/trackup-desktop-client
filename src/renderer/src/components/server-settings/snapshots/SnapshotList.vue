@@ -1,34 +1,42 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
-import { useSnapshotStatsCRUD } from '@/composables/snapshots/useSnapshotStatsCRUD'
-import SnapshotCard from './SnapshotCard.vue'
-import Select from 'primevue/select'
-import Paginator from 'primevue/paginator'
-import ProgressSpinner from 'primevue/progressspinner'
+import { useSnapshotStore } from '@/stores/snapshot'
+import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
 import SnapshotDetailDialog from './SnapshotDetailDialog.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
-import type { SnapshotType, ISnapshot } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Select from 'primevue/select'
+import Button from 'primevue/button'
+import Badge from 'primevue/badge'
+import type {
+    SnapshotType,
+    ISnapshotLight
+} from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
-const props = defineProps<{
+interface Props {
     serverId: string
-}>()
+}
 
-const { t } = useI18n()
+const props = defineProps<Props>()
+
+const { t, d } = useI18n()
 const toast = useToast()
-const snapshotStore = useSnapshotStatsStore()
-const { getSnapshotStatsById } = useSnapshotStatsCRUD()
+const snapshotStore = useSnapshotStore()
+const { getSnapshotById } = useSnapshotCRUD()
 
+// Filter state
 const selectedType = ref<SnapshotType | 'all'>('all')
-const currentPage = ref(1)
-const showDetailDialog = ref(false)
-const selectedSnapshot = ref<ISnapshot | null>(null)
-const showDeleteConfirm = ref(false)
+
+// Dialog state
+const isDetailDialogVisible = ref(false)
+const isDeleteDialogVisible = ref(false)
 const snapshotToDelete = ref<string | null>(null)
 
-const typeOptions = computed(() => [
+// Type filter options
+const typeFilterOptions = computed(() => [
     { label: t('views.server_settings.snapshots.list.all_types'), value: 'all' },
     { label: t('views.server_settings.snapshots.types.daily'), value: 'daily' },
     { label: t('views.server_settings.snapshots.types.weekly'), value: 'weekly' },
@@ -38,10 +46,15 @@ const typeOptions = computed(() => [
     { label: t('views.server_settings.snapshots.types.custom'), value: 'custom' }
 ])
 
-const fetchSnapshots = async () => {
-    const params: any = {
-        page: currentPage.value,
-        limit: 10
+// Pagination state
+const currentPage = ref(0)
+const rowsPerPage = ref(10)
+
+// Fetch snapshots function
+const fetchSnapshots = async (): Promise<void> => {
+    const params: { page: number; limit: number; type?: SnapshotType } = {
+        page: currentPage.value + 1,
+        limit: rowsPerPage.value
     }
     if (selectedType.value !== 'all') {
         params.type = selectedType.value
@@ -50,25 +63,62 @@ const fetchSnapshots = async () => {
 }
 
 // Watch for filter changes
-watch([selectedType, currentPage], () => {
+watch(selectedType, () => {
+    currentPage.value = 0
     fetchSnapshots()
 })
 
 // Initial load
-fetchSnapshots()
+onMounted(() => {
+    fetchSnapshots()
+})
 
-const handleSnapshotClick = async (snapshotId: string) => {
-    const res = await snapshotStore.fetchSnapshotById(props.serverId, snapshotId)
+// Format date for display
+const formatDate = (date: string): string => {
+    return d(new Date(date), 'short')
+}
+
+// Get type label
+const getTypeLabel = (type: SnapshotType): string => {
+    return t(`views.server_settings.snapshots.types.${type}`)
+}
+
+// Get type severity for badge
+const getTypeSeverity = (
+    type: SnapshotType
+): 'info' | 'success' | 'warn' | 'danger' | 'secondary' | 'contrast' | undefined => {
+    const severityMap: Record<SnapshotType, 'info' | 'success' | 'warn' | 'danger' | 'secondary'> = {
+        daily: 'info',
+        weekly: 'success',
+        monthly: 'warn',
+        yearly: 'secondary',
+        milestone: 'danger',
+        custom: 'secondary'
+    }
+    return severityMap[type]
+}
+
+// Handle row click - show detail dialog
+const handleRowClick = async (event: { data: ISnapshotLight }): Promise<void> => {
+    const snapshot = event.data
+    const res = await snapshotStore.fetchSnapshotById(props.serverId, snapshot.id)
     if (!res.error && res.data) {
-        selectedSnapshot.value = res.data
-        showDetailDialog.value = true
+        isDetailDialogVisible.value = true
+    } else {
+        toast.add({
+            severity: 'error',
+            summary: t('messages.error.title'),
+            detail: t('views.server_settings.snapshots.detail.load_error'),
+            life: 3000
+        })
     }
 }
 
-const handleDownload = async (snapshotId: string) => {
+// Handle download
+const handleDownload = async (snapshot: ISnapshotLight): Promise<void> => {
     try {
-        const res = await getSnapshotStatsById(props.serverId, snapshotId)
-        if (res.error) {
+        const res = await getSnapshotById(props.serverId, snapshot.id)
+        if (res.error || !res.data) {
             toast.add({
                 severity: 'error',
                 summary: t('messages.error.title'),
@@ -78,26 +128,23 @@ const handleDownload = async (snapshotId: string) => {
             return
         }
 
-        if (res.data) {
-            // Create a blob and download the file
-            const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `snapshot-${res.data.title ?? res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            URL.revokeObjectURL(url)
+        const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `snapshot-${res.data.title ?? res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
 
-            toast.add({
-                severity: 'success',
-                summary: t('messages.success.title'),
-                detail: t('views.server_settings.snapshots.download.success'),
-                life: 3000
-            })
-        }
-    } catch (error) {
+        toast.add({
+            severity: 'success',
+            summary: t('messages.success.title'),
+            detail: t('views.server_settings.snapshots.download.success'),
+            life: 3000
+        })
+    } catch {
         toast.add({
             severity: 'error',
             summary: t('messages.error.title'),
@@ -107,12 +154,14 @@ const handleDownload = async (snapshotId: string) => {
     }
 }
 
-const handleDelete = (snapshotId: string) => {
-    snapshotToDelete.value = snapshotId
-    showDeleteConfirm.value = true
+// Handle delete request
+const handleDeleteRequest = (snapshot: ISnapshotLight): void => {
+    snapshotToDelete.value = snapshot.id
+    isDeleteDialogVisible.value = true
 }
 
-const confirmDelete = async () => {
+// Confirm delete
+const confirmDelete = async (): Promise<void> => {
     if (!snapshotToDelete.value) return
 
     const res = await snapshotStore.deleteSnapshot(props.serverId, snapshotToDelete.value)
@@ -130,17 +179,21 @@ const confirmDelete = async () => {
             detail: t('views.server_settings.snapshots.delete.success'),
             life: 3000
         })
-        // Refresh the list
         await fetchSnapshots()
     }
 
-    showDeleteConfirm.value = false
     snapshotToDelete.value = null
 }
 
-const onPageChange = (event: any) => {
-    currentPage.value = event.page + 1
+// Handle page change
+const handlePage = (event: { page: number; rows: number }): void => {
+    currentPage.value = event.page
+    rowsPerPage.value = event.rows
+    fetchSnapshots()
 }
+
+// Expose refetch for parent component
+defineExpose({ fetchSnapshots })
 </script>
 
 <template>
@@ -152,59 +205,107 @@ const onPageChange = (event: any) => {
             </h3>
             <Select
                 v-model="selectedType"
-                :options="typeOptions"
+                :options="typeFilterOptions"
                 option-label="label"
                 option-value="value"
                 :placeholder="t('views.server_settings.snapshots.list.filter_by_type')"
-                class="w-64"
+                class="w-56"
             />
         </div>
 
-        <!-- Loading state -->
-        <div v-if="snapshotStore.isLoading" class="flex justify-center items-center py-12">
-            <ProgressSpinner style="width: 50px; height: 50px" />
-        </div>
-
-        <!-- Empty state -->
-        <div
-            v-else-if="snapshotStore.getSnapshots.length === 0"
-            class="text-center py-12 bg-surface-0 rounded-2xl ring-1 ring-surface-200/60"
+        <!-- Snapshot table -->
+        <DataTable
+            :value="snapshotStore.snapshots"
+            :loading="snapshotStore.isLoading"
+            :paginator="true"
+            :rows="rowsPerPage"
+            :total-records="snapshotStore.pagination.total"
+            :lazy="true"
+            :first="currentPage * rowsPerPage"
+            :rows-per-page-options="[5, 10, 20]"
+            data-key="id"
+            striped-rows
+            hover
+            class="cursor-pointer"
+            @row-click="handleRowClick"
+            @page="handlePage"
         >
-            <p class="text-surface-500">
-                {{ t('views.server_settings.snapshots.list.empty') }}
-            </p>
-        </div>
+            <!-- Empty message -->
+            <template #empty>
+                <div class="text-center py-8 text-surface-500">
+                    <i class="pi pi-camera text-4xl mb-3 block"></i>
+                    {{ t('views.server_settings.snapshots.list.empty') }}
+                </div>
+            </template>
 
-        <!-- Snapshot grid -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <SnapshotCard
-                v-for="snapshot in snapshotStore.getSnapshots"
-                :key="snapshot.id"
-                :snapshot="snapshot"
-                @click="handleSnapshotClick(snapshot.id)"
-                @download="handleDownload(snapshot.id)"
-                @delete="handleDelete(snapshot.id)"
-            />
-        </div>
+            <!-- Title column -->
+            <Column field="title" :header="t('views.server_settings.snapshots.columns.title')" style="width: 25%">
+                <template #body="{ data }">
+                    <span class="font-medium text-surface-900">
+                        {{ data.title || getTypeLabel(data.type) }}
+                    </span>
+                </template>
+            </Column>
 
-        <!-- Pagination -->
-        <Paginator
-            v-if="snapshotStore.getPagination.pageCount > 1"
-            :rows="snapshotStore.getPagination.limit"
-            :total-records="snapshotStore.getPagination.total"
-            :first="(snapshotStore.getPagination.page - 1) * snapshotStore.getPagination.limit"
-            @page="onPageChange"
-        />
+            <!-- Description column -->
+            <Column field="description" :header="t('views.server_settings.snapshots.columns.description')" style="width: 30%">
+                <template #body="{ data }">
+                    <span class="text-surface-600 line-clamp-1">
+                        {{ data.description || '-' }}
+                    </span>
+                </template>
+            </Column>
+
+            <!-- Type column -->
+            <Column field="type" :header="t('views.server_settings.snapshots.columns.type')" style="width: 15%">
+                <template #body="{ data }">
+                    <Badge :value="getTypeLabel(data.type)" :severity="getTypeSeverity(data.type)" />
+                </template>
+            </Column>
+
+            <!-- Date column -->
+            <Column field="created_at" :header="t('views.server_settings.snapshots.columns.date')" style="width: 15%">
+                <template #body="{ data }">
+                    <span class="text-surface-600">{{ formatDate(data.created_at) }}</span>
+                </template>
+            </Column>
+
+            <!-- Actions column -->
+            <Column :header="t('views.server_settings.snapshots.columns.actions')" style="width: 15%">
+                <template #body="{ data }">
+                    <div class="flex gap-1">
+                        <Button
+                            icon="pi pi-download"
+                            text
+                            rounded
+                            size="small"
+                            severity="info"
+                            v-tooltip.top="t('views.server_settings.snapshots.actions.download')"
+                            @click.stop="handleDownload(data)"
+                        />
+                        <Button
+                            icon="pi pi-trash"
+                            text
+                            rounded
+                            size="small"
+                            severity="danger"
+                            v-tooltip.top="t('views.server_settings.snapshots.actions.delete')"
+                            @click.stop="handleDeleteRequest(data)"
+                        />
+                    </div>
+                </template>
+            </Column>
+        </DataTable>
 
         <!-- Detail Dialog -->
         <SnapshotDetailDialog
-            v-model:visible="showDetailDialog"
-            :snapshot="selectedSnapshot"
+            v-model:visible="isDetailDialogVisible"
+            :snapshot="snapshotStore.currentSnapshot"
         />
 
         <!-- Delete Confirmation Dialog -->
         <ConfirmationDialog
-            v-model="showDeleteConfirm"
+            v-model="isDeleteDialogVisible"
             :title="t('views.server_settings.snapshots.delete.confirm_title')"
             :message="t('views.server_settings.snapshots.delete.confirm_message')"
             :on-confirm="confirmDelete"

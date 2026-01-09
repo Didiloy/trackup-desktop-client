@@ -186,6 +186,7 @@ declare module 'vue' {
     SessionProfileHeader: typeof import('./src/components/sessions/profile/SessionProfileHeader.vue')['default']
     Skeleton: typeof import('primevue/skeleton')['default']
     SnapshotCard: typeof import('./src/components/server-settings/snapshots/SnapshotCard.vue')['default']
+    SnapshotCardGrid: typeof import('./src/components/server-settings/snapshots/SnapshotCardGrid.vue')['default']
     SnapshotCleanupDialog: typeof import('./src/components/server-settings/snapshots/SnapshotCleanupDialog.vue')['default']
     SnapshotCompareDialog: typeof import('./src/components/server-settings/snapshots/SnapshotCompareDialog.vue')['default']
     SnapshotCreateDialog: typeof import('./src/components/server-settings/snapshots/SnapshotCreateDialog.vue')['default']

@@ -3,17 +3,17 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import type { ISnapshot } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
-import { useSnapshotStatsCRUD } from '@/composables/snapshots/useSnapshotStatsCRUD'
+import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Button from 'primevue/button'
-import Divider from 'primevue/divider'
 import Badge from 'primevue/badge'
-import Icon from '@/components/common/icons/Icon.vue'
 
-const props = defineProps<{
+interface Props {
     visible: boolean
     snapshot: ISnapshot | null
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     (e: 'update:visible', value: boolean): void
@@ -21,15 +21,14 @@ const emit = defineEmits<{
 
 const { t, d } = useI18n()
 const toast = useToast()
-const { getSnapshotStatsById } = useSnapshotStatsCRUD()
+const { getSnapshotById } = useSnapshotCRUD()
+
 const isDownloading = ref(false)
 
-const safeType = computed(() => {
-    return props.snapshot?.type || 'custom'
-})
+const snapshotType = computed(() => props.snapshot?.type ?? 'custom')
 
 const typeLabel = computed(() => {
-    return t(`views.server_settings.snapshots.types.${safeType.value}`)
+    return t(`views.server_settings.snapshots.types.${snapshotType.value}`)
 })
 
 const formattedDate = computed(() => {
@@ -37,24 +36,28 @@ const formattedDate = computed(() => {
     return d(new Date(props.snapshot.created_at), 'medium')
 })
 
-const handleDownload = async () => {
+const displayTitle = computed(() => {
+    return props.snapshot?.title || typeLabel.value
+})
+
+const handleDownload = async (): Promise<void> => {
     if (!props.snapshot) return
-    
+
     isDownloading.value = true
     try {
-        const res = await getSnapshotStatsById(props.snapshot.server_id, props.snapshot.id)
+        const res = await getSnapshotById(props.snapshot.server_id, props.snapshot.id)
         if (res.error || !res.data) {
             throw new Error('Failed to fetch snapshot data')
         }
 
         const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' })
         const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `snapshot-${res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `snapshot-${res.data.type}-${new Date(res.data.snapshot_date).toLocaleDateString()}.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
         URL.revokeObjectURL(url)
 
         toast.add({
@@ -63,7 +66,7 @@ const handleDownload = async () => {
             detail: t('views.server_settings.snapshots.download.success'),
             life: 3000
         })
-    } catch (error) {
+    } catch {
         toast.add({
             severity: 'error',
             summary: t('messages.error.title'),
@@ -73,6 +76,16 @@ const handleDownload = async () => {
     } finally {
         isDownloading.value = false
     }
+}
+
+const formatTrendValue = (value: number | undefined): string => {
+    if (value === undefined) return '0'
+    const sign = value >= 0 ? '+' : ''
+    return `${sign}${value}`
+}
+
+const getTrendSeverity = (value: number | undefined): 'success' | 'danger' => {
+    return (value ?? 0) >= 0 ? 'success' : 'danger'
 }
 </script>
 
@@ -85,19 +98,19 @@ const handleDownload = async () => {
         <template #header>
             <div v-if="snapshot" class="flex flex-col gap-2 w-full pr-8">
                 <div class="flex items-center gap-3">
-                    <div :class="`p-2 rounded-lg bg-primary-50 text-primary-600`">
-                        <Icon icon="mdi:camera" class="text-xl" />
+                    <div class="p-2 rounded-lg bg-primary-50 text-primary-600">
+                        <i class="pi pi-camera text-xl"></i>
                     </div>
                     <div class="flex flex-col">
                         <h2 class="text-xl font-bold text-surface-900 leading-tight">
-                            {{ snapshot.title || typeLabel }}
+                            {{ displayTitle }}
                         </h2>
                         <div class="flex items-center gap-2 text-sm text-surface-500">
                             <span>{{ formattedDate }}</span>
                             <span>•</span>
-                            <Badge 
-                                :value="typeLabel" 
-                                :severity="safeType === 'milestone' ? 'danger' : 'info'" 
+                            <Badge
+                                :value="typeLabel"
+                                :severity="snapshotType === 'milestone' ? 'danger' : 'info'"
                                 size="small"
                             />
                         </div>
@@ -106,12 +119,15 @@ const handleDownload = async () => {
             </div>
         </template>
 
-        <div v-if="snapshot" class="flex flex-col gap-8 p-1">
+        <div v-if="snapshot" class="flex flex-col gap-8 p-6">
             <!-- Description -->
-            <div v-if="snapshot.description" class="bg-surface-50 p-4 rounded-xl border border-surface-100">
+            <div
+                v-if="snapshot.description"
+                class="bg-surface-50 p-4 rounded-xl border border-surface-100"
+            >
                 <div class="flex items-center gap-2 mb-2 text-surface-900 font-semibold">
-                    <Icon icon="mdi:text-box-outline" class="text-lg" />
-                    <h3>Description</h3>
+                    <i class="pi pi-align-left text-lg"></i>
+                    <h3>{{ t('views.server_settings.snapshots.detail.description') }}</h3>
                 </div>
                 <p class="text-surface-600 leading-relaxed">{{ snapshot.description }}</p>
             </div>
@@ -119,28 +135,44 @@ const handleDownload = async () => {
             <!-- Server Stats -->
             <div v-if="snapshot.data.server_stats">
                 <div class="flex items-center gap-2 mb-4">
-                    <Icon icon="mdi:chart-bar" class="text-xl text-primary-600" />
+                    <i class="pi pi-chart-bar text-xl text-primary-600"></i>
                     <h3 class="text-lg font-bold text-surface-900">
                         {{ t('views.server_settings.snapshots.detail.server_stats') }}
                     </h3>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="stat-card bg-blue-50/50 border border-blue-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-blue-600 uppercase mb-1">{{ t('views.server_stats.total_sessions') }}</p>
-                        <p class="text-2xl font-bold text-surface-900">{{ snapshot.data.server_stats.total_sessions }}</p>
+                        <p class="text-xs font-semibold text-blue-600 uppercase mb-1">
+                            {{ t('views.server_stats.total_sessions') }}
+                        </p>
+                        <p class="text-2xl font-bold text-surface-900">
+                            {{ snapshot.data.server_stats.total_sessions }}
+                        </p>
                     </div>
                     <div class="stat-card bg-green-50/50 border border-green-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-green-600 uppercase mb-1">{{ t('views.server_stats.total_members') }}</p>
-                        <p class="text-2xl font-bold text-surface-900">{{ snapshot.data.server_stats.total_members }}</p>
+                        <p class="text-xs font-semibold text-green-600 uppercase mb-1">
+                            {{ t('views.server_stats.total_members') }}
+                        </p>
+                        <p class="text-2xl font-bold text-surface-900">
+                            {{ snapshot.data.server_stats.total_members }}
+                        </p>
                     </div>
                     <div class="stat-card bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-orange-600 uppercase mb-1">{{ t('views.server_stats.active_members') }}</p>
-                        <p class="text-2xl font-bold text-surface-900">{{ snapshot.data.server_stats.active_members }}</p>
+                        <p class="text-xs font-semibold text-orange-600 uppercase mb-1">
+                            {{ t('views.server_stats.active_members') }}
+                        </p>
+                        <p class="text-2xl font-bold text-surface-900">
+                            {{ snapshot.data.server_stats.active_members }}
+                        </p>
                     </div>
                     <div class="stat-card bg-purple-50/50 border border-purple-100 p-4 rounded-xl">
-                        <p class="text-xs font-semibold text-purple-600 uppercase mb-1">{{ t('views.server_stats.engagement_score') }}</p>
+                        <p class="text-xs font-semibold text-purple-600 uppercase mb-1">
+                            {{ t('views.server_stats.engagement_score') }}
+                        </p>
                         <div class="flex items-baseline gap-1">
-                            <p class="text-2xl font-bold text-surface-900">{{ Math.round(snapshot.data.server_stats.engagement_score || 0) }}</p>
+                            <p class="text-2xl font-bold text-surface-900">
+                                {{ Math.round(snapshot.data.server_stats.engagement_score || 0) }}
+                            </p>
                             <span class="text-sm text-surface-500">/100</span>
                         </div>
                     </div>
@@ -150,7 +182,7 @@ const handleDownload = async () => {
             <!-- Trends -->
             <div v-if="snapshot.data.trends?.sessions_change !== undefined">
                 <div class="flex items-center gap-2 mb-4">
-                    <Icon icon="mdi:trending-up" class="text-xl text-primary-600" />
+                    <i class="pi pi-arrow-up-right text-xl text-primary-600"></i>
                     <h3 class="text-lg font-bold text-surface-900">
                         {{ t('views.server_settings.snapshots.detail.trends') }}
                     </h3>
@@ -158,28 +190,40 @@ const handleDownload = async () => {
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
                         <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">{{ t('views.server_settings.snapshots.compare.sessions_diff') }}</span>
-                            <Badge 
-                                :value="(snapshot.data.trends.sessions_change ?? 0) >= 0 ? '+' + (snapshot.data.trends.sessions_change ?? 0) : snapshot.data.trends.sessions_change" 
-                                :severity="(snapshot.data.trends.sessions_change ?? 0) >= 0 ? 'success' : 'danger'"
+                            <span class="text-sm font-medium text-surface-500">
+                                {{ t('views.server_settings.snapshots.compare.sessions_diff') }}
+                            </span>
+                            <Badge
+                                :value="formatTrendValue(snapshot.data.trends.sessions_change)"
+                                :severity="getTrendSeverity(snapshot.data.trends.sessions_change)"
                             />
                         </div>
                     </div>
                     <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
                         <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">{{ t('views.server_settings.snapshots.compare.members_diff') }}</span>
-                            <Badge 
-                                :value="(snapshot.data.trends.members_change ?? 0) >= 0 ? '+' + (snapshot.data.trends.members_change ?? 0) : snapshot.data.trends.members_change" 
-                                :severity="(snapshot.data.trends.members_change ?? 0) >= 0 ? 'success' : 'danger'"
+                            <span class="text-sm font-medium text-surface-500">
+                                {{ t('views.server_settings.snapshots.compare.members_diff') }}
+                            </span>
+                            <Badge
+                                :value="formatTrendValue(snapshot.data.trends.members_change)"
+                                :severity="getTrendSeverity(snapshot.data.trends.members_change)"
                             />
                         </div>
                     </div>
                     <div class="p-4 rounded-xl border border-surface-200 bg-surface-0">
                         <div class="flex justify-between items-start mb-2">
-                            <span class="text-sm font-medium text-surface-500">{{ t('views.server_settings.snapshots.compare.engagement_diff') }}</span>
-                            <Badge 
-                                :value="(snapshot.data.trends.engagement_change ?? 0) >= 0 ? '+' + (snapshot.data.trends.engagement_change ?? 0).toFixed(1) : (snapshot.data.trends.engagement_change ?? 0).toFixed(1)" 
-                                :severity="(snapshot.data.trends.engagement_change ?? 0) >= 0 ? 'success' : 'danger'"
+                            <span class="text-sm font-medium text-surface-500">
+                                {{ t('views.server_settings.snapshots.compare.engagement_diff') }}
+                            </span>
+                            <Badge
+                                :value="
+                                    formatTrendValue(
+                                        snapshot.data.trends.engagement_change !== undefined
+                                            ? Math.round(snapshot.data.trends.engagement_change * 10) / 10
+                                            : undefined
+                                    )
+                                "
+                                :severity="getTrendSeverity(snapshot.data.trends.engagement_change)"
                             />
                         </div>
                     </div>
@@ -190,7 +234,7 @@ const handleDownload = async () => {
                 <!-- Top Members -->
                 <div v-if="snapshot.data.top_members?.length">
                     <div class="flex items-center gap-2 mb-4">
-                        <Icon icon="mdi:trophy" class="text-xl text-yellow-500" />
+                        <i class="pi pi-star text-xl text-yellow-500"></i>
                         <h3 class="text-lg font-bold text-surface-900">
                             {{ t('views.server_settings.snapshots.detail.top_members') }}
                         </h3>
@@ -202,14 +246,21 @@ const handleDownload = async () => {
                             class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-50 border border-transparent hover:border-surface-200 transition-colors"
                         >
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm"
+                                >
                                     {{ member.rank }}
                                 </div>
                                 <span class="font-medium text-surface-900">{{ member.email }}</span>
                             </div>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-sm font-semibold text-surface-900">{{ member.total_sessions }} sessions</span>
-                                <span class="text-xs text-surface-500">{{ Math.floor(member.total_duration / 60) }}min</span>
+                                <span class="text-sm font-semibold text-surface-900">
+                                    {{ member.total_sessions }}
+                                    {{ t('views.server_settings.snapshots.detail.sessions') }}
+                                </span>
+                                <span class="text-xs text-surface-500">
+                                    {{ Math.floor(member.total_duration / 60) }}min
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -218,7 +269,7 @@ const handleDownload = async () => {
                 <!-- Top Activities -->
                 <div v-if="snapshot.data.top_activities?.length">
                     <div class="flex items-center gap-2 mb-4">
-                        <Icon icon="mdi:controller" class="text-xl text-purple-500" />
+                        <i class="pi pi-bolt text-xl text-purple-500"></i>
                         <h3 class="text-lg font-bold text-surface-900">
                             {{ t('views.server_settings.snapshots.detail.top_activities') }}
                         </h3>
@@ -230,14 +281,22 @@ const handleDownload = async () => {
                             class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-50 border border-transparent hover:border-surface-200 transition-colors"
                         >
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-100 font-bold text-surface-600 text-sm"
+                                >
                                     {{ activity.rank }}
                                 </div>
                                 <span class="font-medium text-surface-900">{{ activity.name }}</span>
                             </div>
                             <div class="text-right flex flex-col items-end">
-                                <span class="text-sm font-semibold text-surface-900">{{ activity.total_sessions }} sessions</span>
-                                <span class="text-xs text-surface-500">Popularity: {{ Math.round(activity.popularity_score || 0) }}</span>
+                                <span class="text-sm font-semibold text-surface-900">
+                                    {{ activity.total_sessions }}
+                                    {{ t('views.server_settings.snapshots.detail.sessions') }}
+                                </span>
+                                <span class="text-xs text-surface-500">
+                                    {{ t('views.server_settings.snapshots.detail.popularity') }}:
+                                    {{ Math.round(activity.popularity_score || 0) }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -246,19 +305,18 @@ const handleDownload = async () => {
         </div>
 
         <template #footer>
-            <div class="flex justify-end gap-3 p-4 border-t border-surface-200 bg-surface-50/50 -mx-6 -mb-6 mt-6 rounded-b-xl">
-                 <Button
+            <div
+                class="flex justify-end gap-3 p-4 border-t border-surface-200 bg-surface-50/50 -mx-6 -mb-6 mt-6 rounded-b-xl"
+            >
+                <Button
                     :label="t('views.server_settings.snapshots.actions.download')"
-                    icon="mdi:download"
+                    icon="pi pi-download"
                     severity="secondary"
                     outlined
                     :loading="isDownloading"
                     @click="handleDownload"
                 />
-                <Button
-                    :label="t('common.actions.close')"
-                    @click="emit('update:visible', false)"
-                />
+                <Button :label="t('common.actions.close')" @click="emit('update:visible', false)" />
             </div>
         </template>
     </AppDialog>

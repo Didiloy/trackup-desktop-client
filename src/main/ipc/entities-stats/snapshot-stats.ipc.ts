@@ -49,7 +49,7 @@ export function registerSnapshotStatsIpc(): void {
             if (validationError) return validationError
 
             return apiService.post<ISnapshot>(
-                `/api/v1/stats/servers/${serverId}/snapshots`,
+                `/api/v1/servers/${serverId}/snapshots`,
                 accessToken,
                 request
             )
@@ -77,7 +77,7 @@ export function registerSnapshotStatsIpc(): void {
             const queryString = buildQueryParams(params)
 
             return apiService.get<IPaginatedSnapshots>(
-                `/api/v1/stats/servers/${serverId}/snapshots${queryString}`,
+                `/api/v1/servers/${serverId}/snapshots${queryString}`,
                 accessToken
             )
         }
@@ -102,7 +102,7 @@ export function registerSnapshotStatsIpc(): void {
             if (validationError) return validationError
 
             return apiService.get<ISnapshot>(
-                `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId}`,
+                `/api/v1/servers/${serverId}/snapshots/${snapshotId}`,
                 accessToken
             )
         }
@@ -129,7 +129,7 @@ export function registerSnapshotStatsIpc(): void {
             const queryString = buildQueryParams(params)
 
             return apiService.get<ISnapshot>(
-                `/api/v1/stats/servers/${serverId}/snapshots/latest${queryString}`,
+                `/api/v1/servers/${serverId}/snapshots/latest${queryString}`,
                 accessToken
             )
         }
@@ -152,7 +152,7 @@ export function registerSnapshotStatsIpc(): void {
             if (validationError) return validationError
 
             return apiService.get<ISnapshotSummary>(
-                `/api/v1/stats/servers/${serverId}/snapshots/summary`,
+                `/api/v1/servers/${serverId}/snapshots/summary`,
                 accessToken
             )
         }
@@ -178,7 +178,7 @@ export function registerSnapshotStatsIpc(): void {
             )
             if (validationError) return validationError
             return apiService.get<ISnapshotComparisonResult>(
-                `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId1}/compare/${snapshotId2}`,
+                `/api/v1/servers/${serverId}/snapshots/${snapshotId1}/compare/${snapshotId2}`,
                 accessToken
             )
         }
@@ -203,7 +203,7 @@ export function registerSnapshotStatsIpc(): void {
             if (validationError) return validationError
 
             return apiService.delete<ISnapshot>(
-                `/api/v1/stats/servers/${serverId}/snapshots/${snapshotId}`,
+                `/api/v1/servers/${serverId}/snapshots/${snapshotId}`,
                 accessToken
             )
         }
@@ -229,7 +229,7 @@ export function registerSnapshotStatsIpc(): void {
             const queryString = buildQueryParams(params)
 
             return apiService.delete<ICleanupSnapshotsResponse>(
-                `/api/v1/stats/servers/${serverId}/snapshots/cleanup${queryString}`,
+                `/api/v1/servers/${serverId}/snapshots/cleanup${queryString}`,
                 accessToken
             )
         }

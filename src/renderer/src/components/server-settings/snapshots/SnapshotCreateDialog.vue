@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
-import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
+import { useSnapshotStore } from '@/stores/snapshot'
 import AppDialog from '@/components/common/dialogs/AppDialog.vue'
 import Select from 'primevue/select'
 import InputText from 'primevue/inputtext'
@@ -10,10 +10,12 @@ import Textarea from 'primevue/textarea'
 import Button from 'primevue/button'
 import type { SnapshotType } from '@shared/contracts/interfaces/entities-stats/snapshot-stats.interfaces'
 
-const props = defineProps<{
+interface Props {
     visible: boolean
     serverId: string
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     (e: 'update:visible', value: boolean): void
@@ -22,25 +24,30 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const toast = useToast()
-const snapshotStore = useSnapshotStatsStore()
+const snapshotStore = useSnapshotStore()
 
-const selectedType = ref<SnapshotType>('milestone')
-const title = ref('')
-const description = ref('')
-const isCreating = ref(false)
+// Form state
+const form = ref({
+    type: 'milestone' as SnapshotType,
+    title: '',
+    description: ''
+})
 
-const typeOptions = [
+const isSubmitting = ref(false)
+
+// Type options (only manual types)
+const typeOptions = computed(() => [
     { label: t('views.server_settings.snapshots.types.milestone'), value: 'milestone' },
     { label: t('views.server_settings.snapshots.types.custom'), value: 'custom' }
-]
+])
 
-const handleCreate = async () => {
-    isCreating.value = true
+const handleSubmit = async (): Promise<void> => {
+    isSubmitting.value = true
     try {
         const res = await snapshotStore.createSnapshot(props.serverId, {
-            type: selectedType.value,
-            title: title.value || undefined,
-            description: description.value || undefined
+            type: form.value.type,
+            title: form.value.title || undefined,
+            description: form.value.description || undefined
         })
 
         if (res.error) {
@@ -58,27 +65,33 @@ const handleCreate = async () => {
                 life: 3000
             })
             emit('created')
-            emit('update:visible', false)
-            resetForm()
+            closeDialog()
         }
     } finally {
-        isCreating.value = false
+        isSubmitting.value = false
     }
 }
 
-const resetForm = () => {
-    selectedType.value = 'milestone'
-    title.value = ''
-    description.value = ''
+const resetForm = (): void => {
+    form.value = {
+        type: 'milestone',
+        title: '',
+        description: ''
+    }
 }
 
-const onHide = () => {
+const closeDialog = (): void => {
+    emit('update:visible', false)
+    resetForm()
+}
+
+const handleHide = (): void => {
     resetForm()
 }
 </script>
 
 <template>
-    <AppDialog :model-value="visible" @update:model-value="emit('update:visible', $event)" @hide="onHide">
+    <AppDialog :model-value="visible" @update:model-value="emit('update:visible', $event)" @hide="handleHide">
         <template #header>
             <div class="flex flex-col gap-1">
                 <h2 class="text-xl font-bold text-surface-900">
@@ -90,7 +103,7 @@ const onHide = () => {
             </div>
         </template>
 
-        <div class="flex flex-col gap-6 p-6">
+        <div class="flex flex-col gap-5 p-6">
             <!-- Type selector -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-type" class="font-medium text-surface-900">
@@ -98,7 +111,7 @@ const onHide = () => {
                 </label>
                 <Select
                     id="snapshot-type"
-                    v-model="selectedType"
+                    v-model="form.type"
                     :options="typeOptions"
                     option-label="label"
                     option-value="value"
@@ -109,12 +122,12 @@ const onHide = () => {
             <!-- Title -->
             <div class="flex flex-col gap-2">
                 <label for="snapshot-title" class="font-medium text-surface-900">
-                    {{ t('views.server_settings.snapshots.title_label') }}
+                    {{ t('views.server_settings.snapshots.create.title_label') }}
                 </label>
                 <InputText
                     id="snapshot-title"
-                    v-model="title"
-                    :placeholder="t('views.server_settings.snapshots.title_placeholder')"
+                    v-model="form.title"
+                    :placeholder="t('views.server_settings.snapshots.create.title_placeholder')"
                     class="w-full"
                 />
             </div>
@@ -126,7 +139,7 @@ const onHide = () => {
                 </label>
                 <Textarea
                     id="snapshot-description"
-                    v-model="description"
+                    v-model="form.description"
                     :placeholder="t('views.server_settings.snapshots.create.description_placeholder')"
                     rows="4"
                     class="w-full"
@@ -135,17 +148,18 @@ const onHide = () => {
         </div>
 
         <template #footer>
-            <div class="flex justify-end gap-3 p-6">
+            <div class="flex justify-end gap-3 p-6 pt-0">
                 <Button
                     :label="t('common.actions.cancel')"
                     severity="secondary"
                     outlined
-                    @click="emit('update:visible', false)"
+                    :disabled="isSubmitting"
+                    @click="closeDialog"
                 />
                 <Button
                     :label="t('views.server_settings.snapshots.create.submit')"
-                    :loading="isCreating"
-                    @click="handleCreate"
+                    :loading="isSubmitting"
+                    @click="handleSubmit"
                 />
             </div>
         </template>

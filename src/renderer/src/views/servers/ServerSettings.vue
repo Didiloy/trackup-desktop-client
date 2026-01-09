@@ -5,7 +5,7 @@ import SnapshotManagement from '@/components/server-settings/snapshots/SnapshotM
 import Divider from 'primevue/divider'
 
 const { t } = useI18n()
-const serverStore = useServerStore()
+const server_store = useServerStore()
 </script>
 
 <template>
@@ -22,8 +22,8 @@ const serverStore = useServerStore()
         </div>
 
         <!-- Snapshots Section (Owner only) -->
-        <div v-if="serverStore.isOwnership && serverStore.getPublicId" class="mb-8">
-            <SnapshotManagement :server-id="serverStore.getPublicId" />
+        <div v-if="server_store.getPublicId" class="mb-8">
+            <SnapshotManagement :server-id="server_store.getPublicId" />
             <Divider class="my-8" />
         </div>
     </div>

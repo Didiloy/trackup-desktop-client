@@ -109,13 +109,13 @@ const actions = computed<ServerAction[]>(() => {
     ]
 
     if (server_store.isOwnership) {
-        baseActions.push({
-            id: 'settings',
-            label: t('views.server_settings.title'),
-            icon: 'pi pi-cog',
-            routeName: 'ServerSettings'
-        })
     }
+    baseActions.push({
+        id: 'settings',
+        label: t('views.server_settings.title'),
+        icon: 'pi pi-cog',
+        routeName: 'ServerSettings'
+    })
 
     return baseActions
 })

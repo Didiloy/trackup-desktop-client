@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { reactive, computed } from 'vue'
-import { useSnapshotStatsCRUD } from '@/composables/snapshots/useSnapshotStatsCRUD'
+import { reactive, computed, watch } from 'vue'
+import { useSnapshotCRUD } from '@/composables/snapshots/useSnapshotCRUD'
+import { useUserPreferencesStore } from '@/stores/user-preferences'
 import type {
     ISnapshot,
     ISnapshotLight,
@@ -22,41 +23,62 @@ interface PaginationState {
     pageCount: number
 }
 
-export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
-    const {
-        createSnapshotStats,
-        getAllSnapshotsStats,
-        getSnapshotStatsById,
-        getLatestSnapshotStats,
-        getSnapshotsStatsSummary,
-        compareSnapshotsStats,
-        deleteSnapshotStats,
-        cleanupSnapshotsStats
-    } = useSnapshotStatsCRUD()
+interface SnapshotState {
+    snapshots: ISnapshotLight[]
+    currentSnapshot: ISnapshot | null
+    summary: ISnapshotSummary | null
+    comparison: ISnapshotComparisonResult | null
+    pagination: PaginationState
+    isLoading: boolean
+    isSummaryLoading: boolean
+    isComparing: boolean
+    error: string | null
+    currentServerId: string | null
+}
 
-    const state = reactive({
-        snapshots: [] as ISnapshotLight[],
-        currentSnapshot: null as ISnapshot | null,
-        summary: null as ISnapshotSummary | null,
-        comparison: null as ISnapshotComparisonResult | null,
+export const useSnapshotStore = defineStore('snapshot', () => {
+    const {
+        createSnapshot: createSnapshotApi,
+        listSnapshots,
+        getSnapshotById: getSnapshotByIdApi,
+        getLatestSnapshot: getLatestSnapshotApi,
+        getSnapshotsSummary,
+        compareSnapshots: compareSnapshotsApi,
+        deleteSnapshot: deleteSnapshotApi,
+        cleanupSnapshots: cleanupSnapshotsApi
+    } = useSnapshotCRUD()
+
+    const state = reactive<SnapshotState>({
+        snapshots: [],
+        currentSnapshot: null,
+        summary: null,
+        comparison: null,
         pagination: {
             page: 1,
             limit: 10,
             total: 0,
             pageCount: 0
-        } as PaginationState,
+        },
         isLoading: false,
-        error: null as string | null
+        isSummaryLoading: false,
+        isComparing: false,
+        error: null,
+        currentServerId: null
     })
 
+    let autoFetchInterval: NodeJS.Timeout | null = null
+
     // Getters
-    const getSnapshots = computed(() => state.snapshots)
-    const getCurrentSnapshot = computed(() => state.currentSnapshot)
-    const getSummary = computed(() => state.summary)
-    const getComparison = computed(() => state.comparison)
-    const getPagination = computed(() => state.pagination)
+    const snapshots = computed(() => state.snapshots)
+    const currentSnapshot = computed(() => state.currentSnapshot)
+    const summary = computed(() => state.summary)
+    const comparison = computed(() => state.comparison)
+    const pagination = computed(() => state.pagination)
     const isLoading = computed(() => state.isLoading)
-    const getError = computed(() => state.error)
+    const isSummaryLoading = computed(() => state.isSummaryLoading)
+    const isComparing = computed(() => state.isComparing)
+    const error = computed(() => state.error)
+    const isEmpty = computed(() => !state.isLoading && state.snapshots.length === 0)
 
     // Actions
     const fetchSnapshots = async (
@@ -65,8 +87,9 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
     ): Promise<ISnapshotApiResponse<IPaginatedSnapshots>> => {
         state.isLoading = true
         state.error = null
+        state.currentServerId = serverId
         try {
-            const res = await getAllSnapshotsStats(serverId, params)
+            const res = await listSnapshots(serverId, params)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -97,7 +120,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         state.isLoading = true
         state.error = null
         try {
-            const res = await getSnapshotStatsById(serverId, snapshotId)
+            const res = await getSnapshotByIdApi(serverId, snapshotId)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -120,7 +143,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         state.isLoading = true
         state.error = null
         try {
-            const res = await getLatestSnapshotStats(serverId, params)
+            const res = await getLatestSnapshotApi(serverId, params)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -136,10 +159,10 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
     }
 
     const fetchSummary = async (serverId: string): Promise<ISnapshotApiResponse<ISnapshotSummary>> => {
-        state.isLoading = true
+        state.isSummaryLoading = true
         state.error = null
         try {
-            const res = await getSnapshotsStatsSummary(serverId)
+            const res = await getSnapshotsSummary(serverId)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -151,7 +174,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
             state.error = message
             return { error: message }
         } finally {
-            state.isLoading = false
+            state.isSummaryLoading = false
         }
     }
 
@@ -162,7 +185,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         state.isLoading = true
         state.error = null
         try {
-            const res = await createSnapshotStats(serverId, request)
+            const res = await createSnapshotApi(serverId, request)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -182,10 +205,10 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         snapshotId1: string,
         snapshotId2: string
     ): Promise<ISnapshotApiResponse<ISnapshotComparisonResult>> => {
-        state.isLoading = true
+        state.isComparing = true
         state.error = null
         try {
-            const res = await compareSnapshotsStats(serverId, snapshotId1, snapshotId2)
+            const res = await compareSnapshotsApi(serverId, snapshotId1, snapshotId2)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -197,7 +220,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
             state.error = message
             return { error: message }
         } finally {
-            state.isLoading = false
+            state.isComparing = false
         }
     }
 
@@ -208,7 +231,7 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         state.isLoading = true
         state.error = null
         try {
-            const res = await cleanupSnapshotsStats(serverId, params)
+            const res = await cleanupSnapshotsApi(serverId, params)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
@@ -230,14 +253,14 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         state.isLoading = true
         state.error = null
         try {
-            const res = await deleteSnapshotStats(serverId, snapshotId)
+            const res = await deleteSnapshotApi(serverId, snapshotId)
             if (res.error) {
                 state.error = res.error
                 return { error: res.error }
             }
             // Remove from local state if successful
             if (res.data) {
-                state.snapshots = state.snapshots.filter(s => s.id !== snapshotId)
+                state.snapshots = state.snapshots.filter((s) => s.id !== snapshotId)
                 if (state.currentSnapshot?.id === snapshotId) {
                     state.currentSnapshot = null
                 }
@@ -252,6 +275,14 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         }
     }
 
+    const clearComparison = (): void => {
+        state.comparison = null
+    }
+
+    const setCurrentSnapshot = (snapshot: ISnapshot | null): void => {
+        state.currentSnapshot = snapshot
+    }
+
     const resetState = (): void => {
         state.snapshots = []
         state.currentSnapshot = null
@@ -264,18 +295,61 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
             pageCount: 0
         }
         state.isLoading = false
+        state.isSummaryLoading = false
+        state.isComparing = false
         state.error = null
+        stopAutoFetch()
+        state.currentServerId = null
     }
+
+    // Auto-fetch logic
+    const startAutoFetch = (serverId: string): void => {
+        stopAutoFetch()
+        state.currentServerId = serverId
+        const userPreferencesStore = useUserPreferencesStore()
+        const intervalMs = userPreferencesStore.getAutoFetchIntervalMinutes * 60 * 1000
+
+        autoFetchInterval = setInterval(() => {
+            if (state.currentServerId) {
+                fetchSnapshots(state.currentServerId, {
+                    page: state.pagination.page,
+                    limit: state.pagination.limit
+                })
+                fetchSummary(state.currentServerId)
+            }
+        }, intervalMs)
+    }
+
+    const stopAutoFetch = (): void => {
+        if (autoFetchInterval) {
+            clearInterval(autoFetchInterval)
+            autoFetchInterval = null
+        }
+    }
+
+    // Watch for preference changes to restart auto-fetch with new interval
+    const userPreferencesStore = useUserPreferencesStore()
+    watch(
+        () => userPreferencesStore.getAutoFetchIntervalMinutes,
+        () => {
+            if (state.currentServerId) {
+                startAutoFetch(state.currentServerId)
+            }
+        }
+    )
 
     return {
         // State/Getters
-        getSnapshots,
-        getCurrentSnapshot,
-        getSummary,
-        getComparison,
-        getPagination,
+        snapshots,
+        currentSnapshot,
+        summary,
+        comparison,
+        pagination,
         isLoading,
-        getError,
+        isSummaryLoading,
+        isComparing,
+        error,
+        isEmpty,
 
         // Actions
         fetchSnapshots,
@@ -284,8 +358,12 @@ export const useSnapshotStatsStore = defineStore('snapshot-stats', () => {
         fetchSummary,
         createSnapshot,
         compareSnapshots,
-        deleteSnapshot,
         cleanupSnapshots,
-        resetState
+        deleteSnapshot,
+        clearComparison,
+        setCurrentSnapshot,
+        resetState,
+        startAutoFetch,
+        stopAutoFetch
     }
 })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useSnapshotStatsStore } from '@/stores/snapshot-stats'
+import { useSnapshotStore } from '@/stores/snapshot'
 import SnapshotSummary from './SnapshotSummary.vue'
 import SnapshotList from './SnapshotList.vue'
 import SnapshotCreateDialog from './SnapshotCreateDialog.vue'
@@ -10,27 +10,31 @@ import SnapshotCleanupDialog from './SnapshotCleanupDialog.vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 
-const props = defineProps<{
+interface Props {
     serverId: string
-}>()
-
-const { t } = useI18n()
-const snapshotStore = useSnapshotStatsStore()
-
-const showCreateDialog = ref(false)
-const showCompareDialog = ref(false)
-const showCleanupDialog = ref(false)
-
-const handleSnapshotCreated = async () => {
-    // Refresh the summary and list after creating a snapshot
-    await snapshotStore.fetchSummary(props.serverId)
-    await snapshotStore.fetchSnapshots(props.serverId, { page: 1, limit: 10 })
 }
 
-const handleSnapshotsCleaned = async () => {
-    // Refresh the list after cleanup
-    await snapshotStore.fetchSnapshots(props.serverId, { page: 1, limit: 10 })
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const snapshotStore = useSnapshotStore()
+
+// Dialog visibility states
+const isCreateDialogVisible = ref(false)
+const isCompareDialogVisible = ref(false)
+const isCleanupDialogVisible = ref(false)
+
+// Reference to SnapshotList for refreshing
+const snapshotListRef = ref<InstanceType<typeof SnapshotList> | null>(null)
+
+const handleSnapshotCreated = async (): Promise<void> => {
     await snapshotStore.fetchSummary(props.serverId)
+    snapshotListRef.value?.fetchSnapshots()
+}
+
+const handleSnapshotsCleaned = async (): Promise<void> => {
+    await snapshotStore.fetchSummary(props.serverId)
+    snapshotListRef.value?.fetchSnapshots()
 }
 </script>
 
@@ -53,19 +57,19 @@ const handleSnapshotsCleaned = async () => {
                         icon="pi pi-chart-line"
                         severity="secondary"
                         outlined
-                        @click="showCompareDialog = true"
+                        @click="isCompareDialogVisible = true"
                     />
                     <Button
                         :label="t('views.server_settings.snapshots.actions.cleanup')"
                         icon="pi pi-trash"
                         severity="danger"
                         outlined
-                        @click="showCleanupDialog = true"
+                        @click="isCleanupDialogVisible = true"
                     />
                     <Button
                         :label="t('views.server_settings.snapshots.actions.create')"
                         icon="pi pi-plus"
-                        @click="showCreateDialog = true"
+                        @click="isCreateDialogVisible = true"
                     />
                 </div>
             </div>
@@ -79,17 +83,17 @@ const handleSnapshotsCleaned = async () => {
         <Divider />
 
         <!-- List Section -->
-        <SnapshotList :server-id="serverId" />
+        <SnapshotList ref="snapshotListRef" :server-id="serverId" />
 
         <!-- Dialogs -->
         <SnapshotCreateDialog
-            v-model:visible="showCreateDialog"
+            v-model:visible="isCreateDialogVisible"
             :server-id="serverId"
             @created="handleSnapshotCreated"
         />
-        <SnapshotCompareDialog v-model:visible="showCompareDialog" :server-id="serverId" />
+        <SnapshotCompareDialog v-model:visible="isCompareDialogVisible" :server-id="serverId" />
         <SnapshotCleanupDialog
-            v-model:visible="showCleanupDialog"
+            v-model:visible="isCleanupDialogVisible"
             :server-id="serverId"
             @cleaned="handleSnapshotsCleaned"
         />
