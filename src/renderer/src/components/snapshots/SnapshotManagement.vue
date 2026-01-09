@@ -76,8 +76,6 @@ const handleSnapshotsCleaned = async (): Promise<void> => {
 
         <Divider />
 
-
-
         <!-- List Section -->
         <SnapshotList ref="snapshotListRef" :server-id="serverId" />
 

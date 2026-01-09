@@ -61,7 +61,7 @@ export function usePaginatedFetcher<T>(
     // Computed property to check if there are more items to load
     const hasMore = computed(() => {
         if (mode === 'replace') {
-            return (page.value * limit) < total.value
+            return page.value * limit < total.value
         }
         return items.value.length < total.value
     })

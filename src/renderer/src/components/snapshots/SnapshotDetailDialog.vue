@@ -205,7 +205,9 @@ const getTrendSeverity = (value: number | undefined): 'success' | 'danger' => {
                                 :value="
                                     formatTrendValue(
                                         snapshot.data.trends.engagement_change !== undefined
-                                            ? Math.round(snapshot.data.trends.engagement_change * 10) / 10
+                                            ? Math.round(
+                                                  snapshot.data.trends.engagement_change * 10
+                                              ) / 10
                                             : undefined
                                     )
                                 "
@@ -272,7 +274,9 @@ const getTrendSeverity = (value: number | undefined): 'success' | 'danger' => {
                                 >
                                     {{ activity.rank }}
                                 </div>
-                                <span class="font-medium text-surface-900">{{ activity.name }}</span>
+                                <span class="font-medium text-surface-900">{{
+                                    activity.name
+                                }}</span>
                             </div>
                             <div class="text-right flex flex-col items-end">
                                 <span class="text-sm font-semibold text-surface-900">

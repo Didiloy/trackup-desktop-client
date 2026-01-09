@@ -38,7 +38,14 @@ const availableTypes = computed<{ label: string; value: SnapshotType }[]>(() => 
     { label: t('common.periods.custom'), value: 'custom' }
 ])
 
-const selectedTypes = ref<SnapshotType[]>(['daily', 'weekly', 'monthly', 'yearly', 'milestone', 'custom'])
+const selectedTypes = ref<SnapshotType[]>([
+    'daily',
+    'weekly',
+    'monthly',
+    'yearly',
+    'milestone',
+    'custom'
+])
 
 const handleCleanup = async (): Promise<void> => {
     isSubmitting.value = true
@@ -111,7 +118,13 @@ const handleHide = (): void => {
                     {{ t('views.server_settings.snapshots.cleanup.days_label') }}
                 </label>
                 <div class="flex items-center gap-10">
-                    <InputNumber id="days-old" v-model="daysOld" :min="1" :max="365" class="w-full" />
+                    <InputNumber
+                        id="days-old"
+                        v-model="daysOld"
+                        :min="1"
+                        :max="365"
+                        class="w-full"
+                    />
                     <span class="text-surface-600">
                         {{ t('views.server_settings.snapshots.cleanup.days_unit') }}
                     </span>
@@ -137,7 +150,6 @@ const handleHide = (): void => {
                     {{ t('views.server_settings.snapshots.cleanup.types_hint') }}
                 </span>
             </div>
-
         </div>
 
         <template #footer>

@@ -180,7 +180,9 @@ export const useSnapshotStore = defineStore('snapshot', () => {
         }
     }
 
-    const fetch_summary = async (server_id: string): Promise<ISnapshotApiResponse<ISnapshotSummary>> => {
+    const fetch_summary = async (
+        server_id: string
+    ): Promise<ISnapshotApiResponse<ISnapshotSummary>> => {
         state.is_summary_loading = true
         state.error = null
         state.current_server_id = server_id

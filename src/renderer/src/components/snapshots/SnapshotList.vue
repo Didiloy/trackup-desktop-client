@@ -56,7 +56,7 @@ const {
             limit,
             type: selectedType.value !== 'all' ? selectedType.value : undefined
         })
-        
+
         if (res.error) {
             return { data: [], total: 0, error: res.error }
         }

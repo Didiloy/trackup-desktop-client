@@ -155,7 +155,9 @@ const closeDialog = (): void => {
                             :options="availableSnapshots"
                             option-label="label"
                             option-value="value"
-                            :placeholder="t('views.server_settings.snapshots.compare.select_placeholder')"
+                            :placeholder="
+                                t('views.server_settings.snapshots.compare.select_placeholder')
+                            "
                             class="w-full"
                         />
                     </div>
@@ -169,7 +171,9 @@ const closeDialog = (): void => {
                             :options="availableSnapshots"
                             option-label="label"
                             option-value="value"
-                            :placeholder="t('views.server_settings.snapshots.compare.select_placeholder')"
+                            :placeholder="
+                                t('views.server_settings.snapshots.compare.select_placeholder')
+                            "
                             class="w-full"
                         />
                     </div>
@@ -198,7 +202,9 @@ const closeDialog = (): void => {
                             <p class="font-semibold text-surface-900">
                                 {{
                                     comparison.snapshot1.title ||
-                                    t(`views.server_settings.snapshots.types.${comparison.snapshot1.snapshot_type}`)
+                                    t(
+                                        `views.server_settings.snapshots.types.${comparison.snapshot1.snapshot_type}`
+                                    )
                                 }}
                             </p>
                             <p class="text-sm text-surface-600">
@@ -215,7 +221,9 @@ const closeDialog = (): void => {
                             <p class="font-semibold text-surface-900">
                                 {{
                                     comparison.snapshot2.title ||
-                                    t(`views.server_settings.snapshots.types.${comparison.snapshot2.snapshot_type}`)
+                                    t(
+                                        `views.server_settings.snapshots.types.${comparison.snapshot2.snapshot_type}`
+                                    )
                                 }}
                             </p>
                             <p class="text-sm text-surface-600">
@@ -275,29 +283,41 @@ const closeDialog = (): void => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
                             <h4 class="font-semibold text-surface-900 mb-3">
-                                {{ t('views.server_settings.snapshots.compare.top_members_changes') }}
+                                {{
+                                    t('views.server_settings.snapshots.compare.top_members_changes')
+                                }}
                             </h4>
                             <div class="flex gap-4 text-sm">
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.new_entries')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t(
+                                                'views.server_settings.snapshots.compare.new_entries'
+                                            )
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-green-600 ml-2">{{
                                         comparison.top_members_changes.new_entries.length
                                     }}</span>
                                 </div>
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.dropped_entries')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t(
+                                                'views.server_settings.snapshots.compare.dropped_entries'
+                                            )
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-red-600 ml-2">{{
                                         comparison.top_members_changes.dropped_entries.length
                                     }}</span>
                                 </div>
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.maintained')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t('views.server_settings.snapshots.compare.maintained')
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-surface-900 ml-2">{{
                                         comparison.top_members_changes.maintained
                                     }}</span>
@@ -307,29 +327,43 @@ const closeDialog = (): void => {
 
                         <div class="p-4 rounded-xl bg-surface-50 border border-surface-200">
                             <h4 class="font-semibold text-surface-900 mb-3">
-                                {{ t('views.server_settings.snapshots.compare.top_activities_changes') }}
+                                {{
+                                    t(
+                                        'views.server_settings.snapshots.compare.top_activities_changes'
+                                    )
+                                }}
                             </h4>
                             <div class="flex gap-4 text-sm">
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.new_entries')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t(
+                                                'views.server_settings.snapshots.compare.new_entries'
+                                            )
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-green-600 ml-2">{{
                                         comparison.top_activities_changes.new_entries.length
                                     }}</span>
                                 </div>
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.dropped_entries')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t(
+                                                'views.server_settings.snapshots.compare.dropped_entries'
+                                            )
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-red-600 ml-2">{{
                                         comparison.top_activities_changes.dropped_entries.length
                                     }}</span>
                                 </div>
                                 <div>
-                                    <span class="text-surface-500">{{
-                                        t('views.server_settings.snapshots.compare.maintained')
-                                    }}:</span>
+                                    <span class="text-surface-500"
+                                        >{{
+                                            t('views.server_settings.snapshots.compare.maintained')
+                                        }}:</span
+                                    >
                                     <span class="font-bold text-surface-900 ml-2">{{
                                         comparison.top_activities_changes.maintained
                                     }}</span>

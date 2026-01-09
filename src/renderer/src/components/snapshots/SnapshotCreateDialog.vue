@@ -87,7 +87,11 @@ const handleHide = (): void => {
 </script>
 
 <template>
-    <AppDialog :model-value="visible" @update:model-value="emit('update:visible', $event)" @hide="handleHide">
+    <AppDialog
+        :model-value="visible"
+        @update:model-value="emit('update:visible', $event)"
+        @hide="handleHide"
+    >
         <template #header>
             <div class="flex flex-col gap-1">
                 <h2 class="text-xl font-bold text-surface-900">
@@ -136,7 +140,9 @@ const handleHide = (): void => {
                 <Textarea
                     id="snapshot-description"
                     v-model="form.description"
-                    :placeholder="t('views.server_settings.snapshots.create.description_placeholder')"
+                    :placeholder="
+                        t('views.server_settings.snapshots.create.description_placeholder')
+                    "
                     rows="4"
                     class="w-full"
                 />
