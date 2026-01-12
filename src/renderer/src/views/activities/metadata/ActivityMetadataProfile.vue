@@ -128,6 +128,12 @@ function handleBack(): void {
                             <h1 class="text-2xl font-bold text-surface-900">
                                 {{ definition.label }}
                             </h1>
+                            <Badge
+                                v-if="definition.archived"
+                                :value="t('common.fields.archived')"
+                                severity="warn"
+                                class="shadow-lg"
+                            />
                             <span
                                 class="px-2 py-0.5 rounded-full bg-surface-200 text-surface-600 text-xs font-semibold uppercase tracking-wide"
                             >

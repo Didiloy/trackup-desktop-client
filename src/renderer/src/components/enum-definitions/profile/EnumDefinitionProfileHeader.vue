@@ -5,7 +5,7 @@ import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum
 import { enumDefGradientColorsList } from '@/components/enum-definitions/constants/constants'
 import { useServerStore } from '@/stores/server'
 
-defineProps<{
+const props = defineProps<{
     definition: IEnumDefinition | null
     loading?: boolean
 }>()
@@ -21,6 +21,14 @@ const server_store = useServerStore()
 const gradientClass = computed(() => {
     const colorIndex = parseInt(route.query.colorIndex as string) || 0
     return enumDefGradientColorsList[colorIndex % enumDefGradientColorsList.length]
+})
+
+const canEdit = computed(() => {
+    return props.definition && !props.definition.archived && server_store.isOwnership
+})
+
+const canDelete = computed(() => {
+    return props.definition && !props.definition.archived && server_store.isOwnership
 })
 </script>
 
@@ -46,7 +54,7 @@ const gradientClass = computed(() => {
                 text
                 rounded
                 class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-white/40! text-white!"
-                :disabled="loading"
+                :disabled="loading || !canEdit"
                 @click="emit('edit')"
             />
             <Button
@@ -54,7 +62,7 @@ const gradientClass = computed(() => {
                 text
                 rounded
                 class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-red-500/60! text-white!"
-                :disabled="loading"
+                :disabled="loading || !canDelete"
                 @click="emit('delete')"
             />
         </div>
@@ -81,8 +89,16 @@ const gradientClass = computed(() => {
                         >
                             <i class="pi pi-list text-2xl"></i>
                         </div>
-                        <div>
-                            <h1 class="text-2xl font-bold">{{ definition.name }}</h1>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3">
+                                <h1 class="text-2xl font-bold">{{ definition.name }}</h1>
+                                <Badge
+                                    v-if="definition.archived"
+                                    :value="$t('common.fields.archived')"
+                                    severity="warn"
+                                    class="shadow-lg"
+                                />
+                            </div>
                             <p v-if="definition.description" class="text-white/70 text-sm mt-1">
                                 {{ definition.description }}
                             </p>

@@ -72,6 +72,31 @@ export function registerEnumDefinitionIpc(): void {
         }
     )
 
+    // Get an enum definition by ID
+    ipcMain.handle(
+        ipc_channels.enumDefinition.getById,
+        async (
+            _event,
+            serverId: string,
+            enumDefinitionId: string,
+            accessToken: string
+        ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
+            logger.info('Getting enum definition:', enumDefinitionId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(enumDefinitionId, 'Enum definition ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<IEnumDefinition>(
+                `/api/v1/servers/${serverId}/enum-definitions/${enumDefinitionId}`,
+                accessToken
+            )
+        }
+    )
+
     // Update an enum definition
     ipcMain.handle(
         ipc_channels.enumDefinition.update,

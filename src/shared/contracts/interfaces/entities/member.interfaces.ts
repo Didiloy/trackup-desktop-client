@@ -10,6 +10,7 @@ export interface IServerMember {
     role_public_id: string
     role_name: string
     created_at: string
+    archived: boolean
 }
 
 export interface IInviteMemberRequest {

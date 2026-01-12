@@ -27,6 +27,8 @@ const {
 const displayName = computed(() => props.member?.nickname || '')
 const initials = computed(() => getInitials(displayName.value, { mode: 'all', maxInitials: 2 }))
 
+const isArchived = computed(() => props.member?.archived ?? false)
+
 const menuItems = computed<
     Array<{
         label: string
@@ -41,6 +43,11 @@ const menuItems = computed<
         severity?: string
         command: () => void | Promise<boolean>
     }> = []
+
+    // Don't show any actions if member has left the server
+    if (isArchived.value) {
+        return items
+    }
 
     if (canUpdateNickname(props.member.user_email)) {
         items.push({
@@ -114,9 +121,17 @@ const onItemSelected = (item: unknown): void => {
             <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-4 mb-3">
                     <div class="flex-1 min-w-0">
-                        <h1 class="text-3xl font-bold text-surface-900 mb-2 truncate">
-                            {{ displayName }}
-                        </h1>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h1 class="text-3xl font-bold text-surface-900 truncate">
+                                {{ displayName }}
+                            </h1>
+                            <Badge
+                                v-if="isArchived"
+                                :value="t('common.fields.left_server')"
+                                severity="warn"
+                                class="shadow-lg"
+                            />
+                        </div>
                         <div class="flex items-center gap-2 text-surface-600 text-sm">
                             <i class="pi pi-calendar"></i>
                             <span>

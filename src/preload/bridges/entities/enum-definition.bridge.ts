@@ -39,6 +39,22 @@ export const enumDefinitionBridge = {
     },
 
     /**
+     * Get an enum definition by ID
+     */
+    getById: (
+        serverId: string,
+        enumDefinitionId: string,
+        accessToken: string
+    ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
+        return ipcRenderer.invoke(
+            ipc_channels.enumDefinition.getById,
+            serverId,
+            enumDefinitionId,
+            accessToken
+        )
+    },
+
+    /**
      * Update an enum definition (creator only)
      */
     update: (

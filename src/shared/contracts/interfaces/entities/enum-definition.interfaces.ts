@@ -16,6 +16,7 @@ export interface IEnumDefinition {
     name: string
     description: string | null
     values: IEnumValue[]
+    archived: boolean
 }
 
 export interface ICreateEnumDefinitionRequest {

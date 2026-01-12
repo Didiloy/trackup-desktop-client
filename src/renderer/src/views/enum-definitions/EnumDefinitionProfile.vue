@@ -28,7 +28,7 @@ const route = useRoute()
 const definitionId = computed(() => route.params.enumDefinitionId as string)
 
 const server_store = useServerStore()
-const { deleteEnumDefinition, listEnumDefinitions } = useEnumDefinitionCRUD()
+const { deleteEnumDefinition, listEnumDefinitions, getEnumDefinitionById } = useEnumDefinitionCRUD()
 const { navigateToServerEnumDefinition } = useEnumDefinitionNavigation()
 
 // Local state
@@ -47,20 +47,14 @@ async function loadEnumDefinition(): Promise<void> {
     error.value = null
 
     try {
-        // Get definition from server store (already loaded)
-        const definitions = server_store.getEnumsDefinition
-        if (!definitions || definitions.length === 0) {
-            error.value = t('messages.error.fetch')
+        const res = await getEnumDefinitionById(server_store.getPublicId, definitionId.value)
+        
+        if (res.error || !res.data) {
+            error.value = res.error ?? t('messages.error.fetch')
             return
         }
 
-        const foundDef = definitions.find((d) => d.public_id === definitionId.value)
-        if (!foundDef) {
-            error.value = t('messages.error.not_found')
-            return
-        }
-
-        enumDefinition.value = foundDef
+        enumDefinition.value = res.data
     } catch (e) {
         error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {

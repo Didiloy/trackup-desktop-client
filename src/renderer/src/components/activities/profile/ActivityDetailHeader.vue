@@ -24,7 +24,15 @@ const canDelete = computed(() => {
     if (!props.activity) {
         return false
     }
-    return server_store.isOwnership === true
+    return server_store.isOwnership === true && !props.activity.archived
+})
+
+const canEdit = computed(() => {
+    return props.activity && !props.activity.archived
+})
+
+const canCreateSession = computed(() => {
+    return props.activity && !props.activity.archived
 })
 
 const summaryMetrics = computed(() => {
@@ -76,11 +84,19 @@ const summaryMetrics = computed(() => {
             </div>
 
             <div class="flex-1 min-w-[220px]">
-                <h1
-                    class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
-                >
-                    {{ activity?.name || t('common.fields.none') }}
-                </h1>
+                <div class="flex items-center gap-3">
+                    <h1
+                        class="text-3xl font-bold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
+                    >
+                        {{ activity?.name || t('common.fields.none') }}
+                    </h1>
+                    <Badge
+                        v-if="activity?.archived"
+                        :value="t('common.fields.archived')"
+                        severity="warn"
+                        class="shadow-lg"
+                    />
+                </div>
                 <p
                     class="text-sm mt-1 max-w-2xl line-clamp-2 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
                     v-tooltip.left="activity?.description"
@@ -94,6 +110,7 @@ const summaryMetrics = computed(() => {
                     icon="pi pi-plus"
                     :label="t('views.server_activities.create_session')"
                     size="small"
+                    :disabled="!canCreateSession"
                     :pt="{
                         label: { class: 'text-surface-100' },
                         icon: { class: 'text-surface-100' }
@@ -105,6 +122,7 @@ const summaryMetrics = computed(() => {
                     :label="t('common.actions.edit')"
                     severity="help"
                     class="shadow"
+                    :disabled="!canEdit"
                     :pt="{
                         label: { class: 'text-surface-100' },
                         icon: { class: 'text-surface-100' }

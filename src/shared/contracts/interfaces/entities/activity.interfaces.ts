@@ -11,6 +11,7 @@ export interface IActivity {
     description: string
     logo: string
     banner: string
+    archived: boolean
 }
 
 export interface ICreateActivityRequest {

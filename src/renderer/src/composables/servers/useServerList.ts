@@ -35,7 +35,10 @@ export function useServerList(): UseServerListReturn {
     async function handleServerCreated(server: IServer): Promise<void> {
         await fetchServers()
         if (server?.public_id) {
-            await navigateToServer(server.public_id)
+            // Navigate to the newly created server after 2 seconds
+            setTimeout(async () => {
+                await navigateToServer(server.public_id)
+            }, 2000)
         }
     }
 

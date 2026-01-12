@@ -14,6 +14,10 @@ interface UseEnumDefinitionCRUDReturn {
     listEnumDefinitions: (
         serverId: string
     ) => Promise<IEnumDefinitionApiResponse<IEnumDefinition[]>>
+    getEnumDefinitionById: (
+        serverId: string,
+        enumDefinitionId: string
+    ) => Promise<IEnumDefinitionApiResponse<IEnumDefinition>>
     updateEnumDefinition: (
         serverId: string,
         enumDefinitionId: string,
@@ -52,6 +56,20 @@ export function useEnumDefinitionCRUD(): UseEnumDefinitionCRUDReturn {
     }
 
     /**
+     * Get an enum definition by ID
+     */
+    const getEnumDefinitionById = async (
+        serverId: string,
+        enumDefinitionId: string
+    ): Promise<IEnumDefinitionApiResponse<IEnumDefinition>> => {
+        return window.api.enumDefinition.getById(
+            serverId,
+            enumDefinitionId,
+            user_store.getAccessToken!
+        )
+    }
+
+    /**
      * Update an enum definition
      */
     const updateEnumDefinition = async (
@@ -84,6 +102,7 @@ export function useEnumDefinitionCRUD(): UseEnumDefinitionCRUDReturn {
     return {
         createEnumDefinition,
         listEnumDefinitions,
+        getEnumDefinitionById,
         updateEnumDefinition,
         deleteEnumDefinition
     }

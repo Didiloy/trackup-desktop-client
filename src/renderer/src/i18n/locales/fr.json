@@ -30,7 +30,9 @@
             "select_chrono": "Sélectionner un chrono",
             "duration": "Durée",
             "no_description": "Aucune description",
-            "no_data": "Aucune donnée disponible"
+            "no_data": "Aucune donnée disponible",
+            "archived": "Archivé",
+            "left_server": "A quitté le serveur"
         },
         "actions": {
             "choose": "Choisir",
