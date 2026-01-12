@@ -56,6 +56,7 @@ declare module 'vue' {
     ChronosList: typeof import('./src/components/chronos/ChronosList.vue')['default']
     ColorPicker: typeof import('primevue/colorpicker')['default']
     ConfirmationDialog: typeof import('./src/components/common/dialogs/ConfirmationDialog.vue')['default']
+    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     ContextActionMenu: typeof import('./src/components/common/contexts/ContextActionMenu.vue')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     CreateEditServerForm: typeof import('./src/components/servers/create-join/CreateEditServerForm.vue')['default']

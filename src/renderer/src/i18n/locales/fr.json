@@ -518,6 +518,7 @@
             "no_members": "Aucun membre dans ce serveur.",
             "invite_members": "Inviter des membres",
             "kick_member": "Expulser un membre",
+            "kick_member_confirm": "Êtes-vous sûr de vouloir expulser ce membre du serveur ? Cette action est irréversible et le membre devra utiliser un nouveau code d'invitation pour rejoindre à nouveau.",
             "member_kicked": "Membre expulsé",
             "member_kicked_detail": "Le membre a été expulsé avec succès",
             "member_kicked_error": "Échec de l'expulsion du membre",

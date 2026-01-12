@@ -3,6 +3,7 @@ import { useServerStore } from '@/stores/server'
 
 interface UseMemberNavigationResult {
     navigateToMemberProfile: (memberId: string) => Promise<void>
+    navigateToServerMembers: () => Promise<void>
 }
 
 export function useMemberNavigation(): UseMemberNavigationResult {
@@ -19,7 +20,17 @@ export function useMemberNavigation(): UseMemberNavigationResult {
         })
     }
 
+    async function navigateToServerMembers(): Promise<void> {
+        await router.push({
+            name: 'ServerMembers',
+            params: {
+                id: server_store.getPublicId
+            }
+        })
+    }
+
     return {
-        navigateToMemberProfile
+        navigateToMemberProfile,
+        navigateToServerMembers
     }
 }

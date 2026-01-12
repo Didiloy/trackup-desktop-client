@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast'
 import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
 export function useMemberActions() {
     const { t } = useI18n()
@@ -11,12 +12,17 @@ export function useMemberActions() {
     const server_store = useServerStore()
     const user_store = useUserStore()
     const { kickMember: kickMemberAPI, updateMemberNickname, listMembers } = useMemberCRUD()
+    const { navigateToServerMembers } = useMemberNavigation()
 
     // Nickname management state
     const show_nickname_dialog = ref(false)
     const new_nickname = ref('')
     const is_updating = ref(false)
     const isKicking = ref(false)
+
+    // Kick confirmation state
+    const show_kick_confirmation = ref(false)
+    const member_to_kick = ref<string | null>(null)
 
     /**
      * Open nickname dialog
@@ -110,14 +116,22 @@ export function useMemberActions() {
     }
 
     /**
-     * Kick member from server (owner only)
+     * Kick member from server (owner only) with confirmation
      */
-    const kickMember = async (memberId: string): Promise<boolean> => {
-        if (!server_store.getPublicId) return false
+    const kickMember = (memberId: string): void => {
+        member_to_kick.value = memberId
+        show_kick_confirmation.value = true
+    }
+
+    /**
+     * Confirm and execute kick action
+     */
+    const confirmKickMember = async (): Promise<void> => {
+        if (!server_store.getPublicId || !member_to_kick.value) return
 
         isKicking.value = true
         try {
-            const result = await kickMemberAPI(server_store.getPublicId, memberId)
+            const result = await kickMemberAPI(server_store.getPublicId, member_to_kick.value)
             if (result.data) {
                 // Refresh members list
                 const resMembers = await listMembers(server_store.getPublicId)
@@ -131,7 +145,9 @@ export function useMemberActions() {
                     detail: t('views.server_members.member_kicked_detail'),
                     life: 3000
                 })
-                return true
+
+                // Navigate to server members view
+                await navigateToServerMembers()
             } else {
                 toast.add({
                     severity: 'error',
@@ -139,7 +155,6 @@ export function useMemberActions() {
                     detail: t('views.server_members.member_kicked_error_detail'),
                     life: 3000
                 })
-                return false
             }
         } catch (error) {
             console.error('Failed to kick member', error)
@@ -149,9 +164,10 @@ export function useMemberActions() {
                 detail: t('views.server_members.member_kicked_error_detail'),
                 life: 3000
             })
-            return false
         } finally {
             isKicking.value = false
+            show_kick_confirmation.value = false
+            member_to_kick.value = null
         }
     }
 
@@ -175,12 +191,14 @@ export function useMemberActions() {
         new_nickname,
         is_updating,
         isKicking,
+        show_kick_confirmation,
 
         // Actions
         updateNickname,
         confirmUpdateNickname,
         closeNicknameDialog,
         kickMember,
+        confirmKickMember,
 
         // Permissions
         canUpdateNickname,

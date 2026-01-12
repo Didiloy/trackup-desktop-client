@@ -8,6 +8,7 @@ import { useContextMenu } from '@/composables/useContextMenu'
 import { getInitials, formatDate } from '@/utils'
 import InputDialog from '@/components/common/dialogs/InputDialog.vue'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
+import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 
 const props = defineProps<{
     member: IServerMember
@@ -21,7 +22,9 @@ const {
     confirmUpdateNickname,
     kickMember,
     canUpdateNickname,
-    canKickMember
+    canKickMember,
+    show_kick_confirmation,
+    confirmKickMember
 } = useMemberActions()
 
 const displayName = computed(() => props.member?.nickname || '')
@@ -34,6 +37,7 @@ const menuItems = computed<
         label: string
         icon: string
         severity?: string
+        danger?: boolean
         command: () => void | Promise<boolean>
     }>
 >(() => {
@@ -61,7 +65,7 @@ const menuItems = computed<
         items.push({
             label: t('views.server_members.kick_member'),
             icon: 'pi pi-times',
-            severity: 'danger',
+            danger: true,
             command: () => kickMember(props.member.public_id)
         })
     }
@@ -172,6 +176,17 @@ const onItemSelected = (item: unknown): void => {
             :cancel-label="t('common.actions.cancel')"
             confirm-severity="primary"
             @confirm="handleNicknameUpdate"
+        />
+
+        <!-- Kick Confirmation Dialog -->
+        <ConfirmationDialog
+            v-model="show_kick_confirmation"
+            :title="t('views.server_members.kick_member')"
+            :message="t('views.server_members.kick_member_confirm')"
+            :confirm-label="t('views.server_members.kick_member')"
+            :cancel-label="t('common.actions.cancel')"
+            confirm-severity="danger"
+            :on-confirm="confirmKickMember"
         />
     </div>
 </template>

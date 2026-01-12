@@ -45,7 +45,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
             >
                 <Avatar
                     :image="
-                        server_store.getMemberById(participant.public_id)?.avatar_url ?? undefined
+                        server_store.getMemberById(participant.public_id)?.avatar_url ? participant : undefined
                     "
                     :label="
                         !server_store.getMemberById(participant.public_id)?.avatar_url
@@ -59,7 +59,10 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
                 <div class="flex-1 min-w-0">
                     <div class="font-medium text-surface-900 truncate flex items-center gap-2">
                         <span class="text-sm text-surface-500 hover:underline cursor-pointer">
-                            {{ server_store.getMemberById(participant.public_id)?.nickname }}
+                            {{
+                                server_store.getMemberById(participant.public_id)?.nickname ??
+                                participant.nickname
+                            }}
                         </span>
                         <i
                             v-if="isCreator(participant, creator)"
