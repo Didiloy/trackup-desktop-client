@@ -15,7 +15,6 @@ export interface IActivityMetadataDefinition {
     required: boolean
     allow_not_predefined_value: boolean
     choices: (number | string | boolean)[] | null // ISO date strings for DATE
-    archived: boolean
 }
 
 export interface ICreateActivityMetadataDefinitionRequest {

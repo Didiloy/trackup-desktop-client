@@ -744,8 +744,30 @@
                 "update_banner": "Mettre à jour la bannière du serveur",
                 "update_logo": "Mettre à jour le logo du serveur"
             },
+            "invitation": {
+                "title": "Code d'invitation",
+                "description": "Partagez ce code pour inviter des membres à rejoindre votre serveur.",
+                "token_label": "Code d'invitation",
+                "expires_at": "Expire le",
+                "refresh_button": "Générer un nouveau code",
+                "copy_success": "Code copié dans le presse-papiers",
+                "refresh_success": "Nouveau code d'invitation généré"
+            },
             "danger_zone": {
                 "title": "Zone dangereuse",
+                "description": "Les actions ci-dessous sont irréversibles. Procédez avec précaution.",
+                "leave_server": {
+                    "title": "Quitter le serveur",
+                    "description": "Vous quitterez ce serveur et perdrez l'accès à toutes ses données.",
+                    "button": "Quitter le serveur",
+                    "confirm_message": "Êtes-vous sûr de vouloir quitter ce serveur ?"
+                },
+                "archive_server": {
+                    "title": "Archiver le serveur",
+                    "description": "Cette action archivera le serveur. Toutes les données seront conservées mais le serveur sera supprimé.",
+                    "button": "Archiver le serveur",
+                    "confirm_message": "Êtes-vous sûr de vouloir archiver ce serveur ? Cette action est irréversible."
+                },
                 "delete_server": {
                     "title": "Supprimer le serveur",
                     "description": "Cette action est irréversible. Toutes les données associées au serveur seront définitivement supprimées.",
