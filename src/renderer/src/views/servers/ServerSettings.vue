@@ -14,7 +14,7 @@ const server_store = useServerStore()
     <div class="w-full h-full overflow-auto px-4 py-6 bg-surface-50">
         <div class="flex flex-col gap-6 mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-surface-900">
+                <h1 class="text-3xl font-bold text-surface-900">
                     {{ t('views.server_settings.title') }}
                 </h1>
                 <p class="text-surface-500 mt-1">

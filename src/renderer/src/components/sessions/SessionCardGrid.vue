@@ -94,7 +94,7 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
         <!-- Empty State -->
         <div
             v-else-if="isEmpty"
-            class="flex flex-col items-center justify-center h-full min-h-[400px]"
+            class="flex flex-col items-center justify-center mt-100"
         >
             <SessionIcon class="text-7xl text-surface-300 mb-4" />
             <p class="text-xl font-medium text-surface-600">{{ t('common.filters.no_results') }}</p>

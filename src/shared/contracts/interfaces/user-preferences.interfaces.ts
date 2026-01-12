@@ -11,7 +11,7 @@ export interface IUserPreferences {
 }
 
 // Auto-fetch interval configuration
-export const MIN_AUTO_FETCH_INTERVAL_MINUTES = 10
+export const MIN_AUTO_FETCH_INTERVAL_MINUTES = 5
 export const MAX_AUTO_FETCH_INTERVAL_MINUTES = 20
 
 export const DEFAULT_USER_PREFERENCES: Readonly<IUserPreferences> = {

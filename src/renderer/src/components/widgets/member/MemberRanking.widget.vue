@@ -120,13 +120,13 @@ const statsData = computed(() => {
                     <Icon :icon="item.icon" class="text-primary-600 text-2xl" />
                     <div>
                         <div class="text-sm font-medium text-gray-700">{{ item.label }}</div>
-                        <div class="text-xs text-gray-500">
-                            {{
-                                t('views.server_members.ranking.percentile', {
-                                    percentile: item.percentile.toFixed(1)
-                                })
-                            }}
-                        </div>
+<!--                        <div class="text-xs text-gray-500">-->
+<!--                            {{-->
+<!--                                t('views.server_members.ranking.percentile', {-->
+<!--                                    percentile: item.percentile-->
+<!--                                })-->
+<!--                            }}-->
+<!--                        </div>-->
                     </div>
                 </div>
                 <div class="text-right">
