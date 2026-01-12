@@ -60,13 +60,10 @@ export const useUserStatsStore = defineStore('user-stats', () => {
                     }
                 }
 
-                // Use the maximum of: current state, backend value, and persisted value
-                // This prevents the timer from jumping back if backend is lagging
-                state.real_time_app_seconds = Math.max(
-                    state.real_time_app_seconds,
-                    backend_seconds,
-                    stored_seconds
-                )
+                // Use the maximum of backend value and persisted value for THIS user
+                // We don't use state.real_time_app_seconds here to avoid carrying over
+                // values from a previous user when switching accounts
+                state.real_time_app_seconds = Math.max(backend_seconds, stored_seconds)
 
                 // Ensure tracking is running
                 if (!time_interval) {
@@ -170,7 +167,7 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         }
     }
 
-    const reset_state = (): void => {
+    const resetState = (): void => {
         // We attempt to clear storage for the *current* user if possible just before reset
         // usage: typically calling this means logging out
         if (user_store.user?.id) {
@@ -232,7 +229,7 @@ export const useUserStatsStore = defineStore('user-stats', () => {
         init_session_tracking,
         end_session_tracking,
         force_refresh,
-        reset_state,
+        resetState,
         start_time_tracking,
         stop_time_tracking,
         start_auto_fetch,

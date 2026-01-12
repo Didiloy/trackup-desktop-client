@@ -314,7 +314,7 @@ export const useSnapshotStore = defineStore('snapshot', () => {
         state.current_snapshot = snapshot
     }
 
-    const reset_state = (): void => {
+    const resetState = (): void => {
         state.snapshots = []
         state.current_snapshot = null
         state.summary = null
@@ -390,7 +390,7 @@ export const useSnapshotStore = defineStore('snapshot', () => {
         delete_snapshot,
         clear_comparison,
         set_current_snapshot,
-        reset_state,
+        resetState,
         start_auto_fetch,
         stop_auto_fetch
     }

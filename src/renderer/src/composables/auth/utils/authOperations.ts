@@ -4,6 +4,10 @@ import { loading, error, setStateFromSession, setError } from './authState'
 import { setupAuthStateListener } from './authListeners'
 import { setupDeepLinkListener } from './deepLinkHandler'
 import { useUserStatsStore } from '@/stores/user-stats'
+import { useServerStatsStore } from '@/stores/server-stats'
+import { useServerStore } from '@/stores/server'
+import { useUserStore } from '@/stores/user'
+import { useSnapshotStore } from '@/stores/snapshot'
 
 /**
  * Initialize auth session and setup listeners
@@ -64,7 +68,7 @@ export async function signInWithOAuth(provider: Provider, redirectTo?: string): 
 
 /**
  * Sign out current user
- * Ends the app session tracking before signing out to persist time on app
+ * Ends the app session tracking and resets all stores before signing out
  */
 export async function signOut(): Promise<void> {
     loading.value = true
@@ -73,6 +77,26 @@ export async function signOut(): Promise<void> {
         // End app session tracking before signing out
         const user_stats_store = useUserStatsStore()
         await user_stats_store.end_session_tracking()
+
+        // Reset all stores to ensure clean state on next login
+        // Order: stop timers/intervals first, then reset state
+        const server_stats_store = useServerStatsStore()
+        const server_store = useServerStore()
+        const user_store = useUserStore()
+        const snapshot_store = useSnapshotStore()
+
+        // Stop all auto-fetch intervals and timers
+        user_stats_store.stop_time_tracking()
+        user_stats_store.stop_auto_fetch()
+        server_stats_store.stop_auto_fetch()
+        snapshot_store.stop_auto_fetch()
+
+        // Reset all store states (user-preferences is intentionally NOT reset)
+        server_store.resetState()
+        user_store.setMyServers(null)
+        snapshot_store.resetState()
+        user_stats_store.resetState()
+        server_stats_store.resetState()
 
         const { error: signOutError } = await supabase.auth.signOut()
         if (signOutError) {
