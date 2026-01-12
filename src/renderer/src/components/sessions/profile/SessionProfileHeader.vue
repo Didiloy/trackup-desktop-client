@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useServerStore } from '@/stores/server'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { formatDate } from '@/utils'
+import { useSessionActions } from '@/composables/sessions/useSessionActions'
 
 interface Props {
     session: ISession | null
@@ -19,12 +19,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
     (e: 'edit'): void
     (e: 'delete'): void
-    (e: 'like'): void
-    (e: 'unlike'): void
 }>()
 
 const { t } = useI18n()
 const server_store = useServerStore()
+const { toggleLike } = useSessionActions(toRef(props, 'session'))
 
 const bannerStyle = computed(() => {
     if (props.session?.activity.banner) {
@@ -32,15 +31,6 @@ const bannerStyle = computed(() => {
     }
     return {}
 })
-
-function handleLike() {
-    if (!props.session) return
-    if (props.session.liked_by_me) {
-        emit('unlike')
-    } else {
-        emit('like')
-    }
-}
 </script>
 
 <template>
@@ -124,7 +114,7 @@ function handleLike() {
                                 :label="session.likes_count.toString()"
                                 :severity="session.liked_by_me ? 'danger' : 'secondary'"
                                 :outlined="!session.liked_by_me"
-                                @click="handleLike"
+                                @click="toggleLike"
                             />
                         </div>
                     </div>

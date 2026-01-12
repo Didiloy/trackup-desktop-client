@@ -8,10 +8,9 @@ import { useServerStore } from '@/stores/server'
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { usePaginatedFetcher } from '@/composables/usePaginatedFetcher'
 import SessionCreateDialog from '@/components/sessions/create/SessionCreateDialog.vue'
-import { useDebounceFn } from '@vueuse/core'
 
 const i18n = useI18n()
-const { listSessions, likeSession, unlikeSession } = useSessionCRUD()
+const { listSessions } = useSessionCRUD()
 const server_store = useServerStore()
 
 // Activity search state
@@ -78,35 +77,6 @@ const {
     ]
 })
 
-// Debounced like/unlike handlers to prevent API spam
-const onLikeSession = useDebounceFn(async (sessionId: string): Promise<void> => {
-    const serverId = server_store.getPublicId
-    if (!serverId) return
-
-    const res = await likeSession(serverId, sessionId)
-    if (!res.error) {
-        const session = sessions.value.find((s) => s.public_id === sessionId)
-        if (session) {
-            session.liked_by_me = true
-            session.likes_count += 1
-        }
-    }
-}, 500)
-
-const onUnlikeSession = useDebounceFn(async (sessionId: string): Promise<void> => {
-    const serverId = server_store.getPublicId
-    if (!serverId) return
-
-    const res = await unlikeSession(serverId, sessionId)
-    if (!res.error) {
-        const session = sessions.value.find((s) => s.public_id === sessionId)
-        if (session) {
-            session.liked_by_me = false
-            session.likes_count -= 1
-        }
-    }
-}, 500)
-
 onMounted(() => {
     load()
 })
@@ -161,8 +131,6 @@ onMounted(() => {
                 :sessions="sessions"
                 :loading="loading"
                 :has-more="hasMore"
-                @like="onLikeSession"
-                @unlike="onUnlikeSession"
                 @load-more="loadMore"
             />
         </div>

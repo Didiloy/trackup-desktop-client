@@ -2,7 +2,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
 import { useServerStore } from '@/stores/server'
 import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
@@ -15,9 +14,8 @@ import TransitionWrapper from '@/components/common/transitions/TransitionWrapper
 
 const { t } = useI18n()
 const route = useRoute()
-const toast = useToast()
 const server_store = useServerStore()
-const { getSessionById, likeSession, unlikeSession } = useSessionCRUD()
+const { getSessionById } = useSessionCRUD()
 
 const sessionId = computed(() => route.params.sessionId as string)
 const session = ref<ISession | null>(null)
@@ -41,29 +39,6 @@ async function loadSession() {
         error.value = e instanceof Error ? e.message : t('messages.error.fetch')
     } finally {
         loading.value = false
-    }
-}
-
-async function handleLike() {
-    if (!session.value || !server_store.getPublicId) return
-
-    try {
-        if (session.value.liked_by_me) {
-            await unlikeSession(server_store.getPublicId, session.value.public_id)
-            session.value.liked_by_me = false
-            session.value.likes_count--
-        } else {
-            await likeSession(server_store.getPublicId, session.value.public_id)
-            session.value.liked_by_me = true
-            session.value.likes_count++
-        }
-    } catch (e) {
-        toast.add({
-            severity: 'error',
-            summary: t('messages.error.update'),
-            detail: e instanceof Error ? e.message : String(e),
-            life: 2500
-        })
     }
 }
 
@@ -97,8 +72,6 @@ onMounted(async () => {
                 <SessionProfileHeader
                     :session="session"
                     :loading="loading"
-                    @like="handleLike"
-                    @unlike="handleLike"
                 />
 
                 <div v-if="session" class="grid grid-cols-1 lg:grid-cols-3 gap-6">

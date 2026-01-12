@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import type { ISessionListItem } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useI18n } from 'vue-i18n'
+import { toRef } from 'vue'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { useSessionNavigation } from '@/composables/sessions/useSessionNavigation'
+import { useSessionActions } from '@/composables/sessions/useSessionActions'
 import { formatDate } from '@/utils'
 interface Props {
     session: ISessionListItem
 }
 
 interface Emits {
-    (e: 'like', sessionId: string): void
-    (e: 'unlike', sessionId: string): void
     (e: 'load-more'): void
 }
 
@@ -18,14 +18,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
 const { navigateToSessionProfile } = useSessionNavigation()
-
-function toggleLike(session: ISessionListItem): void {
-    if (session.liked_by_me) {
-        emit('unlike', session.public_id)
-    } else {
-        emit('like', session.public_id)
-    }
-}
+const { toggleLike } = useSessionActions(toRef(props, 'session'))
 
 function getParticipantTooltip(
     participant: ISessionListItem['server_member'][number],
@@ -149,7 +142,7 @@ async function navigateToSession(): Promise<void> {
                 :outlined="!session.liked_by_me"
                 size="small"
                 class="px-4! py-2! h-fit"
-                @click.stop="toggleLike(session)"
+                @click.stop="toggleLike"
             />
         </div>
     </div>

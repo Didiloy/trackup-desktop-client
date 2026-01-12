@@ -15,8 +15,6 @@ interface Props {
 }
 
 interface Emits {
-    (e: 'like', sessionId: string): void
-    (e: 'unlike', sessionId: string): void
     (e: 'load-more'): void
 }
 
@@ -25,14 +23,6 @@ const props = withDefaults(defineProps<Props>(), {
     hasMore: true
 })
 const emit = defineEmits<Emits>()
-
-function toggleLike(session: ISessionListItem): void {
-    if (session.liked_by_me) {
-        emit('unlike', session.public_id)
-    } else {
-        emit('like', session.public_id)
-    }
-}
 
 const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
 </script>
@@ -54,8 +44,6 @@ const isEmpty = computed(() => props.sessions.length === 0 && !props.loading)
                 v-for="session in sessions"
                 :key="session.public_id"
                 :session="session"
-                @like="toggleLike(session)"
-                @unlike="toggleLike(session)"
             />
         </TransitionGroup>
 
