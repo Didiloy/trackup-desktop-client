@@ -4,7 +4,6 @@ import type {
     ISessionMember,
     ISessionCreator
 } from '@shared/contracts/interfaces/entities/session.interfaces'
-import { useServerStore } from '@/stores/server'
 import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 
@@ -15,15 +14,11 @@ interface Props {
 
 defineProps<Props>()
 const { t } = useI18n()
-const server_store = useServerStore()
+
 const { navigateToMemberProfile } = useMemberNavigation()
 
 function isCreator(participant: ISessionMember, creator?: ISessionCreator): boolean {
     return !!creator && participant.public_id === creator.member_public_id
-}
-
-async function goToMemberProfile(participant: ISessionMember): Promise<void> {
-    await navigateToMemberProfile(participant.public_id)
 }
 </script>
 
@@ -41,14 +36,12 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
                 :key="participant.public_id"
                 class="flex items-center gap-3 p-2 m-2 rounded-xl hover:bg-surface-50 transition-colors cursor-pointer hover:shadow"
                 :class="{ 'bg-primary-50/50': isCreator(participant, creator) }"
-                @click="goToMemberProfile(participant)"
+                @click="navigateToMemberProfile(participant.public_id)"
             >
                 <Avatar
-                    :image="
-                        server_store.getMemberById(participant.public_id)?.avatar_url ? participant : undefined
-                    "
+                    :image="participant.avatar_url ?? undefined"
                     :label="
-                        !server_store.getMemberById(participant.public_id)?.avatar_url
+                        !participant.avatar_url
                             ? participant.nickname.charAt(0).toUpperCase()
                             : undefined
                     "
@@ -59,10 +52,7 @@ async function goToMemberProfile(participant: ISessionMember): Promise<void> {
                 <div class="flex-1 min-w-0">
                     <div class="font-medium text-surface-900 truncate flex items-center gap-2">
                         <span class="text-sm text-surface-500 hover:underline cursor-pointer">
-                            {{
-                                server_store.getMemberById(participant.public_id)?.nickname ??
-                                participant.nickname
-                            }}
+                            {{ participant.nickname }}
                         </span>
                         <i
                             v-if="isCreator(participant, creator)"
