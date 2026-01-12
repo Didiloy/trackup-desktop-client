@@ -28,8 +28,8 @@ const route = useRoute()
 const definitionId = computed(() => route.params.enumDefinitionId as string)
 
 const server_store = useServerStore()
-const { deleteEnumDefinition } = useEnumDefinitionCRUD()
-const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()
+const { deleteEnumDefinition, listEnumDefinitions } = useEnumDefinitionCRUD()
+const { navigateToServerEnumDefinition } = useEnumDefinitionNavigation()
 
 // Local state
 const enumDefinition = ref<IEnumDefinition | null>(null)
@@ -88,8 +88,14 @@ async function handleDelete() {
             life: 3000
         })
 
+        // Refresh enum definitions in server store
+        const resEnumDefs = await listEnumDefinitions(server_store.getPublicId)
+        if (!resEnumDefs.error && resEnumDefs.data) {
+            server_store.setEnumsDefinition(resEnumDefs.data)
+        }
+
         // Navigate back to list - doesn't need navigation since it's going to list view
-        //navigateToEnumDefinitionProfile(server_store.getPublicId)
+        await navigateToServerEnumDefinition()
     } catch (e) {
         toast.add({
             severity: 'error',

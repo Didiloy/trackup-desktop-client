@@ -70,7 +70,7 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: '/servers/:id/enum-definitions',
-        name: 'ServerDefinitions',
+        name: 'ServerEnumDefinitions',
         component: () => import('@/views/servers/ServerEnumDefinitions.vue'),
         meta: { requiresAuth: true }
     },

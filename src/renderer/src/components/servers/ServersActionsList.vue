@@ -95,7 +95,7 @@ const actions = computed<ServerAction[]>(() => {
             id: 'enum-definitions',
             label: t('views.server_enum_definitions.title'),
             icon: 'pi pi-list',
-            routeName: 'ServerDefinitions',
+            routeName: 'ServerEnumDefinitions',
             childRoutes: ['ServerEnumDefinitionProfile'],
             children: [
                 {

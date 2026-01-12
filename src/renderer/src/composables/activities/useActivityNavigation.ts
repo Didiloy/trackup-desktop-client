@@ -3,6 +3,7 @@ import { useServerStore } from '@/stores/server'
 
 interface UseActivityNavigationResult {
     navigateToActivityProfile: (activityId: string) => Promise<void>
+    navigateToServerActivities: () => Promise<void>
 }
 
 export function useActivityNavigation(): UseActivityNavigationResult {
@@ -19,7 +20,17 @@ export function useActivityNavigation(): UseActivityNavigationResult {
         })
     }
 
+    async function navigateToServerActivities(): Promise<void> {
+        await router.push({
+            name: 'ServerActivities',
+            params: {
+                id: server_store.getPublicId
+            }
+        })
+    }
+
     return {
-        navigateToActivityProfile
+        navigateToActivityProfile,
+        navigateToServerActivities
     }
 }

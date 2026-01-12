@@ -37,7 +37,7 @@ import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 const route = useRoute()
 const toast = useToast()
 const { t } = useI18n()
-const { navigateToActivityProfile } = useActivityNavigation()
+const { navigateToServerActivities } = useActivityNavigation()
 const activityId = computed(() => route.params.activityId as string)
 
 const { getActivityById, deleteActivity } = useActivityCRUD()
@@ -112,7 +112,7 @@ async function confirmDelete(): Promise<void> {
             return
         }
         toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2000 })
-        await navigateToActivityProfile(server_store.getPublicId)
+        await navigateToServerActivities()
     } catch (e) {
         toast.add({
             severity: 'error',

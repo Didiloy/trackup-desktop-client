@@ -6,6 +6,7 @@ interface UseEnumDefinitionNavigationResult {
         enumDefinitionId: string,
         colorIndex?: number
     ) => Promise<void>
+    navigateToServerEnumDefinition: () => Promise<void>
 }
 
 export function useEnumDefinitionNavigation(): UseEnumDefinitionNavigationResult {
@@ -26,7 +27,17 @@ export function useEnumDefinitionNavigation(): UseEnumDefinitionNavigationResult
         })
     }
 
+    async function navigateToServerEnumDefinition() : Promise<void> {
+        await router.push({
+            name: 'ServerEnumDefinitions',
+            params: {
+                id: server_store.getPublicId
+            }
+        })
+    }
+
     return {
-        navigateToEnumDefinitionProfile
+        navigateToEnumDefinitionProfile,
+        navigateToServerEnumDefinition
     }
 }
