@@ -26,7 +26,7 @@ import { useToast } from 'primevue/usetoast'
 import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import { useI18n } from 'vue-i18n'
 
-import ActivityEditDialog from '@/components/activities/create-edit/ActivityEditDialog.vue'
+import ActivityCreateEditDialog from '@/components/activities/create-edit/ActivityCreateEditDialog.vue'
 import ActivityTimelineChartWidget from '@/components/widgets/activity/ActivityTimelineChart.widget.vue'
 import ActivityRankingWidget from '@/components/widgets/activity/ActivityRanking.widget.vue'
 import ActivityParticipantsWidget from '@/components/widgets/activity/ActivityParticipants.widget.vue'
@@ -262,11 +262,12 @@ onMounted(async () => {
             @created="handleSessionCreated"
         />
 
-        <ActivityEditDialog
+        <ActivityCreateEditDialog
             v-if="activity"
             v-model="show_edit_dialog"
+            mode="edit"
             :activity="activity"
-            @updated="loadActivity"
+            @success="loadActivity"
         />
     </div>
 </template>

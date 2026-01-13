@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import ActivityCreateDialog from '@/components/activities/create-edit/ActivityCreateDialog.vue'
+import ActivityCreateEditDialog from '@/components/activities/create-edit/ActivityCreateEditDialog.vue'
 import ActivityFilterBar from '@/components/activities/ActivityFilterBar.vue'
 import ActivityCardGrid from '@/components/activities/ActivityCardGrid.vue'
 import { onMounted, ref } from 'vue'
@@ -165,6 +165,6 @@ onMounted(() => {
             />
         </div>
 
-        <ActivityCreateDialog v-model="show_add_activity_dialog" @created="load" />
+        <ActivityCreateEditDialog v-model="show_add_activity_dialog" mode="create" @success="load" />
     </div>
 </template>
