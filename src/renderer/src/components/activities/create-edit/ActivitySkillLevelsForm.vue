@@ -8,6 +8,7 @@ import type {
 import { useActivitySkillLevelCRUD } from '@/composables/activities/skillLevels/useActivitySkillLevelCRUD'
 import { useServerStore } from '@/stores/server'
 import { useToast } from 'primevue/usetoast'
+import SkillLevelIcon from '@/components/common/icons/SkillLevelIcon.vue'
 
 const props = withDefaults(
     defineProps<{
@@ -170,7 +171,7 @@ async function onSubmit(): Promise<void> {
 <template>
     <div class="flex flex-col gap-4 h-full">
         <div class="flex items-center gap-2">
-            <i class="pi pi-sliders-h text-surface-500"></i>
+            <SkillLevelIcon class="text-primary-500" />
             <div class="flex flex-col">
                 <span class="text-sm font-medium text-surface-700">
                     {{ t('views.server_activities.add_modal.skill_levels_title') }}

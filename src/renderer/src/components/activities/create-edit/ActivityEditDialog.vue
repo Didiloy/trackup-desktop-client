@@ -6,6 +6,9 @@ import ActivityMetadataForm from './ActivityMetadataForm.vue'
 import { useI18n } from 'vue-i18n'
 import type { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import ActivityCreateEditForm from '@/components/activities/create-edit/ActivityCreateEditForm.vue'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
+import SkillLevelIcon from '@/components/common/icons/SkillLevelIcon.vue'
 
 interface Props {
     modelValue: boolean
@@ -28,17 +31,17 @@ const steps = computed(() => [
     {
         key: 'info',
         label: t('common.steps.activity'),
-        icon: 'pi pi-pencil'
+        icon: ActivityIcon
     },
     {
         key: 'metadata',
         label: t('common.steps.metadata'),
-        icon: 'pi pi-database'
+        icon: MetadataIcon
     },
     {
         key: 'skill-levels',
         label: t('common.steps.skill_levels'),
-        icon: 'pi pi-sliders-h'
+        icon: SkillLevelIcon
     }
 ])
 

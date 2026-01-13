@@ -315,7 +315,6 @@ const isHexColor = (v?: string): boolean => {
                     <div class="flex items-center gap-2">
                         <Avatar
                             :image="slotProps.option.avatar_url"
-                            :label="slotProps.option.nickname?.charAt(0).toUpperCase()"
                             shape="circle"
                             size="small"
                         />

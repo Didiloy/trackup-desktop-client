@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { translateSkillLevel } from '@/utils/skill-level.utils'
 import { formatMinutesToLabel } from '@/utils/time.utils'
+import SkillLevelIcon from '@/components/common/icons/SkillLevelIcon.vue'
 
 const props = defineProps<{
     skillLevels?: IActivitySkillLevel[]
@@ -20,7 +21,7 @@ const sortedSkillLevels = computed(() => {
 <template>
     <div class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm h-full">
         <div class="flex items-center gap-2 mb-4">
-            <i class="pi pi-graduation-cap text-primary-500"></i>
+            <SkillLevelIcon class="text-primary-500" />
             <p class="text-sm font-semibold text-surface-700">
                 {{ t('views.server_activities.performance_section.skill_levels_title') }}
             </p>
