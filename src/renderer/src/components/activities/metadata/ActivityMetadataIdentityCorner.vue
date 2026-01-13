@@ -84,7 +84,7 @@ const isVisible = computed(() => props.show)
                         metadataDefinitionId: props.metadataDefinitionId
                     }
                 }"
-                class="max-w-[80px] truncate uppercase tracking-wider"
+                class="max-w-[60px] truncate uppercase tracking-wider"
             >
                 {{ definitionName }}
             </router-link>
