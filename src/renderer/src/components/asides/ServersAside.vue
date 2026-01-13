@@ -102,7 +102,7 @@ async function copyInvite(): Promise<void> {
                                 <button
                                     v-if="server_store.getInvitationCode"
                                     type="button"
-                                    class="flex items-center justify-center gap-1 px-3 py-1.5 rounded-md text-white text-2xs shadow-sm hover:shadow-md transition-all duration-150 hover:scale-[1.02] active:scale-[0.99]"
+                                    class="flex items-center justify-center gap-1 px-3 py-1.5 rounded-md text-white text-2xs shadow-sm hover:shadow-md transition-all duration-150 hover:scale-[1.02] active:scale-[0.99] cursor-pointer"
                                     :style="{ background: 'var(--gradient-primary)' }"
                                     @click="copyInvite"
                                 >

@@ -9,6 +9,7 @@ import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 import Icon from '@/components/common/icons/Icon.vue'
 import TreeBranchIcon from '@/components/common/icons/TreeBranchIcon.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import EnumDefinitionsIcon from '@/components/common/icons/EnumDefinitionsIcon.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -94,7 +95,7 @@ const actions = computed<ServerAction[]>(() => {
         {
             id: 'enum-definitions',
             label: t('views.server_enum_definitions.title'),
-            icon: 'pi pi-list',
+            icon: EnumDefinitionsIcon,
             routeName: 'ServerEnumDefinitions',
             childRoutes: ['ServerEnumDefinitionProfile'],
             children: [
@@ -105,18 +106,14 @@ const actions = computed<ServerAction[]>(() => {
                     routeNames: ['ServerEnumDefinitionProfile']
                 }
             ]
+        },
+        {
+            id: 'settings',
+            label: t('views.server_settings.title'),
+            icon: 'pi pi-cog',
+            routeName: 'ServerSettings'
         }
     ]
-
-    if (server_store.isOwnership) {
-    }
-    baseActions.push({
-        id: 'settings',
-        label: t('views.server_settings.title'),
-        icon: 'pi pi-cog',
-        routeName: 'ServerSettings'
-    })
-
     return baseActions
 })
 
