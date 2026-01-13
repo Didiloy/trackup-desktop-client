@@ -17,7 +17,7 @@ import EnumDefinitionChoicesWidget from '@/components/widgets/enum-definitions/E
 import EnumDefinitionMostUsedValueWidget from '@/components/widgets/enum-definitions/EnumDefinitionMostUsedValue.widget.vue'
 import EnumDefinitionAvgLikesWidget from '@/components/widgets/enum-definitions/EnumDefinitionAvgLikes.widget.vue'
 import EnumDefinitionAvgParticipantsWidget from '@/components/widgets/enum-definitions/EnumDefinitionAvgParticipants.widget.vue'
-import EnumDefinitionCreateEditDialog from '@/components/enum-definitions/EnumDefinitionCreateEditDialog.vue'
+import EnumDefinitionCreateEditDialog from '@/components/enum-definitions/create-edit/EnumDefinitionCreateEditDialog.vue'
 import EnumDefinitionTopValuesWidget from '@/components/widgets/enum-definitions/EnumDefinitionTopValues.widget.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 import type { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
@@ -48,7 +48,7 @@ async function loadEnumDefinition(): Promise<void> {
 
     try {
         const res = await getEnumDefinitionById(server_store.getPublicId, definitionId.value)
-        
+
         if (res.error || !res.data) {
             error.value = res.error ?? t('messages.error.fetch')
             return
