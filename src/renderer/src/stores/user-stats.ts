@@ -69,6 +69,9 @@ export const useUserStatsStore = defineStore('user-stats', () => {
                 if (!time_interval) {
                     start_time_tracking()
                 }
+
+                // Start auto-fetch when we have valid user stats
+                start_auto_fetch()
             }
         } catch (e: unknown) {
             state.error = e instanceof Error ? e.message : String(e)
@@ -201,9 +204,6 @@ export const useUserStatsStore = defineStore('user-stats', () => {
             auto_fetch_interval = null
         }
     }
-
-    // Initialize auto-fetch on store creation
-    start_auto_fetch()
 
     // Watch for preference changes to restart auto-fetch with new interval
     const userPreferencesStore = useUserPreferencesStore()

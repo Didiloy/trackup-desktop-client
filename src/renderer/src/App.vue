@@ -18,6 +18,8 @@ const userStatsStore = useUserStatsStore()
 async function initSession(): Promise<void> {
     if (isAuthenticated.value) {
         await userStatsStore.init_session_tracking()
+        // Fetch stats to trigger autofetch
+        await userStatsStore.fetch_all()
     }
 }
 
