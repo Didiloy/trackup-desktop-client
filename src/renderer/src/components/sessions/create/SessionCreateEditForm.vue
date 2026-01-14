@@ -102,10 +102,12 @@ onMounted(async () => {
         date.value = new Date(props.initialSession.date)
         comment.value = props.initialSession.comment || ''
         
-        // Map participants
+        // Map participants (exclude current user as they are filtered out)
         if (props.initialSession.server_member && server_store.getMembers) {
              const sessionMemberIds = props.initialSession.server_member.map(m => m.public_id)
-             selected_participants.value = server_store.getMembers.filter(m => sessionMemberIds.includes(m.public_id))
+             selected_participants.value = server_store.getMembers.filter(m => 
+                sessionMemberIds.includes(m.public_id) && m.user_email !== user_store.getEmail
+             )
         }
 
         // Fetch activity details to populate the mock activity object for display
