@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, Component } from 'vue'
 import MultiStepsDialog from '@/components/common/dialogs/MultiStepsDialog.vue'
-import SessionCreateForm from './SessionCreateForm.vue'
-import SessionEnumsForm from './SessionEnumsForm.vue'
-import SessionActivityMetadataForm from './SessionActivityMetadataForm.vue'
+import SessionCreateEditForm from './SessionCreateEditForm.vue'
+import SessionEnumsCreateForm from './SessionEnumsCreateForm.vue'
+import SessionActivityMetadataCreateForm from './SessionActivityMetadataCreateForm.vue'
 import { useI18n } from 'vue-i18n'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import { useServerStore } from '@/stores/server'
@@ -210,7 +210,7 @@ const isClosable = computed(() => {
         :dismissable-mask="isClosable"
         @update:model-value="emit('update:modelValue', $event)"
     >
-        <SessionCreateForm
+        <SessionCreateEditForm
             v-if="current_step === 'info'"
             :pre-selected-activity-id="props.preSelectedActivityId"
             @success="handleSessionCreated"
@@ -218,14 +218,14 @@ const isClosable = computed(() => {
             @update:activity-id="handleActivityChange"
         />
 
-        <SessionEnumsForm
+        <SessionEnumsCreateForm
             v-else-if="current_step === 'enums'"
             :session-id="created_session?.public_id || ''"
             @success="handleEnumsAdded"
             @skip="handleSkipEnums"
         />
 
-        <SessionActivityMetadataForm
+        <SessionActivityMetadataCreateForm
             v-else-if="current_step === 'metadata'"
             :session-id="created_session?.public_id || ''"
             :activity-id="created_session?.activity.public_id || ''"

@@ -3,20 +3,21 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
+import { useSessionCRUD } from '@/composables/sessions/useSessionCRUD'
 import { useServerStore } from '@/stores/server'
 import { useUserStore } from '@/stores/user'
 import type {
     ICreateActivitySessionRequest,
-    IActivity
+    IActivity,
+    IUpdateActivityRequest
 } from '@shared/contracts/interfaces/entities/activity.interfaces'
-import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
+import type { ISession, IUpdateSessionRequest } from '@shared/contracts/interfaces/entities/session.interfaces'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
 import ActivityAutocomplete from '@/components/activities/ActivityAutocomplete.vue'
 import Select from 'primevue/select'
 import { useChronos, type IChrono } from '@/composables/useChronos'
 import DurationInput from '@/components/common/inputs/DurationInput.vue'
 import { formatDuration, convertMsToMinutes } from '@/utils/time.utils'
-import { ICONS } from '@/constants/icons'
 import Icon from '@/components/common/icons/Icon.vue'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
@@ -24,9 +25,11 @@ import MemberIcon from '@/components/common/icons/MemberIcon.vue'
 const props = withDefaults(
     defineProps<{
         preSelectedActivityId?: string | null
+        initialSession?: ISession | null
     }>(),
     {
-        preSelectedActivityId: null
+        preSelectedActivityId: null,
+        initialSession: null
     }
 )
 
@@ -41,6 +44,7 @@ const toast = useToast()
 const server_store = useServerStore()
 const user_store = useUserStore()
 const { getActivityById, createActivitySession } = useActivityCRUD()
+const { updateSession } = useSessionCRUD()
 const { chronos, removeChrono } = useChronos()
 
 // Form fields
@@ -58,8 +62,12 @@ const selected_chrono = ref<IChrono | null>(null)
 // Loading state
 const submitting = ref(false)
 
+// Mode detection
+const isEditMode = computed(() => !!props.initialSession)
+
 // Activity selection state
 const effectiveActivityId = computed(() => {
+    if (props.initialSession) return props.initialSession.activity.public_id
     if (props.preSelectedActivityId) return props.preSelectedActivityId
     return selected_activity.value?.public_id
 })
@@ -77,9 +85,9 @@ const availableChronos = computed(() => {
     }))
 })
 
-// Watch selected_chrono to update duration and title
+// Watch selected_chrono to update duration and title (Only in create mode)
 watch(selected_chrono, (chrono) => {
-    if (chrono) {
+    if (chrono && !isEditMode.value) {
         duration.value = convertMsToMinutes(chrono.elapsed)
         title.value = chrono.title || ''
     }
@@ -87,7 +95,37 @@ watch(selected_chrono, (chrono) => {
 
 // Initialize
 onMounted(async () => {
-    if (props.preSelectedActivityId && server_store.getPublicId) {
+    // If Edit Mode
+    if (props.initialSession) {
+        title.value = props.initialSession.title
+        duration.value = Number(props.initialSession.duration)
+        date.value = new Date(props.initialSession.date)
+        comment.value = props.initialSession.comment || ''
+        
+        // Map participants
+        if (props.initialSession.server_member && server_store.getMembers) {
+             const sessionMemberIds = props.initialSession.server_member.map(m => m.public_id)
+             selected_participants.value = server_store.getMembers.filter(m => sessionMemberIds.includes(m.public_id))
+        }
+
+        // Fetch activity details to populate the mock activity object for display
+        // Though in edit mode we might just disable activity selection and show the name
+        // We construct a partial IActivity since we can't easily fetch full detail if not needed, 
+        // but let's try to fetch if we have ID.
+        if (props.initialSession.activity.public_id && server_store.getPublicId) {
+             const res = await getActivityById(server_store.getPublicId, props.initialSession.activity.public_id)
+            if (!res.error && res.data) {
+                pre_selected_activity.value = res.data
+                selected_activity.value = res.data
+                activity_name.value = res.data.name
+            } else {
+                // Fallback if fetch fails
+                 activity_name.value = props.initialSession.activity.name
+            }
+        }
+    } 
+    // If Create Mode with pre-selected activity
+    else if (props.preSelectedActivityId && server_store.getPublicId) {
         const res = await getActivityById(server_store.getPublicId, props.preSelectedActivityId)
         if (!res.error && res.data) {
             pre_selected_activity.value = res.data
@@ -95,6 +133,7 @@ onMounted(async () => {
             activity_name.value = res.data.name
         }
     }
+
     // Emit initial value if present
     if (effectiveActivityId.value) {
         emit('update:activityId', effectiveActivityId.value)
@@ -115,47 +154,69 @@ const filteredMembers = computed(
     () => server_store.getMembers?.filter((m) => m.user_email !== user_store.getEmail) || []
 )
 
-// Create session
-async function onCreate(): Promise<void> {
+// Submit handler
+async function onSubmit(): Promise<void> {
     if (!canSubmit.value || !effectiveActivityId.value) return
 
     submitting.value = true
+    const serverId = server_store.getPublicId
+    if (!serverId) {
+        toast.add({ severity: 'error', summary: t('messages.error.noServerSelected'), life: 3000 })
+        submitting.value = false
+        return
+    }
 
     try {
-        const serverId = server_store.getPublicId
-        if (!serverId) {
-            throw new Error(t('messages.error.noServerSelected'))
+        if (isEditMode.value && props.initialSession) {
+             // Update
+            const payload: IUpdateSessionRequest = {
+                title: title.value.trim() || undefined,
+                duration: Number(duration.value),
+                date: date.value.toISOString(),
+                participants: selected_participants.value.map((m) => m.public_id),
+                comment: comment.value.trim() || undefined
+            }
+
+            const res = await updateSession(serverId, props.initialSession.public_id, payload)
+            if (res.error || !res.data) {
+                throw new Error(res.error || t('messages.error.updateFailed'))
+            }
+
+            toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
+            emit('success', res.data)
+
+        } else {
+            // Create
+            const payload: ICreateActivitySessionRequest = {
+                title: title.value.trim() || undefined,
+                duration: Number(duration.value),
+                date: date.value.toISOString(),
+                participants: selected_participants.value.map((m) => m.public_id),
+                comment: comment.value.trim() || undefined
+            }
+
+            const res = await createActivitySession(serverId, effectiveActivityId.value, payload)
+            if (res.error || !res.data) {
+                throw new Error(res.error || t('messages.error.createSessionFailed'))
+            }
+
+            toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
+
+            // Remove chrono if selected
+            if (selected_chrono.value) {
+                removeChrono(selected_chrono.value.id)
+            }
+
+            emit('success', res.data)
         }
-
-        const payload: ICreateActivitySessionRequest = {
-            title: title.value.trim() || undefined,
-            duration: Number(duration.value),
-            date: date.value.toISOString(),
-            participants: selected_participants.value.map((m) => m.public_id),
-            comment: comment.value.trim() || undefined
-        }
-
-        const res = await createActivitySession(serverId, effectiveActivityId.value, payload)
-        if (res.error || !res.data) {
-            throw new Error(res.error || t('messages.error.createSessionFailed'))
-        }
-
-        toast.add({ severity: 'success', summary: t('messages.success.create'), life: 2500 })
-
-        // Remove chrono if selected
-        if (selected_chrono.value) {
-            removeChrono(selected_chrono.value.id)
-        }
-
-        // Emit success with created session
-        emit('success', res.data)
     } catch (e) {
-        const message = e instanceof Error ? e.message : t('messages.error.createSessionFailed')
+        const message = e instanceof Error ? e.message : t('messages.error.operationFailed')
         toast.add({ severity: 'error', summary: message, life: 3000 })
     } finally {
         submitting.value = false
     }
 }
+
 const isHexColor = (v?: string): boolean => {
     if (!v) return false
     return /^#([0-9A-F]{3}){1,2}$/i.test(v)
@@ -165,7 +226,6 @@ const isHexColor = (v?: string): boolean => {
 <template>
     <div class="flex flex-col gap-6 h-full">
         <!-- Activity and Title Row -->
-        <!-- Row 1: Title, Activity, Date -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Title -->
             <div class="flex flex-col gap-2">
@@ -195,17 +255,19 @@ const isHexColor = (v?: string): boolean => {
                     >
                 </div>
                 <div class="w-full">
+                    <!-- If Edit Mode or Pre-selected, show readonly input -->
+                    <InputText
+                        v-if="isEditMode || props.preSelectedActivityId"
+                        :model-value="pre_selected_activity?.name || activity_name"
+                        disabled
+                        class="w-full"
+                    />
+                     <!-- Else show Autocomplete -->
                     <ActivityAutocomplete
-                        v-if="!props.preSelectedActivityId"
+                        v-else
                         v-model="activity_name"
                         :initial-activity="pre_selected_activity"
                         @select="(a) => (selected_activity = a)"
-                    />
-                    <InputText
-                        v-else
-                        :model-value="pre_selected_activity?.name || ''"
-                        disabled
-                        class="w-full"
                     />
                 </div>
             </div>
@@ -240,8 +302,8 @@ const isHexColor = (v?: string): boolean => {
             <div class="flex gap-2">
                 <DurationInput v-model="duration" :show-seconds="false" class="flex-1" />
 
-                <div v-if="availableChronos.length > 0" class="flex flex-col gap-1">
-                    <!-- Select if chronos exist -->
+                <!-- Chronos only in Create Mode -->
+                <div v-if="!isEditMode && availableChronos.length > 0" class="flex flex-col gap-1">
                     <Select
                         v-model="selected_chrono"
                         :options="availableChronos"
@@ -349,11 +411,11 @@ const isHexColor = (v?: string): boolean => {
                 @click="emit('cancel')"
             />
             <Button
-                :label="t('common.actions.next')"
+                :label="isEditMode ? t('common.actions.save') : t('common.actions.next')"
                 :disabled="!canSubmit"
                 :loading="submitting"
                 :style="{ background: 'var(--gradient-primary)' }"
-                @click="onCreate"
+                @click="onSubmit"
             />
         </div>
     </div>

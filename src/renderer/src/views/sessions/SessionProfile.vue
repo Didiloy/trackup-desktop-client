@@ -11,6 +11,7 @@ import SessionParticipants from '@/components/sessions/profile/SessionParticipan
 import SessionMetadata from '@/components/sessions/profile/SessionMetadata.vue'
 import SessionEnumDefinitions from '@/components/sessions/profile/SessionEnumDefinitions.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+import SessionEditDialog from '@/components/sessions/create/SessionEditDialog.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -21,6 +22,11 @@ const sessionId = computed(() => route.params.sessionId as string)
 const session = ref<ISession | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
+const editDialogVisible = ref(false)
+
+function handleSessionUpdated(updatedSession: ISession) {
+    session.value = updatedSession
+}
 
 async function loadSession() {
     if (!server_store.getPublicId || !sessionId.value) return
@@ -72,6 +78,7 @@ onMounted(async () => {
                 <SessionProfileHeader
                     :session="session"
                     :loading="loading"
+                    @edit="editDialogVisible = true"
                 />
 
                 <div v-if="session" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -92,5 +99,12 @@ onMounted(async () => {
                 </div>
             </div>
         </TransitionWrapper>
+
+        <SessionEditDialog
+            v-if="session"
+            v-model="editDialogVisible"
+            :session="session"
+            @updated="handleSessionUpdated"
+        />
     </div>
 </template>

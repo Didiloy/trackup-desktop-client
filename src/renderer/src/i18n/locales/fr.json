@@ -720,6 +720,7 @@
         "server_sessions": {
             "title": "Sessions du serveur",
             "title_base": "Sessions",
+            "title_single": "Session",
             "profile": "Profil de la session",
             "add_modal": {
                 "title": "Créer une session",

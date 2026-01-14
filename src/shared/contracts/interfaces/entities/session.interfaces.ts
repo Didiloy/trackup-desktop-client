@@ -68,6 +68,7 @@ export interface IUpdateSessionRequest {
     date?: string
     participants?: string[]
     comment?: string
+    title?: string
 }
 
 export interface IUpdateSessionParticipantsRequest {

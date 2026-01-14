@@ -3,6 +3,7 @@ import { computed, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ISession } from '@shared/contracts/interfaces/entities/session.interfaces'
 import { useServerStore } from '@/stores/server'
+import { useServerMemberStore } from '@/stores/server-member'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { formatDate } from '@/utils'
 import { useSessionActions } from '@/composables/sessions/useSessionActions'
@@ -23,7 +24,13 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const server_store = useServerStore()
+const server_member_store = useServerMemberStore()
 const { toggleLike } = useSessionActions(toRef(props, 'session'))
+
+const canEdit = computed(() => {
+    if (!props.session || !server_member_store.getPublicId) return false
+    return props.session.creator.member_public_id === server_member_store.getPublicId
+})
 
 const bannerStyle = computed(() => {
     if (props.session?.activity.banner) {
@@ -109,6 +116,13 @@ const bannerStyle = computed(() => {
 
                         <!-- Actions -->
                         <div class="flex items-center gap-2 mb-1">
+                            <Button
+                                v-if="canEdit"
+                                icon="pi pi-pencil"
+                                :label="t('common.actions.edit')"
+                                severity="help"
+                                @click="emit('edit')"
+                            />
                             <Button
                                 :icon="session.liked_by_me ? 'pi pi-heart-fill' : 'pi pi-heart'"
                                 :label="session.likes_count.toString()"
