@@ -284,18 +284,10 @@
     },
     "views": {
         "login": {
-            "welcome": "Bienvenue !",
-            "welcome_back": "Content de vous revoir !",
-            "login_button": "Se connecter",
             "description": "Connectez-vous pour continuer",
-            "continue_with_google": "Continuer avec Google",
-            "continue_with_github": "Continuer avec GitHub",
-            "continue_with_gitlab": "Continuer avec GitLab",
-            "terms": "En continuant vous acceptez nos termes et conditions et notre politique de confidentialité",
+            "terms_agreement": "En continuant vous acceptez nos {link}",
+            "cgu": "Conditions Générales d'Utilisation",
             "logout_button": "se déconnecter",
-            "signup_button": "S'inscrire",
-            "no_account": "Vous n'avez pas de compte ?",
-            "already_have_account": "Vous avez déjà un compte ?",
             "error": {
                 "cannot_login": "Une erreur est survenue lors de la connexion",
                 "invalid_email": "Veuillez entrer une adresse email valide"
