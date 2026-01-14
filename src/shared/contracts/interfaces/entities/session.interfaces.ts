@@ -64,7 +64,6 @@ export interface ISession {
  */
 
 export interface IUpdateSessionRequest {
-    activity_id?: string
     duration?: number
     date?: string
     participants?: string[]
