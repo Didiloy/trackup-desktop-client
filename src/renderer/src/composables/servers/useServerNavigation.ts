@@ -102,8 +102,8 @@ export function useServerNavigation(): UseServerNavigationResult {
             })
             toast.add({
                 severity: 'error',
-                summary: t('servers.navigation.error_loading_server_title'),
-                detail: t('servers.navigation.error_loading_server'),
+                summary: t('messages.error.title'),
+                detail: t('messages.error.fetch'),
                 life: 5000
             })
             throw new Error('Navigation failed')
