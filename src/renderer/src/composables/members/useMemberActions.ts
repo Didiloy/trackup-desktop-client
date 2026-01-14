@@ -1,12 +1,34 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useServerStore } from '@/stores/server'
 import { useServerMemberStore } from '@/stores/server-member'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
+import type { IUpdateMemberProfileDto } from '@shared/contracts/interfaces/entities/member.interfaces'
 
-export function useMemberActions() {
+interface _useMemberActionsReturn {
+    // State
+    show_profile_dialog: Ref<boolean>
+    new_nickname: Ref<string>
+    new_avatar_url: Ref<string>
+    is_updating: Ref<boolean>
+    isKicking: Ref<boolean>
+    show_kick_confirmation: Ref<boolean>
+
+    // Actions
+    updateProfile: (currentNickname: string, currentAvatarUrl: string) => void
+    confirmUpdateProfile: (memberId: string, data: IUpdateMemberProfileDto) => Promise<void>
+    closeProfileDialog: () => void
+    kickMember: (memberId: string) => void
+    confirmKickMember: () => Promise<void>
+
+    // Permissions
+    canUpdateProfile: (memberId: string) => boolean
+    canKickMember: (memberId: string) => boolean
+}
+
+export function useMemberActions(): _useMemberActionsReturn {
     const { t } = useI18n()
     const toast = useToast()
     const server_store = useServerStore()
@@ -56,10 +78,10 @@ export function useMemberActions() {
      */
     const handleUpdateProfile = async (
         memberId: string,
-        data: { nickname?: string; avatarUrl?: string }
+        data: IUpdateMemberProfileDto
     ): Promise<void> => {
         if (!memberId || !server_store.getPublicId) return
-        if (!data.nickname && !data.avatarUrl) {
+        if (!data.nickname && !data.avatar_url) {
             closeProfileDialog()
             return
         }
@@ -68,12 +90,12 @@ export function useMemberActions() {
 
         try {
             // Build the request with only the fields that are provided
-            const updateData: { nickname?: string; avatar_url?: string } = {}
+            const updateData: IUpdateMemberProfileDto = {}
             if (data.nickname !== undefined) {
                 updateData.nickname = data.nickname
             }
-            if (data.avatarUrl !== undefined) {
-                updateData.avatar_url = data.avatarUrl
+            if (data.avatar_url !== undefined) {
+                updateData.avatar_url = data.avatar_url
             }
 
             const result = await updateMemberProfile(server_store.getPublicId, memberId, updateData)
@@ -118,7 +140,7 @@ export function useMemberActions() {
      */
     const confirmUpdateProfile = async (
         memberId: string,
-        data: { nickname?: string; avatarUrl?: string }
+        data: IUpdateMemberProfileDto
     ): Promise<void> => {
         await handleUpdateProfile(memberId, data)
     }

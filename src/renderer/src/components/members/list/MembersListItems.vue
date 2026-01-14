@@ -5,7 +5,10 @@ import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vu
 import MemberProfileEditDialog from '@/components/members/profile/MemberProfileEditDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { useMemberActions } from '@/composables/members/useMemberActions'
-import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IServerMember,
+    IUpdateMemberProfileDto
+} from '@shared/contracts/interfaces/entities/member.interfaces'
 import Member from '@/components/members/Member.vue'
 import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
@@ -58,10 +61,7 @@ const onItemSelected = (item: unknown): void => {
     menuItem.command?.()
 }
 
-const handleProfileUpdate = async (data: {
-    nickname?: string
-    avatarUrl?: string
-}): Promise<void> => {
+const handleProfileUpdate = async (data: IUpdateMemberProfileDto): Promise<void> => {
     await confirmUpdateProfile(props.member.public_id, data)
 }
 </script>
@@ -82,8 +82,7 @@ const handleProfileUpdate = async (data: {
     <!-- Profile Update Dialog -->
     <MemberProfileEditDialog
         v-model="show_profile_dialog"
-        :nickname="props.member.nickname"
-        :avatar-url="props.member.avatar_url"
+        :server-member="props.member"
         :on-confirm="handleProfileUpdate"
     />
 </template>

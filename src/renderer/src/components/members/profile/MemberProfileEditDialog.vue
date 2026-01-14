@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getInitials } from '@/utils'
+import AppDialog from '@/components/common/dialogs/AppDialog.vue'
+import EntityLogoHandling from '@/components/common/EntityLogoHandling.vue'
+import type {
+    IServerMember,
+    IUpdateMemberProfileDto
+} from '@shared/contracts/interfaces/entities/member.interfaces'
 
 const { t } = useI18n()
 
 interface Props {
     modelValue: boolean
-    nickname?: string
-    avatarUrl?: string
+    serverMember: IServerMember
     /** Function prop for async confirmation - manages loading state internally */
-    onConfirm?: (data: { nickname?: string; avatarUrl?: string }) => void | Promise<void>
+    onConfirm?: (data: IUpdateMemberProfileDto) => void | Promise<void>
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    nickname: '',
-    avatarUrl: ''
-})
-
-const dialogWidth = '500px'
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
@@ -34,17 +33,12 @@ const visible = computed({
 const nicknameInput = ref('')
 const avatarUrlInput = ref('')
 const loading = ref(false)
-const avatarError = ref(false)
-
-const displayInitials = computed(() => {
-    if (nicknameInput.value) {
-        return getInitials(nicknameInput.value, { mode: 'all', maxInitials: 2 })
-    }
-    return '?'
-})
 
 const hasChanges = computed(() => {
-    return nicknameInput.value !== props.nickname || avatarUrlInput.value !== props.avatarUrl
+    return (
+        nicknameInput.value !== props.serverMember.nickname ||
+        avatarUrlInput.value !== props.serverMember.avatar_url
+    )
 })
 
 const isFormValid = computed(() => {
@@ -54,28 +48,18 @@ const isFormValid = computed(() => {
 // Reset form when dialog is opened
 watch(visible, (newVal) => {
     if (newVal) {
-        nicknameInput.value = props.nickname
-        avatarUrlInput.value = props.avatarUrl
+        nicknameInput.value = props.serverMember.nickname
+        avatarUrlInput.value = props.serverMember.avatar_url
         loading.value = false
-        avatarError.value = false
     }
 })
 
-// Validate avatar URL when it changes
-watch(avatarUrlInput, () => {
-    avatarError.value = false
-})
-
-const onAvatarError = (): void => {
-    avatarError.value = true
-}
-
-const onAvatarLoad = (): void => {
-    avatarError.value = false
-}
-
 const closeDialog = (): void => {
     emit('update:modelValue', false)
+}
+
+const handleAvatarUpdate = (newAvatar: string): void => {
+    avatarUrlInput.value = newAvatar
 }
 
 const confirmAction = async (): Promise<void> => {
@@ -84,14 +68,14 @@ const confirmAction = async (): Promise<void> => {
     if (props.onConfirm) {
         loading.value = true
         try {
-            const data: { nickname?: string; avatarUrl?: string } = {}
-            
+            const data: IUpdateMemberProfileDto = {}
+
             // Only include changed fields
-            if (nicknameInput.value !== props.nickname) {
+            if (nicknameInput.value !== props.serverMember.nickname) {
                 data.nickname = nicknameInput.value.trim()
             }
-            if (avatarUrlInput.value !== props.avatarUrl) {
-                data.avatarUrl = avatarUrlInput.value.trim() || undefined
+            if (avatarUrlInput.value !== props.serverMember.avatar_url) {
+                data.avatar_url = avatarUrlInput.value.trim() || undefined
             }
 
             await props.onConfirm(data)
@@ -106,23 +90,24 @@ const confirmAction = async (): Promise<void> => {
 </script>
 
 <template>
-    <Dialog
-        v-model:visible="visible"
-        modal
-        :header="t('views.members_aside.update_profile')"
-        :style="{
-            width: dialogWidth,
-            height: 'fit-content',
-            userSelect: 'none'
-        }"
-        :draggable="false"
-        :pt="{
-            root: {
-                style: 'background-color: var(--p-surface-100); color: var(--p-surface-900)'
-            }
-        }"
+    <AppDialog
+        v-model="visible"
+        style-class="w-[600px] max-w-[92vw]"
+        content-class="p-6 bg-surface-50"
     >
-        <p class="mb-4 text-surface-600">{{ t('views.members_aside.update_profile_message') }}</p>
+        <template #header>
+            <div class="flex items-center gap-2 p-3">
+                <i class="pi pi-user-edit text-primary-600"></i>
+                <div class="flex flex-col">
+                    <span class="font-semibold text-surface-900">
+                        {{ t('views.members_aside.update_profile') }}
+                    </span>
+                    <span class="text-xs text-surface-600">
+                        {{ t('views.members_aside.update_profile_message') }}
+                    </span>
+                </div>
+            </div>
+        </template>
 
         <div class="form-container">
             <!-- Nickname Field -->
@@ -140,69 +125,40 @@ const confirmAction = async (): Promise<void> => {
                 />
             </div>
 
-            <!-- Avatar URL Field -->
-            <div class="field">
-                <label for="avatar-input" class="text-sm font-medium mb-2 block">
-                    {{ t('views.members_aside.avatar_url') }}
-                </label>
-                <InputText
-                    id="avatar-input"
-                    v-model="avatarUrlInput"
-                    :placeholder="t('views.members_aside.enter_avatar_url')"
-                    :disabled="loading"
-                    class="w-full"
-                    @keyup.enter="confirmAction"
-                />
-            </div>
-
-            <!-- Avatar Preview -->
+            <!-- Avatar Handling -->
             <div class="field">
                 <label class="text-sm font-medium mb-2 block">
-                    {{ t('views.members_aside.avatar_preview') }}
+                    {{ t('views.members_aside.avatar_url') }}
                 </label>
-                <div class="flex items-center gap-4">
-                    <div
-                        class="w-20 h-20 rounded-xl overflow-hidden bg-primary-100 ring-2 ring-primary-200 shadow-md shrink-0"
-                    >
-                        <img
-                            v-if="avatarUrlInput && !avatarError"
-                            :src="avatarUrlInput"
-                            class="w-full h-full object-cover"
-                            alt="Avatar Preview"
-                            @error="onAvatarError"
-                            @load="onAvatarLoad"
-                        />
-                        <div
-                            v-else
-                            class="w-full h-full flex items-center justify-center text-2xl font-bold text-primary-700"
-                        >
-                            {{ displayInitials }}
-                        </div>
-                    </div>
-                    <div v-if="avatarError" class="text-sm text-red-600">
-                        <i class="pi pi-exclamation-circle mr-1"></i>
-                        {{ t('views.members_aside.invalid_url') }}
-                    </div>
+                <div class="p-4 rounded-2xl bg-surface-100 ring-1 ring-surface-200">
+                    <EntityLogoHandling
+                        :logo="avatarUrlInput"
+                        :entity-name="nicknameInput || serverMember.nickname"
+                        :display-edit-button="true"
+                        @update-logo="handleAvatarUpdate"
+                    />
                 </div>
             </div>
         </div>
 
-        <div class="dialog-buttons">
-            <Button
-                :label="t('common.actions.cancel')"
-                severity="secondary"
-                :disabled="loading"
-                @click="closeDialog"
-            />
-            <Button
-                :label="t('views.members_aside.update_profile')"
-                severity="primary"
-                :disabled="loading || !isFormValid"
-                :loading="loading"
-                @click="confirmAction"
-            />
-        </div>
-    </Dialog>
+        <template #footer>
+            <div class="dialog-buttons">
+                <Button
+                    :label="t('common.actions.cancel')"
+                    severity="secondary"
+                    :disabled="loading"
+                    @click="closeDialog"
+                />
+                <Button
+                    :label="t('views.members_aside.update_profile')"
+                    severity="primary"
+                    :disabled="loading || !isFormValid"
+                    :loading="loading"
+                    @click="confirmAction"
+                />
+            </div>
+        </template>
+    </AppDialog>
 </template>
 
 <style scoped>
@@ -211,16 +167,15 @@ const confirmAction = async (): Promise<void> => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
 }
 
 .form-container {
-    margin: 1rem 0;
     user-select: text;
 }
 
 .field {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .field:last-child {

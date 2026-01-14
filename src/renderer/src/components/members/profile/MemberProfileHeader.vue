@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
+import type {
+    IServerMember,
+    IUpdateMemberProfileDto
+} from '@shared/contracts/interfaces/entities/member.interfaces'
 import { useMemberActions } from '@/composables/members/useMemberActions'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { getInitials, formatDate } from '@/utils'
@@ -70,10 +73,7 @@ const menuItems = computed<
     return items
 })
 
-const handleProfileUpdate = async (data: {
-    nickname?: string
-    avatarUrl?: string
-}): Promise<void> => {
+const handleProfileUpdate = async (data: IUpdateMemberProfileDto): Promise<void> => {
     await confirmUpdateProfile(props.member.public_id, data)
 }
 
@@ -167,8 +167,7 @@ const onItemSelected = (item: unknown): void => {
         <!-- Profile Edit Dialog -->
         <MemberProfileEditDialog
             v-model="show_profile_dialog"
-            :nickname="member.nickname"
-            :avatar-url="member.avatar_url"
+            :server-member="member"
             :on-confirm="handleProfileUpdate"
         />
 
