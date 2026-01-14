@@ -85,6 +85,12 @@ const routes: RouteRecordRaw[] = [
         name: 'ServerSessionProfile',
         component: () => import('@/views/sessions/SessionProfile.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/auth/terms',
+        name: 'AcceptTerms',
+        component: () => import('@/views/auth/AcceptTerms.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 
@@ -96,6 +102,7 @@ const router: Router = createRouter({
 // Navigation guard to check authentication
 router.beforeEach(async (to, _, next) => {
     const user_store = useUserStore()
+
     // Check if the route requires authentication
     if (to.meta.requiresAuth && !user_store.hasUser) {
         // For other protected routes
@@ -103,6 +110,19 @@ router.beforeEach(async (to, _, next) => {
             name: 'Login',
             query: { redirect: to.fullPath }
         })
+    } else if (user_store.hasUser) {
+        // Helper to check terms acceptance safely
+        const termsAccepted = (user_store.user?.user_metadata as { terms_accepted?: boolean })?.terms_accepted
+
+        if (!termsAccepted && to.name !== 'AcceptTerms') {
+            // If logged in but terms not accepted, redirect to terms page
+            next({ name: 'AcceptTerms' })
+        } else if (termsAccepted && to.name === 'AcceptTerms') {
+            // If terms already accepted, don't allow visiting terms page
+            next({ name: 'Home' })
+        } else {
+            next()
+        }
     } else {
         next()
     }

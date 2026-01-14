@@ -1,6 +1,6 @@
 import { supabase } from '@/supabase'
 import type { Provider } from '@supabase/supabase-js'
-import { loading, error, setStateFromSession, setError } from './authState'
+import { loading, error, setStateFromSession, setError, session } from './authState'
 import { setupAuthStateListener } from './authListeners'
 import { setupDeepLinkListener } from './deepLinkHandler'
 import { useUserStatsStore } from '@/stores/user-stats'
@@ -62,6 +62,34 @@ export async function signInWithOAuth(provider: Provider, redirectTo?: string): 
         loading.value = false
     }
     return undefined
+}
+
+/**
+ * Update user metadata to accept terms
+ */
+export async function acceptTerms(): Promise<void> {
+    loading.value = true
+    error.value = null
+    try {
+        const { error: updateError, data } = await supabase.auth.updateUser({
+            data: { terms_accepted: true, terms_accepted_at: new Date().toISOString() }
+        })
+
+        if (updateError) {
+            error.value = updateError.message
+            throw updateError
+        }
+
+        // Update local state
+        if (data.user) {
+            setStateFromSession({ ...session.value!, user: data.user })
+        }
+    } catch (e) {
+        setError(e)
+        throw e
+    } finally {
+        loading.value = false
+    }
 }
 
 /**

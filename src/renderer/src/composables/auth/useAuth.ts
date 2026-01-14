@@ -2,7 +2,7 @@ import type { TUseAuth } from '@shared/contracts/types/useAuth.type'
 
 // Import separated modules
 import { loading, error, isAuthenticated } from './utils/authState'
-import { initializeSession, signInWithOAuth, signOut } from './utils/authOperations'
+import { initializeSession, signInWithOAuth, signOut, acceptTerms } from './utils/authOperations'
 
 /**
  * Main auth composable
@@ -68,6 +68,7 @@ export function useAuth(): TUseAuth {
         initializeSession: initAuth,
         signInWithOAuth,
         signOut,
+        acceptTerms,
         // Expose cleanup for manual teardown (e.g., app shutdown)
         cleanup: cleanupAuth
     }

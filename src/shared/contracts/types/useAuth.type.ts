@@ -8,5 +8,6 @@ export type TUseAuth = {
     initializeSession: () => Promise<void>
     signInWithOAuth: (provider: Provider, redirectTo?: string) => Promise<unknown>
     signOut: () => Promise<void>
+    acceptTerms: () => Promise<void>
     cleanup: () => void
 }
