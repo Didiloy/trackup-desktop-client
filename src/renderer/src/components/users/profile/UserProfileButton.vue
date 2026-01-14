@@ -5,7 +5,7 @@ import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import { useHomeNavigation } from '@/composables/app/useHomeNavigation'
+import { useAppNavigation } from '@/composables/app/useAppNavigation'
 
 const i18n = useI18n()
 
@@ -13,7 +13,7 @@ const user_store = useUserStore()
 const server_store = useServerStore()
 
 const route = useRoute()
-const { navigateToHome } = useHomeNavigation()
+const { navigateToHome } = useAppNavigation()
 
 const isActive = computed(() => route.path === '/')
 const profileTitle = computed(() => user_store.getUsername ?? undefined)

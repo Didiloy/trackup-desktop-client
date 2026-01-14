@@ -2,10 +2,12 @@
 import { useAuth } from '@/composables/auth/useAuth'
 import type { Provider } from '@supabase/supabase-js'
 import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
 
 const { signInWithOAuth, loading, error } = useAuth()
+const user_store = useUserStore()
 
 const available_providers: { provider: Provider; icon: string; label: string }[] = [
     {
@@ -70,7 +72,7 @@ async function handleOAuth(provider: Provider): Promise<void> {
             </div>
 
             <div
-                v-if="loading"
+                v-if="loading && !user_store.hasUser "
                 class="mt-6 text-center text-surface-500 flex flex-col items-center gap-3 animate-pulse"
             >
                 <i class="pi pi-spinner pi-spin text-xl"></i>

@@ -3,11 +3,11 @@ import { useAuth } from '@/composables/auth/useAuth'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
-import { useHomeNavigation } from '@/composables/app/useHomeNavigation'
+import { useAppNavigation } from '@/composables/app/useAppNavigation'
 
 const { t } = useI18n()
 const { acceptTerms } = useAuth()
-const { navigateToHome } = useHomeNavigation()
+const { navigateToHome } = useAppNavigation()
 
 const loading = ref(false)
 const accepted = ref(false)
@@ -47,9 +47,6 @@ async function handleAccept(): Promise<void> {
                 />
                 <div class="text-center space-y-2">
                     <h1 class="text-2xl font-bold text-surface-900">{{ t('views.login.cgu') }}</h1>
-                    <p class="text-surface-600 text-sm leading-relaxed">
-                        {{ t('views.login.description') }}
-                    </p>
                 </div>
             </div>
 
