@@ -115,6 +115,7 @@ onMounted(() => {
             </h2>
             <div class="flex flex-row items-center justify-center">
                 <Button
+                    v-if="server_store.isOwnership"
                     icon="pi pi-plus"
                     :label="t('views.server_enum_definitions.add_definition')"
                     severity="primary"

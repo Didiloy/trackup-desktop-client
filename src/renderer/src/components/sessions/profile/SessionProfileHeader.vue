@@ -124,9 +124,16 @@ const bannerStyle = computed(() => {
                                 @click="emit('edit')"
                             />
                             <Button
+                                v-if="canEdit"
+                                icon="pi pi-trash"
+                                :label="t('common.actions.delete')"
+                                severity="danger"
+                                @click="emit('delete')"
+                            />
+                            <Button
                                 :icon="session.liked_by_me ? 'pi pi-heart-fill' : 'pi pi-heart'"
                                 :label="session.likes_count.toString()"
-                                :severity="session.liked_by_me ? 'danger' : 'secondary'"
+                                :severity="session.liked_by_me ? 'info' : 'secondary'"
                                 :outlined="!session.liked_by_me"
                                 @click="toggleLike"
                             />

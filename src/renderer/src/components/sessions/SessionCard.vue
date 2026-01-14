@@ -138,7 +138,7 @@ async function navigateToSession(): Promise<void> {
             <Button
                 :icon="session.liked_by_me ? 'pi pi-heart-fill' : 'pi pi-heart'"
                 :label="session.likes_count.toString()"
-                :severity="session.liked_by_me ? 'danger' : 'secondary'"
+                :severity="session.liked_by_me ? 'info' : 'secondary'"
                 :outlined="!session.liked_by_me"
                 size="small"
                 class="px-4! py-2! h-fit"

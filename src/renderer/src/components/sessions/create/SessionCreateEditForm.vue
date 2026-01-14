@@ -181,7 +181,7 @@ async function onSubmit(): Promise<void> {
 
             const res = await updateSession(serverId, props.initialSession.public_id, payload)
             if (res.error || !res.data) {
-                throw new Error(res.error || t('messages.error.updateFailed'))
+                throw new Error(res.error || t('messages.error.update'))
             }
 
             toast.add({ severity: 'success', summary: t('messages.success.update'), life: 2500 })
@@ -212,7 +212,7 @@ async function onSubmit(): Promise<void> {
             emit('success', res.data)
         }
     } catch (e) {
-        const message = e instanceof Error ? e.message : t('messages.error.operationFailed')
+        const message = e instanceof Error ? e.message : t('messages.error.save')
         toast.add({ severity: 'error', summary: message, life: 3000 })
     } finally {
         submitting.value = false

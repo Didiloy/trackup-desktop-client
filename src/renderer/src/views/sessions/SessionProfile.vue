@@ -12,20 +12,46 @@ import SessionMetadata from '@/components/sessions/profile/SessionMetadata.vue'
 import SessionEnumDefinitions from '@/components/sessions/profile/SessionEnumDefinitions.vue'
 import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
 import SessionEditDialog from '@/components/sessions/create/SessionEditDialog.vue'
+import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import { useToast } from 'primevue/usetoast'
+import { useSessionNavigation } from '@/composables/sessions/useSessionNavigation'
 
 const { t } = useI18n()
 const route = useRoute()
+const toast = useToast()
 const server_store = useServerStore()
-const { getSessionById } = useSessionCRUD()
+const { getSessionById, deleteSession } = useSessionCRUD()
+const { navigateToServerSessions } = useSessionNavigation()
 
 const sessionId = computed(() => route.params.sessionId as string)
 const session = ref<ISession | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 const editDialogVisible = ref(false)
+const deleteConfirmationVisible = ref(false)
 
 function handleSessionUpdated(updatedSession: ISession) {
     session.value = updatedSession
+}
+
+async function handleDeleteSession() {
+    if (!server_store.getPublicId || !sessionId.value) return
+
+    try {
+        const res = await deleteSession(server_store.getPublicId, sessionId.value)
+        if (res.error) {
+            toast.add({ severity: 'error', summary: res.error, life: 3000 })
+            return
+        }
+
+        toast.add({ severity: 'success', summary: t('messages.success.delete'), life: 2500 })
+
+        // Redirect to server sessions list
+        await navigateToServerSessions()
+    } catch (e) {
+        const message = e instanceof Error ? e.message : t('messages.error.delete')
+        toast.add({ severity: 'error', summary: message, life: 3000 })
+    }
 }
 
 async function loadSession() {
@@ -79,6 +105,7 @@ onMounted(async () => {
                     :session="session"
                     :loading="loading"
                     @edit="editDialogVisible = true"
+                    @delete="deleteConfirmationVisible = true"
                 />
 
                 <div v-if="session" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -105,6 +132,15 @@ onMounted(async () => {
             v-model="editDialogVisible"
             :session="session"
             @updated="handleSessionUpdated"
+        />
+
+        <ConfirmationDialog
+            v-model="deleteConfirmationVisible"
+            :title="t('views.server_sessions.delete_modal.title')"
+            :message="t('views.server_sessions.delete_modal.message')"
+            :confirm-label="t('common.actions.delete')"
+            confirm-severity="danger"
+            :on-confirm="handleDeleteSession"
         />
     </div>
 </template>

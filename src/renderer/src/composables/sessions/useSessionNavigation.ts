@@ -3,6 +3,7 @@ import { useServerStore } from '@/stores/server'
 
 interface UseSessionNavigationResult {
     navigateToSessionProfile: (sessionId: string) => Promise<void>
+    navigateToServerSessions: () => Promise<void>
 }
 
 export function useSessionNavigation(): UseSessionNavigationResult {
@@ -19,7 +20,17 @@ export function useSessionNavigation(): UseSessionNavigationResult {
         })
     }
 
+    async function navigateToServerSessions(): Promise<void> {
+        await router.push({
+            name: 'ServerSessions',
+            params: {
+                id: server_store.getPublicId
+            }
+        })
+    }
+
     return {
-        navigateToSessionProfile
+        navigateToSessionProfile,
+        navigateToServerSessions
     }
 }
