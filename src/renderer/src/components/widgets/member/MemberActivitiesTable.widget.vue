@@ -16,6 +16,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import { translateSkillLevel } from '@/utils/skill-level.utils'
 import MemberIdentityCorner from '@/components/members/profile/MemberIdentityCorner.vue'
 import { formatDate } from '@/utils'
+import SkillLevelIcon from '@/components/common/icons/SkillLevelIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -122,7 +123,7 @@ const navigateToActivity = async (activityId: string): Promise<void> => {
                             v-if="activity.skill_level"
                             class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-primary-50 text-primary-700 text-xs font-medium"
                         >
-                            <i class="pi pi-graduation-cap"></i>
+                            <SkillLevelIcon/>
                             <span>{{ translateSkillLevel(activity.skill_level, t) }}</span>
                         </div>
                     </div>

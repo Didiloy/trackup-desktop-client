@@ -48,21 +48,29 @@ const canDelete = computed(() => {
         </div>
 
         <!-- Action buttons -->
-        <div class="absolute top-4 right-4 z-20 flex gap-2" v-if="server_store.isOwnership">
+        <div class="absolute top-4 right-4 z-20 flex gap-3" v-if="server_store.isOwnership">
             <Button
                 icon="pi pi-pencil"
-                text
-                rounded
-                class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-white/40! text-white!"
+                :label="$t('common.actions.edit')"
+                severity="help"
+                class="shadow"
                 :disabled="loading || !canEdit"
+                :pt="{
+                    label: { class: 'text-surface-100' },
+                    icon: { class: 'text-surface-100' }
+                }"
                 @click="emit('edit')"
             />
             <Button
                 icon="pi pi-trash"
-                text
-                rounded
-                class="w-10! h-10! bg-white/20! backdrop-blur-sm hover:bg-red-500/60! text-white!"
+                :label="$t('common.actions.delete')"
+                severity="danger"
+                class="shadow"
                 :disabled="loading || !canDelete"
+                :pt="{
+                    label: { class: 'text-surface-100' },
+                    icon: { class: 'text-surface-100' }
+                }"
                 @click="emit('delete')"
             />
         </div>
