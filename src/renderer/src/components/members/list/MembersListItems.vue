@@ -36,7 +36,7 @@ const items = computed(() => {
         }
     ]
 
-    if (canUpdateProfile(props.member.user_email)) {
+    if (canUpdateProfile(props.member.public_id)) {
         baseItems.push({
             label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',

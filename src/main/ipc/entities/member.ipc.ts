@@ -124,6 +124,31 @@ export function registerMemberIpc(): void {
         }
     )
 
+    // Get member by user ID
+    ipcMain.handle(
+        ipc_channels.member.getByUserId,
+        async (
+            _event,
+            serverId: string,
+            userId: string,
+            accessToken: string
+        ): Promise<IMemberApiResponse<IServerMember>> => {
+            logger.info('Getting member by user ID:', userId)
+
+            const validationError = combineValidations(
+                validateRequired(serverId, 'Server ID'),
+                validateRequired(userId, 'User ID'),
+                validateAuth(accessToken)
+            )
+            if (validationError) return validationError
+
+            return apiService.get<IServerMember>(
+                `/api/v1/servers/${serverId}/members/by-user/${userId}`,
+                accessToken
+            )
+        }
+    )
+
     // Kick a member from the servers (creator only)
     ipcMain.handle(
         ipc_channels.member.kick,

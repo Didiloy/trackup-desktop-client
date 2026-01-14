@@ -39,6 +39,10 @@ export const useUserStore = defineStore('user', () => {
         state.servers = servers
     }
 
+    const resetState = (): void => {
+        state.servers = null
+    }
+
     return {
         // State from auth (readonly)
         user,
@@ -57,6 +61,7 @@ export const useUserStore = defineStore('user', () => {
         getAuthProvider,
 
         // Actions
-        setMyServers
+        setMyServers,
+        resetState
     }
 })

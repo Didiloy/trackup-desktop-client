@@ -6,6 +6,7 @@ export const MEMBER_CHANNELS = {
     quit: 'member:quit',
     list: 'member:list',
     getById: 'member:getById',
+    getByUserId: 'member:getByUserId',
     kick: 'member:kick',
     updateProfile: 'member:updateProfile',
     getSessions: 'member:getSessions',

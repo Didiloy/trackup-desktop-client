@@ -26,6 +26,10 @@ interface UseMemberCRUDReturn {
         serverId: string,
         memberId: string
     ) => Promise<IMemberApiResponse<IServerMember>>
+    getMemberByUserId: (
+        serverId: string,
+        userId: string
+    ) => Promise<IMemberApiResponse<IServerMember>>
     kickMember: (serverId: string, memberId: string) => Promise<IMemberApiResponse<void>>
     updateMemberProfile: (
         serverId: string,
@@ -87,6 +91,16 @@ export function useMemberCRUD(): UseMemberCRUDReturn {
         memberId: string
     ): Promise<IMemberApiResponse<IServerMember>> => {
         return window.api.member.getById(serverId, memberId, user_store.getAccessToken!)
+    }
+
+    /**
+     * Get member by user ID
+     */
+    const getMemberByUserId = async (
+        serverId: string,
+        userId: string
+    ): Promise<IMemberApiResponse<IServerMember>> => {
+        return window.api.member.getByUserId(serverId, userId, user_store.getAccessToken!)
     }
 
     /**
@@ -154,6 +168,7 @@ export function useMemberCRUD(): UseMemberCRUDReturn {
         quitServer,
         listMembers,
         getMemberById,
+        getMemberByUserId,
         kickMember,
         updateMemberProfile,
         getMemberSessions,

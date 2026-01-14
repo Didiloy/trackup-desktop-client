@@ -1,5 +1,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import { useServerMemberStore } from '@/stores/server-member'
+import { useUserStore } from '@/stores/user'
 import { useServerCRUD } from '@/composables/servers/useServerCRUD'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
@@ -22,11 +24,13 @@ export function useServerNavigation(): UseServerNavigationResult {
     const route = useRoute()
     const router = useRouter()
     const server_store = useServerStore()
+    const server_member_store = useServerMemberStore()
+    const user_store = useUserStore()
     const toast = useToast()
     const { t } = useI18n()
 
     const { getServerDetails } = useServerCRUD()
-    const { listMembers } = useMemberCRUD()
+    const { listMembers, getMemberByUserId } = useMemberCRUD()
     const { listEnumDefinitions } = useEnumDefinitionCRUD()
     const {
         showServerLoading,
@@ -38,7 +42,7 @@ export function useServerNavigation(): UseServerNavigationResult {
     } = useServerLoading()
 
     async function getServerInfos(serverId: string, force = false): Promise<void> {
-        if (!force && server_store.loadFromCache(serverId)) {
+        if (!force && (await server_store.loadFromCache(serverId))) {
             // If from cache, quickly complete all steps
             completeAllLoadingSteps()
             await delay(STEP_DELAY)
@@ -80,6 +84,14 @@ export function useServerNavigation(): UseServerNavigationResult {
             completeLoadingStep('enum_definitions')
             server_store.setEnumsDefinition(enumsRes.data)
             await delay(STEP_DELAY)
+
+            // Step 4: Current Member
+            if (user_store.getId) {
+                const memberRes = await getMemberByUserId(serverId, user_store.getId)
+                if (memberRes.data) {
+                    server_member_store.setMember(memberRes.data)
+                }
+            }
         } catch {
             server_store.resetState()
             await delay(500) // Show error state briefly
@@ -103,7 +115,10 @@ export function useServerNavigation(): UseServerNavigationResult {
         if (server_store.getPublicId === serverId) return
 
         const hasCache = server_store.loadFromCache(serverId)
-        if (!hasCache) server_store.resetState()
+        if (!hasCache) {
+            server_store.resetState()
+            server_member_store.resetState()
+        }
 
         // Show loading overlay
         showServerLoading(serverName)

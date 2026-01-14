@@ -59,6 +59,17 @@ export const memberBridge = {
     },
 
     /**
+     * Get member by user ID
+     */
+    getByUserId: (
+        serverId: string,
+        userId: string,
+        accessToken: string
+    ): Promise<IMemberApiResponse<IServerMember>> => {
+        return ipcRenderer.invoke(ipc_channels.member.getByUserId, serverId, userId, accessToken)
+    },
+
+    /**
      * Kick a member from the servers (creator only)
      */
     kick: (

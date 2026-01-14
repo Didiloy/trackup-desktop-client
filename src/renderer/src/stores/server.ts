@@ -5,6 +5,8 @@ import { IServerMember } from '@shared/contracts/interfaces/entities/member.inte
 import { IActivity } from '@shared/contracts/interfaces/entities/activity.interfaces'
 import { IEnumDefinition } from '@shared/contracts/interfaces/entities/enum-definition.interfaces'
 import { useServerStatsStore } from './server-stats'
+import { useSnapshotStore } from '@/stores/snapshot'
+import { useServerMemberStore } from '@/stores/server-member'
 
 interface ServerCache {
     server: IServer
@@ -14,7 +16,9 @@ interface ServerCache {
 }
 
 export const useServerStore = defineStore('server', () => {
-    const serverStatsStore = useServerStatsStore()
+    const server_stats_store = useServerStatsStore()
+    const snapshot_store = useSnapshotStore()
+    const server_member_store = useServerMemberStore()
     // Cache to store previously loaded servers (TTL: 5 minutes)
     const cache = reactive<Map<string, ServerCache>>(new Map())
     const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
@@ -69,8 +73,8 @@ export const useServerStore = defineStore('server', () => {
     const setServer = (srv: IServer | null): void => {
         state.server = srv
         if (srv?.public_id) {
-            serverStatsStore.fetchAll(srv.public_id)
-            serverStatsStore.start_auto_fetch(srv.public_id)
+            server_stats_store.fetchAll(srv.public_id)
+            server_stats_store.start_auto_fetch(srv.public_id)
         }
     }
 
@@ -93,7 +97,10 @@ export const useServerStore = defineStore('server', () => {
         state.serverEnumsDefinition = null
         state.ownership = false
         state.isLoading = false
-        serverStatsStore.resetState()
+
+        server_stats_store.resetState()
+        snapshot_store.resetState()
+        server_member_store.resetState()
     }
 
     const setLoading = (loading: boolean): void => {
@@ -136,7 +143,7 @@ export const useServerStore = defineStore('server', () => {
         })
     }
 
-    const loadFromCache = (serverId: string): boolean => {
+    const loadFromCache = async (serverId: string): Promise<boolean> => {
         const cached = getCachedServer(serverId)
         if (!cached) return false
 
@@ -144,14 +151,17 @@ export const useServerStore = defineStore('server', () => {
         state.serverMembers = cached.members
         state.serverEnumsDefinition = cached.enumDefinition
 
-        serverStatsStore.fetchAll(serverId)
-        serverStatsStore.start_auto_fetch(serverId)
+        await server_stats_store.fetchAll(serverId)
+        server_stats_store.start_auto_fetch(serverId)
         return true
     }
 
     const clearCache = (): void => {
         cache.clear()
-        serverStatsStore.resetState()
+
+        server_stats_store.resetState()
+        snapshot_store.resetState()
+        server_member_store.resetState()
     }
 
     return {

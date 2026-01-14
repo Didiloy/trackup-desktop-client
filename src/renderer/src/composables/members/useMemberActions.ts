@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useServerStore } from '@/stores/server'
-import { useUserStore } from '@/stores/user'
+import { useServerMemberStore } from '@/stores/server-member'
 import { useMemberCRUD } from '@/composables/members/useMemberCRUD'
 import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
@@ -10,7 +10,7 @@ export function useMemberActions() {
     const { t } = useI18n()
     const toast = useToast()
     const server_store = useServerStore()
-    const user_store = useUserStore()
+    const server_member_store = useServerMemberStore()
     const { kickMember: kickMemberAPI, updateMemberProfile, listMembers } = useMemberCRUD()
     const { navigateToServerMembers } = useMemberNavigation()
 
@@ -181,16 +181,18 @@ export function useMemberActions() {
 
     /**
      * Check if current user can update profile for this member
+     * Uses server-member store to compare member IDs
      */
-    const canUpdateProfile = (memberEmail: string): boolean => {
-        return memberEmail === user_store.getEmail
+    const canUpdateProfile = (memberId: string): boolean => {
+        return memberId === server_member_store.getPublicId
     }
 
     /**
      * Check if current user can kick this member
+     * Owner can kick anyone except themselves
      */
-    const canKickMember = (memberEmail: string): boolean => {
-        return Boolean(server_store.isOwnership) && memberEmail !== user_store.getEmail
+    const canKickMember = (memberId: string): boolean => {
+        return Boolean(server_store.isOwnership) && memberId !== server_member_store.getPublicId
     }
 
     return {

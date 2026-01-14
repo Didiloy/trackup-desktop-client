@@ -50,7 +50,7 @@ const menuItems = computed<
         return items
     }
 
-    if (canUpdateProfile(props.member.user_email)) {
+    if (canUpdateProfile(props.member.public_id)) {
         items.push({
             label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',
@@ -58,7 +58,7 @@ const menuItems = computed<
         })
     }
 
-    if (canKickMember(props.member.user_email)) {
+    if (canKickMember(props.member.public_id)) {
         items.push({
             label: t('views.server_members.kick_member'),
             icon: 'pi pi-times',
