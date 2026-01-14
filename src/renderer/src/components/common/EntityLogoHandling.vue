@@ -80,7 +80,7 @@ function removeLogo(): void {
 <template>
     <div class="w-full flex items-center gap-8">
         <!-- Avatar section on the left -->
-        <div class="relative shrink-0" style="width: 80px; height: 80px">
+        <div class="relative shrink-0 mt-5" style="width: 80px; height: 80px">
             <Avatar
                 v-if="logo"
                 :image="logo"

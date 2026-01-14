@@ -101,6 +101,7 @@ export function useMemberActions(): _useMemberActionsReturn {
             const result = await updateMemberProfile(server_store.getPublicId, memberId, updateData)
 
             if (result.data) {
+                server_member_store.setMember(result.data)
                 // Refresh the members list by fetching again
                 const membersResult = await listMembers(server_store.getPublicId)
                 if (membersResult.data) {

@@ -6,6 +6,7 @@ import type {
     IUpdateMemberProfileDto
 } from '@shared/contracts/interfaces/entities/member.interfaces'
 import { useMemberActions } from '@/composables/members/useMemberActions'
+import { useServerMemberStore } from '@/stores/server-member'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { getInitials, formatDate } from '@/utils'
 import MemberProfileEditDialog from '@/components/members/profile/MemberProfileEditDialog.vue'
@@ -17,6 +18,8 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const server_member_store = useServerMemberStore()
+
 const {
     show_profile_dialog,
     updateProfile,
@@ -28,10 +31,22 @@ const {
     confirmKickMember
 } = useMemberActions()
 
-const displayName = computed(() => props.member?.nickname || '')
+// Use store data if this is the current user's profile for reactivity
+const isOwnProfile = computed(() => props.member.public_id === server_member_store.getPublicId)
+
+const displayMember = computed<IServerMember>(() => {
+    if (isOwnProfile.value && server_member_store.hasMember) {
+        // Use reactive store data for own profile
+        return server_member_store.getMember!
+    }
+    // Use props data for other members
+    return props.member
+})
+
+const displayName = computed(() => displayMember.value?.nickname || '')
 const initials = computed(() => getInitials(displayName.value, { mode: 'all', maxInitials: 2 }))
 
-const isArchived = computed(() => props.member?.archived ?? false)
+const isArchived = computed(() => displayMember.value?.archived ?? false)
 
 const menuItems = computed<
     Array<{
@@ -53,11 +68,11 @@ const menuItems = computed<
         return items
     }
 
-    if (canUpdateProfile(props.member.public_id)) {
+    if (canUpdateProfile(displayMember.value.public_id)) {
         items.push({
             label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',
-            command: () => updateProfile(props.member.nickname, props.member.avatar_url)
+            command: () => updateProfile(displayMember.value.nickname, displayMember.value.avatar_url)
         })
     }
 
@@ -66,7 +81,7 @@ const menuItems = computed<
             label: t('views.server_members.kick_member'),
             icon: 'pi pi-times',
             severity: 'danger',
-            command: () => kickMember(props.member.public_id)
+            command: () => kickMember(displayMember.value.public_id)
         })
     }
 
@@ -99,11 +114,11 @@ const onItemSelected = (item: unknown): void => {
             <!-- Avatar -->
             <div class="relative shrink-0">
                 <div
-                    class="w-24 h-24 rounded-2xl overflow-hidden bg-primary-100 ring-4 ring-primary-200 shadow-lg"
+                    class="w-24 h-24 rounded-2xl overflow-hidden"
                 >
                     <img
-                        v-if="member.avatar_url"
-                        :src="member.avatar_url"
+                        v-if="displayMember.avatar_url"
+                        :src="displayMember.avatar_url"
                         class="w-full h-full object-cover"
                         alt="Member Avatar"
                     />
@@ -117,12 +132,12 @@ const onItemSelected = (item: unknown): void => {
                 <div
                     class="absolute -bottom-2 -right-2 px-3 py-1 rounded-full bg-primary-100 text-xs font-bold text-primary-700 shadow-lg border-2 border-white"
                 >
-                    {{ member.role_name }}
+                    {{ displayMember.role_name }}
                 </div>
             </div>
 
             <!-- Info & Actions -->
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 mt-5">
                 <div class="flex items-start justify-between gap-4 mb-3">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-3 mb-2">
@@ -140,7 +155,7 @@ const onItemSelected = (item: unknown): void => {
                             <i class="pi pi-calendar"></i>
                             <span>
                                 {{ t('views.server_members.joined') }}
-                                {{ formatDate(member.created_at) }}
+                                {{ formatDate(displayMember.created_at) }}
                             </span>
                         </div>
                     </div>
@@ -167,7 +182,7 @@ const onItemSelected = (item: unknown): void => {
         <!-- Profile Edit Dialog -->
         <MemberProfileEditDialog
             v-model="show_profile_dialog"
-            :server-member="member"
+            :server-member="displayMember"
             :on-confirm="handleProfileUpdate"
         />
 
