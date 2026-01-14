@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
-import { useRoute, useRouter } from 'vue-router'
-import { useServerStore } from '@/stores/server'
+// import toggle_sidebar_icon from '@/assets/icons/toggle-sidebar.svg?raw'
+// import { useRoute, useRouter } from 'vue-router'
+// import { useServerStore } from '@/stores/server'
 import ChronosButton from '@/components/chronos/ChronosButton.vue'
 
+import { useAuth } from '@/composables/auth/useAuth'
+
 const { t } = useI18n()
+const { isAuthenticated } = useAuth()
 // const route = useRoute()
 // const router = useRouter()
 // const showMembersAsideToggle = computed(
@@ -66,7 +69,7 @@ function handleWindowControls(): void {
             id="window-controls"
             class="flex items-center justify-center h-full w-fit bg-surface-200"
         >
-            <div class="h-full flex items-center justify-center px-1">
+            <div v-if="isAuthenticated" class="h-full flex items-center justify-center px-1">
                 <ChronosButton />
             </div>
             <!--            <div-->
