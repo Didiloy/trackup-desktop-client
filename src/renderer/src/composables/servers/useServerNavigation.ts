@@ -63,15 +63,24 @@ export function useServerNavigation(): UseServerNavigationResult {
             server_store.setServer(detailsRes.data)
             await delay(STEP_DELAY)
 
-            // Step 2: Members
+            // Step 2: Members & Current Member
             startLoadingStep('members')
-            const membersRes = await listMembers(serverId)
-            if (membersRes.error || !membersRes.data) {
+            const [currentMemberRes, membersRes] = await Promise.all([
+                getMemberByUserId(serverId, user_store.getId!),
+                listMembers(serverId)
+            ])
+            if (
+                currentMemberRes.error ||
+                !currentMemberRes.data ||
+                membersRes.error ||
+                !membersRes.data
+            ) {
                 errorLoadingStep('members')
-                throw new Error('Failed to load members')
+                throw new Error('Failed to load members or current member')
             }
             completeLoadingStep('members')
             server_store.setMembers(membersRes.data.data ?? null)
+            server_member_store.setMember(currentMemberRes.data ?? null)
             await delay(STEP_DELAY)
 
             // Step 3: Enum Definitions
@@ -84,14 +93,6 @@ export function useServerNavigation(): UseServerNavigationResult {
             completeLoadingStep('enum_definitions')
             server_store.setEnumsDefinition(enumsRes.data)
             await delay(STEP_DELAY)
-
-            // Step 4: Current Member
-            if (user_store.getId) {
-                const memberRes = await getMemberByUserId(serverId, user_store.getId)
-                if (memberRes.data) {
-                    server_member_store.setMember(memberRes.data)
-                }
-            }
         } catch {
             server_store.resetState()
             await delay(500) // Show error state briefly
