@@ -117,6 +117,7 @@ declare module 'vue' {
     MemberIcon: typeof import('./src/components/common/icons/MemberIcon.vue')['default']
     MemberIdentityCorner: typeof import('./src/components/members/profile/MemberIdentityCorner.vue')['default']
     'MemberPatternsSummary.widget': typeof import('./src/components/widgets/member/MemberPatternsSummary.widget.vue')['default']
+    MemberProfileEditDialog: typeof import('./src/components/members/profile/MemberProfileEditDialog.vue')['default']
     MemberProfileHeader: typeof import('./src/components/members/profile/MemberProfileHeader.vue')['default']
     'MemberRanking.widget': typeof import('./src/components/widgets/member/MemberRanking.widget.vue')['default']
     'MemberRankingOverview.widget': typeof import('./src/components/widgets/member/MemberRankingOverview.widget.vue')['default']

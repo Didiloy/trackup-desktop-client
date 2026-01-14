@@ -2,11 +2,10 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
-import type { IMemberStatsDetails } from '@shared/contracts/interfaces/entities-stats/member-stats.interfaces'
 import { useMemberActions } from '@/composables/members/useMemberActions'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { getInitials, formatDate } from '@/utils'
-import InputDialog from '@/components/common/dialogs/InputDialog.vue'
+import MemberProfileEditDialog from '@/components/members/profile/MemberProfileEditDialog.vue'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
 
@@ -16,12 +15,11 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const {
-    show_nickname_dialog,
-    new_nickname,
-    updateNickname,
-    confirmUpdateNickname,
+    show_profile_dialog,
+    updateProfile,
+    confirmUpdateProfile,
     kickMember,
-    canUpdateNickname,
+    canUpdateProfile,
     canKickMember,
     show_kick_confirmation,
     confirmKickMember
@@ -37,7 +35,6 @@ const menuItems = computed<
         label: string
         icon: string
         severity?: string
-        danger?: boolean
         command: () => void | Promise<boolean>
     }>
 >(() => {
@@ -53,11 +50,11 @@ const menuItems = computed<
         return items
     }
 
-    if (canUpdateNickname(props.member.user_email)) {
+    if (canUpdateProfile(props.member.user_email)) {
         items.push({
-            label: t('views.members_aside.update_nickname'),
+            label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',
-            command: () => updateNickname(props.member.nickname)
+            command: () => updateProfile(props.member.nickname, props.member.avatar_url)
         })
     }
 
@@ -65,7 +62,7 @@ const menuItems = computed<
         items.push({
             label: t('views.server_members.kick_member'),
             icon: 'pi pi-times',
-            danger: true,
+            severity: 'danger',
             command: () => kickMember(props.member.public_id)
         })
     }
@@ -73,8 +70,11 @@ const menuItems = computed<
     return items
 })
 
-const handleNicknameUpdate = async (nickname: string): Promise<void> => {
-    await confirmUpdateNickname(props.member.public_id, nickname, props.member.nickname)
+const handleProfileUpdate = async (data: {
+    nickname?: string
+    avatarUrl?: string
+}): Promise<void> => {
+    await confirmUpdateProfile(props.member.public_id, data)
 }
 
 const { menu, onRightClick } = useContextMenu(menuItems.value)
@@ -164,18 +164,12 @@ const onItemSelected = (item: unknown): void => {
             </div>
         </div>
 
-        <!-- Nickname Dialog -->
-        <InputDialog
-            v-model="show_nickname_dialog"
-            v-model:input-value="new_nickname"
-            :title="t('views.members_aside.update_nickname')"
-            :message="t('views.members_aside.update_nickname_message')"
-            :input-label="t('views.members_aside.new_nickname')"
-            :input-placeholder="t('views.members_aside.enter_nickname')"
-            :confirm-label="t('views.members_aside.update_nickname')"
-            :cancel-label="t('common.actions.cancel')"
-            confirm-severity="primary"
-            @confirm="handleNicknameUpdate"
+        <!-- Profile Edit Dialog -->
+        <MemberProfileEditDialog
+            v-model="show_profile_dialog"
+            :nickname="member.nickname"
+            :avatar-url="member.avatar_url"
+            :on-confirm="handleProfileUpdate"
         />
 
         <!-- Kick Confirmation Dialog -->

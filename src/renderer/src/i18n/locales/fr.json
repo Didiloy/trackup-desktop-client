@@ -359,7 +359,13 @@
             "update_nickname": "Mettre à jour le surnom",
             "update_nickname_message": "Entrez un nouveau surnom pour votre profil.",
             "new_nickname": "Nouveau surnom",
-            "enter_nickname": "Entrez le surnom"
+            "enter_nickname": "Entrez le surnom",
+            "update_profile": "Mettre à jour le profil",
+            "update_profile_message": "Modifiez votre surnom et votre avatar dans ce serveur",
+            "avatar_url": "URL de l'avatar",
+            "enter_avatar_url": "Entrez l'URL de l'avatar",
+            "avatar_preview": "Aperçu de l'avatar",
+            "invalid_url": "URL invalide"
         },
         "servers_aside": {
             "fallback_name": "Serveur",

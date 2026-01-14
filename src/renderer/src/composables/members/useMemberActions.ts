@@ -14,9 +14,10 @@ export function useMemberActions() {
     const { kickMember: kickMemberAPI, updateMemberProfile, listMembers } = useMemberCRUD()
     const { navigateToServerMembers } = useMemberNavigation()
 
-    // Nickname management state
-    const show_nickname_dialog = ref(false)
+    // Profile management state
+    const show_profile_dialog = ref(false)
     const new_nickname = ref('')
+    const new_avatar_url = ref('')
     const is_updating = ref(false)
     const isKicking = ref(false)
 
@@ -25,49 +26,57 @@ export function useMemberActions() {
     const member_to_kick = ref<string | null>(null)
 
     /**
-     * Open nickname dialog
+     * Open profile dialog
      */
-    const openNicknameDialog = (currentNickname: string): void => {
+    const openProfileDialog = (currentNickname: string, currentAvatarUrl: string): void => {
         new_nickname.value = currentNickname || ''
-        show_nickname_dialog.value = true
+        new_avatar_url.value = currentAvatarUrl || ''
+        show_profile_dialog.value = true
     }
 
     /**
-     * Close nickname dialog
+     * Close profile dialog
      */
-    const closeNicknameDialog = (): void => {
-        show_nickname_dialog.value = false
+    const closeProfileDialog = (): void => {
+        show_profile_dialog.value = false
         new_nickname.value = ''
+        new_avatar_url.value = ''
         is_updating.value = false
     }
 
     /**
-     * Update member nickname
+     * Update member profile
      */
-    const updateNickname = (currentNickname: string): void => {
-        openNicknameDialog(currentNickname)
+    const updateProfile = (currentNickname: string, currentAvatarUrl: string): void => {
+        openProfileDialog(currentNickname, currentAvatarUrl)
     }
 
     /**
-     * Handle nickname update
+     * Handle profile update
      */
-    const handleUpdateNickname = async (
+    const handleUpdateProfile = async (
         memberId: string,
-        nickname: string,
-        currentNickname?: string
+        data: { nickname?: string; avatarUrl?: string }
     ): Promise<void> => {
         if (!memberId || !server_store.getPublicId) return
-        if (!nickname || nickname === currentNickname) {
-            closeNicknameDialog()
+        if (!data.nickname && !data.avatarUrl) {
+            closeProfileDialog()
             return
         }
 
         is_updating.value = true
 
         try {
-            const result = await updateMemberProfile(server_store.getPublicId, memberId, {
-                nickname
-            })
+            // Build the request with only the fields that are provided
+            const updateData: { nickname?: string; avatar_url?: string } = {}
+            if (data.nickname !== undefined) {
+                updateData.nickname = data.nickname
+            }
+            if (data.avatarUrl !== undefined) {
+                updateData.avatar_url = data.avatarUrl
+            }
+
+            const result = await updateMemberProfile(server_store.getPublicId, memberId, updateData)
 
             if (result.data) {
                 // Refresh the members list by fetching again
@@ -77,13 +86,13 @@ export function useMemberActions() {
                 }
                 toast.add({
                     severity: 'success',
-                    summary: t('views.members_aside.update_nickname'),
+                    summary: t('views.members_aside.update_profile'),
                     detail: t('messages.success.update'),
                     life: 3000
                 })
-                closeNicknameDialog()
+                closeProfileDialog()
             } else {
-                console.error('Failed to update nickname:', result.error)
+                console.error('Failed to update profile:', result.error)
                 toast.add({
                     severity: 'error',
                     summary: t('messages.error.update'),
@@ -93,7 +102,7 @@ export function useMemberActions() {
                 is_updating.value = false
             }
         } catch (error) {
-            console.error('Error updating nickname:', error)
+            console.error('Error updating profile:', error)
             toast.add({
                 severity: 'error',
                 summary: t('messages.error.update'),
@@ -105,14 +114,13 @@ export function useMemberActions() {
     }
 
     /**
-     * Confirm nickname update
+     * Confirm profile update
      */
-    const confirmUpdateNickname = async (
+    const confirmUpdateProfile = async (
         memberId: string,
-        newNickname: string,
-        currentNickname: string
+        data: { nickname?: string; avatarUrl?: string }
     ): Promise<void> => {
-        await handleUpdateNickname(memberId, newNickname, currentNickname)
+        await handleUpdateProfile(memberId, data)
     }
 
     /**
@@ -172,9 +180,9 @@ export function useMemberActions() {
     }
 
     /**
-     * Check if current user can update nickname for this member
+     * Check if current user can update profile for this member
      */
-    const canUpdateNickname = (memberEmail: string): boolean => {
+    const canUpdateProfile = (memberEmail: string): boolean => {
         return memberEmail === user_store.getEmail
     }
 
@@ -187,21 +195,22 @@ export function useMemberActions() {
 
     return {
         // State
-        show_nickname_dialog,
+        show_profile_dialog,
         new_nickname,
+        new_avatar_url,
         is_updating,
         isKicking,
         show_kick_confirmation,
 
         // Actions
-        updateNickname,
-        confirmUpdateNickname,
-        closeNicknameDialog,
+        updateProfile,
+        confirmUpdateProfile,
+        closeProfileDialog,
         kickMember,
         confirmKickMember,
 
         // Permissions
-        canUpdateNickname,
+        canUpdateProfile,
         canKickMember
     }
 }

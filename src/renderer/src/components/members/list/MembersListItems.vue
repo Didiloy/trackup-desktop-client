@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
-import InputDialog from '@/components/common/dialogs/InputDialog.vue'
+import MemberProfileEditDialog from '@/components/members/profile/MemberProfileEditDialog.vue'
 import { useContextMenu } from '@/composables/useContextMenu'
 import { useMemberActions } from '@/composables/members/useMemberActions'
 import { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
@@ -17,11 +17,10 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 const {
-    show_nickname_dialog,
-    new_nickname,
-    updateNickname,
-    confirmUpdateNickname,
-    canUpdateNickname
+    show_profile_dialog,
+    updateProfile,
+    confirmUpdateProfile,
+    canUpdateProfile
 } = useMemberActions()
 
 const { navigateToMemberProfile } = useMemberNavigation()
@@ -37,11 +36,11 @@ const items = computed(() => {
         }
     ]
 
-    if (canUpdateNickname(props.member.user_email)) {
+    if (canUpdateProfile(props.member.user_email)) {
         baseItems.push({
-            label: t('views.members_aside.update_nickname'),
+            label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',
-            command: async () => updateNickname(props.member.nickname)
+            command: async () => updateProfile(props.member.nickname, props.member.avatar_url)
         })
     }
 
@@ -59,8 +58,11 @@ const onItemSelected = (item: unknown): void => {
     menuItem.command?.()
 }
 
-const handleNicknameUpdate = async (nickname: string): Promise<void> => {
-    await confirmUpdateNickname(props.member.public_id, nickname, props.member.nickname)
+const handleProfileUpdate = async (data: {
+    nickname?: string
+    avatarUrl?: string
+}): Promise<void> => {
+    await confirmUpdateProfile(props.member.public_id, data)
 }
 </script>
 
@@ -77,17 +79,11 @@ const handleNicknameUpdate = async (nickname: string): Promise<void> => {
 
     <ContextActionMenu ref="menu" :items="items" @item-selected="onItemSelected" />
 
-    <!-- Nickname Update Dialog -->
-    <InputDialog
-        v-model="show_nickname_dialog"
-        v-model:input-value="new_nickname"
-        :title="t('views.members_aside.update_nickname')"
-        :message="t('views.members_aside.update_nickname_message')"
-        :input-label="t('views.members_aside.new_nickname')"
-        :input-placeholder="t('views.members_aside.enter_nickname')"
-        :confirm-label="t('views.members_aside.update_nickname')"
-        :cancel-label="t('common.actions.cancel')"
-        confirm-severity="primary"
-        @confirm="handleNicknameUpdate"
+    <!-- Profile Update Dialog -->
+    <MemberProfileEditDialog
+        v-model="show_profile_dialog"
+        :nickname="props.member.nickname"
+        :avatar-url="props.member.avatar_url"
+        :on-confirm="handleProfileUpdate"
     />
 </template>
