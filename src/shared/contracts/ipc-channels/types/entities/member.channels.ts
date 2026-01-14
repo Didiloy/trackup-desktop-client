@@ -7,7 +7,7 @@ export const MEMBER_CHANNELS = {
     list: 'member:list',
     getById: 'member:getById',
     kick: 'member:kick',
-    updateNickname: 'member:updateNickname',
+    updateProfile: 'member:updateProfile',
     getSessions: 'member:getSessions',
     getSessionsForActivity: 'member:getSessionsForActivity'
 } as const

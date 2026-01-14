@@ -17,8 +17,9 @@ export interface IInviteMemberRequest {
     user_id: string
 }
 
-export interface IUpdateNicknameRequest {
-    nickname: string
+export interface IUpdateMemberProfileDto {
+    nickname?: string
+    avatar_url?: string
 }
 
 export interface IPaginatedMembers {

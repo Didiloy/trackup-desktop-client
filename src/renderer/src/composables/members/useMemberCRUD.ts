@@ -3,7 +3,7 @@ import type {
     IServerMember,
     IPaginatedMembers,
     IInviteMemberRequest,
-    IUpdateNicknameRequest,
+    IUpdateMemberProfileDto,
     IListMembersOptions,
     IMemberApiResponse
 } from '@shared/contracts/interfaces/entities/member.interfaces'
@@ -27,10 +27,10 @@ interface UseMemberCRUDReturn {
         memberId: string
     ) => Promise<IMemberApiResponse<IServerMember>>
     kickMember: (serverId: string, memberId: string) => Promise<IMemberApiResponse<void>>
-    updateMemberNickname: (
+    updateMemberProfile: (
         serverId: string,
         memberId: string,
-        request: IUpdateNicknameRequest
+        request: IUpdateMemberProfileDto
     ) => Promise<IMemberApiResponse<IServerMember>>
     getMemberSessions: (
         serverId: string,
@@ -100,14 +100,14 @@ export function useMemberCRUD(): UseMemberCRUDReturn {
     }
 
     /**
-     * Update member nickname
+     * Update member profile (nickname and/or avatar)
      */
-    const updateMemberNickname = async (
+    const updateMemberProfile = async (
         serverId: string,
         memberId: string,
-        request: IUpdateNicknameRequest
+        request: IUpdateMemberProfileDto
     ): Promise<IMemberApiResponse<IServerMember>> => {
-        return window.api.member.updateNickname(
+        return window.api.member.updateProfile(
             serverId,
             memberId,
             request,
@@ -155,7 +155,7 @@ export function useMemberCRUD(): UseMemberCRUDReturn {
         listMembers,
         getMemberById,
         kickMember,
-        updateMemberNickname,
+        updateMemberProfile,
         getMemberSessions,
         getMemberSessionsForActivity
     }

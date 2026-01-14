@@ -4,7 +4,7 @@ import type {
     IServerMember,
     IPaginatedMembers,
     IInviteMemberRequest,
-    IUpdateNicknameRequest,
+    IUpdateMemberProfileDto,
     IListMembersOptions,
     IMemberApiResponse
 } from '../../../shared/contracts/interfaces/entities/member.interfaces'
@@ -149,28 +149,27 @@ export function registerMemberIpc(): void {
         }
     )
 
-    // Update member nickname
+    // Update member profile (nickname and/or avatar)
     ipcMain.handle(
-        ipc_channels.member.updateNickname,
+        ipc_channels.member.updateProfile,
         async (
             _event,
             serverId: string,
             memberId: string,
-            request: IUpdateNicknameRequest,
+            request: IUpdateMemberProfileDto,
             accessToken: string
         ): Promise<IMemberApiResponse<IServerMember>> => {
-            logger.info('Updating member nickname:', memberId)
+            logger.info('Updating member profile:', memberId)
 
             const validationError = combineValidations(
                 validateRequired(serverId, 'Server ID'),
                 validateRequired(memberId, 'Member ID'),
-                validateRequired(request.nickname, 'Nickname'),
                 validateAuth(accessToken)
             )
             if (validationError) return validationError
 
-            return apiService.patch<IServerMember>(
-                `/api/v1/servers/${serverId}/members/${memberId}/nickname`,
+            return apiService.put<IServerMember>(
+                `/api/v1/servers/${serverId}/members/${memberId}/profile`,
                 accessToken,
                 request
             )

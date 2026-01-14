@@ -11,7 +11,7 @@ export function useMemberActions() {
     const toast = useToast()
     const server_store = useServerStore()
     const user_store = useUserStore()
-    const { kickMember: kickMemberAPI, updateMemberNickname, listMembers } = useMemberCRUD()
+    const { kickMember: kickMemberAPI, updateMemberProfile, listMembers } = useMemberCRUD()
     const { navigateToServerMembers } = useMemberNavigation()
 
     // Nickname management state
@@ -65,7 +65,7 @@ export function useMemberActions() {
         is_updating.value = true
 
         try {
-            const result = await updateMemberNickname(server_store.getPublicId, memberId, {
+            const result = await updateMemberProfile(server_store.getPublicId, memberId, {
                 nickname
             })
 

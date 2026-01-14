@@ -4,7 +4,7 @@ import type {
     IServerMember,
     IPaginatedMembers,
     IInviteMemberRequest,
-    IUpdateNicknameRequest,
+    IUpdateMemberProfileDto,
     IListMembersOptions,
     IMemberApiResponse
 } from '../../../shared/contracts/interfaces/entities/member.interfaces'
@@ -70,16 +70,16 @@ export const memberBridge = {
     },
 
     /**
-     * Update member nickname
+     * Update member profile (nickname and/or avatar)
      */
-    updateNickname: (
+    updateProfile: (
         serverId: string,
         memberId: string,
-        request: IUpdateNicknameRequest,
+        request: IUpdateMemberProfileDto,
         accessToken: string
     ): Promise<IMemberApiResponse<IServerMember>> => {
         return ipcRenderer.invoke(
-            ipc_channels.member.updateNickname,
+            ipc_channels.member.updateProfile,
             serverId,
             memberId,
             request,
