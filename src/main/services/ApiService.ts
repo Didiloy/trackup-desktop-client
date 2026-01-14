@@ -67,7 +67,16 @@ export class ApiService {
                 return { data: undefined as T }
             }
 
-            const data = await response.json()
+            // Read response as text to handle empty bodies
+            const text = await response.text()
+
+            // If body is empty, return undefined
+            if (!text || text.trim() === '') {
+                return { data: undefined as T }
+            }
+
+            // Parse JSON
+            const data = JSON.parse(text)
             return { data }
         } catch (error) {
             logger.error('Fetch error:', error)
