@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import type { IServerMember } from '@shared/contracts/interfaces/entities/member.interfaces'
-import { useMemberActions } from '@/composables/members/useMemberActions'
 import { getInitials } from '@/utils'
 import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
+import { useUserStore } from '@/stores/user'
+import { computed } from 'vue'
+import CurrentUserBadge from '@/components/common/badges/CurrentUserBadge.vue'
+import RoleBadge from '@/components/common/badges/RoleBadge.vue'
 
 const props = defineProps<{
     member: IServerMember
 }>()
 
 const { navigateToMemberProfile } = useMemberNavigation()
+const user_store = useUserStore()
+
+const is_current_user = computed(() => {
+    return props.member.user_email === user_store.getEmail
+})
 
 const handleNavigateToProfile = async (): Promise<void> => {
     await navigateToMemberProfile(props.member.public_id)
@@ -49,11 +57,9 @@ const handleNavigateToProfile = async (): Promise<void> => {
                 >
                     {{ member.nickname }}
                 </h3>
-                <span
-                    class="text-xs px-2 py-0.5 rounded-full bg-primary-100 text-primary-800 font-semibold uppercase tracking-wide"
-                >
-                    {{ member.role_name }}
-                </span>
+                <RoleBadge :role-name="member.role_name" />
+                <!-- Current user badge -->
+                <CurrentUserBadge :show="is_current_user" />
             </div>
         </div>
     </div>

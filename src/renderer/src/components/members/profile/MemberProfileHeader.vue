@@ -12,6 +12,9 @@ import { getInitials, formatDate } from '@/utils'
 import MemberProfileEditDialog from '@/components/members/profile/MemberProfileEditDialog.vue'
 import ContextActionMenu from '@/components/common/contexts/ContextActionMenu.vue'
 import ConfirmationDialog from '@/components/common/dialogs/ConfirmationDialog.vue'
+import CurrentUserBadge from '@/components/common/badges/CurrentUserBadge.vue'
+import { useUserStore } from '@/stores/user'
+import RoleBadge from '@/components/common/badges/RoleBadge.vue'
 
 const props = defineProps<{
     member: IServerMember
@@ -19,6 +22,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const server_member_store = useServerMemberStore()
+const user_store = useUserStore()
 
 const {
     show_profile_dialog,
@@ -48,6 +52,11 @@ const initials = computed(() => getInitials(displayName.value, { mode: 'all', ma
 
 const isArchived = computed(() => displayMember.value?.archived ?? false)
 
+// Check if viewing current user's profile
+const is_current_user = computed(() => {
+    return displayMember.value?.user_email === user_store.getEmail
+})
+
 const menuItems = computed<
     Array<{
         label: string
@@ -72,7 +81,8 @@ const menuItems = computed<
         items.push({
             label: t('views.members_aside.update_profile'),
             icon: 'pi pi-user-edit',
-            command: () => updateProfile(displayMember.value.nickname, displayMember.value.avatar_url)
+            command: () =>
+                updateProfile(displayMember.value.nickname, displayMember.value.avatar_url)
         })
     }
 
@@ -113,9 +123,7 @@ const onItemSelected = (item: unknown): void => {
         <div class="relative flex items-start gap-6">
             <!-- Avatar -->
             <div class="relative shrink-0">
-                <div
-                    class="w-24 h-24 rounded-2xl overflow-hidden"
-                >
+                <div class="w-24 h-24 rounded-2xl overflow-hidden">
                     <img
                         v-if="displayMember.avatar_url"
                         :src="displayMember.avatar_url"
@@ -129,10 +137,8 @@ const onItemSelected = (item: unknown): void => {
                         {{ initials }}
                     </div>
                 </div>
-                <div
-                    class="absolute -bottom-2 -right-2 px-3 py-1 rounded-full bg-primary-100 text-xs font-bold text-primary-700 shadow-lg border-2 border-white"
-                >
-                    {{ displayMember.role_name }}
+                <div class="absolute -bottom-2.5 -right-4">
+                    <RoleBadge :role-name="member.role_name" />
                 </div>
             </div>
 
@@ -141,9 +147,10 @@ const onItemSelected = (item: unknown): void => {
                 <div class="flex items-start justify-between gap-4 mb-3">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-3 mb-2">
-                            <h1 class="text-3xl font-bold text-surface-900 truncate">
+                            <h1 class="text-3xl font-bold text-surface-900 truncate max-w-85">
                                 {{ displayName }}
                             </h1>
+                            <CurrentUserBadge :show="is_current_user" />
                             <Badge
                                 v-if="isArchived"
                                 :value="t('common.fields.left_server')"

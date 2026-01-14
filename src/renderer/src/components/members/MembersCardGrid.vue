@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import MemberCard from '@/components/members/MemberCard.vue'
 import { useI18n } from 'vue-i18n'
 import MemberIcon from '@/components/common/icons/MemberIcon.vue'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
 
@@ -14,6 +15,23 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
     loading: false
+})
+
+const user_store = useUserStore()
+
+// Sort members to show current user first (top-left)
+const sorted_members = computed(() => {
+    const current_user_email = user_store.getEmail
+    if (!current_user_email) return props.members
+
+    return [...props.members].sort((a, b) => {
+        const a_is_current = a.user_email === current_user_email
+        const b_is_current = b.user_email === current_user_email
+        
+        if (a_is_current && !b_is_current) return -1
+        if (!a_is_current && b_is_current) return 1
+        return 0
+    })
 })
 
 const isEmpty = computed(() => props.members.length === 0 && !props.loading)
@@ -27,7 +45,7 @@ const isEmpty = computed(() => props.members.length === 0 && !props.loading)
             tag="div"
             class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 pb-8"
         >
-            <MemberCard v-for="member in members" :key="member.public_id" :member="member" />
+            <MemberCard v-for="member in sorted_members" :key="member.public_id" :member="member" />
         </TransitionGroup>
 
         <!-- Loading State -->

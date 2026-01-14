@@ -32,7 +32,9 @@
             "no_description": "Aucune description",
             "no_data": "Aucune donnée disponible",
             "archived": "Archivé",
-            "left_server": "A quitté le serveur"
+            "left_server": "A quitté le serveur",
+            "you": "Vous",
+            "role": "Rôle {role}"
         },
         "actions": {
             "choose": "Choisir",
