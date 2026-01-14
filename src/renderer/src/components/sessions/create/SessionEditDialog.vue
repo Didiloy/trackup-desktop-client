@@ -31,7 +31,7 @@ function onSuccess(updatedSession: ISession): void {
     <AppDialog
         :model-value="modelValue"
         :style-class="'w-[600px] max-w-[92vw] max-h-[90vh] flex flex-col'"
-        :content-class="'overflow-y-auto p-0 flex-1'"
+        :content-class="'overflow-y-auto p-0 flex-1 bg-surface-50'"
         @update:model-value="emit('update:modelValue', $event)"
     >
         <template #header>
@@ -39,9 +39,9 @@ function onSuccess(updatedSession: ISession): void {
                 class="flex items-center gap-3 p-4 text-xl font-bold text-surface-900 border-b border-surface-200"
             >
                 <SessionIcon class="w-6 h-6 text-primary-500" />
-                <span
-                    >{{ t('common.actions.edit') }}
-                    {{ t('views.server_sessions.title_single').toLowerCase() }}</span
+                <span>
+                    {{ t('common.actions.edit') }}
+                </span
                 >
             </div>
         </template>
