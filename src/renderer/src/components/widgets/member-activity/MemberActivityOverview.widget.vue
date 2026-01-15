@@ -90,13 +90,26 @@ const skillLevelLabel = computed(() => translateSkillLevel(stats.value?.skill_le
 </script>
 
 <template>
-    <BaseWidgetContainer :title="t('widgets.member_activity.overview.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
-        <ActivityIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            class="top-4 right-[130px]"
-        />
+    <BaseWidgetContainer :loading="isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('widgets.member_activity.overview.title') }}
+                    </h3>
+                    <MemberIdentityCorner
+                        :show="props.showIdentity"
+                        class="static ml-5"
+                        :member-id="memberId"
+                    />
+                    <ActivityIdentityCorner
+                        :show="props.showIdentity"
+                        class="static"
+                        :activity-id="activityId"
+                    />
+                </div>
+            </div>
+        </template>
 
         <div v-if="stats" class="space-y-4">
             <!-- Activity Name -->
