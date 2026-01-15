@@ -23,7 +23,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        defaultSize: { w: 4, h: 5, minW: 4, minH: 5 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -96,7 +96,11 @@ const mostActiveHour = computed(() => {
 
 <template>
     <BaseWidgetContainer :title="t('views.server_members.patterns.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <MemberIdentityCorner
+            class="top-10 ml-53"
+            :show="props.showIdentity"
+            :member-id="memberId"
+        />
         <div v-if="patterns" class="space-y-6">
             <div>
                 <h4 class="text-sm font-medium mb-3">

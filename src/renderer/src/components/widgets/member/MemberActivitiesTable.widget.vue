@@ -28,7 +28,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
+        defaultSize: { w: 6, h: 8, minW: 6, minH: 8 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -97,7 +97,11 @@ const navigateToActivity = async (activityId: string): Promise<void> => {
 
 <template>
     <BaseWidgetContainer :title="t('widgets.member.activities_table.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <MemberIdentityCorner
+            class="top-10 ml-53"
+            :show="props.showIdentity"
+            :member-id="memberId"
+        />
 
         <div
             v-if="activities.length === 0 && !isLoading"
@@ -123,7 +127,7 @@ const navigateToActivity = async (activityId: string): Promise<void> => {
                             v-if="activity.skill_level"
                             class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-primary-50 text-primary-700 text-xs font-medium"
                         >
-                            <SkillLevelIcon/>
+                            <SkillLevelIcon />
                             <span>{{ translateSkillLevel(activity.skill_level, t) }}</span>
                         </div>
                     </div>

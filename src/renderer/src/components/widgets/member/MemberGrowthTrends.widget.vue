@@ -25,7 +25,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 },
+        defaultSize: { w: 6, h: 3, minW: 6, minH: 3 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })

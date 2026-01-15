@@ -27,7 +27,7 @@ defineOptions({
             key: EWidgetCategory.MemberActivities,
             label_key: 'widgets.categories.member_activity'
         },
-        defaultSize: { w: 4, h: 10, minW: 4, minH: 10 },
+        defaultSize: { w: 4, h: 7, minW: 4, minH: 7 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })

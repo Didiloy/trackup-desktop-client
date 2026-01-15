@@ -26,7 +26,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        defaultSize: { w: 4, h: 4, minW: 4, minH: 4 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -108,7 +108,11 @@ const statsData = computed(() => {
 
 <template>
     <BaseWidgetContainer :title="t('views.server_members.ranking.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <MemberIdentityCorner
+            class="top-10 ml-32"
+            :show="props.showIdentity"
+            :member-id="memberId"
+        />
         <div class="space-y-4">
             <!-- Overall Ranking -->
             <div
@@ -120,13 +124,13 @@ const statsData = computed(() => {
                     <Icon :icon="item.icon" class="text-primary-600 text-2xl" />
                     <div>
                         <div class="text-sm font-medium text-gray-700">{{ item.label }}</div>
-<!--                        <div class="text-xs text-gray-500">-->
-<!--                            {{-->
-<!--                                t('views.server_members.ranking.percentile', {-->
-<!--                                    percentile: item.percentile-->
-<!--                                })-->
-<!--                            }}-->
-<!--                        </div>-->
+                        <!--                        <div class="text-xs text-gray-500">-->
+                        <!--                            {{-->
+                        <!--                                t('views.server_members.ranking.percentile', {-->
+                        <!--                                    percentile: item.percentile-->
+                        <!--                                })-->
+                        <!--                            }}-->
+                        <!--                        </div>-->
                     </div>
                 </div>
                 <div class="text-right">

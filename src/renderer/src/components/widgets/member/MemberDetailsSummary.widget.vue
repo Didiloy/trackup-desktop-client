@@ -27,7 +27,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        defaultSize: { w: 4, h: 7, minW: 4, minH: 7 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -109,7 +109,11 @@ const favoriteActivity = computed(() => details.value?.favorite_activity)
 
 <template>
     <BaseWidgetContainer :title="t('widgets.member.details_summary.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <MemberIdentityCorner
+            class="top-10 ml-45"
+            :show="props.showIdentity"
+            :member-id="memberId"
+        />
 
         <div v-if="details" class="space-y-6">
             <!-- Main Stats Grid -->

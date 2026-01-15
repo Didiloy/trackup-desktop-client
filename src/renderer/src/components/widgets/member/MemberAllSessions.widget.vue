@@ -26,7 +26,7 @@ defineOptions({
             key: EWidgetCategory.Member,
             label_key: 'widgets.categories.member'
         },
-        defaultSize: { w: 6, h: 8, minW: 4, minH: 6 },
+        defaultSize: { w: 4, h: 6, minW: 4, minH: 6 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -94,7 +94,11 @@ async function navigateToSession(sessionId: string): Promise<void> {
 
 <template>
     <BaseWidgetContainer :title="t('widgets.member.all_sessions.title')" :loading="isLoading">
-        <MemberIdentityCorner :show="props.showIdentity" :member-id="memberId" />
+        <MemberIdentityCorner
+            class="top-10 ml-48"
+            :show="props.showIdentity"
+            :member-id="memberId"
+        />
 
         <div
             v-if="sessions.length === 0 && !isLoading"
