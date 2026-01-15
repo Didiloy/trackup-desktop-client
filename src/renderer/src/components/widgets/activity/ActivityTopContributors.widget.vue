@@ -85,13 +85,23 @@ const contributorsData = computed(() => {
 
 <template>
     <BaseWidgetContainer>
-        <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
-        <div class="flex items-center justify-between mb-4">
-            <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.server_activities.card.top_contributor') }}
-            </p>
-            <span class="text-xs text-surface-400">{{ contributorsData.length }} </span>
-        </div>
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg font-bold text-surface-900">
+                            {{ t('views.server_activities.card.top_contributor') }}
+                        </h3>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                        />
+                    </div>
+                    <span class="text-xs text-surface-400">{{ contributorsData.length }}</span>
+                </div>
+            </div>
+        </template>
 
         <div class="space-y-3">
             <div

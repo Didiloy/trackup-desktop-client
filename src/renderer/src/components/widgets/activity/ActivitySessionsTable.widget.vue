@@ -92,13 +92,18 @@ watch(
 
 <template>
     <BaseWidgetContainer :loading="loading && sessions.length === 0">
-        <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
-
         <template #header>
             <div class="px-5 pt-5 pb-3">
-                <p class="text-sm font-semibold text-surface-600">
-                    {{ t('views.server_activities.recent_sessions') }}
-                </p>
+                <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('views.server_activities.recent_sessions') }}
+                    </h3>
+                    <ActivityIdentityCorner
+                        :show="props.showIdentity"
+                        class="static"
+                        :activity-id="activityId"
+                    />
+                </div>
             </div>
         </template>
 

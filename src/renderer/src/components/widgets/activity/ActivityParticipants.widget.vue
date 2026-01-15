@@ -111,10 +111,20 @@ const items = computed(() => {
 
 <template>
     <BaseWidgetContainer>
-        <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
-        <p class="text-sm font-semibold text-surface-600 mb-4">
-            {{ t('views.server_activities.performance_section.participants') }}
-        </p>
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('views.server_activities.performance_section.participants') }}
+                    </h3>
+                    <ActivityIdentityCorner
+                        :show="props.showIdentity"
+                        class="static"
+                        :activity-id="activityId"
+                    />
+                </div>
+            </div>
+        </template>
 
         <div v-if="items.length" class="space-y-5">
             <div

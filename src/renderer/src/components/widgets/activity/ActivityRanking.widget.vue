@@ -90,16 +90,20 @@ const rankPercent = computed(() => {
 
 <template>
     <BaseWidgetContainer>
-        <div class="flex items-center gap-3 mb-4">
-            <p class="text-sm font-semibold text-surface-600">
-                {{ t('views.server_activities.performance_section.ranking') }}
-            </p>
-            <ActivityIdentityCorner
-                :show="props.showIdentity"
-                class="static"
-                :activity-id="activityId"
-            />
-        </div>
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-bold text-surface-900">
+                        {{ t('views.server_activities.performance_section.ranking') }}
+                    </h3>
+                    <ActivityIdentityCorner
+                        :show="props.showIdentity"
+                        class="static"
+                        :activity-id="activityId"
+                    />
+                </div>
+            </div>
+        </template>
 
         <div v-if="isLoading" class="flex items-center justify-center py-10">
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>

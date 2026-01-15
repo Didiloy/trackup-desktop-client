@@ -136,9 +136,9 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
             <div class="px-5 pt-5 pb-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <p class="text-sm font-semibold text-surface-600">
+                        <h3 class="text-lg font-bold text-surface-900">
                             {{ t('views.server_activities.performance_section.heatmap') }}
-                        </p>
+                        </h3>
                         <ActivityIdentityCorner
                             :show="props.showIdentity"
                             class="static"
