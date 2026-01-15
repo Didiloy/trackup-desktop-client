@@ -10,6 +10,8 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
+import ActivityIdentityCorner from '@/components/activities/profile/ActivityIdentityCorner.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -21,7 +23,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 6, h: 3, minW: 4, minH: 2 },
+        defaultSize: { w: 4, h: 6, minW: 4, minH: 6 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -138,7 +140,7 @@ const cards = computed(() => {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <BaseWidgetContainer>
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.server_activities.performance_section.patterns') }}
@@ -153,5 +155,5 @@ const cards = computed(() => {
                 <p class="text-lg font-semibold text-surface-900">{{ card.value }}</p>
             </div>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

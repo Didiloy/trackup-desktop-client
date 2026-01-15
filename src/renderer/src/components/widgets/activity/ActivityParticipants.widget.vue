@@ -11,6 +11,7 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -22,7 +23,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 6, h: 3, minW: 4, minH: 2 },
+        defaultSize: { w: 4, h: 5, minW: 4, minH: 5 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -109,13 +110,13 @@ const items = computed(() => {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <BaseWidgetContainer>
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <p class="text-sm font-semibold text-surface-600 mb-4">
             {{ t('views.server_activities.performance_section.participants') }}
         </p>
 
-        <div v-if="items.length" class="space-y-4">
+        <div v-if="items.length" class="space-y-5">
             <div
                 v-for="item in items"
                 :key="item.label"
@@ -137,5 +138,5 @@ const items = computed(() => {
         <div v-else class="flex items-center justify-center py-10 text-surface-400 text-sm">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

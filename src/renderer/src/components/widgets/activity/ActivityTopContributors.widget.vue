@@ -12,6 +12,7 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -23,7 +24,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 },
+        defaultSize: { w: 4, h: 4, minW: 4, minH: 4 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -81,7 +82,7 @@ const contributorsData = computed(() => {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <BaseWidgetContainer>
         <ActivityIdentityCorner :show="props.showIdentity" :activity-id="activityId" />
         <div class="flex items-center justify-between mb-4">
             <p class="text-sm font-semibold text-surface-600">
@@ -120,5 +121,5 @@ const contributorsData = computed(() => {
         <div v-if="!contributorsData.length" class="text-sm text-surface-400 text-center py-4">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

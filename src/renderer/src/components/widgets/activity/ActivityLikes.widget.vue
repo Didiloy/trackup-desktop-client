@@ -12,7 +12,6 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type {
     IActivityStats,
-    IActivityStatsDetails
 } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 

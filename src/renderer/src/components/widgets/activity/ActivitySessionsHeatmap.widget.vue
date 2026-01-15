@@ -25,7 +25,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 12, h: 6, minW: 10, minH: 5 },
+        defaultSize: { w: 12, h: 5, minW: 12, minH: 5 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -157,7 +157,7 @@ function tooltipFor(day: { date: Date; count: number; duration: number }): strin
                 <div
                     v-for="(week, weekIndex) in heatmapData"
                     :key="weekIndex"
-                    class="grid grid-rows-7 gap-1"
+                    class="grid grid-rows-7 gap-3"
                 >
                     <div
                         v-for="day in week"

@@ -12,6 +12,7 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityRanking } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -23,7 +24,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 },
+        defaultSize: { w: 3, h: 5, minW: 3, minH: 5 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -88,7 +89,7 @@ const rankPercent = computed(() => {
 </script>
 
 <template>
-    <div class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm">
+    <BaseWidgetContainer>
         <div class="flex items-center gap-3 mb-4">
             <p class="text-sm font-semibold text-surface-600">
                 {{ t('views.server_activities.performance_section.ranking') }}
@@ -104,7 +105,7 @@ const rankPercent = computed(() => {
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
         </div>
 
-        <div v-else-if="rankingData" class="space-y-6">
+        <div v-else-if="rankingData" class="space-y-6 h-full">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-3xl font-bold text-surface-900">
@@ -175,5 +176,5 @@ const rankPercent = computed(() => {
         <div v-else class="flex items-center justify-center py-10 text-surface-400 text-sm">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

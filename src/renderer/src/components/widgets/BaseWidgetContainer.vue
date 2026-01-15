@@ -30,7 +30,7 @@ defineProps<{
             <!-- Main Content -->
             <div
                 class="widget-body flex-1 flex flex-col overflow-hidden"
-                :class="noPadding ? '' : 'p-5'"
+                :class="noPadding ? '' : 'p-1'"
             >
                 <slot />
             </div>

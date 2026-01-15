@@ -13,6 +13,7 @@ import {
 } from '@shared/contracts/interfaces/widget.interfaces'
 import type { IActivityGrowthTrends } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -24,7 +25,7 @@ defineOptions({
             key: EWidgetCategory.Activity,
             label_key: 'widgets.categories.activity'
         },
-        defaultSize: { w: 12, h: 4, minW: 6, minH: 3 },
+        defaultSize: { w: 4, h: 6, minW: 4, minH: 6 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -125,9 +126,7 @@ function formatValue(val: number, isDuration?: boolean): string {
 </script>
 
 <template>
-    <div
-        class="relative rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm flex flex-col"
-    >
+    <BaseWidgetContainer>
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <p class="text-sm font-semibold text-surface-600">
@@ -140,8 +139,8 @@ function formatValue(val: number, isDuration?: boolean): string {
                 />
             </div>
             <PeriodSelector
-                :period="null"
                 v-model:selected-period-type="selectedPeriod"
+                :period="null"
                 :show-custom="false"
             />
         </div>
@@ -150,7 +149,7 @@ function formatValue(val: number, isDuration?: boolean): string {
             <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
         </div>
 
-        <div v-else-if="growthTrends" class="space-y-4 flex-1">
+        <div v-else-if="growthTrends" class="space-y-2.5 flex-1">
             <div
                 v-for="metric in metrics"
                 :key="metric.label"
@@ -199,5 +198,5 @@ function formatValue(val: number, isDuration?: boolean): string {
         <div v-else class="flex-1 flex items-center justify-center py-10 text-surface-400 text-sm">
             {{ t('common.fields.none') }}
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>
