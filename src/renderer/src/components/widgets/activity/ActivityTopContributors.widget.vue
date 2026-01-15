@@ -13,6 +13,7 @@ import {
 import type { IActivityStatsDetails } from '@shared/contracts/interfaces/entities-stats/activity-stats.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
+import { useMemberNavigation } from '@/composables/members/useMemberNavigation'
 
 defineOptions({
     widgetMetadata: {
@@ -44,6 +45,7 @@ const { t } = useI18n()
 const route = useRoute()
 const server_store = useServerStore()
 const { getActivityStatsDetails } = useActivityStatsCRUD()
+const { navigateToMemberProfile } = useMemberNavigation()
 
 const activityId = computed(() => (route.params.activityId as string) || props.config?.activityId)
 const localDetails = ref<IActivityStatsDetails | null>(null)
@@ -100,7 +102,12 @@ const contributorsData = computed(() => {
                 <span class="text-lg font-semibold text-primary-500">#{{ member.rank }}</span>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-surface-900">
-                        {{ server_store.getMemberById(member.member_id)?.nickname }}
+                        <span
+                            class="cursor-pointer hover:underline hover:text-primary-600"
+                            @click="navigateToMemberProfile(member.member_id)"
+                        >
+                            {{ server_store.getMemberById(member.member_id)?.nickname }}
+                        </span>
                     </p>
                     <p class="text-xs text-surface-500">
                         {{ member.sessions_count }}

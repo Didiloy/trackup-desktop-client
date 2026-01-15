@@ -200,23 +200,23 @@ onMounted(async () => {
 
                             <ActivityTimelineChartWidget :show-identity="false" class="mb-6" />
 
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                                <div class="space-y-5 min-w-0">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6 items-start">
+                                <div class="flex flex-col space-y-5 min-w-0">
                                     <ActivityRankingWidget :show-identity="false" />
                                     <ActivityGrowthComparisonWidget :show-identity="false" />
                                     <ActivityTopContributorsWidget :show-identity="false" />
                                 </div>
-                                <div class="space-y-5 min-w-0">
+                                <div class="flex flex-col space-y-5 min-w-0">
                                     <ActivityParticipantsWidget :show-identity="false" />
                                     <ActivityPatternsSummaryWidget :show-identity="false" />
                                 </div>
                             </div>
 
-                            <!-- Heatmap in its own full-width card -->
                             <ActivitySessionsHeatmapWidget
                                 :show-identity="false"
-                                class="mb-6 w-full"
+                                class="w-full"
                             />
+
                         </div>
                     </TransitionWrapper>
                 </TabPanel>
