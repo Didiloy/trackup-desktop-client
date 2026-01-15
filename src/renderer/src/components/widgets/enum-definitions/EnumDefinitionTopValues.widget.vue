@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionStatsCRUD } from '@/composables/enum-definitions/useEnumDefinitionStatsCRUD'
 import EnumDefinitionIdentityCorner from '@/components/enum-definitions/profile/EnumDefinitionIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -22,7 +23,7 @@ defineOptions({
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
         },
-        defaultSize: { w: 4, h: 6, minW: 3, minH: 5 },
+        defaultSize: { w: 4, h: 4, minW: 4, minH: 4 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -102,33 +103,30 @@ const maxUsage = computed(() => {
 </script>
 
 <template>
-    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
-        <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-4">
-            <div
-                class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center"
-            >
-                <i class="pi pi-list text-lg"></i>
-            </div>
-            <div>
-                <h3 class="font-semibold text-surface-900">
-                    {{ t('views.server_enum_definitions.profile.top_values.title') }}
-                </h3>
-            </div>
-        </div>
+    <BaseWidgetContainer :loading="loading">
+        <template #header>
+            <div class="pt-2 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
 
-        <!-- Loading State -->
-        <div v-if="loading" class="space-y-3">
-            <div v-for="i in 5" :key="i" class="flex items-center gap-3">
-                <Skeleton width="30px" height="24px" class="rounded-lg" />
-                <Skeleton width="100%" height="36px" class="rounded-lg" />
+                        <div>
+                            <h3 class="text-lg font-bold text-surface-900">
+                                {{ t('views.server_enum_definitions.profile.top_values.title') }}
+                            </h3>
+                        </div>
+                        <EnumDefinitionIdentityCorner
+                            :show="props.showIdentity"
+                            class="static ml-5"
+                            :definition-id="definitionId"
+                        />
+                    </div>
+                </div>
             </div>
-        </div>
+        </template>
 
         <!-- Empty State -->
         <div
-            v-else-if="!sortedValues.length"
+            v-if="!sortedValues.length"
             class="flex flex-col items-center justify-center h-48 text-surface-400"
         >
             <i class="pi pi-list text-4xl mb-3"></i>
@@ -181,5 +179,5 @@ const maxUsage = computed(() => {
                 </div>
             </div>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

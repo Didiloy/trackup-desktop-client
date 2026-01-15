@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import type {
     IWidgetMetadata,
     IEnumDefinitionWidgetConfig
@@ -21,7 +22,7 @@ defineOptions({
             key: EWidgetCategory.EnumDefinition,
             label_key: 'widgets.categories.enum_definition'
         },
-        defaultSize: { w: 4, h: 4, minW: 3, minH: 3 },
+        defaultSize: { w: 4, h: 3, minW: 4, minH: 3 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -73,33 +74,37 @@ const choices = computed(() => {
 </script>
 
 <template>
-    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
-        <EnumDefinitionIdentityCorner :show="props.showIdentity" :definition-id="definitionId" />
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-5">
-            <div
-                class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center"
-            >
-                <i class="pi pi-check-square text-lg"></i>
+    <BaseWidgetContainer :loading="loading">
+        <template #header>
+            <div class="pt-2 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0"
+                        >
+                            <i class="pi pi-tags text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-surface-900">
+                                {{ t('widgets.enum_definition.choices.title') }}
+                            </h3>
+                            <p class="text-xs text-surface-500 mt-1">
+                                {{ choices.length }} {{ t('common.fields.items') }}
+                            </p>
+                        </div>
+                        <EnumDefinitionIdentityCorner
+                            :show="props.showIdentity"
+                            class="static ml-5"
+                            :definition-id="definitionId"
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 class="font-semibold text-surface-900">
-                    {{ t('widgets.enum_definition.choices.title') }}
-                </h3>
-                <p class="text-sm text-surface-500">
-                    {{ choices.length }} {{ t('common.fields.items') }}
-                </p>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="loading" class="flex flex-wrap gap-2">
-            <Skeleton v-for="i in 6" :key="i" width="80px" height="32px" class="rounded-lg" />
-        </div>
+        </template>
 
         <!-- Empty State -->
         <div
-            v-else-if="!choices.length"
+            v-if="!choices.length"
             class="flex flex-col items-center justify-center py-8 text-surface-400"
         >
             <i class="pi pi-list text-3xl mb-2"></i>
@@ -111,10 +116,10 @@ const choices = computed(() => {
             <span
                 v-for="(choice, idx) in choices"
                 :key="idx"
-                class="px-3 py-1.5 rounded-xl text-sm font-medium bg-surface-100 text-surface-700 ring-1 ring-inset ring-surface-200 transition-transform hover:scale-105 hover:bg-surface-200"
+                class="px-3 py-1.5 rounded-xl text-sm font-medium bg-surface-100 text-surface-700 ring-1 ring-inset ring-surface-200 transition-transform hover:bg-surface-200"
             >
                 {{ choice }}
             </span>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>
