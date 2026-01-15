@@ -125,6 +125,7 @@ export interface ITopMember {
 export interface ITopActivity {
     activity_id: string
     activity_name: string
+    activity_logo?: string
     total_sessions: number
     total_duration: number
     avg_duration: number

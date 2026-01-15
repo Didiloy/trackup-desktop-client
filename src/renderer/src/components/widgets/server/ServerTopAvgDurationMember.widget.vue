@@ -10,6 +10,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -21,7 +22,7 @@ defineOptions({
             key: EWidgetCategory.Server,
             label_key: 'widgets.categories.server'
         },
-        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
+        defaultSize: { w: 3, h: 4, minW: 3, minH: 4 }
     } satisfies IWidgetMetadata
 })
 
@@ -107,11 +108,11 @@ const HandleMemberClick = async (): Promise<void> => {
                 >
                     <span class="flex items-center gap-1">
                         <Icon icon="pi pi-clock" class="text-[10px]" />
-                        {{ formatMinutesToLabel(avg_duration) }} moy.
+                        {{ formatMinutesToLabel(avg_duration) }}
                     </span>
                     <span class="flex items-center gap-1">
-                        <Icon icon="pi pi-calendar" class="text-[10px]" />
-                        {{ member_stats.total_sessions }} sessions
+                        <SessionIcon />
+                        {{ member_stats.total_sessions }}
                     </span>
                 </div>
             </div>

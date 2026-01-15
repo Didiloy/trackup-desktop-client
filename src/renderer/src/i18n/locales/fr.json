@@ -609,7 +609,7 @@
             "top_avg_duration_member": "Meilleure durée moyenne",
             "best_avg_duration_member": "Meilleure durée moy.",
             "activity_of_week": "Activité de la semaine",
-            "most_played_this_week": "La plus jouée cette semaine",
+            "most_practice_this_week": "La plus pratiquée cette semaine",
             "top_member_week_tooltip": "Membre avec la plus grande durée totale dans les 7 derniers jours",
             "top_member_month_tooltip": "Membre avec la plus grande durée totale dans les 30 derniers jours",
             "top_sessions_member_tooltip": "Membre avec le plus de sessions créées (tout le temps)",

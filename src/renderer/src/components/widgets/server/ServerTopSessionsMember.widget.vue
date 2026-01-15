@@ -10,6 +10,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -21,7 +22,7 @@ defineOptions({
             key: EWidgetCategory.Server,
             label_key: 'widgets.categories.server'
         },
-        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
+        defaultSize: { w: 3, h: 4, minW: 3, minH: 4 }
     } satisfies IWidgetMetadata
 })
 
@@ -30,7 +31,9 @@ const server_store = useServerStore()
 const server_stats_store = useServerStatsStore()
 const { navigateToMemberProfile } = useMemberNavigation()
 
-const top_member_id = computed(() => server_stats_store.getDetails?.server_stats.top_sessions_member)
+const top_member_id = computed(
+    () => server_stats_store.getDetails?.server_stats.top_sessions_member
+)
 const top_member = computed(() => {
     if (!top_member_id.value) return null
     return server_store.getMemberById(top_member_id.value)
@@ -97,8 +100,8 @@ const HandleMemberClick = async (): Promise<void> => {
                     class="mt-2 flex items-center justify-center gap-3 text-xs text-surface-600"
                 >
                     <span class="flex items-center gap-1">
-                        <Icon icon="pi pi-calendar" class="text-[10px]" />
-                        {{ member_stats.total_sessions }} sessions
+                        <SessionIcon />
+                        {{ member_stats.total_sessions }}
                     </span>
                     <span class="flex items-center gap-1">
                         <Icon icon="pi pi-clock" class="text-[10px]" />

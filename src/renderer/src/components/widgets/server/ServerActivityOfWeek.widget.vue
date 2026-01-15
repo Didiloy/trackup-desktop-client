@@ -4,21 +4,24 @@ import { computed } from 'vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
+import AvatarButton from '@/components/common/buttons/AvatarButton.vue'
 import Icon from '@/components/common/icons/Icon.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
         id: 'server-activity-of-week',
         title_key: 'widgets.server.activity_of_week.title',
-        icon: 'pi pi-fire',
+        icon: 'pi pi-bell',
         description_key: 'widgets.server.activity_of_week.description',
         category: {
             key: EWidgetCategory.Server,
             label_key: 'widgets.categories.server'
         },
-        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
+        defaultSize: { w: 3, h: 4, minW: 3, minH: 4 }
     } satisfies IWidgetMetadata
 })
 
@@ -46,7 +49,7 @@ const HandleActivityClick = async (): Promise<void> => {
         <template #header>
             <div class="px-5 pt-5 pb-3">
                 <div class="flex items-center gap-2">
-                    <Icon icon="pi pi-fire" class="text-red-500" />
+                    <ActivityIcon class="text-red-500" />
                     <h3
                         class="text-lg font-bold text-surface-900"
                         v-tooltip.bottom="t('views.server_stats.activity_of_week_tooltip')"
@@ -72,22 +75,29 @@ const HandleActivityClick = async (): Promise<void> => {
             class="flex flex-col items-center justify-center h-full gap-3 cursor-pointer hover:bg-surface-50 rounded-xl transition-colors p-4"
             @click="HandleActivityClick"
         >
-            <div
-                class="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center shadow-sm"
-            >
-                <Icon icon="pi pi-fire" class="text-red-500 text-3xl" />
-            </div>
+            <AvatarButton
+                :label="activity.activity_name"
+                :image-url="activity.activity_logo"
+                icon="pi pi-fire"
+                size="xlarge"
+                shape="circle"
+                bg-variant="soft"
+                :hover-scale="false"
+                button-class="bg-red-500/10"
+                avatar-class="text-red-500"
+                @click="HandleActivityClick"
+            />
             <div class="text-center w-full">
                 <p class="text-lg font-bold text-surface-900 truncate">
                     {{ activity.activity_name }}
                 </p>
                 <p class="text-sm text-surface-500">
-                    {{ t('views.server_stats.most_played_this_week') }}
+                    {{ t('views.server_stats.most_practice_this_week') }}
                 </p>
                 <div class="mt-2 flex items-center justify-center gap-3 text-xs text-surface-600">
                     <span class="flex items-center gap-1">
-                        <Icon icon="pi pi-calendar" class="text-[10px]" />
-                        {{ activity.total_sessions }} sessions
+                        <SessionIcon/>
+                        {{ activity.total_sessions }}
                     </span>
                 </div>
             </div>

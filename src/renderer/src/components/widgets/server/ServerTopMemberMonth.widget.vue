@@ -10,6 +10,7 @@ import { formatMinutesToLabel } from '@/utils/time.utils'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import SessionIcon from '@/components/common/icons/SessionIcon.vue'
 
 defineOptions({
     widgetMetadata: {
@@ -21,7 +22,7 @@ defineOptions({
             key: EWidgetCategory.Server,
             label_key: 'widgets.categories.server'
         },
-        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 }
+        defaultSize: { w: 3, h: 4, minW: 3, minH: 4 }
     } satisfies IWidgetMetadata
 })
 
@@ -89,7 +90,9 @@ const HandleMemberClick = async (): Promise<void> => {
             />
             <div class="text-center w-full">
                 <p class="text-lg font-bold text-surface-900 truncate">{{ top_member.nickname }}</p>
-                <p class="text-sm text-surface-500">{{ t('views.server_stats.member_of_month') }}</p>
+                <p class="text-sm text-surface-500">
+                    {{ t('views.server_stats.member_of_month') }}
+                </p>
                 <div
                     v-if="member_stats"
                     class="mt-2 flex items-center justify-center gap-3 text-xs text-surface-600"
@@ -99,8 +102,8 @@ const HandleMemberClick = async (): Promise<void> => {
                         {{ formatMinutesToLabel(member_stats.total_duration ?? 0) }}
                     </span>
                     <span class="flex items-center gap-1">
-                        <Icon icon="pi pi-calendar" class="text-[10px]" />
-                        {{ member_stats.total_sessions }} sessions
+                        <SessionIcon />
+                        {{ member_stats.total_sessions }}
                     </span>
                 </div>
             </div>
