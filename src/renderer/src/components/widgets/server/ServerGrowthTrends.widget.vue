@@ -8,6 +8,7 @@ import type { IServerGrowthResponse } from '@shared/contracts/interfaces/entitie
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { formatMinutesToLabel } from '@/utils/time.utils'
 
 defineOptions({
     widgetMetadata: {
@@ -123,7 +124,7 @@ function getGrowthIcon(value: number): string {
 </script>
 
 <template>
-    <BaseWidgetContainer :loading="isLoading">
+    <BaseWidgetContainer :loading="isLoading" >
         <template #header>
             <div class="px-5 pt-5 pb-3">
                 <div class="flex items-center justify-between">
@@ -155,7 +156,7 @@ function getGrowthIcon(value: number): string {
                     <p class="text-xl font-bold text-surface-900">
                         {{
                             metric.key === 'duration'
-                                ? (metric.current / 60).toFixed(1) + 'h'
+                                ? formatMinutesToLabel(metric.current)
                                 : metric.current.toLocaleString()
                         }}
                     </p>
