@@ -15,11 +15,18 @@ const { refreshInviteCode } = useServerCRUD()
 
 const isRefreshing = ref(false)
 const showToken = ref(false)
+const showServerId = ref(false)
 
 const maskedCode = computed(() => {
     if (!server_store.getInvitationCode) return '••••••••••'
     if (showToken.value) return server_store.getInvitationCode
     return maskKey(server_store.getInvitationCode)
+})
+
+const maskedServerId = computed(() => {
+    if (!server_store.getPublicId) return '••••••••••'
+    if (showServerId.value) return server_store.getPublicId
+    return maskKey(server_store.getPublicId)
 })
 
 const formattedExpiry = computed(() => {
@@ -36,6 +43,14 @@ const handleCopy = (): void => {
 }
 
 /**
+ * Copy server ID to clipboard
+ */
+const handleCopyServerId = (): void => {
+    if (!server_store.getPublicId) return
+    copyKeyToClipBoard(server_store.getPublicId, toast, { t } as any)
+}
+
+/**
  * Refresh the invitation code
  */
 const handleRefresh = async (): Promise<void> => {
@@ -49,7 +64,7 @@ const handleRefresh = async (): Promise<void> => {
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.title'),
-                detail: t('views.server_settings.invitation.refresh_success'),
+                detail: t('views.server_settings.confidential.refresh_success'),
                 life: 3000
             })
         } else {
@@ -79,12 +94,43 @@ const handleRefresh = async (): Promise<void> => {
         <!-- Section Header -->
         <div class="flex flex-col gap-1">
             <h2 class="text-xl font-bold text-surface-900 flex items-center gap-2">
-                <i class="pi pi-link" />
-                {{ t('views.server_settings.invitation.title') }}
+                <i class="pi pi-shield" />
+                {{ t('views.server_settings.confidential.title') }}
             </h2>
             <p class="text-surface-500 text-sm">
-                {{ t('views.server_settings.invitation.description') }}
+                {{ t('views.server_settings.confidential.description') }}
             </p>
+        </div>
+
+        <!-- Server ID Section -->
+        <div class="border border-surface-200 rounded-lg bg-surface-0 p-4">
+            <div class="flex flex-col gap-2">
+                <label class="font-medium text-surface-700 text-sm">
+                    {{ t('views.server_settings.confidential.server_id_label') }}
+                </label>
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 relative">
+                        <InputText
+                            :model-value="maskedServerId"
+                            class="w-full font-mono"
+                            readonly
+                        />
+                    </div>
+                    <Button
+                        :icon="showServerId ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                        severity="secondary"
+                        outlined
+                        @click="showServerId = !showServerId"
+                    />
+                    <Button
+                        icon="pi pi-copy"
+                        severity="secondary"
+                        outlined
+                        :disabled="!server_store.getPublicId"
+                        @click="handleCopyServerId"
+                    />
+                </div>
+            </div>
         </div>
 
         <!-- Invitation Code Section -->
@@ -93,7 +139,7 @@ const handleRefresh = async (): Promise<void> => {
                 <!-- Token Display -->
                 <div class="flex flex-col gap-2">
                     <label class="font-medium text-surface-700 text-sm">
-                        {{ t('views.server_settings.invitation.token_label') }}
+                        {{ t('views.server_settings.confidential.invitation_code_label') }}
                     </label>
                     <div class="flex items-center gap-2">
                         <div class="flex-1 relative">
@@ -122,13 +168,13 @@ const handleRefresh = async (): Promise<void> => {
                 <!-- Expiration Date -->
                 <div v-if="formattedExpiry" class="flex items-center gap-2 text-sm text-surface-500">
                     <i class="pi pi-calendar" />
-                    <span>{{ t('views.server_settings.invitation.expires_at') }}: {{ formattedExpiry }}</span>
+                    <span>{{ t('views.server_settings.confidential.expires_at') }}: {{ formattedExpiry }}</span>
                 </div>
 
                 <!-- Refresh Button -->
                 <div class="flex justify-end">
                     <Button
-                        :label="t('views.server_settings.invitation.refresh_button')"
+                        :label="t('views.server_settings.confidential.refresh_button')"
                         icon="pi pi-refresh"
                         severity="secondary"
                         :loading="isRefreshing"

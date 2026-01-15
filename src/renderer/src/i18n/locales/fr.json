@@ -744,10 +744,11 @@
         "server_settings": {
             "title": "Paramètres",
             "subtitle": "Gérez les paramètres du serveur",
-            "invitation": {
-                "title": "Code d'invitation",
-                "description": "Partagez ce code pour inviter des membres à rejoindre votre serveur.",
-                "token_label": "Code d'invitation",
+            "confidential": {
+                "title": "Informations confidentielles",
+                "server_id_label": "ID du serveur",
+                "invitation_code_label": "Code d'invitation",
+                "description": "Retrouvez ici les informations confidentielles de votre serveur.",
                 "expires_at": "Expire le",
                 "refresh_button": "Générer un nouveau code",
                 "copy_success": "Code copié dans le presse-papiers",

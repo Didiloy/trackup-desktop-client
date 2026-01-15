@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useServerStore } from '@/stores/server'
-import InvitationSection from '@/components/servers/InvitationSection.vue'
+import ConfidentialSection from '@/components/servers/ConfidentialSection.vue'
 import SnapshotManagement from '@/components/snapshots/SnapshotManagement.vue'
 import DangerZone from '@/components/servers/DangerZone.vue'
 import Divider from 'primevue/divider'
@@ -23,9 +23,9 @@ const server_store = useServerStore()
             </div>
         </div>
 
-        <!-- Invitation Section (Owner only) -->
+        <!-- Confidential Information Section (Owner only) -->
         <div v-if="server_store.getPublicId && server_store.isOwnership" class="mb-8">
-            <InvitationSection />
+            <ConfidentialSection />
             <Divider class="my-8" />
         </div>
 
