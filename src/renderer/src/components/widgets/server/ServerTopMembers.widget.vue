@@ -20,7 +20,7 @@ defineOptions({
             key: EWidgetCategory.Server,
             label_key: 'widgets.categories.server'
         },
-        defaultSize: { w: 6, h: 4, minW: 4, minH: 3 }
+        defaultSize: { w: 4, h: 4, minW: 4, minH: 4 }
     } satisfies IWidgetMetadata
 })
 
