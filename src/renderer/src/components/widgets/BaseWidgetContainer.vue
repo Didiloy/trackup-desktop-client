@@ -1,29 +1,49 @@
 <script setup lang="ts">
-defineProps<{
+import { ref, watch } from 'vue'
+import TransitionWrapper from '@/components/common/transitions/TransitionWrapper.vue'
+
+const props = defineProps<{
     title?: string
     loading?: boolean
     noPadding?: boolean
     noHeader?: boolean
 }>()
+
+// Only show spinner after a brief delay (avoids flash for quick loads)
+const showSpinner = ref(false)
+let timeout: NodeJS.Timeout | null = null
+
+watch(
+    () => props.loading,
+    (isLoading) => {
+        if (isLoading) {
+            // Show spinner after 150ms to avoid flash on quick loads
+            timeout = setTimeout(() => {
+                showSpinner.value = true
+            }, 150)
+        } else {
+            if (timeout) clearTimeout(timeout)
+            showSpinner.value = false
+        }
+    },
+    { immediate: true }
+)
 </script>
 
 <template>
     <div
         class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm h-full w-full flex flex-col hover:shadow-md transition-shadow text-left justify-between"
     >
-        <!-- Loading Overlay -->
-        <div
-            v-if="loading"
-            class="absolute inset-0 rounded-2xl bg-surface-100/80 backdrop-blur-sm flex items-center justify-center z-10"
-        >
-            <div class="flex flex-col items-center gap-3">
-                <ProgressSpinner
-                    style="width: 40px; height: 40px"
-                    stroke-width="4"
-                    animation-duration="1s"
-                />
+        <!-- Loading Overlay with smooth transition -->
+        <TransitionWrapper>
+            <div
+                v-if="loading && showSpinner"
+                class="absolute inset-0 rounded-2xl bg-surface-50/90 backdrop-blur-sm flex items-center justify-center z-10"
+            >
+                <!-- Lightweight CSS spinner -->
+                <div class="spinner"></div>
             </div>
-        </div>
+        </TransitionWrapper>
 
         <!-- Widget Content (always rendered) -->
         <div class="h-full w-full flex flex-col">
@@ -52,5 +72,21 @@ defineProps<{
 <style scoped>
 .widget-body {
     min-height: 0; /* Important for flex children with overflow */
+}
+
+/* Lightweight CSS spinner (much faster than ProgressSpinner component) */
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(var(--primary-500), 0.1);
+    border-top-color: rgb(var(--primary-500));
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>
