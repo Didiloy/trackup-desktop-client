@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
     <div
-        class="rounded-3xl bg-surface-0 ring-1 ring-surface-200/60 p-5 shadow-sm base-widget-container h-full w-full flex flex-col"
+        class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm h-full w-full flex flex-col hover:shadow-md transition-shadow text-left justify-between"
     >
         <!-- Loading State -->
         <div v-if="loading" class="h-full w-full rounded-2xl bg-surface-100 animate-pulse"></div>
@@ -39,12 +39,6 @@ defineProps<{
 </template>
 
 <style scoped>
-.base-widget-container {
-    border-radius: 1.5rem;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    border: 1px solid rgb(226 232 240 / 0.6);
-}
-
 .widget-body {
     min-height: 0; /* Important for flex children with overflow */
 }

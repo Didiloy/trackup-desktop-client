@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionStatsCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionStatsCRUD'
 import ActivityMetadataIdentityCorner from '@/components/activities/metadata/ActivityMetadataIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { VueUiDonut } from 'vue-data-ui'
 import type { VueUiDonutConfig, VueUiDonutDatasetItem } from 'vue-data-ui'
 import type {
@@ -199,43 +200,38 @@ const config = computed<VueUiDonutConfig>(() => ({
 </script>
 
 <template>
-    <div class="relative bg-surface-0 rounded-3xl p-6 shadow-sm ring-1 ring-surface-200/60 h-full">
-        <ActivityMetadataIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            :metadata-definition-id="definitionId"
-        />
-
-        <ActivityIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            class="top-4 right-[125px]"
-        />
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-4">
-            <div
-                class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
-            >
-                <i class="pi pi-chart-pie text-lg"></i>
+    <BaseWidgetContainer :loading="loading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-surface-900">
+                                {{ t('widgets.activity_metadata.distribution.title') }}
+                            </h3>
+                            <p class="text-xs text-surface-500 mt-1">
+                                {{ t('widgets.activity_metadata.distribution.description') }}
+                            </p>
+                        </div>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static ml-5"
+                            :activity-id="activityId"
+                        />
+                        <ActivityMetadataIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                            :metadata-definition-id="definitionId"
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 class="font-semibold text-surface-900">
-                    {{ t('widgets.activity_metadata.distribution.title') }}
-                </h3>
-                <p class="text-sm text-surface-500">
-                    {{ t('widgets.activity_metadata.distribution.description') }}
-                </p>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="loading" class="flex items-center justify-center h-64">
-            <ProgressSpinner strokeWidth="4" style="width: 50px; height: 50px" />
-        </div>
+        </template>
 
         <!-- Incompatible Type Warning -->
         <div
-            v-else-if="!isTypeCompatible"
+            v-if="!isTypeCompatible"
             class="flex flex-col items-center justify-center h-64 text-surface-400 bg-surface-50 rounded-xl border border-dashed border-surface-200"
         >
             <i class="pi pi-exclamation-triangle text-amber-500 text-3xl mb-3"></i>
@@ -264,5 +260,5 @@ const config = computed<VueUiDonutConfig>(() => ({
         <div v-else class="flex justify-center h-80">
             <VueUiDonut :dataset="chartData" :config="config" />
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

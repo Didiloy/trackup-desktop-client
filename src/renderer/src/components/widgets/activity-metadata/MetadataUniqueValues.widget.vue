@@ -68,10 +68,6 @@ const isTypeCompatible = computed(() => {
     return isMetadataTypeSupported(local_stats.value.metadata_type, SUPPORTED_TYPES)
 })
 
-const translatedSupportedTypes = computed(() => {
-    return getTranslatedMetadataTypes(SUPPORTED_TYPES, t)
-})
-
 async function fetchStats(): Promise<void> {
     const serverId = server_store.getPublicId
     if (!definitionId.value || !serverId || !activityId.value) return

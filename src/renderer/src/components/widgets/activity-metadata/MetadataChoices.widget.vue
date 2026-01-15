@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import ActivityMetadataIdentityCorner from '@/components/activities/metadata/ActivityMetadataIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
@@ -23,7 +24,7 @@ defineOptions({
             key: EWidgetCategory.ActivityMetadata,
             label_key: 'widgets.categories.activity_metadata'
         },
-        defaultSize: { w: 2, h: 3, minW: 2, minH: 3 },
+        defaultSize: { w: 4, h: 3, minW: 4, minH: 3 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -83,46 +84,41 @@ const choices = computed(() => localDefinition.value?.choices || [])
 </script>
 
 <template>
-    <div
-        class="relative bg-surface-0 rounded-2xl p-5 shadow-sm ring-1 ring-surface-200/60 h-full overflow-hidden flex flex-col"
-    >
-        <ActivityMetadataIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            :metadata-definition-id="definitionId"
-        />
-
-        <ActivityIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            class="top-4 right-[125px]"
-        />
-
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-4 shrink-0">
-            <div
-                class="w-10 h-13 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
-            >
-                <i class="pi pi-tags text-lg"></i>
+    <BaseWidgetContainer :loading="isLoading">
+        <template #header>
+            <div class="pt-2 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center shrink-0"
+                        >
+                            <i class="pi pi-tags text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-surface-900">
+                                {{ t('widgets.activity_metadata.choices.title') }}
+                            </h3>
+                            <p class="text-xs text-surface-500 mt-1">
+                                {{ t('widgets.activity_metadata.choices.description') }}
+                            </p>
+                        </div>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static ml-5"
+                            :activity-id="activityId"
+                        />
+                        <ActivityMetadataIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                            :metadata-definition-id="definitionId"
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 class="font-semibold text-surface-900">
-                    {{ t('widgets.activity_metadata.choices.title') }}
-                </h3>
-                <p class="text-xs text-surface-500 mt-2">
-                    {{ t('widgets.activity_metadata.choices.description') }}
-                </p>
-            </div>
-        </div>
+        </template>
 
-        <!-- Content -->
-        <div v-if="isLoading" class="flex-1 animate-pulse space-y-2">
-            <div class="h-6 w-3/4 bg-surface-100 rounded"></div>
-            <div class="h-6 w-1/2 bg-surface-100 rounded"></div>
-            <div class="h-6 w-2/3 bg-surface-100 rounded"></div>
-        </div>
-
-        <div v-else-if="choices.length > 0" class="flex-1 overflow-y-auto pr-1">
+        <div v-if="choices.length > 0" class="flex-1 overflow-y-auto pr-1">
             <div class="flex flex-wrap gap-2">
                 <span
                     v-for="(choice, idx) in choices"
@@ -138,5 +134,5 @@ const choices = computed(() => localDefinition.value?.choices || [])
             <i class="pi pi-ban text-2xl mb-2"></i>
             <p class="text-sm">{{ t('common.fields.no_data') }}</p>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>

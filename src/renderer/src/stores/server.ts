@@ -149,6 +149,7 @@ export const useServerStore = defineStore('server', () => {
 
         state.server = cached.server
         state.serverMembers = cached.members
+        state.serverActivities = null // Activities are not cached
         state.serverEnumsDefinition = cached.enumDefinition
 
         await server_stats_store.fetchAll(serverId)

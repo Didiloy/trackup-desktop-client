@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionStatsCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionStatsCRUD'
 import ActivityMetadataIdentityCorner from '@/components/activities/metadata/ActivityMetadataIdentityCorner.vue'
+import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import type {
     IWidgetMetadata,
     IActivityMetadataWidgetConfig
@@ -29,7 +30,7 @@ defineOptions({
             key: EWidgetCategory.ActivityMetadata,
             label_key: 'widgets.categories.activity_metadata'
         },
-        defaultSize: { w: 4, h: 4, minW: 4, minH: 4 },
+        defaultSize: { w: 4, h: 5, minW: 4, minH: 5 },
         requiresConfig: true
     } satisfies IWidgetMetadata
 })
@@ -171,44 +172,41 @@ const stats = computed(() => [
 </script>
 
 <template>
-    <div class="relative bg-surface-0 rounded-2xl p-5 shadow-sm ring-1 ring-surface-200/60 h-full">
-        <ActivityMetadataIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            :metadata-definition-id="definitionId"
-        />
-
-        <ActivityIdentityCorner
-            :show="props.showIdentity"
-            :activity-id="activityId"
-            class="top-4 right-[135px]"
-        />
-
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-4">
-            <div
-                class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center"
-            >
-                <i class="pi pi-calculator text-lg"></i>
+    <BaseWidgetContainer :loading="isLoadingLocal">
+        <template #header>
+            <div class="pt-2 pb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center shrink-0">
+                            <i class="pi pi-calculator text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-surface-900">
+                                {{ t('widgets.activity_metadata.numeric_summary.title') }}
+                            </h3>
+                            <p class="text-xs text-surface-500 mt-1">
+                                {{ t('widgets.activity_metadata.numeric_summary.description') }}
+                            </p>
+                        </div>
+                        <ActivityIdentityCorner
+                            :show="props.showIdentity"
+                            class="static ml-3"
+                            :activity-id="activityId"
+                        />
+                        <ActivityMetadataIdentityCorner
+                            :show="props.showIdentity"
+                            class="static"
+                            :activity-id="activityId"
+                            :metadata-definition-id="definitionId"
+                        />
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 class="font-semibold text-surface-900">
-                    {{ t('widgets.activity_metadata.numeric_summary.title') }}
-                </h3>
-                <p class="text-xs text-surface-500">
-                    {{ t('widgets.activity_metadata.numeric_summary.description') }}
-                </p>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="isLoadingLocal" class="grid grid-cols-2 gap-3">
-            <div v-for="i in 4" :key="i" class="h-16 rounded-xl bg-surface-100 animate-pulse"></div>
-        </div>
+        </template>
 
         <!-- Incompatible Type Warning -->
         <div
-            v-else-if="!isTypeCompatible"
+            v-if="!isTypeCompatible"
             class="flex flex-col items-center justify-center h-32 text-surface-400 bg-surface-50 rounded-xl border border-dashed border-surface-200"
         >
             <i class="pi pi-exclamation-triangle text-amber-500 text-2xl mb-2"></i>
@@ -225,13 +223,13 @@ const stats = computed(() => [
         </div>
 
         <!-- Stats Grid -->
-        <div v-else-if="numericSummary" class="grid grid-cols-2 gap-3">
+        <div v-else-if="numericSummary" class="grid grid-cols-2 gap-6">
             <div
                 v-for="stat in stats"
                 :key="stat.label"
                 class="p-3 rounded-xl bg-surface-50/80 border border-surface-100"
             >
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex items-center gap-2 mb-2 min-h-15">
                     <div :class="[stat.bg, stat.color, 'p-1.5 rounded-lg']">
                         <i :class="[stat.icon, 'text-xs']"></i>
                     </div>
@@ -246,5 +244,5 @@ const stats = computed(() => [
             <i class="pi pi-calculator text-2xl mb-2"></i>
             <p class="text-sm">{{ t('common.fields.no_data') }}</p>
         </div>
-    </div>
+    </BaseWidgetContainer>
 </template>
