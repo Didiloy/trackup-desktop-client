@@ -586,6 +586,7 @@
             "active_members": "Membres actifs",
             "total_duration": "Durée totale unique",
             "total_activities": "Total des activités",
+            "active_activities": "Activités actives",
             "total_members": "Total des membres",
             "unique_members": "Membres uniques",
             "activity_evolution": "Évolution de l'activité du serveur",
@@ -598,7 +599,17 @@
             "sessions": "Sessions",
             "duration": "Durée",
             "members": "Membres",
-            "growth_trends": "Tendances de croissance"
+            "growth_trends": "Tendances de croissance",
+            "top_member_week": "Top membre de la semaine",
+            "member_of_week": "Membre de la semaine",
+            "top_member_month": "Top membre du mois",
+            "member_of_month": "Membre du mois",
+            "top_sessions_member": "Membre le plus actif",
+            "most_sessions_member": "Plus de sessions",
+            "top_avg_duration_member": "Meilleure durée moyenne",
+            "best_avg_duration_member": "Meilleure durée moy.",
+            "activity_of_week": "Activité de la semaine",
+            "most_played_this_week": "La plus jouée cette semaine"
         },
         "server_activities": {
             "title": "Activités du serveur",
@@ -955,6 +966,30 @@
             "activities_distribution": {
                 "title": "Distribution Activités",
                 "description": "Affiche la répartition des activités"
+            },
+            "active_activities": {
+                "title": "Activités Actives",
+                "description": "Affiche le nombre d'activités actives utilisées dans au moins une session"
+            },
+            "top_member_week": {
+                "title": "Top Membre Semaine",
+                "description": "Affiche le membre avec la plus grande durée totale sur les 7 derniers jours"
+            },
+            "top_member_month": {
+                "title": "Top Membre Mois",
+                "description": "Affiche le membre avec la plus grande durée totale sur les 30 derniers jours"
+            },
+            "top_sessions_member": {
+                "title": "Plus de Sessions",
+                "description": "Affiche le membre avec le plus de sessions créées"
+            },
+            "top_avg_duration_member": {
+                "title": "Meilleure Durée Moy.",
+                "description": "Affiche le membre avec la plus grande durée moyenne de session"
+            },
+            "activity_of_week": {
+                "title": "Activité de la Semaine",
+                "description": "Affiche l'activité la plus jouée dans les 7 derniers jours"
             }
         },
         "member": {

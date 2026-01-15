@@ -17,10 +17,16 @@ export interface IServerStats {
     total_members: number
     active_members: number
     total_activities: number
+    active_activities: number
     total_likes: number
     avg_likes_per_session: number
     avg_participants_per_session: number
     engagement_score: number
+    top_member_week: string | null
+    top_member_month: string | null
+    top_sessions_member: string | null
+    top_avg_duration_member: string | null
+    activity_of_week: string | null
 }
 
 // ============================================================================

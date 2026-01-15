@@ -12,6 +12,12 @@ import ServerTopMembersWidget from '@/components/widgets/server/ServerTopMembers
 import ServerGrowthTrendsWidget from '@/components/widgets/server/ServerGrowthTrends.widget.vue'
 import ServerActivitiesDistributionWidget from '@/components/widgets/server/ServerActivitiesDistribution.widget.vue'
 import ServerTotalSessionsWidget from '@/components/widgets/server/ServerTotalSessions.widget.vue'
+import ServerActiveActivitiesWidget from '@/components/widgets/server/ServerActiveActivities.widget.vue'
+import ServerTopMemberWeekWidget from '@/components/widgets/server/ServerTopMemberWeek.widget.vue'
+import ServerTopMemberMonthWidget from '@/components/widgets/server/ServerTopMemberMonth.widget.vue'
+import ServerTopSessionsMemberWidget from '@/components/widgets/server/ServerTopSessionsMember.widget.vue'
+import ServerTopAvgDurationMemberWidget from '@/components/widgets/server/ServerTopAvgDurationMember.widget.vue'
+import ServerActivityOfWeekWidget from '@/components/widgets/server/ServerActivityOfWeek.widget.vue'
 import { useServerStatsStore } from '@/stores/server-stats'
 
 const server_stats_store = useServerStatsStore()
@@ -33,6 +39,7 @@ const server_stats_store = useServerStatsStore()
             <ServerActiveMembersWidget />
             <ServerTotalDurationWidget />
             <ServerTotalActivitiesWidget />
+            <ServerActiveActivitiesWidget />
             <ServerEngagementScoreWidget />
             <ServerAvgLikesWidget />
             <ServerAvgParticipantsWidget />
@@ -47,10 +54,18 @@ const server_stats_store = useServerStatsStore()
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             <ServerTopMembersWidget />
             <ServerTopActivitiesWidget />
             <ServerGrowthTrendsWidget />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <ServerTopMemberWeekWidget />
+            <ServerTopMemberMonthWidget />
+            <ServerTopSessionsMemberWidget />
+            <ServerTopAvgDurationMemberWidget />
+            <ServerActivityOfWeekWidget />
         </div>
     </div>
 </template>
