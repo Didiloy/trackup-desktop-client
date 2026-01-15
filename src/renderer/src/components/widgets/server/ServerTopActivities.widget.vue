@@ -6,6 +6,7 @@ import { useServerStatsStore } from '@/stores/server-stats'
 import BaseWidgetContainer from '@/components/widgets/BaseWidgetContainer.vue'
 import { type IWidgetMetadata } from '@shared/contracts/interfaces/widget.interfaces'
 import { EWidgetCategory } from '@shared/contracts/enums/widget-category.enum'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 
 defineOptions({
     widgetMetadata: {
@@ -23,12 +24,7 @@ defineOptions({
 
 const server_stats_store = useServerStatsStore()
 const { t } = useI18n()
-
-const maxSessions = computed(() => {
-    const activities = server_stats_store.getDetails?.top_activities
-    if (!activities?.length) return 1
-    return Math.max(...activities.map((a) => a.total_sessions))
-})
+const { navigateToActivityProfile } = useActivityNavigation()
 </script>
 
 <template>
@@ -40,47 +36,46 @@ const maxSessions = computed(() => {
                 </h3>
             </div>
         </template>
+
         <div
             v-if="!server_stats_store.getDetails?.top_activities?.length"
             class="text-center py-8 text-surface-400 h-full flex items-center justify-center"
         >
-            {{ t('common.fields.none') }}
+            <div class="flex flex-col items-center gap-2">
+                <i class="pi pi-inbox text-3xl"></i>
+                <p class="text-sm">{{ t('common.fields.none') }}</p>
+            </div>
         </div>
 
-        <div v-else class="space-y-5 h-full overflow-y-auto pr-1">
+        <div v-else class="px-5 pb-4 space-y-2 overflow-y-auto" style="height: calc(80% - 60px)">
             <div
                 v-for="activity in server_stats_store.getDetails.top_activities"
                 :key="activity.activity_id"
-                class="group"
+                class="group p-3 rounded-xl border border-surface-200 hover:border-primary-300 hover:text-primary-600 transition-colors cursor-pointer hover:bg-primary-50/30 duration-300 hover:shadow-sm"
+                @click="navigateToActivityProfile(activity.activity_id)"
             >
-                <div class="flex justify-between items-center mb-1.5">
-                    <span class="text-sm font-medium text-surface-900 truncate pr-4">
-                        <router-link
-                            :to="{
-                                name: 'ServerActivityProfile',
-                                params: { activityId: activity.activity_id }
-                            }"
-                            class="hover:text-primary-600 hover:underline transition-colors"
-                        >
+                <div class="flex items-center gap-3">
+                    <!-- Activity info -->
+                    <div class="flex-1 min-w-0">
+                        <span class="block font-semibold text-surface-900 truncate">
                             {{ activity.activity_name }}
-                        </router-link>
-                    </span>
-                    <span class="text-xs text-surface-500 flex items-center gap-2">
-                        <span class="flex items-center gap-1">
-                            <i class="pi pi-clock text-[10px]"></i>
-                            {{ formatMinutesToLabel(activity.total_duration) }}
                         </span>
-                        <span class="font-medium text-surface-700">
-                            {{ activity.total_sessions }}
-                        </span>
-                    </span>
-                </div>
 
-                <div class="h-2 w-full bg-surface-100 rounded-full overflow-hidden">
-                    <div
-                        class="h-full bg-primary-500 rounded-full transition-all duration-500 group-hover:bg-primary-400"
-                        :style="{ width: `${(activity.total_sessions / maxSessions) * 100}%` }"
-                    ></div>
+                        <!-- Stats row -->
+                        <div class="flex items-center gap-3 mt-1 text-xs text-surface-500">
+                            <span class="flex items-center gap-1.5">
+                                <i class="pi pi-calendar text-[10px] text-primary-500"></i>
+                                <span class="font-medium text-surface-700">{{
+                                    activity.total_sessions
+                                }}</span>
+                                sessions
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <i class="pi pi-clock text-[10px] text-primary-500"></i>
+                                {{ formatMinutesToLabel(activity.total_duration) }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

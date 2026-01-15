@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useActivityCRUD } from '@/composables/activities/useActivityCRUD'
 import ActivityIcon from '@/components/common/icons/ActivityIcon.vue'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 
 const server_store = useServerStore()
 const { getActivityById } = useActivityCRUD()
@@ -58,6 +59,8 @@ watch(
 
 const activityName = computed(() => localActivityName.value)
 const isVisible = computed(() => props.show)
+
+const { navigateToActivityProfile } = useActivityNavigation()
 </script>
 
 <template>
@@ -71,18 +74,12 @@ const isVisible = computed(() => props.show)
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
             <ActivityIcon class="text-[9px]" />
-            <router-link
-                :to="{
-                    name: 'ServerActivityProfile',
-                    params: {
-                        id: server_store.getPublicId,
-                        activityId: props.activityId
-                    }
-                }"
+            <span
                 class="max-w-[80px] truncate uppercase tracking-wider"
+                @click="navigateToActivityProfile(props.activityId!)"
             >
                 {{ activityName }}
-            </router-link>
+            </span>
         </div>
     </div>
 </template>

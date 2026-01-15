@@ -7,6 +7,7 @@ import { useServerMemberStore } from '@/stores/server-member'
 import { formatMinutesToLabel } from '@/utils/time.utils'
 import { formatDate } from '@/utils'
 import { useSessionActions } from '@/composables/sessions/useSessionActions'
+import { useActivityNavigation } from '@/composables/activities/useActivityNavigation'
 
 interface Props {
     session: ISession | null
@@ -26,6 +27,7 @@ const { t } = useI18n()
 const server_store = useServerStore()
 const server_member_store = useServerMemberStore()
 const { toggleLike } = useSessionActions(toRef(props, 'session'))
+const { navigateToActivityProfile } = useActivityNavigation()
 
 const canEdit = computed(() => {
     if (!props.session || !server_member_store.getPublicId) return false
@@ -99,18 +101,12 @@ const bannerStyle = computed(() => {
                                 class="flex items-center gap-2 text-surface-600 mb-1 font-medium"
                                 :class="{ 'text-3xl font-bold': session.title === '' }"
                             >
-                                <router-link
-                                    :to="{
-                                        name: 'ServerActivityProfile',
-                                        params: {
-                                            id: server_store.getPublicId,
-                                            activityId: session.activity.public_id
-                                        }
-                                    }"
-                                    class="hover:text-primary-600 hover:underline transition-colors"
+                                <span
+                                    class="hover:text-primary-600 hover:underline transition-colors cursor-pointer"
+                                    @click="navigateToActivityProfile(session.activity.public_id)"
                                 >
                                     {{ session.activity.name }}
-                                </router-link>
+                                </span>
                             </h3>
                         </div>
 

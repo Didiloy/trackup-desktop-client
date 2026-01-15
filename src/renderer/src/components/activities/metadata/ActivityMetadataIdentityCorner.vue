@@ -5,6 +5,7 @@ import { useServerStore } from '@/stores/server'
 import { useActivityMetadataDefinitionCRUD } from '@/composables/activities/metadata/useActivityMetadataDefinitionCRUD'
 import type { IActivityMetadataDefinition } from '@shared/contracts/interfaces/entities/activity-metadata-definition.interfaces'
 import MetadataIcon from '@/components/common/icons/MetadataIcon.vue'
+import { useMetadataNavigation } from '@/composables/activities/useMetadataNavigation'
 
 const route = useRoute()
 const server_store = useServerStore()
@@ -62,6 +63,8 @@ watch(
 )
 
 const isVisible = computed(() => props.show)
+
+const {navigateToMetadataProfile} = useMetadataNavigation()
 </script>
 
 <template>
@@ -75,19 +78,12 @@ const isVisible = computed(() => props.show)
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
             <MetadataIcon />
-            <router-link
-                :to="{
-                    name: 'ServerActivityMetadataProfile',
-                    params: {
-                        id: server_store.getPublicId,
-                        activityId: props.activityId,
-                        metadataDefinitionId: props.metadataDefinitionId
-                    }
-                }"
+            <span
                 class="max-w-[60px] truncate uppercase tracking-wider"
+                @click="navigateToMetadataProfile(activityIdValue, props.metadataDefinitionId!)"
             >
                 {{ definitionName }}
-            </router-link>
+            </span>
         </div>
     </div>
 </template>

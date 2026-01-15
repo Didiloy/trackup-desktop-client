@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useServerStore } from '@/stores/server'
 import { useEnumDefinitionCRUD } from '@/composables/enum-definitions/useEnumDefinitionCRUD'
+import { useEnumDefinitionNavigation } from '@/composables/enum-definitions/useEnumDefinitionNavigation'
 
 const server_store = useServerStore()
 const { listEnumDefinitions } = useEnumDefinitionCRUD()
@@ -74,6 +75,8 @@ watch(
 )
 
 const isVisible = computed(() => props.show)
+
+const { navigateToEnumDefinitionProfile } = useEnumDefinitionNavigation()
 </script>
 
 <template>
@@ -87,18 +90,12 @@ const isVisible = computed(() => props.show)
             class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-100/80 backdrop-blur-sm border border-surface-200/50 text-[10px] font-medium text-surface-500 hover:text-primary-500 hover:border-primary-200 transition-colors cursor-pointer"
         >
             <i class="pi pi-list text-[9px]"></i>
-            <router-link
-                :to="{
-                    name: 'ServerEnumDefinitionProfile',
-                    params: {
-                        id: server_store.getPublicId,
-                        enumDefinitionId: props.definitionId
-                    }
-                }"
+            <span
                 class="max-w-[80px] truncate uppercase tracking-wider"
+                @click="navigateToEnumDefinitionProfile(props.definitionId!)"
             >
                 {{ definitionName }}
-            </router-link>
+            </span>
         </div>
     </div>
 </template>
