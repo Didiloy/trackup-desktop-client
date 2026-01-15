@@ -46,16 +46,20 @@ const emit = defineEmits<{
 
 <style scoped>
 .grid-container {
-    min-height: 400px;
+    padding: 0;
+    border-radius: 0;
+    background-image: none;
+    background-size: 20px 20px;
+    transition:
+        padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        background-image 0.4s ease;
 }
 
 .grid-container.is-editing {
-    background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-color: #f8fafc;
-    border-radius: 1rem;
+    background-image: radial-gradient(circle, #e2e8f0 2px, transparent 1px);
+    border-radius: 2rem;
     padding: 1rem;
-    transition: all 0.3s ease;
 }
 
 .widget-grid-item {
