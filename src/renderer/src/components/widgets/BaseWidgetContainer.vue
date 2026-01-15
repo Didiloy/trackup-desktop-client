@@ -11,11 +11,22 @@ defineProps<{
     <div
         class="relative p-5 rounded-2xl bg-surface-0 ring-1 ring-surface-200/60 shadow-sm h-full w-full flex flex-col hover:shadow-md transition-shadow text-left justify-between"
     >
-        <!-- Loading State -->
-        <div v-if="loading" class="h-full w-full rounded-2xl bg-surface-100 animate-pulse"></div>
+        <!-- Loading Overlay -->
+        <div
+            v-if="loading"
+            class="absolute inset-0 rounded-2xl bg-surface-100/80 backdrop-blur-sm flex items-center justify-center z-10"
+        >
+            <div class="flex flex-col items-center gap-3">
+                <ProgressSpinner
+                    style="width: 40px; height: 40px"
+                    stroke-width="4"
+                    animation-duration="1s"
+                />
+            </div>
+        </div>
 
-        <!-- Widget Content -->
-        <div v-else class="h-full w-full flex flex-col">
+        <!-- Widget Content (always rendered) -->
+        <div class="h-full w-full flex flex-col">
             <!-- Header Section (Optional) -->
             <div v-if="!noHeader && (title || $slots.header)" class="widget-header shrink-0">
                 <slot name="header">
