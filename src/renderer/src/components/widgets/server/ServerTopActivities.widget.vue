@@ -47,7 +47,7 @@ const { navigateToActivityProfile } = useActivityNavigation()
             </div>
         </div>
 
-        <div v-else class="px-5 pb-4 space-y-2 overflow-y-auto" style="height: calc(80% - 60px)">
+        <div v-else class="px-5 pb-4 space-y-2 overflow-y-auto" >
             <div
                 v-for="activity in server_stats_store.getDetails.top_activities"
                 :key="activity.activity_id"

@@ -143,11 +143,11 @@ function getGrowthIcon(value: number): string {
             </div>
         </template>
 
-        <div v-if="metrics.length > 0" class="grid grid-cols-1 gap-4 h-full">
+        <div v-if="metrics.length > 0" class="grid grid-cols-1 gap-4 h-full ">
             <div
                 v-for="metric in metrics"
                 :key="metric.key"
-                class="flex items-center justify-between p-3 rounded-2xl bg-surface-50/50"
+                class="flex items-center justify-between p-3 rounded-2xl bg-surface-50/50 "
             >
                 <div>
                     <p class="text-xs font-medium text-surface-500 uppercase tracking-wider mb-1">
