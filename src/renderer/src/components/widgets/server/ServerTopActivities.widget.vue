@@ -32,10 +32,14 @@ const maxSessions = computed(() => {
 </script>
 
 <template>
-    <BaseWidgetContainer
-        :title="t('views.server_stats.top_activities')"
-        :loading="server_stats_store.isLoading"
-    >
+    <BaseWidgetContainer :loading="server_stats_store.isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <h3 class="text-lg font-bold text-surface-900">
+                    {{ t('views.server_stats.top_activities') }}
+                </h3>
+            </div>
+        </template>
         <div
             v-if="!server_stats_store.getDetails?.top_activities?.length"
             class="text-center py-8 text-surface-400 h-full flex items-center justify-center"

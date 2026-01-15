@@ -35,10 +35,14 @@ const handleMemberClick = async (memberId: string): Promise<void> => {
 </script>
 
 <template>
-    <BaseWidgetContainer
-        :title="t('views.server_stats.top_members')"
-        :loading="server_stats_store.isLoading"
-    >
+    <BaseWidgetContainer :loading="server_stats_store.isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <h3 class="text-lg font-bold text-surface-900">
+                    {{ t('views.server_stats.top_members') }}
+                </h3>
+            </div>
+        </template>
         <div
             v-if="!server_stats_store.getDetails?.top_members?.length"
             class="text-center py-8 text-surface-400 h-full flex items-center justify-center"

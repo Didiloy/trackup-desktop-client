@@ -122,10 +122,14 @@ const donutConfig = computed<VueUiDonutConfig>(() => ({
 </script>
 
 <template>
-    <BaseWidgetContainer
-        :title="t('views.server_stats.distribution')"
-        :loading="server_stats_store.isLoading"
-    >
+    <BaseWidgetContainer :loading="server_stats_store.isLoading">
+        <template #header>
+            <div class="px-5 pt-5 pb-3">
+                <h3 class="text-lg font-bold text-surface-900">
+                    {{ t('views.server_stats.distribution') }}
+                </h3>
+            </div>
+        </template>
         <div v-if="dataset.length > 0" class="flex justify-center h-full">
             <VueUiDonut :dataset="dataset" :config="donutConfig" />
         </div>
