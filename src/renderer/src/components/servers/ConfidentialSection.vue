@@ -60,7 +60,7 @@ const handleRefresh = async (): Promise<void> => {
     try {
         const result = await refreshInviteCode(server_store.getPublicId)
         if (result.data) {
-            server_store.setServer(result.data)
+            await server_store.setServer(result.data)
             toast.add({
                 severity: 'success',
                 summary: t('messages.success.title'),

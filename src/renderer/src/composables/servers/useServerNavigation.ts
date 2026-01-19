@@ -14,7 +14,7 @@ interface UseServerNavigationResult {
 }
 
 // Small delay to show step transitions
-const STEP_DELAY = 300
+const STEP_DELAY = 220
 
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -52,23 +52,24 @@ export function useServerNavigation(): UseServerNavigationResult {
         server_store.setLoading(true)
 
         try {
+            const [detailsRes, currentMemberRes, membersRes, enumsRes] = await Promise.all([
+                getServerDetails(serverId),
+                getMemberByUserId(serverId, user_store.getId!),
+                listMembers(serverId),
+                listEnumDefinitions(serverId)
+            ])
             // Step 1: Server Details
             startLoadingStep('server_details')
-            const detailsRes = await getServerDetails(serverId)
             if (detailsRes.error || !detailsRes.data) {
                 errorLoadingStep('server_details')
                 throw new Error('Failed to load server details')
             }
             completeLoadingStep('server_details')
-            server_store.setServer(detailsRes.data)
+            await server_store.setServer(detailsRes.data)
             await delay(STEP_DELAY)
 
             // Step 2: Members & Current Member
             startLoadingStep('members')
-            const [currentMemberRes, membersRes] = await Promise.all([
-                getMemberByUserId(serverId, user_store.getId!),
-                listMembers(serverId)
-            ])
             if (
                 currentMemberRes.error ||
                 !currentMemberRes.data ||
@@ -85,7 +86,6 @@ export function useServerNavigation(): UseServerNavigationResult {
 
             // Step 3: Enum Definitions
             startLoadingStep('enum_definitions')
-            const enumsRes = await listEnumDefinitions(serverId)
             if (enumsRes.error || !enumsRes.data) {
                 errorLoadingStep('enum_definitions')
                 throw new Error('Failed to load enum definitions')

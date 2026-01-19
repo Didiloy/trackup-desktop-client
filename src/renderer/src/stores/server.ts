@@ -70,10 +70,10 @@ export const useServerStore = defineStore('server', () => {
     const isOwnership: ComputedRef<boolean | null> = computed(() => !!state.server?.invite_code) // As only owner can see invite code, if we havve the code we are owner
 
     // Setter functions
-    const setServer = (srv: IServer | null): void => {
+    const setServer = async (srv: IServer | null): Promise<void> => {
         state.server = srv
         if (srv?.public_id) {
-            server_stats_store.fetchAll(srv.public_id)
+            await server_stats_store.fetchAll(srv.public_id)
             server_stats_store.start_auto_fetch(srv.public_id)
         }
     }

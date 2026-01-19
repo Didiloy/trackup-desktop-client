@@ -13,6 +13,11 @@ import type {
     IServerStatsApiResponse
 } from '@shared/contracts/interfaces/entities-stats/server-stats.interfaces'
 
+interface IServerStatsCache {
+    details: IServerStatsDetails
+    timestamp: number
+}
+
 export const useServerStatsStore = defineStore('server-stats', () => {
     const {
         getServerStats,
@@ -32,6 +37,10 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         isTimelineLoading: false,
         error: null as string | null
     })
+
+    // Cache for stats with TTL aligned with server cache
+    const stats_cache = reactive<Map<string, IServerStatsCache>>(new Map())
+    const STATS_CACHE_TTL = 5 * 60 * 1000 // 5 minutes - aligned with server cache TTL
 
     let auto_fetch_interval: NodeJS.Timeout | null = null
     let current_server_id: string | null = null
@@ -69,9 +78,32 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     }
 
     const fetchDetails = async (
-        serverId: string
+        serverId: string,
+        use_cache = true
     ): Promise<IServerStatsApiResponse<IServerStatsDetails>> => {
-        state.isLoading = true
+        // Check cache first if enabled
+        const cached = use_cache ? getCachedStats(serverId) : null
+        if (cached) {
+            // Return cached data immediately
+            state.details = cached
+            if (cached.timeline) {
+                state.timeline = cached.timeline
+            }
+            // Don't show loading state for cached data
+            state.isLoading = false
+
+            // If cache is fresh, return immediately without fetching
+            if (isCacheFresh(serverId)) {
+                return { data: cached }
+            }
+
+            // Cache exists but is stale - fetch in background to revalidate
+            // Don't set isLoading to true, let it happen silently
+        } else {
+            // No cache, show loading state
+            state.isLoading = true
+        }
+
         state.error = null
         try {
             const res = await getServerStatsDetails(serverId)
@@ -79,10 +111,18 @@ export const useServerStatsStore = defineStore('server-stats', () => {
                 state.error = res.error
                 return { error: res.error }
             }
+
+            // Update state and cache
             state.details = res.data ?? null
             if (res.data?.timeline) {
                 state.timeline = res.data.timeline
             }
+
+            // Save to cache
+            if (res.data) {
+                setCachedStats(serverId, res.data)
+            }
+
             return res
         } catch (e: unknown) {
             const message = e instanceof Error ? e.message : String(e)
@@ -165,10 +205,11 @@ export const useServerStatsStore = defineStore('server-stats', () => {
     }
 
     const fetchAll = async (
-        serverId: string
+        serverId: string,
+        use_cache = true
     ): Promise<IServerStatsApiResponse<IServerStatsDetails>> => {
-        // Fetch base details first
-        return await fetchDetails(serverId)
+        // Fetch base details with cache support (stale-while-revalidate)
+        return await fetchDetails(serverId, use_cache)
     }
 
     const resetState = (): void => {
@@ -182,6 +223,32 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         state.error = null
         stop_auto_fetch()
         current_server_id = null
+        // Note: we don't clear the cache here to allow instant navigation between servers
+    }
+
+    // Cache helper functions
+    const getCachedStats = (serverId: string): IServerStatsDetails | null => {
+        const cached = stats_cache.get(serverId)
+        if (!cached) return null
+        return cached.details
+    }
+
+    const isCacheFresh = (serverId: string): boolean => {
+        const cached = stats_cache.get(serverId)
+        if (!cached) return false
+        const now = Date.now()
+        return (now - cached.timestamp) < STATS_CACHE_TTL
+    }
+
+    const setCachedStats = (serverId: string, details: IServerStatsDetails): void => {
+        stats_cache.set(serverId, {
+            details,
+            timestamp: Date.now()
+        })
+    }
+
+    const clearCache = (): void => {
+        stats_cache.clear()
     }
 
     // Auto-fetch logic
@@ -193,7 +260,8 @@ export const useServerStatsStore = defineStore('server-stats', () => {
 
         auto_fetch_interval = setInterval(() => {
             if (current_server_id) {
-                fetchAll(current_server_id)
+                // Force refresh without cache for auto-fetch
+                fetchAll(current_server_id, false)
             }
         }, intervalMs)
     }
@@ -237,6 +305,11 @@ export const useServerStatsStore = defineStore('server-stats', () => {
         fetchAll,
         resetState,
         start_auto_fetch,
-        stop_auto_fetch
+        stop_auto_fetch,
+
+        // Cache management
+        getCachedStats,
+        isCacheFresh,
+        clearCache
     }
 })
